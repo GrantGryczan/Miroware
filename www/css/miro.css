@@ -62,10 +62,10 @@ body {
 	margin: 8px 0;
 	padding: 0;
 }
-#socialicons {
+#externals {
 	padding: 8px 16px;
 }
-.socialicon {
+.external {
 	display: inline-block;
 	min-width: 28px;
 	height: 28px;
@@ -86,7 +86,7 @@ body {
 	border-color: #ffffff;
 	color: #ffffff;
 }
-.mdc-button.mdc-button--stroked::before, .mdc-button.mdc-button--stroked::after {
+.mdc-button::before, .mdc-button::after {
 	background-color: #ffffff;
 }
 .mdc-text-field__bottom-line {
