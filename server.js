@@ -70,6 +70,7 @@ app.use(function(req, res) {
 		}
 	}
 });
+var temp;
 app.post("*", function(req, res) {
 	var subdomain = req.subdomains.join(".");
 	if(subdomain == "") {
