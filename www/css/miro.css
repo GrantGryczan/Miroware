@@ -1,0 +1,100 @@
+@import url("https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+::-webkit-scrollbar {
+	width: 12px;
+	height: 12px;
+	border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+	background-color: #303030;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 6px;
+	border: 2px solid transparent;
+	background-color: #484848;
+	background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:active {
+	background-color: #606060;
+}
+::-webkit-scrollbar-corner {
+	background: #303030;
+}
+html {
+	margin-right: calc(100% - 100vw);
+}
+body {
+	margin: 0;
+	margin-right: calc(100vw - 100%);
+	overflow-x: hidden;
+	background-color: #202020;
+	font-family: Roboto, sans-serif;
+	color: #ffffff;
+}
+#container {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+#menu {
+	position: fixed;
+	top: 8px;
+	left: 8px;
+	z-index: 4;
+	background: none;
+	box-shadow: none;
+	color: rgba(255, 255, 255, 0.6);
+}
+#menu:hover, #menu:focus {
+	color: #ffffff;
+}
+.mdc-temporary-drawer__header-content {
+	background-color: #202020;
+}
+.mdc-temporary-drawer .mdc-list-item:hover::before {
+	opacity: 0.06;
+}
+.mdc-temporary-drawer .mdc-list-item:focus::before {
+	opacity: 0.12;
+}
+.mdc-temporary-drawer .mdc-list-item:active::before {
+	opacity: 0.18;
+}
+.mdc-permanent-drawer__toolbar-spacer {
+	height: 0;
+	margin: 8px 0;
+	padding: 0;
+}
+#socialicons {
+	padding: 8px 16px;
+}
+.socialicon {
+	display: inline-block;
+	min-width: 28px;
+	height: 28px;
+	margin: 1px;
+	padding: 0;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 24px 24px;
+}
+.mdc-card {
+	background-color: #303030;
+}
+.mdc-button.mdc-button--stroked {
+	border-color: rgba(255, 255, 255, 0.6);
+	color: rgba(255, 255, 255, 0.6);
+}
+.mdc-button.mdc-button--stroked:hover, .mdc-button.mdc-button--stroked:focus {
+	border-color: #ffffff;
+	color: #ffffff;
+}
+.mdc-button.mdc-button--stroked::before, .mdc-button.mdc-button--stroked::after {
+	background-color: #ffffff;
+}
+.mdc-text-field__bottom-line {
+	background-color: #b54040;
+}
+.mdc-ripple-surface {
+	user-select: none;
+}

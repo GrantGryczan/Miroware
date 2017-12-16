@@ -1,0 +1,12 @@
+#error {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	background-image: url("/image/404.png");
+	pointer-events: none;
+}

@@ -1,0 +1,67 @@
+body {
+	margin-top: 512px;
+	background-image: url("/image/icon/main.gif");
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+.wrapper {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	padding: 56px;
+}
+.smooth {
+	transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mdc-card {
+	justify-content: flex-start;
+	position: relative;
+	left: 0;
+	top: 0;
+	margin: 16px;
+	width: 256px;
+	height: 256px;
+	opacity: 1;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100%;
+	cursor: pointer;
+}
+.mdc-card.invisible {
+	left: 20px;
+	opacity: 0;
+	pointer-events: none;
+}
+.mdc-card.closing {
+	z-index: 1;
+}
+.mdc-card.open {
+	left: -64px;
+	top: -64px;
+	width: 384px;
+	height: 384px;
+	margin-right: -112px;
+	margin-bottom: -112px;
+	z-index: 2;
+	background-size: 150%;
+}
+.mdc-card__primary {
+	margin-bottom: 8px;
+}
+.mdc-card section {
+	position: relative;
+	top: 184px;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+.mdc-card.open section {
+	top: 0;
+}
+.mdc-card .mdc-card__supporting-text {
+	flex-grow: 1;
+}
+.mdc-button:not(:disabled) {
+	color: #ffffff;
+}
+.mdc-button:after, .mdc-button:before {
+	background-color: rgba(255, 255, 255, 0.16);
+}

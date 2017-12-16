@@ -106,7 +106,7 @@ var getActualPath = function(path) {
 	if(path.indexOf("/") != 0) {
 		path = "/" + path;
 	}
-	path = "public" + path.replace(/\/+/g, "/");
+	path = "www" + path.replace(/\/+/g, "/");
 	if(path.lastIndexOf("/") > path.lastIndexOf(".") && !(fs.existsSync(path) && !fs.statSync(path).isDirectory())) {
 		if(path.lastIndexOf("/") != path.length-1) {
 			path += "/";
@@ -163,7 +163,7 @@ app.get("*", async function(req, res) {
 	if(subdomain == "" || subdomain == "d") {
 		var path = getActualPath(decodedPath);
 		var type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.lookup(path);
-		var publicPath = path.slice(6);
+		var publicPath = path.slice(3);
 		if(path.slice(-10) == "/index.njs") {
 			publicPath = publicPath.slice(0, -9);
 		}
