@@ -1,14 +1,13 @@
 body {
-	margin-top: 512px;
-	background-image: url("/image/icon/main.gif");
-	background-position: center top;
-	background-repeat: no-repeat;
 }
 .wrapper {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding: 56px;
+	padding: 512px 56px 56px 56px;
+	background-image: url("/image/icon/main.gif");
+	background-position: center top;
+	background-repeat: no-repeat;
 }
 .smooth {
 	transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
