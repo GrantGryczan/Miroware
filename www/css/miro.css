@@ -20,13 +20,10 @@
 ::-webkit-scrollbar-corner {
 	background: #303030;
 }
-html {
-	margin-right: calc(100% - 100vw);
-}
 body {
 	margin: 0;
-	margin-right: calc(100vw - 100%);
 	overflow-x: hidden;
+	overflow-y: scroll !important;
 	background-color: #202020;
 	font-family: Roboto, sans-serif;
 	color: #ffffff;
