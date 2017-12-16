@@ -72,7 +72,11 @@ app.use(function(req, res) {
 });
 app.post("*", function(req, res) {
 	var subdomain = req.subdomains.join(".");
-	if(subdomain == "pipe") {
+	if(subdomain == "") {
+		if(req.path == "/github") {
+			console.log(req.body);
+		}
+	} else if(subdomain == "pipe") {
 		var dotIndex = req.path.lastIndexOf(".");
 		var key = crypto.createHash("sha256").update(req.body + "pypé").digest("hex") + ((dotIndex == -1) ? "" : req.path.slice(dotIndex));
 		s3.putObject({
