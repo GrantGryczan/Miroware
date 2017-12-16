@@ -50,11 +50,11 @@ app.use(function(req, res) {
 	res.set("Access-Control-Expose-Headers", "X-Magic");
 	res.set("Access-Control-Allow-Origin", "*");
 	if(req.protocol == "http") {
-		res.redirect("https://" + req.get("Host") + req.url);
+		res.redirect(`https://${req.get("Host") + req.url}`);
 	} else {
 		var subdomain = req.subdomains.join(".");
 		if(subdomain == "www") {
-			res.redirect("https://" + req.get("Host").slice(4) + req.url);
+			res.redirect(`https://${req.get("Host").slice(4) + req.url}`);
 		} else {
 			try {
 				decodeURIComponent(req.url);
@@ -75,21 +75,23 @@ app.post("*", function(req, res) {
 	var subdomain = req.subdomains.join(".");
 	if(subdomain == "") {
 		if(req.path == "/github") {
-			temp = req;
+			console.log(`sha1=${crypto.createHmac("sha251", youKnow.gh.secret).update(req.body).digest("hex")}\n${req.get("X-Hub-Signiture")}`);
+			var payload;
+			try {
+				payload = JSON.parse(decodeURIComponent(req.body.toString()));
+			} catch(err) {}
 		}
 	} else if(subdomain == "pipe") {
-		var dotIndex = req.path.lastIndexOf(".");
-		var key = crypto.createHash("sha256").update(req.body + "pypé").digest("hex") + ((dotIndex == -1) ? "" : req.path.slice(dotIndex));
 		s3.putObject({
 			Body: req.body,
 			Bucket: "miroware-pipe",
-			Key: key,
-			ContentType: mime.lookup(key),
+			Key: req.path.slice(1),
+			ContentType: mime.lookup(req.path),
 			ServerSideEncryption: "AES256"
 		}, function(err) {
 			res.set("Content-Type", "text/plain");
 			if(err) {
-				res.status(err.statusCode).send("Error " + err.statusCode + ": " + err.message);
+				res.status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
 			} else {
 				res.send(key);
 			}
@@ -109,9 +111,9 @@ var evalVal = function(thisCode) {
 };
 var getActualPath = function(path) {
 	if(path.indexOf("/") != 0) {
-		path = "/" + path;
+		path = `/${path}`;
 	}
-	path = "www" + path.replace(/\/+/g, "/");
+	path = `www${path.replace(/\/+/g, "/")}`;
 	if(path.lastIndexOf("/") > path.lastIndexOf(".") && !(fs.existsSync(path) && !fs.statSync(path).isDirectory())) {
 		if(path.lastIndexOf("/") != path.length-1) {
 			path += "/";
@@ -152,7 +154,7 @@ var load = function(path, context) {
 			};
 			var val = "";
 			try {
-				evalVal.call(context, "(async function() {\n" + fs.readFileSync(getActualPath(path)) + "\n}).call(this);");
+				evalVal.call(context, `(async function() {\n${fs.readFileSync(getActualPath(path))}\n}).call(this);`);
 			} catch(err) {
 				reject(err);
 			}
@@ -197,14 +199,14 @@ app.get("*", async function(req, res) {
 		}
 	} else if(subdomain == "pipe") {
 		if(decodedPath == "/") {
-			res.redirect("https://" + req.get("Host").slice(5) + "/pipe/");
+			res.redirect(`https://${req.get("Host").slice(5)}/pipe/`);
 		} else {
 			s3.getObject({
 				Bucket: "miroware-pipe",
 				Key: decodedPath.slice(1)
 			}, function(err, data) {
 				if(err) {
-					res.set("Content-Type", "text/plain").status(err.statusCode).send("Error " + err.statusCode + ": " + err.message);
+					res.set("Content-Type", "text/plain").status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
 				} else {
 					res.set("Content-Type", data.ContentType);
 					res.send(data.Body);

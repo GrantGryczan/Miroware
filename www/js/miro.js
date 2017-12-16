@@ -50,7 +50,7 @@
 		};
 		var formData = "";
 		for(var i in data) {
-			formData += (formData ? "&" : "") + encodeURIComponent(i) + "=" + encodeURIComponent(data[i]);
+			formData += `${(formData ? "&" : "") + encodeURIComponent(i)}=${encodeURIComponent(data[i])}`;
 		}
 		req.send(formData);
 	};
