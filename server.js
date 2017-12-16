@@ -74,7 +74,7 @@ app.post("*", function(req, res) {
 	var subdomain = req.subdomains.join(".");
 	if(subdomain == "") {
 		if(req.path == "/github") {
-			console.log(req.body);
+			temp = req;
 		}
 	} else if(subdomain == "pipe") {
 		var dotIndex = req.path.lastIndexOf(".");
