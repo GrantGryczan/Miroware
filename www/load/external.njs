@@ -2,7 +2,7 @@ if(this.socialicons) {
 	this.value = "";
 	this.exit();
 } else {
-	var links = ["/discord/", "/patreon/", "/twitter/", "/youtube/"];
+	var links = ["/discord/", "/patreon/", "/github/", "/youtube/", "/twitter/"];
 	var t = this;
 	t.cache = 1;
 	t.value = html`

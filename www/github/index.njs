@@ -1,6 +1,6 @@
-this.title = "Patreon";
-this.description = "Support Miroware's content!";
-this.tags = ["redirect", "link", "patreon", "support", "donate", "donation", "donations", "contribute", "contribution", "contributions", "money"];
+this.title = "GitHub";
+this.description = "Engage in Miroware's source code!";
+this.tags = ["redirect", "link", "git", "github", "hub", "repository", "repo", "open", "source", "code"];
 this.value = (await load("/load/head.njs", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="index.css">`;
@@ -10,7 +10,7 @@ this.value += html`
 this.value += (await load("/load/belt.njs", this)).value;
 this.value += html`
 		<script>
-			location.replace("${this.redirect = "https://www.patreon.com/miroware"}");
+			location.replace("${this.redirect = "https://github.com/Miroware8"}");
 		</script>`;
 this.value += (await load("/load/foot.njs", this)).value;
 this.exit();

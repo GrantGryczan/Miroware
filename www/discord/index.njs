@@ -6,7 +6,7 @@ this.value += html`
 		<link rel="stylesheet" href="index.css">`;
 this.value += (await load("/load/body.njs", this)).value;
 this.value += html`
-		Redirecting...`;
+			Redirecting...`;
 this.value += (await load("/load/belt.njs", this)).value;
 this.value += html`
 		<script>

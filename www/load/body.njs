@@ -14,7 +14,7 @@ this.value = html`
 						<i class="material-icons mdc-list-item__start-detail">person</i>Log in
 					</a>
 					<div class="mdc-permanent-drawer__toolbar-spacer"></div>`;
-this.value += (await load("/load/socialicons.njs", this)).value;
+this.value += (await load("/load/external.njs", this)).value;
 this.value += html`
 				</nav>
 			</nav>
