@@ -78,6 +78,27 @@ app.post("*", function(req, res) {
 			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}`) {
 				res.send();
 				var payload = JSON.parse(req.body);
+				if(payload.repository.name == "web") {
+					var branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
+					if(branch == "public") {
+						var added = [];
+						var removed = [];
+						var modified = [];
+						var commits = [payload.head_commit].concat(payload.commits);
+						for(var i = 0; i < commits.length; i++) {
+							for(var j = 0; j < commits[i].added.length; j++) {
+								if(added.indexOf(commits[i].added[j]) == -1) {
+									added.push(commits[i].added[j]);
+									request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${commits[i].added[j]}`, function(err, res2, body) {
+										if(body) {
+											fs.writeFileSync(commits[i].added[j], body);
+										}
+									});
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	} else if(subdomain == "pipe") {
@@ -136,6 +157,7 @@ var load = function(path, context) {
 	for(var i in context) {
 		properties.push(i);
 	}
+	context.value = "";
 	return new Promise(function(resolve, reject) {
 		if(loadCache[path]) {
 			resolve(Object.assign(context, loadCache[path]));
