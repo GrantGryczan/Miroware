@@ -75,7 +75,7 @@ app.post("*", function(req, res) {
 	var subdomain = req.subdomains.join(".");
 	if(subdomain == "") {
 		if(req.path == "/github") {
-			console.log(`sha1=${crypto.createHmac("sha251", youKnow.gh.secret).update(req.body).digest("hex")}\n${req.get("X-Hub-Signiture")}`);
+			console.log(`sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}\n${req.get("X-Hub-Signiture")}`);
 			var payload;
 			try {
 				payload = JSON.parse(decodeURIComponent(req.body.toString()));
