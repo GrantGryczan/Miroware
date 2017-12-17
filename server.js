@@ -93,8 +93,8 @@ app.post("*", function(req, res) {
 										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${added}`, function(err, res2, body) {
 											if(body) {
 												var index = 0;
-												while((index = added.indexOf("/", index)) != -1) {
-													var path = added.slice(0, index);
+												while(index = added.indexOf("/", index)+1) {
+													var path = added.slice(0, index-1);
 													if(!fs.existsSync(path)) {
 														fs.mkdirSync(path);
 													}
