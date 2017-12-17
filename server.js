@@ -94,6 +94,7 @@ app.post("*", function(req, res) {
 									request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${commits[i].added[j]}`, function(err, res2, body) {
 										if(body) {
 											fs.writeFileSync(commits[i].added[j], body);
+											console.log(commits[i].added[j]);
 										}
 									});
 								}
