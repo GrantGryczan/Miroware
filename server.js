@@ -89,28 +89,32 @@ app.post("*", function(req, res) {
 							for(var j = 0; j < commits[i].added.length; j++) {
 								if(added.indexOf(commits[i].added[j]) == -1) {
 									added.push(commits[i].added[j]);
-									request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${commits[i].added[j]}`, function(err, res2, body) {
-										if(body) {
-											var index = 0;
-											while((index = commits[i].added[j].indexOf("/", index)) != -1) {
-												var path = commits[i].added[j].slice(0, index);
-												if(!fs.existsSync(path)) {
-													fs.mkdirSync(path);
+									(function(added) {
+										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${added}`, function(err, res2, body) {
+											if(body) {
+												var index = 0;
+												while((index = added.indexOf("/", index)) != -1) {
+													var path = added.slice(0, index);
+													if(!fs.existsSync(path)) {
+														fs.mkdirSync(path);
+													}
 												}
+												fs.writeFileSync(added, body);
 											}
-											fs.writeFileSync(commits[i].added[j], body);
-										}
-									});
+										});
+									})(commits[i].added[j]);
 								}
 							}
 							for(var j = 0; j < commits[i].modified.length; j++) {
 								if(modified.indexOf(commits[i].modified[j]) == -1) {
 									modified.push(commits[i].modified[j]);
-									request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${commits[i].modified[j]}`, function(err, res2, body) {
-										if(body) {
-											fs.writeFileSync(commits[i].modified[j], body);
-										}
-									});
+									(function(modified) {
+										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${modified}`, function(err, res2, body) {
+											if(body) {
+												fs.writeFileSync(modified, body);
+											}
+										});
+									})(commits[i].modified[j]);
 								}
 							}
 							for(var j = 0; j < commits[i].removed.length; j++) {
