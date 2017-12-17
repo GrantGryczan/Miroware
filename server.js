@@ -75,7 +75,7 @@ app.post("*", function(req, res) {
 	if(subdomain == "") {
 		if(req.path == "/github") {
 			var signature = req.get("X-Hub-Signature");
-			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}`) {
+			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}` && req.get("X-GitHub-Event") == "push") {
 				res.send();
 				var payload = JSON.parse(req.body);
 				if(payload.repository.name == "web") {
