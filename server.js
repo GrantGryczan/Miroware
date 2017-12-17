@@ -99,7 +99,7 @@ app.post("*", function(req, res) {
 														fs.mkdirSync(path);
 													}
 												}
-												fs.writeFile(added, body);
+												fs.writeFileSync(added, body);
 											}
 										});
 									})(commits[i].added[j]);
@@ -111,7 +111,7 @@ app.post("*", function(req, res) {
 									(function(modified) {
 										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${modified}`, function(err, res2, body) {
 											if(body) {
-												fs.writeFile(modified, body);
+												fs.writeFileSync(modified, body);
 											}
 										});
 									})(commits[i].modified[j]);
@@ -120,14 +120,14 @@ app.post("*", function(req, res) {
 							for(var j = 0; j < commits[i].removed.length; j++) {
 								if(removed.indexOf(commits[i].removed[j]) == -1) {
 									removed.push(commits[i].removed[j]);
+									fs.unlinkSync(commits[i].removed[j]);
 									var index = commits[i].removed[j].length;
 									while((index = commits[i].removed[j].lastIndexOf("/", index)-1) != -2) {
 										var path = commits[i].removed[j].slice(0, index+1);
-										if(!fs.existsSync(path)) {
-											fs.mkdirSync(path);
+										if(fs.existsSync(path)) {
+											fs.rmdirSync(path);
 										}
 									}
-									fs.unlink(commits[i].removed[j]);
 								}
 							}
 						}
