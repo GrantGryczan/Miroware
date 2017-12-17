@@ -78,8 +78,10 @@ app.post("*", function(req, res) {
 			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}`) {
 				res.send();
 				var payload = JSON.parse(req.body);
+				console.log(1);
 				if(payload.repository.name == "web") {
 					var branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
+					console.log(branch);
 					if(branch == "public") {
 						var added = [];
 						var removed = [];
@@ -97,6 +99,7 @@ app.post("*", function(req, res) {
 								}
 							}
 						}
+						console.log(added);
 					}
 				}
 			}
