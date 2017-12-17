@@ -78,10 +78,8 @@ app.post("*", function(req, res) {
 			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}`) {
 				res.send();
 				var payload = JSON.parse(req.body);
-				console.log(1);
 				if(payload.repository.name == "web") {
 					var branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
-					console.log(branch);
 					if(branch == "public") {
 						var added = [];
 						var removed = [];
@@ -94,13 +92,27 @@ app.post("*", function(req, res) {
 									request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${commits[i].added[j]}`, function(err, res2, body) {
 										if(body) {
 											fs.writeFileSync(commits[i].added[j], body);
-											console.log(commits[i].added[j]);
 										}
 									});
 								}
 							}
+							for(var j = 0; j < commits[i].modified.length; j++) {
+								if(modified.indexOf(commits[i].modified[j]) == -1) {
+									modified.push(commits[i].modified[j]);
+									request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${commits[i].modified[j]}`, function(err, res2, body) {
+										if(body) {
+											fs.writeFileSync(commits[i].modified[j], body);
+										}
+									});
+								}
+							}
+							for(var j = 0; j < commits[i].removed.length; j++) {
+								if(removed.indexOf(commits[i].removed[j]) == -1) {
+									removed.push(commits[i].removed[j]);
+									fs.unlinkSync(commits[i].removed[j]);
+								}
+							}
 						}
-						console.log(added);
 					}
 				}
 			}
