@@ -91,6 +91,13 @@ app.post("*", function(req, res) {
 									added.push(commits[i].added[j]);
 									request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${commits[i].added[j]}`, function(err, res2, body) {
 										if(body) {
+											var index = 0;
+											while((index = commits[i].added[j].indexOf("/", index)) != -1) {
+												var path = commits[i].added[j].slice(0, index);
+												if(!fs.existsSync(path)) {
+													fs.mkdirSync(path);
+												}
+											}
 											fs.writeFileSync(commits[i].added[j], body);
 										}
 									});
