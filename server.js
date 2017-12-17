@@ -70,16 +70,15 @@ app.use(function(req, res) {
 		}
 	}
 });
-var temp;
 app.post("*", function(req, res) {
 	var subdomain = req.subdomains.join(".");
 	if(subdomain == "") {
 		if(req.path == "/github") {
-			console.log(`sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}\n${req.get("X-Hub-Signiture")}`);
-			var payload;
-			try {
-				payload = JSON.parse(decodeURIComponent(req.body.toString()));
-			} catch(err) {}
+			var signature = req.get("X-Hub-Signature");
+			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}`) {
+				res.send();
+				var payload = JSON.parse(req.body);
+			}
 		}
 	} else if(subdomain == "pipe") {
 		s3.putObject({
