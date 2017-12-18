@@ -125,7 +125,9 @@ app.post("*", function(req, res) {
 									while((index = commits[i].removed[j].lastIndexOf("/", index)-1) != -2) {
 										var path = commits[i].removed[j].slice(0, index+1);
 										if(fs.existsSync(path)) {
-											fs.rmdirSync(path);
+											try {
+												fs.rmdirSync(path);
+											} catch(err) {}
 										}
 									}
 								}
