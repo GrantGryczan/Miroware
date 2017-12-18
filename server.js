@@ -49,12 +49,19 @@ app.use(function(req, res) {
 	res.set("X-Magic", "real");
 	res.set("Access-Control-Expose-Headers", "X-Magic");
 	res.set("Access-Control-Allow-Origin", "*");
+	var host = req.get("Host");
+	if(host.indexOf("localhost:") == 0) {
+		Object.defineProperty(req, "protocol", {
+			value: "https",
+			enumerable: true
+		});
+	}
 	if(req.protocol == "http") {
-		res.redirect(`https://${req.get("Host") + req.url}`);
+		res.redirect(`https://${host + req.url}`);
 	} else {
 		var subdomain = req.subdomains.join(".");
 		if(subdomain == "www") {
-			res.redirect(`https://${req.get("Host").slice(4) + req.url}`);
+			res.redirect(`${req.protocol}://${host.slice(4) + req.url}`);
 		} else {
 			try {
 				decodeURIComponent(req.url);
@@ -142,7 +149,7 @@ app.post("*", function(req, res) {
 			Body: req.body,
 			Bucket: "miroware-pipe",
 			Key: req.path.slice(1),
-			ContentType: mime.lookup(req.path),
+			ContentType: mime.getType(req.path),
 			ServerSideEncryption: "AES256"
 		}, function(err) {
 			res.set("Content-Type", "text/plain");
@@ -226,7 +233,7 @@ app.get("*", async function(req, res) {
 	var subdomain = req.subdomains.join(".");
 	if(subdomain == "" || subdomain == "d") {
 		var path = getActualPath(decodedPath);
-		var type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.lookup(path);
+		var type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
 		var publicPath = path.slice(3);
 		if(path.slice(-10) == "/index.njs") {
 			publicPath = publicPath.slice(0, -9);
@@ -256,7 +263,7 @@ app.get("*", async function(req, res) {
 		}
 	} else if(subdomain == "pipe") {
 		if(decodedPath == "/") {
-			res.redirect(`https://${req.get("Host").slice(5)}/pipe/`);
+			res.redirect(`${req.protocol}://${req.get("Host").slice(5)}/pipe/`);
 		} else {
 			s3.getObject({
 				Bucket: "miroware-pipe",
@@ -273,11 +280,13 @@ app.get("*", async function(req, res) {
 	}
 });
 http.createServer(app).listen(8080);
-https.createServer({
-	key: fs.readFileSync("/etc/letsencrypt/live/miroware.io/privkey.pem"),
-	cert: fs.readFileSync("/etc/letsencrypt/live/miroware.io/cert.pem"),
-	ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
-}, app).listen(8443);
+try {
+	https.createServer({
+		key: fs.readFileSync("/etc/letsencrypt/live/miroware.io/privkey.pem"),
+		cert: fs.readFileSync("/etc/letsencrypt/live/miroware.io/cert.pem"),
+		ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
+	}, app).listen(8443);
+} catch(err) {}
 fs.watch(__filename, function(type) {
 	process.exit();
 });

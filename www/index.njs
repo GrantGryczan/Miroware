@@ -1,4 +1,4 @@
-var links = ["/tilepuzzle/", "/snake/", "/galtonboard/", "/completebullshit/", "/evilcubes/", "/draw/", "/charagraph/", "/imagecorruptor/"];
+var links = [];
 this.title = "Miroware";
 this.description = "Hello, world!";
 this.tags = ["homepage", "home", "page", "front"];
