@@ -1,0 +1,29 @@
+{
+	"name": "web",
+	"version": "1.0.0",
+	"description": "Miroware's Website",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Miroware8/web.git"
+	},
+	"author": "Grant Gryczan",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Miroware8/web/issues"
+	},
+	"homepage": "https://miroware.io/",
+	"dependencies": {
+		"aws-sdk": "^2.171.0",
+		"body-parser": "^1.18.2",
+		"connect-dynamodb": "^2.0.0",
+		"cookie-parser": "^1.4.3",
+		"express": "^4.16.2",
+		"express-session": "^1.15.6",
+		"mime": "^2.0.3",
+		"request": "^2.83.0"
+	}
+}
