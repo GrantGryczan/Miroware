@@ -87,7 +87,7 @@ app.post("*", function(req, res) {
 				var payload = JSON.parse(req.body);
 				if(payload.repository.name == "web") {
 					var branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
-					if(branch == "public") {
+					if(branch == "master") {
 						var added = [];
 						var removed = [];
 						var modified = [];
