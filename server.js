@@ -50,31 +50,36 @@ app.use(function(req, res) {
 	res.set("Access-Control-Expose-Headers", "X-Magic");
 	res.set("Access-Control-Allow-Origin", "*");
 	var host = req.get("Host");
-	if(host.indexOf("localhost:") == 0) {
-		Object.defineProperty(req, "protocol", {
-			value: "https",
-			enumerable: true
-		});
-	}
-	if(req.protocol == "http") {
-		res.redirect(`https://${host + req.url}`);
-	} else {
-		var subdomain = req.subdomains.join(".");
-		if(subdomain == "www") {
-			res.redirect(`${req.protocol}://${host.slice(4) + req.url}`);
+	if(host) {
+		if(host.indexOf("localhost:") == 0) {
+			Object.defineProperty(req, "protocol", {
+				value: "https",
+				enumerable: true
+			});
+		}
+		if(req.protocol == "http") {
+			res.redirect(`https://${host + req.url}`);
 		} else {
-			try {
-				decodeURIComponent(req.url);
-				for(var i in req.body) {
-					if(typeof req.body[i] == "string") {
-						req.body[i] = req.body[i].replace(/\r/g, "");
+			var subdomain = req.subdomains.join(".");
+			if(subdomain == "www") {
+				res.redirect(`${req.protocol}://${host.slice(4) + req.url}`);
+			} else {
+				try {
+					decodeURIComponent(req.url);
+					for(var i in req.body) {
+						if(typeof req.body[i] == "string") {
+							req.body[i] = req.body[i].replace(/\r/g, "");
+						}
 					}
+					req.next();
+				} catch(err) {
+					res.status(400).json(400);
 				}
-				req.next();
-			} catch(err) {
-				res.status(400).json(400);
 			}
 		}
+	} else {
+		console.log(req.get("User-Agent"));
+		res.status(400).send("I am not quite sure how you could get this error, but you apparently can. I am willing to bet that you need a new web browser. That is probably what caused it.");
 	}
 });
 app.post("*", function(req, res) {
