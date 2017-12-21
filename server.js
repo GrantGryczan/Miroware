@@ -96,46 +96,45 @@ app.post("*", function(req, res) {
 						var added = [];
 						var removed = [];
 						var modified = [];
-						var commits = [payload.head_commit].concat(payload.commits);
-						for(var i = 0; i < commits.length; i++) {
-							for(var j = 0; j < commits[i].added.length; j++) {
-								if(added.indexOf(commits[i].added[j]) == -1) {
-									added.push(commits[i].added[j]);
-									(function(added) {
-										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${added}`, function(err, res2, body) {
+						for(var i = 0; i < payload.commits.length; i++) {
+							for(var j = 0; j < payload.commits[i].added.length; j++) {
+								if(added.indexOf(payload.commits[i].added[j]) == -1) {
+									added.push(payload.commits[i].added[j]);
+									(function(path) {
+										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
 											if(body) {
 												var index = 0;
-												while(index = added.indexOf("/", index)+1) {
-													var path = added.slice(0, index-1);
+												while(index = path.indexOf("/", index)+1) {
+													var path = path.slice(0, index-1);
 													if(!fs.existsSync(path)) {
 														fs.mkdirSync(path);
 													}
 												}
-												fs.writeFileSync(added, body);
+												fs.writeFileSync(path, body);
 											}
 										});
-									})(commits[i].added[j]);
+									})(payload.commits[i].added[j]);
 								}
 							}
-							for(var j = 0; j < commits[i].modified.length; j++) {
-								if(modified.indexOf(commits[i].modified[j]) == -1) {
-									modified.push(commits[i].modified[j]);
-									(function(modified) {
-										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${modified}`, function(err, res2, body) {
+							for(var j = 0; j < payload.commits[i].modified.length; j++) {
+								if(modified.indexOf(payload.commits[i].modified[j]) == -1) {
+									modified.push(payload.commits[i].modified[j]);
+									(function(path) {
+										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
 											if(body) {
-												fs.writeFileSync(modified, body);
+												fs.writeFileSync(path, body);
 											}
 										});
-									})(commits[i].modified[j]);
+									})(payload.commits[i].modified[j]);
 								}
 							}
-							for(var j = 0; j < commits[i].removed.length; j++) {
-								if(removed.indexOf(commits[i].removed[j]) == -1) {
-									removed.push(commits[i].removed[j]);
-									fs.unlinkSync(commits[i].removed[j]);
-									var index = commits[i].removed[j].length;
-									while((index = commits[i].removed[j].lastIndexOf("/", index)-1) != -2) {
-										var path = commits[i].removed[j].slice(0, index+1);
+							for(var j = 0; j < payload.commits[i].removed.length; j++) {
+								if(removed.indexOf(payload.commits[i].removed[j]) == -1) {
+									removed.push(payload.commits[i].removed[j]);
+									fs.unlinkSync(payload.commits[i].removed[j]);
+									var index = payload.commits[i].removed[j].length;
+									while((index = payload.commits[i].removed[j].lastIndexOf("/", index)-1) != -2) {
+										var path = payload.commits[i].removed[j].slice(0, index+1);
 										if(fs.existsSync(path)) {
 											try {
 												fs.rmdirSync(path);
