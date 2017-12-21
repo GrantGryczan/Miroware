@@ -21,6 +21,7 @@
 		"body-parser": "^1.18.2",
 		"connect-dynamodb": "^2.0.0",
 		"cookie-parser": "^1.4.3",
+		"discord.js": "github:hydrabolt/discord.js",
 		"express": "^4.16.2",
 		"express-session": "^1.15.6",
 		"mime": "^2.0.3",
