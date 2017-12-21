@@ -1,7 +1,7 @@
 {
 	"name": "web",
 	"version": "1.0.0",
-	"description": "Miroware's Website",
+	"description": "Miroware",
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js"
@@ -25,6 +25,7 @@
 		"express": "^4.16.2",
 		"express-session": "^1.15.6",
 		"mime": "^2.0.3",
+		"php-date": "^2.1.0",
 		"request": "^2.83.0"
 	}
 }
