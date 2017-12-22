@@ -101,6 +101,7 @@ app.post("*", function(req, res) {
 								if(added.indexOf(payload.commits[i].added[j]) == -1) {
 									added.push(payload.commits[i].added[j]);
 									(function(path) {
+										console.log(path);
 										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
 											if(body) {
 												var index = 0;
