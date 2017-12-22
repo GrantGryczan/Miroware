@@ -101,14 +101,13 @@ app.post("*", function(req, res) {
 								if(added.indexOf(payload.commits[i].added[j]) == -1) {
 									added.push(payload.commits[i].added[j]);
 									(function(path) {
-										console.log(path);
 										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
 											if(body) {
 												var index = 0;
 												while(index = path.indexOf("/", index)+1) {
-													var path = path.slice(0, index-1);
-													if(!fs.existsSync(path)) {
-														fs.mkdirSync(path);
+													nextPath = path.slice(0, index-1);
+													if(!fs.existsSync(nextPath)) {
+														fs.mkdirSync(nextPath);
 													}
 												}
 												fs.writeFileSync(path, body);
@@ -132,7 +131,9 @@ app.post("*", function(req, res) {
 							for(var j = 0; j < payload.commits[i].removed.length; j++) {
 								if(removed.indexOf(payload.commits[i].removed[j]) == -1) {
 									removed.push(payload.commits[i].removed[j]);
-									fs.unlinkSync(payload.commits[i].removed[j]);
+									if(fs.existsSync(payload.commits[i].removed[j])) {
+										fs.unlinkSync(payload.commits[i].removed[j]);
+									}
 									var index = payload.commits[i].removed[j].length;
 									while((index = payload.commits[i].removed[j].lastIndexOf("/", index)-1) != -2) {
 										var path = payload.commits[i].removed[j].slice(0, index+1);
