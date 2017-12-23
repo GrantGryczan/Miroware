@@ -31,6 +31,7 @@ var warn = function(guild, perms) {
 };
 var guildCreate = function(guild) {
 	console.log("guildCreate " + guild.id);
+	/*
 	guild.createChannel("starboard", "text", [{
 		type: "role",
 		id: guild.defaultRole.id,
@@ -46,6 +47,8 @@ var guildCreate = function(guild) {
 	}).catch(function() {
 		warn(guild, "manage channels");
 	});
+	*/
+	
 };
 var guildDelete = function(guild) {
 	console.log("guildDelete " + guild.id);
