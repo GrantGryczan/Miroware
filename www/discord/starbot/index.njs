@@ -10,7 +10,7 @@ this.value += html`
 this.value += (await load("/load/belt.njs", this)).value;
 this.value += html`
 		<script>
-			location.replace("${this.redirect = "https://discordapp.com/oauth2/authorize?client_id=369313537073348608&scope=bot&permissions=379984"}");
+			location.replace("${this.redirect = "https://discordapp.com/oauth2/authorize?client_id=369313537073348608&scope=bot&permissions=379968"}");
 		</script>`;
 this.value += (await load("/load/foot.njs", this)).value;
 this.exit();
