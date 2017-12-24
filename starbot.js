@@ -16,7 +16,9 @@ client.once("error", process.exit);
 client.once("disconnect", process.exit);
 var inform = function(guild, str1, str2) {
 	guild.owner.send(str1).catch(function() {
-		var channels = Array.from(guild.channels.values());
+		var channels = guild.channels.filterArray(function(channel) {
+			return channel.type == "text";
+		});
 		var i = 0;
 		var testChannel = function() {
 			if(channels[i]) {
