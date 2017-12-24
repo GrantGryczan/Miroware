@@ -79,6 +79,7 @@ client.on("guildDelete", guildDelete);
 client.on("channelDelete", function(channel) {
 	if(channel.id == data.guilds[channel.guild.id][0]) {
 		data.guilds[channel.guild.id][0] = null;
+		save();
 	}
 });
 var starred = [];
