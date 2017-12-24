@@ -48,19 +48,27 @@ var guildDelete = function(guild) {
 	save();
 }
 var sendHelp = function(msg) {
-	console.log(0);
 	if(data.guilds[msg.guild.id][0]) {
 		console.log(1);
 		var help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${(data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
-		if(perm) {
-			help += "\nAs a member of the Discord server with administrative permission, you can enter \">⭐\" with, after it, a channel tag to set the starboard channel, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (except for in the starboard channel, which already has this disabled by default).";
-		}
-		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
-		msg.channel.send(help).catch(function() {
-			permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-		});
-	} else {
 		console.log(2);
+		if(perm) {
+			console.log(3);
+			help += "\nAs a member of the Discord server with administrative permission, you can enter \">⭐\" with, after it, a channel tag to set the starboard channel, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (except for in the starboard channel, which already has this disabled by default).";
+			console.log(4);
+		}
+		console.log(5);
+		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
+		console.log(6);
+		msg.channel.send(help).then(function() {
+			console.log(7);
+		}).catch(function() {
+			console.log(8);
+			permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+			console.log(9);
+		});
+		console.log(10);
+	} else {
 		noStarboard(msg.guild);
 	}
 };
