@@ -173,7 +173,7 @@ client.on("message", function(msg) {
 							});
 						});
 					}).catch(function(err) {
-						console.error(err);
+						console.error(err.message);
 						data.guilds[msg.guild.id][1] = old1;
 						save();
 						msg.channel.messages.fetch(content).then(function(msg2) {
