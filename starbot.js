@@ -14,44 +14,35 @@ var save = function() {
 var client = new Discord.Client();
 client.once("error", process.exit);
 client.once("disconnect", process.exit);
-var warn = function(guild, perms) {
-	var warning = ", likely because I do not have permission to " + perms + ". It is recommended that you enable these permissions for me in attempt to resolve this error.";
-	guild.owner.send("An error occured on " + guild.name + warning).catch(function() {
-		warning = guild.owner + " An error occured" + warning;
+var inform = function(guild, str1, str2) {
+	guild.owner.send(str1).catch(function() {
 		var channels = Array.from(guild.channels.values());
 		var i = 0;
 		var testChannel = function() {
-			channels[i].send(warning).catch(function() {
-				i++;
-				testChannel();
-			});
+			if(channels[i]) {
+				channels[i].send(str2).catch(function() {
+					i++;
+					testChannel();
+				});
+			}
 		};
 		testChannel();
 	});
 };
+var permWarn = function(guild, perms) {
+	var warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
+	inform(guild, `An error occured on ${guild.name+warning}`, `${guild.owner} An error occured${warning}`);
+};
+var noStarboard = function(guild) {
+	var warning = " as there is nowhere for starred messages to be placed. No starboard channel has been set!\nAs a member of the Discord server with administrative permission, you can set the starboard channel by entering \">⭐\" with a channel tag after it. It is recommended that you also set permissions on that channel channel so that only I can send messages in it.";
+	inform(guild, `An error occured on ${guild.name+warning}`, `${guild.owner} An error occured${warning}`);
+}
 var guildCreate = function(guild) {
-	console.log("guildCreate " + guild.id);
-	/*
-	guild.createChannel("starboard", "text", [{
-		type: "role",
-		id: guild.defaultRole.id,
-		deny: 2048
-	}, {
-		type: "member",
-		id: client.user.id,
-		allow: 268446736,
-		deny: 131072
-	}]).then(function(channel) {
-		data.guilds[guild.id] = [channel.id, "%E2%AD%90", 5, 16755763];
-		save();
-	}).catch(function() {
-		warn(guild, "manage channels");
-	});
-	*/
-	
+	console.log(`guildCreate ${guild.id}`);
+	data.guilds[guild.id] = [null, "%E2%AD%90", 5, 16755763];
 };
 var guildDelete = function(guild) {
-	console.log("guildDelete " + guild.id);
+	console.log(`guildDelete ${guild.id}`);
 	delete data.guilds[guild.id];
 	save();
 }
@@ -64,8 +55,8 @@ client.once("ready", function() {
 	for(var i = 0; i < guilds.length; i++) {
 		var guild = client.guilds.get(guilds[i]);
 		if(data.guilds[guilds[i]]) {
-			if(!guild.channels.get(data.guilds[guilds[i]][0])) {
-				guild.leave();
+			if(data.guilds[guilds[i]][0] && !guild.channels.get(data.guilds[guilds[i]][0])) {
+				data.guilds[guilds[i]][0] = null;
 			}
 		} else {
 			guildCreate(guild);
@@ -84,7 +75,7 @@ client.on("guildCreate", guildCreate);
 client.on("guildDelete", guildDelete);
 client.on("channelDelete", function(channel) {
 	if(channel.id == data.guilds[channel.guild.id][0]) {
-		channel.guild.leave();
+		data.guilds[channel.guild.id][0] = null;
 	}
 });
 var starred = [];
@@ -97,7 +88,7 @@ var star = function(msg, callback) {
 			timestamp: msg.createdAt.toISOString(),
 			color: data.guilds[msg.guild.id][3],
 			footer: {
-				text: decodeURIComponent(data.guilds[msg.guild.id][1]) + " | " + msg.id
+				text: `${decodeURIComponent(data.guilds[msg.guild.id][1])} | ${msg.id}`
 			},
 			fields: [
 				{
@@ -130,10 +121,14 @@ var star = function(msg, callback) {
 			url: attachment.url
 		};
 	}
-	var starboard = msg.guild.channels.get(data.guilds[msg.guild.id][0]);
-	starboard.send(embed).then(callback).catch(function(err) {
-		warn(msg.guild, "read messages, send messages, " + (attachment ? "and/or embed links" : "embed links, and/or attach files") + ", in the " + starboard + " channel or otherwise");
-	});
+	if(data.guilds[msg.guild.id][0]) {
+		var starboard = msg.guild.channels.get(data.guilds[msg.guild.id][0]);
+		starboard.send(embed).then(callback).catch(function(err) {
+			permWarn(msg.guild, `read messages, send messages, ${(attachment ? "and/or embed links" : "embed links, and/or attach files")}, in the ${starboard} channel or otherwise`);
+		});
+	} else {
+		noStarboard(msg.guild);
+	}
 };
 client.on("messageReactionAdd", function(reaction) {
 	if(starred.indexOf(reaction.message.id) == -1 && data.guilds[reaction.message.guild.id] && reaction.message.channel.id != data.guilds[reaction.message.guild.id][0] && reaction.emoji.identifier == data.guilds[reaction.message.guild.id][1] && reaction.count >= data.guilds[reaction.message.guild.id][2]) {
@@ -148,14 +143,18 @@ client.on("message", function(msg) {
 			var member = msg.guild.member(msg.author);
 			var perm = member.hasPermission(8);
 			var sendHelp = function() {
-				var help = msg.author + " You can add " + data.guilds[msg.guild.id][2] + " " + decodeURIComponent(data.guilds[msg.guild.id][1]) + " " + ((data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions") + " to a message on this server to add it to the <#" + data.guilds[msg.guild.id][0] + "> channel.";
-				if(perm) {
-					help += "\nAs a member of this Discord server with administrative permission, you can enter \">⭐\" with, after it, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, a channel tag to switch the starboard channel (not recommended), or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (except for in the starboard channel, which already has this disabled by default).";
+				if(data.guilds[msg.guild.id][0]) {
+					var help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${((data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions")} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
+					if(perm) {
+						help += "\nAs a member of the Discord server with administrative permission, you can enter \">⭐\" with, after it, a channel tag to set the starboard channel, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (except for in the starboard channel, which already has this disabled by default).";
+					}
+					help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
+					msg.channel.send(help).catch(function() {
+						permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+					});
+				} else {
+					noStarboard(msg.guild);
 				}
-				help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
-				msg.channel.send(help).catch(function() {
-					warn(msg.guild, "send messages, in the " + msg.channel + " channel or otherwise");
-				});
 			};
 			if(perm) {
 				content = content.replace(prefix, "").replace(/ /g, "");
@@ -166,8 +165,8 @@ client.on("message", function(msg) {
 						reaction.remove(client.user).then(function() {
 							data.guilds[msg.guild.id][1] = reaction.emoji.identifier;
 							save();
-							msg.channel.send(msg.author + " Members now have to react with the " + content + " emoji to get a message starred.").catch(function() {
-								warn(msg.guild, "send messages, in the " + msg.channel + " channel or otherwise");
+							msg.channel.send(`${msg.author} Members now have to react with the ${content} emoji to get a message starred.`).catch(function() {
+								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 							});
 						});
 					}).catch(function() {
@@ -175,8 +174,8 @@ client.on("message", function(msg) {
 						save();
 						msg.channel.messages.fetch(content).then(function(msg2) {
 							star(msg2, function() {
-								msg.channel.send(msg.author + " Message `" + msg2.id + "` has been starred.").catch(function() {
-									warn(msg.guild, "send messages, in the " + msg.channel + " channel or otherwise");
+								msg.channel.send(`${msg.author} Message \`${msg2.id}\` has been starred.`).catch(function() {
+									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 								});
 							});
 						}).catch(function() {
@@ -185,12 +184,12 @@ client.on("message", function(msg) {
 								if(msg.guild.channels.get(channel)) {
 									data.guilds[msg.guild.id][0] = channel;
 									save();
-									msg.channel.send(msg.author + " The starboard channel has been set to " + content + ".").catch(function() {
-										warn(msg.guild, "send messages, in the " + msg.channel + " channel or otherwise");
+									msg.channel.send(`${msg.author} The starboard channel has been set to ${content}.`).catch(function() {
+										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 									});
 								} else {
-									msg.channel.send(msg.author + " That channel does not exist, or I do not have permission read messages in it.").catch(function() {
-										warn(msg.guild, "send messages, in the " + msg.channel + " channel or otherwise");
+									msg.channel.send(`${msg.author} That channel does not exist, or I do not have permission to read messages in it.`).catch(function() {
+										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 									});
 								}
 							} else {
@@ -198,20 +197,20 @@ client.on("message", function(msg) {
 								if(reactionCount) {
 									data.guilds[msg.guild.id][2] = Math.abs(reactionCount);
 									save();
-									msg.channel.send(msg.author + " Members now have to add " + data.guilds[msg.guild.id][2] + " " + ((data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions") + " to get a message starred.").catch(function() {
-										warn(msg.guild, "send messages, in the " + msg.channel + " channel or otherwise");
+									msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${((data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions")} to get a message starred.`).catch(function() {
+										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 									});
 								} else if(colorTest.test(content)) {
 									var code = content.replace(colorTest, "$1$1$2$2$3$3$4");
 									data.guilds[msg.guild.id][3] = parseInt(code, 16);
 									save();
-									msg.channel.send("The starred embed color has been changed to `#" + code + "`.\n(The default starred embed color is `#ffac33`.)", {
+									msg.channel.send(`The starred embed color has been changed to \`#${code}\`.\n(The default starred embed color is \`#ffac33\`.)`, {
 										embed: {
-											title: "#" + code,
+											title: `#${code}`,
 											color: data.guilds[msg.guild.id][3]
 										}
 									}).catch(function() {
-										warn(msg.guild, "send messages or embed links, in the " + msg.channel + " channel or otherwise");
+										permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 									});
 								} else {
 									sendHelp();
