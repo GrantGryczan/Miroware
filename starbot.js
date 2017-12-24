@@ -161,7 +161,9 @@ client.on("message", function(msg) {
 			var perm = msg.guild.member(msg.author).hasPermission(8);
 			if(perm) {
 				content = content.replace(prefix, "").replace(/ /g, "");
+				console.log(content);
 				if(content) {
+					console.log(2);
 					var old1 = data.guilds[msg.guild.id][1];
 					data.guilds[msg.guild.id][1] = null;
 					msg.react(content).then(function(reaction) {
