@@ -159,7 +159,6 @@ client.on("message", function(msg) {
 		if(prefix.test(content)) {
 			var member = msg.guild.member(msg.author);
 			var perm = member.hasPermission(8);
-			sendHelp(msg);
 			if(perm) {
 				content = content.replace(prefix, "").replace(/ /g, "");
 				if(content) {
@@ -217,16 +216,16 @@ client.on("message", function(msg) {
 										permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 									});
 								} else {
-									sendHelp();
+									sendHelp(msg);
 								}
 							}
 						});
 					});
 				} else {
-					sendHelp();
+					sendHelp(msg);
 				}
 			} else {
-				sendHelp();
+				sendHelp(msg);
 			}
 		}
 	}
