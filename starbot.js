@@ -40,6 +40,7 @@ var noStarboard = function(guild) {
 var guildCreate = function(guild) {
 	console.log(`guildCreate ${guild.id}`);
 	data.guilds[guild.id] = [null, "%E2%AD%90", 5, 16755763];
+	noStarboard();
 };
 var guildDelete = function(guild) {
 	console.log(`guildDelete ${guild.id}`);
