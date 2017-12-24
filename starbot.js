@@ -47,27 +47,17 @@ var guildDelete = function(guild) {
 	delete data.guilds[guild.id];
 	save();
 }
-var sendHelp = function(msg) {
+var sendHelp = function(msg, perm) {
 	if(data.guilds[msg.guild.id][0]) {
-		console.log(1);
 		var help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${(data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
-		console.log(2);
 		if(perm) {
-			console.log(3);
 			help += "\nAs a member of the Discord server with administrative permission, you can enter \">⭐\" with, after it, a channel tag to set the starboard channel, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (except for in the starboard channel, which already has this disabled by default).";
-			console.log(4);
 		}
-		console.log(5);
 		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
-		console.log(6);
 		msg.channel.send(help).then(function() {
-			console.log(7);
 		}).catch(function() {
-			console.log(8);
 			permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-			console.log(9);
 		});
-		console.log(10);
 	} else {
 		noStarboard(msg.guild);
 	}
@@ -168,8 +158,7 @@ client.on("message", function(msg) {
 	if(msg.channel.type == "text" && !msg.system) {
 		var content = msg.content;
 		if(prefix.test(content)) {
-			var member = msg.guild.member(msg.author);
-			var perm = member.hasPermission(8);
+			var perm = msg.guild.member(msg.author).hasPermission(8);
 			if(perm) {
 				content = content.replace(prefix, "").replace(/ /g, "");
 				if(content) {
@@ -227,16 +216,16 @@ client.on("message", function(msg) {
 										permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 									});
 								} else {
-									sendHelp(msg);
+									sendHelp(msg, perm);
 								}
 							}
 						});
 					});
 				} else {
-					sendHelp(msg);
+					sendHelp(msg, perm);
 				}
 			} else {
-				sendHelp(msg);
+				sendHelp(msg, perm);
 			}
 		}
 	}
