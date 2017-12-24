@@ -222,6 +222,7 @@ client.on("message", function(msg) {
 						});
 					});
 				} else {
+					console.log(1);
 					sendHelp(msg);
 				}
 			} else {
