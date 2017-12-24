@@ -19,13 +19,11 @@ var inform = function(guild, str1, str2) {
 		var channels = guild.channels.filterArray(function(channel) {
 			return channel.type == "text";
 		});
-		var i = 0;
+		var i = -1;
 		var testChannel = function() {
+			i++;
 			if(channels[i]) {
-				channels[i].send(str2).catch(function() {
-					i++;
-					testChannel();
-				});
+				channels[i].send(str2).catch(testChannel);
 			}
 		};
 		testChannel();
@@ -49,6 +47,20 @@ var guildDelete = function(guild) {
 	delete data.guilds[guild.id];
 	save();
 }
+var sendHelp = function(msg) {
+	if(data.guilds[msg.guild.id][0]) {
+		var help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${(data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
+		if(perm) {
+			help += "\nAs a member of the Discord server with administrative permission, you can enter \">⭐\" with, after it, a channel tag to set the starboard channel, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (except for in the starboard channel, which already has this disabled by default).";
+		}
+		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
+		msg.channel.send(help).catch(function() {
+			permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+		});
+	} else {
+		noStarboard(msg.guild);
+	}
+};
 client.once("ready", function() {
 	client.user.setPresence({
 		status: "online"
@@ -85,6 +97,7 @@ client.on("channelDelete", function(channel) {
 var starred = [];
 var star = function(msg, callback) {
 	if(data.guilds[msg.guild.id][0]) {
+		console.log(`star ${msg.guild.id} ${msg.channel.id} ${msg.id}`);
 		if(starred.indexOf(msg.id) == -1) {
 			starred.push(msg.id);
 		}
@@ -128,7 +141,7 @@ var star = function(msg, callback) {
 		}
 		var starboard = msg.guild.channels.get(data.guilds[msg.guild.id][0]);
 		starboard.send(embed).then(callback).catch(function() {
-			permWarn(msg.guild, `read messages, send messages, ${(attachment ? "and/or embed links" : "embed links, and/or attach files")}, in the ${starboard} channel or otherwise`);
+			permWarn(msg.guild, `read messages, send messages, ${attachment ? "and/or embed links" : "embed links, and/or attach files"}, in the ${starboard} channel or otherwise`);
 		});
 	} else {
 		noStarboard(msg.guild);
@@ -146,20 +159,7 @@ client.on("message", function(msg) {
 		if(prefix.test(content)) {
 			var member = msg.guild.member(msg.author);
 			var perm = member.hasPermission(8);
-			var sendHelp = function() {
-				if(data.guilds[msg.guild.id][0]) {
-					var help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${((data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions")} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
-					if(perm) {
-						help += "\nAs a member of the Discord server with administrative permission, you can enter \">⭐\" with, after it, a channel tag to set the starboard channel, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (except for in the starboard channel, which already has this disabled by default).";
-					}
-					help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
-					msg.channel.send(help).catch(function() {
-						permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-					});
-				} else {
-					noStarboard(msg.guild);
-				}
-			};
+			sendHelp(msg);
 			if(perm) {
 				content = content.replace(prefix, "").replace(/ /g, "");
 				if(content) {
@@ -201,7 +201,7 @@ client.on("message", function(msg) {
 								if(reactionCount) {
 									data.guilds[msg.guild.id][2] = Math.abs(reactionCount);
 									save();
-									msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${((data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions")} to get a message starred.`).catch(function() {
+									msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${(data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions"} to get a message starred.`).catch(function() {
 										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 									});
 								} else if(colorTest.test(content)) {
