@@ -14,6 +14,9 @@ var save = function() {
 var client = new Discord.Client();
 client.once("error", process.exit);
 client.once("disconnect", process.exit);
+var italicize = function(str) {
+	return `_${JSON.stringify(str.toString()).slice(1, -1).replace(/_/g, "\\_")}_`;
+};
 var inform = function(guild, str1, str2) {
 	guild.owner.send(str1).catch(function() {
 		var channels = guild.channels.filterArray(function(channel) {
@@ -31,11 +34,11 @@ var inform = function(guild, str1, str2) {
 };
 var permWarn = function(guild, perms) {
 	var warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
-	inform(guild, `An error occured on _${guild.name}_${warning}`, `${guild.owner} An error occured${warning}`);
+	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
 };
 var noStarboard = function(guild) {
 	var warning = ", as there is nowhere for starred messages to be placed. No starboard channel has been set!\nAs a member of the Discord server with administrative permission, you can set the starboard channel by entering \">⭐\" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.";
-	inform(guild, `An error occured on _${guild.name}_${warning}`, `${guild.owner} An error occured${warning}`);
+	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
 }
 var guildCreate = function(guild) {
 	console.log(`guildCreate ${guild.id}`);
