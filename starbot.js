@@ -83,50 +83,50 @@ client.on("channelDelete", function(channel) {
 });
 var starred = [];
 var star = function(msg, callback) {
-	if(starred.indexOf(msg.id) == -1) {
-		starred.push(msg.id);
-	}
-	var embed = {
-		embed: {
-			timestamp: msg.createdAt.toISOString(),
-			color: data.guilds[msg.guild.id][3],
-			footer: {
-				text: `${decodeURIComponent(data.guilds[msg.guild.id][1])} | ${msg.id}`
-			},
-			fields: [
-				{
-					name: "Author",
-					value: msg.author.toString(),
-					inline: true
-				},
-				{
-					name: "Channel",
-					value: msg.channel.toString(),
-					inline: true
-				},
-				{
-					name: "Message",
-					value: msg.content || "..."
-				}
-			]
-		}
-	};
-	if(embed.embed.fields[2].value.length > 1024) {
-		embed.embed.fields[2].value = msg.content.slice(0, 1024);
-		embed.embed.fields.push({
-			name: "Continued",
-			value: msg.content.slice(1024)
-		});
-	}
-	var attachment = msg.attachments.first();
-	if(attachment) {
-		embed.embed.image = {
-			url: attachment.url
-		};
-	}
 	if(data.guilds[msg.guild.id][0]) {
+		if(starred.indexOf(msg.id) == -1) {
+			starred.push(msg.id);
+		}
+		var embed = {
+			embed: {
+				timestamp: msg.createdAt.toISOString(),
+				color: data.guilds[msg.guild.id][3],
+				footer: {
+					text: `${decodeURIComponent(data.guilds[msg.guild.id][1])} | ${msg.id}`
+				},
+				fields: [
+					{
+						name: "Author",
+						value: msg.author.toString(),
+						inline: true
+					},
+					{
+						name: "Channel",
+						value: msg.channel.toString(),
+						inline: true
+					},
+					{
+						name: "Message",
+						value: msg.content || "..."
+					}
+				]
+			}
+		};
+		if(embed.embed.fields[2].value.length > 1024) {
+			embed.embed.fields[2].value = msg.content.slice(0, 1024);
+			embed.embed.fields.push({
+				name: "Continued",
+				value: msg.content.slice(1024)
+			});
+		}
+		var attachment = msg.attachments.first();
+		if(attachment) {
+			embed.embed.image = {
+				url: attachment.url
+			};
+		}
 		var starboard = msg.guild.channels.get(data.guilds[msg.guild.id][0]);
-		starboard.send(embed).then(callback).catch(function(err) {
+		starboard.send(embed).then(callback).catch(function() {
 			permWarn(msg.guild, `read messages, send messages, ${(attachment ? "and/or embed links" : "embed links, and/or attach files")}, in the ${starboard} channel or otherwise`);
 		});
 	} else {
