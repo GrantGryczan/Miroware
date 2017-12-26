@@ -171,7 +171,7 @@ var html = function() {
 	var string = arguments[0][0];
 	var substitutions = [].slice.call(arguments, 1);
 	for(var i = 0; i < substitutions.length; i++) {
-		string += substitutions[i].toString().replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + arguments[0][i+1];
+		string += String(substitutions[i]).replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + arguments[0][i+1];
 	}
 	return string;
 };
@@ -298,5 +298,5 @@ fs.watch(__filename, function(type) {
 });
 var stdin = process.openStdin();
 stdin.on("data", function(input) {
-	console.log(eval(input.toString().trim()));
+	console.log(eval(String(input).trim()));
 });
