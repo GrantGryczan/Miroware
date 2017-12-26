@@ -15,7 +15,7 @@ var client = new Discord.Client();
 client.once("error", process.exit);
 client.once("disconnect", process.exit);
 var italicize = function(str) {
-	return `_${JSON.stringify(str.toString()).slice(1, -1).replace(/_/g, "\\_")}_`;
+	return `_${JSON.stringify(String(str)).slice(1, -1).replace(/_/g, "\\_")}_`;
 };
 var inform = function(guild, str1, str2) {
 	guild.owner.send(str1).catch(function() {
@@ -115,12 +115,12 @@ var star = function(msg, callback) {
 				fields: [
 					{
 						name: "Author",
-						value: msg.author.toString(),
+						value: String(msg.author),
 						inline: true
 					},
 					{
 						name: "Channel",
-						value: msg.channel.toString(),
+						value: String(msg.channel),
 						inline: true
 					},
 					{
@@ -239,5 +239,5 @@ fs.watch(__filename, function(type) {
 });
 var stdin = process.openStdin();
 stdin.on("data", function(input) {
-	console.log(eval(input.toString().trim()));
+	console.log(eval(String(input).trim()));
 });
