@@ -66,11 +66,6 @@ app.use(function(req, res) {
 			} else {
 				try {
 					decodeURIComponent(req.url);
-					for(var i in req.body) {
-						if(typeof req.body[i] == "string") {
-							req.body[i] = req.body[i].replace(/\r/g, "");
-						}
-					}
 					req.next();
 				} catch(err) {
 					res.status(400).json(400);
@@ -169,7 +164,7 @@ app.post("*", function(req, res) {
 });
 var html = function() {
 	var string = arguments[0][0];
-	var substitutions = [].slice.call(arguments, 1);
+	var substitutions = Array.prototype.slice.call(arguments, 1);
 	for(var i = 0; i < substitutions.length; i++) {
 		string += String(substitutions[i]).replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + arguments[0][i+1];
 	}
@@ -202,10 +197,7 @@ var load = function(path, context) {
 	} else {
 		context = {};
 	}
-	var properties = [];
-	for(var i in context) {
-		properties.push(i);
-	}
+	var properties = Object.keys(context);
 	context.value = "";
 	return new Promise(function(resolve, reject) {
 		if(loadCache[path]) {
