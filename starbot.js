@@ -234,7 +234,7 @@ client.on("message", function(msg) {
 	}
 });
 client.login(data.token);
-fs.watch(__filename, function(type) {
+fs.watch(__filename, function() {
 	process.exit();
 });
 var stdin = process.openStdin();
