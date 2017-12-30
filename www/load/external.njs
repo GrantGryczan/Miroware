@@ -18,8 +18,12 @@ if(this.socialicons) {
 				socialicons: true
 			});
 			request(context.redirect, function(err, res, body) {
+				var origin = context.redirect.slice(0, context.redirect.indexOf("/", context.redirect.indexOf("//")+2));
 				var icon = body.match(/<link(?: .*?)? (?:rel="(?:.* )?icon(?: .*)?"(?: .*?)? href="([^"]*?)")|(?:href="([^"]*?)"(?: .*?)? rel="(?:.* )?icon(?: .*)?")( [^>]*)?>/i)[1];
-				icon = (icon.indexOf("//") == -1) ? (context.redirect.slice(0, context.redirect.indexOf("/", context.redirect.indexOf("//")+2)) + icon) : icon;
+				if(!icon) {
+					icon = "/favicon.ico";
+				}
+				icon = (icon.indexOf("//") == -1) ? (origin + icon) : icon;
 				t.value += html`<a class="external mdc-button" href="${links[i]}" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
 				i++;
 				iterate();
