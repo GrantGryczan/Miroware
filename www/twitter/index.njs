@@ -10,7 +10,7 @@ this.value += html`
 this.value += (await load("/load/belt.njs", this)).value;
 this.value += html`
 		<script>
-			location.replace("${this.redirect = "https://twitter.com/Miroware8"}");
+			location.replace("${this.redirect = "https://twitter.com/GrantGryczan"}");
 		</script>`;
 this.value += (await load("/load/foot.njs", this)).value;
 this.exit();

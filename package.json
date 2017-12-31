@@ -28,6 +28,7 @@
 		"express-session": "^1.15.6",
 		"mime": "^2.1.0",
 		"php-date": "^2.1.1",
-		"request": "^2.83.0"
+		"request": "^2.83.0",
+		"request-promise-native": "^1.0.5"
 	}
 }
