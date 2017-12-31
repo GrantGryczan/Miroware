@@ -2,7 +2,7 @@
 	"ast": false,
 	"comments": false,
 	"compact": true,
-	"filename": "source2.js",
+	"filename": "source.js",
 	"minified": true,
 	"presets": ["env"],
 	"sourceMaps": true
