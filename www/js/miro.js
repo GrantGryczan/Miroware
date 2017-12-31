@@ -81,4 +81,3 @@
 		new mdc.ripple.MDCRipple(v);
 	}
 })();
-// edited
