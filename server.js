@@ -229,21 +229,22 @@ setInterval(function() {
 	loadCache = {};
 }, 86400000);
 app.get("*", async function(req, res) {
-	res.set("Cache-Control", "no-cache");
+	res.set("Cache-Control", "max-age=86400");
 	let decodedPath = decodeURIComponent(req.path);
 	let subdomain = req.subdomains.join(".");
 	if(subdomain == "" || subdomain == "d") {
 		let path = getActualPath(decodedPath);
 		let type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
 		let publicPath = path.slice(3);
-		if(path.slice(-10) == "/index.njs") {
+		if(path.endsWith("/index.njs")) {
 			publicPath = publicPath.slice(0, -9);
 		}
 		if(decodedPath != publicPath) {
 			res.redirect(publicPath);
 		} else if(fs.existsSync(path)) {
 			res.set("Content-Type", type);
-			if(path.slice(-4) == ".njs") {
+			if(path.endsWith(".njs")) {
+				res.set("Cache-Control", "no-cache");
 				res.set("Content-Type", "text/html");
 				res.send((await load(decodedPath, {
 					req,
