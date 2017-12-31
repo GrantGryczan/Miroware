@@ -1,4 +1,8 @@
 (function() {
+	window.Miro = {};
+	Miro.magic = {};
+	Miro.magic.magic = Miro.magic;
+	console.log(Miro.magic);
 	HTMLFormElement.prototype.disable = function() {
 		this.classList.add("mdc-text-field--disabled");
 		let inputs = this.querySelectorAll("input, button");
@@ -13,10 +17,6 @@
 			v.disabled = false;
 		}
 	};
-	window.Miro = {};
-	Miro.magic = {};
-	Miro.magic.magic = Miro.magic;
-	console.log(Miro.magic);
 	let rawQuery;
 	if(location.href.indexOf("#") != -1) {
 		rawQuery = location.href.slice(0, location.href.indexOf("#"));
