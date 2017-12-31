@@ -229,6 +229,7 @@ setInterval(function() {
 	loadCache = {};
 }, 86400000);
 app.get("*", async function(req, res) {
+	res.set("Cache-Control", "no-cache");
 	let decodedPath = decodeURIComponent(req.path);
 	let subdomain = req.subdomains.join(".");
 	if(subdomain == "" || subdomain == "d") {
