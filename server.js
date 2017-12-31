@@ -9,6 +9,7 @@ var session = require("express-session");
 var request = require("request");
 var crypto = require("crypto");
 var babel = require("babel-core");
+var childProcess = require("child_process");
 var mime = require("mime");
 var AWS = require("aws-sdk");
 var DynamoDBStore = require("connect-dynamodb")({
@@ -132,6 +133,12 @@ app.post("*", function(req, res) {
 									}
 								}
 							}
+						}
+						if(modified.includes("package.json")) {
+							childProcess.spawnSync("npm", ["update"]);
+						}
+						if(modified.includes("server.js")) {
+							process.exit();
 						}
 					}
 				}
@@ -277,9 +284,6 @@ try {
 		ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
 	}, app).listen(8443);
 } catch(err) {}
-fs.watch(__filename, function() {
-	process.exit();
-});
 var stdin = process.openStdin();
 stdin.on("data", function(input) {
 	console.log(eval(String(input)));
