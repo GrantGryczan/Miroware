@@ -102,8 +102,7 @@ app.post("*", function(req, res) {
 														fs.mkdirSync(nextPath);
 													}
 												}
-												console.log(path);
-												if(path.startsWith("web/") && path.endsWith(".js")) {
+												if(path.startsWith("www/") && path.endsWith(".js")) {
 													var result = babel.transform(body);
 													body = result.code;
 													fs.writeFileSync(path + ".map", result.map);
