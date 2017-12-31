@@ -1,30 +1,30 @@
 console.log("< Server >");
-var fs = require("fs");
-var http = require("http");
-var https = require("https");
-var express = require("express");
-var cookieParser = require("cookie-parser");
-var bodyParser = require("body-parser");
-var session = require("express-session");
-var request = require("request-promise-native");
-var crypto = require("crypto");
-var babel = require("babel-core");
-var childProcess = require("child_process");
-var mime = require("mime");
-var AWS = require("aws-sdk");
-var DynamoDBStore = require("connect-dynamodb")({
+let fs = require("fs");
+let http = require("http");
+let https = require("https");
+let express = require("express");
+let cookieParser = require("cookie-parser");
+let bodyParser = require("body-parser");
+let session = require("express-session");
+let request = require("request-promise-native");
+let crypto = require("crypto");
+let babel = require("babel-core");
+let childProcess = require("child_process");
+let mime = require("mime");
+let AWS = require("aws-sdk");
+let DynamoDBStore = require("connect-dynamodb")({
 	session
 });
-var youKnow = require("./data/youknow.js");
-var babelrc = JSON.parse(fs.readFileSync("./.babelrc"));
+let youKnow = require("./data/youknow.js");
+let babelrc = JSON.parse(fs.readFileSync("./.babelrc"));
 mime.define({
 	"text/html": ["njs"]
 });
-var s3 = new AWS.S3({
+let s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
-var app = express();
+let app = express();
 app.set("trust proxy", true);
 app.use(cookieParser());
 app.use(bodyParser.raw({
@@ -49,7 +49,7 @@ app.use(function(req, res) {
 	res.set("X-Magic", "real");
 	res.set("Access-Control-Expose-Headers", "X-Magic");
 	res.set("Access-Control-Allow-Origin", "*");
-	var host = req.get("Host");
+	let host = req.get("Host");
 	if(host) {
 		if(host.startsWith("localhost:")) {
 			Object.defineProperty(req, "protocol", {
@@ -60,7 +60,7 @@ app.use(function(req, res) {
 		if(req.protocol == "http") {
 			res.redirect(`https://${host + req.url}`);
 		} else {
-			var subdomain = req.subdomains.join(".");
+			let subdomain = req.subdomains.join(".");
 			if(subdomain == "www") {
 				res.redirect(`${req.protocol}://${host.slice(4) + req.url}`);
 			} else {
@@ -78,25 +78,25 @@ app.use(function(req, res) {
 	}
 });
 app.post("*", async function(req, res) {
-	var subdomain = req.subdomains.join(".");
+	let subdomain = req.subdomains.join(".");
 	if(subdomain == "") {
 		if(req.path == "/github") {
-			var signature = req.get("X-Hub-Signature");
+			let signature = req.get("X-Hub-Signature");
 			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}` && req.get("X-GitHub-Event") == "push") {
 				res.send();
-				var payload = JSON.parse(req.body);
+				let payload = JSON.parse(req.body);
 				if(payload.repository.name == "web") {
-					var branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
+					let branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
 					if(branch == "master") {
-						var modified = [];
-						var removed = [];
-						for(var v of payload.commits) {
-							for(var w of [...v.added, ...v.modified]) {
+						let modified = [];
+						let removed = [];
+						for(let v of payload.commits) {
+							for(let w of [...v.added, ...v.modified]) {
 								if(!modified.includes(w)) {
 									modified.push(w);
 									await (async function(path) {
-										var body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`);
-										var index = 0;
+										let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`);
+										let index = 0;
 										while(index = path.indexOf("/", index)+1) {
 											nextPath = path.slice(0, index-1);
 											if(!fs.existsSync(nextPath)) {
@@ -104,8 +104,8 @@ app.post("*", async function(req, res) {
 											}
 										}
 										if(path.startsWith("www/") && path.endsWith(".js")) {
-											var result = babel.transform(body, babelrc);
-											var sourceMappingURL = `${path.slice(3)}.map`;
+											let result = babel.transform(body, babelrc);
+											let sourceMappingURL = `${path.slice(3)}.map`;
 											body = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
 											fs.writeFileSync(`www${sourceMappingURL}`, JSON.stringify(result.map));
 										}
@@ -113,15 +113,15 @@ app.post("*", async function(req, res) {
 									})(w);
 								}
 							}
-							for(var w of v.removed) {
+							for(let w of v.removed) {
 								if(!removed.includes(w)) {
 									removed.push(w);
 									if(fs.existsSync(w)) {
 										fs.unlinkSync(w);
 									}
-									var index = w.length;
+									let index = w.length;
 									while((index = w.lastIndexOf("/", index)-1) != -2) {
-										var path = w.slice(0, index+1);
+										let path = w.slice(0, index+1);
 										if(fs.existsSync(path)) {
 											try {
 												fs.rmdirSync(path);
@@ -161,18 +161,18 @@ app.post("*", async function(req, res) {
 		});
 	}
 });
-var html = function() {
-	var string = arguments[0][0];
-	var substitutions = Array.prototype.slice.call(arguments, 1);
-	for(var i = 0; i < substitutions.length; i++) {
+let html = function() {
+	let string = arguments[0][0];
+	let substitutions = Array.prototype.slice.call(arguments, 1);
+	for(let i = 0; i < substitutions.length; i++) {
 		string += String(substitutions[i]).replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + arguments[0][i+1];
 	}
 	return string;
 };
-var evalVal = function(thisCode) {
+let evalVal = function(thisCode) {
 	return eval(thisCode);
 };
-var getActualPath = function(path) {
+let getActualPath = function(path) {
 	if(!path.startsWith("/")) {
 		path = `/${path}`;
 	}
@@ -186,8 +186,8 @@ var getActualPath = function(path) {
 	path = path.replace(/\/\.{1,2}(?=\/)/g, "");
 	return path;
 };
-var loadCache = {};
-var load = function(path, context) {
+let loadCache = {};
+let load = function(path, context) {
 	if(context) {
 		context = Object.assign({}, context);
 		delete context.cache;
@@ -196,7 +196,7 @@ var load = function(path, context) {
 	} else {
 		context = {};
 	}
-	var properties = ["exit", Object.keys(context)];
+	let properties = ["exit", Object.keys(context)];
 	context.value = "";
 	return new Promise(function(resolve, reject) {
 		if(loadCache[path]) {
@@ -205,7 +205,7 @@ var load = function(path, context) {
 			context.exit = function() {
 				if(context.cache == 1) {
 					loadCache[path] = {};
-					for(var i in context) {
+					for(let i in context) {
 						if(!properties.includes(i)) {
 							loadCache[path][i] = context[i];
 						}
@@ -213,7 +213,7 @@ var load = function(path, context) {
 				}
 				resolve(context);
 			};
-			var val = "";
+			let val = "";
 			try {
 				evalVal.call(context, `(async function() {\n${fs.readFileSync(getActualPath(path))}\n}).call(this);`);
 			} catch(err) {
@@ -226,12 +226,12 @@ setInterval(function() {
 	loadCache = {};
 }, 86400000);
 app.get("*", async function(req, res) {
-	var decodedPath = decodeURIComponent(req.path);
-	var subdomain = req.subdomains.join(".");
+	let decodedPath = decodeURIComponent(req.path);
+	let subdomain = req.subdomains.join(".");
 	if(subdomain == "" || subdomain == "d") {
-		var path = getActualPath(decodedPath);
-		var type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
-		var publicPath = path.slice(3);
+		let path = getActualPath(decodedPath);
+		let type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
+		let publicPath = path.slice(3);
 		if(path.slice(-10) == "/index.njs") {
 			publicPath = publicPath.slice(0, -9);
 		}
@@ -284,7 +284,7 @@ try {
 		ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
 	}, app).listen(8443);
 } catch(err) {}
-var stdin = process.openStdin();
+let stdin = process.openStdin();
 stdin.on("data", function(input) {
 	console.log(eval(String(input)));
 });
