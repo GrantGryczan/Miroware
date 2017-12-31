@@ -18,6 +18,7 @@
 	"homepage": "https://miroware.io/",
 	"dependencies": {
 		"aws-sdk": "^2.171.0",
+		"babel-core": "^6.26.0",
 		"body-parser": "^1.18.2",
 		"connect-dynamodb": "^2.0.0",
 		"cookie-parser": "^1.4.3",

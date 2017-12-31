@@ -8,20 +8,18 @@ var bodyParser = require("body-parser");
 var session = require("express-session");
 var request = require("request");
 var crypto = require("crypto");
+var babel = require("babel-core");
 var mime = require("mime");
 var AWS = require("aws-sdk");
 var DynamoDBStore = require("connect-dynamodb")({
 	session
 });
-var youKnow = require("./data/youknow");
+var youKnow = require("./data/youknow.js");
 mime.define({
 	"text/html": ["njs"]
 });
 var s3 = new AWS.S3({
-	credentials: new AWS.Credentials({
-		accessKeyId: youKnow.s3.accessKeyId,
-		secretAccessKey: youKnow.s3.secretAccessKey
-	}),
+	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
 var app = express();
@@ -51,7 +49,7 @@ app.use(function(req, res) {
 	res.set("Access-Control-Allow-Origin", "*");
 	var host = req.get("Host");
 	if(host) {
-		if(host.indexOf("localhost:") == 0) {
+		if(host.startsWith("localhost:")) {
 			Object.defineProperty(req, "protocol", {
 				value: "https",
 				enumerable: true
@@ -93,7 +91,7 @@ app.post("*", function(req, res) {
 						var modified = [];
 						for(var i = 0; i < payload.commits.length; i++) {
 							for(var j = 0; j < payload.commits[i].added.length; j++) {
-								if(added.indexOf(payload.commits[i].added[j]) == -1) {
+								if(!added.includes(payload.commits[i].added[j])) {
 									added.push(payload.commits[i].added[j]);
 									(function(path) {
 										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
@@ -105,6 +103,11 @@ app.post("*", function(req, res) {
 														fs.mkdirSync(nextPath);
 													}
 												}
+												if(path.startsWith("web/") && path.endsWith(".js")) {
+													var result = babel.transform(body);
+													body = result.code;
+													fs.writeFileSync(path + ".map", result.map);
+												}
 												fs.writeFileSync(path, body);
 											}
 										});
@@ -112,7 +115,7 @@ app.post("*", function(req, res) {
 								}
 							}
 							for(var j = 0; j < payload.commits[i].modified.length; j++) {
-								if(modified.indexOf(payload.commits[i].modified[j]) == -1) {
+								if(!modified.includes(payload.commits[i].modified[j])) {
 									modified.push(payload.commits[i].modified[j]);
 									(function(path) {
 										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
@@ -124,7 +127,7 @@ app.post("*", function(req, res) {
 								}
 							}
 							for(var j = 0; j < payload.commits[i].removed.length; j++) {
-								if(removed.indexOf(payload.commits[i].removed[j]) == -1) {
+								if(!removed.includes(payload.commits[i].removed[j])) {
 									removed.push(payload.commits[i].removed[j]);
 									if(fs.existsSync(payload.commits[i].removed[j])) {
 										fs.unlinkSync(payload.commits[i].removed[j]);
@@ -174,12 +177,12 @@ var evalVal = function(thisCode) {
 	return eval(thisCode);
 };
 var getActualPath = function(path) {
-	if(path.indexOf("/") != 0) {
+	if(!path.startsWith("/")) {
 		path = `/${path}`;
 	}
 	path = `www${path.replace(/\/+/g, "/")}`;
 	if(path.lastIndexOf("/") > path.lastIndexOf(".") && !(fs.existsSync(path) && !fs.statSync(path).isDirectory())) {
-		if(path.lastIndexOf("/") != path.length-1) {
+		if(!path.endsWith("/")) {
 			path += "/";
 		}
 		path += "index.njs";
@@ -197,7 +200,7 @@ var load = function(path, context) {
 	} else {
 		context = {};
 	}
-	var properties = Object.keys(context);
+	var properties = ["exit", Object.keys(context)];
 	context.value = "";
 	return new Promise(function(resolve, reject) {
 		if(loadCache[path]) {
@@ -207,7 +210,7 @@ var load = function(path, context) {
 				if(context.cache == 1) {
 					loadCache[path] = {};
 					for(var i in context) {
-						if(i != "exit" && properties.indexOf(i) == -1) {
+						if(!properties.includes(i)) {
 							loadCache[path][i] = context[i];
 						}
 					}
@@ -253,7 +256,7 @@ app.get("*", async function(req, res) {
 			res.status(404);
 			if(type == "text/html") {
 				res.redirect("/error/404/");
-			} else if(type.indexOf("image/") == 0) {
+			} else if(type.startsWith("image/")) {
 				res.json(404);
 			} else {
 				res.json(404);
@@ -285,7 +288,7 @@ try {
 		ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
 	}, app).listen(8443);
 } catch(err) {}
-fs.watch(__filename, function(type) {
+fs.watch(__filename, function() {
 	process.exit();
 });
 var stdin = process.openStdin();
