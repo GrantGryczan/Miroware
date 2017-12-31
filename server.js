@@ -134,9 +134,7 @@ app.post("*", async function(req, res) {
 												url: `${filename}.map`
 											}
 										});
-										console.log(result);
 										contents = result.code;
-										console.log(`${w}.map`);
 										fs.writeFileSync(`${w}.map`, result.map);
 									}
 									fs.writeFileSync(w, contents);
