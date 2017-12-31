@@ -95,12 +95,12 @@ app.post("*", async function(req, res) {
 							for(let w of [...v.added, ...v.modified]) {
 								if(!modified.includes(w)) {
 									modified.push(w);
-									let contents = new Buffer(JSON.parse(await request.get({
+									let contents = String(new Buffer(JSON.parse(await request.get({
 										url: `https://api.github.com/repos/${payload.repository.full_name}/contents/${w}?ref=${branch}`,
 										headers: {
 											"User-Agent": "request"
 										}
-									})).content, "base64").toString("utf-8"); // ECH
+									})).content, "base64"));
 									console.log(contents);
 									let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${w}?${Date.now()}`);
 									let index = 0;
