@@ -142,7 +142,7 @@ app.post("*", function(req, res) {
 							childProcess.spawnSync("npm", ["update"]);
 						}
 						if(modified.includes("server.js")) {
-							process.exit();
+							process.exit(); // Please send help.
 						}
 					}
 				}
