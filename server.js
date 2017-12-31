@@ -86,13 +86,12 @@ app.post("*", function(req, res) {
 				if(payload.repository.name == "web") {
 					var branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
 					if(branch == "master") {
-						var added = [];
-						var removed = [];
 						var modified = [];
-						for(var i = 0; i < payload.commits.length; i++) {
-							for(var j = 0; j < payload.commits[i].added.length; j++) {
-								if(!added.includes(payload.commits[i].added[j])) {
-									added.push(payload.commits[i].added[j]);
+						var removed = [];
+						for(var v of payload.commits) {
+							for(var w of [...v.added, ...v.modified]) {
+								if(!modified.includes(w)) {
+									modified.push(w);
 									(function(path) {
 										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
 											if(body) {
@@ -103,18 +102,7 @@ app.post("*", function(req, res) {
 														fs.mkdirSync(nextPath);
 													}
 												}
-												payload.commits[i].modified.push(payload.commits[i].added[j]);
-											}
-										});
-									})(payload.commits[i].added[j]);
-								}
-							}
-							for(var j = 0; j < payload.commits[i].modified.length; j++) {
-								if(!modified.includes(payload.commits[i].modified[j])) {
-									modified.push(payload.commits[i].modified[j]);
-									(function(path) {
-										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
-											if(body) {
+												console.log(path);
 												if(path.startsWith("web/") && path.endsWith(".js")) {
 													var result = babel.transform(body);
 													body = result.code;
@@ -123,18 +111,18 @@ app.post("*", function(req, res) {
 												fs.writeFileSync(path, body);
 											}
 										});
-									})(payload.commits[i].modified[j]);
+									})(w);
 								}
 							}
-							for(var j = 0; j < payload.commits[i].removed.length; j++) {
-								if(!removed.includes(payload.commits[i].removed[j])) {
-									removed.push(payload.commits[i].removed[j]);
-									if(fs.existsSync(payload.commits[i].removed[j])) {
-										fs.unlinkSync(payload.commits[i].removed[j]);
+							for(var w of v.removed) {
+								if(!removed.includes(w)) {
+									removed.push(w);
+									if(fs.existsSync(w)) {
+										fs.unlinkSync(w);
 									}
-									var index = payload.commits[i].removed[j].length;
-									while((index = payload.commits[i].removed[j].lastIndexOf("/", index)-1) != -2) {
-										var path = payload.commits[i].removed[j].slice(0, index+1);
+									var index = w.length;
+									while((index = w.lastIndexOf("/", index)-1) != -2) {
+										var path = w.slice(0, index+1);
 										if(fs.existsSync(path)) {
 											try {
 												fs.rmdirSync(path);
