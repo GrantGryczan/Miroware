@@ -95,23 +95,21 @@ app.post("*", async function(req, res) {
 							for(let w of [...v.added, ...v.modified]) {
 								if(!modified.includes(w)) {
 									modified.push(w);
-									await (async function(path) {
-										let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`);
-										let index = 0;
-										while(index = path.indexOf("/", index)+1) {
-											nextPath = path.slice(0, index-1);
-											if(!fs.existsSync(nextPath)) {
-												fs.mkdirSync(nextPath);
-											}
+									let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`);
+									let index = 0;
+									while(index = path.indexOf("/", index)+1) {
+										nextPath = path.slice(0, index-1);
+										if(!fs.existsSync(nextPath)) {
+											fs.mkdirSync(nextPath);
 										}
-										if(path.startsWith("www/") && path.endsWith(".js")) {
-											let result = babel.transform(body, babelrc);
-											let sourceMappingURL = `${path.slice(3)}.map`;
-											body = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
-											fs.writeFileSync(`www${sourceMappingURL}`, JSON.stringify(result.map));
-										}
-										fs.writeFileSync(path, body);
-									})(w);
+									}
+									if(path.startsWith("www/") && path.endsWith(".js")) {
+										let result = babel.transform(body, babelrc);
+										let sourceMappingURL = `${path.slice(3)}.map`;
+										body = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
+										fs.writeFileSync(`www${sourceMappingURL}`, JSON.stringify(result.map));
+									}
+									fs.writeFileSync(path, body);
 								}
 							}
 							for(let w of v.removed) {
