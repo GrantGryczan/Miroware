@@ -1,4 +1,18 @@
 (function() {
+	HTMLFormElement.prototype.disable = function() {
+		this.classList.add("mdc-text-field--disabled");
+		var inputs = this.querySelectorAll("input, button");
+		for(var i = 0; i < inputs.length; i++) {
+			inputs[i].disabled = true;
+		}
+	};
+	HTMLFormElement.prototype.enable = function() {
+		this.classList.remove("mdc-text-field--disabled");
+		var inputs = this.querySelectorAll("input, button");
+		for(var i = 0; i < inputs.length; i++) {
+			inputs[i].disabled = false;
+		}
+	};
 	window.Miro = {};
 	Miro.magic = {};
 	Miro.magic.magic = Miro.magic;
