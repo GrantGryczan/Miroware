@@ -5,18 +5,18 @@ let https = require("https");
 let express = require("express");
 let cookieParser = require("cookie-parser");
 let bodyParser = require("body-parser");
-let session = require("express-session");
 let request = require("request-promise-native");
 let crypto = require("crypto");
 let babel = require("babel-core");
+let UglifyJS = require("uglify-js");
 let childProcess = require("child_process");
 let mime = require("mime");
 let AWS = require("aws-sdk");
+let session = require("express-session");
 let DynamoDBStore = require("connect-dynamodb")({
 	session
 });
 let youKnow = require("./data/youknow.js");
-let babelrc = JSON.parse(fs.readFileSync("./.babelrc"));
 mime.define({
 	"text/html": ["njs"]
 });
@@ -108,10 +108,37 @@ app.post("*", async function(req, res) {
 										}
 									}
 									if(w.startsWith("www/") && w.endsWith(".js")) {
-										let result = babel.transform(contents, babelrc);
-										let sourceMappingURL = `${w.slice(3)}.map`;
-										contents = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
-										fs.writeFileSync(`www${sourceMappingURL}`, JSON.stringify(result.map));
+										let filename = w.slice(w.lastIndexOf("/")+1);
+										let result = babel.transform(contents, {
+											ast: false,
+											comments: false,
+											compact: true,
+											filename,
+											minified: true,
+											presets: ["env"],
+											sourceMaps: true
+										});
+										let result2 = UglifyJS.minify(result.code, {
+											parse: {
+												html5_comments: false
+											},
+											compress: {
+												passes: 2,
+												unsafe_comps: true,
+												unsafe_math: true,
+												unsafe_proto: true
+											},
+											/*output: {
+												beautify: false
+											},*/
+											sourceMap: {
+												content: JSON.stringify(result.map)
+												filename,
+												url: `${filename}.map`
+											}
+										});
+										contents = result2.code;
+										fs.writeFileSync(`${w}.map`, JSON.stringify(result2.map));
 									}
 									fs.writeFileSync(w, contents);
 								}
@@ -133,9 +160,6 @@ app.post("*", async function(req, res) {
 									}
 								}
 							}
-						}
-						if(modified.includes(".babelrc")) {
-							babelrc = JSON.parse(fs.readFileSync("./.babelrc"));
 						}
 						if(modified.includes("package.json")) {
 							childProcess.spawnSync("npm", ["update"]);
