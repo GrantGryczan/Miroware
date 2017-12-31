@@ -100,7 +100,7 @@ app.post("*", async function(req, res) {
 										headers: {
 											"User-Agent": "request"
 										}
-									})).contents, "base64").toString("utf-8"); // ECH
+									})).content, "base64").toString("utf-8"); // ECH
 									console.log(contents);
 									let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${w}?${Date.now()}`);
 									let index = 0;
