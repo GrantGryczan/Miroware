@@ -1,23 +1,23 @@
 (function() {
 	HTMLFormElement.prototype.disable = function() {
 		this.classList.add("mdc-text-field--disabled");
-		var inputs = this.querySelectorAll("input, button");
-		for(var i = 0; i < inputs.length; i++) {
-			inputs[i].disabled = true;
+		let inputs = this.querySelectorAll("input, button");
+		for(let v of inputs) {
+			v.disabled = true;
 		}
 	};
 	HTMLFormElement.prototype.enable = function() {
 		this.classList.remove("mdc-text-field--disabled");
-		var inputs = this.querySelectorAll("input, button");
-		for(var i = 0; i < inputs.length; i++) {
-			inputs[i].disabled = false;
+		let inputs = this.querySelectorAll("input, button");
+		for(let v of inputs) {
+			v.disabled = false;
 		}
 	};
 	window.Miro = {};
 	Miro.magic = {};
 	Miro.magic.magic = Miro.magic;
 	console.log(Miro.magic);
-	var rawQuery;
+	let rawQuery;
 	if(location.href.indexOf("#") != -1) {
 		rawQuery = location.href.slice(0, location.href.indexOf("#"));
 	} else {
@@ -29,18 +29,18 @@
 		rawQuery = [];
 	}
 	Miro.query = {};
-	for(var i = 0; i < rawQuery.length; i++) {
+	for(let v of rawQuery) {
 		try {
-			var p = rawQuery[i].split("=");
+			let p = v.split("=");
 			Miro.query[p[0]] = decodeURIComponent(p[1]);
 		} catch(err) {}
 	}
 	Miro.request = function(method, url, data, headers, success, error, noMagic) {
 		data = data || {};
 		headers = headers || {};
-		var req = new XMLHttpRequest();
+		let req = new XMLHttpRequest();
 		req.open(method, url, true);
-		for(var i in headers) {
+		for(let i in headers) {
 			req.setRequestHeader(i, headers[i]);
 		}
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -62,22 +62,22 @@
 				}
 			}
 		};
-		var formData = "";
-		for(var i in data) {
+		let formData = "";
+		for(let i in data) {
 			formData += `${(formData ? "&" : "") + encodeURIComponent(i)}=${encodeURIComponent(data[i])}`;
 		}
 		req.send(formData);
 	};
-	var drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-temporary-drawer"));
+	let drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-temporary-drawer"));
 	document.querySelector("#menu").addEventListener("click", function() {
 		drawer.open = true;
 	});
-	var textFields = document.querySelectorAll(".mdc-text-field");
-	for(var i = 0; i < textFields.length; i++) {
-		new mdc.textField.MDCTextField(textFields[i]);
+	let textFields = document.querySelectorAll(".mdc-text-field");
+	for(let v of textFields) {
+		new mdc.textField.MDCTextField(v);
 	}
-	var ripples = document.querySelectorAll(".ripple");
-	for(var i = 0; i < ripples.length; i++) {
-		new mdc.ripple.MDCRipple(ripples[i]);
+	let ripples = document.querySelectorAll(".ripple");
+	for(let v of ripples) {
+		new mdc.ripple.MDCRipple(v);
 	}
 })();
