@@ -105,9 +105,9 @@ app.post("*", function(req, res) {
 												}
 												if(path.startsWith("www/") && path.endsWith(".js")) {
 													var result = babel.transform(body, babelrc);
-													var sourceMappingURL = `${path}.map`;
+													var sourceMappingURL = `${path.slice(3)}.map`;
 													body = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
-													fs.writeFileSync(sourceMappingURL, JSON.stringify(result.map));
+													fs.writeFileSync(`www${sourceMappingURL}`, JSON.stringify(result.map));
 												}
 												fs.writeFileSync(path, body);
 											}
