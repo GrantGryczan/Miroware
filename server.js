@@ -1,5 +1,4 @@
 console.log("< Server >");
-console.log(1);
 var fs = require("fs");
 var http = require("http");
 var https = require("https");
