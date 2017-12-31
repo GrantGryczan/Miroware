@@ -1,5 +1,5 @@
 console.log("< Server >");
-console.log(2);
+console.log(1);
 let fs = require("fs");
 let http = require("http");
 let https = require("https");
@@ -95,21 +95,21 @@ app.post("*", async function(req, res) {
 							for(let w of [...v.added, ...v.modified]) {
 								if(!modified.includes(w)) {
 									modified.push(w);
-									let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`);
+									let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${w}?${Date.now()}`);
 									let index = 0;
-									while(index = path.indexOf("/", index)+1) {
-										nextPath = path.slice(0, index-1);
+									while(index = w.indexOf("/", index)+1) {
+										nextPath = w.slice(0, index-1);
 										if(!fs.existsSync(nextPath)) {
 											fs.mkdirSync(nextPath);
 										}
 									}
-									if(path.startsWith("www/") && path.endsWith(".js")) {
+									if(w.startsWith("www/") && w.endsWith(".js")) {
 										let result = babel.transform(body, babelrc);
-										let sourceMappingURL = `${path.slice(3)}.map`;
+										let sourceMappingURL = `${w.slice(3)}.map`;
 										body = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
 										fs.writeFileSync(`www${sourceMappingURL}`, JSON.stringify(result.map));
 									}
-									fs.writeFileSync(path, body);
+									fs.writeFileSync(w, body);
 								}
 							}
 							for(let w of v.removed) {
