@@ -6,7 +6,7 @@ var express = require("express");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var session = require("express-session");
-var request = require("request");
+var request = require("request-promise-native");
 var crypto = require("crypto");
 var babel = require("babel-core");
 var childProcess = require("child_process");
@@ -77,7 +77,7 @@ app.use(function(req, res) {
 		res.status(400).send("I am not quite sure how you could get this error, but you apparently can. I am willing to bet that you need a new web browser. That is probably what caused it.");
 	}
 });
-app.post("*", function(req, res) {
+app.post("*", async function(req, res) {
 	var subdomain = req.subdomains.join(".");
 	if(subdomain == "") {
 		if(req.path == "/github") {
@@ -94,25 +94,22 @@ app.post("*", function(req, res) {
 							for(var w of [...v.added, ...v.modified]) {
 								if(!modified.includes(w)) {
 									modified.push(w);
-									(function(path) {
-										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
-											if(body) {
-												var index = 0;
-												while(index = path.indexOf("/", index)+1) {
-													nextPath = path.slice(0, index-1);
-													if(!fs.existsSync(nextPath)) {
-														fs.mkdirSync(nextPath);
-													}
-												}
-												if(path.startsWith("www/") && path.endsWith(".js")) {
-													var result = babel.transform(body, babelrc);
-													var sourceMappingURL = `${path.slice(3)}.map`;
-													body = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
-													fs.writeFileSync(`www${sourceMappingURL}`, JSON.stringify(result.map));
-												}
-												fs.writeFileSync(path, body);
+									await (async function(path) {
+										var body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`);
+										var index = 0;
+										while(index = path.indexOf("/", index)+1) {
+											nextPath = path.slice(0, index-1);
+											if(!fs.existsSync(nextPath)) {
+												fs.mkdirSync(nextPath);
 											}
-										});
+										}
+										if(path.startsWith("www/") && path.endsWith(".js")) {
+											var result = babel.transform(body, babelrc);
+											var sourceMappingURL = `${path.slice(3)}.map`;
+											body = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
+											fs.writeFileSync(`www${sourceMappingURL}`, JSON.stringify(result.map));
+										}
+										fs.writeFileSync(path, body);
 									})(w);
 								}
 							}
@@ -141,9 +138,7 @@ app.post("*", function(req, res) {
 							childProcess.spawnSync("npm", ["update"]);
 						}
 						if(modified.includes("server.js")) {
-							setTimeout(function() {
-								process.exit();
-							});
+							process.exit();
 						}
 					}
 				}
