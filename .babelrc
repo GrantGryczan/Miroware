@@ -1,5 +1,6 @@
 {
 	"ast": false,
+	"comments": false,
 	"compact": true,
 	"filename": "babel.log",
 	"minified": true,
