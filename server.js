@@ -15,6 +15,7 @@ var DynamoDBStore = require("connect-dynamodb")({
 	session
 });
 var youKnow = require("./data/youknow.js");
+var babelrc = JSON.parse(fs.readFileSync("./.babelrc"));
 mime.define({
 	"text/html": ["njs"]
 });
@@ -103,7 +104,7 @@ app.post("*", function(req, res) {
 													}
 												}
 												if(path.startsWith("www/") && path.endsWith(".js")) {
-													var result = babel.transform(body);
+													var result = babel.transform(body, babelrc);
 													body = result.code;
 													fs.writeFileSync(path + ".map", result.map);
 												}
