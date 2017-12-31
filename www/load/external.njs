@@ -11,7 +11,6 @@ if(this.socialicons) {
 		let context = await load(link, {
 			socialicons: true
 		});
-		console.log(context.redirect);
 		let origin = context.redirect.slice(0, context.redirect.indexOf("/", context.redirect.indexOf("//")+2));
 		let body;
 		let icon;
