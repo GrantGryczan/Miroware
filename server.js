@@ -107,7 +107,7 @@ app.post("*", async function(req, res) {
 											fs.mkdirSync(nextPath);
 										}
 									}
-									if(w.startsWith("www/") && w.endsWith(".js")) {
+									if(w.startsWith("www/") && mime.getType(w) == "application/javascript") {
 										let filename = w.slice(w.lastIndexOf("/")+1);
 										let compiled = babel.transform(contents, {
 											ast: false,
@@ -272,7 +272,7 @@ app.get("*", async function(req, res) {
 				})).value);
 			} else {
 				console.log(type);
-				if(type == "text/javascript") {
+				if(type == "application/javascript") {
 					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/"))}.map`);
 				}
 				fs.createReadStream(path).pipe(res);
