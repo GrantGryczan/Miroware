@@ -1,5 +1,5 @@
 console.log("< Server >");
-console.log(-3);
+console.log(-4);
 let fs = require("fs");
 let http = require("http");
 let https = require("https");
@@ -95,6 +95,11 @@ app.post("*", async function(req, res) {
 							for(let w of [...v.added, ...v.modified]) {
 								if(!modified.includes(w)) {
 									modified.push(w);
+									await new Promise(function(resolve) {
+										setTimeout(function() {
+											resolve();
+										}, 2000);
+									});
 									let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${w}?${Date.now()}`);
 									let index = 0;
 									console.log(body.split("\n")[1]);
