@@ -109,7 +109,7 @@ app.post("*", async function(req, res) {
 									}
 									if(w.startsWith("www/") && w.endsWith(".js")) {
 										let filename = w.slice(w.lastIndexOf("/")+1);
-										let result = babel.transform(contents, {
+										let compiled = babel.transform(contents, {
 											ast: false,
 											comments: false,
 											compact: true,
@@ -118,7 +118,7 @@ app.post("*", async function(req, res) {
 											presets: ["env"],
 											sourceMaps: true
 										});
-										let result2 = UglifyJS.minify(result.code, {
+										let result = UglifyJS.minify(compiled.code, {
 											parse: {
 												html5_comments: false
 											},
@@ -128,17 +128,15 @@ app.post("*", async function(req, res) {
 												unsafe_math: true,
 												unsafe_proto: true
 											},
-											/*output: {
-												beautify: false
-											},*/
 											sourceMap: {
-												content: JSON.stringify(result.map),
+												content: JSON.stringify(compiled.map),
 												filename,
 												url: `${filename}.map`
 											}
 										});
-										contents = result2.code;
-										fs.writeFileSync(`${w}.map`, JSON.stringify(result2.map));
+										console.log(result);
+										contents = result.code;
+										fs.writeFileSync(`${w}.map`, JSON.stringify(result.map));
 									}
 									fs.writeFileSync(w, contents);
 								}
