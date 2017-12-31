@@ -3,5 +3,6 @@
 	"comments": false,
 	"compact": true,
 	"filename": "babel.log",
-	"minified": true
+	"minified": true,
+	"sourceMaps": true
 }
