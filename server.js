@@ -273,7 +273,7 @@ app.get("*", async function(req, res) {
 			} else {
 				console.log(type);
 				if(type == "application/javascript") {
-					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/"))}.map`);
+					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/")+1)}.map`);
 				}
 				fs.createReadStream(path).pipe(res);
 			}
