@@ -106,7 +106,7 @@ app.post("*", function(req, res) {
 												if(path.startsWith("www/") && path.endsWith(".js")) {
 													var result = babel.transform(body, babelrc);
 													body = result.code;
-													fs.writeFileSync(path + ".map", result.map);
+													fs.writeFileSync(path + ".map", JSON.stringify(result.map));
 												}
 												fs.writeFileSync(path, body);
 											}
