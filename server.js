@@ -130,8 +130,7 @@ app.post("*", async function(req, res) {
 											},
 											sourceMap: {
 												content: JSON.stringify(compiled.map),
-												filename,
-												url: `${filename}.map`
+												filename
 											}
 										});
 										contents = result.code;
@@ -272,6 +271,9 @@ app.get("*", async function(req, res) {
 					res
 				})).value);
 			} else {
+				if(type == "text/javascript") {
+					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/"))}.map`);
+				}
 				fs.createReadStream(path).pipe(res);
 			}
 		} else {
