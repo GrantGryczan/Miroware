@@ -100,9 +100,7 @@ app.post("*", async function(req, res) {
 										headers: {
 											"User-Agent": "request"
 										}
-									})).content, "base64")); // ...
-									console.log(contents);
-									let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${w}?${Date.now()}`);
+									})).content, "base64"));
 									let index = 0;
 									while(index = w.indexOf("/", index)+1) {
 										nextPath = w.slice(0, index-1);
@@ -111,12 +109,12 @@ app.post("*", async function(req, res) {
 										}
 									}
 									if(w.startsWith("www/") && w.endsWith(".js")) {
-										let result = babel.transform(body, babelrc);
+										let result = babel.transform(contents, babelrc);
 										let sourceMappingURL = `${w.slice(3)}.map`;
-										body = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
+										contents = `${result.code}\n//# sourceMappingURL=${sourceMappingURL}`;
 										fs.writeFileSync(`www${sourceMappingURL}`, JSON.stringify(result.map));
 									}
-									fs.writeFileSync(w, body);
+									fs.writeFileSync(w, contents);
 								}
 							}
 							for(let w of v.removed) {
