@@ -293,5 +293,5 @@ fs.watch(__filename, function() {
 });
 var stdin = process.openStdin();
 stdin.on("data", function(input) {
-	console.log(eval(String(input).trim()));
+	console.log(eval(String(input)));
 });
