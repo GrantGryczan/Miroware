@@ -4,5 +4,5 @@
 	"compact": true,
 	"filename": "babel.log",
 	"minified": true,
-	"sourceMaps": true
+	"sourceMaps": "both"
 }
