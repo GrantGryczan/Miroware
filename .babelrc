@@ -2,7 +2,7 @@
 	"ast": false,
 	"comments": false,
 	"compact": true,
-	"filename": "temp2.js",
+	"filename": "temp3.js",
 	"minified": true,
 	"presets": ["env"],
 	"sourceMaps": true
