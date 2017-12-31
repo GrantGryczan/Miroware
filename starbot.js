@@ -180,7 +180,7 @@ client.on("message", function(msg) {
 						save();
 						msg.channel.messages.fetch(content).then(function(msg2) {
 							star(msg2, function() {
-								msg.channel.send(`${msg.author} Message \`${msg2.id}\` has been starred.`).catch(function() {
+								msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(function() {
 									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 								});
 							});
