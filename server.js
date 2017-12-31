@@ -134,6 +134,9 @@ app.post("*", function(req, res) {
 								}
 							}
 						}
+						if(modified.includes(".babelrc")) {
+							babelrc = JSON.parse(fs.readFileSync("./.babelrc"));
+						}
 						if(modified.includes("package.json")) {
 							childProcess.spawnSync("npm", ["update"]);
 						}
