@@ -5,4 +5,4 @@
 		form.disable();
 	});
 })();
-"test"
+"test2";
