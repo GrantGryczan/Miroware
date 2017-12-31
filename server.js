@@ -132,7 +132,7 @@ app.post("*", async function(req, res) {
 												beautify: false
 											},*/
 											sourceMap: {
-												content: JSON.stringify(result.map)
+												content: JSON.stringify(result.map),
 												filename,
 												url: `${filename}.map`
 											}
