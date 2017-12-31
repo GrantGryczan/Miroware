@@ -3,6 +3,6 @@
 	"comments": false,
 	"compact": true,
 	"minified": true,
-	"presets": ["es2015"],
+	"presets": ["env"],
 	"sourceMaps": true
 }
