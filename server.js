@@ -95,7 +95,12 @@ app.post("*", async function(req, res) {
 							for(let w of [...v.added, ...v.modified]) {
 								if(!modified.includes(w)) {
 									modified.push(w);
-									let contents = await request.get(`https://api.github.com/repos/${payload.repository.full_name}/contents/${w}?ref=${branch}`);
+									let contents = await request.get({
+										url: `https://api.github.com/repos/${payload.repository.full_name}/contents/${w}?ref=${branch}`,
+										headers: {
+											"User-Agent": "request"
+										}
+									});
 									console.log(contents);
 									let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${w}?${Date.now()}`);
 									let index = 0;
