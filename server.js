@@ -136,7 +136,7 @@ app.post("*", async function(req, res) {
 										});
 										console.log(result);
 										contents = result.code;
-										fs.writeFileSync(`${w}.map`, JSON.stringify(result.map));
+										fs.writeFileSync(`${w}.map`, result.map);
 									}
 									fs.writeFileSync(w, contents);
 								}
