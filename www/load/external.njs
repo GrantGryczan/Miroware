@@ -16,8 +16,10 @@ if(this.socialicons) {
 		let icon;
 		try {
 			body = await request.get(context.redirect);
-			icon = body.match(/<link(?: .*?)? (?:rel="(?:.* )?icon(?: .*)?"(?: .*?)? href="([^"]*?)")|(?:href="([^"]*?)"(?: .*?)? rel="(?:.* )?icon(?: .*)?")( [^>]*)?>/i)[1];
-		} catch(err) {}
+		} catch(err) {
+			body = err.error;
+		}
+		icon = body.match(/<link(?: .*?)? (?:rel="(?:.* )?icon(?: .*)?"(?: .*?)? href="([^"]*?)")|(?:href="([^"]*?)"(?: .*?)? rel="(?:.* )?icon(?: .*)?")( [^>]*)?>/i)[1];
 		if(!icon) {
 			icon = "/favicon.ico";
 		}

@@ -1,29 +1,29 @@
 console.log("< Starbot >");
-var fs = require("fs");
-var Discord = require("discord.js");
-var colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
-var channelTest = /^<#(\d+)>$/;
-var data;
-var load = function() {
+let fs = require("fs");
+let Discord = require("discord.js");
+let colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
+let channelTest = /^<#(\d+)>$/;
+let data;
+let load = function() {
 	data = JSON.parse(fs.readFileSync("data/starbot.json"));
 };
 load();
-var save = function() {
+let save = function() {
 	fs.writeFileSync("data/starbot.json", JSON.stringify(data));
 };
-var client = new Discord.Client();
+let client = new Discord.Client();
 client.once("error", process.exit);
 client.once("disconnect", process.exit);
-var italicize = function(str) {
+let italicize = function(str) {
 	return `_${JSON.stringify(String(str)).slice(1, -1).replace(/_/g, "\\_")}_`;
 };
-var inform = function(guild, str1, str2) {
+let inform = function(guild, str1, str2) {
 	guild.owner.send(str1).catch(function() {
-		var channels = guild.channels.filterArray(function(channel) {
+		let channels = guild.channels.filterArray(function(channel) {
 			return channel.type == "text";
 		});
-		var i = -1;
-		var testChannel = function() {
+		let i = -1;
+		let testChannel = function() {
 			i++;
 			if(channels[i]) {
 				channels[i].send(str2).catch(testChannel);
@@ -32,27 +32,27 @@ var inform = function(guild, str1, str2) {
 		testChannel();
 	});
 };
-var permWarn = function(guild, perms) {
-	var warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
+let permWarn = function(guild, perms) {
+	let warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
 	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
 };
-var noStarboard = function(guild) {
-	var warning = ", as there is nowhere for starred messages to be placed. No starboard channel has been set!\nAs a member of the Discord server with administrative permission, you can set the starboard channel by entering \">⭐\" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.";
+let noStarboard = function(guild) {
+	let warning = ", as there is nowhere for starred messages to be placed. No starboard channel has been set!\nAs a member of the Discord server with administrative permission, you can set the starboard channel by entering \">⭐\" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.";
 	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
 }
-var guildCreate = function(guild) {
+let guildCreate = function(guild) {
 	console.log(`guildCreate ${guild.id}`);
 	data.guilds[guild.id] = [null, "%E2%AD%90", 5, 16755763];
 	noStarboard(guild);
 };
-var guildDelete = function(guild) {
+let guildDelete = function(guild) {
 	console.log(`guildDelete ${guild.id}`);
 	delete data.guilds[guild.id];
 	save();
 }
-var sendHelp = function(msg, perm) {
+let sendHelp = function(msg, perm) {
 	if(data.guilds[msg.guild.id][0]) {
-		var help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${(data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
+		let help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${(data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if(perm) {
 			help += "\nAs a member of the Discord server with administrative permission, you can enter \">⭐\" with, after it, a channel tag to set the starboard channel, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (except for in the starboard channel, which already has this disabled by default).";
 		}
@@ -70,9 +70,9 @@ client.once("ready", function() {
 		status: "online"
 	});
 	client.user.setActivity("Enter \">⭐\" for info.");
-	var guilds = Array.from(client.guilds.keys());
-	for(var i = 0; i < guilds.length; i++) {
-		var guild = client.guilds.get(guilds[i]);
+	let guilds = Array.from(client.guilds.keys());
+	for(let i = 0; i < guilds.length; i++) {
+		let guild = client.guilds.get(guilds[i]);
 		if(data.guilds[guilds[i]]) {
 			if(data.guilds[guilds[i]][0] && !guild.channels.get(data.guilds[guilds[i]][0])) {
 				data.guilds[guilds[i]][0] = null;
@@ -81,7 +81,7 @@ client.once("ready", function() {
 			guildCreate(guild);
 		}
 	}
-	for(var i in data.guilds) {
+	for(let i in data.guilds) {
 		if(guilds.indexOf(i) == -1) {
 			guildDelete(i);
 		} else if(!data.guilds[i][1]) {
@@ -98,14 +98,14 @@ client.on("channelDelete", function(channel) {
 		save();
 	}
 });
-var starred = [];
-var star = function(msg, callback) {
+let starred = [];
+let star = function(msg, callback) {
 	if(data.guilds[msg.guild.id][0]) {
 		console.log(`star ${msg.guild.id} ${msg.channel.id} ${msg.id}`);
 		if(starred.indexOf(msg.id) == -1) {
 			starred.push(msg.id);
 		}
-		var embed = {
+		let embed = {
 			embed: {
 				timestamp: msg.createdAt.toISOString(),
 				color: data.guilds[msg.guild.id][3],
@@ -137,13 +137,13 @@ var star = function(msg, callback) {
 				value: msg.content.slice(1024)
 			});
 		}
-		var attachment = msg.attachments.first();
+		let attachment = msg.attachments.first();
 		if(attachment) {
 			embed.embed.image = {
 				url: attachment.url
 			};
 		}
-		var starboard = msg.guild.channels.get(data.guilds[msg.guild.id][0]);
+		let starboard = msg.guild.channels.get(data.guilds[msg.guild.id][0]);
 		starboard.send(embed).then(callback).catch(function() {
 			permWarn(msg.guild, `read messages, send messages, ${attachment ? "and/or embed links" : "embed links, and/or attach files"}, in the ${starboard} channel or otherwise`);
 		});
@@ -156,16 +156,16 @@ client.on("messageReactionAdd", function(reaction) {
 		star(reaction.message);
 	}
 });
-var prefix = /^> ?⭐/;
+let prefix = /^> ?⭐/;
 client.on("message", function(msg) {
 	if(msg.channel.type == "text" && !msg.system) {
-		var content = msg.content;
+		let content = msg.content;
 		if(prefix.test(content)) {
-			var perm = msg.guild.member(msg.author).hasPermission(8);
+			let perm = msg.guild.member(msg.author).hasPermission(8);
 			if(perm) {
 				content = content.replace(prefix, "").replace(/ /g, "");
 				if(content) {
-					var old1 = data.guilds[msg.guild.id][1];
+					let old1 = data.guilds[msg.guild.id][1];
 					data.guilds[msg.guild.id][1] = null;
 					msg.react(content).then(function(reaction) {
 						reaction.remove(client.user).then(function() {
@@ -186,7 +186,7 @@ client.on("message", function(msg) {
 							});
 						}).catch(function() {
 							if(channelTest.test(content)) {
-								var channel = content.replace(channelTest, "$1");
+								let channel = content.replace(channelTest, "$1");
 								if(msg.guild.channels.get(channel)) {
 									data.guilds[msg.guild.id][0] = channel;
 									save();
@@ -199,7 +199,7 @@ client.on("message", function(msg) {
 									});
 								}
 							} else {
-								var reactionCount = parseInt(content);
+								let reactionCount = parseInt(content);
 								if(reactionCount) {
 									data.guilds[msg.guild.id][2] = Math.abs(reactionCount);
 									save();
@@ -207,7 +207,7 @@ client.on("message", function(msg) {
 										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 									});
 								} else if(colorTest.test(content)) {
-									var code = content.replace(colorTest, "$1$1$2$2$3$3$4");
+									let code = content.replace(colorTest, "$1$1$2$2$3$3$4");
 									data.guilds[msg.guild.id][3] = parseInt(code, 16);
 									save();
 									msg.channel.send(`The starred embed color has been changed to \`#${code}\`.\n(The default starred embed color is \`#ffac33\`.)`, {
@@ -237,7 +237,7 @@ client.login(data.token);
 fs.watch(__filename, function() {
 	process.exit();
 });
-var stdin = process.openStdin();
+let stdin = process.openStdin();
 stdin.on("data", function(input) {
 	console.log(eval(String(input)));
 });

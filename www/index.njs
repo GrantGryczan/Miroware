@@ -1,4 +1,4 @@
-var links = [];
+let links = [];
 this.title = "Miroware";
 this.description = "Hello, world!";
 this.tags = ["homepage", "home", "page", "front"];
@@ -8,8 +8,8 @@ this.value += html`
 this.value += (await load("/load/body.njs", this)).value;
 this.value += html`
 			<div class="wrapper">`;
-for(var j = 0; j < links.length; j++) {
-	var page = fs.readFileSync(`www${links[j]}index.njs`).toString();
+for(let j = 0; j < links.length; j++) {
+	let page = fs.readFileSync(`www${links[j]}index.njs`).toString();
 	this.value += html`
 			<div class="mdc-card mdc-elevation-transition mdc-elevation--z2 mdc-ripple-surface invisible open" href="${links[j]}" style="background-image: url(&quot;${links[j]}icon.png&quot;);">
 				<section class="mdc-card__primary">
