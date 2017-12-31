@@ -6,14 +6,14 @@ this.value += html`
 		<link rel="stylesheet" href="index.css">`;
 this.value += (await load("/load/body.njs", this)).value;
 this.value += html`
-			<form>
+			<form id="loginform">
 				<div class="mdc-text-field">
 					<input id="email" class="mdc-text-field__input" type="email">
 					<label class="mdc-text-field__label" for="email">Email</label>
 					<div class="mdc-text-field__bottom-line"></div>
 				</div><br>
 				<br>
-				<button class="mdc-button mdc-button--stroked ripple">Log in</button>
+				<button class="mdc-button mdc-button--stroked ripple" type="submit">Log in</button>
 			</form>`;
 this.value += (await load("/load/belt.njs", this)).value;
 this.value += html`

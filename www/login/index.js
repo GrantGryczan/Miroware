@@ -1,6 +1,7 @@
 (function() {
-	var form = document.querySelector("form");
+	let form = document.querySelector("form");
 	form.addEventListener("submit", function(evt) {
 		evt.preventDefault();
+		form.disable();
 	});
 })();
