@@ -134,7 +134,6 @@ app.post("*", function(req, res) {
 								}
 							}
 						}
-						console.log(modified);
 						if(modified.includes(".babelrc")) {
 							babelrc = JSON.parse(fs.readFileSync("./.babelrc"));
 						}
