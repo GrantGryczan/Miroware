@@ -1,5 +1,5 @@
 console.log("< Server >");
-console.log(-1);
+console.log(-2);
 let fs = require("fs");
 let http = require("http");
 let https = require("https");
@@ -91,15 +91,13 @@ app.post("*", async function(req, res) {
 					if(branch == "master") {
 						let modified = [];
 						let removed = [];
-						console.log(1);
 						for(let v of payload.commits) {
 							for(let w of [...v.added, ...v.modified]) {
 								if(!modified.includes(w)) {
 									modified.push(w);
-									console.log(2);
 									let body = await request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${w}?${Date.now()}`);
 									let index = 0;
-									console.log(3);
+									console.log(body.split("\n")[1]);
 									while(index = w.indexOf("/", index)+1) {
 										nextPath = w.slice(0, index-1);
 										if(!fs.existsSync(nextPath)) {
@@ -133,7 +131,6 @@ app.post("*", async function(req, res) {
 								}
 							}
 						}
-						console.log(4);
 						if(modified.includes(".babelrc")) {
 							babelrc = JSON.parse(fs.readFileSync("./.babelrc"));
 						}
