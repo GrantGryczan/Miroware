@@ -103,12 +103,7 @@ app.post("*", function(req, res) {
 														fs.mkdirSync(nextPath);
 													}
 												}
-												if(path.startsWith("web/") && path.endsWith(".js")) {
-													var result = babel.transform(body);
-													body = result.code;
-													fs.writeFileSync(path + ".map", result.map);
-												}
-												fs.writeFileSync(path, body);
+												payload.commits[i].modified.push(payload.commits[i].added[j]);
 											}
 										});
 									})(payload.commits[i].added[j]);
@@ -120,6 +115,11 @@ app.post("*", function(req, res) {
 									(function(path) {
 										request.get(`https://raw.githubusercontent.com/${payload.repository.full_name}/${branch}/${path}?${Date.now()}`, function(err, res2, body) {
 											if(body) {
+												if(path.startsWith("web/") && path.endsWith(".js")) {
+													var result = babel.transform(body);
+													body = result.code;
+													fs.writeFileSync(path + ".map", result.map);
+												}
 												fs.writeFileSync(path, body);
 											}
 										});
