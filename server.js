@@ -271,7 +271,6 @@ app.get("*", async function(req, res) {
 					res
 				})).value);
 			} else {
-				console.log(type);
 				if(type == "application/javascript") {
 					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/")+1)}.map`);
 				}
