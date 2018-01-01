@@ -1,4 +1,4 @@
-window.dataLayer = window.dataLayer || []; // test
+window.dataLayer = window.dataLayer || [];
 const gtag = function() {
 	dataLayer.push(arguments);
 };
