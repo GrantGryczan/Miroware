@@ -60,12 +60,12 @@ app.use(function(req, res) {
 		if(req.protocol == "http") {
 			res.redirect(`https://${host + req.url}`);
 		} else {
-			const subdomain = req.subdomains.join(".");
-			if(subdomain == "www") {
+			req.subdomain = req.subdomains.join(".");
+			if(req.subdomain == "www") {
 				res.redirect(`${req.protocol}://${host.slice(4) + req.url}`);
 			} else {
 				try {
-					decodeURIComponent(req.url);
+					req.decodedPath = decodeURIComponent(req.url);
 					req.next();
 				} catch(err) {
 					res.status(400).json(400);
@@ -78,8 +78,7 @@ app.use(function(req, res) {
 	}
 });
 app.post("*", async function(req, res) {
-	const subdomain = req.subdomains.join(".");
-	if(subdomain == "") {
+	if(req.subdomain == "") {
 		if(req.path == "/github") {
 			const signature = req.get("X-Hub-Signature");
 			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}` && req.get("X-GitHub-Event") == "push") {
@@ -170,7 +169,7 @@ app.post("*", async function(req, res) {
 				}
 			}
 		}
-	} else if(subdomain == "pipe") {
+	} else if(req.subdomain == "pipe") {
 		s3.putObject({
 			Body: req.body,
 			Bucket: "miroware-pipe",
@@ -252,23 +251,21 @@ setInterval(function() {
 }, 86400000);
 app.get("*", async function(req, res) {
 	res.set("Cache-Control", "max-age=86400");
-	const decodedPath = decodeURIComponent(req.path);
-	const subdomain = req.subdomains.join(".");
-	if(subdomain == "" || subdomain == "d") {
-		const path = getActualPath(decodedPath);
+	if(req.subdomain == "" || req.subdomain == "d") {
+		const path = getActualPath(req.decodedPath);
 		const type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
 		let publicPath = path.slice(3);
 		if(path.endsWith("/index.njs")) {
 			publicPath = publicPath.slice(0, -9);
 		}
-		if(decodedPath != publicPath) {
+		if(req.decodedPath != publicPath) {
 			res.redirect(publicPath);
 		} else if(fs.existsSync(path)) {
 			res.set("Content-Type", type);
 			if(path.endsWith(".njs")) {
 				res.set("Cache-Control", "no-cache");
 				res.set("Content-Type", "text/html");
-				res.send((await load(decodedPath, {
+				res.send((await load(req.decodedPath, {
 					req,
 					res
 				})).value);
@@ -288,13 +285,13 @@ app.get("*", async function(req, res) {
 				res.json(404);
 			}
 		}
-	} else if(subdomain == "pipe") {
-		if(decodedPath == "/") {
+	} else if(req.subdomain == "pipe") {
+		if(req.decodedPath == "/") {
 			res.redirect(`${req.protocol}://${req.get("Host").slice(5)}/pipe/`);
 		} else {
 			s3.getObject({
 				Bucket: "miroware-pipe",
-				Key: decodedPath.slice(1)
+				Key: req.decodedPath.slice(1)
 			}, function(err, data) {
 				if(err) {
 					res.set("Content-Type", "text/plain").status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
