@@ -1,22 +1,20 @@
 console.log("< Server >");
-let fs = require("fs");
-let http = require("http");
-let https = require("https");
-let express = require("express");
-let cookieParser = require("cookie-parser");
-let bodyParser = require("body-parser");
-let request = require("request-promise-native");
-let crypto = require("crypto");
-let babel = require("babel-core");
-let UglifyJS = require("uglify-js");
-let childProcess = require("child_process");
-let mime = require("mime");
-let AWS = require("aws-sdk");
-let session = require("express-session");
-let DynamoDBStore = require("connect-dynamodb")({
-	session
-});
-let youKnow = require("./data/youknow.js");
+const fs = require("fs");
+const http = require("http");
+const https = require("https");
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const request = require("request-promise-native");
+const crypto = require("crypto");
+const babel = require("babel-core");
+const UglifyJS = require("uglify-js");
+const childProcess = require("child_process");
+const mime = require("mime");
+const AWS = require("aws-sdk");
+const session = require("express-session");
+const DynamoDBStore = require("connect-dynamodb");
+const youKnow = require("./data/youknow.js");
 mime.define({
 	"text/html": ["njs"]
 });
@@ -41,6 +39,8 @@ app.use(session({
 		expires: new Date(Date.now()+2592000000)
 	},
 	store: new DynamoDBStore({
+		session
+	})({
 		table: "sessions",
 		AWSConfigJSON: youKnow.db
 	})
