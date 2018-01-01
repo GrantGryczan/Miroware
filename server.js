@@ -18,11 +18,11 @@ const youKnow = require("./data/youknow.js");
 mime.define({
 	"text/html": ["njs"]
 });
-let s3 = new AWS.S3({
+const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
-let app = express();
+const app = express();
 app.set("trust proxy", true);
 app.use(cookieParser());
 app.use(bodyParser.raw({
@@ -49,7 +49,7 @@ app.use(function(req, res) {
 	res.set("X-Magic", "real");
 	res.set("Access-Control-Expose-Headers", "X-Magic");
 	res.set("Access-Control-Allow-Origin", "*");
-	let host = req.get("Host");
+	const host = req.get("Host");
 	if(host) {
 		if(host.startsWith("localhost:")) {
 			Object.defineProperty(req, "protocol", {
@@ -60,7 +60,7 @@ app.use(function(req, res) {
 		if(req.protocol == "http") {
 			res.redirect(`https://${host + req.url}`);
 		} else {
-			let subdomain = req.subdomains.join(".");
+			const subdomain = req.subdomains.join(".");
 			if(subdomain == "www") {
 				res.redirect(`${req.protocol}://${host.slice(4) + req.url}`);
 			} else {
@@ -78,18 +78,18 @@ app.use(function(req, res) {
 	}
 });
 app.post("*", async function(req, res) {
-	let subdomain = req.subdomains.join(".");
+	const subdomain = req.subdomains.join(".");
 	if(subdomain == "") {
 		if(req.path == "/github") {
-			let signature = req.get("X-Hub-Signature");
+			const signature = req.get("X-Hub-Signature");
 			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}` && req.get("X-GitHub-Event") == "push") {
 				res.send();
-				let payload = JSON.parse(req.body);
+				const payload = JSON.parse(req.body);
 				if(payload.repository.name == "web") {
-					let branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
+					const branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
 					if(branch == "master") {
-						let modified = [];
-						let removed = [];
+						const modified = [];
+						const removed = [];
 						for(let v of payload.commits) {
 							for(let w of [...v.added, ...v.modified]) {
 								if(!modified.includes(w)) {
@@ -108,8 +108,8 @@ app.post("*", async function(req, res) {
 										}
 									}
 									if(w.startsWith("www/") && mime.getType(w) == "application/javascript") {
-										let filename = w.slice(w.lastIndexOf("/")+1);
-										let compiled = babel.transform(contents, {
+										const filename = w.slice(w.lastIndexOf("/")+1);
+										const compiled = babel.transform(contents, {
 											ast: false,
 											comments: false,
 											compact: true,
@@ -118,7 +118,7 @@ app.post("*", async function(req, res) {
 											presets: ["env"],
 											sourceMaps: true
 										});
-										let result = UglifyJS.minify(compiled.code, {
+										const result = UglifyJS.minify(compiled.code, {
 											parse: {
 												html5_comments: false
 											},
@@ -150,7 +150,7 @@ app.post("*", async function(req, res) {
 									}
 									let index = w.length;
 									while((index = w.lastIndexOf("/", index)-1) != -2) {
-										let path = w.slice(0, index+1);
+										const path = w.slice(0, index+1);
 										if(fs.existsSync(path)) {
 											try {
 												fs.rmdirSync(path);
@@ -187,18 +187,18 @@ app.post("*", async function(req, res) {
 		});
 	}
 });
-let html = function() {
+const html = function() {
 	let string = arguments[0][0];
-	let substitutions = Array.prototype.slice.call(arguments, 1);
+	const substitutions = Array.prototype.slice.call(arguments, 1);
 	for(let i = 0; i < substitutions.length; i++) {
 		string += String(substitutions[i]).replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + arguments[0][i+1];
 	}
 	return string;
 };
-let evalVal = function(thisCode) {
+const evalVal = function(thisCode) {
 	return eval(thisCode);
 };
-let getActualPath = function(path) {
+const getActualPath = function(path) {
 	if(!path.startsWith("/")) {
 		path = `/${path}`;
 	}
@@ -212,8 +212,8 @@ let getActualPath = function(path) {
 	path = path.replace(/\/\.{1,2}(?=\/)/g, "");
 	return path;
 };
-let loadCache = {};
-let load = function(path, context) {
+const loadCache = {};
+const load = function(path, context) {
 	if(context) {
 		context = Object.assign({}, context);
 		delete context.cache;
@@ -222,7 +222,7 @@ let load = function(path, context) {
 	} else {
 		context = {};
 	}
-	let properties = ["exit", Object.keys(context)];
+	const properties = ["exit", Object.keys(context)];
 	context.value = "";
 	return new Promise(function(resolve, reject) {
 		if(loadCache[path]) {
@@ -239,7 +239,6 @@ let load = function(path, context) {
 				}
 				resolve(context);
 			};
-			let val = "";
 			try {
 				evalVal.call(context, `(async function() {\n${fs.readFileSync(getActualPath(path))}\n}).call(this);`);
 			} catch(err) {
@@ -253,11 +252,11 @@ setInterval(function() {
 }, 86400000);
 app.get("*", async function(req, res) {
 	res.set("Cache-Control", "max-age=86400");
-	let decodedPath = decodeURIComponent(req.path);
-	let subdomain = req.subdomains.join(".");
+	const decodedPath = decodeURIComponent(req.path);
+	const subdomain = req.subdomains.join(".");
 	if(subdomain == "" || subdomain == "d") {
-		let path = getActualPath(decodedPath);
-		let type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
+		const path = getActualPath(decodedPath);
+		const type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
 		let publicPath = path.slice(3);
 		if(path.endsWith("/index.njs")) {
 			publicPath = publicPath.slice(0, -9);
@@ -315,7 +314,7 @@ try {
 		ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
 	}, app).listen(8443);
 } catch(err) {}
-let stdin = process.openStdin();
+const stdin = process.openStdin();
 stdin.on("data", function(input) {
 	console.log(eval(String(input)));
 });
