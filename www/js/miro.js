@@ -1,5 +1,5 @@
 window.dataLayer = window.dataLayer || [];
-var gtag = function() {
+const gtag = function() {
 	dataLayer.push(arguments);
 };
 gtag("js", new Date());
@@ -11,14 +11,14 @@ gtag("config", "UA-110090319-1");
 	console.log(Miro.magic);
 	HTMLFormElement.prototype.disable = function() {
 		this.classList.add("mdc-text-field--disabled");
-		let inputs = this.querySelectorAll("input, button");
+		const inputs = this.querySelectorAll("input, button");
 		for(let v of inputs) {
 			v.disabled = true;
 		}
 	};
 	HTMLFormElement.prototype.enable = function() {
 		this.classList.remove("mdc-text-field--disabled");
-		let inputs = this.querySelectorAll("input, button");
+		const inputs = this.querySelectorAll("input, button");
 		for(let v of inputs) {
 			v.disabled = false;
 		}
@@ -37,14 +37,14 @@ gtag("config", "UA-110090319-1");
 	Miro.query = {};
 	for(let v of rawQuery) {
 		try {
-			let p = v.split("=");
+			const p = v.split("=");
 			Miro.query[p[0]] = decodeURIComponent(p[1]);
 		} catch(err) {}
 	}
 	Miro.request = function(method, url, data, headers, success, error, noMagic) {
 		data = data || {};
 		headers = headers || {};
-		let req = new XMLHttpRequest();
+		const req = new XMLHttpRequest();
 		req.open(method, url, true);
 		for(let i in headers) {
 			req.setRequestHeader(i, headers[i]);
@@ -74,15 +74,15 @@ gtag("config", "UA-110090319-1");
 		}
 		req.send(formData);
 	};
-	let drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-temporary-drawer"));
+	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-temporary-drawer"));
 	document.querySelector("#menu").addEventListener("click", function() {
 		drawer.open = true;
 	});
-	let textFields = document.querySelectorAll(".mdc-text-field");
+	const textFields = document.querySelectorAll(".mdc-text-field");
 	for(let v of textFields) {
 		new mdc.textField.MDCTextField(v);
 	}
-	let ripples = document.querySelectorAll(".ripple");
+	const ripples = document.querySelectorAll(".ripple");
 	for(let v of ripples) {
 		new mdc.ripple.MDCRipple(v);
 	}
