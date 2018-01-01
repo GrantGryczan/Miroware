@@ -144,6 +144,9 @@ app.post("*", async function(req, res) {
 									removed.push(w);
 									if(fs.existsSync(w)) {
 										fs.unlinkSync(w);
+										if(mime.getType(w) == "application/javascript") {
+											fs.unlinkSync(`${w}.map`);
+										}
 									}
 									let index = w.length;
 									while((index = w.lastIndexOf("/", index)-1) != -2) {
