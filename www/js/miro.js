@@ -1,9 +1,3 @@
-window.dataLayer = window.dataLayer || [];
-const gtag = function() {
-	dataLayer.push(arguments);
-};
-gtag("js", new Date());
-gtag("config", "UA-110090319-1");
 (function() {
 	window.Miro = {};
 	Miro.magic = {};

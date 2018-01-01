@@ -77,6 +77,123 @@ app.use(function(req, res) {
 		res.status(400).send("I am not quite sure how you could get this error, but you apparently can. I am willing to bet that you need a new web browser. That is probably what caused it.");
 	}
 });
+const html = function() {
+	let string = arguments[0][0];
+	const substitutions = Array.prototype.slice.call(arguments, 1);
+	for(let i = 0; i < substitutions.length; i++) {
+		string += String(substitutions[i]).replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + arguments[0][i+1];
+	}
+	return string;
+};
+const evalVal = function(thisCode) {
+	return eval(thisCode);
+};
+const getActualPath = function(path) {
+	if(!path.startsWith("/")) {
+		path = `/${path}`;
+	}
+	path = `www${path.replace(/\/+/g, "/")}`;
+	if(path.lastIndexOf("/") > path.lastIndexOf(".") && !(fs.existsSync(path) && !fs.statSync(path).isDirectory())) {
+		if(!path.endsWith("/")) {
+			path += "/";
+		}
+		path += "index.njs";
+	}
+	path = path.replace(/\/\.{1,2}(?=\/)/g, "");
+	return path;
+};
+let loadCache = {};
+const load = function(path, context) {
+	if(context) {
+		context = Object.assign({}, context);
+		delete context.cache;
+		delete context.value;
+		delete context.exit;
+	} else {
+		context = {};
+	}
+	const properties = ["exit", Object.keys(context)];
+	context.value = "";
+	return new Promise(function(resolve, reject) {
+		if(loadCache[path]) {
+			resolve(Object.assign(context, loadCache[path]));
+		} else {
+			context.exit = function() {
+				if(context.cache == 1) {
+					loadCache[path] = {};
+					for(let i in context) {
+						if(!properties.includes(i)) {
+							loadCache[path][i] = context[i];
+						}
+					}
+				}
+				resolve(context);
+			};
+			try {
+				evalVal.call(context, `(async function() {\n${fs.readFileSync(getActualPath(path))}\n}).call(this);`);
+			} catch(err) {
+				reject(err);
+			}
+		}
+	});
+};
+setInterval(function() {
+	loadCache = {};
+}, 86400000);
+app.get("*", async function(req, res) {
+	res.set("Cache-Control", "max-age=86400");
+	if(req.subdomain == "" || req.subdomain == "d") {
+		const path = getActualPath(req.decodedPath);
+		const type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
+		let publicPath = path.slice(3);
+		if(path.endsWith("/index.njs")) {
+			publicPath = publicPath.slice(0, -9);
+		}
+		if(req.decodedPath != publicPath) {
+			res.redirect(publicPath);
+		} else if(fs.existsSync(path)) {
+			res.set("Content-Type", type);
+			if(path.endsWith(".njs")) {
+				res.set("Cache-Control", "no-cache");
+				res.set("Content-Type", "text/html");
+				res.send((await load(req.decodedPath, {
+					req,
+					res
+				})).value);
+			} else {
+				if(type == "application/javascript") {
+					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/")+1)}.map`);
+				}
+				fs.createReadStream(path).pipe(res);
+			}
+		} else {
+			res.status(404);
+			if(type == "text/html") {
+				res.redirect("/error/404/");
+			} else if(type.startsWith("image/")) {
+				res.json(404);
+			} else {
+				res.json(404);
+			}
+		}
+	} else if(req.subdomain == "pipe") {
+		if(req.decodedPath == "/") {
+			res.redirect(`${req.protocol}://${req.get("Host").slice(5)}/pipe/`);
+		} else {
+			s3.getObject({
+				Bucket: "miroware-pipe",
+				Key: req.decodedPath.slice(1)
+			}, function(err, data) {
+				if(err) {
+					res.set("Content-Type", "text/plain").status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
+				} else {
+					res.set("Content-Type", data.ContentType);
+					res.send(data.Body);
+				}
+			});
+		}
+	}
+});
 app.post("*", async function(req, res) {
 	if(req.subdomain == "") {
 		if(req.path == "/github") {
@@ -184,123 +301,6 @@ app.post("*", async function(req, res) {
 				res.send(key);
 			}
 		});
-	}
-});
-const html = function() {
-	let string = arguments[0][0];
-	const substitutions = Array.prototype.slice.call(arguments, 1);
-	for(let i = 0; i < substitutions.length; i++) {
-		string += String(substitutions[i]).replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + arguments[0][i+1];
-	}
-	return string;
-};
-const evalVal = function(thisCode) {
-	return eval(thisCode);
-};
-const getActualPath = function(path) {
-	if(!path.startsWith("/")) {
-		path = `/${path}`;
-	}
-	path = `www${path.replace(/\/+/g, "/")}`;
-	if(path.lastIndexOf("/") > path.lastIndexOf(".") && !(fs.existsSync(path) && !fs.statSync(path).isDirectory())) {
-		if(!path.endsWith("/")) {
-			path += "/";
-		}
-		path += "index.njs";
-	}
-	path = path.replace(/\/\.{1,2}(?=\/)/g, "");
-	return path;
-};
-const loadCache = {};
-const load = function(path, context) {
-	if(context) {
-		context = Object.assign({}, context);
-		delete context.cache;
-		delete context.value;
-		delete context.exit;
-	} else {
-		context = {};
-	}
-	const properties = ["exit", Object.keys(context)];
-	context.value = "";
-	return new Promise(function(resolve, reject) {
-		if(loadCache[path]) {
-			resolve(Object.assign(context, loadCache[path]));
-		} else {
-			context.exit = function() {
-				if(context.cache == 1) {
-					loadCache[path] = {};
-					for(let i in context) {
-						if(!properties.includes(i)) {
-							loadCache[path][i] = context[i];
-						}
-					}
-				}
-				resolve(context);
-			};
-			try {
-				evalVal.call(context, `(async function() {\n${fs.readFileSync(getActualPath(path))}\n}).call(this);`);
-			} catch(err) {
-				reject(err);
-			}
-		}
-	});
-};
-setInterval(function() {
-	loadCache = {};
-}, 86400000);
-app.get("*", async function(req, res) {
-	res.set("Cache-Control", "max-age=86400");
-	if(req.subdomain == "" || req.subdomain == "d") {
-		const path = getActualPath(req.decodedPath);
-		const type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
-		let publicPath = path.slice(3);
-		if(path.endsWith("/index.njs")) {
-			publicPath = publicPath.slice(0, -9);
-		}
-		if(req.decodedPath != publicPath) {
-			res.redirect(publicPath);
-		} else if(fs.existsSync(path)) {
-			res.set("Content-Type", type);
-			if(path.endsWith(".njs")) {
-				res.set("Cache-Control", "no-cache");
-				res.set("Content-Type", "text/html");
-				res.send((await load(req.decodedPath, {
-					req,
-					res
-				})).value);
-			} else {
-				if(type == "application/javascript") {
-					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/")+1)}.map`);
-				}
-				fs.createReadStream(path).pipe(res);
-			}
-		} else {
-			res.status(404);
-			if(type == "text/html") {
-				res.redirect("/error/404/");
-			} else if(type.startsWith("image/")) {
-				res.json(404);
-			} else {
-				res.json(404);
-			}
-		}
-	} else if(req.subdomain == "pipe") {
-		if(req.decodedPath == "/") {
-			res.redirect(`${req.protocol}://${req.get("Host").slice(5)}/pipe/`);
-		} else {
-			s3.getObject({
-				Bucket: "miroware-pipe",
-				Key: req.decodedPath.slice(1)
-			}, function(err, data) {
-				if(err) {
-					res.set("Content-Type", "text/plain").status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
-				} else {
-					res.set("Content-Type", data.ContentType);
-					res.send(data.Body);
-				}
-			});
-		}
 	}
 });
 http.createServer(app).listen(8080);
