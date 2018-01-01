@@ -18,13 +18,5 @@ this.value = html`
 		<meta name="google-signin-client_id" content="${youKnow.google.clientId}">
 		<link rel="icon" href="/image/icon/cover.png">
 		<link rel="stylesheet" href="/css/miro.css">
-		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			var gtag = function() {
-				dataLayer.push(arguments);
-			};
-			gtag("js", new Date());
-			gtag("config", "UA-110090319-1");
-		</script>`;
+		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>`;
 this.exit();
