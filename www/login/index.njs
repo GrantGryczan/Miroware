@@ -8,7 +8,7 @@ this.value += (await load("/load/body.njs", this)).value;
 this.value += html`
 			<form id="loginform">
 				<div class="mdc-text-field">
-					<input id="email" class="mdc-text-field__input" type="email">
+					<input id="email" class="mdc-text-field__input" type="email" required>
 					<label class="mdc-text-field__label" for="email">Email</label>
 					<div class="mdc-text-field__bottom-line"></div>
 				</div><br>
