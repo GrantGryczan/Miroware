@@ -85,9 +85,6 @@ const html = function() {
 	}
 	return string;
 };
-const evalVal = function(thisCode) {
-	return eval(thisCode);
-};
 const getActualPath = function(path) {
 	if(!path.startsWith("/")) {
 		path = `/${path}`;
@@ -102,8 +99,10 @@ const getActualPath = function(path) {
 	path = path.replace(/\/\.{1,2}(?=\/)/g, "");
 	return path;
 };
-let loadCache = {};
+const readCache = {};
+const loadCache = {};
 const load = function(path, context) {
+	const actualPath = getActualPath(path);
 	if(context) {
 		context = Object.assign({}, context);
 		delete context.cache;
@@ -115,22 +114,31 @@ const load = function(path, context) {
 	const properties = ["exit", Object.keys(context)];
 	context.value = "";
 	return new Promise(function(resolve, reject) {
-		if(loadCache[path]) {
-			resolve(Object.assign(context, loadCache[path]));
+		if(loadCache[actualPath]) {
+			resolve(Object.assign(context, loadCache[actualPath]));
 		} else {
 			context.exit = function() {
 				if(context.cache == 1) {
-					loadCache[path] = {};
+					loadCache[actualPath] = {};
 					for(let i in context) {
 						if(!properties.includes(i)) {
-							loadCache[path][i] = context[i];
+							loadCache[actualPath][i] = context[i];
 						}
 					}
 				}
 				resolve(context);
 			};
 			try {
-				evalVal.call(context, `(async function() {\n${fs.readFileSync(getActualPath(path))}\n}).call(this);`);
+				const modified = fs.statSync(actualPath).mtimeMs;
+				if(readCache[actualPath]) {
+					if(readCache[actualPath][0] != modified) {
+						delete readCache[actualPath];
+					}
+				}
+				if(!readCache[actualPath]) {
+					readCache[actualPath] = [modified, eval(`(async function() {\n${fs.readFileSync(actualPath)}\n})`)];
+				}
+				readCache[actualPath][1].call(context);
 			} catch(err) {
 				reject(err);
 			}
@@ -138,7 +146,9 @@ const load = function(path, context) {
 	});
 };
 setInterval(function() {
-	loadCache = {};
+	for(let i in loadCache) {
+		delete loadCache[i];
+	}
 }, 86400000);
 app.get("*", async function(req, res) {
 	res.set("Cache-Control", "max-age=86400");
@@ -195,7 +205,7 @@ app.get("*", async function(req, res) {
 	}
 });
 app.post("*", async function(req, res) {
-	if(req.subdomain == "") {
+	if(req.subdomain == "" || req.subdomain == "d") {
 		if(req.path == "/github") {
 			const signature = req.get("X-Hub-Signature");
 			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}` && req.get("X-GitHub-Event") == "push") {
