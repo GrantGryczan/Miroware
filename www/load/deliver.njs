@@ -7,7 +7,7 @@ if(queryIndex && path) {
 		t.value = body;
 		t.exit();
 	};
-	request.get(`https://raw.githubusercontent.com/${path}`).then(callback).catch(callback);
+	request.get(path).then(callback).catch(callback);
 } else {
 	t.res.set("Content-Type", "text/plain").status(400);
 	t.value = "400";
