@@ -2,18 +2,18 @@ if(this.socialicons) {
 	this.value = "";
 	this.exit();
 } else {
-	let links = ["/discord/", "/patreon/", "/youtube/", "/twitter/", "/github/"];
-	let t = this;
+	const links = ["/discord/", "/patreon/", "/youtube/", "/twitter/", "/github/"];
+	const t = this;
 	t.cache = 1;
 	t.value = html`
 					<div id="externals">`;
 	for(let v of links) {
-		let context = await load(v, {
+		const context = await load(v, {
 			socialicons: true
 		});
-		let origin = context.redirect.slice(0, context.redirect.indexOf("/", context.redirect.indexOf("//")+2));
-		let body;
-		let icon;
+		const origin = context.redirect.slice(0, context.redirect.indexOf("/", context.redirect.indexOf("//")+2));
+		const body;
+		const icon;
 		try {
 			body = await request.get(context.redirect);
 		} catch(err) {
