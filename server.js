@@ -118,13 +118,20 @@ const load = function(path, context) {
 			resolve(Object.assign(context, loadCache[actualPath]));
 		} else {
 			context.exit = function() {
-				if(context.cache == 1) {
-					loadCache[actualPath] = {};
-					for(let i in context) {
-						if(!properties.includes(i)) {
-							loadCache[actualPath][i] = context[i];
+				if(context.cache) {
+					let cacheIndex = actualPath;
+					loadCache[cacheIndex] = {};
+					if(context.cache == 2) {
+						let queryIndex = context.req.url.indexOf("?");
+						if(queryIndex != -1) {
+							cacheIndex += context.req.url.slice(queryIndex);
 						}
 					}
+					Object.keys(context).forEach(function(key) {
+						if(!properties.includes(key)) {
+							loadCache[cacheIndex][key] = context[key];
+						}
+					});
 				}
 				resolve(context);
 			};
@@ -146,9 +153,9 @@ const load = function(path, context) {
 	});
 };
 setInterval(function() {
-	for(let i in loadCache) {
-		delete loadCache[i];
-	}
+	Object.keys(loadCache).forEach(function(key) {
+		delete loadCache[key];
+	});
 }, 86400000);
 app.get("*", async function(req, res) {
 	res.set("Cache-Control", "max-age=86400");
