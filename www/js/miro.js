@@ -40,8 +40,8 @@
 		headers = headers || {};
 		const req = new XMLHttpRequest();
 		req.open(method, url, true);
-		Object.keys(headers).forEach(function(key) {
-			req.setRequestHeader(key, headers[key]);
+		Object.keys(headers).forEach(function(i) {
+			req.setRequestHeader(i, headers[i]);
 		});
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.onreadystatechange = function() {
@@ -63,8 +63,8 @@
 			}
 		};
 		let formData = "";
-		Object.keys(data).forEach(function(key) {
-			formData += `${(formData ? "&" : "") + encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
+		Object.keys(data).forEach(function(i) {
+			formData += `${(formData ? "&" : "") + encodeURIComponent(i)}=${encodeURIComponent(data[i])}`;
 		});
 		req.send(formData);
 	};
