@@ -85,7 +85,8 @@ const html = function() {
 	}
 	return string;
 };
-const getActualPath = function(path) {
+const getRawPath = function(path) {
+	// TODO: cache
 	if(!path.startsWith("/")) {
 		path = `/${path}`;
 	}
@@ -102,50 +103,56 @@ const getActualPath = function(path) {
 const readCache = {};
 const loadCache = {};
 const load = function(path, context) {
-	const actualPath = getActualPath(path);
+	const rawPath = getRawPath(path);
 	if(context) {
-		context = Object.assign({}, context);
+		context = {...context};
 		delete context.cache;
 		delete context.value;
 		delete context.exit;
 	} else {
 		context = {};
 	}
-	const properties = ["exit", Object.keys(context)];
+	const properties = ["exit", "req", "res", Object.keys(context)];
 	context.value = "";
 	return new Promise(function(resolve, reject) {
-		if(loadCache[actualPath]) {
-			resolve(Object.assign(context, loadCache[actualPath]));
+		if(loadCache[rawPath]) {
+			resolve({
+				...context,
+				...typeof loadCache[rawPath] == "object" ? loadCache[rawPath] : loadCache[loadCache[rawPath]]
+			});
 		} else {
 			context.exit = function() {
 				if(context.cache) {
-					let cacheIndex = actualPath;
-					loadCache[cacheIndex] = {};
+					let cacheIndex = rawPath;
 					if(context.cache == 2) {
-						let queryIndex = context.req.url.indexOf("?");
+						const initCacheIndex = cacheIndex;
+						cacheIndex += "?";
+						const queryIndex = context.req.url.indexOf("?");
 						if(queryIndex != -1) {
 							cacheIndex += context.req.url.slice(queryIndex);
 						}
+						loadCache[initCacheIndex] = cacheIndex;
 					}
-					Object.keys(context).forEach(function(key) {
-						if(!properties.includes(key)) {
-							loadCache[cacheIndex][key] = context[key];
+					loadCache[cacheIndex] = {};
+					Object.keys(context).forEach(function(i) {
+						if(!properties.includes(i)) {
+							loadCache[cacheIndex][i] = context[i];
 						}
 					});
 				}
 				resolve(context);
 			};
 			try {
-				const modified = fs.statSync(actualPath).mtimeMs;
-				if(readCache[actualPath]) {
-					if(readCache[actualPath][0] != modified) {
-						delete readCache[actualPath];
+				const modified = fs.statSync(rawPath).mtimeMs;
+				if(readCache[rawPath]) {
+					if(readCache[rawPath][0] != modified) {
+						delete readCache[rawPath];
 					}
 				}
-				if(!readCache[actualPath]) {
-					readCache[actualPath] = [modified, eval(`(async function() {\n${fs.readFileSync(actualPath)}\n})`)];
+				if(!readCache[rawPath]) {
+					readCache[rawPath] = [modified, eval(`(async function() {\n${fs.readFileSync(rawPath)}\n})`)];
 				}
-				readCache[actualPath][1].call(context);
+				readCache[rawPath][1].call(context);
 			} catch(err) {
 				reject(err);
 			}
@@ -153,8 +160,8 @@ const load = function(path, context) {
 	});
 };
 setInterval(function() {
-	Object.keys(loadCache).forEach(function(key) {
-		delete loadCache[key];
+	Object.keys(loadCache).forEach(function(i) {
+		delete loadCache[i];
 	});
 }, 86400000);
 app.get("*", async function(req, res) {
@@ -162,7 +169,7 @@ app.get("*", async function(req, res) {
 	if(req.subdomain == "" || req.subdomain == "d") {
 		const queryIndex = req.decodedPath.indexOf("?");
 		const noQueryIndex = queryIndex == -1;
-		const path = getActualPath(noQueryIndex ? req.decodedPath : req.decodedPath.slice(0, queryIndex));
+		const path = getRawPath(noQueryIndex ? req.decodedPath : req.decodedPath.slice(0, queryIndex));
 		const type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
 		let publicPath = path.slice(3);
 		if(path.endsWith("/index.njs")) {
@@ -179,10 +186,19 @@ app.get("*", async function(req, res) {
 			if(path.endsWith(".njs")) {
 				res.set("Cache-Control", "no-cache");
 				res.set("Content-Type", "text/html");
-				res.send((await load(publicPath, {
+				const result = await load(publicPath, {
 					req,
 					res
-				})).value);
+				});
+				if(result.headers) {
+					Object.keys(result.headers).forEach(function(i) {
+						res.set(i, result.headers[i]);
+					});
+				}
+				if(result.status) {
+					res.status(result.status);
+				}
+				res.send(result.value);
 			} else {
 				if(type == "application/javascript") {
 					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/")+1)}.map`);
@@ -321,7 +337,7 @@ app.post("*", async function(req, res) {
 			if(err) {
 				res.status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
 			} else {
-				res.send(key);
+				res.send(pathThingyThatDoesNotYetExist);
 			}
 		});
 	}
