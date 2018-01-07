@@ -68,7 +68,7 @@ app.use(function(req, res) {
 					req.decodedPath = decodeURIComponent(req.url);
 					req.next();
 				} catch(err) {
-					res.status(400).json(400);
+					res.status(400).send("400");
 				}
 			}
 		}
@@ -89,14 +89,14 @@ const getActualPath = function(path) {
 	if(!path.startsWith("/")) {
 		path = `/${path}`;
 	}
-	path = `www${path.replace(/\/+/g, "/")}`;
+	path = `www${path.replace(/[\\\/]+/g, "/").replace(/\/\.{1,2}(?=\/)/g, "")}`;
 	if(path.lastIndexOf("/") > path.lastIndexOf(".") && !(fs.existsSync(path) && !fs.statSync(path).isDirectory())) {
 		if(!path.endsWith("/")) {
 			path += "/";
 		}
 		path += "index.njs";
 	}
-	path = path.replace(/\/\.{1,2}(?=\/)/g, "");
+	path = path;
 	return path;
 };
 const readCache = {};
@@ -160,20 +160,26 @@ setInterval(function() {
 app.get("*", async function(req, res) {
 	res.set("Cache-Control", "max-age=86400");
 	if(req.subdomain == "" || req.subdomain == "d") {
-		const path = getActualPath(req.decodedPath);
+		const queryIndex = req.decodedPath.indexOf("?");
+		const noQueryIndex = queryIndex == -1;
+		const path = getActualPath(noQueryIndex ? req.decodedPath : req.decodedPath.slice(0, queryIndex));
 		const type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
 		let publicPath = path.slice(3);
 		if(path.endsWith("/index.njs")) {
 			publicPath = publicPath.slice(0, -9);
 		}
-		if(req.decodedPath != publicPath) {
-			res.redirect(publicPath);
+		let publicPathQuery = publicPath;
+		if(!noQueryIndex) {
+			publicPathQuery += req.decodedPath.slice(queryIndex);
+		}
+		if(req.decodedPath != publicPathQuery) {
+			res.redirect(publicPathQuery);
 		} else if(fs.existsSync(path)) {
 			res.set("Content-Type", type);
 			if(path.endsWith(".njs")) {
 				res.set("Cache-Control", "no-cache");
 				res.set("Content-Type", "text/html");
-				res.send((await load(req.decodedPath, {
+				res.send((await load(publicPath, {
 					req,
 					res
 				})).value);
@@ -188,9 +194,9 @@ app.get("*", async function(req, res) {
 			if(type == "text/html") {
 				res.redirect("/error/404/");
 			} else if(type.startsWith("image/")) {
-				res.json(404);
+				res.send("404");
 			} else {
-				res.json(404);
+				res.send("404");
 			}
 		}
 	} else if(req.subdomain == "pipe") {
