@@ -85,20 +85,28 @@ const html = function() {
 	}
 	return string;
 };
+const rawPathCache = {};
 const getRawPath = function(path) {
-	// TODO: cache
-	if(!path.startsWith("/")) {
-		path = `/${path}`;
-	}
-	path = `www${path.replace(/[\\\/]+/g, "/").replace(/\/\.{1,2}(?=\/)/g, "")}`;
-	if(path.lastIndexOf("/") > path.lastIndexOf(".") && !(fs.existsSync(path) && !fs.statSync(path).isDirectory())) {
-		if(!path.endsWith("/")) {
-			path += "/";
+	if(rawPathCache[path]) {
+		return rawPathCache[path];
+	} else {
+		let output = path;
+		if(!output.startsWith("/")) {
+			output = `/${output}`;
 		}
-		path += "index.njs";
+		output = `www${output.replace(/[\\\/]+/g, "/").replace(/\/\.{1,2}(?=\/)/g, "")}`;
+		if(output.lastIndexOf("/") > output.lastIndexOf(".") && !(fs.existsSync(output) && !fs.statSync(output).isDirectory())) {
+			if(!output.endsWith("/")) {
+				output += "/";
+			}
+			output += "index.njs";
+		}
+		var keys = Object.keys(rawPathCache);
+		if(keys.length > 100) {
+			delete rawPathCache[keys[0]];
+		}
+		return rawPathCache[path] = output;
 	}
-	path = path;
-	return path;
 };
 const readCache = {};
 const loadCache = {};
