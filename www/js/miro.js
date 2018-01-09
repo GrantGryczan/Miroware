@@ -68,7 +68,7 @@
 		});
 		req.send(formData);
 	};
-	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-temporary-drawer"));
+	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-drawer--temporary"));
 	document.querySelector("#menu").addEventListener("click", function() {
 		drawer.open = true;
 	});

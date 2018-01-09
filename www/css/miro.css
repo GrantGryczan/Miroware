@@ -24,7 +24,6 @@ body {
 	margin: 0;
 	overflow: hidden;
 	background-color: #202020;
-	font-family: Roboto, sans-serif;
 	color: #ffffff;
 }
 #container {
@@ -46,22 +45,20 @@ body {
 #menu:hover, #menu:focus {
 	color: #ffffff;
 }
-.mdc-temporary-drawer__header-content {
+.mdc-drawer__header-content {
 	background-color: #202020;
 }
-.mdc-temporary-drawer .mdc-list-item:hover::before {
+.mdc-drawer .mdc-list {
+	padding: 8px 0;
+}
+.mdc-drawer .mdc-list-item:hover::before {
 	opacity: 0.06;
 }
-.mdc-temporary-drawer .mdc-list-item:focus::before {
+.mdc-drawer .mdc-list-item:focus::before {
 	opacity: 0.12;
 }
-.mdc-temporary-drawer .mdc-list-item:active::before {
+.mdc-drawer .mdc-list-item:active::before {
 	opacity: 0.18;
-}
-.mdc-permanent-drawer__toolbar-spacer {
-	height: 0;
-	margin: 8px 0;
-	padding: 0;
 }
 #externals {
 	padding: 8px 16px;
@@ -96,4 +93,3 @@ body {
 .mdc-ripple-surface {
 	user-select: none;
 }
-/* 2 */

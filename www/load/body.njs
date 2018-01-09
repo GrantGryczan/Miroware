@@ -1,19 +1,21 @@
 this.value = html`
 	</head>
-	<body class="mdc-theme--dark">
-		<aside class="mdc-temporary-drawer mdc-typography">
-			<nav class="mdc-temporary-drawer__drawer">
-				<header class="mdc-temporary-drawer__header">
-					<div class="mdc-temporary-drawer__header-content"></div>
+	<body class="mdc-theme--dark mdc-typography">
+		<aside class="mdc-drawer mdc-drawer--temporary demo-drawer">
+			<nav class="mdc-drawer__drawer">
+				<header class="mdc-drawer__header">
+					<div class="mdc-drawer__header-content"></div>
 				</header>
-				<nav class="mdc-temporary-drawer__content mdc-list">
-					<a class="mdc-list-item" href="/">
-						<i class="material-icons mdc-list-item__start-detail">home</i>Home
-					</a>
-					<a class="mdc-list-item" href="/login/">
-						<i class="material-icons mdc-list-item__start-detail">person</i>Log in
-					</a>
-					<div class="mdc-permanent-drawer__toolbar-spacer"></div>`;
+				<nav class="mdc-drawer__content mdc-list-group">
+					<div class="mdc-list">
+						<a class="mdc-list-item" href="/">
+							<i class="material-icons mdc-list-item__graphic">home</i>Home
+						</a>
+						<a class="mdc-list-item" href="/login/">
+							<i class="material-icons mdc-list-item__graphic">person</i>Log in
+						</a>
+					</div>
+					<hr class="mdc-list-divider">`;
 this.value += (await load("/load/external.njs", this)).value;
 this.value += html`
 				</nav>
