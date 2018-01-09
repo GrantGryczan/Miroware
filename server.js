@@ -124,23 +124,29 @@ const load = function(path, context) {
 	const properties = ["exit", "req", "res", Object.keys(context)];
 	context.value = "";
 	return new Promise(function(resolve, reject) {
-		if(loadCache[rawPath]) {
+		let cacheIndex = rawPath;
+		if(loadCache[cacheIndex] == 2) {
+			cacheIndex += "?";
+			const queryIndex = context.req.url.indexOf("?");
+			if(queryIndex != -1) {
+				cacheIndex += context.req.url.slice(queryIndex+1);
+			}
+		}
+		if(loadCache[cacheIndex]) {
 			resolve({
 				...context,
-				...typeof loadCache[rawPath] == "object" ? loadCache[rawPath] : loadCache[loadCache[rawPath]]
+				...loadCache[cacheIndex]
 			});
 		} else {
 			context.exit = function() {
 				if(context.cache) {
-					let cacheIndex = rawPath;
 					if(context.cache == 2) {
-						const initCacheIndex = cacheIndex;
-						cacheIndex += "?";
+						loadCache[rawPath] = context.cache;
+						cacheIndex = `${rawPath}?`;
 						const queryIndex = context.req.url.indexOf("?");
 						if(queryIndex != -1) {
-							cacheIndex += context.req.url.slice(queryIndex);
+							cacheIndex += context.req.url.slice(queryIndex+1);
 						}
-						loadCache[initCacheIndex] = cacheIndex;
 					}
 					loadCache[cacheIndex] = {};
 					Object.keys(context).forEach(function(i) {
@@ -153,11 +159,6 @@ const load = function(path, context) {
 			};
 			try {
 				const modified = fs.statSync(rawPath).mtimeMs;
-				if(readCache[rawPath]) {
-					if(readCache[rawPath][0] != modified) {
-						delete readCache[rawPath];
-					}
-				}
 				if(!readCache[rawPath]) {
 					readCache[rawPath] = [modified, eval(`(async function() {\n${fs.readFileSync(rawPath)}\n})`)];
 				}
@@ -168,11 +169,6 @@ const load = function(path, context) {
 		}
 	});
 };
-setInterval(function() {
-	Object.keys(loadCache).forEach(function(i) {
-		delete loadCache[i];
-	});
-}, 86400000);
 app.get("*", async function(req, res) {
 	res.set("Cache-Control", "max-age=86400");
 	if(req.subdomain == "" || req.subdomain == "d") {
@@ -313,6 +309,19 @@ app.post("*", async function(req, res) {
 										}
 									}
 									fs.writeFileSync(w, contents);
+									if(readCache[w]) {
+										delete readCache[w];
+									}
+									if(loadCache[w]) {
+										if(loadCache[w] == 2) {
+											Object.keys(loadCache).forEach(function(i) {
+												if(i.startsWith(`${w}?`)) {
+													delete loadCache[i];
+												}
+											});
+										}
+										delete loadCache[w];
+									}
 								}
 							}
 							for(let w of v.removed) {
@@ -320,7 +329,8 @@ app.post("*", async function(req, res) {
 									removed.push(w);
 									if(fs.existsSync(w)) {
 										fs.unlinkSync(w);
-										if(mime.getType(w) == "application/javascript") {
+										const type = mime.getType(w);
+										if(type == "application/javascript" || type == "text/css") {
 											fs.unlinkSync(`${w}.map`);
 										}
 									}
