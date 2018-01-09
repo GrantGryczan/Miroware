@@ -307,7 +307,9 @@ app.post("*", async function(req, res) {
 												sourceMap: true
 											}).minify(contents);
 											contents = output.styles;
-											fs.writeFileSync(`${w}.map`, output.sourceMap);
+											const sourceMap = JSON.parse(output.sourceMap);
+											sourceMap.sources = [w.slice(w.lastIndexOf("/")+1)];
+											fs.writeFileSync(`${w}.map`, JSON.stringify(sourceMap));
 										}
 									}
 									fs.writeFileSync(w, contents);
