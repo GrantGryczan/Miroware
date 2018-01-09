@@ -7,9 +7,10 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const request = require("request-promise-native");
 const crypto = require("crypto");
+const childProcess = require("child_process");
 const babel = require("babel-core");
 const UglifyJS = require("uglify-js");
-const childProcess = require("child_process");
+const CleanCSS = require("clean-css");
 const mime = require("mime");
 const AWS = require("aws-sdk");
 const session = require("express-session");
@@ -208,7 +209,7 @@ app.get("*", async function(req, res) {
 				}
 				res.send(result.value);
 			} else {
-				if(type == "application/javascript") {
+				if(type == "application/javascript" || type == "text/css") {
 					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/")+1)}.map`);
 				}
 				fs.createReadStream(path).pipe(res);
@@ -270,34 +271,44 @@ app.post("*", async function(req, res) {
 											fs.mkdirSync(nextPath);
 										}
 									}
-									if(w.startsWith("www/") && mime.getType(w) == "application/javascript") {
-										const filename = w.slice(w.lastIndexOf("/")+1);
-										const compiled = babel.transform(contents, {
-											ast: false,
-											comments: false,
-											compact: true,
-											filename,
-											minified: true,
-											presets: ["env"],
-											sourceMaps: true
-										});
-										const result = UglifyJS.minify(compiled.code, {
-											parse: {
-												html5_comments: false
-											},
-											compress: {
-												passes: 2,
-												unsafe_comps: true,
-												unsafe_math: true,
-												unsafe_proto: true
-											},
-											sourceMap: {
-												content: JSON.stringify(compiled.map),
-												filename
-											}
-										});
-										contents = result.code;
-										fs.writeFileSync(`${w}.map`, result.map);
+									if(w.startsWith("www/")) {
+										const type = mime.getType(w);
+										if(type == "application/javascript") {
+											const filename = w.slice(w.lastIndexOf("/")+1);
+											const compiled = babel.transform(contents, {
+												ast: false,
+												comments: false,
+												compact: true,
+												filename,
+												minified: true,
+												presets: ["env"],
+												sourceMaps: true
+											});
+											const result = UglifyJS.minify(compiled.code, {
+												parse: {
+													html5_comments: false
+												},
+												compress: {
+													passes: 2,
+													unsafe_comps: true,
+													unsafe_math: true,
+													unsafe_proto: true
+												},
+												sourceMap: {
+													content: JSON.stringify(compiled.map),
+													filename
+												}
+											});
+											contents = result.code;
+											fs.writeFileSync(`${w}.map`, result.map);
+										} else if(type == "text/css") {
+											const output = new CleanCSS({
+												inline: false,
+												sourceMap: true
+											}).minify(contents);
+											contents = output.styles;
+											fs.writeFileSync(`${w}.map`, output.sourceMap);
+										}
 									}
 									fs.writeFileSync(w, contents);
 								}

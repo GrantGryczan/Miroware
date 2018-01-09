@@ -21,6 +21,7 @@
 		"babel-core": "^6.26.0",
 		"babel-preset-env": "^1.6.1",
 		"body-parser": "^1.18.2",
+		"clean-css": "^4.1.9",
 		"connect-dynamodb": "^2.0.0",
 		"cookie-parser": "^1.4.3",
 		"discord.js": "github:hydrabolt/discord.js",
