@@ -58,11 +58,11 @@ app.use(function(req, res) {
 				enumerable: true
 			});
 		}
-		if(req.protocol == "http") {
+		if(req.protocol === "http") {
 			res.redirect(`https://${host + req.url}`);
 		} else {
 			req.subdomain = req.subdomains.join(".");
-			if(req.subdomain == "www") {
+			if(req.subdomain === "www") {
 				res.redirect(`${req.protocol}://${host.slice(4) + req.url}`);
 			} else {
 				try {
@@ -125,10 +125,10 @@ const load = function(path, context) {
 	context.value = "";
 	return new Promise(function(resolve, reject) {
 		let cacheIndex = rawPath;
-		if(loadCache[cacheIndex] == 2) {
+		if(loadCache[cacheIndex] === 2) {
 			cacheIndex += "?";
 			const queryIndex = context.req.url.indexOf("?");
-			if(queryIndex != -1) {
+			if(queryIndex !== -1) {
 				cacheIndex += context.req.url.slice(queryIndex+1);
 			}
 		}
@@ -140,11 +140,11 @@ const load = function(path, context) {
 		} else {
 			context.exit = function() {
 				if(context.cache) {
-					if(context.cache == 2) {
+					if(context.cache === 2) {
 						loadCache[rawPath] = context.cache;
 						cacheIndex = `${rawPath}?`;
 						const queryIndex = context.req.url.indexOf("?");
-						if(queryIndex != -1) {
+						if(queryIndex !== -1) {
 							cacheIndex += context.req.url.slice(queryIndex+1);
 						}
 					}
@@ -171,9 +171,9 @@ const load = function(path, context) {
 };
 app.get("*", async function(req, res) {
 	res.set("Cache-Control", "max-age=86400");
-	if(req.subdomain == "" || req.subdomain == "d") {
+	if(req.subdomain === "" || req.subdomain === "d") {
 		const queryIndex = req.decodedPath.indexOf("?");
-		const noQueryIndex = queryIndex == -1;
+		const noQueryIndex = queryIndex === -1;
 		const path = getRawPath(noQueryIndex ? req.decodedPath : req.decodedPath.slice(0, queryIndex));
 		const type = (path.lastIndexOf("/") > path.lastIndexOf(".")) ? "text/plain" : mime.getType(path);
 		let publicPath = path.slice(3);
@@ -184,7 +184,7 @@ app.get("*", async function(req, res) {
 		if(!noQueryIndex) {
 			publicPathQuery += req.decodedPath.slice(queryIndex);
 		}
-		if(req.decodedPath != publicPathQuery) {
+		if(req.decodedPath !== publicPathQuery) {
 			res.redirect(publicPathQuery);
 		} else if(fs.existsSync(path)) {
 			res.set("Content-Type", type);
@@ -205,14 +205,14 @@ app.get("*", async function(req, res) {
 				}
 				res.send(result.value);
 			} else {
-				if(type == "application/javascript" || type == "text/css") {
+				if(type === "application/javascript" || type === "text/css") {
 					res.set("SourceMap", `${publicPath.slice(publicPath.lastIndexOf("/")+1)}.map`);
 				}
 				fs.createReadStream(path).pipe(res);
 			}
 		} else {
 			res.status(404);
-			if(type == "text/html") {
+			if(type === "text/html") {
 				res.redirect("/error/404/");
 			} else if(type.startsWith("image/")) {
 				res.send("404");
@@ -220,8 +220,8 @@ app.get("*", async function(req, res) {
 				res.send("404");
 			}
 		}
-	} else if(req.subdomain == "pipe") {
-		if(req.decodedPath == "/") {
+	} else if(req.subdomain === "pipe") {
+		if(req.decodedPath === "/") {
 			res.redirect(`${req.protocol}://${req.get("Host").slice(5)}/pipe/`);
 		} else {
 			s3.getObject({
@@ -239,15 +239,15 @@ app.get("*", async function(req, res) {
 	}
 });
 app.post("*", async function(req, res) {
-	if(req.subdomain == "" || req.subdomain == "d") {
-		if(req.path == "/github") {
+	if(req.subdomain === "" || req.subdomain === "d") {
+		if(req.path === "/github") {
 			const signature = req.get("X-Hub-Signature");
-			if(signature && signature == `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}` && req.get("X-GitHub-Event") == "push") {
+			if(signature && signature === `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}` && req.get("X-GitHub-Event") === "push") {
 				res.send();
 				const payload = JSON.parse(req.body);
-				if(payload.repository.name == "web") {
+				if(payload.repository.name === "web") {
 					const branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
-					if(branch == "master") {
+					if(branch === "master") {
 						const modified = [];
 						const removed = [];
 						for(let v of payload.commits) {
@@ -276,7 +276,7 @@ app.post("*", async function(req, res) {
 											contents = contents.join("");
 										} else {
 											const type = mime.getType(w);
-											if(type == "application/javascript") {
+											if(type === "application/javascript") {
 												const filename = w.slice(w.lastIndexOf("/")+1);
 												const compiled = babel.transform(contents, {
 													ast: false,
@@ -304,7 +304,7 @@ app.post("*", async function(req, res) {
 												});
 												contents = result.code;
 												fs.writeFileSync(`${w}.map`, result.map);
-											} else if(type == "text/css") {
+											} else if(type === "text/css") {
 												const output = new CleanCSS({
 													inline: false,
 													sourceMap: true
@@ -321,7 +321,7 @@ app.post("*", async function(req, res) {
 										delete readCache[w];
 									}
 									if(loadCache[w]) {
-										if(loadCache[w] == 2) {
+										if(loadCache[w] === 2) {
 											Object.keys(loadCache).forEach(function(i) {
 												if(i.startsWith(`${w}?`)) {
 													delete loadCache[i];
@@ -338,12 +338,12 @@ app.post("*", async function(req, res) {
 									if(fs.existsSync(w)) {
 										fs.unlinkSync(w);
 										const type = mime.getType(w);
-										if(type == "application/javascript" || type == "text/css") {
+										if(type === "application/javascript" || type === "text/css") {
 											fs.unlinkSync(`${w}.map`);
 										}
 									}
 									let index = w.length;
-									while((index = w.lastIndexOf("/", index)-1) != -2) {
+									while((index = w.lastIndexOf("/", index)-1) !== -2) {
 										const path = w.slice(0, index+1);
 										if(fs.existsSync(path)) {
 											try {
@@ -364,7 +364,7 @@ app.post("*", async function(req, res) {
 				}
 			}
 		}
-	} else if(req.subdomain == "pipe") {
+	} else if(req.subdomain === "pipe") {
 		s3.putObject({
 			Body: req.body,
 			Bucket: "miroware-pipe",

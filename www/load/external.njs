@@ -23,7 +23,7 @@ if(this.socialicons) {
 		if(!icon) {
 			icon = "/favicon.ico";
 		}
-		icon = (icon.indexOf("//") == -1) ? (origin + icon) : icon;
+		icon = (icon.indexOf("//") === -1) ? (origin + icon) : icon;
 		t.value += html`<a class="external mdc-button" href="${v}" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
 	}
 	t.value += html`

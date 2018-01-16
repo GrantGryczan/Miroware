@@ -20,7 +20,7 @@ const italicize = function(str) {
 const inform = function(guild, str1, str2) {
 	guild.owner.send(str1).catch(function() {
 		const channels = guild.channels.filterArray(function(channel) {
-			return channel.type == "text";
+			return channel.type === "text";
 		});
 		let i = -1;
 		const testChannel = function() {
@@ -52,7 +52,7 @@ const guildDelete = function(guild) {
 }
 const sendHelp = function(msg, perm) {
 	if(data.guilds[msg.guild.id][0]) {
-		let help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${(data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
+		let help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${(data.guilds[msg.guild.id][2] === 1) ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if(perm) {
 			help += "\nAs a member of the Discord server with administrative permission, you can enter \">⭐\" with, after it, a channel tag to set the starboard channel, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (except for in the starboard channel, which already has this disabled by default).";
 		}
@@ -82,7 +82,7 @@ client.once("ready", function() {
 		}
 	}
 	for(let i in data.guilds) {
-		if(guilds.indexOf(i) == -1) {
+		if(guilds.indexOf(i) === -1) {
 			guildDelete(i);
 		} else if(!data.guilds[i][1]) {
 			data.guilds[i][1] = "%E2%AD%90";
@@ -93,7 +93,7 @@ client.once("ready", function() {
 client.on("guildCreate", guildCreate);
 client.on("guildDelete", guildDelete);
 client.on("channelDelete", function(channel) {
-	if(channel.id == data.guilds[channel.guild.id][0]) {
+	if(channel.id === data.guilds[channel.guild.id][0]) {
 		data.guilds[channel.guild.id][0] = null;
 		save();
 	}
@@ -102,7 +102,7 @@ const starred = [];
 const star = function(msg, callback) {
 	if(data.guilds[msg.guild.id][0]) {
 		console.log(`star ${msg.guild.id} ${msg.channel.id} ${msg.id}`);
-		if(starred.indexOf(msg.id) == -1) {
+		if(starred.indexOf(msg.id) === -1) {
 			starred.push(msg.id);
 		}
 		const embed = {
@@ -152,13 +152,13 @@ const star = function(msg, callback) {
 	}
 };
 client.on("messageReactionAdd", function(reaction) {
-	if(starred.indexOf(reaction.message.id) == -1 && data.guilds[reaction.message.guild.id] && reaction.message.channel.id != data.guilds[reaction.message.guild.id][0] && reaction.emoji.identifier == data.guilds[reaction.message.guild.id][1] && reaction.count >= data.guilds[reaction.message.guild.id][2]) {
+	if(starred.indexOf(reaction.message.id) === -1 && data.guilds[reaction.message.guild.id] && reaction.message.channel.id !== data.guilds[reaction.message.guild.id][0] && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1] && reaction.count >= data.guilds[reaction.message.guild.id][2]) {
 		star(reaction.message);
 	}
 });
 const prefix = /^> ?⭐/;
 client.on("message", function(msg) {
-	if(msg.channel.type == "text" && !msg.system) {
+	if(msg.channel.type === "text" && !msg.system) {
 		let content = msg.content;
 		if(prefix.test(content)) {
 			const perm = msg.guild.member(msg.author).hasPermission(8);
@@ -203,7 +203,7 @@ client.on("message", function(msg) {
 								if(reactionCount) {
 									data.guilds[msg.guild.id][2] = Math.abs(reactionCount);
 									save();
-									msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${(data.guilds[msg.guild.id][2] == 1) ? "reaction" : "reactions"} to get a message starred.`).catch(function() {
+									msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${(data.guilds[msg.guild.id][2] === 1) ? "reaction" : "reactions"} to get a message starred.`).catch(function() {
 										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 									});
 								} else if(colorTest.test(content)) {

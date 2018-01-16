@@ -17,7 +17,7 @@
 		};
 		let toggleCard = function(card) {
 			for(let i = 0; i < cards.length; i++) {
-				if(cards[i] != card && cards[i].classList.contains("open")) {
+				if(cards[i] !== card && cards[i].classList.contains("open")) {
 					cards[i].classList.remove("open");
 					closeCard(cards[i]);
 				}
@@ -30,7 +30,7 @@
 			}
 		};
 		let clickCard = function(evt) {
-			if(evt.target.tagName != "A") {
+			if(evt.target.tagName !== "A") {
 				toggleCard(this);
 			}
 		};

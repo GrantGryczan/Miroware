@@ -18,12 +18,12 @@
 		}
 	};
 	let rawQuery;
-	if(location.href.indexOf("#") != -1) {
+	if(location.href.indexOf("#") !== -1) {
 		rawQuery = location.href.slice(0, location.href.indexOf("#"));
 	} else {
 		rawQuery = location.href;
 	}
-	if(rawQuery.indexOf("?") != -1) {
+	if(rawQuery.indexOf("?") !== -1) {
 		rawQuery = rawQuery.slice(rawQuery.indexOf("?")+1).split("&");
 	} else {
 		rawQuery = [];
@@ -45,19 +45,19 @@
 		});
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.onreadystatechange = function() {
-			if(req.readyState == XMLHttpRequest.DONE && req.status) {
+			if(req.readyState === XMLHttpRequest.DONE && req.status) {
 				statusType = Math.floor(req.status/100);
-				if(noMagic || req.getResponseHeader("X-Magic") == "real") {
-					if(statusType == 2) {
-						if(typeof success == "function") {
+				if(noMagic || req.getResponseHeader("X-Magic") === "real") {
+					if(statusType === 2) {
+						if(typeof success === "function") {
 							success(req.responseText);
 						}
-					} else if(statusType == 4 || statusType == 5) {
-						if(typeof error == "function") {
+					} else if(statusType === 4 || statusType === 5) {
+						if(typeof error === "function") {
 							error(req.status);
 						}
 					}
-				} else if(typeof error == "function") {
+				} else if(typeof error === "function") {
 					error(req.status);
 				}
 			}
