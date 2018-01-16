@@ -268,44 +268,52 @@ app.post("*", async function(req, res) {
 										}
 									}
 									if(w.startsWith("www/")) {
-										const type = mime.getType(w);
-										if(type == "application/javascript") {
-											const filename = w.slice(w.lastIndexOf("/")+1);
-											const compiled = babel.transform(contents, {
-												ast: false,
-												comments: false,
-												compact: true,
-												filename,
-												minified: true,
-												presets: ["env"],
-												sourceMaps: true
-											});
-											const result = UglifyJS.minify(compiled.code, {
-												parse: {
-													html5_comments: false
-												},
-												compress: {
-													passes: 2,
-													unsafe_comps: true,
-													unsafe_math: true,
-													unsafe_proto: true
-												},
-												sourceMap: {
-													content: JSON.stringify(compiled.map),
-													filename
-												}
-											});
-											contents = result.code;
-											fs.writeFileSync(`${w}.map`, result.map);
-										} else if(type == "text/css") {
-											const output = new CleanCSS({
-												inline: false,
-												sourceMap: true
-											}).minify(contents);
-											contents = output.styles;
-											const sourceMap = JSON.parse(output.sourceMap);
-											sourceMap.sources = [w.slice(w.lastIndexOf("/")+1)];
-											fs.writeFileSync(`${w}.map`, JSON.stringify(sourceMap));
+										if(w.endsWith(".njs")) {
+											contents = contents.split(/(html`(?:(?:\${(?:`(?:.*|\n)`|"(?:.*|\n)"|'(?:.*|\n)'|.|\n)*?})|.|\n)*?`)/g);
+											for(let i = 1; i < contents.length; i += 2) {
+												contents[i] = contents[i].replace(/\s+/g, " ");
+											}
+											contents = contents.join("");
+										} else {
+											const type = mime.getType(w);
+											if(type == "application/javascript") {
+												const filename = w.slice(w.lastIndexOf("/")+1);
+												const compiled = babel.transform(contents, {
+													ast: false,
+													comments: false,
+													compact: true,
+													filename,
+													minified: true,
+													presets: ["env"],
+													sourceMaps: true
+												});
+												const result = UglifyJS.minify(compiled.code, {
+													parse: {
+														html5_comments: false
+													},
+													compress: {
+														passes: 2,
+														unsafe_comps: true,
+														unsafe_math: true,
+														unsafe_proto: true
+													},
+													sourceMap: {
+														content: JSON.stringify(compiled.map),
+														filename
+													}
+												});
+												contents = result.code;
+												fs.writeFileSync(`${w}.map`, result.map);
+											} else if(type == "text/css") {
+												const output = new CleanCSS({
+													inline: false,
+													sourceMap: true
+												}).minify(contents);
+												contents = output.styles;
+												const sourceMap = JSON.parse(output.sourceMap);
+												sourceMap.sources = [w.slice(w.lastIndexOf("/")+1)];
+												fs.writeFileSync(`${w}.map`, JSON.stringify(sourceMap));
+											}
 										}
 									}
 									fs.writeFileSync(w, contents);
