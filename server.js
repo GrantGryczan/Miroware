@@ -271,7 +271,7 @@ app.post("*", async function(req, res) {
 										if(w.endsWith(".njs")) {
 											contents = contents.split(/(html`(?:(?:\${(?:`(?:.*|\n)`|"(?:.*|\n)"|'(?:.*|\n)'|.|\n)*?})|.|\n)*?`)/g);
 											for(let i = 1; i < contents.length; i += 2) {
-												contents[i] = contents[i].replace(/\s+/g, " ");
+												contents[i] = contents[i].replace(/\n/g, "").replace(/\s+/g, " ");
 											}
 											contents = contents.join("");
 										} else {
