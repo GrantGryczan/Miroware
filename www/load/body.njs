@@ -26,4 +26,3 @@ this.value += html`
 		</button>
 		<div id="container">`;
 this.exit();
-// test

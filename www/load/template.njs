@@ -12,4 +12,3 @@ this.value += html`
 		<script src="index.js"></script>`;
 this.value += (await load("/load/foot.njs", this)).value;
 this.exit();
-// test

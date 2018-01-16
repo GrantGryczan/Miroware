@@ -30,4 +30,3 @@ if(this.socialicons) {
 					</div>`;
 	t.exit();
 }
-// test
