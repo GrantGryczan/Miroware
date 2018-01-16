@@ -10,4 +10,3 @@ this.value += html`
 this.value += (await load("/load/belt.njs", this)).value;
 this.value += (await load("/load/foot.njs", this)).value;
 this.exit();
-// test
