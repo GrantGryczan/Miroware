@@ -211,11 +211,8 @@ app.get("*", async function(req, res) {
 				fs.createReadStream(path).pipe(res);
 			}
 		} else {
-			res.status(404);
 			if(type === "text/html") {
 				res.redirect("/error/404/");
-			} else if(type.startsWith("image/")) {
-				res.send("404");
 			} else {
 				res.send("404");
 			}
