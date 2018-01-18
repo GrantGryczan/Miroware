@@ -17,7 +17,6 @@ const s3 = new AWS.S3({
 	sslEnabled: true
 });
 const session = require("express-session");
-const RedisStore = ;
 const app = require("express")();
 app.set("trust proxy", true);
 app.use(require("cookie-parser")());
