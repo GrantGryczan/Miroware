@@ -32,7 +32,7 @@ app.use(session({
 	saveUninitialized: false,
 	cookie: {
 		secure: true,
-		expires: new Date(Date.now()+2592000000)
+		maxAge: 604800000
 	},
 	store: new require("connect-redis")(session)({
 		
