@@ -233,7 +233,6 @@ app.post("*", async function(req, res) {
 		if(req.path === "/github") {
 			const signature = req.get("X-Hub-Signature");
 			if(signature && signature === `sha1=${crypto.createHmac("sha1", youKnow.gh.secret).update(req.body).digest("hex")}` && req.get("X-GitHub-Event") === "push") {
-				res.send();
 				const payload = JSON.parse(req.body);
 				if(payload.repository.name === "web") {
 					const branch = payload.ref.slice(payload.ref.lastIndexOf("/")+1);
@@ -352,6 +351,7 @@ app.post("*", async function(req, res) {
 						}
 					}
 				}
+				res.send();
 			}
 		}
 	} else if(req.subdomain === "pipe") {
