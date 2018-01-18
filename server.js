@@ -1,21 +1,14 @@
 console.log("< Server >");
 const fs = require("fs");
-const http = require("http");
-const https = require("https");
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const request = require("request-promise-native");
 const crypto = require("crypto");
 const childProcess = require("child_process");
 const babel = require("babel-core");
 const UglifyJS = require("uglify-js");
 const CleanCSS = require("clean-css");
-const mime = require("mime");
 const AWS = require("aws-sdk");
-const session = require("express-session");
-const DynamoDBStore = require("connect-dynamodb");
 const youKnow = require("./data/youknow.js");
+const mime = require("mime");
 mime.define({
 	"text/html": ["njs"]
 });
@@ -23,29 +16,30 @@ const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
-const app = express();
+const session = require("express-session");
+const RedisStore = ;
+const app = require("express")();
 app.set("trust proxy", true);
-app.use(cookieParser());
-app.use(bodyParser.raw({
+app.use(require("cookie-parser")());
+app.use(require("body-parser").raw({
 	limit: "100mb",
 	type: "*/*"
 }));
+/* TODO
 app.use(session({
 	name: "session",
-	secret: "temp",
+	secret: youKnow.session.secret,
 	resave: false,
 	saveUninitialized: false,
 	cookie: {
 		secure: true,
 		expires: new Date(Date.now()+2592000000)
 	},
-	store: new DynamoDBStore({
-		session
-	})({
-		table: "sessions",
-		AWSConfigJSON: youKnow.db
+	store: new require("connect-redis")(session)({
+		
 	})
 }));
+*/
 app.use(function(req, res) {
 	res.set("X-Magic", "real");
 	res.set("Access-Control-Expose-Headers", "X-Magic");
@@ -378,9 +372,9 @@ app.post("*", async function(req, res) {
 		});
 	}
 });
-http.createServer(app).listen(8080);
+require("http").createServer(app).listen(8080);
 try {
-	https.createServer({
+	require("https").createServer({
 		key: fs.readFileSync("/etc/letsencrypt/live/miroware.io/privkey.pem"),
 		cert: fs.readFileSync("/etc/letsencrypt/live/miroware.io/cert.pem"),
 		ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
