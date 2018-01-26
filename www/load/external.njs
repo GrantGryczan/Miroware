@@ -31,4 +31,3 @@ if(this.socialicons) {
 					</div>`;
 	t.exit();
 }
-// heck
