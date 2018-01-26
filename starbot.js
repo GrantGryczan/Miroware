@@ -18,19 +18,21 @@ const italicize = (str) => {
 	return `_${JSON.stringify(String(str)).slice(1, -1).replace(/_/g, "\\_")}_`;
 };
 const inform = (guild, str1, str2) => {
-	guild.owner.send(str1).catch(() => {
-		const channels = guild.channels.filterArray(channel => {
-			return channel.type === "text";
+	if(guild.available) {
+		guild.owner.send(str1).catch(() => {
+			const channels = guild.channels.filterArray(channel => {
+				return channel.type === "text";
+			});
+			let i = -1;
+			const testChannel = () => {
+				i++;
+				if(channels[i]) {
+					channels[i].send(str2).catch(testChannel);
+				}
+			};
+			testChannel();
 		});
-		let i = -1;
-		const testChannel = () => {
-			i++;
-			if(channels[i]) {
-				channels[i].send(str2).catch(testChannel);
-			}
-		};
-		testChannel();
-	});
+	}
 };
 const permWarn = (guild, perms) => {
 	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
