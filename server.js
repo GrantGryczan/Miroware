@@ -27,6 +27,25 @@ try {
 } catch(err) {}
 const cube = ServeCube.serve(options);
 const {load} = cube;
+cube.app.get((req, res) => {
+	if(req.subdomain === "pipe") {
+		if(req.decodedPath === "/") {
+			res.redirect(`${req.protocol}://${req.get("Host").slice(5)}/pipe/`);
+		} else {
+			s3.getObject({
+				Bucket: "miroware-pipe",
+				Key: req.decodedPath.slice(1)
+			}, function(err, data) {
+				if(err) {
+					res.set("Content-Type", "text/plain").status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
+				} else {
+					res.set("Content-Type", data.ContentType);
+					res.send(data.Body);
+				}
+			});
+		}
+	}
+})
 cube.app.post((req, res) => {
 	if(req.subdomain === "pipe") {
 		s3.putObject({
