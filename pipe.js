@@ -25,7 +25,7 @@ app.get((req, res) => {
 			});
 		}
 	}
-})
+});
 app.post((req, res) => {
 	if(req.subdomain === "pipe") {
 		s3.putObject({
@@ -44,6 +44,16 @@ app.post((req, res) => {
 		});
 	}
 });
+/* TODO
+http.createServer(app).listen(8080);
+try {
+	https.createServer({
+		key: fs.readFileSync("/etc/letsencrypt/live/miroware.io/privkey.pem"),
+		cert: fs.readFileSync("/etc/letsencrypt/live/miroware.io/cert.pem"),
+		ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
+	}, app).listen(8443);
+}
+*/
 const stdin = process.openStdin();
 stdin.on("data", function(input) {
 	console.log(eval(String(input)));
