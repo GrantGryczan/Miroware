@@ -9,6 +9,7 @@ if(this.socialicons) {
 					<div id="externals">`;
 	for(let v of links) {
 		const context = await load(v, {
+			...this,
 			socialicons: true
 		});
 		const origin = context.redirect.slice(0, context.redirect.indexOf("/", context.redirect.indexOf("//")+2));

@@ -2,10 +2,10 @@ const links = [];
 this.title = "Miroware";
 this.description = "Hello, world!";
 this.tags = ["homepage", "home", "page", "front"];
-this.value = (await load("/load/head.njs", this)).value;
+this.value = (await load("/load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="index.css">`;
-this.value += (await load("/load/body.njs", this)).value;
+this.value += (await load("/load/body", this)).value;
 this.value += html`
 			<div class="wrapper">`;
 for(let j = 0; j < links.length; j++) {
@@ -23,8 +23,8 @@ for(let j = 0; j < links.length; j++) {
 }
 this.value += html`
 			</div>`;
-this.value += (await load("/load/belt.njs", this)).value;
+this.value += (await load("/load/belt", this)).value;
 this.value += html`
 		<script src="index.js"></script>`;
-this.value += (await load("/load/foot.njs", this)).value;
+this.value += (await load("/load/foot", this)).value;
 this.exit();
