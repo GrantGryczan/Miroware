@@ -1,3 +1,4 @@
+console.log("< Pipe >")
 const express = require("express");
 const AWS = require("aws-sdk");
 const youKnow = require("./data/tee.js");
@@ -42,4 +43,8 @@ app.post((req, res) => {
 			}
 		});
 	}
+});
+const stdin = process.openStdin();
+stdin.on("data", function(input) {
+	console.log(eval(String(input)));
 });
