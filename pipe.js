@@ -19,8 +19,7 @@ app.get((req, res) => {
 				if(err) {
 					res.set("Content-Type", "text/plain").status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
 				} else {
-					res.set("Content-Type", data.ContentType);
-					res.send(data.Body);
+					res.set("Content-Type", data.ContentType).send(data.Body);
 				}
 			});
 		}
@@ -45,13 +44,9 @@ app.post((req, res) => {
 	}
 });
 http.createServer(app).listen(8082);
-try {
-	https.createServer({
-		key: fs.readFileSync("/etc/letsencrypt/live/miroware.io/privkey.pem"),
-		cert: fs.readFileSync("/etc/letsencrypt/live/miroware.io/cert.pem"),
-		ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
-	}, app).listen(8445);
-}
+fs.watch(__filename, () => {
+	process.exit();
+});
 const stdin = process.openStdin();
 stdin.on("data", function(input) {
 	console.log(eval(String(input)));
