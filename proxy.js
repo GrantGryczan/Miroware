@@ -1,3 +1,5 @@
+console.log("< Proxy >");
+const fs = require("fs");
 const redbird = require("redbird")({
 	port: 8080,
 	secure: true,
@@ -12,3 +14,10 @@ redbird.register("d.miroware.io", "http://localhost:8081");
 redbird.register("miroware.io", "http://localhost:8081");
 redbird.register("www.miroware.io", "http://localhost:8081");
 redbird.register("pipe.miroware.io", "http://localhost:8081");
+fs.watch(__filename, () => {
+	process.exit();
+});
+const stdin = process.openStdin();
+stdin.on("data", input => {
+	console.log(eval(String(input)));
+});
