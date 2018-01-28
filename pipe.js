@@ -1,4 +1,5 @@
 console.log("< Pipe >")
+const fs = require("fs");
 const http = require("http");
 const express = require("express");
 const AWS = require("aws-sdk");
