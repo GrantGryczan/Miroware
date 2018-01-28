@@ -11,3 +11,4 @@ const redbird = require("redbird")({
 redbird.register("d.miroware.io", "http://localhost:8081");
 redbird.register("miroware.io", "http://localhost:8081");
 redbird.register("www.miroware.io", "http://localhost:8081");
+redbird.register("pipe.miroware.io", "http://localhost:8081");
