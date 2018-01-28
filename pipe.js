@@ -10,12 +10,16 @@ const s3 = new AWS.S3({
 	sslEnabled: true
 });
 app.use((req, res) => {
-	res.set("Content-Type", "text/plain");
-	try {
-		req.decodedPath = decodeURIComponent(req.url);
-		req.next();
-	} catch(err) {
-		res.send("Error 400: Bad Request");
+	if(req.protocol === "http") {
+		res.redirect(`https://pipe.miroware.io${req.url}`);
+	} else {
+		res.set("Content-Type", "text/plain");
+		try {
+			req.decodedPath = decodeURIComponent(req.url);
+			req.next();
+		} catch(err) {
+			res.send("Error 400: Bad Request");
+		}
 	}
 });
 app.get("*", (req, res) => {
