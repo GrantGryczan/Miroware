@@ -8,6 +8,8 @@ const options = {
 	eval: v => {
 		return eval(v);
 	},
+	httpPort: 8081,
+	httpsPort: 8444,
 	subdomain: ["", "d"],
 	githubSecret: youKnow.github.secret,
 	githubPayloadURL: "/githubwebhook"
