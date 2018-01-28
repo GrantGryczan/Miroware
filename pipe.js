@@ -9,7 +9,7 @@ const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
-app.get((req, res) => {
+app.get("*", (req, res) => {
 	if(req.subdomain === "pipe") {
 		if(req.decodedPath === "/") {
 			res.redirect(`${req.protocol}://${req.get("Host").slice(5)}/pipe/`);
@@ -27,7 +27,7 @@ app.get((req, res) => {
 		}
 	}
 });
-app.post((req, res) => {
+app.post("*", (req, res) => {
 	if(req.subdomain === "pipe") {
 		s3.putObject({
 			Body: req.body,
