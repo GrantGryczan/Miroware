@@ -11,7 +11,7 @@ const s3 = new AWS.S3({
 });
 app.use((req, res) => {
 	const host = req.get("Host") || "pipe.miroware.io";
-	console.log(host, req.protocol);
+	console.log(host, req.protocol, req.url);
 	if(host.startsWith("localhost:")) {
 		Object.defineProperty(req, "protocol", {
 			value: "https",
