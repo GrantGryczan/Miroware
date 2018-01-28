@@ -54,7 +54,7 @@ const guildDelete = guild => {
 }
 const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
-		let help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${(data.guilds[msg.guild.id][2] === 1) ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
+		let help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if(perm) {
 			help += "\nAs a member of the Discord server with administrative permission, you can enter \">⭐\" with, after it, a channel tag to set the starboard channel, a number to define how many reactions should get messages starred, an emoji (not custom) to define which emoji should be used to star messages, a hexademical color code to change the starred embed color, or a message ID to star that message manually.\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).";
 		}
@@ -204,7 +204,7 @@ client.on("message", msg => {
 								if(reactionCount) {
 									data.guilds[msg.guild.id][2] = Math.abs(reactionCount);
 									save();
-									msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${(data.guilds[msg.guild.id][2] === 1) ? "reaction" : "reactions"} to get a message starred.`).catch(() => {
+									msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to get a message starred.`).catch(() => {
 										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 									});
 								} else if(colorTest.test(content)) {
