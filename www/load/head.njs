@@ -12,7 +12,7 @@ this.value = html`
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<meta name="author" content="${this.author}">
 		<meta name="description" content="${this.description}">
-		<meta name="keywords" content="${["miroware", "miro", "ware", "grantgryczan", "grant", "gryczan", "magic", "hello", "world", ...this.tags].join(",")}">
+		<meta name="keywords" content="${["miroware", "miro", "ware", "grantgryczan", "grant", "gryczan", "magic", ...this.tags].join(",")}">
 		<meta name="theme-color" content="#202020">
 		<meta property="og:type" content="website">
 		<meta property="og:url" content="https://miroware.io/">
