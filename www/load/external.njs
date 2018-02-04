@@ -3,9 +3,8 @@ if(this.socialicons) {
 	this.exit();
 } else {
 	const links = ["/discord/", "/patreon/", "/youtube/", "/twitter/", "/github/"];
-	const t = this;
-	t.cache = 1;
-	t.value = html`
+	this.cache = 1;
+	this.value = html`
 					<div id="externals">`;
 	for(let v of links) {
 		const context = await load(v, {
@@ -25,9 +24,9 @@ if(this.socialicons) {
 			icon = "/favicon.ico";
 		}
 		icon = (icon.indexOf("//") === -1) ? (origin + icon) : icon;
-		t.value += html`<a class="external mdc-button" href="${v}" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
+		this.value += html`<a class="external mdc-button" href="${v}" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
 	}
-	t.value += html`
+	this.value += html`
 					</div>`;
-	t.exit();
+	this.exit();
 }
