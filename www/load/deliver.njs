@@ -1,17 +1,19 @@
 this.cache = 2;
-this.headers = {};
 const queryIndex = this.req.url.indexOf("?")+1;
 const path = this.req.url.slice(queryIndex);
-if(queryIndex && path) {
-	let callback = body => {
-		this.headers["Content-Type"] = mime.getType(path);
-		this.value = body;
-		this.exit();
-	};
-	request.get(path).then(callback).catch(callback);
-} else {
-	this.status = 400;
-	this.headers["Content-Type"] = "text/plain";
-	this.value = "400";
+this.headers = {
+	"Content-Type": mime.getType(path)
+};
+request.get(path).then(body => {
+	this.value = body;
 	this.exit();
-}
+}).catch(error => {
+	if(error.response) {
+		this.status = error.response.status;
+		this.value = error.response.body;
+	} else {
+		this.status = 400;
+		this.value = error.message;
+	}
+	this.exit();
+});
