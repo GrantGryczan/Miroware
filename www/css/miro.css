@@ -1,5 +1,5 @@
-@import url("https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css");
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url(https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css);
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 ::-webkit-scrollbar {
 	width: 12px;
 	height: 12px;
