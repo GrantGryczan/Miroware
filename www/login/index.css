@@ -1,7 +1,7 @@
 #container {
 	background-repeat: no-repeat;
 	background-position: left calc(50% - 256px) center;
-	background-image: url("/image/icon/cubetransparent.gif");
+	background-image: url(/image/icon/cubetransparent.gif);
 }
 form {
 	display: block;
