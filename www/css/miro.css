@@ -48,8 +48,12 @@ body {
 .mdc-drawer__header-content {
 	background-color: #202020;
 }
-.mdc-drawer .mdc-list {
+.mdc-drawer__content {
+	background-color: #303030;
+}
+.mdc-drawer .mdc-list, .mdc-drawer .mdc-list-item__graphic {
 	padding: 8px 0;
+	color: rgba(255, 255, 255, 0.87);
 }
 .mdc-drawer .mdc-list-item:hover::before {
 	opacity: 0.06;
@@ -59,6 +63,9 @@ body {
 }
 .mdc-drawer .mdc-list-item:active::before {
 	opacity: 0.18;
+}
+.mdc-drawer .mdc-list-divider {
+	border-bottom-color: rgba(255, 255, 255, 0.12);
 }
 #externals {
 	padding: 8px 12px;

@@ -1,7 +1,7 @@
 this.value = html`
 	</head>
-	<body class="mdc-theme--dark mdc-typography">
-		<aside class="mdc-drawer mdc-drawer--temporary demo-drawer">
+	<body class="mdc-typography">
+		<aside class="mdc-drawer mdc-drawer--temporary">
 			<nav class="mdc-drawer__drawer">
 				<header class="mdc-drawer__header">
 					<div class="mdc-drawer__header-content"></div>
