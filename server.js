@@ -1,5 +1,4 @@
 console.log("< Server >");
-const os = require("os");
 const fs = require("fs");
 const ServeCube = require("servecube");
 const {html} = ServeCube;
@@ -15,7 +14,7 @@ const options = {
 	subdomain: ["", "d"],
 	githubSecret: youKnow.github.secret,
 	githubPayloadURL: "/githubwebhook",
-	uncacheModified: os.hostname() !== "miroware.io"
+	uncacheModified: process.argv[2] !== "production"
 };
 try {
 	options.tls = {
