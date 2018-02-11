@@ -12,7 +12,7 @@ window.addEventListener("resize", function() {
 	camera.updateProjectionMatrix();
 });
 camera.position.set(80, 80, 80);
-controls = new THREE.OrbitControls(camera, renderer.domElement);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
 const hemiLight = new THREE.HemisphereLight(0x999999, 0xbfbfbf, 0.6);
 scene.add(hemiLight);
 const dirLight = new THREE.DirectionalLight(0xf2f2f2);
