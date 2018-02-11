@@ -1,10 +1,10 @@
 this.cache = 2;
 const queryIndex = this.req.url.indexOf("?")+1;
-const path = this.req.url.slice(queryIndex);
+const url = this.req.url.slice(queryIndex);
 this.headers = {
-	"Content-Type": mime.getType(path)
+	"Content-Type": mime.getType(url)
 };
-request.get(path).then(body => {
+request.get(url).then(body => {
 	this.value = body;
 	this.exit();
 }).catch(error => {
