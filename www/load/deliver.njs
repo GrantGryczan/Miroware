@@ -1,6 +1,6 @@
 this.cache = 2;
 const queryIndex = this.req.url.indexOf("?")+1;
-const url = this.req.url.slice(queryIndex);
+const url = decodeURIComponent(this.req.url.slice(queryIndex));
 this.headers = {
 	"Content-Type": mime.getType(url)
 };
