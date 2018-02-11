@@ -20,7 +20,6 @@ dirLight.position.set(-1, 1.75, 1);
 scene.add(dirLight);
 const axesHelper = new THREE.AxesHelper(10);
 scene.add(axesHelper);
-let d = Date.now();
 let num = 1;
 let length = 1;
 let offset = 0;
@@ -37,42 +36,38 @@ const mouse = new THREE.Vector2();
 const clock = new THREE.Clock();
 const animate = () => {
 	requestAnimationFrame(animate);
-	const now = Date.now();
-	if(now-d > 10) {
-		d = now;
-		let prime = num !== 1 && num > 0;
-		for(let i = 2; i < Math.sqrt(num); i++) {
-			if(num%i === 0) {
-				prime = false;
-				break;
-			}
+	let prime = num !== 1 && num > 0;
+	for(let i = 2; i < Math.sqrt(num); i++) {
+		if(num%i === 0) {
+			prime = false;
+			break;
 		}
-		if(prime) {
-			const cube = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
-				color: Math.random()*0xffffff
-			}));
-			cube.position.copy(indicator.position);
-			scene.add(cube);
-			cubes.push(cube);
-		}
-		if((offset = (offset+1)%length) === 0 && (dir = (dir+1)%4)%2 === 0) {
-			length++;
-		}
-		switch(dir) {
-			case 0:
-				indicator.position.x += 2;
-				break;
-			case 1:
-				indicator.position.y += 2;
-				break;
-			case 2:
-				indicator.position.x -= 2;
-				break;
-			case 3:
-				indicator.position.y -= 2;
-		}
-		num++;
 	}
+	if(prime) {
+		const cube = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+			color: Math.random()*0xffffff
+		}));
+		cube.position.copy(indicator.position);
+		scene.add(cube);
+		cubes.push(cube);
+	}
+	if((offset = (offset+1)%length) === 0 && (dir = (dir+1)%4)%2 === 0) {
+		length++;
+	}
+	switch(dir) {
+		case 0:
+			indicator.position.x += 2;
+			break;
+		case 1:
+			indicator.position.y += 2;
+			break;
+		case 2:
+			indicator.position.x -= 2;
+			break;
+		case 3:
+			indicator.position.y -= 2;
+	}
+	num++;
 	raycaster.setFromCamera(mouse, camera);
 	const intersect = raycaster.intersectObjects(cubes)[0];
 	if(intersect) {
