@@ -55,11 +55,9 @@ const animate = () => {
 			scene.add(cube);
 			cubes.push(cube);
 		}
-		/*
 		if((offset = (offset+1)%length) === 0 && (dir = (dir+1)%4)%2 === 0) {
 			length++;
 		}
-		*/
 		switch(dir) {
 			case 0:
 				indicator.position.x += 2;
