@@ -6,8 +6,8 @@ if(this.socialicons) {
 	this.cache = 1;
 	this.value = html`
 					<div id="externals">`;
-	for(let v of links) {
-		const context = await load(v, {
+	for(let i of links) {
+		const context = await load(i, {
 			...this,
 			socialicons: true
 		});
@@ -24,7 +24,7 @@ if(this.socialicons) {
 			icon = "/favicon.ico";
 		}
 		icon = (icon.indexOf("//") === -1) ? (origin + icon) : icon;
-		this.value += html`<a class="external mdc-button" href="${v}" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
+		this.value += html`<a class="external mdc-button" href="${i}" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
 	}
 	this.value += html`
 					</div>`;

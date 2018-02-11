@@ -4,17 +4,25 @@
 	Miro.magic.magic = Miro.magic;
 	console.log(Miro.magic);
 	HTMLFormElement.prototype.disable = function() {
-		this.classList.add("mdc-text-field--disabled");
-		const inputs = this.querySelectorAll("input, button");
-		for(let v of inputs) {
-			v.disabled = true;
+		this.setAttribute("disabled", true);
+		for(let i of this.elements) {
+			i.disabled = true;
+		}
+		for(let i of ["checkbox", "radio", "select", "slider", "text-field"]) {
+			for(let j of this.querySelectorAll(`.mdc-${i}`)) {
+				j.classList.add(`mdc-${i}--disabled`);
+			}
 		}
 	};
 	HTMLFormElement.prototype.enable = function() {
-		this.classList.remove("mdc-text-field--disabled");
-		const inputs = this.querySelectorAll("input, button");
-		for(let v of inputs) {
-			v.disabled = false;
+		this.removeAttribute("disabled");
+		for(let i of this.elements) {
+			i.disabled = false;
+		}
+		for(let i of ["checkbox", "radio", "select", "slider", "text-field"]) {
+			for(let j of this.querySelectorAll(`.mdc-${i}`)) {
+				j.classList.remove(`mdc-${i}--disabled`);
+			}
 		}
 	};
 	let rawQuery;
@@ -29,9 +37,9 @@
 		rawQuery = [];
 	}
 	Miro.query = {};
-	for(let v of rawQuery) {
+	for(let i of rawQuery) {
 		try {
-			const p = v.split("=");
+			const p = i.split("=");
 			Miro.query[p[0]] = decodeURIComponent(p[1]);
 		} catch(err) {}
 	}
@@ -73,11 +81,11 @@
 		drawer.open = true;
 	});
 	const textFields = document.querySelectorAll(".mdc-text-field");
-	for(let v of textFields) {
-		new mdc.textField.MDCTextField(v);
+	for(let i of textFields) {
+		new mdc.textField.MDCTextField(i);
 	}
 	const ripples = document.querySelectorAll(".ripple");
-	for(let v of ripples) {
-		new mdc.ripple.MDCRipple(v);
+	for(let i of ripples) {
+		new mdc.ripple.MDCRipple(i);
 	}
 })();

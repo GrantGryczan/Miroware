@@ -10,7 +10,7 @@ this.value += html`
 				<div class="mdc-text-field">
 					<input id="email" class="mdc-text-field__input" type="email" required>
 					<label class="mdc-text-field__label" for="email">Email</label>
-					<div class="mdc-text-field__bottom-line"></div>
+					<div class="mdc-line-ripple"></div>
 				</div><br>
 				<br>
 				<button class="mdc-button mdc-button--stroked ripple" type="submit">Log in</button>

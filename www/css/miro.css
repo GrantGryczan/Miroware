@@ -80,23 +80,54 @@ body {
 	background-position: center;
 	background-size: 24px 24px;
 }
+.mdc-ripple-surface {
+	user-select: none;
+}
+.mdc-text-field .mdc-line-ripple {
+	background-color: #b54040;
+}
 .mdc-card {
 	background-color: #303030;
 }
-.mdc-button.mdc-button--stroked {
+.mdc-button--stroked:not(:disabled) {
 	border-color: rgba(255, 255, 255, 0.6);
 	color: rgba(255, 255, 255, 0.6);
 }
-.mdc-button.mdc-button--stroked:hover, .mdc-button.mdc-button--stroked:focus {
+.mdc-button--stroked:not(:disabled):hover, .mdc-button--stroked:not(:disabled):focus {
 	border-color: #ffffff;
 	color: #ffffff;
+}
+.mdc-button--stroked:disabled {
+	border-color: rgba(255, 255, 255, 0.38);
+	color: rgba(255, 255, 255, 0.38);
 }
 .mdc-button::before, .mdc-button::after {
 	background-color: #ffffff;
 }
-.mdc-text-field__bottom-line {
-	background-color: #b54040;
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder, .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__label {
+	color: rgba(255, 255, 255, 0.6);
 }
-.mdc-ripple-surface {
-	user-select: none;
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder, .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-text-field__label {
+	color: #b54040;
+}
+.mdc-text-field--disabled .mdc-text-field__input, .mdc-text-field--disabled .mdc-text-field__input::placeholder, .mdc-text-field--disabled .mdc-text-field__label {
+	color: rgba(255, 255, 255, 0.38);
+}
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+	color: rgba(255, 255, 255, 0.87);
+}
+.mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input {
+	border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+.mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input:hover {
+	border-bottom-color: #ffffff;
+}
+.mdc-text-field--invalid:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input, .mdc-text-field--invalid:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input:hover {
+	border-bottom-color: #d50000;
+}
+.mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--textarea), .mdc-text-field--disabled:not(.mdc-text-field--textarea) {
+	border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input::-webkit-input-placeholder, .mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__label {
+	color: #d50000;
 }
