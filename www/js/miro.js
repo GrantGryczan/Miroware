@@ -86,7 +86,7 @@
 	}
 	const snackBars = document.querySelectorAll(".mdc-snackbar");
 	for(let i of snackBars) {
-		mdc.snackbar.MDCSnackbar(i);
+		new mdc.snackbar.MDCSnackbar(i);
 	}
 	const ripples = document.querySelectorAll(".ripple");
 	for(let i of ripples) {
