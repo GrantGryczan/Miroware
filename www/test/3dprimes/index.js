@@ -71,7 +71,8 @@ const animate = () => {
 		length++;
 	}
 	let prime = num !== 1 && num > 0;
-	for(let i = 2; i < num; i++) {
+	const numSqrt = Math.sqrt(num);
+	for(let i = 2; i < numSqrt; i++) {
 		if(num%i === 0) {
 			prime = false;
 			break;
