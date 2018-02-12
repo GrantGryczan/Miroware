@@ -56,16 +56,16 @@ const animate = () => {
 	}
 	switch(dir) {
 		case 0:
-			indicator.position.x += 2;
+			indicator.position.x += 1;
 			break;
 		case 1:
-			indicator.position.y += 2;
+			indicator.position.y += 1;
 			break;
 		case 2:
-			indicator.position.x -= 2;
+			indicator.position.x -= 1;
 			break;
 		case 3:
-			indicator.position.y -= 2;
+			indicator.position.y -= 1;
 	}
 	num++;
 	controls.update(clock.getDelta());
