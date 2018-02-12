@@ -85,7 +85,7 @@ renderer.domElement.addEventListener("mouseup", () => {
 		const intersect = raycaster.intersectObjects(cubes)[0];
 		if(intersect) {
 			snackbar.show({
-				message: `${intersect.object.userData.n} (${intersect.object.position.x}, ${intersect.object.position.y}, ${intersect.object.position.z})`,
+				message: `${intersect.object.userData.n} (${intersect.object.position.x}, ${intersect.object.position.y})`,
 			});
 		}
 	}
