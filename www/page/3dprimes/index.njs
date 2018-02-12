@@ -1,6 +1,6 @@
 this.title = "3D Primes";
 this.description = "This test graphs prime numbers on a 3D scale.";
-this.tags = ["3D", "3-D", "three", "dimension", "dimensional", "math", "prime", "primes", "number", "numbers", "graph", "chart"];
+this.tags = ["3D", "3-D", "three", "dimension", "dimensional", "math", "prime", "primes", "number", "numbers", "graph", "chart", "Ulam", "spiral"];
 this.value = (await load("/load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="/css/three.css">`;
