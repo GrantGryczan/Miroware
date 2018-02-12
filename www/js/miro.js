@@ -84,6 +84,10 @@
 	for(let i of textFields) {
 		new mdc.textField.MDCTextField(i);
 	}
+	const snackBars = document.querySelectorAll(".mdc-snackbar");
+	for(let i of snackBars) {
+		mdc.snackbar.MDCSnackbar(i);
+	}
 	const ripples = document.querySelectorAll(".ripple");
 	for(let i of ripples) {
 		new mdc.ripple.MDCRipple(i);
