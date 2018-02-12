@@ -21,9 +21,11 @@ scene.add(dirLight);
 const axesHelper = new THREE.AxesHelper(10);
 scene.add(axesHelper);
 let num = 1;
-let length = 1;
-let offset = 0;
-let dir = 0;
+let length = 0;
+const moves = ["y", 1, "x", -1, "x", -1];
+let maxOffset = 2;
+const base = [[false, -2]];
+let y = 1;
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const indicator = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
 	color: 0xffffff
@@ -36,6 +38,40 @@ const mouse = new THREE.Vector2();
 const clock = new THREE.Clock();
 const animate = () => {
 	requestAnimationFrame(animate);
+	if(!moves.length) {
+		for(let i = 0; i < maxOffset; i++) {
+			for(let j of base) {
+				j[1] *= -1;
+			}
+			if(i === 0) {
+				base.push([!base[base.length-1][0], 2*(Math.floor(length/2)%2)-1]);
+			} else if(i === 1) {
+				base.unshift([!base[0][0], -(2*(Math.floor(length/2)%2)-1)]);
+			} else if(i%2 === 0) {
+				base[base.length-1][1] = Math.sign(base[base.length-1][1])*(Math.abs(base[base.length-1][1])+1);
+			} else {
+				base[0][1] = Math.sign(base[0][1])*(Math.abs(base[0][1])+1);
+			}
+			const ySign = -Math.sign(y);
+			const yAbs = Math.abs(y)+1;
+			y = ySign*yAbs;
+			for(let j = 0; j < yAbs; j++) {
+				moves.push("y", ySign);
+			}
+			for(let j of base) {
+				const axis = j[0] ? "z" : "x";
+				const jSign = Math.sign(j[1]);
+				const jAbs = Math.abs(j[1]);
+				for(let k = 0; k < jAbs; k++) {
+					moves.push(axis, jSign);
+				}
+			}
+		}
+		if(length%2 === 0) {
+			maxOffset += 4;
+		}
+		length++;
+	}
 	let prime = num !== 1 && num > 0;
 	for(let i = 2; i < Math.sqrt(num); i++) {
 		if(num%i === 0) {
@@ -51,22 +87,7 @@ const animate = () => {
 		scene.add(cube);
 		cubes.push(cube);
 	}
-	if((offset = (offset+1)%length) === 0 && (dir = (dir+1)%4)%2 === 0) {
-		length++;
-	}
-	switch(dir) {
-		case 0:
-			indicator.position.x += 2;
-			break;
-		case 1:
-			indicator.position.y += 2;
-			break;
-		case 2:
-			indicator.position.x -= 2;
-			break;
-		case 3:
-			indicator.position.y -= 2;
-	}
+	indicator.position[moves.shift()] += 2*moves.shift();
 	num++;
 	raycaster.setFromCamera(mouse, camera);
 	const intersect = raycaster.intersectObjects(cubes)[0];
