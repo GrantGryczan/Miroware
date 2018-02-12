@@ -1,5 +1,5 @@
 this.title = "3D Primes";
-this.description = "This test graphs prime numbers on a 3D scale.";
+this.description = "This page graphs prime numbers on a 3D scale, rolling up the Ulam spiral in an additional dimension.";
 this.tags = ["3D", "3-D", "three", "dimension", "dimensional", "math", "prime", "primes", "number", "numbers", "graph", "chart", "Ulam", "spiral"];
 this.value = (await load("/load/head", this)).value;
 this.value += html`
