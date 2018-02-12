@@ -30,7 +30,7 @@ const geometry = new THREE.BoxGeometry(1, 1, 1);
 const indicator = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
 	color: 0xffffff
 }));
-indicator.position.x = 2;
+indicator.position.x = 1;
 scene.add(indicator);
 const cubes = [];
 const clock = new THREE.Clock();
@@ -87,7 +87,7 @@ const animate = () => {
 		scene.add(cube);
 		cubes.push(cube);
 	}
-	indicator.position[moves.shift()] += 2*moves.shift();
+	indicator.position[moves.shift()] += moves.shift();
 	num++;
 	controls.update(clock.getDelta());
 	renderer.render(scene, camera);
