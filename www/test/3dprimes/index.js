@@ -33,8 +33,6 @@ const indicator = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
 indicator.position.x = 2;
 scene.add(indicator);
 const cubes = [];
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
 const clock = new THREE.Clock();
 const animate = () => {
 	requestAnimationFrame(animate);
@@ -73,7 +71,7 @@ const animate = () => {
 		length++;
 	}
 	let prime = num !== 1 && num > 0;
-	for(let i = 2; i < Math.sqrt(num); i++) {
+	for(let i = 2; i < num; i++) {
 		if(num%i === 0) {
 			prime = false;
 			break;
@@ -84,21 +82,39 @@ const animate = () => {
 			color: Math.random()*0xffffff
 		}));
 		cube.position.copy(indicator.position);
+		cube.userData.n = num;
 		scene.add(cube);
 		cubes.push(cube);
 	}
 	indicator.position[moves.shift()] += 2*moves.shift();
 	num++;
-	raycaster.setFromCamera(mouse, camera);
-	const intersect = raycaster.intersectObjects(cubes)[0];
-	if(intersect) {
-		console.log(intersect.object);
-	}
 	controls.update(clock.getDelta());
 	renderer.render(scene, camera);
 }
 requestAnimationFrame(animate);
+const snackbar = document.querySelector("#snackbar")._mdc;
+let mouseMoved = false;
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+renderer.domElement.addEventListener("mousedown", () => {
+	mouseMoved = false;
+});
+renderer.domElement.addEventListener("mouseup", () => {
+	if(!mouseMoved) {
+		raycaster.setFromCamera(mouse, camera);
+		const intersect = raycaster.intersectObjects(cubes)[0];
+		if(intersect) {
+			snackbar.show({
+				message: `${intersect.object.userData.n} (${intersect.object.position.x}, ${intersect.object.position.y}, ${intersect.object.position.z})`,
+			});
+		}
+	}
+});
 window.addEventListener("mousemove", event => {
+	mouseMoved = true;
 	mouse.x = 2*event.clientX/window.innerWidth-1;
 	mouse.y = -2*event.clientY/window.innerHeight+1;
+});
+renderer.domElement.addEventListener("wheel", () => {
+	mouseMoved = true;
 });
