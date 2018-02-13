@@ -8,12 +8,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Miroware8/web.git"
+		"url": "git+https://github.com/GrantGryczan/web.git"
 	},
 	"author": "Grant Gryczan",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/Miroware8/web/issues"
+		"url": "https://github.com/GrantGryczan/web/issues"
 	},
 	"homepage": "https://miroware.io/",
 	"dependencies": {
