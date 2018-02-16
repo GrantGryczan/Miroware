@@ -9,6 +9,7 @@ const cube = ServeCube.serve({
 	eval: v => {
 		return eval(v);
 	},
+	domain: "miroware.io",
 	httpPort: 8081,
 	httpsRedirect: true,
 	subdomain: ["", "d"],
