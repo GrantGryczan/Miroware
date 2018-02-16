@@ -10,6 +10,7 @@ const cube = ServeCube.serve({
 		return eval(v);
 	},
 	httpPort: 8081,
+	httpsRedirect: true,
 	subdomain: ["", "d"],
 	githubSecret: youKnow.github.secret,
 	githubPayloadURL: "/githubwebhook",
