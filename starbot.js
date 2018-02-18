@@ -169,7 +169,7 @@ client.on("message", msg => {
 					const old1 = data.guilds[msg.guild.id][1];
 					data.guilds[msg.guild.id][1] = null;
 					msg.react(content).then(reaction => {
-						reaction.remove(client.user).then(() => {
+						reaction.users.remove(client.user).then(() => {
 							data.guilds[msg.guild.id][1] = reaction.emoji.identifier;
 							save();
 							msg.channel.send(`${msg.author} Members now have to react with the ${content} emoji to get a message starred.`).catch(() => {
@@ -177,6 +177,7 @@ client.on("message", msg => {
 							});
 						});
 					}).catch(err => {
+						console.error(err);
 						data.guilds[msg.guild.id][1] = old1;
 						save();
 						msg.channel.messages.fetch(content).then(msg2 => {
