@@ -48,9 +48,9 @@
 		headers = headers || {};
 		const req = new XMLHttpRequest();
 		req.open(method, url, true);
-		Object.keys(headers).forEach(function(i) {
+		for(let i of Object.keys(headers)) {
 			req.setRequestHeader(i, headers[i]);
-		});
+		}
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.onreadystatechange = function() {
 			if(req.readyState === XMLHttpRequest.DONE && req.status) {
@@ -71,9 +71,9 @@
 			}
 		};
 		let formData = "";
-		Object.keys(data).forEach(function(i) {
+		for(let i of Object.keys(data)) {
 			formData += `${(formData ? "&" : "") + encodeURIComponent(i)}=${encodeURIComponent(data[i])}`;
-		});
+		}
 		req.send(formData);
 	};
 	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-drawer--temporary"));
