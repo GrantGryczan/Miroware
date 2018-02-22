@@ -19,12 +19,14 @@ if(this.socialicons) {
 		} catch(err) {
 			body = err.error;
 		}
-		icon = body.match(/<link(?: .*?)? (?:rel="(?:.* )?icon(?: .*)?"(?: .*?)? href="([^"]*?)")|(?:href="([^"]*?)"(?: .*?)? rel="(?:.* )?icon(?: .*)?")( [^>]*)?>/i)[1];
-		if(!icon) {
-			icon = "/favicon.ico";
+		if(body) {
+			icon = body.match(/<link(?: .*?)? (?:rel="(?:.* )?icon(?: .*)?"(?: .*?)? href="([^"]*?)")|(?:href="([^"]*?)"(?: .*?)? rel="(?:.* )?icon(?: .*)?")( [^>]*)?>/i)[1];
+			if(!icon) {
+				icon = "/favicon.ico";
+			}
+			icon = (icon.indexOf("//") === -1) ? (origin + icon) : icon;
+			this.value += html`<a class="external mdc-button" href="${i}" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
 		}
-		icon = (icon.indexOf("//") === -1) ? (origin + icon) : icon;
-		this.value += html`<a class="external mdc-button" href="${i}" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
 	}
 	this.value += html`
 					</div>`;
