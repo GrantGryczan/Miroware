@@ -1,10 +1,16 @@
 this.cache = 2;
-const queryIndex = this.req.url.indexOf("?")+1;
-const url = decodeURIComponent(this.req.url.slice(queryIndex));
+let url = this.req.url;
+const queryIndex = url.indexOf("?")+1;
+url = url.slice(queryIndex);
+const queryIndex2 = url.indexOf("?");
+let noQuery = url;
+if(queryIndex2 != -1) {
+	noQuery = url.slice(0, queryIndex2);
+}
 this.headers = {
-	"Content-Type": mime.getType(url)
+	"Content-Type": mime.getType(noQuery)
 };
-request.get(url).then(body => {
+request.get(decodeURIComponent(url)).then(body => {
 	this.value = body;
 	this.exit();
 }).catch(error => {
