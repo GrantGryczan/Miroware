@@ -3,6 +3,7 @@ this.author = this.author === undefined ? "Grant Gryczan" : this.author;
 this.description = this.description === undefined ? "Hello, world!" : this.description;
 this.tags = this.tags instanceof Array ? this.tags : [];
 this.image = this.image === undefined ? "/image/icon/main.png" : this.image;
+console.log(this.req.get("User-Agent"));
 this.value = html`
 <!DOCTYPE html>
 <html>
