@@ -11,11 +11,11 @@ if(this.socialicons) {
 			...this,
 			socialicons: true
 		});
-		const origin = context.redirect.slice(0, context.redirect.indexOf("/", context.redirect.indexOf("//")+2));
+		const origin = context.redir.slice(0, context.redir.indexOf("/", context.redir.indexOf("//")+2));
 		let body;
 		let icon;
 		try {
-			body = await request.get(context.redirect);
+			body = await request.get(context.redir);
 		} catch(err) {
 			body = err.error;
 		}

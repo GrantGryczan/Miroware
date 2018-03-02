@@ -10,7 +10,7 @@ this.value += html`
 this.value += (await load("/load/belt", this)).value;
 this.value += html`
 		<script>
-			location.replace("${this.redirect = "https://github.com/GrantGryczan"}");
+			location.replace("${this.redir = "https://github.com/GrantGryczan"}");
 		</script>`;
 this.value += (await load("/load/foot", this)).value;
 this.exit();

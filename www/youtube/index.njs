@@ -10,7 +10,7 @@ this.value += html`
 this.value += (await load("/load/belt", this)).value;
 this.value += html`
 		<script>
-			location.replace("${this.redirect = "https://www.youtube.com/c/Miroware"}");
+			location.replace("${this.redir = "https://www.youtube.com/c/Miroware"}");
 		</script>`;
 this.value += (await load("/load/foot", this)).value;
 this.exit();
