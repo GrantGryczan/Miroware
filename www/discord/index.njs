@@ -2,8 +2,6 @@ this.title = "Discord";
 this.description = "Join Miroware's community!";
 this.tags = ["redirect", "link", "discord", "invite", "invitation", "join"];
 this.value = (await load("/load/head", this)).value;
-this.value += html`
-		<link rel="stylesheet" href="index.css">`;
 this.value += (await load("/load/body", this)).value;
 this.value += html`
 			Redirecting...`;

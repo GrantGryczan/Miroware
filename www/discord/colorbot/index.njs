@@ -2,8 +2,6 @@ this.title = "Discord Colorbot";
 this.description = "Invite Colorbot to one of your own Discord servers!";
 this.tags = ["redirect", "link", "discord", "bot", "authorize", "authorization", "authorizing", "colorbot", "color", "colors", "role", "roles", "custom"];
 this.value = (await load("/load/head", this)).value;
-this.value += html`
-		<link rel="stylesheet" href="index.css">`;
 this.value += (await load("/load/body", this)).value;
 this.value += html`
 			Redirecting...`;

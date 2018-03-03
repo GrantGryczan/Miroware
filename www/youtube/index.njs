@@ -2,8 +2,6 @@ this.title = "YouTube";
 this.description = "Watch Miroware's videos!";
 this.tags = ["redirect", "link", "youtube", "channel"];
 this.value = (await load("/load/head", this)).value;
-this.value += html`
-		<link rel="stylesheet" href="index.css">`;
 this.value += (await load("/load/body", this)).value;
 this.value += html`
 			Redirecting...`;

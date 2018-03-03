@@ -2,8 +2,6 @@ this.title = "Patreon";
 this.description = "Support Miroware's content!";
 this.tags = ["redirect", "link", "patreon", "support", "donate", "donation", "donations", "contribute", "contribution", "contributions", "money"];
 this.value = (await load("/load/head", this)).value;
-this.value += html`
-		<link rel="stylesheet" href="index.css">`;
 this.value += (await load("/load/body", this)).value;
 this.value += html`
 			Redirecting...`;
