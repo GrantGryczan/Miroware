@@ -67,12 +67,13 @@ client.once("ready", () => {
 	client.user.setActivity("Enter \">⭐\" for info.");
 	const guilds = Array.from(client.guilds.keys());
 	for(let i of guilds) {
+		const guild = client.guilds.get(i);
 		if(data.guilds[i]) {
 			if(data.guilds[i][0] && !guild.channels.get(data.guilds[i][0])) {
 				data.guilds[i][0] = null;
 			}
 		} else {
-			guildCreate(client.guilds.get(i));
+			guildCreate(guild);
 		}
 	}
 	for(let i of Object.keys(data.guilds)) {
