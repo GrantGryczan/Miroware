@@ -12,15 +12,11 @@ const save = () => {
 const client = new Discord.Client();
 client.once("error", process.exit);
 client.once("disconnect", process.exit);
-const italicize = (str) => {
-	return `_${JSON.stringify(String(str)).slice(1, -1).replace(/_/g, "\\_")}_`;
-};
+const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(/_/g, "\\_")}_`;
 const inform = (guild, str1, str2) => {
 	if(guild.available) {
 		guild.owner.send(str1).catch(() => {
-			const channels = guild.channels.filterArray(channel => {
-				return channel.type === "text";
-			});
+			const channels = guild.channels.filterArray(channel => channel.type === "text");
 			let i = -1;
 			const testChannel = () => {
 				i++;
@@ -52,7 +48,7 @@ const guildDelete = guild => {
 }
 const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
-		let help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURIComponent(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
+		let help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURI(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if(perm) {
 			help += `\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID>\`\nStar a message manually, if the message ID is of a message in the channel you are entering the command in.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
 		}
@@ -70,21 +66,18 @@ client.once("ready", () => {
 	});
 	client.user.setActivity("Enter \">⭐\" for info.");
 	const guilds = Array.from(client.guilds.keys());
-	for(let i = 0; i < guilds.length; i++) {
-		const guild = client.guilds.get(guilds[i]);
-		if(data.guilds[guilds[i]]) {
-			if(data.guilds[guilds[i]][0] && !guild.channels.get(data.guilds[guilds[i]][0])) {
-				data.guilds[guilds[i]][0] = null;
+	for(let i of guilds) {
+		if(data.guilds[i]) {
+			if(data.guilds[i][0] && !guild.channels.get(data.guilds[i][0])) {
+				data.guilds[i][0] = null;
 			}
 		} else {
-			guildCreate(guild);
+			guildCreate(client.guilds.get(i));
 		}
 	}
-	for(let i in data.guilds) {
-		if(guilds.indexOf(i) === -1) {
-			guildDelete(i);
-		} else if(!data.guilds[i][1]) {
-			data.guilds[i][1] = "%E2%AD%90";
+	for(let i of Object.keys(data.guilds)) {
+		if(guilds.indexOf(data.guilds[i]) === -1) {
+			guildDelete(data.guilds[i]);
 		}
 	}
 	save();
@@ -109,7 +102,7 @@ const star = (msg, callback) => {
 				timestamp: msg.createdAt.toISOString(),
 				color: data.guilds[msg.guild.id][3],
 				footer: {
-					text: `${decodeURIComponent(data.guilds[msg.guild.id][1])} | ${msg.id}`
+					text: `${decodeURI(data.guilds[msg.guild.id][1])} | ${msg.id}`
 				},
 				fields: [
 					{
@@ -177,7 +170,6 @@ client.on("message", msg => {
 							});
 						});
 					}).catch(err => {
-						console.error(err);
 						data.guilds[msg.guild.id][1] = old1;
 						save();
 						msg.channel.messages.fetch(content).then(msg2 => {
