@@ -77,6 +77,7 @@ client.once("ready", () => {
 		}
 	}
 	for(let i of Object.keys(data.guilds)) {
+		console.log(i);
 		if(guilds.indexOf(data.guilds[i]) === -1) {
 			guildDelete(data.guilds[i]);
 		}
