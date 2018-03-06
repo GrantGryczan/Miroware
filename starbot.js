@@ -77,9 +77,8 @@ client.once("ready", () => {
 		}
 	}
 	for(let i of Object.keys(data.guilds)) {
-		console.log(i);
-		if(guilds.indexOf(data.guilds[i]) === -1) {
-			guildDelete(data.guilds[i]);
+		if(!guilds.includes(i)) {
+			guildDelete(guilds[i]);
 		}
 	}
 	save();
@@ -96,7 +95,7 @@ const starred = [];
 const star = (msg, callback) => {
 	if(data.guilds[msg.guild.id][0]) {
 		console.log(`star ${msg.guild.id} ${msg.channel.id} ${msg.id}`);
-		if(starred.indexOf(msg.id) === -1) {
+		if(!starred.includes(msg.id)) {
 			starred.push(msg.id);
 		}
 		const embed = {
@@ -146,7 +145,7 @@ const star = (msg, callback) => {
 	}
 };
 client.on("messageReactionAdd", reaction => {
-	if(starred.indexOf(reaction.message.id) === -1 && data.guilds[reaction.message.guild.id] && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1] && reaction.count >= data.guilds[reaction.message.guild.id][2]) {
+	if(!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1] && reaction.count >= data.guilds[reaction.message.guild.id][2]) {
 		star(reaction.message);
 	}
 });
