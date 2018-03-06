@@ -1,8 +1,6 @@
 console.log("< Starbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
-const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
-const channelTest = /^<#(\d+)>$/;
 let data;
 const load = () => {
 	data = JSON.parse(fs.readFileSync("data/starbot.json"));
@@ -158,6 +156,8 @@ client.on("messageReactionAdd", reaction => {
 	}
 });
 const prefix = /^> ?⭐/;
+const channelTest = /^<#(\d+)>$/;
+const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 client.on("message", msg => {
 	if(msg.channel.type === "text" && !msg.system) {
 		let content = msg.content;
