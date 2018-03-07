@@ -255,6 +255,10 @@ client.on("message", msg => {
 								msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(() => {
 									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 								});
+							} else if(data.guilds[msg.guild.id][1][content[1]]) {
+								msg.channel.send(`${msg.author} That group already exists.`).catch(() => {
+									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+								});
 							} else {
 								data.guilds[msg.guild.id][1][content[1]] = [1, []];
 								msg.channel.send(`${msg.author} The ${italicize(content[1])} role group has been created.`).catch(() => {
