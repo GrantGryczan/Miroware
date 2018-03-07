@@ -153,7 +153,7 @@ client.on("message", msg => {
 			if(content) {
 				const spaceIndex = content.indexOf(" ");
 				if(spaceIndex === -1) {
-					content = [content];
+					content = [content, ""];
 				} else {
 					content = [content.slice(0, spaceIndex), content.slice(spaceIndex+1)];
 				}
