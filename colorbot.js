@@ -75,57 +75,49 @@ client.once("ready", () => {
 });
 client.on("guildCreate", guildCreate);
 client.on("guildDelete", guildDelete);
-const colorEmbed = hexCode => {
-	if(data.guilds[msg.guild.id][0]) {
-		console.log(`star ${msg.guild.id} ${msg.channel.id} ${msg.id}`);
-		if(!starred.includes(msg.id)) {
-			starred.push(msg.id);
-		}
-		const embed = {
-			embed: {
-				timestamp: msg.createdAt.toISOString(),
-				color: data.guilds[msg.guild.id][3],
-				footer: {
-					text: `${decodeURI(data.guilds[msg.guild.id][1])} | ${msg.id}`
+const colorEmbed = hex => {
+	const dec = parseInt(hex, 16);
+	const red = parseInt(hex.slice(1, 3), 16);
+	const green = parseInt(hex.slice(3, 5), 16);
+	const blue = parseInt(hex.slice(5, 7), 16);
+	return {
+		embed: {
+			timestamp: msg.createdAt.toISOString(),
+			color: dec,
+			fields: [
+				{
+					name: "HEX",
+					value: hex,
+					inline: true
 				},
-				fields: [
-					{
-						name: "Author",
-						value: String(msg.author),
-						inline: true
-					},
-					{
-						name: "Channel",
-						value: String(msg.channel),
-						inline: true
-					},
-					{
-						name: "Message",
-						value: msg.content || "..."
-					}
-				]
-			}
-		};
-		if(embed.embed.fields[2].value.length > 1024) {
-			embed.embed.fields[2].value = msg.content.slice(0, 1024);
-			embed.embed.fields.push({
-				name: "Continued",
-				value: msg.content.slice(1024)
-			});
+				{
+					name: "DEC",
+					value: String(dec),
+					inline: true
+				},
+				{
+					name: "RGB",
+					value: `rgb(${red}, ${green}, ${blue})`,
+					inline: true
+				},
+				{
+					name: "HSV",
+					value: `TODO`,
+					inline: true
+				},
+				{
+					name: "HSL",
+					value: `TODO`,
+					inline: true
+				},
+				{
+					name: "CMYK",
+					value: `TODO`,
+					inline: true
+				}
+			]
 		}
-		const attachment = msg.attachments.first();
-		if(attachment) {
-			embed.embed.image = {
-				url: attachment.url
-			};
-		}
-		const starboard = msg.guild.channels.get(data.guilds[msg.guild.id][0]);
-		starboard.send(embed).then(callback).catch(() => {
-			permWarn(msg.guild, `read messages, send messages, ${attachment ? "and/or embed links" : "embed links, and/or attach files"}, in the ${starboard} channel or otherwise`);
-		});
-	} else {
-		noStarboard(msg.guild);
-	}
+	};
 };
 const prefix = /^> ?🖌 ?/;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
@@ -157,12 +149,7 @@ client.on("message", msg => {
 								member.roles.add(currentRole).catch(err => {
 									permWarn(msg.guild, "manage roles, above mine or otherwise");
 								});
-								msg.channel.send(msg.author + " Your color has been set.", {
-									embed: {
-										title: content[1],
-										color: parseInt(content[1].slice(1), 16)
-									}
-								}).catch(() => {
+								msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1])).catch(() => {
 									permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 								});
 							} else {
@@ -174,7 +161,7 @@ client.on("message", msg => {
 									}
 								}).then(role => {
 									member.roles.add(role);
-									msg.channel.send(msg.author + " Your color has been set.");
+									msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1]));
 								}).catch(err => {
 									console.log(err.name, err.message);
 									if(err) {
