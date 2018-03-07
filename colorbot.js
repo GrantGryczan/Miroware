@@ -325,20 +325,26 @@ client.on("message", msg => {
 							});
 						}
 					} else if(content[0] === "ungroup") {
-						const role = msg.guild.roles.find("name", content[1]);
-						if(role) {
-							if(ungroup(msg.guild.id, role.id)) {
-								msg.channel.send(`${msg.author} That role has been ungrouped.`).catch(() => {
-									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-								});
-								save();
+						if(content[1]) {
+							const role = msg.guild.roles.find("name", content[1]);
+							if(role) {
+								if(ungroup(msg.guild.id, role.id)) {
+									msg.channel.send(`${msg.author} That role has been ungrouped.`).catch(() => {
+										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+									});
+									save();
+								} else {
+									msg.channel.send(`${msg.author} That role is not in a group.`).catch(() => {
+										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+									});
+								}
 							} else {
-								msg.channel.send(`${msg.author} That role is not in a group.`).catch(() => {
+								msg.channel.send(`${msg.author} No role was found by that name.`).catch(() => {
 									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 								});
 							}
 						} else {
-							msg.channel.send(`${msg.author} No role was found by that name.`).catch(() => {
+							msg.channel.send(`${msg.author} No role was specified.`).catch(() => {
 								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 							});
 						}
@@ -394,14 +400,20 @@ client.on("message", msg => {
 							});
 						}
 					} else if(content[0] === "delete") {
-						if(data.guilds[msg.guild.id][1][content[1]]) {
-							msg.channel.send(`${msg.author} The ${italicize(content[1])} group has been deleted.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
-							delete data.guilds[msg.guild.id][1][content[1]];
-							save();
+						if(content[1]) {
+							if(data.guilds[msg.guild.id][1][content[1]]) {
+								msg.channel.send(`${msg.author} The ${italicize(content[1])} group has been deleted.`).catch(() => {
+									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+								});
+								delete data.guilds[msg.guild.id][1][content[1]];
+								save();
+							} else {
+								msg.channel.send(`${msg.author} No group was found by that name.`).catch(() => {
+									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+								});
+							}
 						} else {
-							msg.channel.send(`${msg.author} No group was found by that name.`).catch(() => {
+							msg.channel.send(`${msg.author} No group was specified.`).catch(() => {
 								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 							});
 						}
