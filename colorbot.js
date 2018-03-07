@@ -239,20 +239,26 @@ client.on("message", msg => {
 						});
 					}
 				} else if(content[0] === "list") {
-					const fields = [];
-					for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
-						fields.push({
-							name: i,
-							value: data.guilds[msg.guild.id][1][i].length ? `<&${data.guilds[msg.guild.id][1][i].map(a => msg.guild.roles.get(a)).join(">, <&")}>` : "(empty)"
-						};
-					}
-					msg.channel.send(String(msg.author), {
-						embed: {
-							fields: fields
+					if(data.guilds[msg.guild.id][1].length) {
+						const fields = [];
+						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
+							fields.push({
+								name: i,
+								value: data.guilds[msg.guild.id][1][i].length ? `<&${data.guilds[msg.guild.id][1][i].map(a => msg.guild.roles.get(a)).join(">, <&")}>` : "(empty)"
+							};
 						}
-					}).catch(() => {
-						permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
-					});
+						msg.channel.send(String(msg.author), {
+							embed: {
+								fields: fields
+							}
+						}).catch(() => {
+							permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
+						});
+					} else {
+						msg.channel.send(`${msg.author} No role groups were found.`).catch(() => {
+							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+						});
+					}
 				} else if(content[0] === "add") {
 					
 				} else if(content[0] === "remove") {
