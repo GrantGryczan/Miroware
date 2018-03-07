@@ -242,6 +242,7 @@ client.on("message", msg => {
 					if(Object.keys(data.guilds[msg.guild.id][1]).length) {
 						const fields = [];
 						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
+							console.log(data.guilds[msg.guild.id][1]);
 							fields.push({
 								name: `${i} (${data.guilds[msg.guild.id][1][0] ? `limit: ${data.guilds[msg.guild.id][1][0]}` : "no limit"})`,
 								value: data.guilds[msg.guild.id][1][i][1].length ? data.guilds[msg.guild.id][1][i][1].map(a => msg.guild.roles.get(a)).join(" ") : "(empty)"
