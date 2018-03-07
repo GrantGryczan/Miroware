@@ -42,7 +42,7 @@ const guildDelete = guild => {
 	save();
 }
 const sendHelp = (msg, perm) => {
-	let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color>\`\nSet your color.\n\n\`>🖌 reset\`\nReset your color role.\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all grouped roles.\n\n\`>🖌 add <role name>\`\nSet your role for its role group.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
+	let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color>\`\nSet your color.\n\n\`>🖌 reset\`\nReset your color role.\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all role groups, grouped roles, and role limits per each user of each group.\n\n\`>🖌 add <role name>\`\nSet your role for its role group.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
 	if(perm) {
 		help += `\n\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 create <group name>\`\nCreate a role group.\n\n\`>🖌 group <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🖌 ungroup <role name>\`\nRemove a role from its role group.\n\n\`>🖌 limit <group name> <number>\`\nLimit how many roles each user can have from a group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🖌 rename <group name> <new group name>\`\nRename a role group.\n\n\`>🖌 delete <group name>\`\nDelete a role group.`;
 	}
@@ -243,7 +243,7 @@ client.on("message", msg => {
 						const fields = [];
 						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
 							fields.push({
-								name: i,
+								name: `${i} (${data.guilds[msg.guild.id][1][0] ? `limit: ${data.guilds[msg.guild.id][1][0]}` : "no limit"})`,
 								value: data.guilds[msg.guild.id][1][i][1].length ? data.guilds[msg.guild.id][1][i][1].map(a => msg.guild.roles.get(a)).join(" ") : "(empty)"
 							});
 						}
