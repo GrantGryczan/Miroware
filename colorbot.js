@@ -159,7 +159,6 @@ client.on("message", msg => {
 				}
 				content[0] = content[0].toLowerCase();
 				if(content[0] === "set" || content[0] === "reset") {
-					console.log(data.guilds[msg.guild.id][0]);
 					if(data.guilds[msg.guild.id][0] === 0) {
 						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? " As a member of this server with administrative permission, you can enable it by entering \"`>🖌 mode`\"." : ""}`).catch(() => {
 							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
