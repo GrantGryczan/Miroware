@@ -345,17 +345,23 @@ client.on("message", msg => {
 					} else if(content[0] === "limit") {
 						content[1] = content[1].split(" ", 2);
 						if(content[1].length < 2) {
-							msg.channel.send(`${msg.author} No limit was specified.`).catch(() => {
+							msg.channel.send(`${msg.author} No ${content[1].length ? "limit" : "group"} was specified.`).catch(() => {
 								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 							});
 						} else if(isNaN(content[1][1])) {
 							msg.channel.send(`${msg.author} That is not a valid number.`).catch(() => {
 								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 							});
-						} else {
+						} else if(data.guilds[msg.guild.id][0][content[1][0]]) {
 							const limit = parseInt(content[1][1]);
-							data.guilds[msg.guild.id][0] = limit < 1 ? 0 : limit;
+							msg.channel.send(`${msg.author} The role limit of the ${content[1][0]} group has been set to ${data.guilds[msg.guild.id][0][content[1][0]][0] = limit < 1 ? 0 : limit}.`).catch(() => {
+								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+							});
 							save();
+						} else {
+							msg.channel.send(`${msg.author} No group was found by that name.`).catch(() => {
+								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+							});
 						}
 					} else if(content[0] === "rename") {
 						content[1] = content[1].split(" ");
