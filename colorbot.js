@@ -136,7 +136,16 @@ client.on("message", msg => {
 					content = [content.slice(0, spaceIndex), content.slice(spaceIndex+1)];
 				}
 				content[0] = content[0].toLowerCase();
-				if(content[0] === "set") {
+				if(content[0] === "get") {
+					if(colorTest.test(content[1])) {
+						content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
+						msg.channel.send(String(msg.author), colorEmbed(content[1])).catch(() => {
+							permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
+						});
+					} else {
+						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`);
+					}
+				} else if(content[0] === "set") {
 					if(colorTest.test(content[1])) {
 						content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
 						const red = parseInt(content[1].slice(1, 3), 16);
@@ -146,7 +155,6 @@ client.on("message", msg => {
 							const currentRole = msg.guild.roles.find("name", content[1]);
 							if(currentRole) {
 								member.roles.add(currentRole).catch(err => {
-									console.error(err);
 									permWarn(msg.guild, "manage roles, above mine or otherwise");
 								});
 								msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1])).catch(() => {
@@ -165,8 +173,7 @@ client.on("message", msg => {
 										permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 									});
 								}).catch(err => {
-									console.log(err.name, err.message);
-									if(err) {
+									if(err.message === "Missing Permissions") {
 										permWarn(msg.guild, "manage roles");
 									} else {
 										const guildRoles = Array.from(msg.guild.roles.values());
@@ -197,12 +204,10 @@ client.on("message", msg => {
 							if(properColorTest.test(i.name)) {
 								if(Array.from(i.members.values()).length > 1) {
 									member.roles.remove(i).then(addColorRole).catch(err => {
-										console.error(err);
 										permWarn(msg.guild, "manage roles, above mine or otherwise");
 									});
 								} else {
 									i.delete().then(addColorRole).catch(err => {
-										console.error(err);
 										permWarn(msg.guild, "manage roles, above mine or otherwise");
 									});
 								}
