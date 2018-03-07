@@ -354,7 +354,7 @@ client.on("message", msg => {
 							});
 						} else if(data.guilds[msg.guild.id][1][content[1][0]]) {
 							const limit = parseInt(content[1][1]);
-							msg.channel.send(`${msg.author} The role limit of the ${content[1][0]} group has been set to ${data.guilds[msg.guild.id][1][content[1][0]][0] = limit < 1 ? 0 : limit}.`).catch(() => {
+							msg.channel.send(`${msg.author} The role limit of the ${italicize(content[1][0])} group has been set to ${data.guilds[msg.guild.id][1][content[1][0]][0] = limit < 1 ? 0 : limit}.`).catch(() => {
 								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 							});
 							save();
