@@ -152,7 +152,7 @@ client.on("message", msg => {
 						const green = parseInt(content[1].slice(3, 5), 16);
 						const blue = parseInt(content[1].slice(5, 7), 16);
 						const addColorRole = () => {
-							const currentRole = guild.roles.find("name", content[1]);
+							const currentRole = msg.guild.roles.find("name", content[1]);
 							if(currentRole) {
 								member.roles.add(currentRole).catch(err => {
 									permWarn(msg.guild, "manage roles, above mine or otherwise");
