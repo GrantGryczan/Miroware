@@ -32,7 +32,6 @@ const permWarn = (guild, perms) => {
 	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
 	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
 };
-data.guilds = {}; // TODO
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild.id}`);
 	data.guilds[guild.id] = [0, {}];
