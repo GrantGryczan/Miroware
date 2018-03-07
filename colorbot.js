@@ -244,7 +244,7 @@ client.on("message", msg => {
 						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
 							fields.push({
 								name: i,
-								value: data.guilds[msg.guild.id][1][i].length ? `<&${data.guilds[msg.guild.id][1][i][1].map(a => msg.guild.roles.get(a)).join(">, <&")}>` : "(empty)"
+								value: data.guilds[msg.guild.id][1][i][1].length ? `<&${data.guilds[msg.guild.id][1][i][1].map(a => msg.guild.roles.get(a)).join(">, <&")}>` : "(empty)"
 							});
 						}
 						msg.channel.send(String(msg.author), {
