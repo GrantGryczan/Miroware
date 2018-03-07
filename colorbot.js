@@ -34,7 +34,7 @@ const permWarn = (guild, perms) => {
 };
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild.id}`);
-	data.guilds[guild.id] = [...stuff];
+	data.guilds[guild.id] = [[], 0];
 };
 const guildDelete = guild => {
 	console.log(`guildDelete ${guild.id}`);
@@ -43,7 +43,7 @@ const guildDelete = guild => {
 }
 const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
-		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color>\`\nSet your color.`;
+		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color code | role name>\`\nSet your color or role.`;
 		if(perm) {
 			help += `\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 set <color>\`\nSet `;
 		}
