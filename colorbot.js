@@ -275,7 +275,7 @@ client.on("message", msg => {
 									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 								});
 							} else if(data.guilds[msg.guild.id][1][content[1]]) {
-								msg.channel.send(`${msg.author} That group already exists.`).catch(() => {
+								msg.channel.send(`${msg.author} A group by that name already exists.`).catch(() => {
 									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 								});
 							} else {
@@ -362,6 +362,10 @@ client.on("message", msg => {
 							});
 						} else if(!/^[a-z0-9]*$/i.test(content[1][1])) {
 							msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(() => {
+								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+							});
+						} else if(data.guilds[msg.guild.id][1][content[1][1]]) {
+							msg.channel.send(`${msg.author} A group by that name already exists.`).catch(() => {
 								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 							});
 						} else if(data.guilds[msg.guild.id][1][content[1][0]]) {
