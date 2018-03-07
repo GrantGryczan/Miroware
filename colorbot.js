@@ -42,9 +42,9 @@ const guildDelete = guild => {
 	save();
 }
 const sendHelp = (msg, perm) => {
-	let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color>\`\nSet your color.\n\n\`>🖌 reset\`\nReset your color role.\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all role groups, grouped roles, and role limits per each user of each group.\n\n\`>🖌 add <role name>\`\nSet your role for its role group.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
+	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🖌 set <color>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🖌 reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all role groups, grouped roles, and role limits per each user of each group.\n\n\`>🖌 add <role name>\`\nSet your role for its role group.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
 	if(perm) {
-		help += `\n\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 create <group name>\`\nCreate a role group.\n\n\`>🖌 group <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🖌 ungroup <role name>\`\nRemove a role from its role group.\n\n\`>🖌 limit <group name> <number>\`\nLimit how many roles each user can have from a group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🖌 rename <group name> <new group name>\`\nRename a role group.\n\n\`>🖌 delete <group name>\`\nDelete a role group.`;
+		help += `\n\nAs a member of this server with administrative permission, you can use the following commands.\n\n\`>🖌 mode\`\nToggle open color mode. This is disabled by default.\n\n\`>🖌 create <group name>\`\nCreate a role group.\n\n\`>🖌 group <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🖌 ungroup <role name>\`\nRemove a role from its role group.\n\n\`>🖌 limit <group name> <number>\`\nLimit how many roles each user can have from a group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🖌 rename <group name> <new group name>\`\nRename a role group.\n\n\`>🖌 delete <group name>\`\nDelete a role group.`;
 	}
 	help += "\n\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/colorbot/>.";
 	msg.channel.send(help).catch(() => {
@@ -158,75 +158,81 @@ client.on("message", msg => {
 					content = [content.slice(0, spaceIndex), content.slice(spaceIndex+1)];
 				}
 				content[0] = content[0].toLowerCase();
-				if(content[0] === "set") {
-					if(colorTest.test(content[1])) {
-						content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
-						const red = parseInt(content[1].slice(1, 3), 16);
-						const green = parseInt(content[1].slice(3, 5), 16);
-						const blue = parseInt(content[1].slice(5, 7), 16);
-						const addColorRole = () => {
-							const currentRole = msg.guild.roles.find("name", content[1]);
-							if(currentRole) {
-								member.roles.add(currentRole).catch(err => {
-									permWarn(msg.guild, "manage roles, above mine or otherwise");
-								});
-								msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1])).catch(() => {
-									permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
-								});
-							} else {
-								msg.guild.roles.create({
-									data: {
-										name: content[1],
-										color: content[1],
-										permissions: 0
-									}
-								}).then(role => {
-									member.roles.add(role);
+				if(content[0] === "set" || content[0] === "reset") {
+					if(!data.guilds[msg.guild.id][0]) {
+						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? " As a member of this server with administrative permission, you can enable it by entering \"`>🖌 mode`\"." : ""}`).catch(() => {
+							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+						});
+					} else if(content[0] === "set") {
+						if(colorTest.test(content[1])) {
+							content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
+							const red = parseInt(content[1].slice(1, 3), 16);
+							const green = parseInt(content[1].slice(3, 5), 16);
+							const blue = parseInt(content[1].slice(5, 7), 16);
+							const addColorRole = () => {
+								const currentRole = msg.guild.roles.find("name", content[1]);
+								if(currentRole) {
+									member.roles.add(currentRole).catch(err => {
+										permWarn(msg.guild, "manage roles, above mine or otherwise");
+									});
 									msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1])).catch(() => {
 										permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 									});
-								}).catch(err => {
-									if(err.message === "Missing Permissions") {
-										permWarn(msg.guild, "manage roles");
-									} else {
-										const guildRoles = Array.from(msg.guild.roles.values());
-										let colors = [];
-										for(let i of guildRoles) {
-											if(properColorTest.test(i.name)) {
-												const redDiff = parseInt(i.name.slice(1, 3), 16)-red;
-												const greenDiff = parseInt(i.name.slice(3, 5), 16)-green;
-												const blueDiff = parseInt(guildRoles[i].name.slice(5, 7), 16)-blue;
-												colors.push([i, redDiff*redDiff+greenDiff*greenDiff+blueDiff*blueDiff]);
-											}
+								} else {
+									msg.guild.roles.create({
+										data: {
+											name: content[1],
+											color: content[1],
+											permissions: 0
 										}
-										colors = colors.sort((a, b) => a[1]-b[1]);
-										let roles = colors[0][0];
-										for(let i = 1; i < 10; i++) {
-											roles += " " + colors[i][0];
-										}
-										msg.channel.send(msg.author + " The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.\n" + roles).catch(() => {
-											permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+									}).then(role => {
+										member.roles.add(role);
+										msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1])).catch(() => {
+											permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 										});
-									}
-								});
-							}
-						};
-						removeRole(member).then(addColorRole).catch(err => {
+									}).catch(err => {
+										if(err.message === "Missing Permissions") {
+											permWarn(msg.guild, "manage roles");
+										} else {
+											const guildRoles = Array.from(msg.guild.roles.values());
+											let colors = [];
+											for(let i of guildRoles) {
+												if(properColorTest.test(i.name)) {
+													const redDiff = parseInt(i.name.slice(1, 3), 16)-red;
+													const greenDiff = parseInt(i.name.slice(3, 5), 16)-green;
+													const blueDiff = parseInt(guildRoles[i].name.slice(5, 7), 16)-blue;
+													colors.push([i, redDiff*redDiff+greenDiff*greenDiff+blueDiff*blueDiff]);
+												}
+											}
+											colors = colors.sort((a, b) => a[1]-b[1]);
+											let roles = colors[0][0];
+											for(let i = 1; i < 10; i++) {
+												roles += " " + colors[i][0];
+											}
+											msg.channel.send(msg.author + " The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.\n" + roles).catch(() => {
+												permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+											});
+										}
+									});
+								}
+							};
+							removeRole(member).then(addColorRole).catch(err => {
+								permWarn(msg.guild, "manage roles, above mine or otherwise");
+							});
+						} else {
+							msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(() => {
+								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+							});
+						}
+					} else if(content[0] === "reset") {
+						removeRole(member).then(() => {
+							msg.channel.send(`${msg.author} Your color role has been reset.`).catch(() => {
+								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+							});
+						}).catch(err => {
 							permWarn(msg.guild, "manage roles, above mine or otherwise");
 						});
-					} else {
-						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(() => {
-							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-						});
 					}
-				} else if(content[0] === "reset") {
-					removeRole(member).then(() => {
-						msg.channel.send(`${msg.author} Your color role has been reset.`).catch(() => {
-							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-						});
-					}).catch(err => {
-						permWarn(msg.guild, "manage roles, above mine or otherwise");
-					});
 				} else if(content[0] === "get") {
 					if(colorTest.test(content[1])) {
 						content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
@@ -264,7 +270,11 @@ client.on("message", msg => {
 				} else if(content[0] === "remove") {
 					
 				} else if(perm) {
-					if(content[0] === "create") {
+					if(content[0] === "mode") {
+						msg.channel.send(`${msg.author} Open color mode has been ${(data.guilds[msg.guild.id][0] = (data.guilds[msg.guild.id][0]+1)%2) ? "enabled" : "disabled"}.`).catch(() => {
+							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+						});
+					} else if(content[0] === "create") {
 						if(content[1]) {
 							if(content[1].includes(" ")) {
 								msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(() => {
