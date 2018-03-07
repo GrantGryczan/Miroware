@@ -239,6 +239,7 @@ client.on("message", msg => {
 						});
 					}
 				} else if(content[0] === "list") {
+					console.log(data.guilds[msg.guild.id][1]);
 					if(data.guilds[msg.guild.id][1].length) {
 						const fields = [];
 						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
