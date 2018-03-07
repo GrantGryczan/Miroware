@@ -6,7 +6,6 @@ const load = () => {
 	data = JSON.parse(fs.readFileSync("data/colorbot.json"));
 };
 load();
-data.guilds = [];
 const save = () => {
 	fs.writeFileSync("data/colorbot.json", JSON.stringify(data));
 };
@@ -44,9 +43,9 @@ const guildDelete = guild => {
 }
 const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
-		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color>\`\nSet your color.\n\n\`>🖌 reset\`\nReset your color role.\n\n\`>🖌 get <color>\`\nShow color info.`;
+		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color>\`\nSet your color.\n\n\`>🖌 reset\`\nReset your color role.\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 group list\`\nList all role groups.\n\n\`>🖌 group set <group name> <role name>\`\nSet your role for a certain role group.\n\n\`>🖌 group reset <group name | role name>\``;
 		if(perm) {
-			help += `\n\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 test\`\nTest, but not really.`;
+			help += `\n\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 group create <group name>\`\nCreate a role group.\n\n\`>🖌 group add <group name> <role name>\`\nAdd a role to a role group.`;
 		}
 		help += "\n\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/colorbot/>.";
 		msg.channel.send(help).catch(() => {
