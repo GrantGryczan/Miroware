@@ -82,7 +82,6 @@ const colorEmbed = hex => {
 	const blue = parseInt(hex.slice(5, 7), 16);
 	return {
 		embed: {
-			timestamp: msg.createdAt.toISOString(),
 			color: dec,
 			fields: [
 				{
