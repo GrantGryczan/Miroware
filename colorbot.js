@@ -166,7 +166,7 @@ client.on("message", msg => {
 									permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 								});
 							} else {
-								guild.roles.create({
+								msg.guild.roles.create({
 									data: {
 										name: content[1],
 										color: content[1],
@@ -180,7 +180,7 @@ client.on("message", msg => {
 									if(err) {
 										permWarn(msg.guild, "manage roles");
 									} else {
-										const guildRoles = Array.from(guild.roles.values());
+										const guildRoles = Array.from(msg.guild.roles.values());
 										let colors = [];
 										for(let i of guildRoles) {
 											if(properColorTest.test(i.name)) {
