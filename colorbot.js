@@ -43,7 +43,7 @@ const guildDelete = guild => {
 }
 const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
-		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 set <color>\`\nSet your color.\n\n\`>🖌 reset <color>\`\nReset your color role.`;
+		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 set <color>\`\nSet your color.\n\n\`>🖌 reset\`\nReset your color role.`;
 		if(perm) {
 			help += `\n\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 test\`\nTest, but not really.`;
 		}
