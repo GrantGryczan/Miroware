@@ -43,7 +43,7 @@ const guildDelete = guild => {
 }
 const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
-		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color>\`\nSet your color.`;
+		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 set <color>\`\nSet your color.\n\n\`>🖌 set <color>\`\nReset your color role.`;
 		if(perm) {
 			help += `\n\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 test\`\nTest, but not really.`;
 		}
@@ -121,6 +121,20 @@ const colorEmbed = hex => {
 const prefix = /^> ?🖌 ?/;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 const properColorTest = /^#[\da-f]{6}$/;
+const removeRole = member => {
+	const roleArray = Array.from(member.roles.values());
+	for(let i of roleArray) {
+		if(properColorTest.test(i.name)) {
+			if(Array.from(i.members.values()).length > 1) {
+				return member.roles.remove(i);
+			} else {
+				return i.delete();
+			}
+			break;
+		}
+	}
+	return Promise.resolve();
+};
 client.on("message", msg => {
 	if(msg.channel.type === "text" && !msg.system) {
 		let content = msg.content;
@@ -198,29 +212,14 @@ client.on("message", msg => {
 								});
 							}
 						};
-						const roleArray = Array.from(member.roles.values());
-						let roleRemoved = false;
-						for(let i of roleArray) {
-							if(properColorTest.test(i.name)) {
-								if(Array.from(i.members.values()).length > 1) {
-									member.roles.remove(i).then(addColorRole).catch(err => {
-										permWarn(msg.guild, "manage roles, above mine or otherwise");
-									});
-								} else {
-									i.delete().then(addColorRole).catch(err => {
-										permWarn(msg.guild, "manage roles, above mine or otherwise");
-									});
-								}
-								roleRemoved = true;
-								break;
-							}
-						}
-						if(!roleRemoved) {
-							addColorRole();
-						}
+						removeRole(member).then(addColorRole).catch(err => {
+							permWarn(msg.guild, "manage roles, above mine or otherwise");
+						});
 					} else {
 						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`);
 					}
+				} else if(content[0] === "reset") {
+					removeRole(member);
 				} else if(perm) {
 					if(content[0] === "limit") {
 
