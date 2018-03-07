@@ -43,11 +43,11 @@ const guildDelete = guild => {
 }
 const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
-		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color code | role name>\`\nSet your color or role.`;
+		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color>\`\nSet your color.`;
 		if(perm) {
-			help += `\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 set <color>\`\nSet `;
+			help += `\n\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 test\`\nTest, but not really.`;
 		}
-		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/colorbot/>.";
+		help += "\n\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/colorbot/>.";
 		msg.channel.send(help).catch(() => {
 			permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 		});
@@ -155,7 +155,7 @@ client.on("message", msg => {
 							const currentRole = guild.roles.find("name", content[1]);
 							if(currentRole) {
 								member.roles.add(currentRole).catch(err => {
-									permWarn(msg.guild, "manage roles");
+									permWarn(msg.guild, "manage roles, above mine or otherwise");
 								});
 								msg.channel.send(msg.author + " Your color has been set.", {
 									embed: {
@@ -172,7 +172,7 @@ client.on("message", msg => {
 										color: content[1],
 										permissions: 0
 									}
-								}).then(function(role) {
+								}).then(role => {
 									member.roles.add(role);
 									msg.channel.send(msg.author + " Your color has been set.");
 								}).catch(err => {
@@ -207,9 +207,13 @@ client.on("message", msg => {
 						for(let i of roleArray) {
 							if(properColorTest.test(i.name)) {
 								if(Array.from(i.members.values()).length > 1) {
-									member.roles.remove(i).then(addColorRole);
+									member.roles.remove(i).then(addColorRole).catch(err => {
+										permWarn(msg.guild, "manage roles, above mine or otherwise");
+									});
 								} else {
-									i.delete().then(addColorRole);
+									i.delete().then(addColorRole).catch(err => {
+										permWarn(msg.guild, "manage roles, above mine or otherwise");
+									});
 								}
 								roleRemoved = true;
 								break;
