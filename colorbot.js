@@ -219,7 +219,11 @@ client.on("message", msg => {
 						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`);
 					}
 				} else if(content[0] === "reset") {
-					removeRole(member);
+					removeRole(member).then(() => {
+						msg.channel.send(`${msg.author} Your color role has been reset.`);
+					}).catch(err => {
+						permWarn(msg.guild, "manage roles, above mine or otherwise");
+					});
 				} else if(perm) {
 					if(content[0] === "limit") {
 
