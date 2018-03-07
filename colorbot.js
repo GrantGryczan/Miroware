@@ -300,8 +300,11 @@ client.on("message", msg => {
 							} else {
 								const role = msg.guild.roles.find("name", content[1].slice(spaceIndex2+1));
 								if(role) {
-									ungroup(msg.guild.id, role.id);
+									const found = ungroup(msg.guild.id, role.id);
 									data.guilds[msg.guild.id][1][content[1].slice(0, spaceIndex2)][1].push(role.id);
+									msg.channel.send(`${msg.author} That role has been ${found ? "moved" : "added"} to that group.`).catch(() => {
+										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+									});
 									save();
 								} else {
 									msg.channel.send(`${msg.author} No role was found by that name.`).catch(() => {
