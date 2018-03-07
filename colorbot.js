@@ -345,7 +345,7 @@ client.on("message", msg => {
 					} else if(content[0] === "limit") {
 						content[1] = content[1].split(" ", 2);
 						if(content[1].length < 2) {
-							msg.channel.send(`${msg.author} No ${content[1].length ? "limit" : "group"} was specified.`).catch(() => {
+							msg.channel.send(`${msg.author} No ${content[1][0] ? "group" : "limit"} was specified.`).catch(() => {
 								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 							});
 						} else if(isNaN(content[1][1])) {
