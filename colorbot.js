@@ -150,16 +150,7 @@ client.on("message", msg => {
 					content = [content.slice(0, spaceIndex), content.slice(spaceIndex+1)];
 				}
 				content[0] = content[0].toLowerCase();
-				if(content[0] === "get") {
-					if(colorTest.test(content[1])) {
-						content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
-						msg.channel.send(String(msg.author), colorEmbed(content[1])).catch(() => {
-							permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
-						});
-					} else {
-						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`);
-					}
-				} else if(content[0] === "set") {
+				if(content[0] === "set") {
 					if(colorTest.test(content[1])) {
 						content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
 						const red = parseInt(content[1].slice(1, 3), 16);
@@ -224,6 +215,15 @@ client.on("message", msg => {
 					}).catch(err => {
 						permWarn(msg.guild, "manage roles, above mine or otherwise");
 					});
+				} else if(content[0] === "get") {
+					if(colorTest.test(content[1])) {
+						content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
+						msg.channel.send(String(msg.author), colorEmbed(content[1])).catch(() => {
+							permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
+						});
+					} else {
+						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`);
+					}
 				} else if(perm) {
 					if(content[0] === "limit") {
 
