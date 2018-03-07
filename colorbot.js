@@ -76,7 +76,7 @@ client.once("ready", () => {
 client.on("guildCreate", guildCreate);
 client.on("guildDelete", guildDelete);
 const colorEmbed = hex => {
-	const dec = parseInt(hex, 16);
+	const dec = parseInt(hex.slice(1), 16);
 	const red = parseInt(hex.slice(1, 3), 16);
 	const green = parseInt(hex.slice(3, 5), 16);
 	const blue = parseInt(hex.slice(5, 7), 16);
