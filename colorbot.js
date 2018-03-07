@@ -147,6 +147,7 @@ client.on("message", msg => {
 							const currentRole = msg.guild.roles.find("name", content[1]);
 							if(currentRole) {
 								member.roles.add(currentRole).catch(err => {
+									console.error(err);
 									permWarn(msg.guild, "manage roles, above mine or otherwise");
 								});
 								msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1])).catch(() => {
@@ -161,7 +162,9 @@ client.on("message", msg => {
 									}
 								}).then(role => {
 									member.roles.add(role);
-									msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1]));
+									msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1])).catch(() => {
+										permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
+									});
 								}).catch(err => {
 									console.log(err.name, err.message);
 									if(err) {
@@ -195,10 +198,12 @@ client.on("message", msg => {
 							if(properColorTest.test(i.name)) {
 								if(Array.from(i.members.values()).length > 1) {
 									member.roles.remove(i).then(addColorRole).catch(err => {
+										console.error(err);
 										permWarn(msg.guild, "manage roles, above mine or otherwise");
 									});
 								} else {
 									i.delete().then(addColorRole).catch(err => {
+										console.error(err);
 										permWarn(msg.guild, "manage roles, above mine or otherwise");
 									});
 								}
