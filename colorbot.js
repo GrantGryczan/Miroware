@@ -245,7 +245,7 @@ client.on("message", msg => {
 							fields.push({
 								name: i,
 								value: data.guilds[msg.guild.id][1][i].length ? `<&${data.guilds[msg.guild.id][1][i].map(a => msg.guild.roles.get(a)).join(">, <&")}>` : "(empty)"
-							};
+							});
 						}
 						msg.channel.send(String(msg.author), {
 							embed: {
