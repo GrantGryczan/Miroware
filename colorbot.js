@@ -181,7 +181,7 @@ client.on("message", msg => {
 										permWarn(msg.guild, "manage roles");
 									} else {
 										const guildRoles = Array.from(guild.roles.values());
-										const colors = [];
+										let colors = [];
 										for(let i of guildRoles) {
 											if(properColorTest.test(i.name)) {
 												const redDiff = parseInt(i.name.slice(1, 3), 16)-red;
@@ -203,7 +203,7 @@ client.on("message", msg => {
 							}
 						};
 						const roleArray = Array.from(member.roles.values());
-						const roleRemoved = false;
+						let roleRemoved = false;
 						for(let i of roleArray) {
 							if(properColorTest.test(i.name)) {
 								if(Array.from(i.members.values()).length > 1) {
