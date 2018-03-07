@@ -301,7 +301,7 @@ client.on("message", msg => {
 								const role = msg.guild.roles.find("name", content[1].slice(spaceIndex2+1));
 								if(role) {
 									ungroup(msg.guild.id, role.id);
-									data.guilds[guild][1][content[1].slice(0, spaceIndex2)][1].push(role.id);
+									data.guilds[msg.guild.id][1][content[1].slice(0, spaceIndex2)][1].push(role.id);
 									save();
 								} else {
 									msg.channel.send(`${msg.author} No role was found by that name.`).catch(() => {
