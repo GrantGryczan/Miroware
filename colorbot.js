@@ -370,7 +370,7 @@ client.on("message", msg => {
 							});
 						} else if(data.guilds[msg.guild.id][1][content[1][0]]) {
 							data.guilds[msg.guild.id][1][content[1][1]] = data.guilds[msg.guild.id][1][content[1][0]];
-							msg.channel.send(`${msg.author} The ${italicize(content[1][0])} group is now the ${content[1][1]} group.`).catch(() => {
+							msg.channel.send(`${msg.author} The ${italicize(content[1][0])} group is now the ${italicize(content[1][1])} group.`).catch(() => {
 								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 							});
 							save();
