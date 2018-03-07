@@ -134,6 +134,8 @@ client.on("message", msg => {
 	if(msg.channel.type === "text" && !msg.system) {
 		let content = msg.content;
 		if(prefix.test(content)) {
+			const member = msg.guild.member(msg.author);
+			const perm = member.hasPermission(8);
 			content = content.replace(prefix, "");
 			if(content) {
 				const spaceIndex = content.indexOf(" ");
@@ -219,17 +221,14 @@ client.on("message", msg => {
 					} else {
 						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`);
 					}
-				} else {
-					const perm = msg.guild.member(msg.author).hasPermission(8);
-					if(perm) {
-						if(content[0] === "limit") {
-							
-						} else {
-							sendHelp(msg, perm);
-						}
+				} else if(perm) {
+					if(content[0] === "limit") {
+
 					} else {
 						sendHelp(msg, perm);
 					}
+				} else {
+					sendHelp(msg, perm);
 				}
 			} else {
 				sendHelp(msg, perm);
