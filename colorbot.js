@@ -6,6 +6,7 @@ const load = () => {
 	data = JSON.parse(fs.readFileSync("data/colorbot.json"));
 };
 load();
+data.guilds = [];
 const save = () => {
 	fs.writeFileSync("data/colorbot.json", JSON.stringify(data));
 };
@@ -34,7 +35,7 @@ const permWarn = (guild, perms) => {
 };
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild.id}`);
-	data.guilds[guild.id] = [[], 0];
+	data.guilds[guild.id] = [{}, 0];
 };
 const guildDelete = guild => {
 	console.log(`guildDelete ${guild.id}`);
