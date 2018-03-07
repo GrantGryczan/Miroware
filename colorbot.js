@@ -45,7 +45,7 @@ const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
 		let help = `${msg.author} You can use the following commands.\n\n\`>🖌 set <color>\`\nSet your color.\n\n\`>🖌 reset\`\nReset your color role.\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all grouped roles.\n\n\`>🖌 add <role name>\`\nSet your role for its role group.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
 		if(perm) {
-			help += `\n\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 group create <group name>\`\nCreate a role group.\n\n\`>🖌 group add <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🖌 group limit <group name> <limit>\`\nLimit how many roles each user can have from a group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🖌 group remove <role name>\`\nRemove a role from its role group.\`\n\n\`>🖌 group delete <group name>\`\nDelete a role group.`;
+			help += `\n\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>🖌 group create <group name>\`\nCreate a role group.\n\n\`>🖌 group add <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🖌 group limit <group name> <limit>\`\nLimit how many roles each user can have from a group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🖌 group remove <role name>\`\nRemove a role from its role group.\n\n\`>🖌 group delete <group name>\`\nDelete a role group.`;
 		}
 		help += "\n\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/colorbot/>.";
 		msg.channel.send(help).catch(() => {
