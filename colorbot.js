@@ -86,38 +86,31 @@ const colorEmbed = hex => {
 	return {
 		embed: {
 			color: dec,
-			fields: [
-				{
-					name: "HEX",
-					value: hex,
-					inline: true
-				},
-				{
-					name: "DEC",
-					value: String(dec),
-					inline: true
-				},
-				{
-					name: "RGB",
-					value: `rgb(${red}, ${green}, ${blue})`,
-					inline: true
-				},
-				{
-					name: "HSV",
-					value: `TODO`,
-					inline: true
-				},
-				{
-					name: "HSL",
-					value: `TODO`,
-					inline: true
-				},
-				{
-					name: "CMYK",
-					value: `TODO`,
-					inline: true
-				}
-			]
+			fields: [{
+				name: "HEX",
+				value: hex,
+				inline: true
+			}, {
+				name: "DEC",
+				value: String(dec),
+				inline: true
+			}, {
+				name: "RGB",
+				value: `rgb(${red}, ${green}, ${blue})`,
+				inline: true
+			}, {
+				name: "HSV",
+				value: `TODO`,
+				inline: true
+			}, {
+				name: "HSL",
+				value: `TODO`,
+				inline: true
+			}, {
+				name: "CMYK",
+				value: `TODO`,
+				inline: true
+			}]
 		}
 	};
 };
