@@ -175,7 +175,7 @@ client.on("message", msg => {
 									member.roles.add(currentRole).catch(err => {
 										permWarn(msg.guild, "manage roles, above mine or otherwise");
 									});
-									msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1])).catch(() => {
+									msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(() => {
 										permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 									});
 								} else {
@@ -187,7 +187,7 @@ client.on("message", msg => {
 										}
 									}).then(role => {
 										member.roles.add(role);
-										msg.channel.send(msg.author + " Your color has been set.", colorEmbed(content[1])).catch(() => {
+										msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(() => {
 											permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 										});
 									}).catch(err => {
@@ -195,7 +195,7 @@ client.on("message", msg => {
 											permWarn(msg.guild, "manage roles");
 										} else {
 											const guildRoles = Array.from(msg.guild.roles.values());
-											let colors = [];
+											const colors = [];
 											for(let i of guildRoles) {
 												if(properColorTest.test(i.name)) {
 													const redDiff = parseInt(i.name.slice(1, 3), 16)-red;
@@ -204,13 +204,12 @@ client.on("message", msg => {
 													colors.push([i, redDiff*redDiff+greenDiff*greenDiff+blueDiff*blueDiff]);
 												}
 											}
-											colors = colors.sort((a, b) => a[1]-b[1]);
-											let roles = colors[0][0];
-											for(let i = 1; i < 10; i++) {
-												roles += " " + colors[i][0];
-											}
-											msg.channel.send(msg.author + " The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.\n" + roles).catch(() => {
-												permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+											msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
+												embed: {
+													description: colors.sort((a, b) => a[1]-b[1]).slice(0, 20).map(a => a[0]).join(" ")
+												}
+											}).catch(() => {
+												permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 											});
 										}
 									});
