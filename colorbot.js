@@ -28,10 +28,6 @@ const inform = (guild, str1, str2) => {
 		});
 	}
 };
-const permWarn = (guild, perms) => {
-	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
-	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
-};
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild.id}`);
 	data.guilds[guild.id] = [0, {}];
@@ -41,15 +37,26 @@ const guildDelete = guild => {
 	delete data.guilds[guild.id];
 	save();
 }
+const permWarn = (guild, perms) => {
+	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
+	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
+};
+const errSendMessages = msg => () => {
+	permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
+};
+const errEmbedLinks = msg => () => {
+	permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
+};
+const errManageRoles = msg => () => {
+	permWarn(msg.guild, "manage roles, above mine or otherwise");
+};
 const sendHelp = (msg, perm) => {
 	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🖌 set <color>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🖌 reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all role groups and their roles.\n\n\`>🖌 add <role name>\`\nSet your role for its role group.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
 	if(perm) {
 		help += `\n\nAs a member of this server with administrative permission, you can use the following commands.\n\n\`>🖌 mode\`\nToggle open color mode. This is disabled by default.\n\n\`>🖌 create <group name>\`\nCreate a role group.\n\n\`>🖌 group <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🖌 ungroup <role name>\`\nRemove a role from its role group.\n\n\`>🖌 limit <group name> <number>\`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🖌 rename <group name> <new group name>\`\nRename a role group.\n\n\`>🖌 delete <group name>\`\nDelete a role group.`;
 	}
 	help += "\n\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/colorbot/>.";
-	msg.channel.send(help).catch(() => {
-		permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-	});
+	msg.channel.send(help).catch(errSendMessages(msg));
 };
 client.once("ready", () => {
 	client.user.setPresence({
@@ -160,9 +167,7 @@ client.on("message", msg => {
 				content[0] = content[0].toLowerCase();
 				if(content[0] === "set" || content[0] === "reset") {
 					if(data.guilds[msg.guild.id][0] === 0) {
-						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? " As a member of this server with administrative permission, you can enable it by entering \"`>🖌 mode`\"." : ""}`).catch(() => {
-							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-						});
+						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? " As a member of this server with administrative permission, you can enable it by entering \"`>🖌 mode`\"." : ""}`).catch(errSendMessages(msg));
 					} else if(content[0] === "set") {
 						if(colorTest.test(content[1])) {
 							content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
@@ -172,12 +177,8 @@ client.on("message", msg => {
 							const addColorRole = () => {
 								const currentRole = msg.guild.roles.find("name", content[1]);
 								if(currentRole) {
-									member.roles.add(currentRole).catch(err => {
-										permWarn(msg.guild, "manage roles, above mine or otherwise");
-									});
-									msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(() => {
-										permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
-									});
+									member.roles.add(currentRole).catch(errManageRoles(msg));
+									msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(errEmbedLinks(msg));
 								} else {
 									msg.guild.roles.create({
 										data: {
@@ -187,9 +188,7 @@ client.on("message", msg => {
 										}
 									}).then(role => {
 										member.roles.add(role);
-										msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(() => {
-											permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
-										});
+										msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(errEmbedLinks(msg));
 									}).catch(err => {
 										if(err.message === "Missing Permissions") {
 											permWarn(msg.guild, "manage roles");
@@ -208,9 +207,7 @@ client.on("message", msg => {
 												embed: {
 													description: colors.sort((a, b) => a[1]-b[1]).slice(0, 20).map(a => a[0]).join(" ")
 												}
-											}).catch(() => {
-												permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
-											});
+											}).catch(errEmbedLinks(msg));
 										}
 									});
 								}
@@ -219,29 +216,19 @@ client.on("message", msg => {
 								permWarn(msg.guild, "manage roles, above mine or otherwise");
 							});
 						} else {
-							msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
 						}
 					} else if(content[0] === "reset") {
 						removeRole(member).then(() => {
-							msg.channel.send(`${msg.author} Your color role has been reset.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
-						}).catch(err => {
-							permWarn(msg.guild, "manage roles, above mine or otherwise");
-						});
+							msg.channel.send(`${msg.author} Your color role has been reset.`).catch(errSendMessages(msg));
+						}).catch(errManageRoles(msg));
 					}
 				} else if(content[0] === "get") {
 					if(colorTest.test(content[1])) {
 						content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
-						msg.channel.send(String(msg.author), colorEmbed(content[1])).catch(() => {
-							permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
-						});
+						msg.channel.send(String(msg.author), colorEmbed(content[1])).catch(errEmbedLinks(msg));
 					} else {
-						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(() => {
-							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-						});
+						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
 					}
 				} else if(content[0] === "list") {
 					if(Object.keys(data.guilds[msg.guild.id][1]).length) {
@@ -256,13 +243,9 @@ client.on("message", msg => {
 							embed: {
 								fields: fields
 							}
-						}).catch(() => {
-							permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
-						});
+						}).catch(errEmbedLinks(msg));
 					} else {
-						msg.channel.send(`${msg.author} No role groups were found.`).catch(() => {
-							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-						});
+						msg.channel.send(`${msg.author} No role groups were found.`).catch(errEmbedLinks(msg));
 					}
 				} else if(content[0] === "add") {
 					
@@ -270,43 +253,29 @@ client.on("message", msg => {
 					
 				} else if(perm) {
 					if(content[0] === "mode") {
-						msg.channel.send(`${msg.author} Open color mode has been ${(data.guilds[msg.guild.id][0] = (data.guilds[msg.guild.id][0]+1)%2) ? "enabled" : "disabled"}.`).catch(() => {
-							permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-						});
+						msg.channel.send(`${msg.author} Open color mode has been ${(data.guilds[msg.guild.id][0] = (data.guilds[msg.guild.id][0]+1)%2) ? "enabled" : "disabled"}.`).catch(errSendMessages(msg));
 						save();
 					} else if(content[0] === "create") {
 						if(content[1]) {
 							if(content[1].includes(" ")) {
-								msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(() => {
-									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-								});
+								msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(errSendMessages(msg));
 							} else if(!/^[a-z0-9]*$/i.test(content[1])) {
-								msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(() => {
-									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-								});
+								msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(errSendMessages(msg));
 							} else if(data.guilds[msg.guild.id][1][content[1]]) {
-								msg.channel.send(`${msg.author} A group by that name already exists.`).catch(() => {
-									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-								});
+								msg.channel.send(`${msg.author} A group by that name already exists.`).catch(errSendMessages(msg));
 							} else {
 								data.guilds[msg.guild.id][1][content[1]] = [1, []];
-								msg.channel.send(`${msg.author} The ${italicize(content[1])} role group has been created.`).catch(() => {
-									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-								});
+								msg.channel.send(`${msg.author} The ${italicize(content[1])} role group has been created.`).catch(errSendMessages(msg));
 								save();
 							}
 						} else {
-							msg.channel.send(`${msg.author} No group name was specified.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} No group name was specified.`).catch(errSendMessages(msg));
 						}
 					} else if(content[0] === "group") {
 						if(content[1]) {
 							const spaceIndex2 = content[1].indexOf(" ");
 							if(spaceIndex2 === -1) {
-								msg.channel.send(`${msg.author} No role name was specified.`).catch(() => {
-									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-								});
+								msg.channel.send(`${msg.author} No role name was specified.`).catch(errSendMessages(msg));
 							} else {
 								const role = msg.guild.roles.find("name", content[1].slice(spaceIndex2+1));
 								if(role) {
@@ -314,118 +283,76 @@ client.on("message", msg => {
 									const group = data.guilds[msg.guild.id][1][content[1].slice(0, spaceIndex2)];
 									if(group) {
 										group[1].push(role.id);
-										msg.channel.send(`${msg.author} That role has been ${found ? "moved" : "added"} to that group.`).catch(() => {
-											permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-										});
+										msg.channel.send(`${msg.author} That role has been ${found ? "moved" : "added"} to that group.`).catch(errSendMessages(msg));
 										save();
 									} else {
-										msg.channel.send(`${msg.author} No group was found by that name.`).catch(() => {
-											permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-										});
+										msg.channel.send(`${msg.author} No group was found by that name.`).catch(errSendMessages(msg));
 									}
 								} else {
-									msg.channel.send(`${msg.author} No role was found by that name.`).catch(() => {
-										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-									});
+									msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
 								}
 							}
 						} else {
-							msg.channel.send(`${msg.author} No group name was specified.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} No group name was specified.`).catch(errSendMessages(msg));
 						}
 					} else if(content[0] === "ungroup") {
 						if(content[1]) {
 							const role = msg.guild.roles.find("name", content[1]);
 							if(role) {
 								if(ungroup(msg.guild.id, role.id)) {
-									msg.channel.send(`${msg.author} That role has been ungrouped.`).catch(() => {
-										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-									});
+									msg.channel.send(`${msg.author} That role has been ungrouped.`).catch(errSendMessages(msg));
 									save();
 								} else {
-									msg.channel.send(`${msg.author} That role is not in a group.`).catch(() => {
-										permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-									});
+									msg.channel.send(`${msg.author} That role is not in a group.`).catch(errSendMessages(msg));
 								}
 							} else {
-								msg.channel.send(`${msg.author} No role was found by that name.`).catch(() => {
-									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-								});
+								msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
 							}
 						} else {
-							msg.channel.send(`${msg.author} No role was specified.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} No role was specified.`).catch(errSendMessages(msg));
 						}
 					} else if(content[0] === "limit") {
 						content[1] = content[1].split(" ", 2);
 						if(content[1].length < 2) {
-							msg.channel.send(`${msg.author} No ${content[1][0] ? "limit" : "group"} was specified.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} No ${content[1][0] ? "limit" : "group"} was specified.`).catch(errSendMessages(msg));
 						} else if(isNaN(content[1][1])) {
-							msg.channel.send(`${msg.author} That is not a valid number.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} That is not a valid number.`).catch(errSendMessages(msg));
 						} else if(data.guilds[msg.guild.id][1][content[1][0]]) {
 							const limit = parseInt(content[1][1]);
-							msg.channel.send(`${msg.author} The role limit of the ${italicize(content[1][0])} group has been set to ${data.guilds[msg.guild.id][1][content[1][0]][0] = limit < 1 ? 0 : limit}.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} The role limit of the ${italicize(content[1][0])} group has been set to ${data.guilds[msg.guild.id][1][content[1][0]][0] = limit < 1 ? 0 : limit}.`).catch(errSendMessages(msg));
 							save();
 						} else {
-							msg.channel.send(`${msg.author} No group was found by that name.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} No group was found by that name.`).catch(errSendMessages(msg));
 						}
 					} else if(content[0] === "rename") {
 						content[1] = content[1].split(" ");
 						if(content[1].length < 2) {
-							msg.channel.send(`${msg.author} No group name was specified.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} No group name was specified.`).catch(errSendMessages(msg));
 						} else if(content[1].length > 2) {
-							msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(errSendMessages(msg));
 						} else if(!/^[a-z0-9]*$/i.test(content[1][1])) {
-							msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(errSendMessages(msg));
 						} else if(data.guilds[msg.guild.id][1][content[1][1]]) {
-							msg.channel.send(`${msg.author} A group by that name already exists.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} A group by that name already exists.`).catch(errSendMessages(msg));
 						} else if(data.guilds[msg.guild.id][1][content[1][0]]) {
 							data.guilds[msg.guild.id][1][content[1][1]] = data.guilds[msg.guild.id][1][content[1][0]];
 							delete data.guilds[msg.guild.id][1][content[1][0]];
-							msg.channel.send(`${msg.author} The ${italicize(content[1][0])} group is now the ${italicize(content[1][1])} group.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} The ${italicize(content[1][0])} group is now the ${italicize(content[1][1])} group.`).catch(errSendMessages(msg));
 							save();
 						} else {
-							msg.channel.send(`${msg.author} No group was found by that name.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} No group was found by that name.`).catch(errSendMessages(msg));
 						}
 					} else if(content[0] === "delete") {
 						if(content[1]) {
 							if(data.guilds[msg.guild.id][1][content[1]]) {
-								msg.channel.send(`${msg.author} The ${italicize(content[1])} group has been deleted.`).catch(() => {
-									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-								});
+								msg.channel.send(`${msg.author} The ${italicize(content[1])} group has been deleted.`).catch(errSendMessages(msg));
 								delete data.guilds[msg.guild.id][1][content[1]];
 								save();
 							} else {
-								msg.channel.send(`${msg.author} No group was found by that name.`).catch(() => {
-									permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-								});
+								msg.channel.send(`${msg.author} No group was found by that name.`).catch(errSendMessages(msg));
 							}
 						} else {
-							msg.channel.send(`${msg.author} No group was specified.`).catch(() => {
-								permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
-							});
+							msg.channel.send(`${msg.author} No group was specified.`).catch(errSendMessages(msg));
 						}
 					} else {
 						sendHelp(msg, perm);
