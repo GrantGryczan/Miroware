@@ -109,22 +109,18 @@ const star = (msg, callback) => {
 				footer: {
 					text: `${decodeURI(data.guilds[msg.guild.id][1])} | ${msg.id}`
 				},
-				fields: [
-					{
-						name: "Author",
-						value: String(msg.author),
-						inline: true
-					},
-					{
-						name: "Channel",
-						value: String(msg.channel),
-						inline: true
-					},
-					{
-						name: "Message",
-						value: msg.content || "..."
-					}
-				]
+				fields: [{
+					name: "Author",
+					value: String(msg.author),
+					inline: true
+				}, {
+					name: "Channel",
+					value: String(msg.channel),
+					inline: true
+				}, {
+					name: "Message",
+					value: msg.content || "..."
+				}]
 			}
 		};
 		if(embed.embed.fields[2].value.length > 1024) {
