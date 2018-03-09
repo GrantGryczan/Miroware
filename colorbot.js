@@ -78,6 +78,14 @@ client.once("ready", () => {
 });
 client.on("guildCreate", guildCreate);
 client.on("guildDelete", guildDelete);
+client.on("roleDelete", role => {
+	for(let i of Object.keys(data.guilds[role.guild.id][1])) {
+		const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
+		if(roleIndex !== -1) {
+			data.guilds[msg.guild.id][1][i][1].splice(roleIndex, 1);
+		}
+	}
+});
 const colorEmbed = hex => {
 	const dec = parseInt(hex.slice(1), 16);
 	const red = parseInt(hex.slice(1, 3), 16);
