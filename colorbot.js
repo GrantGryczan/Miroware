@@ -255,9 +255,13 @@ client.on("message", msg => {
 						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
 							const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
 							if(roleIndex !== -1) {
-								member.roles.remove(role).then(() => {
-									msg.channel.send(`${msg.author} That role has been removed from your user.`).catch(errSendMessages(msg));
-								}).catch(errManageRoles(msg));
+								if(member.roles.has(role)) {
+									member.roles.remove(role).then(() => {
+										msg.channel.send(`${msg.author} That role has been removed from your user.`).catch(errSendMessages(msg));
+									}).catch(errManageRoles(msg));
+								} else {
+									msg.channel.send(`${msg.author} You do not have that role.`).catch(errSendMessages(msg));
+								}
 								found = true;
 								break;
 							}
