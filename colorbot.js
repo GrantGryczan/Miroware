@@ -54,7 +54,7 @@ const errManageRoles = msg => () => {
 	permWarn(msg.guild, "manage roles, above mine or otherwise");
 };
 const sendHelp = (msg, perm) => {
-	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🎨color <color>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🎨reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🎨list\`\nList all role groups and their roles.\n\n\`>🎨add <role name>\`\nGive yourself a role.\n\n\`>🎨remove <role name>\`\nRemove a role from yourself.`;
+	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🎨color <hex color code>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🎨reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🎨list\`\nList all role groups and their roles.\n\n\`>🎨add <role name>\`\nGive yourself a role.\n\n\`>🎨remove <role name>\`\nRemove a role from yourself.`;
 	if(perm) {
 		help += `\n\nAs a member of this server with administrative permission, you can use the following commands.\n\n\`>🎨mode\`\nToggle open color mode. This is disabled by default.\n\n\`>🎨create <group name>\`\nCreate a role group.\n\n\`>🎨group <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🎨ungroup <role name>\`\nRemove a role from its role group.\n\n\`>🎨limit <group name> <number>\`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🎨rename <group name> <new group name>\`\nRename a role group.\n\n\`>🎨delete <group name>\`\nDelete a role group.`;
 	}
@@ -188,7 +188,7 @@ client.on("message", msg => {
 								};
 								removeColor(member).then(addColorRole).catch(errManageRoles(msg));
 							} else {
-								msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
+								msg.channel.send(`${msg.author} That's not a valid hex color code! If you don't know how hex color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
 							}
 						} else {
 							msg.channel.send(`${msg.author} No color code was specified.`).catch(errSendMessages(msg));
