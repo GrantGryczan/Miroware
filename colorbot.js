@@ -51,7 +51,7 @@ const errManageRoles = msg => () => {
 	permWarn(msg.guild, "manage roles, above mine or otherwise");
 };
 const sendHelp = (msg, perm) => {
-	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🖌 set <color>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🖌 reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all role groups and their roles.\n\n\`>🖌 add <role name>\`\nGive yourself a role.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
+	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🖌 color <color>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🖌 reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all role groups and their roles.\n\n\`>🖌 add <role name>\`\nGive yourself a role.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
 	if(perm) {
 		help += `\n\nAs a member of this server with administrative permission, you can use the following commands.\n\n\`>🖌 mode\`\nToggle open color mode. This is disabled by default.\n\n\`>🖌 create <group name>\`\nCreate a role group.\n\n\`>🖌 group <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🖌 ungroup <role name>\`\nRemove a role from its role group.\n\n\`>🖌 limit <group name> <number>\`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🖌 rename <group name> <new group name>\`\nRename a role group.\n\n\`>🖌 delete <group name>\`\nDelete a role group.`;
 	}
@@ -166,10 +166,10 @@ client.on("message", msg => {
 					content = [content.slice(0, spaceIndex), content.slice(spaceIndex+1)];
 				}
 				content[0] = content[0].toLowerCase();
-				if(content[0] === "set" || content[0] === "reset") {
+				if(content[0] === "color" || content[0] === "reset") {
 					if(data.guilds[msg.guild.id][0] === 0) {
 						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? " As a member of this server with administrative permission, you can enable it by entering \"`>🖌 mode`\"." : ""}`).catch(errSendMessages(msg));
-					} else if(content[0] === "set") {
+					} else if(content[0] === "color") {
 						if(colorTest.test(content[1])) {
 							content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
 							const red = parseInt(content[1].slice(1, 3), 16);
