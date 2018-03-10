@@ -340,10 +340,14 @@ client.on("message", msg => {
 								if(group) {
 									const role = msg.guild.roles.find("name", content[1].slice(spaceIndex2+1));
 									if(role) {
-										const found = ungroup(msg.guild.id, role.id);
-										group[1].push(role.id);
-										msg.channel.send(`${msg.author} That role has been ${found ? "moved" : "added"} to that group.`).catch(errSendMessages(msg));
-										save();
+										if(group[1].includes(role.id)) {
+											msg.channel.send(`${msg.author} That role is already in that group.`).catch(errSendMessages(msg));
+										} else {
+											const found = ungroup(msg.guild.id, role.id);
+											group[1].push(role.id);
+											msg.channel.send(`${msg.author} That role has been ${found ? "moved" : "added"} to that group.`).catch(errSendMessages(msg));
+											save();
+										}
 									} else {
 										msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
 									}
