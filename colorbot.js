@@ -336,19 +336,19 @@ client.on("message", msg => {
 							if(spaceIndex2 === -1) {
 								msg.channel.send(`${msg.author} No role name was specified.`).catch(errSendMessages(msg));
 							} else {
-								const role = msg.guild.roles.find("name", content[1].slice(spaceIndex2+1));
-								if(role) {
-									const found = ungroup(msg.guild.id, role.id);
-									const group = data.guilds[msg.guild.id][1][content[1].slice(0, spaceIndex2)];
-									if(group) {
+								const group = data.guilds[msg.guild.id][1][content[1].slice(0, spaceIndex2)];
+								if(group) {
+									const role = msg.guild.roles.find("name", content[1].slice(spaceIndex2+1));
+									if(role) {
+										const found = ungroup(msg.guild.id, role.id);
 										group[1].push(role.id);
 										msg.channel.send(`${msg.author} That role has been ${found ? "moved" : "added"} to that group.`).catch(errSendMessages(msg));
 										save();
 									} else {
-										msg.channel.send(`${msg.author} No group was found by that name.`).catch(errSendMessages(msg));
+										msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
 									}
 								} else {
-									msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
+									msg.channel.send(`${msg.author} No group was found by that name.`).catch(errSendMessages(msg));
 								}
 							}
 						} else {
