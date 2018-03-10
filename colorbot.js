@@ -50,7 +50,8 @@ const errSendMessages = msg => () => {
 const errEmbedLinks = msg => () => {
 	permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 };
-const errManageRoles = msg => () => {
+const errManageRoles = msg => err => {
+	console.log(err);
 	permWarn(msg.guild, "manage roles, above mine or otherwise");
 };
 const sendHelp = (msg, perm) => {
@@ -126,9 +127,7 @@ const colorEmbed = hex => {
 	};
 };
 const setColor = (member, role, msg) => {
-	member.roles.add(role).catch(err => {
-		console.log(err);
-	});
+	member.roles.add(role).catch(errManageRoles(msg));
 	msg.channel.send(`${msg.author} Your color has been set.`, {
 		embed: {
 			title: content[1],
