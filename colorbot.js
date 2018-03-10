@@ -252,8 +252,8 @@ client.on("message", msg => {
 					const role = msg.guild.roles.find("name", content[1]);
 					if(role) {
 						let found = false;
-						for(let i of Object.keys(data.guilds[msg.guild][1])) {
-							const roleIndex = data.guilds[msg.guild][1][i][1].indexOf(role.id);
+						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
+							const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
 							if(roleIndex !== -1) {
 								member.removeRole(role).then(() => {
 									msg.channel.send(`${msg.author} That role has been removed from your user.`).catch(errSendMessages(msg));
