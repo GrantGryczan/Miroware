@@ -166,10 +166,11 @@ client.on("message", msg => {
 					content = [content.slice(0, spaceIndex), content.slice(spaceIndex+1)];
 				}
 				content[0] = content[0].toLowerCase();
-				if(content[0] === "color" || content[0] === "reset") {
+				const contentIsColor = content[0] === "color" || content[0] === "colour";
+				if(contentIsColor || content[0] === "reset") {
 					if(data.guilds[msg.guild.id][0] === 0) {
 						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? " As a member of this server with administrative permission, you can enable it by entering \"`>🖌 mode`\"." : ""}`).catch(errSendMessages(msg));
-					} else if(content[0] === "color") {
+					} else if(contentIsColor) {
 						if(colorTest.test(content[1])) {
 							content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
 							const red = parseInt(content[1].slice(1, 3), 16);
