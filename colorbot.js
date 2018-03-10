@@ -50,8 +50,7 @@ const errSendMessages = msg => () => {
 const errEmbedLinks = msg => () => {
 	permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 };
-const errManageRoles = msg => err => {
-	console.log(err);
+const errManageRoles = msg => () => {
 	permWarn(msg.guild, "manage roles, above mine or otherwise");
 };
 const sendHelp = (msg, perm) => {
@@ -126,12 +125,12 @@ const colorEmbed = hex => {
 		}
 	};
 };
-const setColor = (member, role, msg) => {
+const setColor = (member, color, role, msg) => {
 	member.roles.add(role).catch(errManageRoles(msg));
 	msg.channel.send(`${msg.author} Your color has been set.`, {
 		embed: {
-			title: content[1],
-			color: parseInt(content[1].slice(1), 16)
+			title: color,
+			color: parseInt(color.slice(1), 16)
 		}
 	}).catch(errEmbedLinks(msg));
 };
@@ -187,7 +186,7 @@ client.on("message", msg => {
 								const addColorRole = () => {
 									const currentRole = msg.guild.roles.find("name", content[1]);
 									if(currentRole) {
-										setColor(member, currentRole, msg);
+										setColor(member, content[1], currentRole, msg);
 									} else {
 										msg.guild.roles.create({
 											data: {
@@ -196,7 +195,7 @@ client.on("message", msg => {
 												permissions: 0
 											}
 										}).then(role => {
-											setColor(member, role, msg);
+											setColor(member, content[1], role, msg);
 										}).catch(err => {
 											if(err.message === "Missing Permissions") {
 												permWarn(msg.guild, "manage roles");
