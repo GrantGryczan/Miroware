@@ -126,7 +126,9 @@ const colorEmbed = hex => {
 	};
 };
 const setColor = (member, role, msg) => {
-	member.roles.add(role).catch(errManageRoles(msg));
+	member.roles.add(role).catch(err => {
+		console.log(err);
+	});
 	msg.channel.send(`${msg.author} Your color has been set.`, {
 		embed: {
 			title: content[1],
