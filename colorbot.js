@@ -171,52 +171,56 @@ client.on("message", msg => {
 					if(data.guilds[msg.guild.id][0] === 0) {
 						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? " As a member of this server with administrative permission, you can enable it by entering \"`>🖌 mode`\"." : ""}`).catch(errSendMessages(msg));
 					} else if(contentIsColor) {
-						if(colorTest.test(content[1])) {
-							content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
-							const red = parseInt(content[1].slice(1, 3), 16);
-							const green = parseInt(content[1].slice(3, 5), 16);
-							const blue = parseInt(content[1].slice(5, 7), 16);
-							const addColorRole = () => {
-								const currentRole = msg.guild.roles.find("name", content[1]);
-								if(currentRole) {
-									member.roles.add(currentRole).catch(errManageRoles(msg));
-									msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(errEmbedLinks(msg));
-								} else {
-									msg.guild.roles.create({
-										data: {
-											name: content[1],
-											color: content[1],
-											permissions: 0
-										}
-									}).then(role => {
-										member.roles.add(role);
+						if(content[1]) {
+							if(colorTest.test(content[1])) {
+								content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
+								const red = parseInt(content[1].slice(1, 3), 16);
+								const green = parseInt(content[1].slice(3, 5), 16);
+								const blue = parseInt(content[1].slice(5, 7), 16);
+								const addColorRole = () => {
+									const currentRole = msg.guild.roles.find("name", content[1]);
+									if(currentRole) {
+										member.roles.add(currentRole).catch(errManageRoles(msg));
 										msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(errEmbedLinks(msg));
-									}).catch(err => {
-										if(err.message === "Missing Permissions") {
-											permWarn(msg.guild, "manage roles");
-										} else {
-											const guildRoles = Array.from(msg.guild.roles.values());
-											const colors = [];
-											for(let i of guildRoles) {
-												if(properColorTest.test(i.name)) {
-													const redDiff = parseInt(i.name.slice(1, 3), 16)-red;
-													const greenDiff = parseInt(i.name.slice(3, 5), 16)-green;
-													const blueDiff = parseInt(guildRoles[i].name.slice(5, 7), 16)-blue;
-													colors.push([i, redDiff*redDiff+greenDiff*greenDiff+blueDiff*blueDiff]);
-												}
+									} else {
+										msg.guild.roles.create({
+											data: {
+												name: content[1],
+												color: content[1],
+												permissions: 0
 											}
-											msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
-												embed: {
-													description: colors.sort((a, b) => a[1]-b[1]).slice(0, 20).map(a => a[0]).join(" ")
+										}).then(role => {
+											member.roles.add(role);
+											msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(errEmbedLinks(msg));
+										}).catch(err => {
+											if(err.message === "Missing Permissions") {
+												permWarn(msg.guild, "manage roles");
+											} else {
+												const guildRoles = Array.from(msg.guild.roles.values());
+												const colors = [];
+												for(let i of guildRoles) {
+													if(properColorTest.test(i.name)) {
+														const redDiff = parseInt(i.name.slice(1, 3), 16)-red;
+														const greenDiff = parseInt(i.name.slice(3, 5), 16)-green;
+														const blueDiff = parseInt(guildRoles[i].name.slice(5, 7), 16)-blue;
+														colors.push([i, redDiff*redDiff+greenDiff*greenDiff+blueDiff*blueDiff]);
+													}
 												}
-											}).catch(errEmbedLinks(msg));
-										}
-									});
-								}
-							};
-							removeRole(member).then(addColorRole).catch(errManageRoles(msg));
+												msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
+													embed: {
+														description: colors.sort((a, b) => a[1]-b[1]).slice(0, 20).map(a => a[0]).join(" ")
+													}
+												}).catch(errEmbedLinks(msg));
+											}
+										});
+									}
+								};
+								removeRole(member).then(addColorRole).catch(errManageRoles(msg));
+							} else {
+								msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
+							}
 						} else {
-							msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} No color code was specified.`).catch(errSendMessages(msg));
 						}
 					} else if(content[0] === "reset") {
 						removeRole(member).then(() => {
