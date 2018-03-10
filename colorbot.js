@@ -1,6 +1,9 @@
 console.log("< Colorbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
+const prefix = /^> ?🎨 ?/;
+const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
+const properColorTest = /^#[\da-f]{6}$/;
 let data;
 const load = () => {
 	data = JSON.parse(fs.readFileSync("data/colorbot.json"));
@@ -122,10 +125,16 @@ const colorEmbed = hex => {
 		}
 	};
 };
-const prefix = /^> ?🎨 ?/;
-const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
-const properColorTest = /^#[\da-f]{6}$/;
-const removeRole = member => {
+const setColor = (member, role, msg) => {
+	member.roles.add(role).catch(errManageRoles(msg));
+	msg.channel.send(`${msg.author} Your color has been set.`, {
+		embed: {
+			title: content[1]
+			color: parseInt(content[1].slice(1), 16)
+		}
+	}).catch(errEmbedLinks(msg));
+};
+const removeColor = member => {
 	const roleArray = Array.from(member.roles.values());
 	for(let i of roleArray) {
 		if(properColorTest.test(i.name)) {
@@ -174,14 +183,10 @@ client.on("message", msg => {
 						if(content[1]) {
 							if(colorTest.test(content[1])) {
 								content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
-								const red = parseInt(content[1].slice(1, 3), 16);
-								const green = parseInt(content[1].slice(3, 5), 16);
-								const blue = parseInt(content[1].slice(5, 7), 16);
 								const addColorRole = () => {
 									const currentRole = msg.guild.roles.find("name", content[1]);
 									if(currentRole) {
-										member.roles.add(currentRole).catch(errManageRoles(msg));
-										msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(errEmbedLinks(msg));
+										setColor(member, currentRole, msg);
 									} else {
 										msg.guild.roles.create({
 											data: {
@@ -190,12 +195,14 @@ client.on("message", msg => {
 												permissions: 0
 											}
 										}).then(role => {
-											member.roles.add(role);
-											msg.channel.send(`${msg.author} Your color has been set.`, colorEmbed(content[1])).catch(errEmbedLinks(msg));
+											setColor(member, role, msg);
 										}).catch(err => {
 											if(err.message === "Missing Permissions") {
 												permWarn(msg.guild, "manage roles");
 											} else {
+												const red = parseInt(content[1].slice(1, 3), 16);
+												const green = parseInt(content[1].slice(3, 5), 16);
+												const blue = parseInt(content[1].slice(5, 7), 16);
 												const guildRoles = Array.from(msg.guild.roles.values());
 												const colors = [];
 												for(let i of guildRoles) {
@@ -215,7 +222,7 @@ client.on("message", msg => {
 										});
 									}
 								};
-								removeRole(member).then(addColorRole).catch(errManageRoles(msg));
+								removeColor(member).then(addColorRole).catch(errManageRoles(msg));
 							} else {
 								msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
 							}
@@ -223,7 +230,7 @@ client.on("message", msg => {
 							msg.channel.send(`${msg.author} No color code was specified.`).catch(errSendMessages(msg));
 						}
 					} else if(content[0] === "reset") {
-						removeRole(member).then(() => {
+						removeColor(member).then(() => {
 							msg.channel.send(`${msg.author} Your color role has been reset.`).catch(errSendMessages(msg));
 						}).catch(errManageRoles(msg));
 					}
