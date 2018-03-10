@@ -129,7 +129,7 @@ const setColor = (member, role, msg) => {
 	member.roles.add(role).catch(errManageRoles(msg));
 	msg.channel.send(`${msg.author} Your color has been set.`, {
 		embed: {
-			title: content[1]
+			title: content[1],
 			color: parseInt(content[1].slice(1), 16)
 		}
 	}).catch(errEmbedLinks(msg));
