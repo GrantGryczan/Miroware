@@ -202,7 +202,7 @@ client.on("message", msg => {
 													if(properColorTest.test(i.name)) {
 														const redDiff = parseInt(i.name.slice(1, 3), 16)-red;
 														const greenDiff = parseInt(i.name.slice(3, 5), 16)-green;
-														const blueDiff = parseInt(guildRoles[i].name.slice(5, 7), 16)-blue;
+														const blueDiff = parseInt(i.name.slice(5, 7), 16)-blue;
 														colors.push([i, redDiff*redDiff+greenDiff*greenDiff+blueDiff*blueDiff]);
 													}
 												}
