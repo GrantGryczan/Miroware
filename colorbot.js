@@ -51,7 +51,7 @@ const errManageRoles = msg => () => {
 	permWarn(msg.guild, "manage roles, above mine or otherwise");
 };
 const sendHelp = (msg, perm) => {
-	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🖌 set <color>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🖌 reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all role groups and their roles.\n\n\`>🖌 add <role name>\`\nSet your role for its role group.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
+	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🖌 set <color>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🖌 reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🖌 get <color>\`\nShow color info.\n\n\`>🖌 list\`\nList all role groups and their roles.\n\n\`>🖌 add <role name>\`\nGive yourself a role.\n\n\`>🖌 remove <role name>\`\nRemove a role from your user.`;
 	if(perm) {
 		help += `\n\nAs a member of this server with administrative permission, you can use the following commands.\n\n\`>🖌 mode\`\nToggle open color mode. This is disabled by default.\n\n\`>🖌 create <group name>\`\nCreate a role group.\n\n\`>🖌 group <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🖌 ungroup <role name>\`\nRemove a role from its role group.\n\n\`>🖌 limit <group name> <number>\`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🖌 rename <group name> <new group name>\`\nRename a role group.\n\n\`>🖌 delete <group name>\`\nDelete a role group.`;
 	}
@@ -139,10 +139,10 @@ const removeRole = member => {
 	}
 	return Promise.resolve();
 };
-const ungroup = (guild, id) => {
+const ungroup = (guild, role) => {
 	let found = false;
 	for(let i of Object.keys(data.guilds[guild][1])) {
-		const roleIndex = data.guilds[guild][1][i][1].indexOf(id);
+		const roleIndex = data.guilds[guild][1][i][1].indexOf(role);
 		if(roleIndex !== -1) {
 			data.guilds[guild][1][i][1].splice(roleIndex, 1);
 			found = true;
@@ -213,9 +213,7 @@ client.on("message", msg => {
 									});
 								}
 							};
-							removeRole(member).then(addColorRole).catch(err => {
-								permWarn(msg.guild, "manage roles, above mine or otherwise");
-							});
+							removeRole(member).then(addColorRole).catch(errManageRoles(msg));
 						} else {
 							msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
 						}
@@ -251,7 +249,25 @@ client.on("message", msg => {
 				} else if(content[0] === "add") {
 					
 				} else if(content[0] === "remove") {
-					
+					const role = msg.guild.roles.find("name", content[1]);
+					if(role) {
+						let found = false;
+						for(let i of Object.keys(data.guilds[msg.guild][1])) {
+							const roleIndex = data.guilds[msg.guild][1][i][1].indexOf(role.id);
+							if(roleIndex !== -1) {
+								member.removeRole(role).then(() => {
+									msg.channel.send(`${msg.author} That role has been removed from your user.`).catch(errSendMessages(msg));
+								}).catch(errManageRoles(msg));
+								found = true;
+								break;
+							}
+						}
+						if(!found) {
+							msg.channel.send(`${msg.author} You do not have permission to remove that role.`).catch(errSendMessages(msg));
+						}
+					} else {
+						msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
+					}
 				} else if(perm) {
 					if(content[0] === "mode") {
 						msg.channel.send(`${msg.author} Open color mode has been ${(data.guilds[msg.guild.id][0] = (data.guilds[msg.guild.id][0]+1)%2) ? "enabled" : "disabled"}.`).catch(errSendMessages(msg));
