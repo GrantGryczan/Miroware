@@ -275,7 +275,7 @@ client.on("message", msg => {
 									}
 									if(data.guilds[msg.guild.id][1][i][0] <= 1 || has < data.guilds[msg.guild.id][1][i][0]) {
 										member.roles.add(role).then(() => {
-											msg.channel.send(`${msg.author} ${data.guilds[msg.guild.id][1][i][0] === 1 ? `Your ${italicize(i)} role has been set to ${italicize(role.name)}.` : `You now have the ${italicize(role.name)} role.`}`).catch(errSendMessages(msg));
+											msg.channel.send(`${msg.author} ${data.guilds[msg.guild.id][1][i][0] === 1 ? `Your ${italicize(i)} role has been set to ${italicize(role.name)}.` : `The ${italicize(role.name)} role has been added to your ${italicize(i)} roles.`}`).catch(errSendMessages(msg));
 										}).catch(errManageRoles(msg));
 									} else {
 										msg.channel.send(`${msg.author} You already have ${has} ${italicize(i)} roles, so you need to remove one to add another.`).catch(errSendMessages(msg));
