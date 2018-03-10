@@ -54,7 +54,7 @@ const errManageRoles = msg => () => {
 	permWarn(msg.guild, "manage roles, above mine or otherwise");
 };
 const sendHelp = (msg, perm) => {
-	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🎨color <color>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🎨reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🎨info <color>\`\nShow info on a color.\n\n\`>🎨list\`\nList all role groups and their roles.\n\n\`>🎨add <role name>\`\nGive yourself a role.\n\n\`>🎨remove <role name>\`\nRemove a role from yourself.`;
+	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🎨color <color>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🎨reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🎨list\`\nList all role groups and their roles.\n\n\`>🎨add <role name>\`\nGive yourself a role.\n\n\`>🎨remove <role name>\`\nRemove a role from yourself.`;
 	if(perm) {
 		help += `\n\nAs a member of this server with administrative permission, you can use the following commands.\n\n\`>🎨mode\`\nToggle open color mode. This is disabled by default.\n\n\`>🎨create <group name>\`\nCreate a role group.\n\n\`>🎨group <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🎨ungroup <role name>\`\nRemove a role from its role group.\n\n\`>🎨limit <group name> <number>\`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🎨rename <group name> <new group name>\`\nRename a role group.\n\n\`>🎨delete <group name>\`\nDelete a role group.`;
 	}
@@ -89,42 +89,6 @@ client.on("roleDelete", role => {
 		}
 	}
 });
-const colorEmbed = hex => {
-	const dec = parseInt(hex.slice(1), 16);
-	const red = parseInt(hex.slice(1, 3), 16);
-	const green = parseInt(hex.slice(3, 5), 16);
-	const blue = parseInt(hex.slice(5, 7), 16);
-	return {
-		embed: {
-			color: dec,
-			fields: [{
-				name: "HEX",
-				value: hex,
-				inline: true
-			}, {
-				name: "DEC",
-				value: String(dec),
-				inline: true
-			}, {
-				name: "RGB",
-				value: `rgb(${red}, ${green}, ${blue})`,
-				inline: true
-			}, {
-				name: "HSV",
-				value: `TODO`,
-				inline: true
-			}, {
-				name: "HSL",
-				value: `TODO`,
-				inline: true
-			}, {
-				name: "CMYK",
-				value: `TODO`,
-				inline: true
-			}]
-		}
-	};
-};
 const setColor = (member, color, role, msg) => {
 	member.roles.add(role).catch(errManageRoles(msg));
 	msg.channel.send(`${msg.author} Your color has been set.`, {
@@ -233,13 +197,6 @@ client.on("message", msg => {
 						removeColor(member).then(() => {
 							msg.channel.send(`${msg.author} Your color role has been reset.`).catch(errSendMessages(msg));
 						}).catch(errManageRoles(msg));
-					}
-				} else if(content[0] === "info") {
-					if(colorTest.test(content[1])) {
-						content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
-						msg.channel.send(String(msg.author), colorEmbed(content[1])).catch(errEmbedLinks(msg));
-					} else {
-						msg.channel.send(`${msg.author} That's not a valid color code! If you don't know how color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
 					}
 				} else if(content[0] === "list") {
 					if(Object.keys(data.guilds[msg.guild.id][1]).length) {
