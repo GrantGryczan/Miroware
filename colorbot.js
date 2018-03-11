@@ -81,7 +81,7 @@ client.once("ready", () => {
 });
 client.on("guildCreate", guildCreate);
 client.on("guildDelete", guildDelete);
-client.on("guildMemberRemove", function(member) {
+client.on("guildMemberRemove", member => {
 	for(let [i, v] of member.roles) {
 		if(properColorTest.test(v.name) && v.members.size === 1) {
 			v.delete();
