@@ -81,6 +81,14 @@ client.once("ready", () => {
 });
 client.on("guildCreate", guildCreate);
 client.on("guildDelete", guildDelete);
+client.on("guildMemberRemove", function(member) {
+	for(let [i, v] of member.roles) {
+		if(properColorTest.test(v.name) && v.members.size === 1) {
+			v.delete();
+			break;
+		}
+	}
+});
 client.on("roleDelete", role => {
 	for(let i of Object.keys(data.guilds[role.guild.id][1])) {
 		const roleIndex = data.guilds[role.guild.id][1][i][1].indexOf(role.id);
