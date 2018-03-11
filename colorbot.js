@@ -61,18 +61,18 @@ const sendHelp = (msg, perm) => {
 	msg.channel.send(help).catch(errSendMessages(msg));
 };
 client.once("ready", () => {
-	for(let [i, v] of client.guilds) {
+	for(const [i, v] of client.guilds) {
 		if(!data.guilds[i]) {
 			guildCreate(i);
 		}
 	}
-	for(let i of Object.keys(data.guilds)) {
+	for(const i of Object.keys(data.guilds)) {
 		const guild = client.guilds.get(i);
 		if(guild) {
-			for(let j of Object.keys(data.guilds[i][1])) {
+			for(const j of Object.keys(data.guilds[i][1])) {
 				data.guilds[i][1][j][1] = data.guilds[i][1][j][1].filter(a => guild.roles.get(a));
 			}
-			for(let [j, v] of guild.roles) {
+			for(const [j, v] of guild.roles) {
 				if(properColorTest.test(v.name) && v.members.size === 0) {
 					v.delete();
 				}
@@ -96,7 +96,7 @@ client.on("guildDelete", guild => {
 	save();
 });
 client.on("guildMemberRemove", member => {
-	for(let [i, v] of member.roles) {
+	for(const [i, v] of member.roles) {
 		if(properColorTest.test(v.name) && v.members.size === 0) {
 			v.delete();
 			break;
@@ -104,7 +104,7 @@ client.on("guildMemberRemove", member => {
 	}
 });
 client.on("roleDelete", role => {
-	for(let i of Object.keys(data.guilds[role.guild.id][1])) {
+	for(const i of Object.keys(data.guilds[role.guild.id][1])) {
 		const roleIndex = data.guilds[role.guild.id][1][i][1].indexOf(role.id);
 		if(roleIndex !== -1) {
 			data.guilds[role.guild.id][1][i][1].splice(roleIndex, 1);
@@ -122,7 +122,7 @@ const setColor = (member, color, role, msg) => {
 	}).catch(errEmbedLinks(msg));
 };
 const removeColor = member => {
-	for(let [i, v] of member.roles) {
+	for(const [i, v] of member.roles) {
 		if(properColorTest.test(v.name)) {
 			if(v.members.size > 1) {
 				return member.roles.remove(v);
@@ -136,7 +136,7 @@ const removeColor = member => {
 };
 const ungroup = (guild, role) => {
 	let found = false;
-	for(let i of Object.keys(data.guilds[guild][1])) {
+	for(const i of Object.keys(data.guilds[guild][1])) {
 		const roleIndex = data.guilds[guild][1][i][1].indexOf(role);
 		if(roleIndex !== -1) {
 			data.guilds[guild][1][i][1].splice(roleIndex, 1);
@@ -190,7 +190,7 @@ client.on("message", async msg => {
 												const green = parseInt(content[1].slice(3, 5), 16);
 												const blue = parseInt(content[1].slice(5, 7), 16);
 												const colors = [];
-												for(let [i, v] of msg.guild.roles) {
+												for(const [i, v] of msg.guild.roles) {
 													if(properColorTest.test(v.name)) {
 														const redDiff = parseInt(v.name.slice(1, 3), 16)-red;
 														const greenDiff = parseInt(v.name.slice(3, 5), 16)-green;
@@ -222,7 +222,7 @@ client.on("message", async msg => {
 				} else if(content[0] === "list") {
 					if(Object.keys(data.guilds[msg.guild.id][1]).length) {
 						const fields = [];
-						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
+						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
 							fields.push({
 								name: `${i} (${data.guilds[msg.guild.id][1][i][0] ? `limit: ${data.guilds[msg.guild.id][1][i][0]}` : "no limit"})`,
 								value: data.guilds[msg.guild.id][1][i][1].length ? data.guilds[msg.guild.id][1][i][1].map(a => msg.guild.roles.get(a)).join(" ") : "(empty)"
@@ -240,7 +240,7 @@ client.on("message", async msg => {
 					const role = msg.guild.roles.find("name", content[1]);
 					if(role) {
 						let found = false;
-						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
+						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
 							const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
 							if(roleIndex !== -1) {
 								if(member.roles.has(role.id)) {
@@ -248,10 +248,10 @@ client.on("message", async msg => {
 								} else {
 									let has = 0;
 									if(data.guilds[msg.guild.id][1][i][0]) {
-										for(let j of data.guilds[msg.guild.id][1][i][1]) {
-											if(member.roles.has(j)) {
+										for(const v of data.guilds[msg.guild.id][1][i][1]) {
+											if(member.roles.has(v)) {
 												if(data.guilds[msg.guild.id][1][i][0] === 1) {
-													member.roles.remove(j);
+													member.roles.remove(v);
 												} else {
 													has++;
 												}
@@ -280,7 +280,7 @@ client.on("message", async msg => {
 					const role = msg.guild.roles.find("name", content[1]);
 					if(role) {
 						let found = false;
-						for(let i of Object.keys(data.guilds[msg.guild.id][1])) {
+						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
 							const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
 							if(roleIndex !== -1) {
 								if(member.roles.has(role.id)) {

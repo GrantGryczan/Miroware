@@ -71,7 +71,7 @@ client.once("ready", () => {
 		status: "online"
 	});
 	client.user.setActivity("Enter \">⭐\" for info.");
-	for(let [i, v] of client.guilds) {
+	for(const [i, v] of client.guilds) {
 		if(data.guilds[i]) {
 			if(data.guilds[i][0] && !v.channels.get(data.guilds[i][0])) {
 				data.guilds[i][0] = null;
@@ -80,7 +80,7 @@ client.once("ready", () => {
 			guildCreate(i);
 		}
 	}
-	for(let i of Object.keys(data.guilds)) {
+	for(const i of Object.keys(data.guilds)) {
 		if(!client.guilds.get(i)) {
 			guildDelete(i);
 		}
