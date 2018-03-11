@@ -124,11 +124,11 @@ const ungroup = (guild, role) => {
 	}
 	return found;
 };
-client.on("message", msg => {
+client.on("message", async msg => {
 	if(msg.channel.type === "text" && !msg.system) {
 		let content = msg.content;
 		if(prefix.test(content)) {
-			const member = msg.guild.member(msg.author);
+			const member = await msg.guild.members.fetch(msg.author);
 			const perm = member.hasPermission(8);
 			content = content.replace(prefix, "");
 			if(content) {
