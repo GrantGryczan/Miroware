@@ -5,23 +5,23 @@
 	console.log(Miro.magic);
 	HTMLFormElement.prototype.disable = function() {
 		this.setAttribute("disabled", true);
-		for(let i of this.elements) {
-			i.disabled = true;
+		for(const v of this.elements) {
+			v.disabled = true;
 		}
-		for(let i of ["checkbox", "radio", "select", "slider", "text-field"]) {
-			for(let j of this.querySelectorAll(`.mdc-${i}`)) {
-				j.classList.add(`mdc-${i}--disabled`);
+		for(const v of ["checkbox", "radio", "select", "slider", "text-field"]) {
+			for(const w of this.querySelectorAll(`.mdc-${v}`)) {
+				w.classList.add(`mdc-${v}--disabled`);
 			}
 		}
 	};
 	HTMLFormElement.prototype.enable = function() {
 		this.removeAttribute("disabled");
-		for(let i of this.elements) {
-			i.disabled = false;
+		for(const v of this.elements) {
+			v.disabled = false;
 		}
-		for(let i of ["checkbox", "radio", "select", "slider", "text-field"]) {
-			for(let j of this.querySelectorAll(`.mdc-${i}`)) {
-				j.classList.remove(`mdc-${i}--disabled`);
+		for(const v of ["checkbox", "radio", "select", "slider", "text-field"]) {
+			for(const w of this.querySelectorAll(`.mdc-${v}`)) {
+				w.classList.remove(`mdc-${v}--disabled`);
 			}
 		}
 	};
@@ -37,9 +37,9 @@
 		rawQuery = [];
 	}
 	Miro.query = {};
-	for(let i of rawQuery) {
+	for(const v of rawQuery) {
 		try {
-			const p = i.split("=");
+			const p = v.split("=");
 			Miro.query[p[0]] = decodeURIComponent(p[1]);
 		} catch(err) {}
 	}
@@ -48,7 +48,7 @@
 		headers = headers || {};
 		const req = new XMLHttpRequest();
 		req.open(method, url, true);
-		for(let i of Object.keys(headers)) {
+		for(const i of Object.keys(headers)) {
 			req.setRequestHeader(i, headers[i]);
 		}
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -71,7 +71,7 @@
 			}
 		};
 		let formData = "";
-		for(let i of Object.keys(data)) {
+		for(const i of Object.keys(data)) {
 			formData += `${(formData ? "&" : "") + encodeURIComponent(i)}=${encodeURIComponent(data[i])}`;
 		}
 		req.send(formData);
@@ -81,15 +81,15 @@
 		drawer.open = true;
 	});
 	const textFields = document.querySelectorAll(".mdc-text-field");
-	for(let i of textFields) {
-		i._mdc = new mdc.textField.MDCTextField(i);
+	for(const v of textFields) {
+		v._mdc = new mdc.textField.MDCTextField(i);
 	}
 	const snackBars = document.querySelectorAll(".mdc-snackbar");
-	for(let i of snackBars) {
-		i._mdc = new mdc.snackbar.MDCSnackbar(i);
+	for(const v of snackBars) {
+		v._mdc = new mdc.snackbar.MDCSnackbar(i);
 	}
 	const ripples = document.querySelectorAll(".ripple");
-	for(let i of ripples) {
-		i._mdc = new mdc.ripple.MDCRipple(i);
+	for(const v of ripples) {
+		v._mdc = new mdc.ripple.MDCRipple(i);
 	}
 })();
