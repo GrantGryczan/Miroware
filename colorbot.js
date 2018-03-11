@@ -32,12 +32,12 @@ const inform = (guild, str1, str2) => {
 	}
 };
 const guildCreate = guild => {
-	console.log(`guildCreate ${guild.id}`);
-	data.guilds[guild.id] = [0, {}];
+	console.log(`guildCreate ${guild}`);
+	data.guilds[guild] = [0, {}];
 };
 const guildDelete = guild => {
-	console.log(`guildDelete ${guild.id}`);
-	delete data.guilds[guild.id];
+	console.log(`guildDelete ${guild}`);
+	delete data.guilds[guild];
 	save();
 }
 const permWarn = (guild, perms) => {
@@ -62,25 +62,28 @@ const sendHelp = (msg, perm) => {
 	msg.channel.send(help).catch(errSendMessages(msg));
 };
 client.once("ready", () => {
+	for(let [i, v] of client.guilds) {
+		if(!data.guilds[i]) {
+			guildCreate(i);
+		}
+	}
+	for(let i of Object.keys(data.guilds)) {
+		if(!client.guilds.get(i)) {
+			guildDelete(i);
+		}
+	}
+	save();
 	client.user.setPresence({
 		status: "online"
 	});
 	client.user.setActivity("Enter \">🎨\" for info.");
-	const guilds = Array.from(client.guilds.keys());
-	for(let i of guilds) {
-		if(!data.guilds[i]) {
-			guildCreate(client.guilds.get(i));
-		}
-	}
-	for(let i of Object.keys(data.guilds)) {
-		if(!guilds.includes(i)) {
-			guildDelete(guilds[i]);
-		}
-	}
-	save();
 });
-client.on("guildCreate", guildCreate);
-client.on("guildDelete", guildDelete);
+client.on("guildCreate", guild => {
+	guildCreate(guild.id);
+});
+client.on("guildDelete", guild => {
+	guildDelete(guild.id);
+});
 client.on("guildMemberRemove", member => {
 	for(let [i, v] of member.roles) {
 		if(properColorTest.test(v.name) && v.members.size === 0) {
@@ -107,13 +110,12 @@ const setColor = (member, color, role, msg) => {
 	}).catch(errEmbedLinks(msg));
 };
 const removeColor = member => {
-	const roleArray = Array.from(member.roles.values());
-	for(let i of roleArray) {
-		if(properColorTest.test(i.name)) {
-			if(Array.from(i.members.values()).length > 1) {
-				return member.roles.remove(i);
+	for(let [i, v] of member.roles) {
+		if(properColorTest.test(v.name)) {
+			if(v.members.size > 1) {
+				return member.roles.remove(v);
 			} else {
-				return i.delete();
+				return v.delete();
 			}
 			break;
 		}
@@ -175,14 +177,13 @@ client.on("message", async msg => {
 												const red = parseInt(content[1].slice(1, 3), 16);
 												const green = parseInt(content[1].slice(3, 5), 16);
 												const blue = parseInt(content[1].slice(5, 7), 16);
-												const guildRoles = Array.from(msg.guild.roles.values());
 												const colors = [];
-												for(let i of guildRoles) {
-													if(properColorTest.test(i.name)) {
-														const redDiff = parseInt(i.name.slice(1, 3), 16)-red;
-														const greenDiff = parseInt(i.name.slice(3, 5), 16)-green;
-														const blueDiff = parseInt(i.name.slice(5, 7), 16)-blue;
-														colors.push([i, redDiff*redDiff+greenDiff*greenDiff+blueDiff*blueDiff]);
+												for(let [i, v] of msg.guild.roles) {
+													if(properColorTest.test(v.name)) {
+														const redDiff = parseInt(v.name.slice(1, 3), 16)-red;
+														const greenDiff = parseInt(v.name.slice(3, 5), 16)-green;
+														const blueDiff = parseInt(v.name.slice(5, 7), 16)-blue;
+														colors.push([v, redDiff*redDiff+greenDiff*greenDiff+blueDiff*blueDiff]);
 													}
 												}
 												msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
