@@ -40,14 +40,13 @@ const noStarboard = guild => {
 	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
 }
 const guildCreate = guild => {
-	console.log(`guildCreate ${guild.id}`);
+	console.log(`guildCreate ${guild}`);
 	data.guilds[guild.id] = [null, "%E2%AD%90", 5, 16755763];
 	noStarboard(guild);
 };
 const guildDelete = guild => {
-	console.log(`guildDelete ${guild.id}`);
-	delete data.guilds[guild.id];
-	save();
+	console.log(`guildDelete ${guild}`);
+	delete data.guilds[guild];
 }
 const errSendMessages = msg => () => {
 	permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
@@ -72,26 +71,30 @@ client.once("ready", () => {
 		status: "online"
 	});
 	client.user.setActivity("Enter \">⭐\" for info.");
-	const guilds = Array.from(client.guilds.keys());
-	for(let i of guilds) {
-		const guild = client.guilds.get(i);
+	for(let [i, v] of client.guilds) {
 		if(data.guilds[i]) {
-			if(data.guilds[i][0] && !guild.channels.get(data.guilds[i][0])) {
+			if(data.guilds[i][0] && !v.channels.get(data.guilds[i][0])) {
 				data.guilds[i][0] = null;
 			}
 		} else {
-			guildCreate(guild);
+			guildCreate(i);
 		}
 	}
 	for(let i of Object.keys(data.guilds)) {
-		if(!guilds.includes(i)) {
-			guildDelete(guilds[i]);
+		if(!client.guilds.get(i)) {
+			guildDelete(i);
 		}
 	}
 	save();
 });
-client.on("guildCreate", guildCreate);
-client.on("guildDelete", guildDelete);
+client.on("guildCreate", guild => {
+	guildCreate(guild.id);
+	save();
+});
+client.on("guildDelete", guild => {
+	guildDelete(guild.id);
+	save();
+});
 client.on("channelDelete", channel => {
 	if(channel.id === data.guilds[channel.guild.id][0]) {
 		data.guilds[channel.guild.id][0] = null;
