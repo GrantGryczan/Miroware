@@ -38,7 +38,6 @@ const guildCreate = guild => {
 const guildDelete = guild => {
 	console.log(`guildDelete ${guild}`);
 	delete data.guilds[guild];
-	save();
 }
 const permWarn = (guild, perms) => {
 	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
@@ -90,9 +89,11 @@ client.once("ready", () => {
 });
 client.on("guildCreate", guild => {
 	guildCreate(guild.id);
+	save();
 });
 client.on("guildDelete", guild => {
 	guildDelete(guild.id);
+	save();
 });
 client.on("guildMemberRemove", member => {
 	for(let [i, v] of member.roles) {
