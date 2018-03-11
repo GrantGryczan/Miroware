@@ -128,7 +128,7 @@ client.on("message", async msg => {
 	if(msg.channel.type === "text" && !msg.system) {
 		let content = msg.content;
 		if(prefix.test(content)) {
-			const member = await msg.guild.members.fetch(msg.author);
+			const member = msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author);
 			const perm = member.hasPermission(8);
 			content = content.replace(prefix, "");
 			if(content) {
