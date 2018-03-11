@@ -68,7 +68,17 @@ client.once("ready", () => {
 		}
 	}
 	for(let i of Object.keys(data.guilds)) {
-		if(!client.guilds.get(i)) {
+		const guild = client.guilds.get(i);
+		if(guild) {
+			for(let j of Object.keys(data.guilds[i][1])) {
+				data.guilds[i][1][j][1] = data.guilds[i][1][j][1].filter(a => guild.roles.get(a));
+			}
+			for(let [j, v] of guild.roles) {
+				if(properColorTest.test(v.name) && v.members.size === 0) {
+					v.delete();
+				}
+			}
+		} else {
 			guildDelete(i);
 		}
 	}
@@ -97,6 +107,7 @@ client.on("roleDelete", role => {
 		const roleIndex = data.guilds[role.guild.id][1][i][1].indexOf(role.id);
 		if(roleIndex !== -1) {
 			data.guilds[role.guild.id][1][i][1].splice(roleIndex, 1);
+			break;
 		}
 	}
 });
