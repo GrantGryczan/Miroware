@@ -152,11 +152,11 @@ client.on("messageReactionAdd", reaction => {
 		star(reaction.message);
 	}
 });
-client.on("message", msg => {
+client.on("message", async msg => {
 	if(msg.channel.type === "text" && !msg.system) {
 		let content = msg.content;
 		if(prefix.test(content)) {
-			const perm = msg.guild.member(msg.author).hasPermission(8);
+			const perm = (msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author)).hasPermission(8);
 			if(perm) {
 				content = content.replace(prefix, "").replace(/ /g, "");
 				if(content) {
