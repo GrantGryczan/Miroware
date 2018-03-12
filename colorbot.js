@@ -237,68 +237,76 @@ client.on("message", async msg => {
 						msg.channel.send(`${msg.author} No role groups were found.`).catch(errEmbedLinks(msg));
 					}
 				} else if(content[0] === "add") {
-					const role = msg.guild.roles.find("name", content[1]);
-					if(role) {
-						let found = false;
-						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
-							const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
-							if(roleIndex !== -1) {
-								if(member.roles.has(role.id)) {
-									msg.channel.send(`${msg.author} You already have that role.`).catch(errSendMessages(msg));
-								} else {
-									let has = 0;
-									if(data.guilds[msg.guild.id][1][i][0]) {
-										for(const v of data.guilds[msg.guild.id][1][i][1]) {
-											if(member.roles.has(v)) {
-												if(data.guilds[msg.guild.id][1][i][0] === 1) {
-													member.roles.remove(v);
-												} else {
-													has++;
+					if(content[1]) {
+						const role = msg.guild.roles.find("name", content[1]);
+						if(role) {
+							let found = false;
+							for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
+								const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
+								if(roleIndex !== -1) {
+									if(member.roles.has(role.id)) {
+										msg.channel.send(`${msg.author} You already have that role.`).catch(errSendMessages(msg));
+									} else {
+										let has = 0;
+										if(data.guilds[msg.guild.id][1][i][0]) {
+											for(const v of data.guilds[msg.guild.id][1][i][1]) {
+												if(member.roles.has(v)) {
+													if(data.guilds[msg.guild.id][1][i][0] === 1) {
+														member.roles.remove(v);
+													} else {
+														has++;
+													}
 												}
 											}
 										}
+										if(data.guilds[msg.guild.id][1][i][0] <= 1 || has < data.guilds[msg.guild.id][1][i][0]) {
+											member.roles.add(role).then(() => {
+												msg.channel.send(`${msg.author} ${data.guilds[msg.guild.id][1][i][0] === 1 ? `Your ${italicize(i)} role has been set to ${italicize(role.name)}.` : `The ${italicize(role.name)} role has been added to your ${italicize(i)} roles.`}`).catch(errSendMessages(msg));
+											}).catch(errManageRoles(msg));
+										} else {
+											msg.channel.send(`${msg.author} You already have ${has} ${italicize(i)} roles, so you need to remove one to add another.`).catch(errSendMessages(msg));
+										}
 									}
-									if(data.guilds[msg.guild.id][1][i][0] <= 1 || has < data.guilds[msg.guild.id][1][i][0]) {
-										member.roles.add(role).then(() => {
-											msg.channel.send(`${msg.author} ${data.guilds[msg.guild.id][1][i][0] === 1 ? `Your ${italicize(i)} role has been set to ${italicize(role.name)}.` : `The ${italicize(role.name)} role has been added to your ${italicize(i)} roles.`}`).catch(errSendMessages(msg));
-										}).catch(errManageRoles(msg));
-									} else {
-										msg.channel.send(`${msg.author} You already have ${has} ${italicize(i)} roles, so you need to remove one to add another.`).catch(errSendMessages(msg));
-									}
+									found = true;
+									break;
 								}
-								found = true;
-								break;
 							}
-						}
-						if(!found) {
-							msg.channel.send(`${msg.author} You do not have permission to add that role.`).catch(errSendMessages(msg));
+							if(!found) {
+								msg.channel.send(`${msg.author} You do not have permission to add that role.`).catch(errSendMessages(msg));
+							}
+						} else {
+							msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
 						}
 					} else {
-						msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
+						msg.channel.send(`${msg.author} No role name was specified.`).catch(errSendMessages(msg));
 					}
 				} else if(content[0] === "remove") {
-					const role = msg.guild.roles.find("name", content[1]);
-					if(role) {
-						let found = false;
-						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
-							const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
-							if(roleIndex !== -1) {
-								if(member.roles.has(role.id)) {
-									member.roles.remove(role).then(() => {
-										msg.channel.send(`${msg.author} That role has been removed from yourself.`).catch(errSendMessages(msg));
-									}).catch(errManageRoles(msg));
-								} else {
-									msg.channel.send(`${msg.author} You do not have that role.`).catch(errSendMessages(msg));
+					if(content[1]) {
+						const role = msg.guild.roles.find("name", content[1]);
+						if(role) {
+							let found = false;
+							for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
+								const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
+								if(roleIndex !== -1) {
+									if(member.roles.has(role.id)) {
+										member.roles.remove(role).then(() => {
+											msg.channel.send(`${msg.author} That role has been removed from yourself.`).catch(errSendMessages(msg));
+										}).catch(errManageRoles(msg));
+									} else {
+										msg.channel.send(`${msg.author} You do not have that role.`).catch(errSendMessages(msg));
+									}
+									found = true;
+									break;
 								}
-								found = true;
-								break;
 							}
-						}
-						if(!found) {
-							msg.channel.send(`${msg.author} You do not have permission to remove that role.`).catch(errSendMessages(msg));
+							if(!found) {
+								msg.channel.send(`${msg.author} You do not have permission to remove that role.`).catch(errSendMessages(msg));
+							}
+						} else {
+							msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
 						}
 					} else {
-						msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
+						msg.channel.send(`${msg.author} No role name was specified.`).catch(errSendMessages(msg));
 					}
 				} else if(perm) {
 					if(content[0] === "open") {
