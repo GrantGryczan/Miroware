@@ -114,11 +114,15 @@ client.on("roleDelete", role => {
 });
 const setColor = (member, color, role, msg) => {
 	member.roles.add(role).catch(errManageRoles(msg));
+	const embed = {
+		title: color,
+		color: parseInt(color.slice(1), 16)
+	};
+	if(color === "#36393e") {
+		embed.description = "Why?";
+	}
 	msg.channel.send(`${msg.author} Your color has been set.`, {
-		embed: {
-			title: color,
-			color: parseInt(color.slice(1), 16)
-		}
+		embed
 	}).catch(errEmbedLinks(msg));
 };
 const removeColor = member => {
