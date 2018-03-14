@@ -54,6 +54,6 @@ fs.watch(__filename, () => {
 	process.exit();
 });
 const stdin = process.openStdin();
-stdin.on("data", function(input) {
+stdin.on("data", input => {
 	console.log(eval(String(input)));
 });
