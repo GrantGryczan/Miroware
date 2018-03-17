@@ -33,7 +33,6 @@ const cube = ServeCube.serve({
 	})]*/
 });
 const {load} = cube;
-const stdin = process.openStdin();
-stdin.on("data", input => {
+process.openStdin().on("data", input => {
 	console.log(eval(String(input)));
 });

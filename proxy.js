@@ -17,7 +17,6 @@ redbird.register("pipe.miroware.io", "http://localhost:8082");
 fs.watch(__filename, () => {
 	process.exit();
 });
-const stdin = process.openStdin();
-stdin.on("data", input => {
+process.openStdin().on("data", input => {
 	console.log(eval(String(input)));
 });
