@@ -33,17 +33,16 @@ const inform = (guild, str1, str2) => {
 };
 const permWarn = (guild, perms) => {
 	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
-	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
+	inform(guild, `An error occured on ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 };
 const noStarboard = guild => {
 	const warning = ", as there is nowhere for starred messages to be placed. No starboard channel has been set!\nAs a member of the Discord server with administrative permission, you can set the starboard channel by entering \">⭐\" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.";
-	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
+	inform(guild, `An error occured on ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 }
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild}`);
-	console.log(guild.id);
-	data.guilds[guild.id] = [null, "%E2%AD%90", 5, 16755763];
-	noStarboard(guild);
+	data.guilds[guild] = [null, "%E2%AD%90", 5, 16755763];
+	noStarboard(client.guilds.get(guild));
 };
 const guildDelete = guild => {
 	console.log(`guildDelete ${guild}`);
