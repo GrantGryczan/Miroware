@@ -41,6 +41,7 @@ const noStarboard = guild => {
 }
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild}`);
+	console.log(guild.id);
 	data.guilds[guild.id] = [null, "%E2%AD%90", 5, 16755763];
 	noStarboard(guild);
 };
