@@ -16,7 +16,7 @@ this.value = html`
 						</a>
 					</div>
 					<hr class="mdc-list-divider">`;
-this.value += (await load("/load/external", this)).value;
+this.value += (await load("www/load/external", this)).value;
 this.value += html`
 				</nav>
 			</nav>

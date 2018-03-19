@@ -82,14 +82,14 @@
 	});
 	const textFields = document.querySelectorAll(".mdc-text-field");
 	for(const v of textFields) {
-		v._mdc = new mdc.textField.MDCTextField(i);
+		v._mdc = new mdc.textField.MDCTextField(v);
 	}
 	const snackBars = document.querySelectorAll(".mdc-snackbar");
 	for(const v of snackBars) {
-		v._mdc = new mdc.snackbar.MDCSnackbar(i);
+		v._mdc = new mdc.snackbar.MDCSnackbar(v);
 	}
 	const ripples = document.querySelectorAll(".ripple");
 	for(const v of ripples) {
-		v._mdc = new mdc.ripple.MDCRipple(i);
+		v._mdc = new mdc.ripple.MDCRipple(v);
 	}
 })();

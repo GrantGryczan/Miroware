@@ -104,13 +104,13 @@ body {
 .mdc-button::before, .mdc-button::after {
 	background-color: #ffffff;
 }
-.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder, .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__label {
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder, .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
 	color: rgba(255, 255, 255, 0.6);
 }
-.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder, .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-text-field__label {
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder, .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
 	color: #b54040;
 }
-.mdc-text-field--disabled .mdc-text-field__input, .mdc-text-field--disabled .mdc-text-field__input::placeholder, .mdc-text-field--disabled .mdc-text-field__label {
+.mdc-text-field--disabled .mdc-text-field__input, .mdc-text-field--disabled .mdc-text-field__input::placeholder, .mdc-text-field--disabled .mdc-floating-label {
 	color: rgba(255, 255, 255, 0.38);
 }
 .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
@@ -128,6 +128,6 @@ body {
 .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--textarea), .mdc-text-field--disabled:not(.mdc-text-field--textarea) {
 	border-bottom-color: rgba(255, 255, 255, 0.12);
 }
-.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input::-webkit-input-placeholder, .mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__label {
+.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input::-webkit-input-placeholder, .mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label {
 	color: #d50000;
 }

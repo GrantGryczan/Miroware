@@ -2,12 +2,11 @@ if(this.socialicons) {
 	this.value = "";
 	this.exit();
 } else {
-	const links = ["/discord/", "/patreon/", "/youtube/", "/twitter/", "/github/"];
 	this.cache = 1;
 	this.value = html`
 					<div id="externals">`;
-	for(const v of links) {
-		const context = await load(v, {
+	for(const v of ["discord", "patreon", "youtube", "twitter", "github"]) {
+		const context = await load(`www/${v}/`, {
 			...this,
 			socialicons: true
 		});
