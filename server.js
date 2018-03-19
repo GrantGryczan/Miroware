@@ -15,8 +15,9 @@ const cube = ServeCube.serve({
 	httpPort: 8081,
 	httpsRedirect: true,
 	subdomain: ["", "d"],
-	githubSecret: youKnow.github.secret,
 	githubPayloadURL: "/githubwebhook",
+	githubSecret: youKnow.github.secret,
+	githubToken: youKnow.github.token,
 	uncacheModified: process.argv[2] !== "production"/*,/
 	middleware: [session({
 		name: "session",
