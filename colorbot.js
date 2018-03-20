@@ -2,6 +2,8 @@ console.log("< Colorbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
 const prefix = /^> ?🎨 ?/;
+const underscores = /_/g;
+const alphanumeric = /^[0-9a-z]*$/i;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 const properColorTest = /^#[\da-f]{6}$/;
 let data;
@@ -15,7 +17,7 @@ const save = () => {
 const client = new Discord.Client();
 client.once("error", process.exit);
 client.once("disconnect", process.exit);
-const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(/_/g, "\\_")}_`;
+const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
 const inform = (guild, str1, str2) => {
 	if(guild.available) {
 		guild.owner.send(str1).catch(() => {
@@ -321,7 +323,7 @@ client.on("message", async msg => {
 						if(content[1]) {
 							if(content[1].includes(" ")) {
 								msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(errSendMessages(msg));
-							} else if(!/^[a-z0-9]*$/i.test(content[1])) {
+							} else if(!alphanumeric.test(content[1])) {
 								msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(errSendMessages(msg));
 							} else if(data.guilds[msg.guild.id][1][content[1]]) {
 								msg.channel.send(`${msg.author} A group by that name already exists.`).catch(errSendMessages(msg));
@@ -397,7 +399,7 @@ client.on("message", async msg => {
 							msg.channel.send(`${msg.author} No group name was specified.`).catch(errSendMessages(msg));
 						} else if(content[1].length > 2) {
 							msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(errSendMessages(msg));
-						} else if(!/^[a-z0-9]*$/i.test(content[1][1])) {
+						} else if(!alphanumeric.test(content[1][1])) {
 							msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(errSendMessages(msg));
 						} else if(data.guilds[msg.guild.id][1][content[1][1]]) {
 							msg.channel.send(`${msg.author} A group by that name already exists.`).catch(errSendMessages(msg));
