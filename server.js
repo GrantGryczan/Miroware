@@ -17,7 +17,10 @@ const cube = ServeCube.serve({
 	domain: "miroware.io",
 	httpPort: 8081,
 	httpsRedirect: production,
-	subdomain: ["", "d"],
+	subdomains: {
+		d: "www/",
+		api: "api/"
+	},
 	githubPayloadURL: "/githubwebhook",
 	githubSecret: youKnow.github.secret,
 	githubToken: youKnow.github.token,
