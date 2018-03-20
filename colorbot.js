@@ -106,10 +106,11 @@ client.on("guildMemberRemove", member => {
 	}
 });
 client.on("roleDelete", role => {
-	for(const i of Object.keys(data.guilds[role.guild.id][1])) {
-		const roleIndex = data.guilds[role.guild.id][1][i][1].indexOf(role.id);
+	for(const v of Object.values(data.guilds[role.guild.id][1])) {
+		const roleIndex = v[1].indexOf(role.id);
 		if(roleIndex !== -1) {
-			data.guilds[role.guild.id][1][i][1].splice(roleIndex, 1);
+			v[1].splice(roleIndex, 1);
+			save();
 			break;
 		}
 	}
@@ -229,10 +230,10 @@ client.on("message", async msg => {
 				} else if(content[0] === "list") {
 					if(Object.keys(data.guilds[msg.guild.id][1]).length) {
 						const fields = [];
-						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
+						for(const v of Object.values(data.guilds[msg.guild.id][1])) {
 							fields.push({
-								name: `${i} (${data.guilds[msg.guild.id][1][i][0] ? `limit: ${data.guilds[msg.guild.id][1][i][0]}` : "no limit"})`,
-								value: data.guilds[msg.guild.id][1][i][1].length ? data.guilds[msg.guild.id][1][i][1].map(a => msg.guild.roles.get(a)).join(" ") : "(empty)"
+								name: `${i} (${v[0] ? `limit: ${v[0]}` : "no limit"})`,
+								value: v[1].length ? v[1].map(a => msg.guild.roles.get(a)).join(" ") : "(empty)"
 							});
 						}
 						msg.channel.send(String(msg.author), {
@@ -292,8 +293,8 @@ client.on("message", async msg => {
 						const role = msg.guild.roles.find("name", content[1]) || msg.guild.roles.find(v => v.name.toLowerCase() === content[1].toLowerCase());
 						if(role) {
 							let found = false;
-							for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
-								const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
+							for(const v of Object.values(data.guilds[msg.guild.id][1])) {
+								const roleIndex = v[1].indexOf(role.id);
 								if(roleIndex !== -1) {
 									if(member.roles.has(role.id)) {
 										member.roles.remove(role).then(() => {
