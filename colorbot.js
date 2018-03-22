@@ -230,10 +230,10 @@ client.on("message", async msg => {
 				} else if(content[0] === "list") {
 					if(Object.keys(data.guilds[msg.guild.id][1]).length) {
 						const fields = [];
-						for(const v of Object.values(data.guilds[msg.guild.id][1])) {
+						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
 							fields.push({
-								name: `${i} (${v[0] ? `limit: ${v[0]}` : "no limit"})`,
-								value: v[1].length ? v[1].map(a => msg.guild.roles.get(a)).join(" ") : "(empty)"
+								name: `${i} (${data.guilds[msg.guild.id][1][0] ? `limit: ${data.guilds[msg.guild.id][1][0]}` : "no limit"})`,
+								value: data.guilds[msg.guild.id][1][1].length ? data.guilds[msg.guild.id][1][1].map(a => msg.guild.roles.get(a)).join(" ") : "(empty)"
 							});
 						}
 						msg.channel.send(String(msg.author), {
