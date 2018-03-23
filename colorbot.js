@@ -72,7 +72,7 @@ client.once("ready", () => {
 		const guild = client.guilds.get(i);
 		if(guild) {
 			for(const j of Object.keys(data.guilds[i][1])) {
-				data.guilds[i][1][j][1] = data.guilds[i][1][j][1].filter(a => guild.roles.get(a));
+				data.guilds[i][1][j][1] = data.guilds[i][1][j][1].filter(guild.roles.get);
 			}
 			for(const [j, v] of guild.roles) {
 				if(properColorTest.test(v.name) && v.members.size === 0) {
@@ -207,7 +207,7 @@ client.on("message", async msg => {
 												}
 												msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
 													embed: {
-														description: colors.sort((a, b) => a[1]-b[1]).slice(0, 20).map(a => a[0]).join(" "),
+														description: colors.sort((a, b) => a[1]-b[1]).slice(0, 20).map(v => v[0]).join(" "),
 														color: parseInt(content[1].slice(1), 16)
 													}
 												}).catch(errEmbedLinks(msg));
@@ -233,7 +233,7 @@ client.on("message", async msg => {
 						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
 							fields.push({
 								name: `${i} (${data.guilds[msg.guild.id][1][i][0] ? `limit: ${data.guilds[msg.guild.id][1][i][0]}` : "no limit"})`,
-								value: data.guilds[msg.guild.id][1][i][1].length ? data.guilds[msg.guild.id][1][i][1].map(a => msg.guild.roles.get(a)).join(" ") : "(empty)"
+								value: data.guilds[msg.guild.id][1][i][1].length ? data.guilds[msg.guild.id][1][i][1].map(msg.guild.roles.get).join(" ") : "(empty)"
 							});
 						}
 						msg.channel.send(String(msg.author), {
