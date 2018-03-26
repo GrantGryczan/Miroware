@@ -15,7 +15,9 @@ redbird.register("miroware.io", "http://localhost:8081");
 redbird.register("www.miroware.io", "http://localhost:8081");
 redbird.register("pipe.miroware.io", "http://localhost:8082");
 fs.watch(__filename, () => {
-	process.exit();
+	setTimeout(() => {
+		process.exit();
+	}, 1000);
 });
 process.openStdin().on("data", input => {
 	console.log(eval(String(input)));
