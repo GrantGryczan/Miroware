@@ -1,8 +1,8 @@
 if(this.socialicons) {
 	this.value = "";
-	this.exit();
+	this.done();
 } else {
-	this.cache = 1;
+	this.cache = true;
 	this.value = html`
 					<div id="externals">`;
 	for(const v of ["discord", "patreon", "youtube", "twitter", "github"]) {
@@ -17,13 +17,13 @@ if(this.socialicons) {
 		} catch(err) {
 			body = err.error;
 		}
-		if(body) {
+		if(typeof body === "string") {
 			let icon = body.match(/<link(?: .*?)? (?:rel="(?:.* )?icon(?: .*)?"(?: .*?)? href="([^"]*?)")|(?:href="([^"]*?)"(?: .*?)? rel="(?:.* )?icon(?: .*)?")( [^>]*)?>/i)[1] || "/favicon.ico";
 			icon = (icon.indexOf("//") === -1) ? (origin + icon) : icon;
-			this.value += html`<a class="external mdc-button" href="${v}" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
+			this.value += html`<a class="external mdc-button" href="/${v}/" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
 		}
 	}
 	this.value += html`
 					</div>`;
-	this.exit();
+	this.done();
 }

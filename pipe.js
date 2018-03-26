@@ -12,19 +12,19 @@ const s3 = new AWS.S3({
 app.use((req, res) => {
 	res.set("Content-Type", "text/plain");
 	try {
-		req.decodedPath = decodeURIComponent(req.url);
+		req.decodedURL = decodeURIComponent(req.url);
 		req.next();
 	} catch(err) {
 		res.send("Error 400: Bad Request");
 	}
 });
 app.get("*", (req, res) => {
-	if(req.decodedPath === "/") {
+	if(req.decodedURL === "/") {
 		res.redirect("https://miroware.io/pipe/");
 	} else {
 		s3.getObject({
 			Bucket: "miroware-pipe",
-			Key: req.decodedPath.slice(1)
+			Key: req.decodedURL.slice(1)
 		}, function(err, data) {
 			if(err) {
 				res.status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
@@ -38,8 +38,8 @@ app.post("*", (req, res) => {
 	s3.putObject({
 		Body: req.body,
 		Bucket: "miroware-pipe",
-		Key: req.decodedPath.slice(1),
-		ContentType: mime.getType(req.decodedPath),
+		Key: req.decodedURL.slice(1),
+		ContentType: mime.getType(req.decodedURL),
 		ServerSideEncryption: "AES256"
 	}, function(err) {
 		if(err) {

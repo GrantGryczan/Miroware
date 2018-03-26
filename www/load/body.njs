@@ -25,4 +25,4 @@ this.value += html`
 			<span class="mdc-fab__icon">menu</span>
 		</button>
 		<div id="container">`;
-this.exit();
+this.done();

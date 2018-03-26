@@ -11,4 +11,4 @@ this.value += html`
 			location.replace("${this.redir = "https://twitter.com/GrantGryczan"}");
 		</script>`;
 this.value += (await load("www/load/foot", this)).value;
-this.exit();
+this.done();

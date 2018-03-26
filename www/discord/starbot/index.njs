@@ -11,4 +11,4 @@ this.value += html`
 			location.replace("${this.redir = "https://discordapp.com/oauth2/authorize?client_id=369313537073348608&scope=bot&permissions=379968"}");
 		</script>`;
 this.value += (await load("www/load/foot", this)).value;
-this.exit();
+this.done();

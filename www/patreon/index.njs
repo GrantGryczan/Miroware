@@ -11,4 +11,4 @@ this.value += html`
 			location.replace("${this.redir = "https://www.patreon.com/miroware"}");
 		</script>`;
 this.value += (await load("www/load/foot", this)).value;
-this.exit();
+this.done();

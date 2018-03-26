@@ -8,7 +8,7 @@ this.value += html`
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
 		<script>
-			location.replace("${this.redir = "https://www.youtube.com/c/Miroware"}");
+			location.replace("${this.redir = "https://www.youtube.com/c/GrantGryczan"}");
 		</script>`;
 this.value += (await load("www/load/foot", this)).value;
-this.exit();
+this.done();

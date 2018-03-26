@@ -8,4 +8,4 @@ this.value += html`
 			<div id="error"></div>`;
 this.value += (await load("www/load/belt", this)).value;
 this.value += (await load("www/load/foot", this)).value;
-this.exit();
+this.done();

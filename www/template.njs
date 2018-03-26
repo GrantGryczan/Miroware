@@ -11,4 +11,4 @@ this.value += (await load("www/load/belt", this)).value;
 this.value += html`
 		<script src="index.js"></script>`;
 this.value += (await load("www/load/foot", this)).value;
-this.exit();
+this.done();

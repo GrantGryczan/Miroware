@@ -3,6 +3,7 @@ this.author = this.author === undefined ? "Grant Gryczan" : this.author;
 this.description = this.description === undefined ? "Hello, world!" : this.description;
 this.tags = this.tags instanceof Array ? this.tags : [];
 this.image = this.image === undefined ? "/image/icon/main.png" : this.image;
+const userAgent = this.req.get("User-Agent");
 this.value = html`
 <!DOCTYPE html>
 <html>
@@ -13,7 +14,7 @@ this.value = html`
 		<meta name="author" content="${this.author}">
 		<meta name="description" content="${this.description}">
 		<meta name="keywords" content="${["miroware", "miro", "ware", "grantgryczan", "grant", "gryczan", "magic", ...this.tags].join(",")}">
-		<meta name="theme-color" content="${this.req.get("User-Agent").includes("Discordbot") ? "#ff0000" : "#202020"}">
+		<meta name="theme-color" content="${userAgent && userAgent.includes("Discordbot") ? "#ff0000" : "#202020"}">
 		<meta property="og:type" content="website">
 		<meta property="og:url" content="https://miroware.io/">
 		<meta property="og:site_name" content="Miroware">
@@ -25,4 +26,4 @@ this.value = html`
 		<link rel="stylesheet" href="/css/miro.css">
 		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>
 		<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-110090319-1");</script>`;
-this.exit();
+this.done();

@@ -1,7 +1,6 @@
 console.log("< Server >");
 const fs = require("fs-extra");
-const ServeCube = require("servecube");
-const {html} = ServeCube;
+const {serve, html} = require("servecube");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const request = require("request-promise-native");
@@ -11,9 +10,9 @@ const session = require("express-session");
 const youKnow = require("./data/youknow.js");
 const production = process.argv[2] === "production";
 (async () => {
-	const cube = await ServeCube.serve({
-		eval: v => {
-			return eval(v);
+	const cube = await serve({
+		eval: str => {
+			return eval(str);
 		},
 		domain: "miroware.io",
 		httpPort: 8081,
@@ -25,7 +24,6 @@ const production = process.argv[2] === "production";
 		githubPayloadURL: "/githubwebhook",
 		githubSecret: youKnow.github.secret,
 		githubToken: youKnow.github.token,
-		uncacheModified: !production,
 		middleware: [cookieParser(), bodyParser.raw({
 			limit: "100mb",
 			type: "*/*"
