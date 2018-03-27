@@ -2,7 +2,7 @@ this.title = this.title === undefined ? "Miroware" : this.title;
 this.author = this.author === undefined ? "Grant Gryczan" : this.author;
 this.description = this.description === undefined ? "Hello, world!" : this.description;
 this.tags = this.tags instanceof Array ? this.tags : [];
-this.image = this.image === undefined ? "/image/icon/main.png" : this.image;
+this.image = this.image === undefined ? "/images/icon/main.png" : this.image;
 const userAgent = this.req.get("User-Agent");
 this.value = html`
 <!DOCTYPE html>
@@ -22,7 +22,7 @@ this.value = html`
 		<meta property="og:title" content="${this.title}">
 		<meta property="og:description" content="${this.description}">
 		<meta name="google-signin-client_id" content="${youKnow.google.clientId}">
-		<link rel="icon" href="/image/icon/cover.png">
+		<link rel="icon" href="/images/icon/cover.png">
 		<link rel="stylesheet" href="/css/miro.css">
 		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>
 		<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-110090319-1");</script>`;

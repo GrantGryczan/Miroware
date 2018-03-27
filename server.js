@@ -1,6 +1,6 @@
 console.log("< Server >");
 const fs = require("fs-extra");
-const {serve, html} = require("servecube");
+const {serve, html} = require("../servecube");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const request = require("request-promise-native");
