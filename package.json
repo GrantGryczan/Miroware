@@ -28,6 +28,6 @@
 		"redbird": "^0.7.0",
 		"request": "^2.83.0",
 		"request-promise-native": "^1.0.5",
-		"servecube": "^1.11.2"
+		"servecube": "^1.11.3"
 	}
 }
