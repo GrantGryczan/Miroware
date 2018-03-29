@@ -10,10 +10,8 @@ const redbird = require("redbird")({
 		ca: "/etc/letsencrypt/live/miroware.io/chain.pem"
 	}
 });
-redbird.register("d.miroware.io", "http://localhost:8081");
-redbird.register("miroware.io", "http://localhost:8081");
-redbird.register("www.miroware.io", "http://localhost:8081");
 redbird.register("pipe.miroware.io", "http://localhost:8082");
+redbird.addResolver(() => "http://localhost:8081");
 fs.watch(__filename, () => {
 	setTimeout(() => {
 		process.exit();
