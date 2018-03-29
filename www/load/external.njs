@@ -2,7 +2,7 @@ if(this.socialicons) {
 	this.value = "";
 	this.done();
 } else {
-	this.cache = true;
+	this.cache = context => context.rawPath;
 	this.value = html`
 					<div id="externals">`;
 	for(const v of ["discord", "patreon", "youtube", "twitter", "github"]) {
