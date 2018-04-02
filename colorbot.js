@@ -18,7 +18,7 @@ const client = new Discord.Client();
 client.once("error", process.exit);
 client.once("disconnect", process.exit);
 const byFirstItems = v => v[0];
-const byTextChannels = channel => channel.type === "text";
+const byTextChannels = v => v.type === "text";
 const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
 const inform = (guild, str1, str2) => {
 	if(guild.available) {
