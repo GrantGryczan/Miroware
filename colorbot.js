@@ -17,11 +17,13 @@ const save = () => {
 const client = new Discord.Client();
 client.once("error", process.exit);
 client.once("disconnect", process.exit);
+const byFirstItems = v => v[0];
+const byTextChannels = channel => channel.type === "text";
 const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
 const inform = (guild, str1, str2) => {
 	if(guild.available) {
 		guild.owner.send(str1).catch(() => {
-			const channels = guild.channels.filterArray(channel => channel.type === "text");
+			const channels = guild.channels.filterArray(byTextChannels);
 			let i = -1;
 			const testChannel = () => {
 				i++;
@@ -72,7 +74,7 @@ client.once("ready", () => {
 		const guild = client.guilds.get(i);
 		if(guild) {
 			for(const j of Object.keys(data.guilds[i][1])) {
-				data.guilds[i][1][j][1] = data.guilds[i][1][j][1].filter(guild.roles.get);
+				data.guilds[i][1][j][1] = data.guilds[i][1][j][1].filter(guild.roles.get.bind(guild.roles));
 			}
 			for(const [j, v] of guild.roles) {
 				if(properColorTest.test(v.name) && v.members.size === 0) {
@@ -207,7 +209,7 @@ client.on("message", async msg => {
 												}
 												msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
 													embed: {
-														description: colors.sort((a, b) => a[1]-b[1]).slice(0, 20).map(v => v[0]).join(" "),
+														description: colors.sort((a, b) => a[1]-b[1]).slice(0, 20).map(byFirstItems).join(" "),
 														color: parseInt(content[1].slice(1), 16)
 													}
 												}).catch(errEmbedLinks(msg));
@@ -233,7 +235,7 @@ client.on("message", async msg => {
 						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
 							fields.push({
 								name: `${i} (${data.guilds[msg.guild.id][1][i][0] ? `limit: ${data.guilds[msg.guild.id][1][i][0]}` : "no limit"})`,
-								value: data.guilds[msg.guild.id][1][i][1].length ? data.guilds[msg.guild.id][1][i][1].map(msg.guild.roles.get).join(" ") : "(empty)"
+								value: data.guilds[msg.guild.id][1][i][1].length ? data.guilds[msg.guild.id][1][i][1].map(msg.guild.roles.get.bind(msg.guild.roles)).join(" ") : "(empty)"
 							});
 						}
 						msg.channel.send(String(msg.author), {
