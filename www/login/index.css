@@ -10,3 +10,11 @@ form {
 	top: 50%;
 	transform: translateY(-50%);
 }
+@media screen and (orientation: portrait) {
+	#container {
+		background-position: top calc(50% - 386px) center;
+	}
+	form {
+		transform: translate(-50%, -50%);
+	}
+}
