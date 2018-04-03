@@ -140,7 +140,7 @@
 			dialog.listen("MDCDialog:cancel", () => {
 				resolve(-1);
 			});
-			dialog.show();
+			setTimeout(dialog.show.bind(dialog));
 		});
 	};
 	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-drawer--temporary"));
