@@ -1,4 +1,4 @@
-(function() {
+(() => {
 	window.Miro = {};
 	Miro.magic = {};
 	Miro.magic.magic = Miro.magic;
@@ -43,7 +43,7 @@
 			Miro.query[p[0]] = decodeURIComponent(p[1]);
 		} catch(err) {}
 	}
-	Miro.request = function(method, url, data, headers, success, error, noMagic) {
+	Miro.request = (method, url, data, headers, success, error, noMagic) => {
 		data = data || {};
 		headers = headers || {};
 		const req = new XMLHttpRequest();
@@ -77,19 +77,16 @@
 		req.send(formData);
 	};
 	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-drawer--temporary"));
-	document.querySelector("#menu").addEventListener("click", function() {
+	document.querySelector("#menu").addEventListener("click", () => {
 		drawer.open = true;
 	});
-	const textFields = document.querySelectorAll(".mdc-text-field");
-	for(const v of textFields) {
+	for(const v of document.querySelectorAll(".mdc-text-field")) {
 		v._mdc = new mdc.textField.MDCTextField(v);
 	}
-	const snackBars = document.querySelectorAll(".mdc-snackbar");
-	for(const v of snackBars) {
+	for(const v of document.querySelectorAll(".mdc-snackbar")) {
 		v._mdc = new mdc.snackbar.MDCSnackbar(v);
 	}
-	const ripples = document.querySelectorAll(".ripple");
-	for(const v of ripples) {
+	for(const v of document.querySelectorAll(".ripple")) {
 		v._mdc = new mdc.ripple.MDCRipple(v);
 	}
 })();
