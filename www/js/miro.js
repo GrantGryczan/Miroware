@@ -139,6 +139,9 @@
 			document.body.appendChild(dialogElem);
 			dialog.listen("MDCDialog:cancel", () => {
 				resolve(-1);
+				setTimeout(() => {
+					document.body.removeChild(dialogElem);
+				}, 120)
 			});
 			setTimeout(dialog.show.bind(dialog));
 		});
