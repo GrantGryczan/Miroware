@@ -14,7 +14,7 @@ const production = process.argv[2] === "production";
 		eval: str => {
 			return eval(str);
 		},
-		domain: "miroware.io",
+		domain: production ? "miroware.io" : "localhost",
 		httpPort: 8081,
 		httpsRedirect: production,
 		subdomains: {
@@ -42,6 +42,9 @@ const production = process.argv[2] === "production";
 		})*/]
 	});
 	const {load} = cube;
+	if(!production) {
+		cube.app.set("subdomain offset", 1);
+	}
 	process.openStdin().on("data", input => {
 		console.log(eval(String(input)));
 	});
