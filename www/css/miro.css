@@ -89,20 +89,26 @@ body {
 .mdc-card {
 	background-color: #303030;
 }
-.mdc-button--stroked:not(:disabled) {
-	border-color: rgba(255, 255, 255, 0.6);
+.mdc-button:not(:disabled) {
 	color: rgba(255, 255, 255, 0.6);
 }
-.mdc-button--stroked:not(:disabled):hover, .mdc-button--stroked:not(:disabled):focus {
-	border-color: #ffffff;
+.mdc-button:not(:disabled):hover, .mdc-button--stroked:not(:disabled):focus {
 	color: #ffffff;
 }
-.mdc-button--stroked:disabled {
-	border-color: rgba(255, 255, 255, 0.38);
+.mdc-button:disabled {
 	color: rgba(255, 255, 255, 0.38);
 }
 .mdc-button::before, .mdc-button::after {
 	background-color: #ffffff;
+}
+.mdc-button--stroked:not(:disabled) {
+	border-color: rgba(255, 255, 255, 0.6);
+}
+.mdc-button--stroked:not(:disabled):hover, .mdc-button--stroked:not(:disabled):focus {
+	border-color: #ffffff;
+}
+.mdc-button--stroked:disabled {
+	border-color: rgba(255, 255, 255, 0.38);
 }
 .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder, .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
 	color: rgba(255, 255, 255, 0.6);
