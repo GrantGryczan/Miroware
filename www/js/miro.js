@@ -3,6 +3,13 @@
 	Miro.magic = {};
 	Miro.magic.magic = Miro.magic;
 	console.log(Miro.magic);
+	class MiroError extends Error {
+		constructor() {
+			const err = super(...arguments);
+			err.name = "MiroError";
+			return err;
+		}
+	}
 	HTMLFormElement.prototype.disable = function() {
 		this.setAttribute("disabled", true);
 		for(const v of this.elements) {
@@ -75,6 +82,66 @@
 			formData += `${(formData ? "&" : "") + encodeURIComponent(i)}=${encodeURIComponent(data[i])}`;
 		}
 		req.send(formData);
+	};
+	Miro.dialog = (title, body, buttons) => {
+		if(!(typeof title === "string")) {
+			throw new MiroError("The `title` parameter must be a string.");
+		}
+		if(!(buttons instanceof Array)) {
+			throw new MiroError("The `buttons` parameter must be an array.");
+		}
+		if(typeof body === "string") {
+			body = document.createTextNode(body);
+		} else if(!(body instanceof Node)) {
+			throw new MiroError("The `body` parameter must be a string or a node.");
+		}
+		return new Promise((resolve, reject) => {
+			let dialog;
+			const dialogButton = evt => {
+				dialog.close();
+				resolve(evt.target._index);
+			};
+			const dialogElem = document.createElement("aside");
+			dialogElem.classList.add("mdc-dialog");
+			const surfaceElem = document.createElement("div");
+			surfaceElem.classList.add("mdc-dialog__surface");
+			const headerElem = document.createElement("header");
+			headerElem.classList.add("mdc-dialog__header");
+			const titleElem = document.createElement("h2");
+			titleElem.classList.add("mdc-dialog__header__title");
+			titleElem.textContent = title;
+			headerElem.appendChild(titleElem);
+			surfaceElem.appendChild(headerElem);
+			const bodyElem = document.createElement("section");
+			bodyElem.classList.add("mdc-dialog__body");
+			bodyElem.appendChild(body);
+			surfaceElem.appendChild(bodyElem);
+			const footerElem = document.createElement("footer");
+			footerElem.classList.add("mdc-dialog__footer");
+			for(let i = 0; i < buttons.length; i++) {
+				const button = document.createElement("button");
+				button.classList.add("mdc-button");
+				button.classList.add("mdc-dialog__footer__button");
+				if(i === 0) {
+					button.classList.add("mdc-button--raised");
+				}
+				button._index = i;
+				button.textContent = buttons[i];
+				button.addEventListener("click", dialogButton);
+				footerElem.appendChild(button);
+			}
+			surfaceElem.appendChild(footerElem);
+			dialogElem.appendChild(surfaceElem);
+			const backdropElem = document.createElement("div");
+			backdropElem.classList.add("mdc-dialog__backdrop");
+			dialogElem.appendChild(backdropElem);
+			dialog = new mdc.dialog.MDCDialog(dialogElem);
+			document.body.appendChild(dialogElem);
+			dialog.listen("MDCDialog:cancel", () => {
+				resolve(-1);
+			});
+			dialog.show();
+		});
 	};
 	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-drawer--temporary"));
 	document.querySelector("#menu").addEventListener("click", () => {

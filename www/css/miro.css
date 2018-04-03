@@ -1,4 +1,5 @@
 @import url(https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 ::-webkit-scrollbar {
 	width: 12px;
@@ -89,6 +90,9 @@ body {
 .mdc-card {
 	background-color: #303030;
 }
+.mdc-button::before, .mdc-button::after {
+	background-color: #ffffff;
+}
 .mdc-button:not(:disabled) {
 	color: rgba(255, 255, 255, 0.6);
 }
@@ -98,8 +102,8 @@ body {
 .mdc-button:disabled {
 	color: rgba(255, 255, 255, 0.38);
 }
-.mdc-button::before, .mdc-button::after {
-	background-color: #ffffff;
+.mdc-button--raised:not(:disabled), .mdc-button--unelevated:not(:disabled) {
+	background-color: #404040;
 }
 .mdc-button--stroked:not(:disabled) {
 	border-color: rgba(255, 255, 255, 0.6);
@@ -136,4 +140,10 @@ body {
 }
 .mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input::-webkit-input-placeholder, .mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label {
 	color: #d50000;
+}
+.mdc-dialog__surface {
+	background-color: #202020;
+}
+.mdc-dialog__body {
+	color: rgba(255, 255, 255, 0.54);
 }
