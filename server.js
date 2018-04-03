@@ -9,6 +9,7 @@ const session = require("express-session");
 //const Store = require("")(session);
 const youKnow = require("./data/youknow.js");
 const production = process.argv[2] === "production";
+console.log(process.argv, production);
 (async () => {
 	const cube = await serve({
 		eval: str => {
