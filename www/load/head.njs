@@ -8,7 +8,6 @@ this.value = html`
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>${this.title}</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<meta name="author" content="${this.author}">
@@ -22,6 +21,7 @@ this.value = html`
 		<meta property="og:title" content="${this.title}">
 		<meta property="og:description" content="${this.description}">
 		<meta name="google-signin-client_id" content="${youKnow.google.clientId}">
+		<title>${this.title}</title>
 		<link rel="icon" href="/images/icon/cover.png">
 		<link rel="stylesheet" href="/css/miro.css">
 		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>
