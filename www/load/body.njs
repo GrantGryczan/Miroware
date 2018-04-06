@@ -21,8 +21,8 @@ this.value += html`
 				</nav>
 			</nav>
 		</aside>
-		<button id="menu" class="mdc-fab mdc-fab--mini material-icons">
-			<span class="mdc-fab__icon">menu</span>
-		</button>
-		<div id="container">`;
+		<div id="container">
+			<button id="menu" class="mdc-fab mdc-fab--mini material-icons">
+				<span class="mdc-fab__icon">menu</span>
+			</button>`;
 this.done();

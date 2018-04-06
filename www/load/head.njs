@@ -20,10 +20,10 @@ this.value = html`
 		<meta property="og:image" content="${this.image}">
 		<meta property="og:title" content="${this.title}">
 		<meta property="og:description" content="${this.description}">
-		<meta name="google-signin-client_id" content="${youKnow.google.clientId}">
+		<meta name="google-signin-client_id" content="${youKnow.google.id}">
 		<title>${this.title}</title>
 		<link rel="icon" href="/images/icon/cover.png">
-		<link rel="stylesheet" href="/css/miro.css">
+		<link rel="stylesheet" href="/css/style.css">
 		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>
 		<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-110090319-1");</script>`;
 this.done();

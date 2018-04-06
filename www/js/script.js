@@ -10,7 +10,8 @@
 			return err;
 		}
 	}
-	HTMLFormElement.prototype.disable = function() {
+	const container = document.querySelector("#container");
+	HTMLFormElement.prototype._disable = function() {
 		this.setAttribute("disabled", true);
 		for(const v of this.elements) {
 			v.disabled = true;
@@ -21,7 +22,7 @@
 			}
 		}
 	};
-	HTMLFormElement.prototype.enable = function() {
+	HTMLFormElement.prototype._enable = function() {
 		this.removeAttribute("disabled");
 		for(const v of this.elements) {
 			v.disabled = false;
@@ -46,8 +47,8 @@
 	Miro.query = {};
 	for(const v of rawQuery) {
 		try {
-			const p = v.split("=");
-			Miro.query[p[0]] = decodeURIComponent(p[1]);
+			const param = v.split("=");
+			Miro.query[param[0]] = decodeURIComponent(param[1]);
 		} catch(err) {}
 	}
 	Miro.request = (method, url, data, headers, success, error, noMagic) => {
@@ -83,25 +84,25 @@
 		}
 		req.send(formData);
 	};
-	Miro.dialog = (title, body, buttons) => {
-		if(!(typeof title === "string")) {
-			throw new MiroError("The `title` parameter must be a string.");
-		}
-		if(!(buttons instanceof Array)) {
-			throw new MiroError("The `buttons` parameter must be an array.");
-		}
-		if(typeof body === "string") {
-			body = document.createTextNode(body);
-		} else if(!(body instanceof Node)) {
-			throw new MiroError("The `body` parameter must be a string or a node.");
-		}
-		return new Promise((resolve, reject) => {
-			let dialog;
-			const dialogButton = evt => {
-				dialog.close();
-				resolve(evt.target._index);
-			};
+	Miro.block = state => {
+		container.classList[state ? "add" : "remove"]("hidden");
+	};
+	class MiroDialog {
+		constructor(title, body, buttons) {
+			if(!(typeof title === "string")) {
+				throw new MiroError("The `title` parameter must be a string.");
+			}
+			if(!(buttons instanceof Array)) {
+				throw new MiroError("The `buttons` parameter must be an array.");
+			}
+			if(typeof body === "string") {
+				body = document.createTextNode(body);
+			} else if(!(body instanceof Node)) {
+				throw new MiroError("The `body` parameter must be a string or a node.");
+			}
+			this.ready = false;
 			const dialogElem = document.createElement("aside");
+			dialogElem._dialog = this;
 			dialogElem.classList.add("mdc-dialog");
 			const surfaceElem = document.createElement("div");
 			surfaceElem.classList.add("mdc-dialog__surface");
@@ -125,27 +126,65 @@
 				if(i === 0) {
 					button.classList.add("mdc-button--raised");
 				}
-				button._index = i;
 				button.textContent = buttons[i];
-				button.addEventListener("click", dialogButton);
 				footerElem.appendChild(button);
+				buttons[i] = button;
 			}
 			surfaceElem.appendChild(footerElem);
 			dialogElem.appendChild(surfaceElem);
 			const backdropElem = document.createElement("div");
 			backdropElem.classList.add("mdc-dialog__backdrop");
 			dialogElem.appendChild(backdropElem);
-			dialog = new mdc.dialog.MDCDialog(dialogElem);
-			document.body.appendChild(dialogElem);
-			dialog.listen("MDCDialog:cancel", () => {
-				resolve(-1);
+			const dialog = new mdc.dialog.MDCDialog(dialogElem);
+			container.appendChild(dialogElem);
+			this._promise = new Promise(resolve => {
+				const close = value => {
+					setTimeout(() => {
+						container.removeChild(dialogElem);
+					}, 120);
+					resolve(value);
+				};
+				this._close = close;
+				const dialogButton = evt => {
+					dialog.close();
+					close(buttons.indexOf(evt.target));
+				};
+				for(const v of buttons) {
+					v.addEventListener("click", dialogButton);
+				}
+				dialog.listen("MDCDialog:cancel", () => {
+					close(-1);
+				});
 				setTimeout(() => {
-					document.body.removeChild(dialogElem);
-				}, 120)
+					dialog.show();
+					this.ready = true;
+				});
 			});
-			setTimeout(dialog.show.bind(dialog));
-		});
-	};
+			this._dialog = dialog;
+			this.element = dialogElem;
+			this.body = bodyElem;
+			this.buttons = buttons;
+		}
+		then(onFulfilled) {
+			this._promise.then(onFulfilled);
+			return this;
+		}
+		finally(onFinally) {
+			this._promise.finally(onFinally);
+			return this;
+		}
+		close(value) {
+			setTimeout(() => {
+				if(this.ready) {
+					this._dialog.close();
+					this._close(typeof value === "number" ? value : -1);
+				} else {
+					throw new MiroError("The dialog has not finished instantiating and cannot be closed.");
+				}
+			});
+		}
+	}
+	Miro.dialog = MiroDialog;
 	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-drawer--temporary"));
 	document.querySelector("#menu").addEventListener("click", () => {
 		drawer.open = true;
