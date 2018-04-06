@@ -39,7 +39,7 @@
 		},
 		Discord: () => {
 			return new Promise((resolve, reject) => {
-				const win = window.open("https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=http%3A%2F%2Flocalhost:8081%2Flogin%2Fdiscord%2F&response_type=code&scope=email%20identify%20connections", "authDiscord");
+				const win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=${encodeURIComponent(window.location.origin)}%2Flogin%2Fdiscord%2F&response_type=code&scope=email%20identify%20connections`, "authDiscord");
 				const winClosedPoll = setInterval(() => {
 					if(win.closed) {
 						clearInterval(winClosedPoll);
