@@ -32,7 +32,7 @@
 					gapi.auth2.init().then(auth2 => {
 						auth2.signIn().then(user => {
 							resolve(user.getAuthResponse().id_token);
-						}).catch(console.log);
+						}).catch(reject);
 					});
 				});
 			});
