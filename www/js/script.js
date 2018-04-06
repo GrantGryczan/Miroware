@@ -10,6 +10,7 @@
 			return err;
 		}
 	}
+	const doNothing = () => {};
 	const container = document.querySelector("#container");
 	HTMLFormElement.prototype._disable = function() {
 		this.setAttribute("disabled", true);
@@ -187,13 +188,21 @@
 	Miro.dialog = MiroDialog;
 	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-drawer--temporary"));
 	document.querySelector("#menu").addEventListener("click", () => {
-		drawer.open = true;
+		drawer.open = !drawer.open;
 	});
+	const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector("#snackbar"));
+	Miro.snackbar = (message, actionText, actionHandler) => {
+		const dataObj = {
+			message
+		};
+		if(actionText) {
+			dataObj.actionText = actionText;
+			dataObj.actionHandler = actionHandler || doNothing;
+		}
+		snackbar.show(dataObj);
+	};
 	for(const v of document.querySelectorAll(".mdc-text-field")) {
 		v._mdc = new mdc.textField.MDCTextField(v);
-	}
-	for(const v of document.querySelectorAll(".mdc-snackbar")) {
-		v._mdc = new mdc.snackbar.MDCSnackbar(v);
 	}
 	for(const v of document.querySelectorAll(".ripple")) {
 		v._mdc = new mdc.ripple.MDCRipple(v);

@@ -16,12 +16,14 @@
 		return function() {
 			Miro.block(true);
 			auth().then(value => {
+				Miro.block(false);
 				this.parentNode.parentNode.parentNode.parentNode._dialog.close(1);
 				send(auth.name, value);
 			}).catch(() => {
-				new Miro.snackbar("Authentication failed", "Okay");
-			}).finally(() => {
 				Miro.block(false);
+				setTimeout(() => {
+					Miro.snackbar("Authentication failed", "Okay");
+				});
 			});
 		};
 	};

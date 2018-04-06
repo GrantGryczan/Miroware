@@ -165,3 +165,9 @@ body {
 .mdc-dialog__body {
 	color: rgba(255, 255, 255, 0.54);
 }
+.mdc-snackbar {
+	z-index: 6;
+}
+.mdc-snackbar__action-button {
+	color: #a1a1a1;
+}
