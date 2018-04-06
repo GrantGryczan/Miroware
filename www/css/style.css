@@ -156,6 +156,10 @@ body {
 	color: #d50000;
 }
 .mdc-dialog__surface {
+	width: auto;
+	min-width: 280px;
+	max-width: 880px;
+	margin: 15px;
 	background-color: #202020;
 }
 .mdc-dialog__body {
