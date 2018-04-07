@@ -1,5 +1,5 @@
-this.title = "Error 404";
-this.description = "Not Found";
+this.title = "Error";
+this.description = "An error occured.";
 this.value = (await load("www/load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="index.css">`;

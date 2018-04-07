@@ -52,7 +52,7 @@
 			Miro.query[param[0]] = decodeURIComponent(param[1]);
 		} catch(err) {}
 	}
-	Miro.request = (method, url, data, headers, success, error, noMagic) => {
+	Miro.request = (method, url, data, headers, noMagic) => {
 		data = data || {};
 		headers = headers || {};
 		const req = new XMLHttpRequest();

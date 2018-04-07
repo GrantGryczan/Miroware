@@ -7,6 +7,6 @@
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
-	background-image: url(404.png);
+	background-image: url(error.png);
 	pointer-events: none;
 }
