@@ -15,8 +15,12 @@ const save = () => {
 	fs.writeFileSync("data/colorbot.json", JSON.stringify(data));
 };
 const client = new Discord.Client();
-client.once("error", process.exit);
-client.once("disconnect", process.exit);
+const exitOnError = () => {
+	process.exit(1);
+};
+process.once("unhandledRejection", exitOnError);
+client.once("error", exitOnError);
+client.once("disconnect", exitOnError);
 const byFirstItems = v => v[0];
 const byTextChannels = v => v.type === "text";
 const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
