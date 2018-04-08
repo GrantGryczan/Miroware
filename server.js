@@ -25,7 +25,7 @@ const production = process.argv[2] === "production";
 		githubToken: youKnow.github.token,
 		middleware: [cookieParser()/*, session({
 			name: "session",
-			secret: youKnow.sessionSecret,
+			secret: youKnow.session.secret,
 			resave: false,
 			saveUninitialized: false,
 			cookie: {
