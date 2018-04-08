@@ -2,7 +2,6 @@ console.log("< Server >");
 const fs = require("fs-extra");
 const {serve, html} = require("servecube");
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const request = require("request-promise-native");
 const mime = require("mime");
 const session = require("express-session");
@@ -24,10 +23,7 @@ const production = process.argv[2] === "production";
 		githubPayloadURL: "/githubwebhook",
 		githubSecret: youKnow.github.secret,
 		githubToken: youKnow.github.token,
-		middleware: [cookieParser(), bodyParser.raw({
-			limit: "100mb",
-			type: "*/*"
-		})/*, session({
+		middleware: [cookieParser()/*, session({
 			name: "session",
 			secret: youKnow.sessionSecret,
 			resave: false,

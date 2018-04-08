@@ -17,7 +17,7 @@
 	},
 	"homepage": "https://miroware.io/",
 	"dependencies": {
-		"aws-sdk": "^2.220.1",
+		"aws-sdk": "^2.222.1",
 		"body-parser": "^1.18.2",
 		"cookie-parser": "^1.4.3",
 		"discord.js": "github:hydrabolt/discord.js",
@@ -28,6 +28,6 @@
 		"redbird": "^0.7.0",
 		"request": "^2.83.0",
 		"request-promise-native": "^1.0.5",
-		"servecube": "^1.11.6"
+		"servecube": "^1.11.7"
 	}
 }
