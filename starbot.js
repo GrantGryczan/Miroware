@@ -14,6 +14,7 @@ const save = () => {
 };
 const client = new Discord.Client();
 const exitOnError = () => {
+	console.error(err);
 	process.exit(1);
 };
 process.once("unhandledRejection", exitOnError);
