@@ -13,7 +13,7 @@ const production = process.argv[2] === "production";
 	const client = await MongoClient.connect(youKnow.db.url, {
 		compression: "snappy"
 	});
-	const db = client.db("mspfa");
+	const db = client.db("web");
 	const cube = await serve({
 		eval: str => {
 			return eval(str);
