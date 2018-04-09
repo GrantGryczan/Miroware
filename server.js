@@ -28,7 +28,7 @@ const production = process.argv[2] === "production";
 		githubPayloadURL: "/githubwebhook",
 		githubSecret: youKnow.github.secret,
 		githubToken: youKnow.github.token,
-		middleware: [cookieParser()session({
+		middleware: [cookieParser(), session({
 			secret: youKnow.session.secret,
 			resave: false,
 			saveUninitialized: false,
