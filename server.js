@@ -16,7 +16,7 @@ const production = process.argv[2] === "production";
 	const db = client.db("web");
 	const cube = await serve({
 		eval: v => eval(v),
-		domain: production ? "miroware.io" : "localhost",
+		domain: production ? "miroware.io" : "localhost:8081",
 		errorDir: "error",
 		httpPort: 8081,
 		httpsRedirect: production,
