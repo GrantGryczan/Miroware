@@ -186,7 +186,7 @@ client.on("message", async msg => {
 							star(msg2, () => {
 								msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
 							}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
-						}).catch((err) => {
+						}).catch(() => {
 							if(channelTest.test(content)) {
 								const starboard = content.replace(channelTest, "$1");
 								if(msg.guild.channels.get(starboard)) {
