@@ -185,7 +185,7 @@ client.on("message", async msg => {
 						msg.channel.messages.fetch(contentArray[0]).then(msg2 => {
 							star(msg2, () => {
 								msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
-							}, contentArray[1] && channelTest.test(contentArray[1]) ? contentArray[1].replace(channelTest, "$1") : undefined
+							}, contentArray[1] && channelTest.test(contentArray[1]) ? contentArray[1].replace(channelTest, "$1") : undefined);
 						}).catch(() => {
 							if(channelTest.test(content)) {
 								const channel = content.replace(channelTest, "$1");
