@@ -181,6 +181,7 @@ client.on("message", async msg => {
 						data.guilds[msg.guild.id][1] = old1;
 						save();
 						const contentArray = content.split(" ");
+						console.log(content, contentArray);
 						msg.channel.messages.fetch(contentArray[0]).then(msg2 => {
 							try {
 								star(msg2, () => {
