@@ -64,7 +64,7 @@ const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
 		let help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURI(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if(perm) {
-			help += `\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID> [channel tag]\`\nStar a message manually, if the message ID is of a message in the channel you are entering the command in. Setting a channel tag makes it post the star embed to that channel instead of the default starboard.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
+			help += `\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID> [<channel tag> [channel tag]]\`\nStar a message manually. If you are entering the command in a channel other than the one the desired message is not in, the second parameter should be that channel. The other channel tag makes it post the star embed to that channel instead of the default starboard.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
 		}
 		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
 		msg.channel.send(help).catch(errSendMessages(msg));
@@ -182,15 +182,19 @@ client.on("message", async msg => {
 						data.guilds[msg.guild.id][1] = old1;
 						save();
 						const contentArray = content.split(" ");
-						msg.channel.messages.fetch(contentArray[0]).then(msg2 => {
+						let channel;
+						if(contentArray[1]) {
+							channel = msg.guild.channels.get(contentArray[1]);
+						}
+						(channel || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
 							star(msg2, () => {
 								msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
-							}, contentArray[1] && channelTest.test(contentArray[1]) ? contentArray[1].replace(channelTest, "$1") : undefined);
+							}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
 						}).catch(() => {
 							if(channelTest.test(content)) {
-								const channel = content.replace(channelTest, "$1");
-								if(msg.guild.channels.get(channel)) {
-									data.guilds[msg.guild.id][0] = channel;
+								const starboard = content.replace(channelTest, "$1");
+								if(msg.guild.channels.get(starboard)) {
+									data.guilds[msg.guild.id][0] = starboard;
 									save();
 									msg.channel.send(`${msg.author} The starboard channel has been set to ${content}.`).catch(errSendMessages(msg));
 								} else {
