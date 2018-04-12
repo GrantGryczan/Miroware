@@ -148,7 +148,7 @@ const star = (msg, callback, channel) => {
 				url: attachment.url
 			};
 		}
-		const starboard = msg.guild.channels.get(data.guilds[msg.guild.id][0]);
+		const starboard = msg.guild.channels.get(channel);
 		starboard.send(embed).then(callback).catch(() => {
 			permWarn(msg.guild, `send messages, ${attachment ? "and/or embed links" : "embed links, and/or attach files"}, in the ${starboard} channel or otherwise`);
 		});
