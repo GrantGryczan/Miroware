@@ -63,7 +63,7 @@ const sendHelp = (msg, perm) => {
 	if(data.guilds[msg.guild.id][0]) {
 		let help = `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURI(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if(perm) {
-			help += `\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID>\`\nStar a message manually, if the message ID is of a message in the channel you are entering the command in.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
+			help += `\nAs a member of the Discord server with administrative permission, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID> [channel tag]\`\nStar a message manually, if the message ID is of a message in the channel you are entering the command in. Setting a channel tag makes it post the star embed to that channel instead of the default starboard.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
 		}
 		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
 		msg.channel.send(help).catch(errSendMessages(msg));
@@ -107,8 +107,9 @@ client.on("channelDelete", channel => {
 	}
 });
 const starred = [];
-const star = (msg, callback) => {
-	if(data.guilds[msg.guild.id][0]) {
+const star = (msg, callback, channel) => {
+	channel = channel || data.guilds[msg.guild.id][0];
+	if(channel) {
 		console.log(`star ${msg.guild.id} ${msg.channel.id} ${msg.id}`);
 		if(!starred.includes(msg.id)) {
 			starred.push(msg.id);
@@ -179,10 +180,12 @@ client.on("message", async msg => {
 					}).catch(err => {
 						data.guilds[msg.guild.id][1] = old1;
 						save();
-						msg.channel.messages.fetch(content).then(msg2 => {
+						const contentArray = content.split(" ");
+						msg.channel.messages.fetch(contentArray[0]).then(msg2 => {
+							const channel = content[1].replace(channelTest, "$1");
 							star(msg2, () => {
 								msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
-							});
+							}, channel ? channel : undefined);
 						}).catch(() => {
 							if(channelTest.test(content)) {
 								const channel = content.replace(channelTest, "$1");
