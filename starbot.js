@@ -1,7 +1,8 @@
 console.log("< Starbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
-const prefix = /^> ?⭐/;
+const underscores = /_/g;
+const prefix = /^> ?⭐ ?/;
 const channelTest = /^<#(\d+)>$/;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 let data;
@@ -20,7 +21,7 @@ const exitOnError = () => {
 process.once("unhandledRejection", exitOnError);
 client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
-const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(/_/g, "\\_")}_`;
+const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
 const inform = (guild, str1, str2) => {
 	if(guild.available) {
 		guild.owner.send(str1).catch(() => {
@@ -167,7 +168,7 @@ client.on("message", async msg => {
 		if(prefix.test(content)) {
 			const perm = (msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author)).hasPermission(8);
 			if(perm) {
-				content = content.replace(prefix, "").replace(/ /g, "");
+				content = content.replace(prefix, "");
 				if(content) {
 					const old1 = data.guilds[msg.guild.id][1];
 					data.guilds[msg.guild.id][1] = null;
