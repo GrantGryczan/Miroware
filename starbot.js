@@ -182,11 +182,7 @@ client.on("message", async msg => {
 						data.guilds[msg.guild.id][1] = old1;
 						save();
 						const contentArray = content.split(" ");
-						let channel;
-						if(contentArray[1] && channelTest.test(contentArray[2])) {
-							channel = msg.guild.channels.get(contentArray[2].replace(channelTest, "$1"));
-						}
-						(channel || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
+						((contentArray[1] && channelTest.test(contentArray[2]) ? msg.guild.channels.get(contentArray[2].replace(channelTest, "$1")) : false) || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
 							try {
 								star(msg2, () => {
 									msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
