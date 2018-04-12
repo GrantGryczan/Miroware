@@ -183,8 +183,8 @@ client.on("message", async msg => {
 						save();
 						const contentArray = content.split(" ");
 						let channel;
-						if(contentArray[1]) {
-							channel = msg.guild.channels.get(contentArray[1]);
+						if(contentArray[1] && channelTest.test(contentArray[2])) {
+							channel = msg.guild.channels.get(contentArray[2].replace(channelTest, "$1"));
 						}
 						console.log(channel, contentArray);
 						(channel || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
