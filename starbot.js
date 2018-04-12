@@ -186,12 +186,16 @@ client.on("message", async msg => {
 						if(contentArray[1] && channelTest.test(contentArray[2])) {
 							channel = msg.guild.channels.get(contentArray[2].replace(channelTest, "$1"));
 						}
-						console.log(channel, contentArray);
 						(channel || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
-							star(msg2, () => {
-								msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
-							}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
-						}).catch(() => {
+							try {
+								star(msg2, () => {
+									msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
+								}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
+							} catch(err) {
+								console.log(err);
+							}
+						}).catch((err) => {
+							console.log(err);
 							if(channelTest.test(content)) {
 								const starboard = content.replace(channelTest, "$1");
 								if(msg.guild.channels.get(starboard)) {
