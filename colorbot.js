@@ -1,7 +1,8 @@
 console.log("< Colorbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
-const prefix = /^> ?🎨 ?/;
+const prefix = /^> ?🎨 */;
+const spaces = / +/g;
 const underscores = /_/g;
 const alphanumeric = /^[0-9a-z]*$/i;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
@@ -168,6 +169,7 @@ client.on("message", async msg => {
 			const perm = member.hasPermission(8);
 			content = content.replace(prefix, "");
 			if(content) {
+				content = content.replace(spaces, " ");
 				const spaceIndex = content.indexOf(" ");
 				if(spaceIndex === -1) {
 					content = [content, ""];
