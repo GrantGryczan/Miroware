@@ -1,8 +1,9 @@
 console.log("< Starbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
+const prefix = /^> ?⭐ */;
+const spaces = / +/g;
 const underscores = /_/g;
-const prefix = /^> ?⭐ ?/;
 const channelTest = /^<#(\d+)>$/;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 let data;
@@ -170,6 +171,7 @@ client.on("message", async msg => {
 			if(perm) {
 				content = content.replace(prefix, "");
 				if(content) {
+					content = content.replace(spaces, " ");
 					const old1 = data.guilds[msg.guild.id][1];
 					data.guilds[msg.guild.id][1] = null;
 					msg.react(content).then(reaction => {
