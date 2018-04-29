@@ -1,0 +1,18 @@
+@keyframes init {
+	from {
+		margin-top: 1em;
+		opacity: 0;
+	}
+	to {
+		margin-top: 0;
+		opacity: 1;
+	}
+}
+#string {
+	padding: 1em;
+	text-align: center;
+	font-size: 4em;
+	word-break: break-word;
+	word-wrap: break-word;
+	animation: init 1s ease;
+}
