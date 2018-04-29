@@ -1,4 +1,4 @@
-const string = this.req.queryString || "Hello world!";
+const string = this.req.queryString || "Hello, world!";
 this.title = string;
 this.description = string;
 this.tags = ["quote", "string"];
