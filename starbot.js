@@ -6,6 +6,8 @@ const spaces = / +/g;
 const underscores = /_/g;
 const channelTest = /^<#(\d+)>$/;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
+const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
+const textChannelFilter = channel => channel.type === "text";
 let data;
 const load = () => {
 	data = JSON.parse(fs.readFileSync("data/starbot.json"));
@@ -22,11 +24,10 @@ const exitOnError = () => {
 process.once("unhandledRejection", exitOnError);
 client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
-const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
 const inform = (guild, str1, str2) => {
 	if(guild.available) {
 		guild.owner.send(str1).catch(() => {
-			const channels = guild.channels.filterArray(channel => channel.type === "text");
+			const channels = guild.channels.filterArray(textChannelFilter);
 			let i = -1;
 			const testChannel = () => {
 				i++;
