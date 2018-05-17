@@ -10,7 +10,7 @@
 	}
 	const send = (service, value) => {
 		console.log(service, value);
-		form._enable(); // TODO: after being sent
+		Miro.formState(form, true); // TODO: after being sent
 	};
 	const clickAuth = auth => {
 		return function() {
@@ -61,7 +61,7 @@
 	};
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
-		form._disable();
+		Miro.formState(form, false);
 		const body = document.createElement("span");
 		if(signup) {
 			body.appendChild(document.createTextNode("Connect your Miroware account to an external login to secure your account."));
@@ -83,7 +83,7 @@
 		}
 		new Miro.dialog(signup ? "Signup" : "Login", body, ["Cancel"]).then(value => {
 			if(value !== 1) {
-				form._enable();
+				Miro.formState(form, true);
 			}
 		});
 	});

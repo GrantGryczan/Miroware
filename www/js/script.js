@@ -11,29 +11,16 @@
 		}
 	}
 	const doNothing = () => {};
+	if(!Array.prototype.includes) {
+		const includes = function(search, fromIndex) {
+			return this.indexOf(search, fromIndex) !== -1;
+		};
+		Array.prototype.includes = includes;
+		if(!String.prototype.includes) {
+			String.prototype.includes = includes;
+		}
+	}
 	const container = document.querySelector("#container");
-	HTMLFormElement.prototype._disable = function() {
-		this.setAttribute("disabled", true);
-		for(const v of this.elements) {
-			v.disabled = true;
-		}
-		for(const v of ["checkbox", "radio", "select", "slider", "text-field"]) {
-			for(const w of this.querySelectorAll(`.mdc-${v}`)) {
-				w.classList.add(`mdc-${v}--disabled`);
-			}
-		}
-	};
-	HTMLFormElement.prototype._enable = function() {
-		this.removeAttribute("disabled");
-		for(const v of this.elements) {
-			v.disabled = false;
-		}
-		for(const v of ["checkbox", "radio", "select", "slider", "text-field"]) {
-			for(const w of this.querySelectorAll(`.mdc-${v}`)) {
-				w.classList.remove(`mdc-${v}--disabled`);
-			}
-		}
-	};
 	let rawQuery;
 	if(location.href.indexOf("#") !== -1) {
 		rawQuery = location.href.slice(0, location.href.indexOf("#"));
@@ -52,41 +39,49 @@
 			Miro.query[param[0]] = decodeURIComponent(param[1]);
 		} catch(err) {}
 	}
-	Miro.request = (method, url, data, headers, noMagic) => {
-		data = data || {};
-		headers = headers || {};
-		const req = new XMLHttpRequest();
-		req.open(method, url, true);
-		for(const i of Object.keys(headers)) {
-			req.setRequestHeader(i, headers[i]);
-		}
-		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		req.onreadystatechange = function() {
-			if(req.readyState === XMLHttpRequest.DONE && req.status) {
-				statusType = Math.floor(req.status/100);
-				if(noMagic || req.getResponseHeader("X-Magic") === "real") {
-					if(statusType === 2) {
-						if(typeof success === "function") {
-							success(req.responseText);
-						}
-					} else if(statusType === 4 || statusType === 5) {
-						if(typeof error === "function") {
-							error(req.status);
-						}
-					}
-				} else if(typeof error === "function") {
-					error(req.status);
+	Miro.request = (method, url, headers, body) => {
+		return new Promise(resolve => {
+			method = typeof method === "string" ? method.toUpperCase() : "GET";
+			if(typeof url === "string") {
+				if(!url.startsWith("/")) {
+					url = `/${url}`;
 				}
+			} else {
+				throw new MiroError("The `url` parameter must be a string.");
 			}
-		};
-		let formData = "";
-		for(const i of Object.keys(data)) {
-			formData += `${(formData ? "&" : "") + encodeURIComponent(i)}=${encodeURIComponent(data[i])}`;
-		}
-		req.send(formData);
+			headers = headers instanceof Object ? headers : {};
+			headers["Content-Type"] = "application/json";
+			body = body instanceof Object ? body : {};
+			const req = new XMLHttpRequest();
+			req.open(method, url, true);
+			for(const i of Object.keys(headers)) {
+				req.setRequestHeader(i, headers[i]);
+			}
+			req.onreadystatechange = () => {
+				if(req.readyState === XMLHttpRequest.DONE) {
+					resolve(req);
+				}
+			};
+			req.send(JSON.stringify(body));
+		});
 	};
 	Miro.block = state => {
 		container.classList[state ? "add" : "remove"]("hidden");
+	};
+	Miro.formState = (form, state) => {
+		if(!(form instanceof HTMLFormElement)) {
+			throw new MiroError("The `form` parameter must be an HTML form element.");
+		}
+		state = !state;
+		form.setAttribute("disabled", state);
+		for(const v of form.elements) {
+			v.disabled = state;
+		}
+		for(const v of ["checkbox", "radio", "select", "slider", "text-field"]) {
+			for(const w of form.querySelectorAll(`.mdc-${v}`)) {
+				w.classList[state ? "add" : "remove"](`mdc-${v}--disabled`);
+			}
+		}
 	};
 	class MiroDialog {
 		constructor(title, body, buttons) {
@@ -99,7 +94,7 @@
 			if(typeof body === "string") {
 				body = document.createTextNode(body);
 			} else if(!(body instanceof Node)) {
-				throw new MiroError("The `body` parameter must be a string or a node.");
+				throw new MiroError("The `body` parameter must be a string or a DOM node.");
 			}
 			this.ready = false;
 			const dialogElem = document.createElement("aside");
