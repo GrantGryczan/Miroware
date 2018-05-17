@@ -17,20 +17,20 @@
 	},
 	"homepage": "https://miroware.io/",
 	"dependencies": {
-		"aws-sdk": "^2.222.1",
-		"body-parser": "^1.18.2",
+		"aws-sdk": "^2.241.1",
+		"body-parser": "^1.18.3",
 		"bson-ext": "^2.0.0",
 		"connect-mongo": "^2.0.1",
 		"cookie-parser": "^1.4.3",
 		"discord.js": "github:hydrabolt/discord.js",
 		"express": "^4.16.2",
 		"fs-extra": "^5.0.0",
-		"mime": "^2.2.2",
-		"mongodb": "^3.0.6",
+		"mime": "^2.3.1",
+		"mongodb": "^3.0.8",
 		"php-date": "^2.1.1",
 		"redbird": "^0.7.0",
-		"request": "^2.83.0",
+		"request": "^2.86.0",
 		"request-promise-native": "^1.0.5",
-		"servecube": "^1.13.3"
+		"servecube": "^1.13.5"
 	}
 }
