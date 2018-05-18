@@ -39,13 +39,12 @@
 			Miro.query[param[0]] = decodeURIComponent(param[1]);
 		} catch(err) {}
 	}
+	const apiOrigin = window.location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
 	Miro.request = (method, url, headers, body) => {
 		return new Promise(resolve => {
 			method = typeof method === "string" ? method.toUpperCase() : "GET";
 			if(typeof url === "string") {
-				if(!url.startsWith("/")) {
-					url = `/${url}`;
-				}
+				url = apiOrigin + (url.startsWith("/") ? "" : "/") + url;
 			} else {
 				throw new MiroError("The `url` parameter must be a string.");
 			}
