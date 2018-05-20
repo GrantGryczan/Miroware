@@ -1,4 +1,6 @@
-if(this.req.body.service === "Discord") {
+if(this.req.body.service === "Google") {
+	
+} else if(this.req.body.service === "Discord") {
 	request.post("https://discordapp.com/api/oauth2/token", {
 		form: {
 			client_id: youKnow.discord.id,
@@ -17,11 +19,14 @@ if(this.req.body.service === "Discord") {
 		}).then(body2 => {
 			//request.post(`https://discordapp.com/api/oauth2/token/revoke?token=${body.access_token}`);
 			body2 = JSON.parse(body2);
-			console.log(body2);
 			this.status = 201;
 			this.done();
 		}).catch(requestError.bind(this));
 	}).catch(requestError.bind(this));
 } else {
+	this.value = {
+		error: `${this.req.body.service} is not a valid service.`
+	};
+	this.status = 404;
 	this.done();
 }
