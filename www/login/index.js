@@ -22,7 +22,7 @@
 			Miro.block(false);
 			if(Math.floor(req.status/100) === 2) {
 				Miro.formState(form, true);
-				dialog._dialog.close();
+				dialog.close();
 			} else {
 				authFailed();
 			}
