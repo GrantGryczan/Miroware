@@ -1,6 +1,6 @@
 if(this.req.body.service === "Discord") {
 	console.log(this.req.body);
-	request.post(`https://discordapp.com/api/oauth2/token?client_id=${youKnow.discord.id}&client_secret=${youKnow.discord.secret}&grant_type=client_credentials&code=${encodeURIComponent(this.req.body.value)}`).then(body => {
+	request.post(`https://discordapp.com/api/oauth2/token?client_id=${youKnow.discord.id}&client_secret=${youKnow.discord.secret}&grant_type=authorization_code&code=${encodeURIComponent(this.req.body.value)}`).then(body => {
 		body = JSON.parse(body);
 		console.log(body);
 		request.get({
