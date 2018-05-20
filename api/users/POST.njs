@@ -1,8 +1,14 @@
 if(this.req.body.service === "Discord") {
-	console.log(this.req.body);
-	request.post(`https://discordapp.com/api/oauth2/token?client_id=${youKnow.discord.id}&client_secret=${youKnow.discord.secret}&grant_type=authorization_code&code=${encodeURIComponent(this.req.body.value)}`).then(body => {
+	request.post("https://discordapp.com/api/oauth2/token", {
+		form: {
+			client_id: youKnow.discord.id,
+			client_secret: youKnow.discord.secret,
+			grant_type: "authorization_code",
+			code: this.req.body.value,
+			redirect_uri: `${this.req.get("Referrer")}discord/`
+		}
+	}).then(body => {
 		body = JSON.parse(body);
-		console.log(body);
 		request.get({
 			url: "https://discordapp.com/api/users/@me",
 			headers: {
