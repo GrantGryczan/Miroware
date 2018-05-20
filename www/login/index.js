@@ -1,6 +1,7 @@
 (() => {
 	const form = document.querySelector("form");
 	const submits = form.querySelectorAll("button[type=\"submit\"]");
+	let dialog;
 	let signup = false;
 	const setSubmit = function() {
 		signup = this.id === "signup";
@@ -8,22 +9,33 @@
 	for(const v of submits) {
 		v.addEventListener("click", setSubmit);
 	}
+	const authFailed = () => {
+		setTimeout(() => {
+			Miro.snackbar("Authentication failed", "Okay");
+		});
+	};
 	const send = (service, value) => {
-		console.log(service, value);
-		Miro.formState(form, true); // TODO: after being sent
+		Miro.request("POST", "/users", {}, {
+			service,
+			value
+		}).then(req => {
+			Miro.block(false);
+			if(Math.floor(req.status/100) === 2) {
+				Miro.formState(form, true);
+				dialog._dialog.close();
+			} else {
+				authFailed();
+			}
+		});
 	};
 	const clickAuth = auth => {
 		return function() {
 			Miro.block(true);
 			auth().then(value => {
-				Miro.block(false);
-				this.parentNode.parentNode.parentNode.parentNode._dialog.close(1);
 				send(auth.name, value);
 			}).catch(() => {
 				Miro.block(false);
-				setTimeout(() => {
-					Miro.snackbar("Authentication failed", "Okay");
-				});
+				authFailed();
 			});
 		};
 	};
@@ -41,7 +53,7 @@
 		},
 		Discord: () => {
 			return new Promise((resolve, reject) => {
-				const win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=${encodeURIComponent(window.location.origin)}%2Flogin%2Fdiscord%2F&response_type=code&scope=email%20identify%20connections`, "authDiscord");
+				const win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=${encodeURIComponent(window.location.origin)}%2Flogin%2Fdiscord%2F&response_type=code&scope=identify%20email`, "authDiscord");
 				const winClosedPoll = setInterval(() => {
 					if(win.closed) {
 						clearInterval(winClosedPoll);
@@ -81,7 +93,7 @@
 			button.addEventListener("click", clickAuth(auths[i]));
 			body.appendChild(button);
 		}
-		new Miro.dialog(signup ? "Signup" : "Login", body, ["Cancel"]).then(value => {
+		dialog = new Miro.dialog(signup ? "Signup" : "Login", body, ["Cancel"]).then(value => {
 			if(value !== 1) {
 				Miro.formState(form, true);
 			}

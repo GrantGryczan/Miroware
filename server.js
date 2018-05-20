@@ -14,6 +14,7 @@ const production = process.argv[2] === "production";
 		compression: "snappy"
 	});
 	const db = client.db("web");
+	const users = db.collection("users");
 	const cube = await serve({
 		eval: v => eval(v),
 		domain: production ? "miroware.io" : "localhost:8081",
@@ -42,9 +43,27 @@ const production = process.argv[2] === "production";
 				collection: "sessions",
 				stringify: false
 			})
-		})]
+		}), (req, res) => {
+			if(req.dir === "api") {
+				res.set("Content-Type", "application/json");
+				try {
+					req.body = JSON.parse(req.body);
+				} catch(err) {
+					res.status(400).send({
+						message: err.message
+					});
+					return;
+				}
+			}
+			req.next();
+		}]
 	});
 	const {load} = cube;
+	const requestError = function(err) {
+		this.status = err.statusCode;
+		this.value = err.error;
+		this.done();
+	};
 	evalInput = input => {
 		console.log(eval(String(input)));
 	};
