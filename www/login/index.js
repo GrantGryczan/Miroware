@@ -15,18 +15,22 @@
 		});
 	};
 	const send = (service, value) => {
-		Miro.request("POST", "/users", {}, {
-			service,
-			value
-		}).then(req => {
-			Miro.block(false);
-			if(Math.floor(req.status/100) === 2) {
-				Miro.formState(form, true);
-				dialog.close();
-			} else {
-				authFailed();
-			}
-		});
+		if(signup) {
+			Miro.request("POST", "/users", {}, {
+				service,
+				value
+			}).then(req => {
+				Miro.block(false);
+				if(Math.floor(req.status/100) === 2) {
+					Miro.formState(form, true);
+					dialog.close();
+				} else {
+					authFailed();
+				}
+			});
+		} else {
+			
+		}
 	};
 	const clickAuth = auth => {
 		return function() {
