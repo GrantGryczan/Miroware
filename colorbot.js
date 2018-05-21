@@ -45,10 +45,6 @@ const guildCreate = guild => {
 	console.log(`guildCreate ${guild}`);
 	data.guilds[guild] = [0, {}];
 };
-const guildDelete = guild => {
-	console.log(`guildDelete ${guild}`);
-	delete data.guilds[guild];
-}
 const permWarn = (guild, perms) => {
 	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
 	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
@@ -88,8 +84,6 @@ client.once("ready", () => {
 					v.delete();
 				}
 			}
-		} else {
-			guildDelete(i);
 		}
 	}
 	save();
@@ -100,10 +94,6 @@ client.once("ready", () => {
 });
 client.on("guildCreate", guild => {
 	guildCreate(guild.id);
-	save();
-});
-client.on("guildDelete", guild => {
-	guildDelete(guild.id);
 	save();
 });
 client.on("guildMemberRemove", member => {

@@ -52,10 +52,6 @@ const guildCreate = guild => {
 	data.guilds[guild] = [null, "%E2%AD%90", 5, 16755763];
 	noStarboard(client.guilds.get(guild));
 };
-const guildDelete = guild => {
-	console.log(`guildDelete ${guild}`);
-	delete data.guilds[guild];
-}
 const errSendMessages = msg => () => {
 	permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
 };
@@ -88,19 +84,10 @@ client.once("ready", () => {
 			guildCreate(i);
 		}
 	}
-	for(const i of Object.keys(data.guilds)) {
-		if(!client.guilds.get(i)) {
-			guildDelete(i);
-		}
-	}
 	save();
 });
 client.on("guildCreate", guild => {
 	guildCreate(guild.id);
-	save();
-});
-client.on("guildDelete", guild => {
-	guildDelete(guild.id);
 	save();
 });
 client.on("channelDelete", channel => {
