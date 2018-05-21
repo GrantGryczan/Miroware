@@ -59,7 +59,8 @@ const errSendMessages = msg => () => {
 const errEmbedLinks = msg => () => {
 	permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 };
-const errManageRoles = msg => () => {
+const errManageRoles = msg => err => {
+	console.error(err);
 	permWarn(msg.guild, "manage roles, above mine or otherwise");
 };
 const sendHelp = (msg, perm) => {
