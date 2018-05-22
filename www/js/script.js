@@ -119,9 +119,6 @@
 				const button = document.createElement("button");
 				button.classList.add("mdc-button");
 				button.classList.add("mdc-dialog__footer__button");
-				/*if(i === 0) {
-					button.classList.add("mdc-button--raised");
-				}*/
 				button.textContent = buttons[i];
 				footerElem.appendChild(button);
 				buttons[i] = button;
