@@ -41,7 +41,7 @@
 	}
 	const apiOrigin = window.location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
 	Miro.request = (method, url, headers, body) => {
-		return new Promise(resolve => {
+		return new Promise((resolve, reject) => {
 			method = typeof method === "string" ? method.toUpperCase() : "GET";
 			if(typeof url === "string") {
 				url = apiOrigin + (url.startsWith("/") ? "" : "/") + url;
@@ -52,13 +52,14 @@
 			headers["Content-Type"] = "application/json";
 			body = body instanceof Object ? body : {};
 			const req = new XMLHttpRequest();
+			req.responseType = "json";
 			req.open(method, url, true);
 			for(const i of Object.keys(headers)) {
 				req.setRequestHeader(i, headers[i]);
 			}
 			req.onreadystatechange = () => {
 				if(req.readyState === XMLHttpRequest.DONE) {
-					resolve(req);
+					(status === 0 ? reject : resolve)(req);
 				}
 			};
 			req.send(JSON.stringify(body));

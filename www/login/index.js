@@ -9,14 +9,13 @@
 	for(const v of submits) {
 		v.addEventListener("click", setSubmit);
 	}
-	const authFailed = () => {
-		setTimeout(() => {
-			Miro.snackbar("Authentication failed", "Okay");
-		});
+	const authFailed = data => {
+		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "Unknown", ["Okay"]);
 	};
 	const send = (service, value) => {
 		if(signup) {
 			Miro.request("POST", "/users", {}, {
+				email: form.email.value,
 				service,
 				value
 			}).then(req => {
@@ -25,7 +24,7 @@
 					Miro.formState(form, true);
 					dialog.close();
 				} else {
-					authFailed();
+					authFailed(req);
 				}
 			});
 		} else {
@@ -37,9 +36,9 @@
 			Miro.block(true);
 			auth().then(value => {
 				send(auth.name, value);
-			}).catch(() => {
+			}).catch(err => {
 				Miro.block(false);
-				authFailed();
+				authFailed(err);
 			});
 		};
 	};
@@ -51,7 +50,7 @@
 						auth2.signIn().then(user => {
 							resolve(user.getAuthResponse().id_token);
 						}).catch(reject);
-					});
+					}).catch(reject);
 				});
 			});
 		},
@@ -68,7 +67,15 @@
 					if(evt.origin === window.origin) {
 						window.removeEventListener("message", receive);
 						clearInterval(winClosedPoll);
-						resolve(evt.data);
+						const ampIndex = evt.data.indexOf("&");
+						if(ampIndex !== -1) {
+							evt.data = evt.data.slice(ampIndex);
+						}
+						if(evt.data.startsWith("code=")) {
+							resolve(evt.data.slice(5));
+						} else {
+							reject(evt.data.slice(evt.data.indexOf("=")+1));
+						}
 					}
 				};
 				window.addEventListener("message", receive);

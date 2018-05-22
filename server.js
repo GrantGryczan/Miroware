@@ -7,13 +7,15 @@ const mime = require("mime");
 const {MongoClient} = require("mongodb");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
+const {OAuth2Client} = require("google-auth-library");
 const youKnow = require("./data/youknow.js");
 const production = process.argv[2] === "production";
+const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 (async () => {
-	const client = await MongoClient.connect(youKnow.db.url, {
+	const googleAuthClient = new OAuth2Client(youKnow.google.id);
+	const db = (await MongoClient.connect(youKnow.db.url, {
 		compression: "snappy"
-	});
-	const db = client.db("web");
+	})).db("web");
 	const users = db.collection("users");
 	const cube = await serve({
 		eval: v => eval(v),
@@ -36,7 +38,7 @@ const production = process.argv[2] === "production";
 			name: "sess",
 			cookie: {
 				secure: true,
-				maxAge: 604800000
+				maxAge: 2592000000
 			},
 			store: new MongoStore({
 				db,
@@ -59,11 +61,6 @@ const production = process.argv[2] === "production";
 		}]
 	});
 	const {load} = cube;
-	const requestError = function(err) {
-		this.status = err.statusCode;
-		this.value = err.error;
-		this.done();
-	};
 	evalInput = input => {
 		console.log(eval(String(input)));
 	};
