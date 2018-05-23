@@ -21,7 +21,11 @@
 			Miro.block(false);
 			if(Math.floor(req.status/100) === 2) {
 				dialog.close();
-				// TODO
+				if(signup) {
+					// TODO
+				} else {
+					window.location = Miro.query.dest || "/";
+				}
 			} else {
 				authFailed(req);
 			}
