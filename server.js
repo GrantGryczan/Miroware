@@ -77,6 +77,7 @@ const authenticate = context => {
 		}
 	});
 };
+const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
 	const db = (await MongoClient.connect(youKnow.db.url, {
 		compression: "snappy"
@@ -114,13 +115,13 @@ const authenticate = context => {
 				stringify: false
 			})
 		}), (req, res) => {
-			if(req.dir === "api") {
+			if(req.dir === "api" && bodyMethods.includes(req.method)) {
 				res.set("Content-Type", "application/json");
 				try {
 					req.body = JSON.parse(req.body);
 				} catch(err) {
 					res.status(400).send({
-						message: err.message
+						error: err.message
 					});
 					return;
 				}
