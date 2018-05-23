@@ -53,6 +53,7 @@
 			body = body instanceof Object ? body : {};
 			const req = new XMLHttpRequest();
 			req.responseType = "json";
+			req.withCredentials = true;
 			req.open(method, url, true);
 			for(const i of Object.keys(headers)) {
 				req.setRequestHeader(i, headers[i]);

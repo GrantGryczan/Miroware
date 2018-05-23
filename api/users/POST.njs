@@ -23,7 +23,7 @@ if(testEmail(this.req.body.email)) {
 			} else {
 				const now = Date.now();
 				this.value = {
-					id: this.req.session.id = (await users.insertOne({
+					id: this.req.session.user = (await users.insertOne({
 						created: now,
 						updated: now,
 						login,

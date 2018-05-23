@@ -12,7 +12,7 @@ if(testEmail(this.req.body.email)) {
 			});
 			if(user) {
 				this.value = {
-					id: this.req.session.id = user._id
+					id: this.req.session.user = user._id
 				};
 				this.done();
 			} else {

@@ -82,9 +82,10 @@ const authenticate = context => {
 		compression: "snappy"
 	})).db("web");
 	const users = db.collection("users");
+	const domain = production ? "miroware.io" : "localhost:8081";
 	const cube = await serve({
 		eval: v => eval(v),
-		domain: production ? "miroware.io" : "localhost:8081",
+		domain,
 		errorDir: "error",
 		httpPort: 8081,
 		httpsRedirect: production,
@@ -96,14 +97,16 @@ const authenticate = context => {
 		githubPayloadURL: "/githubwebhook",
 		githubSecret: youKnow.github.secret,
 		githubToken: youKnow.github.token,
-		middleware: [cookieParser(), session({
-			secret: youKnow.session.secret,
+		middleware: [cookieParser(youKnow.cookie.secret), session({
+			secret: youKnow.cookie.secret,
 			resave: false,
 			saveUninitialized: false,
 			name: "sess",
 			cookie: {
-				secure: true,
-				maxAge: 2592000000
+				domain,
+				maxAge: 2592000000,
+				secure: production,
+				httpOnly: true
 			},
 			store: new MongoStore({
 				db,
