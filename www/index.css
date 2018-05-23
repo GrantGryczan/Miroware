@@ -5,7 +5,7 @@ body {
 	flex-flow: row wrap;
 	justify-content: center;
 	padding: 512px 56px 56px 56px;
-	background-image: url(/images/icon/main.gif);
+	background-image: url(/images/icon/transparent.gif);
 	background-position: center top;
 	background-repeat: no-repeat;
 }
