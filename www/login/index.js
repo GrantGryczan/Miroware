@@ -1,4 +1,11 @@
 (() => {
+	const redirect = () => {
+		window.location = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
+	};
+	if(document.querySelector("meta[name=\"user\"]")) {
+		redirect();
+		return;
+	}
 	const form = document.querySelector("form");
 	const submits = form.querySelectorAll("button[type=\"submit\"]");
 	let dialog;
@@ -24,7 +31,7 @@
 				if(signup) {
 					// TODO
 				} else {
-					window.location = Miro.query.dest || "/";
+					redirect();
 				}
 			} else {
 				authFailed(req);
