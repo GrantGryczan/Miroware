@@ -67,7 +67,7 @@
 				const winClosedPoll = setInterval(() => {
 					if(win.closed) {
 						clearInterval(winClosedPoll);
-						reject();
+						reject("The Discord authentication page was closed.");
 					}
 				}, 200);
 				const receive = evt => {
