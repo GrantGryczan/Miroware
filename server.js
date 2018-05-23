@@ -11,8 +11,73 @@ const {OAuth2Client} = require("google-auth-library");
 const youKnow = require("./data/youknow.js");
 const production = process.argv[2] === "production";
 const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+const testEmail = email => emailTest.test(email) && email.length <= 254;
+const googleAuthClient = new OAuth2Client(youKnow.google.id);
+const authenticate = context => {
+	return new Promise(resolve => {
+		if(context.req.body.service === "Google") {
+			googleAuthClient.verifyIdToken({
+				idToken: context.req.body.value,
+				audience: youKnow.google.id
+			}).then(ticket => {
+				const payload = ticket.getPayload();
+				resolve({
+					id: payload.sub,
+					name: payload.name,
+					email: payload.email,
+					verified: payload.email_verified
+				});
+			}).catch(err => {
+				context.value = {
+					error: err.message
+				};
+				context.status = 422;
+				context.done();
+			});
+		} else if(context.req.body.service === "Discord") {
+			const catchError = err => {
+				const error = JSON.parse(err.error);
+				context.value = {
+					error: error.error_description || error.error
+				};
+				context.status = 422;
+				context.done();
+			};
+			request.post("https://discordapp.com/api/oauth2/token", {
+				form: {
+					client_id: youKnow.discord.id,
+					client_secret: youKnow.discord.secret,
+					grant_type: "authorization_code",
+					code: context.req.body.value,
+					redirect_uri: `${context.req.get("Referrer")}discord/`
+				}
+			}).then(body => {
+				body = JSON.parse(body);
+				request.get({
+					url: "https://discordapp.com/api/users/@me",
+					headers: {
+						"Authorization": `${body.token_type} ${body.access_token}`
+					}
+				}).then(body2 => {
+					body2 = JSON.parse(body2);
+					resolve({
+						id: body2.id,
+						name: body2.username,
+						email: body2.email,
+						verified: body2.verified
+					});
+				}).catch(catchError);
+			}).catch(catchError);
+		} else {
+			context.value = {
+				error: "That is not a valid service."
+			};
+			context.status = 422;
+			context.done();
+		}
+	});
+};
 (async () => {
-	const googleAuthClient = new OAuth2Client(youKnow.google.id);
 	const db = (await MongoClient.connect(youKnow.db.url, {
 		compression: "snappy"
 	})).db("web");

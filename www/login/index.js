@@ -13,23 +13,19 @@
 		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "Unknown", ["Okay"]);
 	};
 	const send = (service, value) => {
-		if(signup) {
-			Miro.request("POST", "/users", {}, {
-				email: form.email.value,
-				service,
-				value
-			}).then(req => {
-				Miro.block(false);
-				if(Math.floor(req.status/100) === 2) {
-					Miro.formState(form, true);
-					dialog.close();
-				} else {
-					authFailed(req);
-				}
-			});
-		} else {
-			
-		}
+		Miro.request("POST", signup ? "/users" : "/sessions", {}, {
+			email: form.email.value,
+			service,
+			value
+		}).then(req => {
+			Miro.block(false);
+			if(Math.floor(req.status/100) === 2) {
+				dialog.close();
+				// TODO
+			} else {
+				authFailed(req);
+			}
+		});
 	};
 	const clickAuth = auth => {
 		return function() {
