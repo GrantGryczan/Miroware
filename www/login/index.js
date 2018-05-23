@@ -13,7 +13,7 @@
 		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "Unknown", ["Okay"]);
 	};
 	const send = (service, value) => {
-		Miro.request("POST", signup ? "/users" : "/sessions", {}, {
+		Miro.request("POST", signup ? "/users" : "/session", {}, {
 			email: form.email.value,
 			service,
 			value
@@ -100,10 +100,8 @@
 			button.addEventListener("click", clickAuth(auths[i]));
 			body.appendChild(button);
 		}
-		dialog = new Miro.dialog(signup ? "Signup" : "Login", body, ["Cancel"]).then(value => {
-			if(value !== 1) {
-				Miro.formState(form, true);
-			}
+		dialog = new Miro.dialog(signup ? "Sign up" : "Log in", body, ["Cancel"]).then(value => {
+			Miro.formState(form, true);
 		});
 	});
 })();

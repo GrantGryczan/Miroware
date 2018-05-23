@@ -48,9 +48,13 @@
 			} else {
 				throw new MiroError("The `url` parameter must be a string.");
 			}
+			body = body !== undefined && (body instanceof Object ? body : {});
 			headers = headers instanceof Object ? headers : {};
-			headers["Content-Type"] = "application/json";
-			body = body instanceof Object ? body : {};
+			if(body) {
+				headers["Content-Type"] = "application/json";
+			} else {
+				delete headers["Content-Type"];
+			}
 			const req = new XMLHttpRequest();
 			req.responseType = "json";
 			req.withCredentials = true;
@@ -63,7 +67,7 @@
 					(status === 0 ? reject : resolve)(req);
 				}
 			};
-			req.send(JSON.stringify(body));
+			req.send(body && JSON.stringify(body));
 		});
 	};
 	Miro.block = state => {
@@ -199,5 +203,21 @@
 	}
 	for(const v of document.querySelectorAll(".ripple")) {
 		v._mdc = new mdc.ripple.MDCRipple(v);
+	}
+	const logout = document.querySelector("#logout");
+	if(logout) {
+		logout.addEventListener("click", () => {
+			new Miro.dialog("Log out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
+				if(value === 0) {
+					Miro.request("DELETE", "/session").then(req => {
+						if(Math.floor(req.status/100) === 2) {
+							window.location.reload();
+						} else {
+							new Miro.dialog("Error", req.statusText, ["Okay"]);
+						}
+					});
+				}
+			});
+		});
 	}
 })();

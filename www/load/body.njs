@@ -1,3 +1,4 @@
+const logFlow = this.req.session.user ? "out" : "in";
 this.value = html`
 	</head>
 	<body class="mdc-typography">
@@ -11,8 +12,8 @@ this.value = html`
 						<a class="mdc-list-item" href="/">
 							<i class="material-icons mdc-list-item__graphic">home</i>Home
 						</a>
-						<a class="mdc-list-item" href="/login/">
-							<i class="material-icons mdc-list-item__graphic">person</i>Log in
+						<a id="${logFlow}" class="mdc-list-item" href="${this.req.session.user ? "javascript:;" : "/login/"}">
+							<i class="material-icons mdc-list-item__graphic">person</i>Log ${logFlow}
 						</a>
 					</div>
 					<hr class="mdc-list-divider">`;
