@@ -103,7 +103,7 @@ const authenticate = context => {
 			saveUninitialized: false,
 			name: "sess",
 			cookie: {
-				domain,
+				domain: production ? domain : "localhost",
 				maxAge: 2592000000,
 				secure: production,
 				httpOnly: true
