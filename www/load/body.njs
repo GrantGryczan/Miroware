@@ -12,7 +12,7 @@ this.value = html`
 						<a class="mdc-list-item" href="/">
 							<i class="material-icons mdc-list-item__graphic">home</i>Home
 						</a>
-						<a id="${logFlow}" class="mdc-list-item" href="${this.req.session.user ? "javascript:;" : "/login/"}">
+						<a${this.req.session.user ? " id=\"logout\"" : ""} class="mdc-list-item" href="${this.req.session.user ? "javascript:;" : "/login/"}">
 							<i class="material-icons mdc-list-item__graphic">person</i>Log ${logFlow}
 						</a>
 					</div>
