@@ -104,14 +104,14 @@ if(emailTest.test(this.req.body.email)) {
 		}).catch(catchError);
 	} else {
 		this.value = {
-			error: `${this.req.body.service} is not a valid service.`
+			error: "That is not a valid service."
 		};
 		this.status = 422;
 		this.done();
 	}
 } else {
 	this.value = {
-		error: `${this.req.body.email} is not a valid email.`
+		error: "That is not a valid email."
 	};
 	this.status = 422;
 	this.done();
