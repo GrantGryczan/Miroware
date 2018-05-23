@@ -27,7 +27,7 @@
 		}).then(req => {
 			Miro.block(false);
 			if(Math.floor(req.status/100) === 2) {
-				dialog.close();
+				dialog.close(-2);
 				if(signup) {
 					// TODO
 				} else {
@@ -112,7 +112,9 @@
 			body.appendChild(button);
 		}
 		dialog = new Miro.dialog(signup ? "Sign up" : "Log in", body, ["Cancel"]).then(value => {
-			Miro.formState(form, true);
+			if(value !== -2) {
+				Miro.formState(form, true);
+			}
 		});
 	});
 })();
