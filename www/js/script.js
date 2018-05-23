@@ -204,6 +204,10 @@
 	for(const v of document.querySelectorAll(".ripple")) {
 		v._mdc = new mdc.ripple.MDCRipple(v);
 	}
+	const userElem = document.querySelector("meta[name=\"user\"]");
+	if(userElem) {
+		Miro.user = userElem.getAttribute("content");
+	}
 	const logout = document.querySelector("#logout");
 	if(logout) {
 		logout.addEventListener("click", () => {

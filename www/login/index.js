@@ -2,7 +2,7 @@
 	const redirect = () => {
 		window.location = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
 	};
-	if(document.querySelector("meta[name=\"user\"]")) {
+	if(Miro.user) {
 		redirect();
 		return;
 	}

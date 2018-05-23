@@ -12,7 +12,8 @@ if(testEmail(this.req.body.email)) {
 			});
 			if(user) {
 				this.value = {
-					id: this.req.session.user = user._id
+					in: this.req.session.in = user.name !== null,
+					user: this.req.session.user = user._id
 				};
 				this.done();
 			} else {
