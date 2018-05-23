@@ -4,7 +4,7 @@
 	let dialog;
 	let signup = false;
 	const setSubmit = function() {
-		signup = this.id === "signup";
+		signup = this.name === "signup";
 	};
 	for(const v of submits) {
 		v.addEventListener("click", setSubmit);

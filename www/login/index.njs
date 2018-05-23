@@ -13,7 +13,7 @@ this.value += html`
 					<div class="mdc-line-ripple"></div>
 				</div><br>
 				<br>
-				<button id="login" class="mdc-button mdc-button--outlined ripple spaced" type="submit">Log in</button><button id="signup" class="mdc-button ripple spaced" type="submit">Sign up</button>
+				<button name="login" class="mdc-button mdc-button--outlined ripple spaced" type="submit">Log in</button><button name="signup" class="mdc-button ripple spaced" type="submit">Sign up</button>
 			</form>`;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
