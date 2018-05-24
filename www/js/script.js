@@ -86,7 +86,12 @@
 		if(form._disabled !== state) {
 			form.setAttribute("disabled", form._disabled = state);
 			for(const v of form.elements) {
-				v.disabled = state;
+				if(state) {
+					v._prevDisabled = v.disabled;
+					v.disabled = true;
+				} else if(v._prevDisabled) {
+					v.disabled = false;
+				}
 			}
 			for(const v of ["checkbox", "radio", "select", "slider", "text-field"]) {
 				const mdcClass = `.mdc-${v}`;
@@ -95,7 +100,7 @@
 					if(state) {
 						w._prevDisabled = w.classList.contains(disabledClass);
 						w.classList.add(disabledClass);
-					} else if(!w._prevDisabled) {
+					} else if(w._prevDisabled) {
 						w.classList.remove(disabledClass);
 					}
 				}
