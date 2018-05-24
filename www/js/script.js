@@ -121,8 +121,10 @@
 			surfaceElem.appendChild(headerElem);
 			const bodyElem = document.createElement("section");
 			bodyElem.classList.add("mdc-dialog__body");
-			for(const v of body.querySelectorAll("button:not([type])")) {
-				v.type = "button";
+			if(body.querySelectorAll) {
+				for(const v of body.querySelectorAll("button:not([type])")) {
+					v.type = "button";
+				}
 			}
 			bodyElem.appendChild(body);
 			surfaceElem.appendChild(bodyElem);
