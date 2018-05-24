@@ -19,7 +19,7 @@
 					if(value === 0) {
 						Miro.request("PUT", "/users/@me", {}, {
 							
-						}).then(req => {
+						}).then(async req => {
 							if(Math.floor(req.status/100) !== 2) {
 								await new Miro.dialog("Error", req.statusText, ["Okay"]);
 							}
