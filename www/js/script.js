@@ -88,7 +88,9 @@
 			for(const v of form.elements) {
 				if(state) {
 					v._prevDisabled = v.disabled;
+					console.log(v._prevDisabled);
 					v.disabled = true;
+					console.log(v._prevDisabled);
 				} else if(v._prevDisabled) {
 					v.disabled = false;
 				}
