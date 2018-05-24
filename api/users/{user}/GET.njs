@@ -22,7 +22,7 @@ if(user) {
 		if(isMe) {
 			Object.assign(this.value, {
 				email: user.email,
-				age: user.age
+				birth: user.birth
 			});
 		}
 		this.done();

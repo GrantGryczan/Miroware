@@ -107,6 +107,9 @@
 			}
 		}
 	};
+	for(const v of document.querySelectorAll("input[type=\"email\"]")) {
+		v.maxLength = 254;
+	}
 	class MiroDialog {
 		constructor(title, body, buttons) {
 			if(!(typeof title === "string")) {

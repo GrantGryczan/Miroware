@@ -22,7 +22,7 @@ if(testEmail(this.req.body.email)) {
 					verified: this.req.body.email === data.email && data.verified,
 					publicEmail: false,
 					name: null,
-					age: null,
+					birth: null,
 					desc: "",
 					icon: null
 				})).ops[0]._id

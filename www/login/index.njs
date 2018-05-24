@@ -22,12 +22,12 @@ this.value += html`
 					<div class="mdc-line-ripple"></div>
 				</div><br>
 				<div class="mdc-text-field">
-					<input name="name" class="mdc-text-field__input" type="text" required>
-					<label class="mdc-floating-label" for="name">Username</label>
+					<input name="username" class="mdc-text-field__input" type="text" maxlength="32" required>
+					<label class="mdc-floating-label" for="username">Username</label>
 					<div class="mdc-line-ripple"></div>
 				</div><br>
 				<div class="mdc-text-field">
-					<input name="birthday" class="mdc-text-field__input" type="date" required>
+					<input name="birthday" class="mdc-text-field__input" type="date" max="${inputDate(new Date())}" required>
 					<label class="mdc-floating-label alwaysfloat" for="birthday">Birthday</label>
 					<div class="mdc-line-ripple"></div>
 				</div>

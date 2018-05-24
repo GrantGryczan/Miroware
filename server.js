@@ -77,6 +77,17 @@ const authenticate = context => {
 		}
 	});
 };
+const inputDate = date => {
+	let day = String(date.getDate());
+	if(day.length < 2) {
+		day = `0${day}`;
+	}
+	let month = String(date.getMonth()+1);
+	if(month.length < 2) {
+		month = `0${month}`;
+	}
+	return `${date.getFullYear()}-${month}-${day}`;
+};
 const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
 	const db = (await MongoClient.connect(youKnow.db.url, {

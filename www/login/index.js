@@ -18,7 +18,8 @@
 				}, "Cancel"]).then(value => {
 					if(value === 0) {
 						Miro.request("PUT", "/users/@me", {}, {
-							
+							name: signupDialog.form.username.value,
+							birth: signupDialog.form.birthday.valueAsNumber
 						}).then(async req => {
 							if(Math.floor(req.status/100) === 2) {
 								Miro.in = true;
