@@ -20,11 +20,10 @@
 						Miro.request("PUT", "/users/@me", {}, {
 							
 						}).then(req => {
-							if(Math.floor(req.status/100) === 2) {
-								window.location.reload();
-							} else {
-								new Miro.dialog("Error", req.statusText, ["Okay"]);
+							if(Math.floor(req.status/100) !== 2) {
+								await new Miro.dialog("Error", req.statusText, ["Okay"]);
 							}
+							window.location.reload();
 						});
 					} else {
 						Miro.logOut();
