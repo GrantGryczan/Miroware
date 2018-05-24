@@ -132,6 +132,9 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 	box-shadow: 0 0 0 30px #202020 inset;
 	-webkit-text-fill-color: rgba(255, 255, 255, 0.87);
 }
+.mdc-floating-label {
+	pointer-events: none;
+}
 .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder, .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
 	color: rgba(255, 255, 255, 0.6);
 }

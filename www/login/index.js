@@ -28,7 +28,6 @@
 			});
 		}
 	};
-	loggedIn();
 	if(Miro.user) {
 		loggedIn();
 		return;
