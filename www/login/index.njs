@@ -14,7 +14,24 @@ this.value += html`
 				</div><br>
 				<br>
 				<button name="login" class="mdc-button mdc-button--outlined ripple spaced" type="submit">Log in</button><button name="signup" class="mdc-button ripple spaced" type="submit">Sign up</button>
-			</form>`;
+			</form>
+			<span id="signupform" class="hidden">
+				<div class="mdc-text-field mdc-text-field--disabled">
+					<input name="email" class="mdc-text-field__input" type="email" required disabled>
+					<label class="mdc-floating-label alwaysfloat" for="email">Email</label>
+					<div class="mdc-line-ripple"></div>
+				</div><br>
+				<div class="mdc-text-field">
+					<input name="name" class="mdc-text-field__input" type="text" required>
+					<label class="mdc-floating-label" for="name">Username</label>
+					<div class="mdc-line-ripple"></div>
+				</div><br>
+				<div class="mdc-text-field">
+					<input name="birthday" class="mdc-text-field__input" type="date" required>
+					<label class="mdc-floating-label alwaysfloat" for="birthday">Birthday</label>
+					<div class="mdc-line-ripple"></div>
+				</div>
+			</span>`;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
 		<script src="index.js"></script>`;

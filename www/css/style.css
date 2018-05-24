@@ -159,6 +159,10 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 .mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input::-webkit-input-placeholder, .mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label {
 	color: #d50000;
 }
+.alwaysfloat {
+	transform: translateY(-100%) scale(0.75);
+	cursor: default;
+}
 .mdc-dialog__surface {
 	width: auto;
 	min-width: 280px;

@@ -39,6 +39,11 @@
 			Miro.query[param[0]] = decodeURIComponent(param[1]);
 		} catch(err) {}
 	}
+	Miro.wait = delay => {
+		return new Promise(resolve => {
+			setTimeout(resolve, delay);
+		});
+	};
 	const apiOrigin = window.location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
 	Miro.request = (method, url, headers, body) => {
 		return new Promise((resolve, reject) => {
@@ -105,7 +110,7 @@
 			const dialogElem = document.createElement("aside");
 			dialogElem._dialog = this;
 			dialogElem.classList.add("mdc-dialog");
-			const surfaceElem = document.createElement("div");
+			const surfaceElem = this.form = document.createElement("form");
 			surfaceElem.classList.add("mdc-dialog__surface");
 			const headerElem = document.createElement("header");
 			headerElem.classList.add("mdc-dialog__header");
@@ -121,12 +126,20 @@
 			const footerElem = document.createElement("footer");
 			footerElem.classList.add("mdc-dialog__footer");
 			for(let i = 0; i < buttons.length; i++) {
-				const button = document.createElement("button");
-				button.classList.add("mdc-button");
-				button.classList.add("mdc-dialog__footer__button");
-				button.textContent = buttons[i];
-				footerElem.appendChild(button);
-				buttons[i] = button;
+				const item = buttons[i];
+				buttons[i] = document.createElement("button");
+				if(typeof item === "string") {
+					buttons[i].type = "button";
+					buttons[i].textContent = item;
+				} else if(item instanceof Object) {
+					buttons[i].type = item.type;
+					buttons[i].textContent = item.text;
+				} else {
+					throw new MiroError("The `buttons` parameter's array must only include strings and objects.");
+				}
+				buttons[i].classList.add("mdc-button");
+				buttons[i].classList.add("mdc-dialog__footer__button");
+				footerElem.appendChild(buttons[i]);
 			}
 			surfaceElem.appendChild(footerElem);
 			dialogElem.appendChild(surfaceElem);
@@ -136,6 +149,16 @@
 			const dialog = new mdc.dialog.MDCDialog(dialogElem);
 			container.appendChild(dialogElem);
 			this._promise = new Promise(resolve => {
+				let submitted = false;
+				if(!(submitted = !footerElem.querySelector("button[type=\"submit\"]"))) {
+					surfaceElem.addEventListener("submit", evt => {
+						evt.preventDefault();
+						submitted = true;
+						setTimeout(() => {
+							Miro.formState(surfaceElem, false);
+						});
+					});
+				}
 				const close = value => {
 					setTimeout(() => {
 						container.removeChild(dialogElem);
@@ -143,7 +166,14 @@
 					resolve(value);
 				};
 				this._close = close;
-				const dialogButton = evt => {
+				const dialogButton = async evt => {
+					if(!submitted && evt.target.type === "submit") {
+						console.log(evt.target);
+						await Miro.wait();
+						if(!submitted) {
+							return;
+						}
+					}
 					dialog.close();
 					close(buttons.indexOf(evt.target));
 				};
@@ -204,22 +234,19 @@
 	for(const v of document.querySelectorAll(".ripple")) {
 		v._mdc = new mdc.ripple.MDCRipple(v);
 	}
-	const userElem = document.querySelector("meta[name=\"user\"]");
-	if(userElem) {
-		Miro.user = userElem.getAttribute("content");
-	}
-	const logout = document.querySelector("#logout");
-	if(logout) {
-		logout.addEventListener("click", () => {
+	if((Miro.in = JSON.parse(document.querySelector("meta[name=\"in\"]").getAttribute("content"))) !== null) {
+		Miro.user = document.querySelector("meta[name=\"user\"]").getAttribute("content");
+		Miro.logOut = () => Miro.request("DELETE", "/session").then(req => {
+			if(Math.floor(req.status/100) === 2) {
+				window.location.reload();
+			} else {
+				new Miro.dialog("Error", req.statusText, ["Okay"]);
+			}
+		});
+		document.querySelector("#logout").addEventListener("click", () => {
 			new Miro.dialog("Log out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
 				if(value === 0) {
-					Miro.request("DELETE", "/session").then(req => {
-						if(Math.floor(req.status/100) === 2) {
-							window.location.reload();
-						} else {
-							new Miro.dialog("Error", req.statusText, ["Okay"]);
-						}
-					});
+					Miro.logOut();
 				}
 			});
 		});

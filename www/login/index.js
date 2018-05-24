@@ -1,15 +1,39 @@
 (() => {
-	const redirect = () => {
-		window.location = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
+	const loginForm = document.querySelector("#loginform");
+	const submits = loginForm.querySelectorAll("button[type=\"submit\"]");
+	const signupForm = document.querySelector("#signupform");
+	let signup = false;
+	const loggedIn = () => {
+		Miro.formState(loginForm, false);
+		if(Miro.in) {
+			window.location = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
+		} else {
+			Miro.request("GET", "/users/@me").then(req => {
+				setTimeout(() => {
+					signupForm.classList.remove("hidden");
+				});
+				const signupDialog = new Miro.dialog("Sign up", signupForm, [{
+					text: "Okay",
+					type: "submit"
+				}, "Cancel"]).then(value => {
+					if(value === 0) {
+						Miro.request("PUT", "/users/@me", {}, {
+							
+						});
+					} else {
+						Miro.logOut();
+					}
+				});
+				signupDialog.form.email.value = req.response.email;
+			});
+		}
 	};
+	loggedIn();
 	if(Miro.user) {
-		redirect();
+		loggedIn();
 		return;
 	}
-	const form = document.querySelector("form");
-	const submits = form.querySelectorAll("button[type=\"submit\"]");
 	let dialog;
-	let signup = false;
 	const setSubmit = function() {
 		signup = this.name === "signup";
 	};
@@ -19,20 +43,16 @@
 	const authFailed = data => {
 		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "Unknown", ["Okay"]);
 	};
-	const send = (service, value) => {
+	const send = (service, token) => {
 		Miro.request("POST", signup ? "/users" : "/session", {}, {
-			email: form.email.value,
+			email: loginForm.email.value,
 			service,
-			value
+			token
 		}).then(req => {
 			Miro.block(false);
 			if(Math.floor(req.status/100) === 2) {
 				dialog.close(-2);
-				if(signup) {
-					// TODO
-				} else {
-					redirect();
-				}
+				loggedIn();
 			} else {
 				authFailed(req);
 			}
@@ -41,8 +61,8 @@
 	const clickAuth = auth => {
 		return function() {
 			Miro.block(true);
-			auth().then(value => {
-				send(auth.name, value);
+			auth().then(token => {
+				send(auth.name, token);
 			}).catch(err => {
 				Miro.block(false);
 				authFailed(err);
@@ -89,9 +109,9 @@
 			});
 		}
 	};
-	form.addEventListener("submit", evt => {
+	loginForm.addEventListener("submit", evt => {
 		evt.preventDefault();
-		Miro.formState(form, false);
+		Miro.formState(loginForm, false);
 		const body = document.createElement("span");
 		if(signup) {
 			body.appendChild(document.createTextNode("Connect your Miroware account to an external login to secure your account."));
@@ -113,7 +133,7 @@
 		}
 		dialog = new Miro.dialog(signup ? "Sign up" : "Log in", body, ["Cancel"]).then(value => {
 			if(value !== -2) {
-				Miro.formState(form, true);
+				Miro.formState(loginForm, true);
 			}
 		});
 	});

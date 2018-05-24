@@ -3,7 +3,7 @@
 	background-position: left calc(50% - 256px) center;
 	background-image: url(/images/icon/cubetransparent.gif);
 }
-form {
+#loginform {
 	display: block;
 	position: absolute;
 	left: 50%;
