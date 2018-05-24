@@ -83,7 +83,7 @@
 			throw new MiroError("The `form` parameter must be an HTML form element.");
 		}
 		state = !state;
-		form.setAttribute("disabled", state);
+		form.setAttribute("disabled", form._disabled = state);
 		for(const v of form.elements) {
 			v.disabled = state;
 		}
@@ -155,11 +155,14 @@
 			container.appendChild(dialogElem);
 			this._promise = new Promise(resolve => {
 				let submitted = false;
+				let formState = true;
 				if(!(submitted = !footerElem.querySelector("button[type=\"submit\"]"))) {
 					surfaceElem.addEventListener("submit", evt => {
 						evt.preventDefault();
 						submitted = true;
 						setTimeout(() => {
+							surfaceElem.getAttribute("disabled");
+							formState = surfaceElem._disabled;
 							Miro.formState(surfaceElem, false);
 						});
 					});
@@ -167,6 +170,7 @@
 				const close = value => {
 					setTimeout(() => {
 						container.removeChild(dialogElem);
+						Miro.formState(surfaceElem, formState);
 					}, 120);
 					resolve(value);
 				};
