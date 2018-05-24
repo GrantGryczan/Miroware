@@ -162,7 +162,7 @@
 						submitted = true;
 						setTimeout(() => {
 							surfaceElem.getAttribute("disabled");
-							formState = surfaceElem._disabled;
+							formState = !surfaceElem._disabled;
 							Miro.formState(surfaceElem, false);
 						});
 					});
