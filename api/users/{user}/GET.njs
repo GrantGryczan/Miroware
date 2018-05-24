@@ -23,7 +23,7 @@ if(user) {
 			Object.assign(this.value, {
 				email: user.email,
 				age: user.age
-			});
+			});;
 		}
 		this.done();
 	} else {
