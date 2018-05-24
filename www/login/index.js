@@ -20,10 +20,12 @@
 						Miro.request("PUT", "/users/@me", {}, {
 							
 						}).then(async req => {
-							if(Math.floor(req.status/100) !== 2) {
+							if(Math.floor(req.status/100) === 2) {
+								Miro.in = true;
+							} else {
 								await new Miro.dialog("Error", req.statusText, ["Okay"]);
 							}
-							window.location.reload();
+							loggedIn();
 						});
 					} else {
 						Miro.logOut();
