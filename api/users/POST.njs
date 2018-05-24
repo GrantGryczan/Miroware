@@ -27,6 +27,7 @@ if(testEmail(this.req.body.email)) {
 					icon: null
 				})).ops[0]._id
 			};
+			this.req.session.in = false;
 			this.status = 201;
 			this.done();
 		});
