@@ -3,6 +3,8 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
+ *
+ * https://github.com/facebook/regenerator/blob/master/packages/regenerator-runtime/runtime.js
  */
 
 !(function(global) {
@@ -16,8 +18,14 @@
   var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
+  var inModule = typeof module === "object";
   var runtime = global.regeneratorRuntime;
   if (runtime) {
+	if (inModule) {
+	  // If regeneratorRuntime is defined globally and we're in a module,
+	  // make the exports object identical to regeneratorRuntime.
+	  module.exports = runtime;
+	}
 	// Don't bother evaluating the rest of this file if the runtime was
 	// already defined globally.
 	return;
@@ -25,7 +33,7 @@
 
   // Define the runtime globally (as expected by generated code) as either
   // module.exports (if we're in a module) or a new, empty object.
-  runtime = global.regeneratorRuntime = {};
+  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
 
   function wrap(innerFn, outerFn, self, tryLocsList) {
 	// If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
