@@ -14,7 +14,7 @@
 	#container {
 		background-position: top calc(50% - 256px) center;
 	}
-	form {
+	#loginform {
 		transform: translateX(-50%);
 	}
 }
