@@ -1,4 +1,4 @@
-const logFlow = this.req.session.in ? "in" : "out";
+const logFlow = this.req.session.in ? "out" : "in";
 this.value = html`
 	</head>
 	<body class="mdc-typography">
