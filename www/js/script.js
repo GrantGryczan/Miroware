@@ -93,7 +93,7 @@
 				const disabledClass = `mdc-${v}--disabled`;
 				for(const w of form.querySelectorAll(mdcClass)) {
 					if(state) {
-						w._prevDisabled = w.classList.has(disabledClass);
+						w._prevDisabled = w.classList.contains(disabledClass);
 						w.classList.add(disabledClass);
 					} else if(!w._prevDisabled) {
 						w.classList.remove(disabledClass);
