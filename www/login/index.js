@@ -7,7 +7,7 @@
 		Miro.formState(loginForm, false);
 		if(Miro.in) {
 			window.location = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
-		} else {
+		} else if(Miro.in === false) {
 			Miro.request("GET", "/users/@me").then(req => {
 				setTimeout(() => {
 					signupForm.classList.remove("hidden");
@@ -34,6 +34,8 @@
 				});
 				signupDialog.form.email.value = req.response.email;
 			});
+		} else {
+			window.location.reload();
 		}
 	};
 	if(Miro.user) {
