@@ -19,6 +19,12 @@
 					if(value === 0) {
 						Miro.request("PUT", "/users/@me", {}, {
 							
+						}).then(req => {
+							if(Math.floor(req.status/100) === 2) {
+								window.location.reload();
+							} else {
+								new Miro.dialog("Error", req.statusText, ["Okay"]);
+							}
 						});
 					} else {
 						Miro.logOut();
