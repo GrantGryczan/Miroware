@@ -88,10 +88,8 @@
 			for(const v of form.elements) {
 				if(state) {
 					v._prevDisabled = v.disabled;
-					console.log(v._prevDisabled);
 					v.disabled = true;
-					console.log(v._prevDisabled);
-				} else if(v._prevDisabled) {
+				} else if(!v._prevDisabled) {
 					v.disabled = false;
 				}
 			}
@@ -102,7 +100,7 @@
 					if(state) {
 						w._prevDisabled = w.classList.contains(disabledClass);
 						w.classList.add(disabledClass);
-					} else if(w._prevDisabled) {
+					} else if(!w._prevDisabled) {
 						w.classList.remove(disabledClass);
 					}
 				}
@@ -193,7 +191,6 @@
 				this._close = close;
 				const dialogButton = async evt => {
 					if(!submitted && evt.target.type === "submit") {
-						console.log(evt.target);
 						await Miro.wait();
 						if(!submitted) {
 							return;
