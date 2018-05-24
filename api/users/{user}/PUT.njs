@@ -6,7 +6,7 @@ const filter = {
 };
 const user = await users.findOne(filter);
 if(user) {
-	if(this.req.session.user && this.req.session.user === user._id) {
+	if(this.req.session.user === user._id) {
 		const set = {};
 		
 		await users.updateOne(filter, {
