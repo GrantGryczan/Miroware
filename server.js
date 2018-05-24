@@ -14,6 +14,7 @@ const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const authenticate = context => {
+	console.log(context);
 	return new Promise(resolve => {
 		if(context.req.body.service === "Google") {
 			googleAuthClient.verifyIdToken({
