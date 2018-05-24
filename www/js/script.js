@@ -259,21 +259,23 @@
 	for(const v of document.querySelectorAll(".ripple")) {
 		v._mdc = new mdc.ripple.MDCRipple(v);
 	}
+	Miro.logOut = () => Miro.request("DELETE", "/session").then(req => {
+		if(Math.floor(req.status/100) === 2) {
+			window.location.reload();
+		} else {
+			new Miro.dialog("Error", req.statusText, ["Okay"]);
+		}
+	});
 	if((Miro.in = JSON.parse(document.querySelector("meta[name=\"in\"]").getAttribute("content"))) !== null) {
 		Miro.user = document.querySelector("meta[name=\"user\"]").getAttribute("content");
-		Miro.logOut = () => Miro.request("DELETE", "/session").then(req => {
-			if(Math.floor(req.status/100) === 2) {
-				window.location.reload();
-			} else {
-				new Miro.dialog("Error", req.statusText, ["Okay"]);
-			}
-		});
-		document.querySelector("#logout").addEventListener("click", () => {
-			new Miro.dialog("Log out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
-				if(value === 0) {
-					Miro.logOut();
-				}
+		if(Miro.in) {
+			document.querySelector("#logout").addEventListener("click", () => {
+				new Miro.dialog("Log out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
+					if(value === 0) {
+						Miro.logOut();
+					}
+				});
 			});
-		});
+		}
 	}
 })();
