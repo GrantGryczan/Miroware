@@ -6,6 +6,7 @@ const filter = {
 };
 const user = await users.findOne(filter);
 if(user) {
+	console.log(this.req.session.user);
 	if(this.req.session.user === user._id) {
 		const set = {};
 		
