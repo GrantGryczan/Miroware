@@ -83,13 +83,22 @@
 			throw new MiroError("The `form` parameter must be an HTML form element.");
 		}
 		state = !state;
-		form.setAttribute("disabled", form._disabled = state);
-		for(const v of form.elements) {
-			v.disabled = state;
-		}
-		for(const v of ["checkbox", "radio", "select", "slider", "text-field"]) {
-			for(const w of form.querySelectorAll(`.mdc-${v}`)) {
-				w.classList[state ? "add" : "remove"](`mdc-${v}--disabled`);
+		if(form._disabled !== state) {
+			form.setAttribute("disabled", form._disabled = state);
+			for(const v of form.elements) {
+				v.disabled = state;
+			}
+			for(const v of ["checkbox", "radio", "select", "slider", "text-field"]) {
+				const mdcClass = `.mdc-${v}`;
+				const disabledClass = `mdc-${v}--disabled`;
+				for(const w of form.querySelectorAll(mdcClass)) {
+					if(state) {
+						w._prevDisabled = w.classList.has(disabledClass);
+						w.classList.add(disabledClass);
+					} else if(!w._prevDisabled) {
+						w.classList.remove(disabledClass);
+					}
+				}
 			}
 		}
 	};
