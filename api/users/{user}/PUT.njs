@@ -11,7 +11,7 @@ if(user) {
 		if(this.req.body.name !== undefined && (this.req.body.name = String(this.req.body.name)).length) {
 			set.name = this.req.body.name.slice(0, 32);
 		}
-		if(typeof this.req.body.birth === "number" && this.req.body.birth <= Date.now() && this.req.body.birth >= 8640000000000000) {
+		if(typeof this.req.body.birth === "number" && this.req.body.birth <= Date.now() && this.req.body.birth >= -8640000000000000) {
 			set.birth = parseInt(this.req.body.birth);
 		}
 		if(Object.keys(set).length) {
