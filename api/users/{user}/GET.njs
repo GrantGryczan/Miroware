@@ -5,7 +5,7 @@ const user = await users.findOne({
 	_id: ObjectID(this.params.user)
 });
 if(user) {
-	const isMe = this.params.user === this.req.session.user.toHexString();
+	const isMe = this.params.user && this.params.user === this.req.session.user.toHexString();
 	if(isMe || user.name !== null) {
 		this.value = {
 			created: user.created,
