@@ -131,7 +131,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					_id: req.session.user
 				}, {
 					$set: {
-						updated: Date.now();
+						updated: Date.now()
 					}
 				});
 			}
