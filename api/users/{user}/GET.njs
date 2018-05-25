@@ -2,7 +2,7 @@ if(this.req.session.user && this.params.user === "@me") {
 	this.params.user = this.req.session.user;
 }
 const user = await users.findOne({
-	_id: this.params.user
+	_id: ObjectID(this.params.user)
 });
 if(user) {
 	const isMe = this.params.user === this.req.session.user;

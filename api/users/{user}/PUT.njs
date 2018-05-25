@@ -2,12 +2,11 @@ if(this.req.session.user && this.params.user === "@me") {
 	this.params.user = this.req.session.user;
 }
 const filter = {
-	_id: this.params.user
+	_id: ObjectID(this.params.user)
 };
 const user = await users.findOne(filter);
 if(user) {
-	console.log(this.req.session.user.constructor, user._id.constructor);
-	if(this.req.session.user === user._id) {
+	if(this.req.session.user.toHexString() === user._id.toHexString()) {
 		const set = {};
 		
 		await users.updateOne(filter, {

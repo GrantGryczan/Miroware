@@ -4,7 +4,7 @@ const {serve, html} = require("servecube");
 const cookieParser = require("cookie-parser");
 const request = require("request-promise-native");
 const mime = require("mime");
-const {MongoClient} = require("mongodb");
+const {MongoClient, ObjectID} = require("mongodb");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const {OAuth2Client} = require("google-auth-library");
@@ -91,7 +91,7 @@ const inputDate = date => {
 const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
 	const db = (await MongoClient.connect(youKnow.db.url, {
-		compression: "snappy"
+		native_parser: true
 	})).db("web");
 	const users = db.collection("users");
 	const domain = production ? "miroware.io" : "localhost:8081";
