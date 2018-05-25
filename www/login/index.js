@@ -20,14 +20,9 @@
 						Miro.request("PUT", "/users/@me", {}, {
 							name: signupDialog.form.username.value,
 							birth: signupDialog.form.birthday.valueAsNumber
-						}).then(async req => {
-							if(Math.floor(req.status/100) === 2) {
-								Miro.in = true;
-							} else {
-								await new Miro.dialog("Error", req.statusText, ["Okay"]);
-							}
-							loggedIn();
-						});
+						}).then(Miro.response(async req => {
+							Miro.in = true;
+						})).finally(loggedIn);
 					} else {
 						Miro.logOut();
 					}

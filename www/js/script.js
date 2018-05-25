@@ -44,37 +44,6 @@
 			setTimeout(resolve, delay);
 		});
 	};
-	const apiOrigin = window.location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
-	Miro.request = (method, url, headers, body) => {
-		return new Promise((resolve, reject) => {
-			method = typeof method === "string" ? method.toUpperCase() : "GET";
-			if(typeof url === "string") {
-				url = apiOrigin + (url.startsWith("/") ? "" : "/") + url;
-			} else {
-				throw new MiroError("The `url` parameter must be a string.");
-			}
-			body = body !== undefined && (body instanceof Object ? body : {});
-			headers = headers instanceof Object ? headers : {};
-			if(body) {
-				headers["Content-Type"] = "application/json";
-			} else {
-				delete headers["Content-Type"];
-			}
-			const req = new XMLHttpRequest();
-			req.responseType = "json";
-			req.withCredentials = true;
-			req.open(method, url, true);
-			for(const i of Object.keys(headers)) {
-				req.setRequestHeader(i, headers[i]);
-			}
-			req.onreadystatechange = () => {
-				if(req.readyState === XMLHttpRequest.DONE) {
-					(status === 0 ? reject : resolve)(req);
-				}
-			};
-			req.send(body && JSON.stringify(body));
-		});
-	};
 	Miro.block = state => {
 		container.classList[state ? "add" : "remove"]("hidden");
 	};
@@ -259,13 +228,54 @@
 	for(const v of document.querySelectorAll(".ripple")) {
 		v._mdc = new mdc.ripple.MDCRipple(v);
 	}
-	Miro.logOut = () => Miro.request("DELETE", "/session").then(req => {
-		if(Math.floor(req.status/100) === 2) {
-			window.location.reload();
-		} else {
-			new Miro.dialog("Error", req.statusText, ["Okay"]);
+	Miro.response = success => {
+		if(success && !(success instanceof Function)) {
+			throw new MiroError("The `success` parameter must be a function if it is defined.");
 		}
-	});
+		return async req => {
+			if(Math.floor(req.status/100) === 2) {
+				if(success) {
+					success(req);
+				}
+			} else {
+				await new Miro.dialog("Error", (req.response && req.response.error) || req.statusText, ["Okay"]);
+			}
+		}
+	};
+	const apiOrigin = window.location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
+	Miro.request = (method, url, headers, body) => {
+		return new Promise((resolve, reject) => {
+			method = typeof method === "string" ? method.toUpperCase() : "GET";
+			if(typeof url === "string") {
+				url = apiOrigin + (url.startsWith("/") ? "" : "/") + url;
+			} else {
+				throw new MiroError("The `url` parameter must be a string.");
+			}
+			body = body !== undefined && (body instanceof Object ? body : {});
+			headers = headers instanceof Object ? headers : {};
+			if(body) {
+				headers["Content-Type"] = "application/json";
+			} else {
+				delete headers["Content-Type"];
+			}
+			const req = new XMLHttpRequest();
+			req.responseType = "json";
+			req.withCredentials = true;
+			req.open(method, url, true);
+			for(const i of Object.keys(headers)) {
+				req.setRequestHeader(i, headers[i]);
+			}
+			req.onreadystatechange = () => {
+				if(req.readyState === XMLHttpRequest.DONE) {
+					(status === 0 ? reject : resolve)(req);
+				}
+			};
+			req.send(body && JSON.stringify(body));
+		});
+	};
+	Miro.logOut = () => Miro.request("DELETE", "/session").then(Miro.response(() => {
+		window.location.reload();
+	}));
 	if((Miro.in = JSON.parse(document.querySelector("meta[name=\"in\"]").getAttribute("content"))) !== null) {
 		Miro.user = document.querySelector("meta[name=\"user\"]").getAttribute("content");
 		if(Miro.in) {
