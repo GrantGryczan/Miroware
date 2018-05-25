@@ -238,7 +238,6 @@
 					success(req);
 				}
 			} else {
-				console.log(req);
 				await new Miro.dialog("Error", (req.response && req.response.error) || req.statusText, ["Okay"]);
 			}
 		}
