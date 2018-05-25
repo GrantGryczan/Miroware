@@ -67,6 +67,9 @@ body {
 	padding: 8px 0;
 	color: rgba(255, 255, 255, 0.87);
 }
+.mdc-drawer .mdc-list-item::before {
+	background-color: #ffffff;
+}
 .mdc-drawer .mdc-list-item:hover::before {
 	opacity: 0.06;
 }
