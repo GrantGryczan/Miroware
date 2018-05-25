@@ -21,6 +21,7 @@ if(user) {
 		const notIn = this.req.session.in === false;
 		const validName = this.req.body.name !== undefined && (this.req.body.name = String(this.req.body.name)).length;
 		const validBirth = typeof this.req.body.birth === "number" && this.req.body.birth <= Date.now() && this.req.body.birth >= -8640000000000000;
+		const set = {};
 		if(notIn) {
 			if(validName && validBirth) {
 				this.req.session.in = true;
@@ -34,7 +35,6 @@ if(user) {
 				return;
 			}
 		}
-		const set = {};
 		if(validName) {
 			set.name = this.req.body.name.slice(0, 32);
 		}
