@@ -126,6 +126,15 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				stringify: false
 			})
 		}), (req, res) => {
+			if(req.session.user) {
+				users.findOneAndUpdate({
+					_id: req.session.user
+				}, {
+					$set: {
+						updated: Date.now();
+					}
+				});
+			}
 			if(req.dir === "api" && bodyMethods.includes(req.method)) {
 				res.set("Content-Type", "application/json");
 				try {
