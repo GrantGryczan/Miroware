@@ -9,21 +9,21 @@ if(user) {
 	if(this.req.session.user.toHexString() === user._id.toHexString()) {
 		const set = {};
 		
-		await users.updateOne(filter, {
-			$set: set
-		});
-		this.done();
+		if(Object.keys(set).length) {
+			await users.updateOne(filter, {
+				$set: set
+			});
+		}
 	} else {
 		this.value = {
 			error: "You do not have permission to edit that user."
 		};
 		this.status = 403;
-		this.done();
 	}
 } else {
 	this.value = {
 		error: "That user was not found."
 	};
 	this.status = 404;
-	this.done();
 }
+this.done();
