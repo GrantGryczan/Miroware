@@ -18,15 +18,27 @@ const filter = {
 const user = await users.findOne(filter);
 if(user) {
 	if(this.req.session.user.toHexString() === user._id.toHexString()) {
-		const set = {};
-		if(this.req.body.name !== undefined && (this.req.body.name = String(this.req.body.name)).length) {
-			if(!user.name) {
+		const notIn = this.req.session.in === false;
+		const validName = this.req.body.name !== undefined && (this.req.body.name = String(this.req.body.name)).length;
+		const validBirth = typeof this.req.body.birth === "number" && this.req.body.birth <= Date.now() && this.req.body.birth >= -8640000000000000;
+		if(notIn) {
+			if(validName && validBirth) {
 				this.req.session.in = true;
 				set.created = set.updated = Date.now();
+			} else {
+				this.value = {
+					error: "If signup is incomplete, you must define the `name` and `birth` values."
+				};
+				this.status = 422;
+				this.done();
+				return;
 			}
+		}
+		const set = {};
+		if(validName) {
 			set.name = this.req.body.name.slice(0, 32);
 		}
-		if(typeof this.req.body.birth === "number" && this.req.body.birth <= Date.now() && this.req.body.birth >= -8640000000000000) {
+		if(validBirth) {
 			set.birth = parseInt(this.req.body.birth);
 		}
 		if(Object.keys(set).length) {
