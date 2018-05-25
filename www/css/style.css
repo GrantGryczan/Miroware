@@ -148,10 +148,10 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 }
 .mdc-text-field:not(.mdc-text-field--textarea):not(.mdc-text-field--outlined):not(.mdc-text-field--fullwidth) {
 	&:not(.mdc-text-field--disabled) {
-		&:not(.mdc-text-field--invalid) .mdc-text-field__input {
+		.mdc-text-field__input {
 			color: rgba(255, 255, 255, 0.87);
 		}
-		.mdc-text-field__input {
+		&:not(.mdc-text-field--invalid) .mdc-text-field__input {
 			border-bottom-color: rgba(255, 255, 255, 0.5);
 			&:hover {
 				border-bottom-color: #ffffff;
