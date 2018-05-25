@@ -6,7 +6,7 @@ const filter = {
 };
 const user = await users.findOne(filter);
 if(user) {
-	if(this.req.session.user === user._id.toHexString()) {
+	if(this.req.session.user.toHexString() === user._id.toHexString()) {
 		const set = {};
 		if(this.req.body.name !== undefined && (this.req.body.name = String(this.req.body.name)).length) {
 			set.name = this.req.body.name.slice(0, 32);
