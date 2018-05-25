@@ -1,7 +1,7 @@
 if(this.req.subdomain === "api") {
 	this.value = String(this.params.status);
 } else {
-	delete this.status;
+	this.status = 308;
 	this.redirect = "/error/";
 }
 this.done();
