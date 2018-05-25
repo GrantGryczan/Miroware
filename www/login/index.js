@@ -6,7 +6,7 @@
 	const loggedIn = () => {
 		Miro.formState(loginForm, false);
 		if(Miro.in) {
-			window.location = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
+			window.location.href = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
 		} else if(Miro.in === false) {
 			Miro.request("GET", "/users/@me").then(req => {
 				setTimeout(() => {
