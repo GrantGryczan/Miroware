@@ -151,14 +151,16 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 		.mdc-text-field__input {
 			color: rgba(255, 255, 255, 0.87);
 		}
-		&:not(.mdc-text-field--invalid) .mdc-text-field__input {
-			border-bottom-color: rgba(255, 255, 255, 0.5);
-			&:hover {
-				border-bottom-color: #ffffff;
+		&:not(.mdc-text-field--invalid) {
+			.mdc-text-field__input {
+				border-bottom-color: rgba(255, 255, 255, 0.5);
+				&:hover {
+					border-bottom-color: #ffffff;
+				}
 			}
-		}
-		.mdc-text-field__input::placeholder, .mdc-floating-label {
-			color: rgba(255, 255, 255, 0.6);
+			.mdc-text-field__input::placeholder, .mdc-floating-label {
+				color: rgba(255, 255, 255, 0.6);
+			}
 		}
 	}
 	&--focused:not(.mdc-text-field--disabled) {
