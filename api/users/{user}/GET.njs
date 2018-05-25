@@ -1,5 +1,5 @@
 if(this.req.session.user && this.params.user === "@me") {
-	this.params.user = this.req.session.user;
+	this.params.user = this.req.session.user.toHexString();
 }
 const user = await users.findOne({
 	_id: ObjectID(this.params.user)
