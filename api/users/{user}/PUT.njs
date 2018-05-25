@@ -1,8 +1,19 @@
 if(this.req.session.user && this.params.user === "@me") {
 	this.params.user = this.req.session.user.toHexString();
 }
+let userID;
+try {
+	userID = ObjectID(this.params.user);
+} catch(err) {
+	this.value = {
+		error: err.message
+	};
+	this.status = 422;
+	this.done();
+	return;
+}
 const filter = {
-	_id: ObjectID(this.params.user)
+	_id: userID
 };
 const user = await users.findOne(filter);
 if(user) {
