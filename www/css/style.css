@@ -146,7 +146,7 @@ input:-webkit-autofill, input:-webkit-autofill:focus {
 	box-shadow: 0 0 0 30px #202020 inset;
 	-webkit-text-fill-color: rgba(255, 255, 255, 0.87);
 }
-.mdc-text-field:not(.mdc-text-field--textarea, .mdc-text-field--outlined, .mdc-text-field--fullwidth) {
+.mdc-text-field:not(.mdc-text-field--textarea):not(.mdc-text-field--outlined):not(.mdc-text-field--fullwidth) {
 	&:not(.mdc-text-field--disabled) {
 		.mdc-text-field__input {
 			border-bottom-color: rgba(255, 255, 255, 0.5);
