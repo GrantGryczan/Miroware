@@ -43,13 +43,18 @@ const authenticate = context => {
 				context.status = 422;
 				context.done();
 			};
+			let referrer = context.req.get("Referrer");
+			const queryIndex = referrer.indexOf("?");
+			if(queryIndex !== -1) {
+				referrer = referrer.slice(0, queryIndex);
+			}
 			request.post("https://discordapp.com/api/oauth2/token", {
 				form: {
 					client_id: youKnow.discord.id,
 					client_secret: youKnow.discord.secret,
 					grant_type: "authorization_code",
 					code: context.req.body.token,
-					redirect_uri: `${context.req.get("Referrer")}discord/`
+					redirect_uri: `${referrer}discord/`
 				}
 			}).then(body => {
 				body = JSON.parse(body);
