@@ -4,13 +4,7 @@ if(testEmail(this.req.body.email)) {
 	});
 	if(user) {
 		authenticate(this).then(async data => {
-			const user = await users.findOne({
-				login: [{
-					service: this.req.body.service,
-					id: data.id
-				}]
-			});
-			if(user) {
+			if(user.login.find(v => v.service === this.req.body.service && v.id === data.id)) {
 				this.value = {
 					in: this.req.session.in = user.name !== null,
 					user: this.req.session.user = user._id
