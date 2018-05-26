@@ -1,7 +1,7 @@
 const logFlow = this.req.session.in ? "out" : "in";
 this.value = html`
 	</head>
-	<body class="mdc-typography">
+	<body class="mdc-typography${this.req.session.in === true ? " in" : ""}">
 		<aside class="mdc-drawer mdc-drawer--temporary">
 			<nav class="mdc-drawer__drawer">
 				<header class="mdc-drawer__header">
@@ -9,10 +9,10 @@ this.value = html`
 				</header>
 				<nav class="mdc-drawer__content mdc-list-group">
 					<div class="mdc-list">
-						<a class="mdc-list-item" href="/">
+						<a class="mdc-list-item${this.req.decodedPath === "/" ? " visiting" : "\" href=\"/"}">
 							<i class="material-icons mdc-list-item__graphic">home</i>Home
 						</a>
-						<a id="log${logFlow}" class="mdc-list-item" href="${this.req.session.in ? "javascript:;" : `/login/?dest=${encodeURIComponent(this.req.url)}`}">
+						<a id="log${logFlow}" class="mdc-list-item${this.req.decodedPath === "/login/" ? " visiting" : `" href="${this.req.session.in ? "javascript:;" : html`/login/?dest=$${encodeURIComponent(this.req.url)}`}`}">
 							<i class="material-icons mdc-list-item__graphic">person</i>Log ${logFlow}
 						</a>
 					</div>
