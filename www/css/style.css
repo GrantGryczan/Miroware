@@ -124,20 +124,24 @@ body {
 			color: #ffffff;
 		}
 	}
-	&--raised:not(:disabled), &--unelevated:not(:disabled) {
-		background-color: #404040;
+	&--raised, &--unelevated {
+		&:not(:disabled) {
+			background-color: #404040;
+		}
 	}
-	&--outlined:not(:disabled) {
-		border-color: rgba(255, 255, 255, 0.6);
-		&:hover, &:focus {
-			border-color: #ffffff;
+	&--outlined {
+		&:not(:disabled) {
+			border-color: rgba(255, 255, 255, 0.6);
+			&:hover, &:focus {
+				border-color: #ffffff;
+			}
+		}
+		&:disabled {
+			border-color: rgba(255, 255, 255, 0.38);
 		}
 	}
 	&:disabled {
 		color: rgba(255, 255, 255, 0.38);
-	}
-	&--outlined:disabled {
-		border-color: rgba(255, 255, 255, 0.38);
 	}
 	&::before, &::after {
 		background-color: #ffffff;
