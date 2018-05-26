@@ -58,6 +58,7 @@ body {
 	}
 }
 .mdc-drawer {
+	user-select: none;
 	&__header {
 		display: none;
 		&-content {
