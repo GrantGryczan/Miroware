@@ -24,7 +24,7 @@ this.value = html`
 		<meta name="in" content="${this.req.session.in === undefined ? null : this.req.session.in}">` + (this.req.session.user ? html`
 		<meta name="user" content="${this.req.session.user}">` : "") + html`
 		<title>$${this.title}</title>
-		<link rel="icon" href="/images/icon/cover.png">
+		<link rel="icon" href="/images/icon/cubecover.png">
 		<link rel="stylesheet" href="/css/style.css">
 		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>
 		<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-110090319-1");</script>`;
