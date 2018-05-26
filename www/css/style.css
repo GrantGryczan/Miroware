@@ -86,9 +86,10 @@ body {
 				opacity: 0.18;
 			}
 			&.visiting {
+				opacity: 0.5;
 				pointer-events: none;
 				&::before {
-					opacity: 0.12;
+					opacity: 0.18;
 					background-color: #000000;
 				}
 			}
