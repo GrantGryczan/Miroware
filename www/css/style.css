@@ -89,10 +89,6 @@ body {
 			&.visiting {
 				opacity: 0.5;
 				pointer-events: none;
-				&::before {
-					opacity: 0.18;
-					background-color: #000000;
-				}
 			}
 		}
 		&-divider {
@@ -101,17 +97,17 @@ body {
 	}
 }
 #externals {
-	padding: 8px 12px;
-}
-.external {
-	display: inline-block;
-	min-width: 28px;
-	height: 28px;
-	margin: 1px;
-	padding: 0;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 24px 24px;
+	padding: 12px;
+	.external {
+		display: inline-block;
+		min-width: 28px;
+		height: 28px;
+		margin: 1px;
+		padding: 0;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 24px 24px;
+	}
 }
 .mdc-ripple-surface {
 	user-select: none;
