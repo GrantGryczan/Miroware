@@ -21,8 +21,12 @@ this.value = html`
 		<meta property="og:title" content="$${this.title}">
 		<meta property="og:description" content="$${this.description}">
 		<meta name="google-signin-client_id" content="${youKnow.google.id}">
-		<meta name="in" content="${this.req.session.in === undefined ? null : this.req.session.in}">` + (this.req.session.user ? html`
-		<meta name="user" content="${this.req.session.user}">` : "") + html`
+		<meta name="in" content="${this.req.session.in === undefined ? null : this.req.session.in}">`;
+if(this.req.session.user) {
+	this.value += html`
+		<meta name="user" content="${this.req.session.user}">`;
+}
+this.value += html`
 		<title>$${this.title}</title>
 		<link rel="icon" href="/images/icon/cubecover.png">
 		<link rel="stylesheet" href="/css/style.css">

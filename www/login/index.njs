@@ -1,6 +1,6 @@
 this.title = "Log in";
 this.description = "Log into your Miroware account.";
-this.tags = ["login", "log", "in", "signin", "signup", "sign", "up", "into", "to", "account"];
+this.tags = ["login", "log", "in", "signup", "sign", "up", "signin", "into", "to", "account", "user", "create"];
 this.value = (await load("www/load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="index.css">`;
