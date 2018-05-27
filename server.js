@@ -93,6 +93,14 @@ const inputDate = date => {
 	}
 	return `${date.getFullYear()}-${month}-${day}`;
 };
+const notLoggedIn = context => {
+	if(context.req.session.in) {
+		return false;
+	} else {
+		context.redirect = `/login/?dest=${encodeURIComponent(context.req.url)}`;
+		return true;
+	}
+};
 const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
 	const db = (await MongoClient.connect(youKnow.db.url, {

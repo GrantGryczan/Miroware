@@ -1,3 +1,6 @@
+if(notLoggedIn(this)) {
+	return;
+}
 this.title = "Settings";
 this.description = "Set your settings.";
 this.tags = ["settings", "preferences", "account", "user"];
