@@ -98,6 +98,7 @@ const notLoggedIn = context => {
 		return false;
 	} else {
 		context.redirect = `/login/?dest=${encodeURIComponent(context.req.url)}`;
+		context.done();
 		return true;
 	}
 };
