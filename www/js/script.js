@@ -11,15 +11,6 @@
 		}
 	}
 	const doNothing = () => {};
-	if(!Array.prototype.includes) {
-		const includes = function(search, fromIndex) {
-			return this.indexOf(search, fromIndex) !== -1;
-		};
-		Array.prototype.includes = includes;
-		if(!String.prototype.includes) {
-			String.prototype.includes = includes;
-		}
-	}
 	const container = document.querySelector("#container");
 	let rawQuery;
 	if(location.href.indexOf("#") !== -1) {
