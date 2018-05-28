@@ -166,13 +166,13 @@ input:-webkit-autofill {
 					border-bottom-color: #ffffff;
 				}
 			}
-			.mdc-text-field__input::placeholder, .mdc-floating-label {
+			.mdc-floating-label {
 				color: rgba(255, 255, 255, 0.6);
 			}
 		}
 	}
 	&--focused:not(.mdc-text-field--disabled) {
-		.mdc-text-field__input::placeholder, .mdc-floating-label {
+		.mdc-floating-label {
 			color: #b54040;
 		}
 	}
@@ -183,12 +183,12 @@ input:-webkit-autofill {
 				border-bottom-color: #d50000;
 			}
 		}
-		.mdc-text-field__input::placeholder, .mdc-floating-label {
+		.mdc-floating-label {
 			color: #d50000;
 		}
 	}
 	&--disabled {
-		.mdc-text-field__input, .mdc-text-field__input::placeholder, .mdc-floating-label {
+		.mdc-text-field__input, .mdc-floating-label {
 			color: rgba(255, 255, 255, 0.38);
 		}
 	}
