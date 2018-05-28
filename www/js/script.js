@@ -259,9 +259,9 @@
 				delete headers["Content-Type"];
 			}
 			const req = new XMLHttpRequest();
-			req.responseType = "json";
 			req.withCredentials = true;
 			req.open(method, url, true);
+			req.responseType = "json";
 			for(const i of Object.keys(headers)) {
 				req.setRequestHeader(i, headers[i]);
 			}
