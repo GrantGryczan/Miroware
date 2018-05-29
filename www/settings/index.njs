@@ -9,7 +9,7 @@ this.value = (await load("www/load/head", this)).value;
 		<link rel="stylesheet" href="index.css">`;*/
 this.value += (await load("www/load/body", this)).value;
 const user = await users.findOne({
-	_id: userID
+	_id: this.req.session.user
 });
 this.value += html`
 			<div id="content">
