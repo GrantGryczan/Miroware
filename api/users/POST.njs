@@ -10,22 +10,31 @@ if(testEmail(this.req.body.email)) {
 	} else {
 		authenticate(this).then(async data => {
 			const now = Date.now();
+			
+			const data = {
+				created: now,
+				updated: now,
+				login: [{
+					service: this.req.body.service,
+					id: data.id
+				}],
+				email: this.req.body.email,
+				verified: this.req.body.email === data.email && data.verified,
+				unverified: null,
+				emailCode: null,
+				publicEmail: false,
+				name: null,
+				nameCooldown: 0,
+				birth: null,
+				desc: "",
+				icon: null
+			};
+			if(!data.verified) {
+				data.unverified = this.req.body.email;
+				// TODO: Set `emailCode` and send verification email.
+			}
 			this.value = {
-				id: this.req.session.user = (await users.insertOne({
-					created: now,
-					updated: now,
-					login: [{
-						service: this.req.body.service,
-						id: data.id
-					}],
-					email: this.req.body.email,
-					verified: this.req.body.email === data.email && data.verified,
-					publicEmail: false,
-					name: null,
-					birth: null,
-					desc: "",
-					icon: null
-				})).ops[0]._id
+				id: this.req.session.user = (await users.insertOne(data)).ops[0]._id
 			};
 			this.req.session.in = false;
 			this.status = 201;

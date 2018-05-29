@@ -32,7 +32,8 @@ if(user) {
 		}
 		if(isMe) {
 			Object.assign(this.value, {
-				email: user.email,
+				unverified: user.unverified,
+				nameCooldown: user.nameCooldown,
 				birth: user.birth
 			});
 		}
