@@ -317,13 +317,21 @@
 	const submitField = function(evt) {
 		evt.preventDefault();
 		Miro.formState(this, false);
-		Miro.request("PUT", this._resource, {}, this._getData()).then(Miro.response(() => {
-			setTimeout(() => {
-				this[_saveField].parentNode.classList.add("hidden");
-				this[_saveField].parentNode.previousSibling.classList.remove("hidden");
-				this._input.disabled = true;
-				this._input.parentNode.classList.add("mdc-text-field--disabled");
-			});
+		const body = this._getData();
+		Miro.request("PUT", this._resource, {}, body).then(Miro.response(req => {
+			if(Object.keys(body).join(",") === Object.keys(req.response).join(",")) {
+				setTimeout(() => {
+					this[_saveField].parentNode.classList.add("hidden");
+					this[_saveField].parentNode.previousSibling.classList.remove("hidden");
+					this._input.disabled = true;
+					this._input.parentNode.classList.add("mdc-text-field--disabled");
+					if(this._success) {
+						this._success();
+					}
+				});
+			} else {
+				new Miro.dialog("Error", "An error occurred.", ["Okay"]);
+			}
 		})).finally(() => {
 			Miro.formState(this, true);
 		});

@@ -13,6 +13,12 @@
 			return {
 				name: this._input.value
 			};
+		},
+		_success: function() {
+			let editOptions;
+			while(editOptions = this.querySelector(".editoptions")) {
+				editOptions.parentNode.removeChild(editOptions);
+			}
 		}
 	});
 	Object.assign(document.querySelector("#birth"), {

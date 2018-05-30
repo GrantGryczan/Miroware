@@ -47,6 +47,7 @@ if(user) {
 			await users.updateOne(filter, {
 				$set: set
 			});
+			this.value = set;
 		}
 	} else {
 		this.value = {
