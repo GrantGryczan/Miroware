@@ -90,12 +90,6 @@
 			}
 		}
 	};
-	for(const v of document.querySelectorAll("input[type=\"email\"]")) {
-		v.maxLength = 254;
-	}
-	for(const v of document.querySelectorAll("form button:not([type])")) {
-		v.type = "button";
-	}
 	const _dialog = Symbol("dialog");
 	const _promise = Symbol("promise");
 	const _close = Symbol("close");
@@ -371,5 +365,11 @@
 				});
 			});
 		}
+	}
+	for(const v of document.querySelectorAll("input[type=\"email\"]")) {
+		v.maxLength = 254;
+	}
+	for(const v of document.querySelectorAll("form button:not([type])")) {
+		v.type = "button";
 	}
 })();
