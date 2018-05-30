@@ -26,11 +26,12 @@
 		this.form[_input].blur();
 	};
 	const inputField = function(evt) {
+		this.form[_saveField].disabled = !this.checkValidity() || this.value === this.form[_prevValue];
+	};
+	const keyField = function(evt) {
 		if(evt.keyCode === 27) {
 			this.form[_closeField].click();
-			return;
 		}
-		this.form[_saveField].disabled = !this.checkValidity() || this.value === this.form[_prevValue];
 	};
 	const submitField = function(evt) {
 		evt.preventDefault();
@@ -46,6 +47,7 @@
 		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
 		v[_saveField] = v.querySelector(".savefield");
 		(v[_input] = v.querySelector("input")).addEventListener("input", inputField);
+		v[_input].addEventListener("key", keyField);
 		v.addEventListener("submit", submitField);
 	}
 })();
