@@ -50,6 +50,8 @@ body {
 	top: 8px;
 	left: 8px;
 	z-index: 4;
+}
+.mdc-fab {
 	background: none;
 	box-shadow: none;
 	color: rgba(255, 255, 255, 0.6);
