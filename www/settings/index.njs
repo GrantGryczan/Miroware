@@ -25,8 +25,7 @@ this.value += html`
 					</span><span class="editoptions hidden">
 						<button class="mdc-fab mdc-fab--mini material-icons closefield">
 							<span class="mdc-fab__icon">close</span>
-						</button>
-						<button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit">
+						</button><button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit" disabled>
 							<span class="mdc-fab__icon">check</span>
 						</button>
 					</span>
@@ -43,8 +42,7 @@ this.value += html`
 					</span><span class="editoptions hidden">
 						<button class="mdc-fab mdc-fab--mini material-icons closefield">
 							<span class="mdc-fab__icon">close</span>
-						</button>
-						<button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit">
+						</button><button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit" disabled>
 							<span class="mdc-fab__icon">check</span>
 						</button>
 					</span>
@@ -61,8 +59,7 @@ this.value += html`
 					</span><span class="editoptions hidden">
 						<button class="mdc-fab mdc-fab--mini material-icons closefield">
 							<span class="mdc-fab__icon">close</span>
-						</button>
-						<button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit">
+						</button><button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit" disabled>
 							<span class="mdc-fab__icon">check</span>
 						</button>
 					</span>
