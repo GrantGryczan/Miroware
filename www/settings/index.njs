@@ -46,7 +46,7 @@ this.value += html`
 							<span class="mdc-fab__icon">check</span>
 						</button>
 					</span>` : ""}
-					<p class="mdc-text-field-helper-text">You can only change your username once per day.</p>
+					<p class="mdc-text-field-helper-text">You may only change your username once per day.</p>
 				</form>
 				<form class="field">
 					<div class="mdc-text-field mdc-text-field--disabled">
