@@ -21,7 +21,7 @@ this.value += html`
 					</div><button class="mdc-fab mdc-fab--mini material-icons editfield">
 						<span class="mdc-fab__icon">edit</span>
 					</button>
-				</form><br>
+				</form>
 				<form class="field">
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input name="username" class="mdc-text-field__input" type="text" value="$${user.name}" maxlength="32" required disabled>
@@ -30,7 +30,7 @@ this.value += html`
 					</div><button class="mdc-fab mdc-fab--mini material-icons editfield">
 						<span class="mdc-fab__icon">edit</span>
 					</button>
-				</form><br>
+				</form>
 				<form class="field">
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input name="birthday" class="mdc-text-field__input" type="date" value="${inputDate(new Date(user.birth))}" max="${inputDate(new Date())}" required disabled>
