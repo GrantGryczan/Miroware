@@ -16,7 +16,7 @@ this.value += html`
 				<form class="field">
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input name="email" class="mdc-text-field__input" type="email" value="$${user.email}" required disabled>
-						<label class="mdc-floating-label alwaysfloat" for="email">Email</label>
+						<label class="mdc-floating-label" for="email">Email</label>
 						<div class="mdc-line-ripple"></div>
 					</div><span class="editoptions">
 						<button class="mdc-fab mdc-fab--mini material-icons editfield">
