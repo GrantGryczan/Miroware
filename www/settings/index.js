@@ -7,7 +7,7 @@
 		this.parentNode.nextSibling.classList.remove("hidden");
 		this.form[_input].disabled = false;
 		this.form[_input].parentNode.classList.remove("mdc-text-field--disabled");
-		this.form[_prevValue] = this.value;
+		this.form[_prevValue] = this.form[_input].value;
 		this.form[_input].focus();
 		const prevType = this.form[_input].type;
 		this.form[_input].type = "text";
@@ -20,7 +20,7 @@
 		this.parentNode.previousSibling.classList.remove("hidden");
 		this.form[_input].disabled = true;
 		this.form[_input].parentNode.classList.add("mdc-text-field--disabled");
-		this.value = this.form[_prevValue];
+		this.form[_input].value = this.form[_prevValue];
 		this.form[_input].blur();
 	};
 	const saveField = function() {
@@ -32,7 +32,7 @@
 		this.form[_input].blur();
 	};
 	const inputField = function() {
-		this.form[_saveField].disabled = this.value === this.form[_prevValue].value;
+		this.form[_saveField].disabled = this.value === this.form[_prevValue];
 	};
 	for(const v of document.querySelectorAll(".field")) {
 		v.querySelector(".editfield").addEventListener("click", editField);
