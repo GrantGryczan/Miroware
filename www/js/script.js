@@ -348,13 +348,14 @@
 			</button><button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit" disabled>
 				<span class="mdc-fab__icon">check</span>
 			</button>
-		</span>`;
+		</span>
+	`;
 	for(const v of document.querySelectorAll(".field:not(.noedit)")) {
-		v.insertBefore(editOptions.cloneNode(true), v.firstChild.nextSibling);
+		(v._input = v.querySelector("input")).addEventListener("input", inputField);
+		v.insertBefore(editOptions.cloneNode(true), v._input.parentNode.nextSibling);
 		v.querySelector(".editfield").addEventListener("click", editField);
 		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
 		v[_saveField] = v.querySelector(".savefield");
-		(v._input = v.querySelector("input")).addEventListener("input", inputField);
 		v._input.addEventListener("keydown", keyField);
 		v.addEventListener("submit", submitField);
 	}
