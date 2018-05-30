@@ -44,7 +44,7 @@
 	for(const v of document.querySelectorAll(".field")) {
 		v.querySelector(".editfield").addEventListener("click", editField);
 		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
-		v[_saveField] = v.querySelector(".savefield"));
+		v[_saveField] = v.querySelector(".savefield");
 		(v[_input] = v.querySelector("input")).addEventListener("input", inputField);
 		v.addEventListener("submit", submitField);
 	}
