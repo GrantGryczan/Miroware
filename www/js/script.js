@@ -51,9 +51,8 @@
 			}
 			string += code + arguments[0][i+1];
 		}
-		let elem = document.createElement("span");
-		elem.innerHTML = string;
-		return elem.children.length === 1 ? elem.firstChild : elem;
+		const elem = document.createElement("span");
+		return elem.childNodes.length === 1 ? elem.firstChild : elem;
 	};
 	Miro.block = state => {
 		container.classList[state ? "add" : "remove"]("hidden");
@@ -350,7 +349,7 @@
 	for(const v of document.querySelectorAll(".field:not(.noedit)")) {
 		(v._input = v.querySelector("input")).addEventListener("input", inputField);
 		const editOptionsClone = editOptions.cloneNode(true);
-		v.insertBefore(editOptionsClone.firstChild, v.insertBefore(editOptionsClone.firstChild, v._input.parentNode.nextSibling).nextSibling);
+		v.insertBefore(editOptionsClone.querySelector("span"), v.insertBefore(editOptionsClone.querySelector("span"), v._input.parentNode.nextSibling).nextSibling);
 		v.querySelector(".editfield").addEventListener("click", editField);
 		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
 		v[_saveField] = v.querySelector(".savefield");
