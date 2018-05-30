@@ -8,8 +8,7 @@
 		this.form[_input].parentNode.classList.remove("mdc-text-field--disabled");
 		this.form[_prevValue] = this.value;
 		this.form[_input].focus();
-		this.value = "";
-		this.value = this.form[_prevValue];
+		this.form[_input].setSelectionRange(this.form[_input].value.length, this.form[_input].value.length);
 	};
 	const closeField = function() {
 		this.parentNode.classList.add("hidden");
