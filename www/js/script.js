@@ -53,10 +53,7 @@
 		}
 		let elem = document.createElement("span");
 		elem.innerHTML = string;
-		if(elem.children.length === 1) {
-			elem = elem.firstChild;
-		}
-		return elem;
+		return elem.children.length === 1 ? elem.firstChild : elem;
 	};
 	Miro.block = state => {
 		container.classList[state ? "add" : "remove"]("hidden");
@@ -352,7 +349,9 @@
 	`;
 	for(const v of document.querySelectorAll(".field:not(.noedit)")) {
 		(v._input = v.querySelector("input")).addEventListener("input", inputField);
-		v.insertBefore(editOptions.cloneNode(true), v._input.parentNode.nextSibling);
+		const editOptionsClone = editOptions.cloneNode(true);
+		v.insertBefore(editOptionsClone.firstChild, v._input.parentNode.nextSibling);
+		v.insertBefore(editOptionsClone.lastChild, editOptionsClone.firstChild);
 		v.querySelector(".editfield").addEventListener("click", editField);
 		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
 		v[_saveField] = v.querySelector(".savefield");
