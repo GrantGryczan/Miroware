@@ -35,6 +35,14 @@
 			setTimeout(resolve, delay);
 		});
 	};
+	const prepare = elem => {
+		for(const v of elem.querySelectorAll("input[type=\"email\"]")) {
+			v.maxLength = 254;
+		}
+		for(const v of elem.querySelectorAll("form button:not([type])")) {
+			v.type = "button";
+		}
+	}
 	const htmlExps = ["$", "&"];
 	const htmlReplacements = [[/&/g, "&amp;"], [/</g, "&lt;"], [/>/g, "&gt;"], [/"/g, "&quot;"], [/'/g, "&#39;"], [/`/g, "&#96;"]];
 	window.html = function() {
@@ -53,6 +61,7 @@
 		}
 		const elem = document.createElement("span");
 		elem.innerHTML = string;
+		prepare(elem);
 		return elem.childNodes.length === 1 ? elem.firstChild : elem;
 	};
 	Miro.block = state => {
@@ -297,10 +306,5 @@
 			});
 		}
 	}
-	for(const v of document.querySelectorAll("input[type=\"email\"]")) {
-		v.maxLength = 254;
-	}
-	for(const v of document.querySelectorAll("form button:not([type])")) {
-		v.type = "button";
-	}
+	prepare(document);
 })();

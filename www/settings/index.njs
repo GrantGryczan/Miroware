@@ -30,7 +30,7 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<br>
-					<button id="save" name="save" class="mdc-button mdc-button--raised ripple" type="submit">Save</button>
+					<button id="save" name="save" class="mdc-button mdc-button--raised ripple" type="submit" disabled>Save</button>
 				</form>
 			</div>`;
 this.value += (await load("www/load/belt", this)).value;
