@@ -47,7 +47,7 @@
 		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
 		v[_saveField] = v.querySelector(".savefield");
 		(v[_input] = v.querySelector("input")).addEventListener("input", inputField);
-		v[_input].addEventListener("key", keyField);
+		v[_input].addEventListener("keydown", keyField);
 		v.addEventListener("submit", submitField);
 	}
 })();
