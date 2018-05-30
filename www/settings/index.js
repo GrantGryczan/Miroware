@@ -32,7 +32,7 @@
 		this.form[_input].blur();
 	};
 	const inputField = function() {
-		this.form[_saveField].disabled = this.value === this.form[_prevValue];
+		this.form[_saveField].disabled = this.value === this.form[_prevValue].value;
 	};
 	for(const v of document.querySelectorAll(".field")) {
 		v.querySelector(".editfield").addEventListener("click", editField);
