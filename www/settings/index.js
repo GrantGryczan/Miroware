@@ -1,18 +1,20 @@
 (() => {
 	const _input = Symbol("input");
-	const _icon = Symbol("icon");
+	const _prevValue = Symbol("prevValue");
 	const editField = function() {
-		this[_input].disabled = !this[_input].disabled;
-		this[_icon].textContent = (this[_icon].textContent === "edit" ? "save" : "edit");
-		if(this.previousSibling.classList.toggle("mdc-text-field--disabled")) {
-			// TODO: save
-		} else {
-			this[_input].select();
-		}
+		this.form[_input].disabled = false;
+		this.form[_prevValue] = this.value;
+		this.form[_input].select();
 	};
-	for(const v of document.querySelectorAll(".editfield")) {
+	const closeField = function() {
+		this.form[_input].disabled = false;
+		this.form[_prevValue] = this.value;
+		this.form[_input].select();
+	};
+	for(const v of document.querySelectorAll(".field")) {
 		v[_input] = v.previousSibling.querySelector("input");
-		v[_icon] = v.querySelector(".mdc-fab__icon");
-		v.addEventListener("click", editField);
+		v.querySelector(".editfield").addEventListener("click", editField);
+		v.querySelector(".closefield").addEventListener("click", closeField);
+		v.querySelector(".savefield").addEventListener("click", saveField);
 	}
 })();

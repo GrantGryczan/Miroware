@@ -48,9 +48,17 @@ body {
 .mdc-fab {
 	background: none;
 	box-shadow: none;
-	color: rgba(255, 255, 255, 0.6);
-	&:hover, &:focus {
-		color: #ffffff;
+	&:not(:disabled) {
+		color: rgba(255, 255, 255, 0.6);
+		&:hover, &:focus {
+			color: #ffffff;
+		}
+	}
+	&:disabled {
+		color: rgba(255, 255, 255, 0.3);
+		&:hover, &:focus {
+			box-shadow: none;
+		}
 	}
 }
 #menu {
@@ -59,7 +67,7 @@ body {
 	left: 8px;
 	z-index: 4;
 }
-.editfield {
+.editoptions button {
 	margin-left: 8px;
 }
 .mdc-drawer {
