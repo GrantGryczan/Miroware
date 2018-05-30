@@ -218,10 +218,10 @@
 		snackbar.show(dataObj);
 	};
 	for(const v of document.querySelectorAll(".mdc-text-field")) {
-		v._mdc = new mdc.textField.MDCTextField(v);
+		new mdc.textField.MDCTextField(v);
 	}
 	for(const v of document.querySelectorAll(".ripple")) {
-		v._mdc = new mdc.ripple.MDCRipple(v);
+		new mdc.ripple.MDCRipple(v);
 	}
 	Miro.response = success => {
 		if(success && !(success instanceof Function)) {
@@ -268,6 +268,63 @@
 			req.send(body && JSON.stringify(body));
 		});
 	};
+	const _prevValue = Symbol("prevValue");
+	const _closeField = Symbol("closeField");
+	const _saveField = Symbol("saveField");
+	const editField = function() {
+		this.parentNode.classList.add("hidden");
+		this.form[_saveField].disabled = true;
+		this.parentNode.nextSibling.classList.remove("hidden");
+		this.form._input.disabled = false;
+		this.form._input.parentNode.classList.remove("mdc-text-field--disabled");
+		this.form[_prevValue] = this.form._input.value;
+		this.form._input.focus();
+		const prevType = this.form._input.type;
+		this.form._input.type = "text";
+		const cursorPos = String(this.form._input.value).length;
+		this.form._input.setSelectionRange(cursorPos, cursorPos);
+		this.form._input.type = prevType;
+	};
+	const closeField = function() {
+		this.parentNode.classList.add("hidden");
+		this.parentNode.previousSibling.classList.remove("hidden");
+		this.form._input.disabled = true;
+		this.form._input.parentNode.classList.add("mdc-text-field--disabled");
+		this.form._input.value = this.form[_prevValue];
+	};
+	const inputField = function(evt) {
+		this.form[_saveField].disabled = !this.checkValidity() || this.value === this.form[_prevValue];
+	};
+	const keyField = function(evt) {
+		if(evt.keyCode === 27) {
+			this.form[_closeField].click();
+		}
+	};
+	const submitField = function(evt) {
+		evt.preventDefault();
+		Miro.formState(this, false);
+		Miro.request("PUT", this._resource, {}, this._getData()).then(Miro.response(() => {
+			setTimeout(() => {
+				this[_saveField].parentNode.classList.add("hidden");
+				this[_saveField].parentNode.previousSibling.classList.remove("hidden");
+				this._input.disabled = true;
+				this._input.parentNode.classList.add("mdc-text-field--disabled");
+			});
+		})).finally(() => {
+			Miro.formState(this, true);
+		});
+	};
+	for(const v of document.querySelectorAll(".field")) {
+		const editFieldBtn = v.querySelector(".editfield");
+		if(editFieldBtn) {
+			editFieldBtn.addEventListener("click", editField);
+			(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
+			v[_saveField] = v.querySelector(".savefield");
+			(v._input = v.querySelector("input")).addEventListener("input", inputField);
+			v._input.addEventListener("keydown", keyField);
+			v.addEventListener("submit", submitField);
+		}
+	}
 	Miro.logOut = () => Miro.request("DELETE", "/session").then(Miro.response(() => {
 		window.location.reload();
 	}));
