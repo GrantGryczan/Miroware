@@ -48,7 +48,7 @@ this.value += html`
 					</span>` : ""}
 					<p class="mdc-text-field-helper-text">You may only change your username once per day.</p>
 				</form>
-				<form id="birthday" class="field">
+				<form id="birth" class="field">
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input class="mdc-text-field__input" type="date" value="${inputDate(new Date(user.birth))}" max="${inputDate(new Date())}" required disabled>
 						<label class="mdc-floating-label alwaysfloat" for="birthday">Birthday</label>
