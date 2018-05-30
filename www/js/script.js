@@ -52,6 +52,7 @@
 			string += code + arguments[0][i+1];
 		}
 		const elem = document.createElement("span");
+		elem.innerHTML = string;
 		return elem.childNodes.length === 1 ? elem.firstChild : elem;
 	};
 	Miro.block = state => {
