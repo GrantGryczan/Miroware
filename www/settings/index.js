@@ -8,6 +8,7 @@
 			// TODO: save
 		} else {
 			this[_input].focus();
+			this[_input].value = this[_input].value;
 		}
 	};
 	for(const v of document.querySelectorAll(".editfield")) {
