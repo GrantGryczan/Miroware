@@ -1,9 +1,11 @@
 (() => {
 	const _input = Symbol("input");
 	const _prevValue = Symbol("prevValue");
+	const _closeField = Symbol("closeField");
 	const _saveField = Symbol("saveField");
 	const editField = function() {
 		this.parentNode.classList.add("hidden");
+		this.form[_saveField].disabled = true;
 		this.parentNode.nextSibling.classList.remove("hidden");
 		this.form[_input].disabled = false;
 		this.form[_input].parentNode.classList.remove("mdc-text-field--disabled");
@@ -23,21 +25,27 @@
 		this.form[_input].value = this.form[_prevValue];
 		this.form[_input].blur();
 	};
-	const saveField = function() {
-		// TODO
-		this.parentNode.classList.add("hidden");
-		this.parentNode.previousSibling.classList.remove("hidden");
-		this.form[_input].disabled = true;
-		this.form[_input].parentNode.classList.add("mdc-text-field--disabled");
-		this.form[_input].blur();
-	};
-	const inputField = function() {
+	const inputField = function(evt) {
+		if(evt.keyCode === 27) {
+			this.form[_closeField].click();
+			return;
+		}
 		this.form[_saveField].disabled = !this.checkValidity() || this.value === this.form[_prevValue];
+	};
+	const submitField = function(evt) {
+		evt.preventDefault();
+		// TODO: save
+		this.classList.add("hidden");
+		this.previousSibling.classList.remove("hidden");
+		this[_input].disabled = true;
+		this[_input].parentNode.classList.add("mdc-text-field--disabled");
+		this[_input].blur();
 	};
 	for(const v of document.querySelectorAll(".field")) {
 		v.querySelector(".editfield").addEventListener("click", editField);
-		v.querySelector(".closefield").addEventListener("click", closeField);
-		(v[_saveField] = v.querySelector(".savefield")).addEventListener("click", saveField);
+		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
+		v[_saveField] = v.querySelector(".savefield"));
 		(v[_input] = v.querySelector("input")).addEventListener("input", inputField);
+		v.addEventListener("submit", submitField);
 	}
 })();
