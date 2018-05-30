@@ -36,8 +36,8 @@
 	const submitField = function(evt) {
 		evt.preventDefault();
 		// TODO: save
-		this.classList.add("hidden");
-		this.previousSibling.classList.remove("hidden");
+		this[_saveField].parentNode.classList.add("hidden");
+		this[_saveField].parentNode.previousSibling.classList.remove("hidden");
 		this[_input].disabled = true;
 		this[_input].parentNode.classList.add("mdc-text-field--disabled");
 		this[_input].blur();
