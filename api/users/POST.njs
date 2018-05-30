@@ -10,7 +10,7 @@ if(testEmail(this.req.body.email)) {
 	} else {
 		authenticate(this).then(async data => {
 			const now = Date.now();
-			const data = {
+			const insertData = {
 				created: now,
 				updated: now,
 				login: [{
@@ -28,12 +28,12 @@ if(testEmail(this.req.body.email)) {
 				desc: "",
 				icon: null
 			};
-			if(!data.verified) {
-				data.unverified = this.req.body.email;
+			if(!insertData.verified) {
+				insertData.unverified = this.req.body.email;
 				// TODO: Set `emailCode` and send verification email.
 			}
 			this.value = {
-				id: this.req.session.user = (await users.insertOne(data)).ops[0]._id
+				id: this.req.session.user = (await users.insertOne(insertData)).ops[0]._id
 			};
 			this.req.session.in = false;
 			this.status = 201;
