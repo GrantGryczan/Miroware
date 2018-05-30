@@ -2,9 +2,13 @@
 	const _input = Symbol("input");
 	const _icon = Symbol("icon");
 	const editField = function() {
-		this.previousSibling.classList.toggle("mdc-text-field--disabled");
 		this[_input].disabled = !this[_input].disabled;
 		this[_icon].textContent = (this[_icon].textContent === "edit" ? "save" : "edit");
+		if(this.previousSibling.classList.toggle("mdc-text-field--disabled")) {
+			// TODO: save
+		} else {
+			this[_input].focus();
+		}
 	};
 	for(const v of document.querySelectorAll(".editfield")) {
 		v[_input] = v.previousSibling.querySelector("input");
