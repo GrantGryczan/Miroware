@@ -23,7 +23,6 @@
 		this.form[_input].disabled = true;
 		this.form[_input].parentNode.classList.add("mdc-text-field--disabled");
 		this.form[_input].value = this.form[_prevValue];
-		this.form[_input].blur();
 	};
 	const inputField = function(evt) {
 		this.form[_saveField].disabled = !this.checkValidity() || this.value === this.form[_prevValue];
@@ -39,11 +38,12 @@
 		Miro.request("PUT", "/users/@me", {}, {
 			
 		}).then(Miro.response(() => {
-			this[_saveField].parentNode.classList.add("hidden");
-			this[_saveField].parentNode.previousSibling.classList.remove("hidden");
-			this[_input].disabled = true;
-			this[_input].parentNode.classList.add("mdc-text-field--disabled");
-			this[_input].blur();
+			setTimeout(() => {
+				this[_saveField].parentNode.classList.add("hidden");
+				this[_saveField].parentNode.previousSibling.classList.remove("hidden");
+				this[_input].disabled = true;
+				this[_input].parentNode.classList.add("mdc-text-field--disabled");
+			});
 		})).finally(() => {
 			Miro.formState(this, true);
 		});
