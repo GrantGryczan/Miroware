@@ -10,7 +10,7 @@
 	savePrevs();
 	const onInput = evt => {
 		for(const v of inputs) {
-			if(!v.checkValidity || v[_prev] !== (v.type === "checkbox" ? v.checked : v.value)) {
+			if(!v.checkValidity() || v[_prev] !== (v.type === "checkbox" ? v.checked : v.value)) {
 				settings.disabled = true;
 				return;
 			}
