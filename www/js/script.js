@@ -73,6 +73,9 @@
 	for(const v of document.querySelectorAll("input[type=\"email\"]")) {
 		v.maxLength = 254;
 	}
+	for(const v of body.querySelectorAll("form button:not([type])")) {
+		v.type = "button";
+	}
 	const _dialog = Symbol("dialog");
 	const _promise = Symbol("promise");
 	const _close = Symbol("close");
@@ -104,11 +107,6 @@
 			surfaceElem.appendChild(headerElem);
 			const bodyElem = document.createElement("section");
 			bodyElem.classList.add("mdc-dialog__body");
-			if(body.querySelectorAll) {
-				for(const v of body.querySelectorAll("button:not([type])")) {
-					v.type = "button";
-				}
-			}
 			bodyElem.appendChild(body);
 			surfaceElem.appendChild(bodyElem);
 			const footerElem = document.createElement("footer");

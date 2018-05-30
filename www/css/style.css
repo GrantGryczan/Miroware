@@ -45,12 +45,6 @@ body {
 	opacity: 0.3;
 	background-color: #000000;
 }
-#menu {
-	position: fixed;
-	top: 8px;
-	left: 8px;
-	z-index: 4;
-}
 .mdc-fab {
 	background: none;
 	box-shadow: none;
@@ -58,6 +52,15 @@ body {
 	&:hover, &:focus {
 		color: #ffffff;
 	}
+}
+#menu {
+	position: fixed;
+	top: 8px;
+	left: 8px;
+	z-index: 4;
+}
+.editfield {
+	margin-left: 8px;
 }
 .mdc-drawer {
 	user-select: none;

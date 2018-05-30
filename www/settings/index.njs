@@ -18,21 +18,21 @@ this.value += html`
 						<input name="email" class="mdc-text-field__input" type="email" value="$${user.email}" required disabled>
 						<label class="mdc-floating-label alwaysfloat" for="email">Email</label>
 						<div class="mdc-line-ripple"></div>
-					</div><button class="mdc-fab mdc-fab--mini material-icons editfield spaced">
+					</div><button class="mdc-fab mdc-fab--mini material-icons editfield">
 						<span class="mdc-fab__icon">edit</span>
 					</button><br>
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input name="username" class="mdc-text-field__input" type="text" value="$${user.name}" maxlength="32" required disabled>
 						<label class="mdc-floating-label" for="username">Username</label>
 						<div class="mdc-line-ripple"></div>
-					</div><button class="mdc-fab mdc-fab--mini material-icons editfield spaced">
+					</div><button class="mdc-fab mdc-fab--mini material-icons editfield">
 						<span class="mdc-fab__icon">edit</span>
 					</button><br>
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input name="birthday" class="mdc-text-field__input" type="date" value="${inputDate(new Date(user.birth))}" max="${inputDate(new Date())}" required disabled>
 						<label class="mdc-floating-label alwaysfloat" for="birthday">Birthday</label>
 						<div class="mdc-line-ripple"></div>
-					</div><button class="mdc-fab mdc-fab--mini material-icons editfield spaced">
+					</div><button class="mdc-fab mdc-fab--mini material-icons editfield">
 						<span class="mdc-fab__icon">edit</span>
 					</button>
 				</form>
