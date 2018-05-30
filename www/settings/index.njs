@@ -24,12 +24,12 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div>
 					<p class="mdc-text-field-helper-text">You may only change your username once per day.</p>
-					<br>
 					<div class="mdc-text-field">
 						<input id="birth" name="birth" class="mdc-text-field__input" type="date" value="${inputDate(new Date(user.birth))}" max="${inputDate(new Date())}" required>
 						<label class="mdc-floating-label alwaysfloat" for="birthday">Birthday</label>
 						<div class="mdc-line-ripple"></div>
 					</div><br>
+					<br>
 					<button id="save" name="save" class="mdc-button mdc-button--raised ripple" type="submit">Save</button>
 				</form>
 			</div>`;
