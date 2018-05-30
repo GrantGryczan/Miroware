@@ -10,14 +10,12 @@
 	savePrevs();
 	const onInput = evt => {
 		for(const v of inputs) {
-			if(!v.checkValidity() || v[_prev] !== (v.type === "checkbox" ? v.checked : v.value)) {
-				console.log(v.checkValidity(), v[_prev], v.type === "checkbox" ? v.checked : v.value);
-				settings.disabled = true;
+			if(v.checkValidity() && v[_prev] !== (v.type === "checkbox" ? v.checked : v.value)) {
+				settings.disabled = false;
 				return;
 			}
 		}
-		console.log(1);
-		settings.disabled = false;
+		settings.disabled = true;
 	};
 	settings.addEventListener("input", onInput);
 	settings.addEventListener("change", onInput);
