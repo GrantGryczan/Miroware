@@ -10,7 +10,6 @@ if(testEmail(this.req.body.email)) {
 	} else {
 		authenticate(this).then(async data => {
 			const now = Date.now();
-			
 			const data = {
 				created: now,
 				updated: now,

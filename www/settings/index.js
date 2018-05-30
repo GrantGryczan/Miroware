@@ -35,19 +35,28 @@
 	};
 	const submitField = function(evt) {
 		evt.preventDefault();
-		// TODO: save
-		this[_saveField].parentNode.classList.add("hidden");
-		this[_saveField].parentNode.previousSibling.classList.remove("hidden");
-		this[_input].disabled = true;
-		this[_input].parentNode.classList.add("mdc-text-field--disabled");
-		this[_input].blur();
+		Miro.formState(this, false);
+		Miro.request("PUT", "/users/@me", {}, {
+			
+		}).then(Miro.response(() => {
+			this[_saveField].parentNode.classList.add("hidden");
+			this[_saveField].parentNode.previousSibling.classList.remove("hidden");
+			this[_input].disabled = true;
+			this[_input].parentNode.classList.add("mdc-text-field--disabled");
+			this[_input].blur();
+		})).finally(() => {
+			Miro.formState(this, true);
+		});
 	};
 	for(const v of document.querySelectorAll(".field")) {
-		v.querySelector(".editfield").addEventListener("click", editField);
-		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
-		v[_saveField] = v.querySelector(".savefield");
-		(v[_input] = v.querySelector("input")).addEventListener("input", inputField);
-		v[_input].addEventListener("keydown", keyField);
-		v.addEventListener("submit", submitField);
+		const editFieldBtn = v.querySelector(".editfield");
+		if(editFieldBtn) {
+			editFieldBtn.addEventListener("click", editField);
+			(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
+			v[_saveField] = v.querySelector(".savefield");
+			(v[_input] = v.querySelector("input")).addEventListener("input", inputField);
+			v[_input].addEventListener("keydown", keyField);
+			v.addEventListener("submit", submitField);
+		}
 	}
 })();

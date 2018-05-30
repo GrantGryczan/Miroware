@@ -20,7 +20,7 @@
 						Miro.request("PUT", "/users/@me", {}, {
 							name: signupDialog.form.username.value,
 							birth: signupDialog.form.birthday.valueAsNumber
-						}).then(Miro.response(async req => {
+						}).then(Miro.response(() => {
 							Miro.in = true;
 						})).finally(loggedIn);
 					} else {
