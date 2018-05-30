@@ -350,7 +350,7 @@
 	for(const v of document.querySelectorAll(".field:not(.noedit)")) {
 		(v._input = v.querySelector("input")).addEventListener("input", inputField);
 		const editOptionsClone = editOptions.cloneNode(true);
-		v.insertBefore(editOptionsClone.querySelector("span"), v.insertBefore(editOptionsClone.querySelector("span"), v._input.parentNode.nextSibling).nextSibling);
+		v.insertBefore(editOptionsClone.lastElementChild, v.insertBefore(editOptionsClone.firstElementChild, v._input.parentNode.nextSibling).nextSibling);
 		v.querySelector(".editfield").addEventListener("click", editField);
 		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
 		v[_saveField] = v.querySelector(".savefield");
