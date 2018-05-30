@@ -317,9 +317,8 @@
 	const submitField = function(evt) {
 		evt.preventDefault();
 		Miro.formState(this, false);
-		const body = this._getData();
-		Miro.request("PUT", this._resource, {}, body).then(Miro.response(req => {
-			if(Object.keys(body).join(",") === Object.keys(req.response).join(",")) {
+		Miro.request("PUT", this._resource, {}, this._getData()).then(Miro.response(req => {
+			if(Object.keys(req.response).length) {
 				setTimeout(() => {
 					this[_saveField].parentNode.classList.add("hidden");
 					this[_saveField].parentNode.previousSibling.classList.remove("hidden");
