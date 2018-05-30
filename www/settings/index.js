@@ -10,7 +10,8 @@
 		this.form[_input].focus();
 		const prevType = this.form[_input].type;
 		this.form[_input].type = "text";
-		this.form[_input].setSelectionRange(this.form[_input].value.length, this.form[_input].value.length);
+		const cursorPos = String(this.form[_input].value).length;
+		this.form[_input].setSelectionRange(cursorPos, cursorPos);
 		this.form[_input].type = prevType;
 	};
 	const closeField = function() {
