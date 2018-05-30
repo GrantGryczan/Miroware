@@ -5,6 +5,7 @@
 		this.parentNode.classList.add("hidden");
 		this.parentNode.nextSibling.classList.remove("hidden");
 		this.form[_input].disabled = false;
+		this.form[_input].parentNode.classList.remove("mdc-text-field--disabled");
 		this.form[_prevValue] = this.value;
 		this.form[_input].select();
 	};
@@ -12,12 +13,15 @@
 		this.parentNode.classList.add("hidden");
 		this.parentNode.previousSibling.classList.remove("hidden");
 		this.form[_input].disabled = true;
+		this.form[_input].parentNode.classList.add("mdc-text-field--disabled");
 		this.value = this.form[_prevValue];
 	};
 	const saveField = function() {
 		// TODO
 		this.parentNode.classList.add("hidden");
 		this.parentNode.previousSibling.classList.remove("hidden");
+		this.form[_input].disabled = true;
+		this.form[_input].parentNode.classList.add("mdc-text-field--disabled");
 	};
 	for(const v of document.querySelectorAll(".field")) {
 		v[_input] = v.querySelector("input");
