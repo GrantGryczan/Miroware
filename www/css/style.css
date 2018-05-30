@@ -226,7 +226,7 @@ input:-webkit-autofill {
 }
 .mdc-text-field-helper-text {
 	opacity: 0.5;
-	&, .mdc-text-field--disabled + & {
+	&, .mdc-text-field:not(.mdc-text-field--disabled) + &, .mdc-text-field--disabled + & {
 		color: rgba(255, 255, 255, 0.6);
 	}
 }
