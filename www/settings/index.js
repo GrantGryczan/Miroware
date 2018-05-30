@@ -11,7 +11,7 @@
 		_resource: "/users/@me",
 		_getData: function() {
 			return {
-				username: this._input.value
+				name: this._input.value
 			};
 		}
 	});
