@@ -35,6 +35,29 @@
 			setTimeout(resolve, delay);
 		});
 	};
+	const htmlExps = ["$", "&"];
+	const htmlReplacements = [[/&/g, "&amp;"], [/</g, "&lt;"], [/>/g, "&gt;"], [/"/g, "&quot;"], [/'/g, "&#39;"], [/`/g, "&#96;"]];
+	window.html = function() {
+		let string = arguments[0][0];
+		const exps = arguments.length-1;
+		for(let i = 0; i < exps; i++) {
+			let code = String(arguments[i+1]);
+			const expIndex = htmlExps.indexOf(arguments[0][i].slice(-1));
+			if(expIndex !== -1) {
+				string = string.slice(0, -1);
+				for(let j = expIndex; j < htmlReplacements.length; j++) {
+					code = code.replace(...htmlReplacements[j]);
+				}
+			}
+			string += code + arguments[0][i+1];
+		}
+		let elem = document.createElement("span");
+		elem.innerHTML = string;
+		if(elem.children.length === 1) {
+			elem = elem.firstChild;
+		}
+		return elem;
+	};
 	Miro.block = state => {
 		container.classList[state ? "add" : "remove"]("hidden");
 	};
@@ -314,16 +337,26 @@
 			Miro.formState(this, true);
 		});
 	};
-	for(const v of document.querySelectorAll(".field")) {
-		const editFieldBtn = v.querySelector(".editfield");
-		if(editFieldBtn) {
-			editFieldBtn.addEventListener("click", editField);
-			(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
-			v[_saveField] = v.querySelector(".savefield");
-			(v._input = v.querySelector("input")).addEventListener("input", inputField);
-			v._input.addEventListener("keydown", keyField);
-			v.addEventListener("submit", submitField);
-		}
+	const editOptions = html`
+		<span class="editoptions">
+			<button class="mdc-fab mdc-fab--mini material-icons editfield">
+				<span class="mdc-fab__icon">edit</span>
+			</button>
+		</span><span class="editoptions hidden">
+			<button class="mdc-fab mdc-fab--mini material-icons closefield">
+				<span class="mdc-fab__icon">close</span>
+			</button><button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit" disabled>
+				<span class="mdc-fab__icon">check</span>
+			</button>
+		</span>`;
+	for(const v of document.querySelectorAll(".field:not(.noedit)")) {
+		v.insertBefore(editOptions.cloneNode(true), v.firstChild.nextSibling);
+		v.querySelector(".editfield").addEventListener("click", editField);
+		(v[_closeField] = v.querySelector(".closefield")).addEventListener("click", closeField);
+		v[_saveField] = v.querySelector(".savefield");
+		(v._input = v.querySelector("input")).addEventListener("input", inputField);
+		v._input.addEventListener("keydown", keyField);
+		v.addEventListener("submit", submitField);
 	}
 	Miro.logOut = () => Miro.request("DELETE", "/session").then(Miro.response(() => {
 		window.location.reload();

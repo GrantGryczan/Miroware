@@ -18,34 +18,14 @@ this.value += html`
 						<input class="mdc-text-field__input" type="email" value="$${user.email}" required disabled>
 						<label class="mdc-floating-label" for="email">Email</label>
 						<div class="mdc-line-ripple"></div>
-					</div><span class="editoptions">
-						<button class="mdc-fab mdc-fab--mini material-icons editfield">
-							<span class="mdc-fab__icon">edit</span>
-						</button>
-					</span><span class="editoptions hidden">
-						<button class="mdc-fab mdc-fab--mini material-icons closefield">
-							<span class="mdc-fab__icon">close</span>
-						</button><button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit" disabled>
-							<span class="mdc-fab__icon">check</span>
-						</button>
-					</span>
+					</div>
 				</form>
-				<form id="username" class="field">
+				<form id="username" class="field${Date.now()-user.nameCooldown < 86400000 ? " noedit" : ""}">
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input class="mdc-text-field__input" type="text" value="$${user.name}" maxlength="32" required disabled>
 						<label class="mdc-floating-label" for="username">Username</label>
 						<div class="mdc-line-ripple"></div>
-					</div>${Date.now()-user.nameCooldown >= 86400000 ? html`<span class="editoptions">
-						<button class="mdc-fab mdc-fab--mini material-icons editfield">
-							<span class="mdc-fab__icon">edit</span>
-						</button>
-					</span><span class="editoptions hidden">
-						<button class="mdc-fab mdc-fab--mini material-icons closefield">
-							<span class="mdc-fab__icon">close</span>
-						</button><button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit" disabled>
-							<span class="mdc-fab__icon">check</span>
-						</button>
-					</span>` : ""}
+					</div>
 					<p class="mdc-text-field-helper-text">You may only change your username once per day.</p>
 				</form>
 				<form id="birth" class="field">
@@ -53,17 +33,7 @@ this.value += html`
 						<input class="mdc-text-field__input" type="date" value="${inputDate(new Date(user.birth))}" max="${inputDate(new Date())}" required disabled>
 						<label class="mdc-floating-label alwaysfloat" for="birthday">Birthday</label>
 						<div class="mdc-line-ripple"></div>
-					</div><span class="editoptions">
-						<button class="mdc-fab mdc-fab--mini material-icons editfield">
-							<span class="mdc-fab__icon">edit</span>
-						</button>
-					</span><span class="editoptions hidden">
-						<button class="mdc-fab mdc-fab--mini material-icons closefield">
-							<span class="mdc-fab__icon">close</span>
-						</button><button class="mdc-fab mdc-fab--mini material-icons savefield" type="submit" disabled>
-							<span class="mdc-fab__icon">check</span>
-						</button>
-					</span>
+					</div>
 				</form>
 			</div>`;
 this.value += (await load("www/load/belt", this)).value;
