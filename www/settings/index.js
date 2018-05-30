@@ -15,6 +15,7 @@
 		this.form[_input].disabled = true;
 		this.form[_input].parentNode.classList.add("mdc-text-field--disabled");
 		this.value = this.form[_prevValue];
+		this.form[_input].blur();
 	};
 	const saveField = function() {
 		// TODO
@@ -22,6 +23,7 @@
 		this.parentNode.previousSibling.classList.remove("hidden");
 		this.form[_input].disabled = true;
 		this.form[_input].parentNode.classList.add("mdc-text-field--disabled");
+		this.form[_input].blur();
 	};
 	for(const v of document.querySelectorAll(".field")) {
 		v[_input] = v.querySelector("input");
