@@ -7,8 +7,7 @@
 		if(this.previousSibling.classList.toggle("mdc-text-field--disabled")) {
 			// TODO: save
 		} else {
-			this[_input].focus();
-			this[_input].value = this[_input].value;
+			this[_input].select();
 		}
 	};
 	for(const v of document.querySelectorAll(".editfield")) {
