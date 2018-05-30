@@ -47,8 +47,8 @@ if(user) {
 			await users.updateOne(filter, {
 				$set: set
 			});
-			this.value = set;
 		}
+		this.value = set;
 	} else {
 		this.value = {
 			error: "You do not have permission to edit that user."
