@@ -73,7 +73,7 @@
 	for(const v of document.querySelectorAll("input[type=\"email\"]")) {
 		v.maxLength = 254;
 	}
-	for(const v of body.querySelectorAll("form button:not([type])")) {
+	for(const v of document.querySelectorAll("form button:not([type])")) {
 		v.type = "button";
 	}
 	const _dialog = Symbol("dialog");
