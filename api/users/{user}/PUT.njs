@@ -20,12 +20,13 @@ if(user) {
 	if(this.req.session.user.toHexString() === user._id.toHexString()) {
 		const set = {};
 		const notIn = this.req.session.in === false;
-		const validName = this.req.body.name !== undefined && (this.req.body.name = String(this.req.body.name)).length;
-		const validBirth = typeof this.req.body.birth === "number" && this.req.body.birth <= Date.now() && this.req.body.birth >= -8640000000000000;
+		const now = Date.now();
+		const validName = this.req.body.name !== undefined && (this.req.body.name = String(this.req.body.name)).length && now-user.nameCooldown >= 86400000;
+		const validBirth = typeof this.req.body.birth === "number" && this.req.body.birth <= now && this.req.body.birth >= -8640000000000000;
 		if(notIn) {
 			if(validName && validBirth) {
 				this.req.session.in = true;
-				set.created = set.updated = Date.now();
+				set.created = set.updated = now;
 			} else {
 				this.value = {
 					error: "If signup is incomplete, you must define the `name` and `birth` values."
@@ -37,6 +38,7 @@ if(user) {
 		}
 		if(validName) {
 			set.name = this.req.body.name.slice(0, 32);
+			set.nameCooldown = now;
 		}
 		if(validBirth) {
 			set.birth = parseInt(this.req.body.birth);
