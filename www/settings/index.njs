@@ -35,7 +35,7 @@ this.value += html`
 						<input name="username" class="mdc-text-field__input" type="text" value="$${user.name}" maxlength="32" required disabled>
 						<label class="mdc-floating-label" for="username">Username</label>
 						<div class="mdc-line-ripple"></div>
-					</div>${now-user.nameCooldown >= 86400000 ? html`<span class="editoptions">
+					</div>${Date.now()-user.nameCooldown >= 86400000 ? html`<span class="editoptions">
 						<button class="mdc-fab mdc-fab--mini material-icons editfield">
 							<span class="mdc-fab__icon">edit</span>
 						</button>
