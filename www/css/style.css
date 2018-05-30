@@ -57,7 +57,7 @@ body {
 	&:disabled {
 		color: rgba(255, 255, 255, 0.3);
 		cursor: default;
-		&:hover, &:focus {
+		&:hover, &:focus, &:active {
 			box-shadow: none;
 			background: none;
 		}
