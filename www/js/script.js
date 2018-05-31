@@ -122,6 +122,7 @@
 				throw new MiroError("The `body` parameter must be a string or a DOM node.");
 			}
 			this.ready = false;
+			prepare(body);
 			const dialogElem = document.createElement("aside");
 			dialogElem[_dialog] = this;
 			dialogElem.classList.add("mdc-dialog");
