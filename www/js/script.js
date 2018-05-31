@@ -60,7 +60,7 @@
 			string += code + arguments[0][i+1];
 		}
 		const elem = document.createElement("span");
-		elem.innerHTML = string;
+		elem.innerHTML = string.trim() || string;
 		prepare(elem);
 		return elem.childNodes.length === 1 ? elem.firstChild : elem;
 	};
