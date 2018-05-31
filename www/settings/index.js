@@ -32,10 +32,20 @@
 		for(const v of changed) {
 			body[v.id] = Miro.value(v);
 		}
+		Miro.formState(form, false);
 		Miro.request("PUT", "/users/@me", {}, body).then(Miro.response(() => {
-			savePrevs();
-			submit.disabled = true;
-		}));
+			setTimeout(() => {
+				if(changed.includes(form.elements.name)) {
+					form.elements.name.disabled = true;
+					form.elements.name.parentNode.classList.add("mdc-text-field--disabled");
+				}
+				savePrevs();
+				changed.length = 0;
+				submit.disabled = true;
+			});
+		})).finally(() => {
+			Miro.formState(form, true);
+		});
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
