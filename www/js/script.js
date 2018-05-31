@@ -237,10 +237,12 @@
 		}
 	}
 	Miro.dialog = MiroDialog;
-	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector(".mdc-drawer--temporary"));
-	document.querySelector("#menu").addEventListener("click", () => {
+	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector("#drawer"));
+	const toggleDrawer = () => {
 		drawer.open = !drawer.open;
-	});
+	};
+	document.querySelector("#menu").addEventListener("click", toggleDrawer);
+	document.addEventListener("backbutton", toggleDrawer);
 	const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector("#snackbar"));
 	Miro.snackbar = (message, actionText, actionHandler) => {
 		const dataObj = {

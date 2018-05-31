@@ -1,7 +1,7 @@
 this.value = html`
 	</head>
 	<body class="mdc-typography${this.req.session.in === true ? " in" : ""}">
-		<aside class="mdc-drawer mdc-drawer--temporary">
+		<aside id="drawer" class="mdc-drawer mdc-drawer--temporary">
 			<nav class="mdc-drawer__drawer">
 				<header class="mdc-drawer__header">
 					<div class="mdc-drawer__header-content"></div>
