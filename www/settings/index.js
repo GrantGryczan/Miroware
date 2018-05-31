@@ -24,4 +24,5 @@
 		evt.preventDefault();
 		savePrevs();
 	});
+	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
