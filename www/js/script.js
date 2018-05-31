@@ -242,7 +242,10 @@
 		drawer.open = !drawer.open;
 	};
 	document.querySelector("#menu").addEventListener("click", toggleDrawer);
-	document.addEventListener("backbutton", toggleDrawer);
+	document.addEventListener("backbutton", evt => {
+		evt.preventDefault();
+		toggleDrawer();
+	});
 	const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector("#snackbar"));
 	Miro.snackbar = (message, actionText, actionHandler) => {
 		const dataObj = {
