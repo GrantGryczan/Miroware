@@ -25,14 +25,14 @@ this.value += html`
 							<input id="publicemail" class="mdc-checkbox__native-control" type="checkbox">
 							<div class="mdc-checkbox__background"></div>
 						</div>
-						<label for="publicemail">This is my checkbox</label>
+						<label for="publicemail">Show email publicly</label>
 					</div><br>
 					<div class="mdc-form-field">
 						<div class="mdc-text-field${nameCooldown ? " mdc-text-field--disabled" : ""}">
 							<input id="name" name="name" class="mdc-text-field__input" type="text" value="$${user.name}" maxlength="32" required${nameCooldown ? " disabled" : ""}>
 							<label class="mdc-floating-label" for="name">Username</label>
 							<div class="mdc-line-ripple"></div>
-						</div>
+						</div><br>
 						<p class="mdc-text-field-helper-text">You may only change your username once per day.</p>
 					</div><br>
 					<div class="mdc-form-field">
