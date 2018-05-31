@@ -48,7 +48,7 @@
 		for(const v of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
 			new mdc.textField.MDCTextField(v);
 		}
-		for(const v of node.querySelectorAll(".ripple")) {
+		for(const v of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded)")) {
 			new mdc.ripple.MDCRipple(v);
 		}
 	};

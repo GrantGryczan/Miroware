@@ -13,7 +13,7 @@ this.value += html`
 					<div class="mdc-line-ripple"></div>
 				</div><br>
 				<br>
-				<button name="login" class="mdc-button mdc-button--outlined ripple spaced" type="submit">Log in</button><button name="signup" class="mdc-button ripple spaced" type="submit">Sign up</button>
+				<button name="login" class="mdc-button mdc-button--outlined mdc-ripple spaced" type="submit">Log in</button><button name="signup" class="mdc-button mdc-ripple spaced" type="submit">Sign up</button>
 			</form>
 			<span id="signupform" class="hidden">
 				<div class="mdc-text-field mdc-text-field--disabled">

@@ -43,7 +43,7 @@ this.value += html`
 						</div>
 					</div><br>
 					<br>
-					<button id="save" name="save" class="mdc-button mdc-button--raised ripple" type="submit" disabled>Save</button>
+					<button id="save" name="save" class="mdc-button mdc-button--raised mdc-ripple" type="submit" disabled>Save</button>
 				</form>
 			</div>`;
 this.value += (await load("www/load/belt", this)).value;
