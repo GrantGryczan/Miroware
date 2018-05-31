@@ -23,6 +23,7 @@
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
 		savePrevs();
+		submit.disabled = true;
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
