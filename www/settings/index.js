@@ -32,7 +32,7 @@
 		for(const v of changed) {
 			body[v.id] = Miro.value(v);
 		}
-		Miro.request("PUT", "/users/@me", {}, body).then(Miro.response(req => {
+		Miro.request("PUT", "/users/@me", {}, body).then(Miro.response(() => {
 			savePrevs();
 			submit.disabled = true;
 		}));
