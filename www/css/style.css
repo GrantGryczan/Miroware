@@ -183,7 +183,7 @@ input:-webkit-autofill {
 		-webkit-text-fill-color: rgba(255, 255, 255, 0.87);
 	}
 }
-:not(.mdc-text-field--textarea):not(.mdc-text-field--outlined):not(.mdc-text-field--fullwidth).mdc-text-field {
+:not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth).mdc-text-field {
 	&:not(.mdc-text-field--disabled) {
 		.mdc-text-field__input {
 			color: rgba(255, 255, 255, 0.87);
@@ -223,6 +223,9 @@ input:-webkit-autofill {
 	}
 	&:not(.mdc-text-field--disabled), &--disabled {
 		border-bottom-color: rgba(255, 255, 255, 0.12);
+	}
+	&--upgraded {
+		margin-top: 8px;
 	}
 	.mdc-line-ripple {
 		background-color: #b54040;

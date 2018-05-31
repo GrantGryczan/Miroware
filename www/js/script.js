@@ -35,17 +35,6 @@
 			setTimeout(resolve, delay);
 		});
 	};
-	Miro.prepare = node => {
-		if(!(node instanceof Element || node instanceof Document)) {
-			throw new MiroError("The `node` parameter must be an element or a document.");
-		}
-		for(const v of node.querySelectorAll("input[type=\"email\"]")) {
-			v.maxLength = 254;
-		}
-		for(const v of node.querySelectorAll("button:not([type])")) {
-			v.type = "button";
-		}
-	}
 	const htmlExps = ["$", "&"];
 	const htmlReplacements = [[/&/g, "&amp;"], [/</g, "&lt;"], [/>/g, "&gt;"], [/"/g, "&quot;"], [/'/g, "&#39;"], [/`/g, "&#96;"]];
 	window.html = function() {
@@ -66,6 +55,28 @@
 		elem.innerHTML = string.trim() || string;
 		Miro.prepare(elem);
 		return elem.childNodes.length === 1 ? elem.firstChild : elem;
+	};
+	const checkmark = html`
+		<svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+			<path class="mdc-checkbox__checkmark-path" fill="none" stroke="white" d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+		</svg>
+	`;
+	Miro.prepare = node => {
+		if(!(node instanceof Element || node instanceof Document)) {
+			throw new MiroError("The `node` parameter must be an element or a document.");
+		}
+		for(const v of node.querySelectorAll("input[type=\"email\"]")) {
+			v.maxLength = 254;
+		}
+		for(const v of node.querySelectorAll("button:not([type])")) {
+			v.type = "button";
+		}
+		for(const v of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
+			new mdc.textField.MDCTextField(v);
+		}
+		for(const v of node.querySelectorAll(".ripple")) {
+			new mdc.ripple.MDCRipple(v);
+		}
 	};
 	Miro.block = state => {
 		container.classList[state ? "add" : "remove"]("hidden");
@@ -252,12 +263,6 @@
 		}
 		snackbar.show(dataObj);
 	};
-	for(const v of document.querySelectorAll(".mdc-text-field")) {
-		new mdc.textField.MDCTextField(v);
-	}
-	for(const v of document.querySelectorAll(".ripple")) {
-		new mdc.ripple.MDCRipple(v);
-	}
 	Miro.response = success => {
 		if(success && !(success instanceof Function)) {
 			throw new MiroError("The `success` parameter must be a function if it is defined.");
