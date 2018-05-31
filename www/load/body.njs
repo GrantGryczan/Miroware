@@ -34,7 +34,14 @@ this.value += html`
 			</nav>
 		</aside>
 		<div id="container">
-			<button id="menu" class="mdc-fab mdc-fab--mini material-icons">
-				<span class="mdc-fab__icon">menu</span>
-			</button>`;
+			<header class="mdc-top-app-bar">
+				<div class="mdc-top-app-bar__row">
+					<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+						<button id="menu" class="mdc-top-app-bar__navigation-icon mdc-fab mdc-fab--mini material-icons" type="button">
+							<span class="mdc-fab__icon">menu</span>
+						</button>
+						<span class="mdc-top-app-bar__title">$${this.title}</span>
+					</section>
+				</div>
+			</header>`;
 this.done();
