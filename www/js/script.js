@@ -39,7 +39,7 @@
 		for(const v of elem.querySelectorAll("input[type=\"email\"]")) {
 			v.maxLength = 254;
 		}
-		for(const v of elem.querySelectorAll("form button:not([type])")) {
+		for(const v of elem.querySelectorAll("button:not([type])")) {
 			v.type = "button";
 		}
 	}
