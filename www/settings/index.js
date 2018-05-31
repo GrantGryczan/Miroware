@@ -5,25 +5,37 @@
 	const _prev = Symbol("prev");
 	const savePrevs = () => {
 		for(const v of inputs) {
-			v[_prev] = v.type === "checkbox" ? v.checked : v.value;
+			v[_prev] = Miro.value(v);
 		}
 	};
 	savePrevs();
+	const changed = [];
 	const onInput = evt => {
+		changed.length = 0;
 		for(const v of inputs) {
-			if(v.checkValidity() && v[_prev] !== (v.type === "checkbox" ? v.checked : v.value)) {
-				submit.disabled = false;
-				return;
+			if(v.checkValidity()) {
+				if(v[_prev] !== Miro.value(v)) {
+					changed.push(v);
+				}
+			} else {
+				changed.length = 0;
+				break;
 			}
 		}
-		submit.disabled = true;
+		submit.disabled = !changed.length;
 	};
 	form.addEventListener("input", onInput);
 	form.addEventListener("change", onInput);
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
-		savePrevs();
-		submit.disabled = true;
+		const body = {};
+		for(const v of changed) {
+			body[v.id] = Miro.value(v);
+		}
+		Miro.request("PUT", "/users/@me", {}, body).then(Miro.request(req => {
+			savePrevs();
+			submit.disabled = true;
+		}));
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();

@@ -67,6 +67,12 @@
 	Miro.block = state => {
 		container.classList[state ? "add" : "remove"]("hidden");
 	};
+	Miro.value = input => {
+		if(!(input instanceof HTMLInputElement)) {
+			throw new MiroError("The `input` parameter must be an HTML input element.");
+		}
+		return input.type === "checkbox" ? input.checked : (input.type === "date" ? input.valueAsNumber : input.value);
+	};
 	const mdcTypes = ["checkbox", "radio", "select", "slider", "text-field"];
 	const _disabled = Symbol("disabled");
 	const _prevDisabled = Symbol("prevDisabled");
