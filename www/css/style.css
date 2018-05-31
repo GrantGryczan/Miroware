@@ -259,7 +259,7 @@ input:-webkit-autofill {
 		min-height: calc(100% - 120px);
 		margin: 0;
 	}
-	@media screen and (max-width: 1519px) {
+	@media screen and (min-width: 1021px) and (max-width: 1519px) {
 		max-width: 780px;
 	}
 	@media screen and (min-width: 1520px) {
