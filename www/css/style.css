@@ -248,3 +248,15 @@ input:-webkit-autofill {
 		color: #a1a1a1;
 	}
 }
+#page {
+	margin: 0 auto;
+	padding: 60px;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+	background-color: #282828;
+	@media screen and (min-width: 1520px) {
+		max-width: 1280px;
+	}
+	@media screen and (max-width: 1519px) {
+		max-width: 780px;
+	}
+}

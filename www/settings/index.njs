@@ -11,7 +11,7 @@ const user = await users.findOne({
 });
 const nameCooldown = Date.now()-user.nameCooldown < 86400000;
 this.value += html`
-			<div id="content">
+			<div id="page">
 				<form id="settings">
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input id="email" name="email" class="mdc-text-field__input" type="email" value="$${user.email}" required disabled>
