@@ -35,7 +35,10 @@
 			setTimeout(resolve, delay);
 		});
 	};
-	const prepare = elem => {
+	Miro.prepare = elem => {
+		if(!(body instanceof HTMLElement)) {
+			throw new MiroError("The `elem` parameter must be an HTML element.");
+		}
 		for(const v of elem.querySelectorAll("input[type=\"email\"]")) {
 			v.maxLength = 254;
 		}
@@ -61,7 +64,7 @@
 		}
 		const elem = document.createElement("span");
 		elem.innerHTML = string.trim() || string;
-		prepare(elem);
+		Miro.prepare(elem);
 		return elem.childNodes.length === 1 ? elem.firstChild : elem;
 	};
 	Miro.block = state => {
@@ -123,7 +126,7 @@
 			}
 			this.ready = false;
 			if(body instanceof HTMLElement) {
-				prepare(body);
+				Miro.prepare(body);
 			}
 			const dialogElem = document.createElement("aside");
 			dialogElem[_dialog] = this;
@@ -315,5 +318,5 @@
 			});
 		}
 	}
-	prepare(document);
+	Miro.prepare(document);
 })();
