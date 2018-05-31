@@ -10,7 +10,7 @@
 	top: 50%;
 	transform: translateY(-50%);
 }
-@media screen and (max-aspect-ratio: 1/1) {
+@media (max-width: 1023px) {
 	#container {
 		background-position: top calc(50% - 256px) center;
 	}
