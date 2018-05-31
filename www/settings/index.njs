@@ -26,7 +26,7 @@ this.value += html`
 							<div class="mdc-checkbox__background"></div>
 						</div>
 						<label for="publicemail">This is my checkbox</label>
-					</div>
+					</div><br>
 					<div class="mdc-form-field">
 						<div class="mdc-text-field${nameCooldown ? " mdc-text-field--disabled" : ""}">
 							<input id="name" name="name" class="mdc-text-field__input" type="text" value="$${user.name}" maxlength="32" required${nameCooldown ? " disabled" : ""}>
@@ -34,7 +34,7 @@ this.value += html`
 							<div class="mdc-line-ripple"></div>
 						</div>
 						<p class="mdc-text-field-helper-text">You may only change your username once per day.</p>
-					</div>
+					</div><br>
 					<div class="mdc-form-field">
 						<div class="mdc-text-field">
 							<input id="birth" name="birth" class="mdc-text-field__input" type="date" value="${inputDate(new Date(user.birth))}" max="${inputDate(new Date())}" required>
