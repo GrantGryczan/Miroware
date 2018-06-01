@@ -36,7 +36,7 @@ this.value += html`
 			</span>`;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
-		<script src="https://www.google.com/recaptcha/api.js?render=${youKnow.captcha.site}"></script>
+		<script src="https://www.google.com/recaptcha/api.js"></script>
 		<script src="index.js"></script>`;
 this.value += (await load("www/load/foot", this)).value;
 this.done();
