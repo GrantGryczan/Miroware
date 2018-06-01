@@ -30,7 +30,7 @@ this.value += html`
 						<label class="mdc-floating-label" for="name">Username</label>
 						<div class="mdc-line-ripple"></div>
 					</div>
-					<p class="mdc-text-field-helper-text">You may only change your username once per day.</p>
+					<p class="mdc-text-field-helper-text">You may only set your username once per day.</p>
 					<div class="mdc-text-field">
 						<input id="birth" name="birth" class="mdc-text-field__input" type="date" value="${inputDate(new Date(user.birth))}" max="${inputDate(new Date())}" required>
 						<label class="mdc-floating-label alwaysFloat" for="birthday">Birthday</label>
