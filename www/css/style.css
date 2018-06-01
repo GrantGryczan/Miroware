@@ -3,7 +3,7 @@
 @import url(https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css);
 :root {
 	--mdc-theme-primary: #303030;
-	--mdc-theme-secondary: #b54040;
+	--mdc-theme-secondary: #404040;
 	--mdc-theme-background: #202020;
 }
 ::-webkit-scrollbar {
@@ -249,24 +249,13 @@ input:-webkit-autofill {
 		color: rgba(255, 255, 255, 0.6);
 	}
 }
-.mdc-checkbox {
-	&::before, &::after {
-		background-color: #b54040;
-	}
-	&__native-control {
-		&:enabled {
-			&:checked, &:indeterminate {
-				border-color: #b54040;
-				background-color: #b54040;
-			}
+.mdc-checkbox__native-control {
+	&:not(:checked):not(:indeterminate) {
+		&:enabled ~ .mdc-checkbox__background {
+			border-color: rgba(255, 255, 255, 0.54);
 		}
-		&:not(:checked):not(:indeterminate) {
-			&:enabled ~ .mdc-checkbox__background {
-				border-color: rgba(255, 255, 255, 0.54);
-			}
-			&:disabled ~ .mdc-checkbox__background {
-				border-color: rgba(255, 255, 255, 0.26);
-			}
+		&:disabled ~ .mdc-checkbox__background {
+			border-color: rgba(255, 255, 255, 0.26);
 		}
 	}
 }
