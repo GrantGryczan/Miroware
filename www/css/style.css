@@ -251,15 +251,13 @@ input:-webkit-autofill {
 	&__native-control {
 		&:checked, &:indeterminate {
 			&:enabled {
-				&, & ~ .mdc-checkbox__background {
+				& ~ .mdc-checkbox__background {
 					border-color: #505050;
 					background-color: #505050;
 				}
 			}
-			&:disabled {
-				& ~ .mdc-checkbox__background {
-					background-color: #282828;
-				}
+			&:disabled ~ .mdc-checkbox__background {
+				background-color: #282828;
 				.mdc-checkbox__checkmark-path {
 					stroke: #808080 !important;
 				}
