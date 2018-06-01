@@ -1,4 +1,7 @@
 (() => {
+	window.captchaCallback = () => {
+		
+	};
 	const loginForm = document.querySelector("#loginForm");
 	const submits = loginForm.querySelectorAll("button[type=\"submit\"]");
 	const signupForm = document.querySelector("#signupForm");
@@ -141,7 +144,4 @@
 			}
 		});
 	});
-	window.captchaCallback = () => {
-		
-	};
 })();
