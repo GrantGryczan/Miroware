@@ -1,0 +1,17 @@
+const user = await users.findOne({
+	_id: this.params.user
+});
+this.title = user.name;
+this.description = user.desc;
+this.tags = ["account", "user", "profile"];
+this.value = (await load("www/load/head", this)).value;
+this.value += (await load("www/load/body", this)).value;
+this.value += html`
+			<div id="page">
+				
+			</div>`;
+this.value += (await load("www/load/belt", this)).value;
+this.value += html`
+		<script src="index.js"></script>`;
+this.value += (await load("www/load/foot", this)).value;
+this.done();
