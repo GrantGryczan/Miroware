@@ -291,7 +291,7 @@
 					success(req);
 				}
 			} else {
-				await new Miro.dialog("Error", (req.response && req.response.error) || req.statusText, ["Okay"]);
+				await new Miro.dialog("Error", (req.response && req.response.error) || req.statusText || "An unknown network error occurred.", ["Okay"]);
 			}
 		}
 	};
