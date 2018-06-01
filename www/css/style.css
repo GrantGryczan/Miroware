@@ -246,13 +246,13 @@ input:-webkit-autofill {
 }
 .mdc-checkbox {
 	&::before, &::after {
-		background-color: #b54040;
+		background-color: #505050;
 	}
 	&__native-control {
 		&:enabled {
 			&:checked, &:indeterminate {
-				border-color: #b54040;
-				background-color: #b54040;
+				border-color: #505050;
+				background-color: #505050;
 			}
 		}
 		&:not(:checked):not(:indeterminate) {
@@ -271,14 +271,14 @@ input:-webkit-autofill {
 		background-color: transparent
 	}
 	50% {
-		border-color: #b54040;
-		background-color: #b54040;
+		border-color: #505050;
+		background-color: #505050;
 	}
 }
 @keyframes mdc-checkbox-fade-out-background-0 {
 	0%, 80% {
-		border-color: #b54040;
-		background-color: #b54040;
+		border-color: #505050;
+		background-color: #505050;
 	}
 	to {
 		border-color: rgba(255, 255, 255, 0.54);
