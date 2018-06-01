@@ -244,17 +244,50 @@ input:-webkit-autofill {
 		color: rgba(255, 255, 255, 0.6);
 	}
 }
+.mdc-checkbox {
+	&::before, &::after {
+		background-color: #b54040;
+	}
+	&__native-control {
+		&:enabled {
+			&:checked, &:indeterminate {
+				border-color: #b54040;
+				background-color: #b54040;
+			}
+		}
+		&:not(:checked):not(:indeterminate) {
+			&:enabled ~ .mdc-checkbox__background {
+				border-color: rgba(255, 255, 255, 0.54);
+			}
+			&:disabled ~ .mdc-checkbox__background {
+				border-color: rgba(255, 255, 255, 0.26);
+			}
+		}
+	}
+}
+@keyframes mdc-checkbox-fade-in-background-0 {
+	0% {
+		border-color: rgba(255, 255, 255, 0.54);
+		background-color: transparent
+	}
+	50% {
+		border-color: #018786;
+		background-color: #018786;
+	}
+}
+@keyframes mdc-checkbox-fade-out-background-0 {
+	0%, 80% {
+		border-color: #018786;
+		background-color: #018786;
+	}
+	to {
+		border-color: rgba(255, 255, 255, 0.54);
+		background-color: transparent
+	}
+}
 .mdc-form-field {
 	color: rgba(255, 255, 255, 0.87);
 	user-select: none;
-}
-.mdc-checkbox__native-control:not(:checked):not(:indeterminate) {
-	&:enabled ~ .mdc-checkbox__background {
-		border-color: rgba(255, 255, 255, 0.54);
-	}
-	&:disabled ~ .mdc-checkbox__background {
-		border-color: rgba(255, 255, 255, 0.26);
-	}
 }
 .mdc-dialog {
 	&__surface {
