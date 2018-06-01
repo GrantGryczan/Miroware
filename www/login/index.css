@@ -3,7 +3,7 @@
 	background-position: left calc(50% - 256px) center;
 	background-image: url(/images/icon/cubetransparent.gif);
 }
-#loginform {
+#loginForm {
 	display: block;
 	position: absolute;
 	left: 50%;
@@ -14,7 +14,7 @@
 	#container {
 		background-position: top calc(50% - 256px) center;
 	}
-	#loginform {
+	#loginForm {
 		transform: translateX(-50%);
 	}
 }

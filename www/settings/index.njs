@@ -20,7 +20,7 @@ this.value += html`
 					</div><br>
 					<div class="mdc-form-field">
 						<div class="mdc-checkbox">
-							<input id="publicemail" class="mdc-checkbox__native-control" type="checkbox">
+							<input id="publicEmail" class="mdc-checkbox__native-control" type="checkbox">
 							<div class="mdc-checkbox__background"></div>
 						</div>
 						<label for="publicemail">Show email publicly</label>
@@ -33,7 +33,7 @@ this.value += html`
 					<p class="mdc-text-field-helper-text">You may only change your username once per day.</p>
 					<div class="mdc-text-field">
 						<input id="birth" name="birth" class="mdc-text-field__input" type="date" value="${inputDate(new Date(user.birth))}" max="${inputDate(new Date())}" required>
-						<label class="mdc-floating-label alwaysfloat" for="birthday">Birthday</label>
+						<label class="mdc-floating-label alwaysFloat" for="birthday">Birthday</label>
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<br>

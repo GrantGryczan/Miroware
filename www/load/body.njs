@@ -16,12 +16,12 @@ if(this.req.session.in) {
 						<a class="mdc-list-item${this.req.decodedPath === "/settings/" ? " visiting" : "\" href=\"/settings/"}">
 							<i class="material-icons mdc-list-item__graphic">settings</i> Settings
 						</a>
-						<a id="logout" class="mdc-list-item" href="javascript:;">
+						<a id="logOut" class="mdc-list-item" href="javascript:;">
 							<i class="material-icons mdc-list-item__graphic">person</i> Log out
 						</a>`;
 } else {
 	this.value += html`
-						<a id="login" class="mdc-list-item${this.req.decodedPath === "/login/" ? " visiting" : html`" href="/login/?dest=$${encodeURIComponent(this.req.url)}`}">
+						<a id="logIn" class="mdc-list-item${this.req.decodedPath === "/login/" ? " visiting" : html`" href="/login/?dest=$${encodeURIComponent(this.req.url)}`}">
 							<i class="material-icons mdc-list-item__graphic">person</i> Log in
 						</a>`;
 }

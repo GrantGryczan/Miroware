@@ -232,7 +232,7 @@ input:-webkit-autofill {
 	}
 	.mdc-floating-label {
 		pointer-events: none;
-		&.alwaysfloat {
+		&.alwaysFloat {
 			transform: translateY(-100%) scale(0.75);
 			cursor: default;
 		}
