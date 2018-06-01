@@ -141,4 +141,7 @@
 			}
 		});
 	});
+	window.captchaCallback = () => {
+		
+	};
 })();
