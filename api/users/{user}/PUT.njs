@@ -73,7 +73,7 @@ if(user) {
 			} else if(typeof this.req.body.captcha === "string") {
 				let success = false;
 				try {
-					({success} = await request.post("https://www.google.com/recaptcha/api/siteverify", {
+					console.log(await request.post("https://www.google.com/recaptcha/api/siteverify", {
 						body: {
 							secret: youKnow.captcha.secret,
 							response: this.req.body.captcha,
@@ -81,9 +81,15 @@ if(user) {
 						},
 						json: true
 					}));
-				} catch(err) {
-					console.error(err);
-				}
+					/*({success} = await request.post("https://www.google.com/recaptcha/api/siteverify", {
+						body: {
+							secret: youKnow.captcha.secret,
+							response: this.req.body.captcha,
+							remoteip: this.req.ip
+						},
+						json: true
+					}));*/
+				} catch(err) {}
 				if(!success) {
 					this.value = {
 						error: "The captcha challenge was failed."
