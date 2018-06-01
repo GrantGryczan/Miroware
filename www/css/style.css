@@ -270,26 +270,6 @@ input:-webkit-autofill {
 		}
 	}
 }
-@keyframes mdc-checkbox-fade-in-background-0 {
-	0% {
-		border-color: rgba(255, 255, 255, 0.54);
-		background-color: transparent
-	}
-	50% {
-		border-color: #018786;
-		background-color: #018786;
-	}
-}
-@keyframes mdc-checkbox-fade-out-background-0 {
-	0%, 80% {
-		border-color: #018786;
-		background-color: #018786;
-	}
-	to {
-		border-color: rgba(255, 255, 255, 0.54);
-		background-color: transparent
-	}
-}
 .mdc-form-field {
 	color: rgba(255, 255, 255, 0.87);
 	user-select: none;
