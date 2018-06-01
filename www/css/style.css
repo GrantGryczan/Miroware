@@ -251,8 +251,10 @@ input:-webkit-autofill {
 	&__native-control {
 		&:enabled {
 			&:checked, &:indeterminate {
-				border-color: #505050;
-				background-color: #505050;
+				&, & ~ .mdc-checkbox__background {
+					border-color: #505050;
+					background-color: #505050;
+				}
 			}
 		}
 		&:not(:checked):not(:indeterminate) {
