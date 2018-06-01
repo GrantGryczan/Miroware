@@ -61,6 +61,83 @@ if(user) {
 				this.done();
 				return;
 			}
+		if(notIn) {
+			if(this.req.body.captcha === undefined) {
+				this.value = {
+					error: "If signup is incomplete, you must define a `captcha` value."
+				};
+				this.status = 422;
+				this.done();
+				return;
+			} else if(typeof this.req.body.captcha === "string") {
+				let success = false;
+				try {
+					({success} = await request.post("https://www.google.com/recaptcha/api/siteverify", {
+						body: {
+							secret: youKnow.captcha.secret,
+							response: this.req.body.captcha,
+							remoteip: this.req.ip
+						},
+						json: true
+					}));
+				} catch(err) {}
+				if(!success) {
+					this.value = {
+						error: "The captcha challenge was failed."
+					};
+					this.status = 422;
+					this.done();
+					return;
+				}
+			} else {
+				this.value = {
+					error: "The `captcha` value must be a string."
+				};
+				this.status = 422;
+				this.done();
+				return;
+			}
+		}
+		if(this.req.body.name !== undefined) {
+			if(typeof this.req.body.name === "string") {
+				this.req.body.name = this.req.body.name.trim();
+				if(this.req.body.name.length < 1) {
+					this.value = {
+						error: "The `name` value must be at least 1 character long."
+					};
+					this.status = 422;
+					this.done();
+					return;
+				} else if(this.req.body.name.length > 32) {
+					this.value = {
+						error: "The `name` value must be at most 32 characters long."
+					};
+					this.status = 422;
+					this.done();
+					return;
+				} else {
+					const cooldown = 86400000+user.nameCooldown-now;
+					if(cooldown > 0) {
+						this.value = {
+							error: `The \`name\` value may only be set once per day.`,
+							cooldown
+						};
+						this.status = 422;
+						this.done();
+						return;
+					} else {
+						set.name = this.req.body.name;
+						set.nameCooldown = now;
+					}
+				}
+			} else {
+				this.value = {
+					error: "The `name` value must be a string."
+				};
+				this.status = 422;
+				this.done();
+				return;
+			}
 		} else if(notIn) {
 			this.value = {
 				error: "If signup is incomplete, you must define a `name` value."

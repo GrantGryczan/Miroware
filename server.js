@@ -58,8 +58,7 @@ const authenticate = context => {
 				}
 			}).then(body => {
 				body = JSON.parse(body);
-				request.get({
-					url: "https://discordapp.com/api/users/@me",
+				request.get("https://discordapp.com/api/users/@me", {
 					headers: {
 						"Authorization": `${body.token_type} ${body.access_token}`
 					}

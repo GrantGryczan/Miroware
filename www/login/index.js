@@ -1,7 +1,4 @@
 (() => {
-	window.captchaCallback = () => {
-		
-	};
 	const loginForm = document.querySelector("#loginForm");
 	const submits = loginForm.querySelectorAll("button[type=\"submit\"]");
 	const signupForm = document.querySelector("#signupForm");
@@ -20,13 +17,17 @@
 					type: "submit"
 				}, "Cancel"]).then(value => {
 					if(value === 0) {
-						Miro.request("PUT", "/users/@me", {}, {
-							name: signupDialog.form.elements.name.value,
-							birth: signupDialog.form.elements.birthday.valueAsNumber,
-							captcha: signupDialog.form.elements["g-recaptcha-response"].value
-						}).then(Miro.response(() => {
-							Miro.in = true;
-						})).finally(loggedIn);
+						if(signupDialog.form.elements["g-recaptcha-response"] && signupDialog.form.elements["g-recaptcha-response"].value) {
+							Miro.request("PUT", "/users/@me", {}, {
+								captcha: signupDialog.form.elements["g-recaptcha-response"].value,
+								name: signupDialog.form.elements.name.value,
+								birth: signupDialog.form.elements.birthday.valueAsNumber,
+							}).then(Miro.response(() => {
+								Miro.in = true;
+							})).finally(loggedIn);
+						} else {
+							new Miro.dialog("Error", "You must complete the CAPTCHA challenge before authenticating.");
+						}
 					} else {
 						Miro.logOut();
 					}
