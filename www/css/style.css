@@ -138,11 +138,20 @@ body {
 		max-width: 1280px;
 	}
 }
+.spaced + .spaced {
+	margin-left: 8px;
+}
 .mdc-ripple-surface {
 	user-select: none;
 }
 .mdc-card {
 	background-color: #303030;
+}
+input:-webkit-autofill {
+	&, &:focus {
+		box-shadow: 0 0 0 30px #202020 inset;
+		-webkit-text-fill-color: rgba(255, 255, 255, 0.87);
+	}
 }
 .mdc-button {
 	&:not(:disabled) {
@@ -172,15 +181,6 @@ body {
 	}
 	&::before, &::after {
 		background-color: #ffffff;
-	}
-}
-.spaced + .spaced {
-	margin-left: 8px;
-}
-input:-webkit-autofill {
-	&, &:focus {
-		box-shadow: 0 0 0 30px #202020 inset;
-		-webkit-text-fill-color: rgba(255, 255, 255, 0.87);
 	}
 }
 :not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth).mdc-text-field {
@@ -243,6 +243,10 @@ input:-webkit-autofill {
 	&, .mdc-text-field:not(.mdc-text-field--disabled) + &, .mdc-text-field--disabled + & {
 		color: rgba(255, 255, 255, 0.6);
 	}
+}
+.mdc-form-field {
+	color: rgba(255, 255, 255, 0.87);
+	user-select: none;
 }
 .mdc-dialog {
 	&__surface {
