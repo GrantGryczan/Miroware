@@ -36,8 +36,7 @@
 		Miro.request("PUT", "/users/@me", {}, body).then(Miro.response(() => {
 			setTimeout(() => {
 				if(changed.includes(form.elements.name)) {
-					form.elements.name.disabled = true;
-					form.elements.name.parentNode.classList.add("mdc-text-field--disabled");
+					Miro.inputState(form.elements.name);
 				}
 				savePrevs();
 				changed.length = 0;

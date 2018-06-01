@@ -95,6 +95,18 @@
 		return input.type === "checkbox" ? input.checked : (input.type === "date" ? input.valueAsNumber : input.value);
 	};
 	const mdcTypes = ["checkbox", "radio", "select", "slider", "text-field"];
+	Miro.inputState = (input, state) => {
+		if(!(input instanceof HTMLInputElement)) {
+			throw new MiroError("The `input` parameter must be an HTML input element.");
+		}
+		input.disabled = !state;
+		for(const v of mdcTypes) {
+			if(input.parentNode.classList.contains(`mdc-${v}`)) {
+				const disabledClass = `mdc-${v}--disabled`;
+				input.parentNode.classList[state ? "add" : "remove"](disabledClass);
+			}
+		}
+	};
 	const _disabled = Symbol("disabled");
 	const _prevDisabled = Symbol("prevDisabled");
 	Miro.formState = (form, state) => {
@@ -103,7 +115,7 @@
 		}
 		state = !state;
 		if(form[_disabled] !== state) {
-			form.setAttribute("disabled", form[_disabled] = state);
+			form[_disabled] = state;
 			for(const v of form.elements) {
 				if(state) {
 					v[_prevDisabled] = v.disabled;
@@ -195,7 +207,6 @@
 						evt.preventDefault();
 						submitted = true;
 						setTimeout(() => {
-							surfaceElem.getAttribute("disabled");
 							formState = !surfaceElem[_disabled];
 							Miro.formState(surfaceElem, false);
 						});
