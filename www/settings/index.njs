@@ -20,7 +20,7 @@ this.value += html`
 					</div><br>
 					<div class="mdc-form-field">
 						<div class="mdc-checkbox">
-							<input id="publicEmail" name="publicEmail" class="mdc-checkbox__native-control" type="checkbox">
+							<input id="publicEmail" name="publicEmail" class="mdc-checkbox__native-control" type="checkbox"${user.publicEmail ? " checked" : ""}>
 							<div class="mdc-checkbox__background"></div>
 						</div>
 						<label for="publicEmail">Show email publicly</label>

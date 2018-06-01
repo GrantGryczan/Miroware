@@ -127,6 +127,18 @@ if(user) {
 				return;
 			}
 		}
+		if(this.req.body.publicEmail !== undefined) {
+			if(typeof this.req.body.publicEmail === "boolean") {
+				set.publicEmail = this.req.body.publicEmail;
+			} else {
+				this.value = {
+					error: "The `publicEmail` value must be a Boolean."
+				};
+				this.status = 422;
+				this.done();
+				return;
+			}
+		}
 		if(notIn) {
 			this.req.session.in = true;
 			set.created = now;
