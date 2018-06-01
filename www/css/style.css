@@ -1,11 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 @import url(https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css);
-:root {
-	--mdc-theme-primary: #303030;
-	--mdc-theme-secondary: #404040;
-	--mdc-theme-background: #202020;
-}
 ::-webkit-scrollbar {
 	width: 12px;
 	height: 12px;
@@ -249,14 +244,45 @@ input:-webkit-autofill {
 		color: rgba(255, 255, 255, 0.6);
 	}
 }
-.mdc-checkbox__native-control {
-	&:not(:checked):not(:indeterminate) {
-		&:enabled ~ .mdc-checkbox__background {
-			border-color: rgba(255, 255, 255, 0.54);
+.mdc-checkbox {
+	&::before, &::after {
+		background-color: #b54040;
+	}
+	&__native-control {
+		&:enabled {
+			&:checked, &:indeterminate {
+				border-color: #b54040;
+				background-color: #b54040;
+			}
 		}
-		&:disabled ~ .mdc-checkbox__background {
-			border-color: rgba(255, 255, 255, 0.26);
+		&:not(:checked):not(:indeterminate) {
+			&:enabled ~ .mdc-checkbox__background {
+				border-color: rgba(255, 255, 255, 0.54);
+			}
+			&:disabled ~ .mdc-checkbox__background {
+				border-color: rgba(255, 255, 255, 0.26);
+			}
 		}
+	}
+}
+@keyframes mdc-checkbox-fade-in-background-0 {
+	0% {
+		border-color: rgba(255, 255, 255, 0.54);
+		background-color: transparent
+	}
+	50% {
+		border-color: #b54040;
+		background-color: #b54040;
+	}
+}
+@keyframes mdc-checkbox-fade-out-background-0 {
+	0%, 80% {
+		border-color: #b54040;
+		background-color: #b54040;
+	}
+	to {
+		border-color: rgba(255, 255, 255, 0.54);
+		background-color: transparent
 	}
 }
 .mdc-form-field {
