@@ -73,22 +73,13 @@ if(user) {
 			} else if(typeof this.req.body.captcha === "string") {
 				let success = false;
 				try {
-					console.log(await request.post("https://www.google.com/recaptcha/api/siteverify", {
-						body: {
+					({success} = await request.post("https://www.google.com/recaptcha/api/siteverify", {
+						form: {
 							secret: youKnow.captcha.secret,
 							response: this.req.body.captcha,
 							remoteip: this.req.ip
-						},
-						json: true
+						}
 					}));
-					/*({success} = await request.post("https://www.google.com/recaptcha/api/siteverify", {
-						body: {
-							secret: youKnow.captcha.secret,
-							response: this.req.body.captcha,
-							remoteip: this.req.ip
-						},
-						json: true
-					}));*/
 				} catch(err) {}
 				if(!success) {
 					this.value = {
