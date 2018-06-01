@@ -21,47 +21,6 @@ if(user) {
 		const notIn = this.req.session.in === false;
 		const set = {};
 		const now = Date.now();
-		if(this.req.body.name !== undefined) {
-			if(typeof this.req.body.name === "string") {
-				this.req.body.name = this.req.body.name.trim();
-				if(this.req.body.name.length < 1) {
-					this.value = {
-						error: "The `name` value must be at least 1 character long."
-					};
-					this.status = 422;
-					this.done();
-					return;
-				} else if(this.req.body.name.length > 32) {
-					this.value = {
-						error: "The `name` value must be at most 32 characters long."
-					};
-					this.status = 422;
-					this.done();
-					return;
-				} else {
-					const cooldown = 86400000+user.nameCooldown-now;
-					if(cooldown > 0) {
-						this.value = {
-							error: `The \`name\` value may only be set once per day.`,
-							cooldown
-						};
-						this.status = 422;
-						this.done();
-						return;
-					} else {
-						set.name = this.req.body.name;
-						set.nameCooldown = now;
-					}
-				}
-			} else {
-				this.value = {
-					error: "The `name` value must be a string."
-				};
-				this.status = 422;
-				this.done();
-				return;
-			}
-		}
 		if(notIn) {
 			if(this.req.body.captcha === undefined) {
 				this.value = {
@@ -119,7 +78,7 @@ if(user) {
 					const cooldown = 86400000+user.nameCooldown-now;
 					if(cooldown > 0) {
 						this.value = {
-							error: `The \`name\` value may only be set once per day.`,
+							error: "The `name` value may only be set once per day.",
 							cooldown
 						};
 						this.status = 422;
