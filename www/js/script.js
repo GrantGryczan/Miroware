@@ -141,13 +141,16 @@
 	const _dialog = Symbol("dialog");
 	const _promise = Symbol("promise");
 	const _close = Symbol("close");
+	const defaultDialogButtons = ["Okay"];
 	class MiroDialog {
 		constructor(title, body, buttons) {
 			if(!(typeof title === "string")) {
 				throw new MiroError("The `title` parameter must be a string.");
 			}
-			if(!(buttons instanceof Array)) {
-				throw new MiroError("The `buttons` parameter must be an array.");
+			if(buttons === undefined) {
+				buttons = defaultDialogButtons;
+			} else if(!(buttons instanceof Array)) {
+				throw new MiroError("The `buttons` parameter must be an array if it is defined.");
 			}
 			if(typeof body === "string") {
 				body = document.createTextNode(body);
@@ -291,7 +294,7 @@
 					success(req);
 				}
 			} else {
-				await new Miro.dialog("Error", (req.response && req.response.error) || req.statusText || "An unknown network error occurred.", ["Okay"]);
+				await new Miro.dialog("Error", (req.response && req.response.error) || req.statusText || "An unknown network error occurred.");
 			}
 		}
 	};
