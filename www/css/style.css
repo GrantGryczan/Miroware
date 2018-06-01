@@ -2,9 +2,9 @@
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 @import url(https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css);
 :root {
-	$mdc-theme-primary: #303030;
-	$mdc-theme-secondary: #018786;
-	$mdc-theme-background: #202020;
+	--mdc-theme-primary: #303030;
+	--mdc-theme-secondary: #018786;
+	--mdc-theme-background: #202020;
 }
 ::-webkit-scrollbar {
 	width: 12px;
