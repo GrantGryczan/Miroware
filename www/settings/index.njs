@@ -20,10 +20,10 @@ this.value += html`
 					</div><br>
 					<div class="mdc-form-field">
 						<div class="mdc-checkbox">
-							<input id="publicEmail" class="mdc-checkbox__native-control" type="checkbox">
+							<input id="publicEmail" name="publicEmail" class="mdc-checkbox__native-control" type="checkbox">
 							<div class="mdc-checkbox__background"></div>
 						</div>
-						<label for="publicemail">Show email publicly</label>
+						<label for="publicEmail">Show email publicly</label>
 					</div><br>
 					<div class="mdc-text-field${nameCooldown ? " mdc-text-field--disabled" : ""}">
 						<input id="name" name="name" class="mdc-text-field__input" type="text" value="$${user.name}" maxlength="32" required${nameCooldown ? " disabled" : ""}>

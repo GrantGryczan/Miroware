@@ -30,7 +30,7 @@
 		evt.preventDefault();
 		const body = {};
 		for(const v of changed) {
-			body[v.id] = Miro.value(v);
+			body[v.name] = Miro.value(v);
 		}
 		Miro.formState(form, false);
 		Miro.request("PUT", "/users/@me", {}, body).then(Miro.response(() => {
