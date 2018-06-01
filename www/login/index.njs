@@ -9,7 +9,7 @@ this.value += (await load("www/load/body", this)).value;
 this.value += html`
 			<form id="loginForm">
 				<div class="mdc-text-field">
-					<input name="email" class="mdc-text-field__input" type="email" required>
+					<input id="email" name="email" class="mdc-text-field__input" type="email" required>
 					<label class="mdc-floating-label" for="email">Email</label>
 					<div class="mdc-line-ripple"></div>
 				</div><br>
@@ -18,17 +18,17 @@ this.value += html`
 			</form>
 			<span id="signupForm" class="hidden">
 				<div class="mdc-text-field mdc-text-field--disabled">
-					<input name="email" class="mdc-text-field__input" type="email" required disabled>
+					<input id="email" name="email" class="mdc-text-field__input" type="email" required disabled>
 					<label class="mdc-floating-label alwaysFloat" for="email">Email</label>
 					<div class="mdc-line-ripple"></div>
 				</div><br>
 				<div class="mdc-text-field">
-					<input name="username" class="mdc-text-field__input" type="text" maxlength="32" required>
-					<label class="mdc-floating-label" for="username">Username</label>
+					<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="32" required>
+					<label class="mdc-floating-label" for="name">Username</label>
 					<div class="mdc-line-ripple"></div>
 				</div><br>
 				<div class="mdc-text-field">
-					<input name="birthday" class="mdc-text-field__input" type="date" max="${inputDate(new Date())}" required>
+					<input id="birthday" name="birthday" class="mdc-text-field__input" type="date" max="${inputDate(new Date())}" required>
 					<label class="mdc-floating-label alwaysFloat" for="birthday">Birthday</label>
 					<div class="mdc-line-ripple"></div>
 				</div><br>

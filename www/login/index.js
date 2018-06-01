@@ -21,8 +21,9 @@
 				}, "Cancel"]).then(value => {
 					if(value === 0) {
 						Miro.request("PUT", "/users/@me", {}, {
-							name: signupDialog.form.username.value,
-							birth: signupDialog.form.birthday.valueAsNumber
+							name: signupDialog.form.elements.name.value,
+							birth: signupDialog.form.elements.birthday.valueAsNumber,
+							captcha: signupDialog.form.elements["g-recaptcha-response"].value
 						}).then(Miro.response(() => {
 							Miro.in = true;
 						})).finally(loggedIn);
