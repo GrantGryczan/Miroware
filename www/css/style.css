@@ -1,6 +1,9 @@
-@import url(https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css);
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+$mdc-theme-primary: #9c27b0;
+$mdc-theme-secondary: #76ff03;
+$mdc-theme-background: #fff;
+@import url(https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css);
 ::-webkit-scrollbar {
 	width: 12px;
 	height: 12px;
