@@ -61,6 +61,7 @@ if(user) {
 				this.done();
 				return;
 			}
+		}
 		if(notIn) {
 			if(this.req.body.captcha === undefined) {
 				this.value = {
