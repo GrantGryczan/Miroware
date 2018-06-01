@@ -26,7 +26,7 @@
 								Miro.in = true;
 							})).finally(loggedIn);
 						} else {
-							new Miro.dialog("Error", "You must complete the CAPTCHA challenge before authenticating.");
+							new Miro.dialog("Error", "You must complete the CAPTCHA challenge before authenticating.").then(loggedIn);
 						}
 					} else {
 						Miro.logOut();
