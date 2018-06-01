@@ -31,9 +31,11 @@ this.value += html`
 					<label class="mdc-floating-label alwaysFloat" for="birthday">Birthday</label>
 					<div class="mdc-line-ripple"></div>
 				</div>
+				<div class="g-recaptcha" data-sitekey="${youKnow.captcha.site}"></div>
 			</span>`;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
+		<script src="https://www.google.com/recaptcha/api.js"></script>
 		<script src="index.js"></script>`;
 this.value += (await load("www/load/foot", this)).value;
 this.done();
