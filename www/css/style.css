@@ -250,16 +250,18 @@ input:-webkit-autofill {
 	}
 	&__native-control {
 		&:checked, &:indeterminate {
-			& ~ .mdc-checkbox__background {
-				:enabled & {
+			&:enabled {
+				&, & ~ .mdc-checkbox__background {
 					border-color: #505050;
 					background-color: #505050;
 				}
-				:disabled & {
+			}
+			&:disabled {
+				& ~ .mdc-checkbox__background {
 					background-color: #282828;
-					.mdc-checkbox__checkmark-path {
-						stroke: #808080 !important;
-					}
+				}
+				.mdc-checkbox__checkmark-path {
+					stroke: #808080 !important;
 				}
 			}
 		}
@@ -268,7 +270,7 @@ input:-webkit-autofill {
 				border-color: rgba(255, 255, 255, 0.54);
 			}
 			&:disabled ~ .mdc-checkbox__background {
-				background-color: #282828;
+				border-color: rgba(255, 255, 255, 0.26);
 			}
 		}
 	}
