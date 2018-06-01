@@ -32,13 +32,13 @@ if(user) {
 			} else if(typeof this.req.body.captcha === "string") {
 				let success = false;
 				try {
-					({success} = await request.post("https://www.google.com/recaptcha/api/siteverify", {
+					({success} = JSON.parse(await request.post("https://www.google.com/recaptcha/api/siteverify", {
 						form: {
 							secret: youKnow.captcha.secret,
 							response: this.req.body.captcha,
 							remoteip: this.req.ip
 						}
-					}));
+					})));
 				} catch(err) {}
 				if(!success) {
 					this.value = {
