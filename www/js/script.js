@@ -103,7 +103,7 @@
 		for(const v of mdcTypes) {
 			if(input.parentNode.classList.contains(`mdc-${v}`)) {
 				const disabledClass = `mdc-${v}--disabled`;
-				input.parentNode.classList[state ? "add" : "remove"](disabledClass);
+				input.parentNode.classList[state ? "remove" : "add"](disabledClass);
 			}
 		}
 	};
