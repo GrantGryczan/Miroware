@@ -50,7 +50,7 @@ body {
 .mdc-fab {
 	background: none;
 	box-shadow: none;
-	&:not(:disabled) {
+	&:enabled {
 		color: rgba(255, 255, 255, 0.6);
 		&:hover, &:focus {
 			color: #ffffff;
@@ -154,19 +154,19 @@ input:-webkit-autofill {
 	}
 }
 .mdc-button {
-	&:not(:disabled) {
+	&:enabled {
 		color: rgba(255, 255, 255, 0.6);
 		&:hover, &:focus {
 			color: #ffffff;
 		}
 	}
 	&--raised, &--unelevated {
-		&:not(:disabled) {
+		&:enabled {
 			background-color: #404040;
 		}
 	}
 	&--outlined {
-		&:not(:disabled) {
+		&:enabled {
 			border-color: rgba(255, 255, 255, 0.6);
 			&:hover, &:focus {
 				border-color: #ffffff;
@@ -247,6 +247,14 @@ input:-webkit-autofill {
 .mdc-form-field {
 	color: rgba(255, 255, 255, 0.87);
 	user-select: none;
+}
+.mdc-checkbox__native-control:not(:checked):not(:indeterminate) {
+	&:enabled ~ .mdc-checkbox__background {
+		border-color: rgba(255, 255, 255, 0.54);
+	}
+	&:disabled ~ .mdc-checkbox__background {
+		border-color: rgba(255, 255, 255, 0.26);
+	}
 }
 .mdc-dialog {
 	&__surface {
