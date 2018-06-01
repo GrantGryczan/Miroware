@@ -48,14 +48,14 @@
 		for(const v of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded)")) {
 			new mdc.ripple.MDCRipple(v);
 		}
-		for(const v of node.querySelectorAll(".mdc-form-field")) {
-			new mdc.formField.MDCFormField(v);
-		}
 		for(const v of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
 			new mdc.textField.MDCTextField(v);
 		}
 		for(const v of node.querySelectorAll(".mdc-checkbox")) {
 			new mdc.checkbox.MDCCheckbox(v);
+		}
+		for(const v of node.querySelectorAll(".mdc-form-field")) {
+			new mdc.formField.MDCFormField(v);
 		}
 	};
 	const htmlExps = ["$", "&"];
