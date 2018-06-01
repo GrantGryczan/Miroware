@@ -37,6 +37,6 @@ this.value += html`
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
 		<script src="index.js"></script>
-		<script src="https://www.google.com/recaptcha/api.js?onload=captchaCallback" async defer></script>`;
+		<script src="https://www.google.com/recaptcha/api.js?onload=captchaCallback"></script>`;
 this.value += (await load("www/load/foot", this)).value;
 this.done();
