@@ -81,7 +81,9 @@ if(user) {
 						},
 						json: true
 					}));
-				} catch(err) {}
+				} catch(err) {
+					console.error(err);
+				}
 				if(!success) {
 					this.value = {
 						error: "The captcha challenge was failed."

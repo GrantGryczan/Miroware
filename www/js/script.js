@@ -141,14 +141,13 @@
 	const _dialog = Symbol("dialog");
 	const _promise = Symbol("promise");
 	const _close = Symbol("close");
-	const defaultDialogButtons = ["Okay"];
 	class MiroDialog {
 		constructor(title, body, buttons) {
 			if(!(typeof title === "string")) {
 				throw new MiroError("The `title` parameter must be a string.");
 			}
 			if(buttons === undefined) {
-				buttons = defaultDialogButtons;
+				buttons = ["Okay"];
 			} else if(!(buttons instanceof Array)) {
 				throw new MiroError("The `buttons` parameter must be an array if it is defined.");
 			}
