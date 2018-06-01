@@ -245,6 +245,9 @@ input:-webkit-autofill {
 	}
 }
 .mdc-checkbox {
+	&--disabled ~ label {
+	   color: rgba(255, 255, 255, 0.38);
+	}
 	&::before, &::after {
 		background-color: #505050;
 	}
