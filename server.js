@@ -105,7 +105,7 @@ const notLoggedIn = context => {
 const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
 	const myEval = v => eval(v);
-	require("../replthis")(myEval);
+	require("replthis")(myEval);
 	const db = (await MongoClient.connect(youKnow.db.url, {
 		native_parser: true
 	})).db("web");
