@@ -17,6 +17,4 @@ fs.watch(__filename, () => {
 		process.exit();
 	}, 1000);
 });
-process.openStdin().on("data", input => {
-	console.log(eval(String(input)));
-});
+require("replthis")(v => eval(v));

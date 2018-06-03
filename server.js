@@ -1,4 +1,5 @@
 console.log("< Server >");
+const crypto = require("crypto");
 const fs = require("fs-extra");
 const {serve, html} = require("servecube");
 const cookieParser = require("cookie-parser");
@@ -103,13 +104,15 @@ const notLoggedIn = context => {
 };
 const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
+	const myEval = v => eval(v);
+	require("../replthis")(myEval);
 	const db = (await MongoClient.connect(youKnow.db.url, {
 		native_parser: true
 	})).db("web");
 	const users = db.collection("users");
 	const domain = production ? "miroware.io" : "localhost:8081";
 	const cube = await serve({
-		eval: v => eval(v),
+		eval: myEval,
 		domain,
 		errorDir: "error",
 		httpPort: 8081,
@@ -163,13 +166,4 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}]
 	});
 	const {load} = cube;
-	evalInput = input => {
-		console.log(eval(String(input)));
-	};
 })();
-let evalInput = input => {
-	console.log(eval(String(input)));
-};
-process.openStdin().on("data", input => {
-	evalInput(input);
-});

@@ -30,6 +30,7 @@
 		"mongodb": "^3.0.8",
 		"php-date": "^2.1.1",
 		"redbird": "^0.7.0",
+		"replthis": "^1.0.1",
 		"request": "^2.86.0",
 		"request-promise-native": "^1.0.5",
 		"servecube": "^1.14.11"

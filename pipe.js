@@ -53,6 +53,4 @@ http.createServer(app).listen(8082);
 fs.watch(__filename, () => {
 	process.exit();
 });
-process.openStdin().on("data", input => {
-	console.log(eval(String(input)));
-});
+require("replthis")(v => eval(v));
