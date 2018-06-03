@@ -317,7 +317,7 @@ client.on("message", async msg => {
 					}
 				} else if(perm) {
 					if(content[0] === "open") {
-						msg.channel.send(`${msg.author} Open color mode has been ${(data.guilds[msg.guild.id][0] = (data.guilds[msg.guild.id][0]+1)%2) ? "enabled" : "disabled"}.`).catch(errSendMessages(msg));
+						msg.channel.send(`${msg.author} Open color mode has been ${(data.guilds[msg.guild.id][0] = +!data.guilds[msg.guild.id][0]) ? "enabled" : "disabled"}.`).catch(errSendMessages(msg));
 						save();
 					} else if(content[0] === "create") {
 						if(content[1]) {
