@@ -11,6 +11,7 @@ if(testEmail(this.req.body.email)) {
 		authenticate(this).then(async data => {
 			const now = Date.now();
 			const insertData = {
+				salt: youKnow.crypto.salt(),
 				created: now,
 				updated: now,
 				login: [{
