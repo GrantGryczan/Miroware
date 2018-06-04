@@ -14,6 +14,7 @@ if(testEmail(this.req.body.email)) {
 				salt: youKnow.crypto.salt(),
 				created: now,
 				updated: now,
+				pouch: [],
 				login: [{
 					service: this.req.body.service,
 					id: data.id
