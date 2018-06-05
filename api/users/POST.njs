@@ -10,8 +10,11 @@ if(testEmail(this.req.body.email)) {
 	} else {
 		authenticate(this).then(async data => {
 			const now = Date.now();
+			const token = youKnow.crypto.token();
+			const iv = youKnow.crypto.iv();
 			const insertData = {
-				salt: youKnow.crypto.salt(),
+				iv,
+				token: youKnow.crypto.encrypt(token, iv),
 				created: now,
 				updated: now,
 				pouch: [],
@@ -35,6 +38,7 @@ if(testEmail(this.req.body.email)) {
 				// TODO: Set `emailCode` and send verification email.
 			}
 			this.value = {
+				token,
 				id: this.req.session.user = (await users.insertOne(insertData)).ops[0]._id
 			};
 			this.req.session.in = false;

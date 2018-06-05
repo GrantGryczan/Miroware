@@ -106,7 +106,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
 	const myEval = v => eval(v);
 	require("replthis")(myEval);
-	const db = (await MongoClient.connect(youKnow.db.url, {
+	const db = (await MongoClient.connect(youKnow.db, {
 		native_parser: true
 	})).db("web");
 	const users = db.collection("users");
