@@ -111,6 +111,13 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	})).db("web");
 	const users = db.collection("users");
 	const domain = production ? "miroware.io" : "localhost:8081";
+	const cookieOptions = {
+		domain: `.${production ? domain : "localhost"}`,
+		maxAge: 2592000000,
+		secure: production,
+		httpOnly: true,
+		signed: true
+	};
 	const cube = await serve({
 		eval: myEval,
 		domain,
@@ -125,23 +132,8 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		githubPayloadURL: "/githubwebhook",
 		githubSecret: youKnow.github.secret,
 		githubToken: youKnow.github.token,
-		middleware: [cookieParser(youKnow.cookie.secret), session({
-			secret: youKnow.cookie.secret,
-			resave: false,
-			saveUninitialized: false,
-			name: "sess",
-			cookie: {
-				domain: `.${production ? domain : "localhost"}`,
-				maxAge: 2592000000,
-				secure: production,
-				httpOnly: true
-			},
-			store: new MongoStore({
-				db,
-				collection: "sessions",
-				stringify: false
-			})
-		}), (req, res) => {
+		middleware: [cookieParser(youKnow.cookie.secret), (req, res) => {
+			console.log(req.signedCookies);
 			if(req.session.user) {
 				users.findOneAndUpdate({
 					_id: req.session.user
