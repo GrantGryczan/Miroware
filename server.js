@@ -9,7 +9,7 @@ const {MongoClient, ObjectID} = require("mongodb");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const {OAuth2Client} = require("google-auth-library");
-const youKnow = require("./data/youknow.js");
+const youKnow = require("./secret/youknow.js");
 const production = process.argv[2] === "production";
 const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;

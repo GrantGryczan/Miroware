@@ -9,11 +9,11 @@ const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 const properColorTest = /^#[\da-f]{6}$/;
 let data;
 const load = () => {
-	data = JSON.parse(fs.readFileSync("data/colorbot.json"));
+	data = JSON.parse(fs.readFileSync("secret/colorbot.json"));
 };
 load();
 const save = () => {
-	fs.writeFileSync("data/colorbot.json", JSON.stringify(data));
+	fs.writeFileSync("secret/colorbot.json", JSON.stringify(data));
 };
 const client = new Discord.Client();
 const exitOnError = () => {

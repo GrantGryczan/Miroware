@@ -10,11 +10,11 @@ const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(un
 const byTextChannels = channel => channel.type === "text";
 let data;
 const load = () => {
-	data = JSON.parse(fs.readFileSync("data/starbot.json"));
+	data = JSON.parse(fs.readFileSync("secret/starbot.json"));
 };
 load();
 const save = () => {
-	fs.writeFileSync("data/starbot.json", JSON.stringify(data));
+	fs.writeFileSync("secret/starbot.json", JSON.stringify(data));
 };
 const client = new Discord.Client();
 const exitOnError = () => {

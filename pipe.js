@@ -3,7 +3,7 @@ const fs = require("fs");
 const http = require("http");
 const express = require("express");
 const AWS = require("aws-sdk");
-const youKnow = require("./data/tee.js");
+const youKnow = require("./secret/tee.js");
 const app = express();
 const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
