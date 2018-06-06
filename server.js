@@ -134,6 +134,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		githubToken: youKnow.github.token,
 		middleware: [cookieParser(youKnow.cookie.secret), (req, res) => {
 			console.log(req.signedCookies);
+			/*
 			if(req.session.user) {
 				users.findOneAndUpdate({
 					_id: req.session.user
@@ -143,6 +144,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					}
 				});
 			}
+			*/
 			if(req.dir === "api" && bodyMethods.includes(req.method)) {
 				res.set("Content-Type", "application/json");
 				try {
