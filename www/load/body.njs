@@ -1,6 +1,6 @@
 this.value = html`
 	</head>
-	<body class="mdc-typography${this.req.session.in === true ? " in" : ""}">
+	<body class="mdc-typography${this.req.in ? " in" : ""}">
 		<aside id="drawer" class="mdc-drawer mdc-drawer--temporary">
 			<nav class="mdc-drawer__drawer">
 				<header class="mdc-drawer__header">
@@ -11,7 +11,7 @@ this.value = html`
 						<a class="mdc-list-item${this.req.decodedPath === "/" ? " visiting" : "\" href=\"/"}">
 							<i class="material-icons mdc-list-item__graphic">home</i> Home
 						</a>`;
-if(this.req.session.in) {
+if(this.req.in) {
 	this.value += html`
 						<a class="mdc-list-item${this.req.decodedPath === "/settings/" ? " visiting" : "\" href=\"/settings/"}">
 							<i class="material-icons mdc-list-item__graphic">settings</i> Settings

@@ -145,6 +145,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				});
 			}
 			*/
+			this.req.in = this.req.user ? !!this.req.user.name : null;
 			if(req.dir === "api" && bodyMethods.includes(req.method)) {
 				res.set("Content-Type", "application/json");
 				try {
