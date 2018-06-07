@@ -49,11 +49,11 @@
 	const authFailed = data => {
 		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
 	};
-	const send = (service, token) => {
+	const send = (service, code) => {
 		Miro.request("POST", signup ? "/users" : "/token", {}, {
 			email: loginForm.email.value,
 			service,
-			token
+			code
 		}).then(req => {
 			Miro.block(false);
 			if(Math.floor(req.status/100) === 2) {
@@ -67,8 +67,8 @@
 	const clickAuth = auth => {
 		return function() {
 			Miro.block(true);
-			auth().then(token => {
-				send(auth.name, token);
+			auth().then(code => {
+				send(auth.name, code);
 			}).catch(err => {
 				Miro.block(false);
 				authFailed(err);

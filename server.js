@@ -16,7 +16,7 @@ const authenticate = context => {
 	return new Promise(resolve => {
 		if(context.req.body.service === "Google") {
 			googleAuthClient.verifyIdToken({
-				idToken: context.req.body.token,
+				idToken: context.req.body.code,
 				audience: youKnow.google.id
 			}).then(ticket => {
 				const payload = ticket.getPayload();
@@ -52,7 +52,7 @@ const authenticate = context => {
 					client_id: youKnow.discord.id,
 					client_secret: youKnow.discord.secret,
 					grant_type: "authorization_code",
-					code: context.req.body.token,
+					code: context.req.body.code,
 					redirect_uri: `${referrer}discord/`
 				}
 			}).then(body => {
