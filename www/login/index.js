@@ -50,7 +50,7 @@
 		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
 	};
 	const send = (service, token) => {
-		Miro.request("POST", signup ? "/users" : "/session", {}, {
+		Miro.request("POST", signup ? "/users" : "/token", {}, {
 			email: loginForm.email.value,
 			service,
 			token

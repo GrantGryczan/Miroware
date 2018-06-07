@@ -328,7 +328,7 @@
 			req.send(body && JSON.stringify(body));
 		});
 	};
-	Miro.logOut = () => Miro.request("DELETE", "/session").then(Miro.response(() => {
+	Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(() => {
 		window.location.reload();
 	}));
 	if(Miro.in = JSON.parse(document.querySelector("meta[name=\"in\"]").getAttribute("content"))) {

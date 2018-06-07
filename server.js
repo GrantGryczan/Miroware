@@ -195,7 +195,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
 					const token = context.user.pouch.find(v => v.value.buffer.equals(hash));
 					if(token && context.now < token.expire) {
-						context.scope = token.scope;
+						context.token = token;
 						context.update.$set = {
 							updated: context.now
 						};

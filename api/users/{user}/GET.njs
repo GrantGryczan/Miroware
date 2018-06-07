@@ -16,7 +16,7 @@ const user = await users.findOne({
 	_id: userID
 });
 if(user) {
-	const isMe = this.user && this.params.user === String(this.user._id) && this.scope === 0;
+	const isMe = this.user && this.params.user === String(this.user._id) && this.token.scope === 0;
 	if(isMe || user.name !== null) {
 		this.value = {
 			created: user.created,
