@@ -168,9 +168,18 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.now = Date.now();
 			const auth = context.req.auth || (context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));
 			if(auth) {
-				if(context.user = await users.findOne(context.userFilter = {
-					_id: ObjectID(auth[0])
-				})) {
+				try {
+					context.user = await users.findOne(context.userFilter = {
+						_id: ObjectID(auth[0])
+					});
+				} catch(err) {
+					this.value = {
+						error: err.message
+					};
+					this.status = 400;
+					return false;
+				}
+				if(context.user) {
 					context.update = {
 						$pull: {
 							pouch: {

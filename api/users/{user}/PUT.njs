@@ -8,7 +8,7 @@ try {
 	this.value = {
 		error: err.message
 	};
-	this.status = 422;
+	this.status = 400;
 	this.done();
 	return;
 }
