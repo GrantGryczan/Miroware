@@ -275,7 +275,9 @@
 	const progress = new mdc.linearProgress.MDCLinearProgress(document.querySelector(".mdc-linear-progress"));
 	window.addEventListener("load", () => {
 		progress.close();
-		progress.determinate = true;
+		setTimeout(() => {
+			progress.determinate = true;
+		}, 250);
 	});
 	const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector("#snackbar"));
 	Miro.snackbar = (message, actionText, actionHandler) => {
