@@ -331,17 +331,15 @@
 	Miro.logOut = () => Miro.request("DELETE", "/session").then(Miro.response(() => {
 		window.location.reload();
 	}));
-	if((Miro.in = JSON.parse(document.querySelector("meta[name=\"in\"]").getAttribute("content"))) !== null) {
+	if(Miro.in = JSON.parse(document.querySelector("meta[name=\"in\"]").getAttribute("content"))) {
 		Miro.user = document.querySelector("meta[name=\"user\"]").getAttribute("content");
-		if(Miro.in) {
-			document.querySelector("#logOut").addEventListener("click", () => {
-				new Miro.dialog("Log out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
-					if(value === 0) {
-						Miro.logOut();
-					}
-				});
+		document.querySelector("#logOut").addEventListener("click", () => {
+			new Miro.dialog("Log out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
+				if(value === 0) {
+					Miro.logOut();
+				}
 			});
-		}
+		});
 	}
 	Miro.prepare(document);
 })();

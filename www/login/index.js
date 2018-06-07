@@ -38,7 +38,7 @@
 			window.location.reload();
 		}
 	};
-	if(Miro.user) {
+	if(Miro.in !== null) {
 		loggedIn();
 		return;
 	}
