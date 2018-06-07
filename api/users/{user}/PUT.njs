@@ -83,8 +83,8 @@ if(user) {
 						this.done();
 						return;
 					} else {
-						set.name = this.req.body.name;
-						set.nameCooldown = this.now;
+						this.update.$set.name = this.req.body.name;
+						this.update.$set.nameCooldown = this.now;
 					}
 				}
 			} else {
@@ -120,7 +120,7 @@ if(user) {
 					this.done();
 					return;
 				} else {
-					set.birth = this.req.body.birth;
+					this.update.$set.birth = this.req.body.birth;
 				}
 			} else {
 				this.value = {
@@ -163,7 +163,7 @@ if(user) {
 		}
 		if(this.req.body.publicEmail !== undefined) {
 			if(typeof this.req.body.publicEmail === "boolean") {
-				set.publicEmail = this.req.body.publicEmail;
+				this.update.$set.publicEmail = this.req.body.publicEmail;
 			} else {
 				this.value = {
 					error: "The `publicEmail` value must be a Boolean."
@@ -174,7 +174,7 @@ if(user) {
 			}
 		}
 		if(notIn) {
-			set.created = this.now;
+			this.update.$set.created = this.now;
 		}
 		if(Object.keys(set).length) {
 			users.updateOne(filter, {
