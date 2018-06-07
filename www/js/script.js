@@ -272,7 +272,7 @@
 	document.querySelector("#menu").addEventListener("click", () => {
 		drawer.open = !drawer.open;
 	});
-	progress = new mdc.linearProgress.MDCLinearProgress(document.querySelector(".mdc-linear-progress"));
+	window.progress = new mdc.linearProgress.MDCLinearProgress(document.querySelector(".mdc-linear-progress"));
 	window.addEventListener("load", () => {
 		progress.close();
 		setTimeout(() => {
