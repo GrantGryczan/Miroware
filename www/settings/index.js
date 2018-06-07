@@ -46,7 +46,7 @@
 			Miro.formState(form, true);
 		});
 	});
-	form.querySelector("#showLogins").addEventListener("click", () => {
+	form.querySelector("#showLogins").addEventListener("click", function() {
 		this.parentNode.insertBefore(html`Testing...`, this);
 		this.parentNode.removeChild(this);
 	});
