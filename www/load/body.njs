@@ -1,6 +1,24 @@
 this.value = html`
 	</head>
 	<body class="mdc-typography${this.in ? " in" : ""}">
+		<header class="mdc-top-app-bar mdc-elevation--z2">
+			<div class="mdc-top-app-bar__row">
+				<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+					<button id="menu" class="mdc-top-app-bar__navigation-icon mdc-fab mdc-fab--mini material-icons" type="button">
+						<span class="mdc-fab__icon">menu</span>
+					</button>
+					<span class="mdc-top-app-bar__title">$${this.title}</span>
+				</section>
+			</div>
+			<div class="mdc-linear-progress">
+				<div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+					<span class="mdc-linear-progress__bar-inner"></span>
+				</div>
+				<div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+					<span class="mdc-linear-progress__bar-inner"></span>
+				</div>
+			</div>
+		</header>
 		<aside id="drawer" class="mdc-drawer mdc-drawer--temporary">
 			<nav class="mdc-drawer__drawer">
 				<header class="mdc-drawer__header">
@@ -33,23 +51,5 @@ this.value += html`
 				</nav>
 			</nav>
 		</aside>
-		<div id="container">
-			<header class="mdc-top-app-bar mdc-elevation--z2">
-				<div class="mdc-top-app-bar__row">
-					<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-						<button id="menu" class="mdc-top-app-bar__navigation-icon mdc-fab mdc-fab--mini material-icons" type="button">
-							<span class="mdc-fab__icon">menu</span>
-						</button>
-						<span class="mdc-top-app-bar__title">$${this.title}</span>
-					</section>
-					<div class="mdc-linear-progress mdc-linear-progress--indeterminate">
-						<div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
-							<span class="mdc-linear-progress__bar-inner"></span>
-						</div>
-						<div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
-							<span class="mdc-linear-progress__bar-inner"></span>
-						</div>
-					</div>
-				</div>
-			</header>`;
+		<div id="container">`;
 this.done();

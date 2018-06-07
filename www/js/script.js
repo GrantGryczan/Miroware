@@ -273,8 +273,10 @@
 		drawer.open = !drawer.open;
 	});
 	const progress = new mdc.linearProgress.MDCLinearProgress(document.querySelector(".mdc-linear-progress"));
-	window.addEventListener("load", progress.close.bind(progress));
-	window.addEventListener("unload", progress.open.bind(progress));
+	window.addEventListener("load", () => {
+		progress.close();
+		progress.determinate = true;
+	});
 	const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector("#snackbar"));
 	Miro.snackbar = (message, actionText, actionHandler) => {
 		const dataObj = {
