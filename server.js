@@ -175,12 +175,13 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				} catch(err) {
 					if(context.req.signedCookies.auth) {
 						context.res.clearCookie("auth", cookieOptions);
+					} else {
+						context.value = {
+							error: err.message
+						};
+						context.status = 400;
+						return false;
 					}
-					context.value = {
-						error: err.message
-					};
-					context.status = 400;
-					return false;
 				}
 				if(context.user) {
 					context.update = {
@@ -210,22 +211,24 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					} else {
 						if(context.req.signedCookies.auth) {
 							context.res.clearCookie("auth", cookieOptions);
+						} else {
+							context.value = {
+								error: "The authorization credentials are using an invalid token."
+							};
+							context.status = 401;
+							return false;
 						}
-						context.value = {
-							error: "The authorization credentials are using an invalid token."
-						};
-						context.status = 401;
-						return false;
 					}
 				} else {
 					if(context.req.signedCookies.auth) {
 						context.res.clearCookie("auth", cookieOptions);
+					} else {
+						context.value = {
+							error: "The authorization credentials are requesting a user which does not exist."
+						};
+						context.status = 401;
+						return false;
 					}
-					context.value = {
-						error: "The authorization credentials are requesting a user which does not exist."
-					};
-					context.status = 401;
-					return false;
 				}
 			}
 			context.in = context.user ? !!context.user.name : null;
