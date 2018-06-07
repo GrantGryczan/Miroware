@@ -222,9 +222,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 			context.in = context.user ? !!context.user.name : null;
 		}],
-		loadEnd: [context => {
+		loadEnd: [async context => {
 			if(context.update) {
-				users.updateOne(context.userFilter, context.update);
+				await users.updateOne(context.userFilter, context.update);
 			}
 		}]
 	});
