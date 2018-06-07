@@ -1,7 +1,7 @@
 (() => {
 	const form = document.querySelector("#settings");
 	const inputs = form.querySelectorAll("input");
-	const submit = document.querySelector("#save");
+	const submit = form.querySelector("#save");
 	const _prev = Symbol("prev");
 	const savePrevs = () => {
 		for(const v of inputs) {
@@ -45,6 +45,10 @@
 		})).finally(() => {
 			Miro.formState(form, true);
 		});
+	});
+	form.querySelector("#showLogins").addEventListener("click", () => {
+		this.parentNode.insertBefore(html`Testing...`, this);
+		this.parentNode.removeChild(this);
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
