@@ -196,11 +196,15 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					const token = context.user.pouch.find(v => v.value.buffer.equals(hash));
 					if(token && context.now < token.expire) {
 						context.token = token;
-						context.userFilter["pouch.value"] = hash;
 						context.update.$set = {
 							updated: context.now,
-							"pouch.$.expire": context.now+cookieOptions.maxAge
 						};
+						users.updateOne({
+							...context.userFilter,
+							"pouch.value": hash
+						}, {
+							"pouch.$.expire": context.now+cookieOptions.maxAge
+						});
 					} else {
 						if(context.req.signedCookies.auth) {
 							context.res.clearCookie("auth", cookieOptions);
