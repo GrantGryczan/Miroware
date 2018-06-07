@@ -42,6 +42,14 @@ this.value += html`
 						</button>
 						<span class="mdc-top-app-bar__title">$${this.title}</span>
 					</section>
+					<div class="mdc-linear-progress mdc-linear-progress--indeterminate mdc-linear-progress--closed">
+						<div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+							<span class="mdc-linear-progress__bar-inner"></span>
+						</div>
+						<div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+							<span class="mdc-linear-progress__bar-inner"></span>
+						</div>
+					</div>
 				</div>
 			</header>`;
 this.done();

@@ -272,6 +272,7 @@
 	document.querySelector("#menu").addEventListener("click", () => {
 		drawer.open = !drawer.open;
 	});
+	const progress = new mdc.linearProgress.MDCLinearProgress(document.querySelector(".mdc-linear-progress"));
 	const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector("#snackbar"));
 	Miro.snackbar = (message, actionText, actionHandler) => {
 		const dataObj = {
@@ -306,6 +307,7 @@
 			} else {
 				throw new MiroError("The `url` parameter must be a string.");
 			}
+			progress.open();
 			body = body !== undefined && (body instanceof Object ? body : {});
 			headers = headers instanceof Object ? headers : {};
 			if(body) {
@@ -322,6 +324,7 @@
 			}
 			req.onreadystatechange = () => {
 				if(req.readyState === XMLHttpRequest.DONE) {
+					progress.close();
 					(status === 0 ? reject : resolve)(req);
 				}
 			};
