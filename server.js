@@ -193,7 +193,8 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						}
 					};
 					const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
-					const token = context.user.pouch.find(v => v.value.buffer.equals(hash) || console.log(v.value.buffer, hash));
+					console.log(context.user.pouch);
+					const token = context.user.pouch.find(v => v.value.buffer.equals(hash));
 					if(token && context.now < token.expire) {
 						context.scope = token.scope;
 						context.update.$set = {
@@ -224,7 +225,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}],
 		loadEnd: [async context => {
 			if(context.update) {
-				await users.updateOne(context.userFilter, context.update);
+				users.updateOne(context.userFilter, context.update);
 			}
 		}]
 	});

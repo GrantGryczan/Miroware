@@ -41,6 +41,7 @@ if(testEmail(this.req.body.email)) {
 				// TODO: Set `emailCode` and send verification email.
 			}
 			const id = (await users.insertOne(insertData)).ops[0]._id.toHexString();
+			console.log(id);
 			this.value = {
 				id,
 				token
