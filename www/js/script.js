@@ -276,7 +276,7 @@
 	window.addEventListener("load", () => {
 		progress.close();
 		setTimeout(() => {
-			progress.determinate = true;
+			progress.determinate = false;
 		}, 250);
 	});
 	const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector("#snackbar"));
