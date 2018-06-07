@@ -1,5 +1,5 @@
 if(this.user && this.params.user === "@me") {
-	this.params.user = this.user._id.toHexString();
+	this.params.user = String(this.user._id);
 }
 let userID;
 try {
@@ -17,7 +17,7 @@ const filter = {
 };
 const user = await users.findOne(filter);
 if(user) {
-	if(this.user._id.toHexString() === user._id.toHexString()) {
+	if(String(this.user._id) === String(user._id)) {
 		const notIn = this.in === false;
 		if(notIn) {
 			if(this.req.body.captcha === undefined) {

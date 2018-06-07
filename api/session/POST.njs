@@ -17,7 +17,7 @@ if(testEmail(this.req.body.email)) {
 						}
 					}
 				});
-				const id = user._id.toHexString();
+				const id = String(user._id);
 				this.value = {
 					id,
 					token

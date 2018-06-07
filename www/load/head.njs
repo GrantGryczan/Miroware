@@ -24,7 +24,7 @@ this.value = html`
 		<meta name="in" content="${this.in}">`;
 if(this.in) {
 	this.value += html`
-		<meta name="user" content="${this.user.name}">`;
+		<meta name="user" content="${this.user._id}">`;
 }
 this.value += html`
 		<title>$${this.title}</title>

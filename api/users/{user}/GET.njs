@@ -1,5 +1,5 @@
 if(this.user && this.params.user === "@me") {
-	this.params.user = this.user._id.toHexString();
+	this.params.user = String(this.user._id);
 }
 let userID;
 try {
@@ -16,7 +16,7 @@ const user = await users.findOne({
 	_id: userID
 });
 if(user) {
-	const isMe = this.user && this.params.user === this.user._id.toHexString() && this.scope === 0;
+	const isMe = this.user && this.params.user === String(this.user._id) && this.scope === 0;
 	if(isMe || user.name !== null) {
 		this.value = {
 			created: user.created,
