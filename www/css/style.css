@@ -43,7 +43,6 @@ body {
 	}
 }
 .mdc-top-app-bar {
-	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 	background-color: #303030;
 	top: 0;
 }
@@ -123,7 +122,6 @@ body {
 #page {
 	margin: 0 auto;
 	padding: 60px;
-	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 	background-color: #282828;
 	@media (max-width: 1020px) {
 		width: calc(100% - 120px);

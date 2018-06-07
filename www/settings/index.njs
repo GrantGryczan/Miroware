@@ -8,7 +8,7 @@ this.value = (await load("www/load/head", this)).value;
 this.value += (await load("www/load/body", this)).value;
 const nameCooldown = this.now-this.user.nameCooldown < 86400000;
 this.value += html`
-			<div id="page">
+			<div id="page" class="mdc-elevation--z3">
 				<form id="settings">
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input id="email" name="email" class="mdc-text-field__input" type="email" value="$${this.user.email}" required disabled>

@@ -34,7 +34,7 @@ this.value += html`
 			</nav>
 		</aside>
 		<div id="container">
-			<header class="mdc-top-app-bar">
+			<header class="mdc-top-app-bar mdc-elevation--z2">
 				<div class="mdc-top-app-bar__row">
 					<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
 						<button id="menu" class="mdc-top-app-bar__navigation-icon mdc-fab mdc-fab--mini material-icons" type="button">
