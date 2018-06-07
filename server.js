@@ -193,7 +193,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						}
 					};
 					const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
-					const token = context.user.pouch.find(v => v.value.buffer.equals(hash));
+					const token = context.user.pouch.find(v => v.value.buffer.equals(hash) || console.log(v.value.buffer, hash));
 					if(token && context.now < token[1]) {
 						context.scope = token.scope;
 						context.update.$set = {
