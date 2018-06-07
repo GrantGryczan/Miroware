@@ -92,8 +92,10 @@ client.once("ready", () => {
 	client.user.setActivity("Enter \">🎨\" for info.");
 });
 client.on("guildCreate", guild => {
-	guildCreate(guild.id);
-	save();
+	if(!data.guilds[guild.id]) {
+		guildCreate(guild.id);
+		save();
+	}
 });
 client.on("guildMemberRemove", member => {
 	for(const [i, v] of member.roles) {

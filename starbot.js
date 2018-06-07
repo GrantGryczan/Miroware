@@ -87,8 +87,10 @@ client.once("ready", () => {
 	save();
 });
 client.on("guildCreate", guild => {
-	guildCreate(guild.id);
-	save();
+	if(!data.guilds[guild.id]) {
+		guildCreate(guild.id);
+		save();
+	}
 });
 client.on("channelDelete", channel => {
 	if(channel.id === data.guilds[channel.guild.id][0]) {
