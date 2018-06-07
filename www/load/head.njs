@@ -21,10 +21,10 @@ this.value = html`
 		<meta property="og:title" content="$${this.title}">
 		<meta property="og:description" content="$${this.description}">
 		<meta name="google-signin-client_id" content="${youKnow.google.id}">
-		<meta name="in" content="${this.req.in}">`;
-if(this.req.in) {
+		<meta name="in" content="${this.in}">`;
+if(this.in) {
 	this.value += html`
-		<meta name="user" content="${this.req.user.name}">`;
+		<meta name="user" content="${this.user.name}">`;
 }
 this.value += html`
 		<title>$${this.title}</title>

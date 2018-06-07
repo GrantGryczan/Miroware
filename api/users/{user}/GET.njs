@@ -1,5 +1,5 @@
-if(this.req.session.user && this.params.user === "@me") {
-	this.params.user = this.req.session.user.toHexString();
+if(this.user && this.params.user === "@me") {
+	this.params.user = this.user._id.toHexString();
 }
 let userID;
 try {
@@ -16,7 +16,7 @@ const user = await users.findOne({
 	_id: userID
 });
 if(user) {
-	const isMe = this.req.session.user && this.params.user === this.req.session.user.toHexString();
+	const isMe = this.user && this.params.user === this.user._id.toHexString() && this.scope === 0;
 	if(isMe || user.name !== null) {
 		this.value = {
 			created: user.created,
@@ -42,7 +42,7 @@ if(user) {
 		this.value = {
 			error: "You do not have permission to access that user."
 		};
-		this.status = 403;
+		this.status = 401;
 		this.done();
 	}
 } else {

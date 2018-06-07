@@ -6,8 +6,6 @@ const cookieParser = require("cookie-parser");
 const request = require("request-promise-native");
 const mime = require("mime");
 const {MongoClient, ObjectID} = require("mongodb");
-const session = require("express-session");
-const MongoStore = require("connect-mongo")(session);
 const {OAuth2Client} = require("google-auth-library");
 const youKnow = require("./secret/youknow.js");
 const production = process.argv[2] === "production";
@@ -94,7 +92,7 @@ const inputDate = date => {
 	return `${date.getFullYear()}-${month}-${day}`;
 };
 const notLoggedIn = context => {
-	if(context.req.session.in) {
+	if(context.in) {
 		return false;
 	} else {
 		context.redirect = `/login/?dest=${encodeURIComponent(context.req.url)}`;
@@ -113,7 +111,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	const domain = production ? "miroware.io" : "localhost:8081";
 	const cookieOptions = {
 		domain: `.${production ? domain : "localhost"}`,
-		maxAge: 2592000000,
 		secure: production,
 		httpOnly: true,
 		signed: true
@@ -133,19 +130,26 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		githubSecret: youKnow.github.secret,
 		githubToken: youKnow.github.token,
 		middleware: [cookieParser(youKnow.cookie.secret), (req, res) => {
-			console.log(req.signedCookies);
-			/*
-			if(req.session.user) {
-				users.findOneAndUpdate({
-					_id: req.session.user
-				}, {
-					$set: {
-						updated: Date.now()
+			let auth = req.get("Authorization");
+			if(auth) {
+				if((auth = auth.split(" ")).length === 2) {
+					if(auth[0] === "Basic") {
+						if((auth = String(Buffer.from(auth[1], "base64")).split(":")).length === 2) {
+							req.auth = auth;
+						} else {
+							res.status(400).send({
+								error: "The credentials of the `Authorization` header are not under the format \"<user ID>:<token>\", encoded in base 64."
+							});
+							return;
+						}
 					}
-				});
+				} else {
+					res.status(400).send({
+						error: "The `Authorization` header is not under the format \"<type> <credentials>\"."
+					});
+					return;
+				}
 			}
-			*/
-			req.in = req.user ? !!req.user.name : null;
 			if(req.dir === "api" && bodyMethods.includes(req.method)) {
 				res.set("Content-Type", "application/json");
 				try {
@@ -158,6 +162,59 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				}
 			}
 			req.next();
+		}],
+		loadStart: [async context => {
+			const auth = context.req.auth || (context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));
+			if(auth) {
+				if(context.user = await users.findOne(context.userFilter = {
+					_id: ObjectID(auth[0])
+				})) {
+					context.update = {
+						$pull: {
+							pouch: {
+								expire: {
+									$lte: context.now = Date.now()
+								}
+							}
+						}
+					};
+					const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
+					const token = context.user.pouch.find(v => v.value === hash);
+					if(token && context.now < token[1]) {
+						context.scope = token.scope;
+						context.update.$set = {
+							updated: context.now
+						};
+					} else {
+						if(req.signedCookies.auth) {
+							context.res.clearCookie("auth", cookieOptions);
+						}
+						context.value = {
+							error: "The authorization credentials are using an invalid token."
+						};
+						context.status = 401;
+						return false;
+					}
+				} else {
+					if(req.signedCookies.auth) {
+						context.res.clearCookie("auth", cookieOptions);
+					}
+					context.value = {
+						error: "The authorization credentials are requesting a user which does not exist."
+					};
+					context.status = 401;
+					return false;
+				}
+			}
+			context.in = context.user ? !!context.user.name : null;
+		}],
+		loadEnd: [context => {
+			if(context.status === 401) {
+				context.req.set("WWW-Authenticate", "Basic realm=\"Miroware\"");
+			}
+			if(context.update) {
+				users.updateOne(context.userFilter, context.update);
+			}
 		}]
 	});
 	const {load} = cube;

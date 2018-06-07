@@ -5,10 +5,24 @@ if(testEmail(this.req.body.email)) {
 	if(user) {
 		authenticate(this).then(async data => {
 			if(user.login.find(v => v.service === this.req.body.service && v.id === data.id)) {
+				const token = youKnow.crypto.token();
+				users.updateOne({
+					_id: user._id
+				}, {
+					$push: {
+						pouch: {
+							value: youKnow.crypto.hash(token, user.salt.buffer),
+							scope: 0,
+							expire: this.now+cookieOptions.maxAge
+						}
+					}
+				});
+				const id = user._id.toHexString();
 				this.value = {
-					in: this.req.session.in = user.name !== null,
-					user: this.req.session.user = user._id
+					id,
+					token
 				};
+				this.res.cookie("auth", Buffer.from(`${data.id}:${token}`).toString("base64"), cookieOptions);
 				this.done();
 			} else {
 				this.value = {

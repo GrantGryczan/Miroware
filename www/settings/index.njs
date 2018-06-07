@@ -6,10 +6,7 @@ this.description = "Set your settings.";
 this.tags = ["settings", "preferences", "account", "user"];
 this.value = (await load("www/load/head", this)).value;
 this.value += (await load("www/load/body", this)).value;
-const user = await users.findOne({
-	_id: this.req.session.user
-});
-const nameCooldown = Date.now()-user.nameCooldown < 86400000;
+const nameCooldown = this.now-user.nameCooldown < 86400000;
 this.value += html`
 			<div id="page">
 				<form id="settings">

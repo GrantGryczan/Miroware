@@ -9,8 +9,7 @@ if(testEmail(this.req.body.email)) {
 		this.done();
 	} else {
 		authenticate(this).then(async data => {
-			const now = Date.now();
-			const inAMonth = now+cookieOptions.maxAge;
+			const inAMonth = this.now+cookieOptions.maxAge;
 			const token = youKnow.crypto.token();
 			const salt = youKnow.crypto.salt();
 			const insertData = {
@@ -24,8 +23,8 @@ if(testEmail(this.req.body.email)) {
 					service: this.req.body.service,
 					id: data.id
 				}],
-				created: now,
-				updated: now,
+				created: this.now,
+				updated: this.now,
 				email: this.req.body.email,
 				verified: this.req.body.email === data.email && data.verified,
 				unverified: null,
@@ -41,13 +40,12 @@ if(testEmail(this.req.body.email)) {
 				insertData.unverified = this.req.body.email;
 				// TODO: Set `emailCode` and send verification email.
 			}
-			const id = (await users.insertOne(insertData)).ops[0]._id;
+			const id = (await users.insertOne(insertData)).ops[0]._id.toHexString();
 			this.value = {
-				token,
-				id
+				id,
+				token
 			};
-			this.res.cookie("auth",  `Basic ${Buffer.from(`${id}:${token}`).toString("base64")}`, cookieOptions);
-			this.status = 201;
+			this.res.cookie("auth",  Buffer.from(`${id}:${token}`).toString("base64"), cookieOptions);
 			this.done();
 		});
 	}

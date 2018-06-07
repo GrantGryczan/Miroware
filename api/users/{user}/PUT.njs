@@ -1,5 +1,5 @@
-if(this.req.session.user && this.params.user === "@me") {
-	this.params.user = this.req.session.user.toHexString();
+if(this.user && this.params.user === "@me") {
+	this.params.user = this.user._id.toHexString();
 }
 let userID;
 try {
@@ -17,10 +17,8 @@ const filter = {
 };
 const user = await users.findOne(filter);
 if(user) {
-	if(this.req.session.user.toHexString() === user._id.toHexString()) {
-		const notIn = this.req.session.in === false;
-		const set = {};
-		const now = Date.now();
+	if(this.user._id.toHexString() === user._id.toHexString()) {
+		const notIn = this.in === false;
 		if(notIn) {
 			if(this.req.body.captcha === undefined) {
 				this.value = {
@@ -75,7 +73,7 @@ if(user) {
 					this.done();
 					return;
 				} else {
-					const cooldown = 86400000+user.nameCooldown-now;
+					const cooldown = 86400000+user.nameCooldown-this.now;
 					if(cooldown > 0) {
 						this.value = {
 							error: "The `name` value may only be set once per day.",
@@ -86,7 +84,7 @@ if(user) {
 						return;
 					} else {
 						set.name = this.req.body.name;
-						set.nameCooldown = now;
+						set.nameCooldown = this.now;
 					}
 				}
 			} else {
@@ -114,7 +112,7 @@ if(user) {
 					this.status = 422;
 					this.done();
 					return;
-				} else if(this.req.body.birth > now) {
+				} else if(this.req.body.birth > this.now) {
 					this.value = {
 						error: "You wish you were that young."
 					};
@@ -176,8 +174,7 @@ if(user) {
 			}
 		}
 		if(notIn) {
-			this.req.session.in = true;
-			set.created = now;
+			set.created = this.now;
 		}
 		if(Object.keys(set).length) {
 			users.updateOne(filter, {
@@ -188,7 +185,7 @@ if(user) {
 		this.value = {
 			error: "You do not have permission to edit that user."
 		};
-		this.status = 403;
+		this.status = 401;
 	}
 } else {
 	this.value = {
