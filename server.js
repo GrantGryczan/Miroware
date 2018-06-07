@@ -168,6 +168,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.now = Date.now();
 			const auth = context.req.auth || (context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));
 			if(auth) {
+				console.log(auth);
 				if(context.user = await users.findOne(context.userFilter = {
 					_id: ObjectID(auth[0])
 				})) {
