@@ -49,6 +49,9 @@ body {
 .mdc-linear-progress {
 	position: absolute;
 	bottom: 0;
+	.mdc-linear-progress__bar-inner {
+		background-color: #b43c3c;
+	}
 }
 .mdc-fab {
 	background: none;
