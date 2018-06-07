@@ -209,7 +209,7 @@ input:-webkit-autofill {
 		}
 	}
 	&--focused:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) .mdc-floating-label {
-		color: #b54040;
+		color: #e96363;
 	}
 	&--invalid:not(.mdc-text-field--disabled) {
 		.mdc-text-field__input {
