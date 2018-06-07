@@ -176,11 +176,6 @@ if(user) {
 		if(notIn) {
 			this.update.$set.created = this.now;
 		}
-		if(Object.keys(set).length) {
-			users.updateOne(filter, {
-				$set: set
-			});
-		}
 	} else {
 		this.value = {
 			error: "You do not have permission to edit that user."
