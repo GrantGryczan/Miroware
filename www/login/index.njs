@@ -18,7 +18,7 @@ this.value += html`
 			</form>
 			<span id="signupForm" class="hidden">
 				<div class="mdc-text-field mdc-text-field--disabled">
-					<input id="email" name="email" class="mdc-text-field__input" type="email" required disabled>
+					<input id="email" name="email" class="mdc-text-field__input" type="email" value="$${this.user && this.user.email}" required disabled>
 					<label class="mdc-floating-label alwaysFloat" for="email">Email</label>
 					<div class="mdc-line-ripple"></div>
 				</div><br>

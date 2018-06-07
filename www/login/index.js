@@ -8,31 +8,28 @@
 		if(Miro.in) {
 			window.location.href = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
 		} else if(Miro.in === false) {
-			Miro.request("GET", "/users/@me").then(req => {
-				setTimeout(() => {
-					signupForm.classList.remove("hidden");
-				});
-				const signupDialog = new Miro.dialog("Sign up", signupForm, [{
-					text: "Okay",
-					type: "submit"
-				}, "Cancel"]).then(value => {
-					if(value === 0) {
-						if(signupDialog.form.elements["g-recaptcha-response"] && signupDialog.form.elements["g-recaptcha-response"].value) {
-							Miro.request("PUT", "/users/@me", {}, {
-								captcha: signupDialog.form.elements["g-recaptcha-response"].value,
-								name: signupDialog.form.elements.name.value,
-								birth: signupDialog.form.elements.birthday.valueAsNumber,
-							}).then(Miro.response(() => {
-								Miro.in = true;
-							})).finally(loggedIn);
-						} else {
-							new Miro.dialog("Error", "You must complete the CAPTCHA challenge before authenticating.").then(loggedIn);
-						}
+			setTimeout(() => {
+				signupForm.classList.remove("hidden");
+			});
+			const signupDialog = new Miro.dialog("Sign up", signupForm, [{
+				text: "Okay",
+				type: "submit"
+			}, "Cancel"]).then(value => {
+				if(value === 0) {
+					if(signupDialog.form.elements["g-recaptcha-response"] && signupDialog.form.elements["g-recaptcha-response"].value) {
+						Miro.request("PUT", "/users/@me", {}, {
+							captcha: signupDialog.form.elements["g-recaptcha-response"].value,
+							name: signupDialog.form.elements.name.value,
+							birth: signupDialog.form.elements.birthday.valueAsNumber,
+						}).then(Miro.response(() => {
+							Miro.in = true;
+						})).finally(loggedIn);
 					} else {
-						Miro.logOut();
+						new Miro.dialog("Error", "You must complete the CAPTCHA challenge before authenticating.").then(loggedIn);
 					}
-				});
-				signupDialog.form.email.value = req.response.email;
+				} else {
+					Miro.logOut();
+				}
 			});
 		} else {
 			window.location.reload();
