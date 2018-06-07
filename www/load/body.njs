@@ -10,7 +10,7 @@ this.value = html`
 					<span class="mdc-top-app-bar__title">$${this.title}</span>
 				</section>
 			</div>
-			<div class="mdc-linear-progress">
+			<div class="mdc-linear-progress mdc-linear-progress--indeterminate">
 				<div class="mdc-linear-progress__buffering-dots"></div>
 				<div class="mdc-linear-progress__buffer"></div>
 				<div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">

@@ -49,11 +49,21 @@ body {
 .mdc-linear-progress {
 	position: absolute;
 	bottom: 0;
-	.mdc-linear-progress__buffer {
-		opacity: 0.1;
+	&:not(.buffering) .mdc-linear-progress {
+		&__buffer, &__buffering-dots {
+			display: none;
+		}
 	}
-	.mdc-linear-progress__bar-inner {
-		background-color: #b43c3c;
+	.mdc-linear-progress {
+		&__buffering-dots {
+			opacity: 0.5;
+		}
+		&__buffer {
+			opacity: 0.25;
+		}
+		&__bar-inner {
+			background-color: #b43c3c;
+		}
 	}
 }
 .mdc-fab {
