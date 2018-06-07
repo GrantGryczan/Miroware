@@ -173,10 +173,13 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						_id: ObjectID(auth[0])
 					});
 				} catch(err) {
-					this.value = {
+					if(context.req.signedCookies.auth) {
+						context.res.clearCookie("auth", cookieOptions);
+					}
+					context.value = {
 						error: err.message
 					};
-					this.status = 400;
+					context.status = 400;
 					return false;
 				}
 				if(context.user) {
