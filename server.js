@@ -211,9 +211,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.in = context.user ? !!context.user.name : null;
 		}],
 		loadEnd: [context => {
-			if(context.status === 401) {
-				context.res.set("WWW-Authenticate", "Basic realm=\"Miroware\"");
-			}
 			if(context.update) {
 				users.updateOne(context.userFilter, context.update);
 			}
