@@ -182,6 +182,9 @@ input:-webkit-autofill {
 	&::before, &::after {
 		background-color: #ffffff;
 	}
+	form > & {
+		margin: 8px 0;
+	}
 }
 :not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth).mdc-text-field {
 	&:not(.mdc-text-field--disabled) {
