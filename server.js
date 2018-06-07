@@ -203,7 +203,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							...context.userFilter,
 							"pouch.value": hash
 						}, {
-							"pouch.$.expire": context.now+cookieOptions.maxAge
+							$set: {
+								"pouch.$.expire": context.now+cookieOptions.maxAge
+							}
 						});
 					} else {
 						if(context.req.signedCookies.auth) {
