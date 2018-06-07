@@ -21,12 +21,7 @@ this.value = html`
 		<meta property="og:title" content="$${this.title}">
 		<meta property="og:description" content="$${this.description}">
 		<meta name="google-signin-client_id" content="${youKnow.google.id}">
-		<meta name="in" content="${this.in}">`;
-if(this.in) {
-	this.value += html`
-		<meta name="user" content="${this.user._id}">`;
-}
-this.value += html`
+		<meta name="in" content="${this.in}">
 		<title>$${this.title}</title>
 		<link rel="icon" href="/images/icon/cubecover.png">
 		<link rel="stylesheet" href="/css/style.css">
