@@ -199,7 +199,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						context.userFilter["pouch.value"] = hash;
 						context.update.$set = {
 							updated: context.now,
-							"pouch.$.expire": context.now
+							"pouch.$.expire": context.now+cookieOptions.maxAge
 						};
 					} else {
 						if(context.req.signedCookies.auth) {

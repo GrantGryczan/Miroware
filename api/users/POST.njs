@@ -9,7 +9,6 @@ if(testEmail(this.req.body.email)) {
 		this.done();
 	} else {
 		authenticate(this).then(async data => {
-			const inAMonth = this.now+cookieOptions.maxAge;
 			const token = youKnow.crypto.token();
 			const salt = youKnow.crypto.salt();
 			const insertData = {
@@ -17,7 +16,7 @@ if(testEmail(this.req.body.email)) {
 				pouch: [{
 					value: youKnow.crypto.hash(token, salt),
 					scope: 0,
-					expire: inAMonth
+					expire: this.now+cookieOptions.maxAge
 				}],
 				login: [{
 					service: this.req.body.service,
