@@ -29,10 +29,7 @@ this.value += html`
 					</div>
 					<p class="mdc-text-field-helper-text">You may only set your username once per day.</p>
 					<br>
-					<br>
 					<button class="mdc-button mdc-button--unelevated mdc-button--dense">Show Login Methods</button><br>
-					<br>
-					<br>
 					<div class="mdc-text-field">
 						<input id="birth" name="birth" class="mdc-text-field__input" type="date" value="${inputDate(new Date(this.user.birth))}" max="${inputDate(new Date())}" required>
 						<label class="mdc-floating-label alwaysFloat" for="birthday">Birthday</label>
