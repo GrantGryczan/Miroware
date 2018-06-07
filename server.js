@@ -188,7 +188,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							updated: context.now
 						};
 					} else {
-						if(this.req.signedCookies.auth) {
+						if(context.req.signedCookies.auth) {
 							context.res.clearCookie("auth", cookieOptions);
 						}
 						context.value = {
@@ -198,7 +198,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						return false;
 					}
 				} else {
-					if(this.req.signedCookies.auth) {
+					if(context.req.signedCookies.auth) {
 						context.res.clearCookie("auth", cookieOptions);
 					}
 					context.value = {
