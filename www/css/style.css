@@ -18,7 +18,7 @@
 		}
 	}
 	&-corner {
-		background: #303030;
+		background-color: #303030;
 	}
 }
 body {
@@ -201,10 +201,8 @@ input:-webkit-autofill {
 			}
 		}
 	}
-	&--focused:not(.mdc-text-field--disabled) {
-		.mdc-floating-label {
-			color: #b54040;
-		}
+	&--focused:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) .mdc-floating-label {
+		color: #b54040;
 	}
 	&--invalid:not(.mdc-text-field--disabled) {
 		.mdc-text-field__input {
