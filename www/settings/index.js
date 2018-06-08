@@ -50,7 +50,7 @@
 		Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
 	});
 	let connection;
-	const send = function(service, code) => {
+	const send = function(service, code) {
 		if(!connection) {
 			connection = arguments;
 		}
