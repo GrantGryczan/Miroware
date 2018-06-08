@@ -7,7 +7,7 @@ this.value += html`
 this.value += (await load("www/load/body", this)).value;
 this.value += html`
 			<div id="page" class="mdc-elevation--z3">
-				Hello, world!
+				[Insert information here.]
 			</div>`;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
