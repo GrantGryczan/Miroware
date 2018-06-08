@@ -6,7 +6,7 @@
 	const loggedIn = () => {
 		Miro.formState(loginForm, false);
 		if(Miro.in) {
-			window.location.href = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
+			location.href = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
 		} else if(Miro.in === false) {
 			setTimeout(() => {
 				signupForm.classList.remove("hidden");
@@ -32,7 +32,7 @@
 				}
 			});
 		} else {
-			window.location.reload();
+			location.reload();
 		}
 	};
 	if(Miro.in !== null) {

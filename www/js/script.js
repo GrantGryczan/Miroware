@@ -299,7 +299,7 @@
 			}
 		}
 	};
-	const apiOrigin = window.location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
+	const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
 	Miro.request = (method, url, headers, body) => {
 		return new Promise((resolve, reject) => {
 			method = typeof method === "string" ? method.toUpperCase() : "GET";
@@ -372,7 +372,7 @@
 			});
 		},
 		Discord: (resolve, reject) => {
-			const win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=${encodeURIComponent(window.location.origin)}%2Flogin%2Fdiscord%2F&response_type=code&scope=identify%20email`, "authDiscord");
+			const win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=${encodeURIComponent(location.origin)}%2Flogin%2Fdiscord%2F&response_type=code&scope=identify%20email`, "authDiscord");
 			const winClosedPoll = setInterval(() => {
 				if(win.closed) {
 					clearInterval(winClosedPoll);
@@ -429,9 +429,7 @@
 			resolveAuth = resolve;
 		});
 	};
-	Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(() => {
-		window.location.reload();
-	}));
+	Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload));
 	if(Miro.in = JSON.parse(document.querySelector("meta[name=\"in\"]").getAttribute("content"))) {
 		document.querySelector("#logOut").addEventListener("click", () => {
 			new Miro.dialog("Log out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
