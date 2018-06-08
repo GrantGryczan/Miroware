@@ -53,8 +53,11 @@
 		service,
 		code
 	});
-	form.querySelector("#showLogins").addEventListener("click", () => {
-		Miro.auth("Connections", "Confirm your credentials to continue.", send).then(console.log);
+	const showConnections = req => {
+		console.log(req.response);
+	};
+	form.querySelector("#manageConnections").addEventListener("click", () => {
+		Miro.auth("Connections", "Confirm your credentials to continue.", send).then(showConnections);
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
