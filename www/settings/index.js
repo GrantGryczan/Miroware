@@ -49,14 +49,24 @@
 		Miro.formState(form, false);
 		Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
 	});
-	const send = (service, code) => Miro.request("GET", "/users/@me", {
-		"X-Miro-Connection": `${service} ${code}`
-	});
+	let connection;
+	const send = function(service, code) => {
+		if(!connection) {
+			connection = arguments;
+		}
+		return Miro.request("GET", "/users/@me", {
+			"X-Miro-Connection": `${service} ${code}`
+		});
+	};
 	const showConnections = req => {
 		console.log(req.response);
 	};
 	form.querySelector("#manageConnections").addEventListener("click", () => {
-		Miro.auth("Connections", "Confirm your credentials to continue.", send).then(showConnections);
+		if(connection) {
+			send.apply(null, connection);
+		} else {
+			Miro.auth("Connections", "Confirm your credentials to continue.", send).then(showConnections);
+		}
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
