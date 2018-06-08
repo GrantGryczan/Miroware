@@ -112,18 +112,15 @@
 			});
 		}
 	};
-	loginForm.addEventListener("submit", evt => {
-		evt.preventDefault();
-		Miro.formState(loginForm, false);
-		const body = document.createElement("span");
-		if(signup) {
-			body.appendChild(document.createTextNode("Connect your Miroware account to an external login to secure your account."));
-			body.appendChild(document.createElement("br"));
-			body.appendChild(document.createTextNode("The option to change or add more connections is available after signing up."));
-		} else {
-			body.appendChild(document.createTextNode("Choose a login method."));
+	Miro.auth = (title, message) => {
+		if(!(typeof message === "string")) {
+			throw new MiroError("The `body` parameter must be a string.");
 		}
-		body.appendChild(document.createElement("br"));
+		const body = document.createElement("span");
+		for(const v of message.split("\n")) {
+			body.appendChild(document.createTextNode(v));
+			body.appendChild(document.createElement("br"));
+		}
 		body.appendChild(document.createElement("br"));
 		for(const i of Object.keys(auths)) {
 			const button = document.createElement("button");
@@ -134,10 +131,15 @@
 			button.addEventListener("click", clickAuth(auths[i]));
 			body.appendChild(button);
 		}
-		dialog = new Miro.dialog(signup ? "Sign up" : "Log in", body, ["Cancel"]).then(value => {
+		return new Miro.dialog(title || "Authenticate", body, ["Cancel"]);
+	};
+	loginForm.addEventListener("submit", evt => {
+		evt.preventDefault();
+		Miro.formState(loginForm, false);
+		dialog = Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.").then(value => {
 			if(value !== -2) {
 				Miro.formState(loginForm, true);
 			}
-		});
+		})
 	});
 })();
