@@ -37,12 +37,20 @@ if(user) {
 				birth: user.birth
 			});
 			if(this.req.get("X-Miro-Connection")) {
-				const connection = await connect(this);
-				if(connection) {
-					this.value.connections = user.connections.map(v => ({
-						service: v.service,
-						id: v.id
-					}));
+				const data = await connect(this);
+				if(data) {
+					if(user.connections.find(v => v.service === data.connection[0] && v.id === data.id)) {
+						this.value.connections = user.connections.map(v => ({
+							service: v.service,
+							id: v.id
+						}));
+					} else {
+						this.value = {
+							error: "That account does not use that login method."
+						};
+						this.status = 422;
+						this.done();
+					}
 				} else {
 					return;
 				}

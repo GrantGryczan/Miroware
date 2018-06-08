@@ -29,6 +29,7 @@ const connect = context => {
 			}).then(ticket => {
 				const payload = ticket.getPayload();
 				resolve({
+					connection,
 					id: payload.sub,
 					name: payload.name,
 					email: payload.email,
@@ -72,6 +73,7 @@ const connect = context => {
 				}).then(body2 => {
 					body2 = JSON.parse(body2);
 					resolve({
+						connection,
 						id: body2.id,
 						name: body2.username,
 						email: body2.email,
