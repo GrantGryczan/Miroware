@@ -18,7 +18,7 @@ if(testEmail(this.req.body.email)) {
 					scope: 0,
 					expire: this.now+cookieOptions.maxAge
 				}],
-				login: [{
+				connections: [{
 					service: this.req.body.service,
 					id: data.id
 				}],
