@@ -36,6 +36,17 @@ if(user) {
 				nameCooldown: user.nameCooldown,
 				birth: user.birth
 			});
+			if(this.req.get("X-Miro-Connection")) {
+				const connection = await connect(this);
+				if(connection) {
+					this.value.connections = user.connections.map(v => ({
+						service: v.service,
+						id: v.id
+					}));
+				} else {
+					return;
+				}
+			}
 		}
 		this.done();
 	} else {

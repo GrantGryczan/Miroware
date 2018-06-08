@@ -46,10 +46,10 @@
 	for(const v of submits) {
 		v.addEventListener("click", setSubmit);
 	}
-	const send = (service, code) => Miro.request("POST", signup ? "/users" : "/token", {}, {
-		email: loginForm.email.value,
-		service,
-		code
+	const send = (service, code) => Miro.request("POST", signup ? "/users" : "/token", {
+		"X-Miro-Connection": `${service} ${code}`
+	}, {
+		email: loginForm.email.value
 	});
 	const resolveDialog = value => {
 		if(value !== -2) {

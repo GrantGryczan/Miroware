@@ -12,11 +12,19 @@ const production = process.argv[2] === "production";
 const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
-const authenticate = context => {
+const connect = context => {
 	return new Promise(resolve => {
-		if(context.req.body.service === "Google") {
+		let connection = context.req.get("X-Miro-Connection");
+		if(!connection || (connection = connection.split(" ")).length !== 2) {
+			context.value = {
+				error: "The `X-Miro-Connection` header is not in the format \"<service> <code>\"."
+			};
+			context.status = 400;
+			context.done();
+		}
+		if(connection[0] === "Google") {
 			googleAuthClient.verifyIdToken({
-				idToken: context.req.body.code,
+				idToken: connection[1],
 				audience: youKnow.google.id
 			}).then(ticket => {
 				const payload = ticket.getPayload();
@@ -33,7 +41,7 @@ const authenticate = context => {
 				context.status = 422;
 				context.done();
 			});
-		} else if(context.req.body.service === "Discord") {
+		} else if(connection[0] === "Discord") {
 			const catchError = err => {
 				const error = JSON.parse(err.error);
 				context.value = {
@@ -52,7 +60,7 @@ const authenticate = context => {
 					client_id: youKnow.discord.id,
 					client_secret: youKnow.discord.secret,
 					grant_type: "authorization_code",
-					code: context.req.body.code,
+					code: connection[1],
 					redirect_uri: `${referrer}discord/`
 				}
 			}).then(body => {
@@ -73,7 +81,7 @@ const authenticate = context => {
 			}).catch(catchError);
 		} else {
 			context.value = {
-				error: "That is not a valid service."
+				error: "The service of the `X-Miro-Credentials` header is invalid."
 			};
 			context.status = 422;
 			context.done();
@@ -139,14 +147,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							req.auth = auth;
 						} else {
 							res.status(400).send({
-								error: "The credentials of the `Authorization` header are not under the format \"<user ID>:<token>\", encoded in base 64."
+								error: "The credentials of the `Authorization` header are not in the format \"<user ID>:<token>\", encoded in base 64."
 							});
 							return;
 						}
 					}
 				} else {
 					res.status(400).send({
-						error: "The `Authorization` header is not under the format \"<type> <credentials>\"."
+						error: "The `Authorization` header is not in the format \"<type> <credentials>\"."
 					});
 					return;
 				}

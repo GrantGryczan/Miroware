@@ -49,9 +49,8 @@
 		Miro.formState(form, false);
 		Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
 	});
-	const send = (service, code) => Miro.request("GET", "/users/@me", {}, {
-		service,
-		code
+	const send = (service, code) => Miro.request("GET", "/users/@me", {
+		"X-Miro-Connection": `${service} ${code}`
 	});
 	const showConnections = req => {
 		console.log(req.response);

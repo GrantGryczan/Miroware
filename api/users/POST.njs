@@ -8,7 +8,7 @@ if(testEmail(this.req.body.email)) {
 		this.status = 422;
 		this.done();
 	} else {
-		authenticate(this).then(async data => {
+		connect(this).then(async data => {
 			const token = youKnow.crypto.token();
 			const salt = youKnow.crypto.salt();
 			const insertData = {

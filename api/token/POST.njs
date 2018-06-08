@@ -3,7 +3,7 @@ if(testEmail(this.req.body.email)) {
 		email: this.req.body.email
 	});
 	if(user) {
-		authenticate(this).then(async data => {
+		connect(this).then(data => {
 			if(user.connections.find(v => v.service === this.req.body.service && v.id === data.id)) {
 				const token = youKnow.crypto.token();
 				users.updateOne({

@@ -333,7 +333,7 @@
 					(req.status === 0 ? reject : resolve)(req);
 				}
 			};
-			req.send(body && JSON.stringify(body));
+			req.send((body && JSON.stringify(body)) || undefined);
 		});
 	};
 	let authDialog;
