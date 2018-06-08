@@ -346,9 +346,9 @@
 		Miro.block(false);
 		authFailed(err);
 	};
-	const closeAndResolveAuth = Miro.response(() => {
+	const closeAndResolveAuth = Miro.response(req => {
 		authDialog.close(-2);
-		resolveAuth();
+		resolveAuth(req);
 	});
 	const clickAuth = auth => {
 		return () => {

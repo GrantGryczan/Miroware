@@ -54,7 +54,7 @@
 		code
 	});
 	form.querySelector("#showLogins").addEventListener("click", () => {
-		Miro.auth("Connections", "Confirm your credentials to continue.", send);
+		Miro.auth("Connections", "Confirm your credentials to continue.", send).then(console.log);
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
