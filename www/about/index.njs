@@ -1,6 +1,6 @@
-this.title = "Template";
-this.description = "Hello, world!";
-this.tags = ["template", "test"];
+this.title = "About";
+this.description = "Learn about Miroware.";
+this.tags = ["about", "info", "information"];
 this.value = (await load("www/load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="index.css">`;
