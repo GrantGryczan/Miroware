@@ -39,25 +39,19 @@
 		loggedIn();
 		return;
 	}
-	let dialog;
 	const setSubmit = function() {
 		signup = this.name === "signup";
 	};
 	for(const v of submits) {
 		v.addEventListener("click", setSubmit);
 	}
-	const send = (service, code) => {
-		Miro.request("POST", signup ? "/users" : "/token", {}, {
-			email: loginForm.email.value,
-			service,
-			code
-		}).then(Miro.response(req => {
-			dialog.close(-2);
-			loggedIn();
-		})).finally(() => {
-			Miro.block(false);
-		});
-	};
+	const send = (service, code) => Miro.request("POST", signup ? "/users" : "/token", {}, {
+		email: loginForm.email.value,
+		service,
+		code
+	});
+	let authDialog;
+	let sendAuth;
 	const authFailed = data => {
 		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
 	};
@@ -65,7 +59,16 @@
 		return () => {
 			Miro.block(true);
 			auth().then(code => {
-				send(auth.name, code);
+				try {
+					sendAuth(auth.name, code).then(Miro.response(req => {
+						authDialog.close(-2);
+						loggedIn();
+					})).finally(() => {
+						Miro.block(false);
+					});
+				} catch(err) {
+					throw new MiroError("The `send` parameter must be a promise from `Miro.request`.");
+				}
 			}).catch(err => {
 				Miro.block(false);
 				authFailed(err);
@@ -112,7 +115,7 @@
 			});
 		}
 	};
-	Miro.auth = (title, message) => {
+	Miro.auth = (title, message, send) => {
 		if(!(typeof message === "string")) {
 			throw new MiroError("The `body` parameter must be a string.");
 		}
@@ -131,15 +134,15 @@
 			button.addEventListener("click", clickAuth(auths[i]));
 			body.appendChild(button);
 		}
-		return new Miro.dialog(title || "Authenticate", body, ["Cancel"]);
+		new Miro.dialog(title || "Authenticate", body, ["Cancel"]).then(value => {
+			if(value !== -2) {
+				Miro.formState(loginForm, true);
+			}
+		});
 	};
 	loginForm.addEventListener("submit", evt => {
 		evt.preventDefault();
 		Miro.formState(loginForm, false);
-		dialog = Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.").then(value => {
-			if(value !== -2) {
-				Miro.formState(loginForm, true);
-			}
-		})
+		dialog = Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send);
 	});
 })();
