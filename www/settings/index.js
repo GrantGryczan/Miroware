@@ -61,9 +61,10 @@
 	const showConnections = req => {
 		console.log(req.response);
 	};
+	const showConnectionsResponse = Miro.request(showConnections);
 	form.querySelector("#manageConnections").addEventListener("click", () => {
 		if(connection) {
-			send.apply(null, connection).then(showConnections);
+			send.apply(null, connection).then(showConnectionsResponse);
 		} else {
 			Miro.auth("Connections", "Confirm your credentials to continue.", send).then(showConnections);
 		}
