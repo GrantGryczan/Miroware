@@ -127,6 +127,10 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		httpOnly: true,
 		signed: true
 	};
+	const clearCookieOptions = {
+		domain: cookieOptions.domain,
+		path: cookieOptions.path
+	};
 	const cube = await serve({
 		eval: myEval,
 		domain,
@@ -185,7 +189,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					});
 				} catch(err) {
 					if(context.req.signedCookies.auth) {
-						context.res.clearCookie("auth", cookieOptions);
+						context.res.clearCookie("auth", clearCookieOptions);
 					} else {
 						context.value = {
 							error: err.message
@@ -219,9 +223,12 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 								"pouch.$.expire": context.now+cookieOptions.maxAge
 							}
 						});
+						if(context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {
+							context.res.cookie("auth", context.req.signedCookies.auth, cookieOptions);
+						}
 					} else {
 						if(context.req.signedCookies.auth) {
-							context.res.clearCookie("auth", cookieOptions);
+							context.res.clearCookie("auth", clearCookieOptions);
 						} else {
 							context.value = {
 								error: "The authorization credentials are using an invalid token."
@@ -232,7 +239,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					}
 				} else {
 					if(context.req.signedCookies.auth) {
-						context.res.clearCookie("auth", cookieOptions);
+						context.res.clearCookie("auth", clearCookieOptions);
 					} else {
 						context.value = {
 							error: "The authorization credentials are requesting a user which does not exist."
