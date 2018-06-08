@@ -39,7 +39,7 @@ if(user) {
 			if(this.req.get("X-Miro-Connection")) {
 				const data = await connect(this);
 				if(data) {
-					if(user.connections.find(v => v.service === data.connection[0] && v.id === data.id)) {
+					if(user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
 						this.value.connections = user.connections.map(v => ({
 							service: v.service,
 							id: v.id
