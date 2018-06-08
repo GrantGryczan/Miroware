@@ -60,7 +60,7 @@
 			Miro.block(true);
 			auth().then(code => {
 				try {
-					sendAuth(auth.name, code).then(Miro.response(req => {
+					sendAuth(auth.name, code).then(Miro.response(() => {
 						authDialog.close(-2);
 						loggedIn();
 					})).finally(() => {
@@ -138,7 +138,7 @@
 			button.addEventListener("click", clickAuth(auths[i]));
 			body.appendChild(button);
 		}
-		new Miro.dialog(title || "Authenticate", body, ["Cancel"]).then(value => {
+		authDialog = new Miro.dialog(title || "Authenticate", body, ["Cancel"]).then(value => {
 			if(value !== -2) {
 				Miro.formState(loginForm, true);
 			}
