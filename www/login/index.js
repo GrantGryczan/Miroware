@@ -3,6 +3,9 @@
 	const submits = loginForm.querySelectorAll("button[type=\"submit\"]");
 	const signupForm = document.querySelector("#signupForm");
 	let signup = false;
+	const getIn = Miro.response(() => {
+		Miro.in = true;
+	});
 	const loggedIn = () => {
 		Miro.formState(loginForm, false);
 		if(Miro.in) {
@@ -21,9 +24,7 @@
 							captcha: signupDialog.form.elements["g-recaptcha-response"].value,
 							name: signupDialog.form.elements.name.value,
 							birth: signupDialog.form.elements.birthday.valueAsNumber,
-						}).then(Miro.response(() => {
-							Miro.in = true;
-						})).finally(loggedIn);
+						}).then(getIn).finally(loggedIn);
 					} else {
 						new Miro.dialog("Error", "You must complete the CAPTCHA challenge before authenticating.").then(loggedIn);
 					}
