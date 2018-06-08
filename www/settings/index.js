@@ -47,8 +47,7 @@
 		});
 	});
 	form.querySelector("#showLogins").addEventListener("click", function() {
-		this.parentNode.insertBefore(html`Testing...`, this);
-		this.parentNode.removeChild(this);
+		
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
