@@ -401,7 +401,7 @@
 			window.addEventListener("message", receive);
 		}
 	};
-	Miro.auth = (title, message, send) => {
+	Miro.auth = (title, message, send, resolveDialog) => {
 		if(!(typeof message === "string")) {
 			throw new MiroError("The `message` parameter must be a string.");
 		}
@@ -424,11 +424,10 @@
 			button.addEventListener("click", clickAuth(auths[i]));
 			body.appendChild(button);
 		}
-		authDialog = new Miro.dialog(title || "Authenticate", body, ["Cancel"]).then(value => {
-			if(value !== -2) {
-				Miro.formState(loginForm, true);
-			}
-		});
+		authDialog = new Miro.dialog(title || "Authenticate", body, ["Cancel"]);
+		if(resolveDialog instanceof Function) {
+			authDialog.then(resolveDialog);
+		}
 		return new Promise(resolve => {
 			resolveAuth = resolve;
 		});
