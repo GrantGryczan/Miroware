@@ -326,7 +326,7 @@
 			req.onreadystatechange = () => {
 				if(req.readyState === XMLHttpRequest.DONE) {
 					progress.close();
-					(status === 0 ? reject : resolve)(req);
+					(req.status === 0 ? reject : resolve)(req);
 				}
 			};
 			req.send(body && JSON.stringify(body));
@@ -338,24 +338,27 @@
 	const authFailed = data => {
 		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
 	};
+	const catchAuth = err => {
+		Miro.block(false);
+		authFailed(err);
+	};
+	const closeAndResolveAuth = () => {
+		authDialog.close(-2);
+		resolveAuth();
+	});
 	const clickAuth = auth => {
 		return () => {
 			Miro.block(true);
-			auth().then(code => {
+			new Promise(auth).then(code => {
 				try {
-					sendAuth(auth.name, code).then(Miro.response(() => {
-						authDialog.close(-2);
-						resolveAuth();
-					})).finally(() => {
-						Miro.block(false);
+					Miro.block(false);
+					setTimeout(() => {
+						sendAuth(auth.name, code).then(Miro.response(closeAndResolveAuth);
 					});
 				} catch(err) {
 					throw new MiroError("The `send` parameter must be a promise from `Miro.request`.");
 				}
-			}).catch(err => {
-				Miro.block(false);
-				authFailed(err);
-			});
+			}).catch(catchAuth);
 		};
 	};
 	const auths = {
@@ -370,32 +373,30 @@
 				});
 			});
 		},
-		Discord: () => {
-			return new Promise((resolve, reject) => {
-				const win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=${encodeURIComponent(window.location.origin)}%2Flogin%2Fdiscord%2F&response_type=code&scope=identify%20email`, "authDiscord");
-				const winClosedPoll = setInterval(() => {
-					if(win.closed) {
-						clearInterval(winClosedPoll);
-						reject("The Discord authentication page was closed.");
+		Discord: (resolve, reject) => {
+			const win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=${encodeURIComponent(window.location.origin)}%2Flogin%2Fdiscord%2F&response_type=code&scope=identify%20email`, "authDiscord");
+			const winClosedPoll = setInterval(() => {
+				if(win.closed) {
+					clearInterval(winClosedPoll);
+					reject("The Discord authentication page was closed.");
+				}
+			}, 200);
+			const receive = evt => {
+				if(evt.origin === window.origin) {
+					window.removeEventListener("message", receive);
+					clearInterval(winClosedPoll);
+					const ampIndex = evt.data.indexOf("&");
+					if(ampIndex !== -1) {
+						evt.data = evt.data.slice(ampIndex);
 					}
-				}, 200);
-				const receive = evt => {
-					if(evt.origin === window.origin) {
-						window.removeEventListener("message", receive);
-						clearInterval(winClosedPoll);
-						const ampIndex = evt.data.indexOf("&");
-						if(ampIndex !== -1) {
-							evt.data = evt.data.slice(ampIndex);
-						}
-						if(evt.data.startsWith("code=")) {
-							resolve(evt.data.slice(5));
-						} else {
-							reject(evt.data.slice(evt.data.indexOf("=")+1));
-						}
+					if(evt.data.startsWith("code=")) {
+						resolve(evt.data.slice(5));
+					} else {
+						reject(evt.data.slice(evt.data.indexOf("=")+1));
 					}
-				};
-				window.addEventListener("message", receive);
-			});
+				}
+			};
+			window.addEventListener("message", receive);
 		}
 	};
 	Miro.auth = (title, message, send) => {
