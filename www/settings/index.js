@@ -61,7 +61,7 @@
 	const showConnections = req => {
 		console.log(req.response);
 	};
-	const showConnectionsResponse = Miro.request(showConnections);
+	const showConnectionsResponse = Miro.response(showConnections);
 	form.querySelector("#manageConnections").addEventListener("click", () => {
 		if(connection) {
 			send.apply(null, connection).then(showConnectionsResponse);
