@@ -46,7 +46,7 @@
 			Miro.formState(form, true);
 		});
 	});
-	form.querySelector("#showLogins").addEventListener("click", function() {
+	form.querySelector("#showLogins").addEventListener("click", () => {
 		
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
