@@ -334,6 +334,7 @@
 	};
 	let authDialog;
 	let sendAuth;
+	let resolveAuth;
 	const authFailed = data => {
 		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
 	};
@@ -344,7 +345,7 @@
 				try {
 					sendAuth(auth.name, code).then(Miro.response(() => {
 						authDialog.close(-2);
-						loggedIn();
+						resolveAuth();
 					})).finally(() => {
 						Miro.block(false);
 					});
@@ -424,6 +425,9 @@
 			if(value !== -2) {
 				Miro.formState(loginForm, true);
 			}
+		});
+		return new Promise(resolve => {
+			resolveAuth = resolve;
 		});
 	};
 	Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(() => {
