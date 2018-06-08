@@ -345,7 +345,7 @@
 	const closeAndResolveAuth = () => {
 		authDialog.close(-2);
 		resolveAuth();
-	});
+	};
 	const clickAuth = auth => {
 		return () => {
 			Miro.block(true);
@@ -353,7 +353,7 @@
 				try {
 					Miro.block(false);
 					setTimeout(() => {
-						sendAuth(auth.name, code).then(Miro.response(closeAndResolveAuth);
+						sendAuth(auth.name, code).then(Miro.response(closeAndResolveAuth));
 					});
 				} catch(err) {
 					throw new MiroError("The `send` parameter must be a promise from `Miro.request`.");
@@ -362,15 +362,13 @@
 		};
 	};
 	const auths = {
-		Google: () => {
-			return new Promise((resolve, reject) => {
-				gapi.load("auth2", () => {
-					gapi.auth2.init().then(auth2 => {
-						auth2.signIn().then(user => {
-							resolve(user.getAuthResponse().id_token);
-						}).catch(reject);
+		Google: (resolve, reject) => {
+			gapi.load("auth2", () => {
+				gapi.auth2.init().then(auth2 => {
+					auth2.signIn().then(user => {
+						resolve(user.getAuthResponse().id_token);
 					}).catch(reject);
-				});
+				}).catch(reject);
 			});
 		},
 		Discord: (resolve, reject) => {
