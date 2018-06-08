@@ -117,8 +117,12 @@
 	};
 	Miro.auth = (title, message, send) => {
 		if(!(typeof message === "string")) {
-			throw new MiroError("The `body` parameter must be a string.");
+			throw new MiroError("The `message` parameter must be a string.");
 		}
+		if(!(send instanceof Function)) {
+			throw new MiroError("The `send` parameter must be a function.");
+		}
+		sendAuth = send;
 		const body = document.createElement("span");
 		for(const v of message.split("\n")) {
 			body.appendChild(document.createTextNode(v));
@@ -143,6 +147,6 @@
 	loginForm.addEventListener("submit", evt => {
 		evt.preventDefault();
 		Miro.formState(loginForm, false);
-		dialog = Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send);
+		Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send);
 	});
 })();
