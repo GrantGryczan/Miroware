@@ -46,26 +46,23 @@
 	for(const v of submits) {
 		v.addEventListener("click", setSubmit);
 	}
-	const authFailed = data => {
-		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
-	};
 	const send = (service, code) => {
 		Miro.request("POST", signup ? "/users" : "/token", {}, {
 			email: loginForm.email.value,
 			service,
 			code
-		}).then(req => {
+		}).then(Miro.response(req => {
+			dialog.close(-2);
+			loggedIn();
+		})).finally(() => {
 			Miro.block(false);
-			if(Math.floor(req.status/100) === 2) {
-				dialog.close(-2);
-				loggedIn();
-			} else {
-				authFailed(req);
-			}
 		});
 	};
+	const authFailed = data => {
+		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
+	};
 	const clickAuth = auth => {
-		return function() {
+		return () => {
 			Miro.block(true);
 			auth().then(code => {
 				send(auth.name, code);
