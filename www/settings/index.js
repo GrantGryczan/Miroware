@@ -63,7 +63,7 @@
 	};
 	form.querySelector("#manageConnections").addEventListener("click", () => {
 		if(connection) {
-			send.apply(null, connection);
+			send.apply(null, connection).then(showConnections);
 		} else {
 			Miro.auth("Connections", "Confirm your credentials to continue.", send).then(showConnections);
 		}
