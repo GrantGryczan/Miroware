@@ -19,7 +19,7 @@ if(testEmail(this.req.body.email)) {
 					expire: this.now+cookieOptions.maxAge
 				}],
 				connections: [{
-					service: this.req.body.service,
+					service: data.connections[0],
 					id: data.id
 				}],
 				created: this.now,
