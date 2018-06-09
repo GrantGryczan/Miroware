@@ -31,7 +31,7 @@ const inform = (guild, str1, str2) => {
 			let i = -1;
 			const testChannel = () => {
 				i++;
-				if(channels[i]) {
+				if(i in channels) {
 					channels[i].send(str2).catch(testChannel);
 				}
 			};
