@@ -78,7 +78,7 @@ if(user) {
 						this.value = {
 							error: "The `name` value may only be set once per day."
 						};
-						this.res.set("Retry-After", Math.ceil(cooldown));
+						this.res.set("Retry-After", Math.ceil(cooldown/1000));
 						this.status = 429;
 						this.done();
 						return;
