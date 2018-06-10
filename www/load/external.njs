@@ -3,7 +3,11 @@ if(this.socialicons) {
 	this.done();
 } else {
 	this.cache = () => "";
-	const htmlIconTest = /<link(?: .*?)? (?:rel="(?:.* )?icon(?: .*)?"(?: .*?)? href="([^"]*?)")|(?:href="([^"]*?)"(?: .*?)? rel="(?:.* )?icon(?: .*)?")( [^>]*)?>/i;
+	const htmlTitleTest = /<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i;
+	const htmlIconExp = "<link(?: [^>]*?)? (?:(?:rel=(\"|')(?:[^\"'>]* )?icon(?: [^\"'>]*)?\\1(?: [^>]*?)? href=(\"|')([^\"'>]*?)\\2)|(?:href=(\"|')([^\"'>]*?)\\4(?: [^>]*?)? rel=(\"|')(?:[^\"'>]* )?icon(?: [^\"'>]*)?\\6))(?: [^>]*)?>";
+	const htmlIconsTest = new RegExp(htmlIconExp, "ig");
+	const htmlIconTest = new RegExp(htmlIconExp, "i");
+	const iconSizeTest = / sizes=("|')([^\"']+)\1/i;
 	this.value = html`
 					<div id="externals">`;
 	for(const v of ["discord", "patreon", "youtube", "twitter", "github"]) {
@@ -19,10 +23,17 @@ if(this.socialicons) {
 			body = err.error;
 		}
 		if(typeof body === "string") {
-			const match = body.match(htmlIconTest);
-			let icon = (match && match[1]) || "/favicon.ico";
+			const matches = body.match(htmlIconsTest);
+			let icon = "/favicon.ico";
+			if(matches) {
+				let size;
+				let index = 0;
+				for(let i = 0; i < matches.length; i++) {
+					console.log(matches[i].match(iconSizeTest));
+				}
+			}
 			icon = (icon.indexOf("//") === -1) ? (origin + icon) : icon;
-			this.value += html`<a class="external mdc-button" href="/${v}/" title="${context.value.match(/<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
+			this.value += html`<a class="external mdc-button" href="/${v}/" title="${context.value.match(htmlTitleTest)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
 		}
 	}
 	this.value += html`

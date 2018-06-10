@@ -7,6 +7,10 @@ const underscores = /_/g;
 const alphanumeric = /^[0-9a-z]*$/i;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 const properColorTest = /^#[\da-f]{6}$/;
+const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
+const byFirstItems = v => v[0];
+const byTextChannels = v => v.type === "text";
+const byColorDiff = (a, b) => a[1]-b[1];
 let data;
 const load = () => {
 	data = JSON.parse(fs.readFileSync("secret/colorbot.json"));
@@ -23,9 +27,6 @@ const exitOnError = () => {
 process.once("unhandledRejection", exitOnError);
 client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
-const byFirstItems = v => v[0];
-const byTextChannels = v => v.type === "text";
-const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
 const inform = (guild, str1, str2) => {
 	if(guild.available) {
 		guild.owner.send(str1).catch(() => {
@@ -208,7 +209,7 @@ client.on("message", async msg => {
 												}
 												msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
 													embed: {
-														description: colors.sort((a, b) => a[1]-b[1]).slice(0, 20).map(byFirstItems).join(" "),
+														description: colors.sort(byColorDiff).slice(0, 20).map(byFirstItems).join(" "),
 														color: parseInt(content[1].slice(1), 16)
 													}
 												}).catch(errEmbedLinks(msg));
