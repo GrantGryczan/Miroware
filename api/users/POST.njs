@@ -19,7 +19,7 @@ if(testEmail(this.req.body.email)) {
 					expire: this.now+cookieOptions.maxAge
 				}],
 				connections: [{
-					service: data.connections[0],
+					service: data.connection[0],
 					id: data.id
 				}],
 				created: this.now,
@@ -52,6 +52,6 @@ if(testEmail(this.req.body.email)) {
 	this.value = {
 		error: "That is not a valid email."
 	};
-	this.status = 422;
+	this.status = 400;
 	this.done();
 }

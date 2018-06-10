@@ -26,23 +26,23 @@ if(testEmail(this.req.body.email)) {
 				this.done();
 			} else {
 				this.value = {
-					error: "That account does not use that login method."
+					error: "Authentication failed."
 				};
-				this.status = 422;
+				this.status = 401;
 				this.done();
 			}
 		});
 	} else {
 		this.value = {
-			error: "That email is not registered."
+			error: "Authentication failed."
 		};
-		this.status = 422;
+		this.status = 401;
 		this.done();
 	}
 } else {
 	this.value = {
 		error: "That is not a valid email."
 	};
-	this.status = 422;
+	this.status = 400;
 	this.done();
 }

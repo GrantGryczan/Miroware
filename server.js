@@ -145,7 +145,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		githubPayloadURL: "/githubwebhook",
 		githubSecret: youKnow.github.secret,
 		githubToken: youKnow.github.token,
-		middleware: [cookieParser(youKnow.cookie.secret), (req, res) => {
+		middleware: [(req, res) => {
 			let auth = req.get("Authorization");
 			if(auth) {
 				if((auth = auth.split(" ")).length === 2) {
@@ -178,7 +178,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				}
 			}
 			req.next();
-		}],
+		}, cookieParser(youKnow.cookie.secret)],
 		loadStart: [async context => {
 			context.now = Date.now();
 			const auth = context.req.auth || (context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));

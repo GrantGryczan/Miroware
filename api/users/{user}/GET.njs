@@ -6,7 +6,7 @@ try {
 	userID = ObjectID(this.params.user);
 } catch(err) {
 	this.value = {
-		error: err.message
+		error: "That is not a valid user ID."
 	};
 	this.status = 400;
 	this.done();
@@ -48,7 +48,7 @@ if(user) {
 						this.value = {
 							error: "That account does not use that login method."
 						};
-						this.status = 422;
+						this.status = 401;
 						this.done();
 					}
 				} else {

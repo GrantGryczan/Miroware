@@ -6,7 +6,7 @@ try {
 	userID = ObjectID(this.params.user);
 } catch(err) {
 	this.value = {
-		error: err.message
+		error: "That is not a valid user ID."
 	};
 	this.status = 400;
 	this.done();
@@ -24,7 +24,7 @@ if(user) {
 				this.value = {
 					error: "If signup is incomplete, you must define a `captcha` value."
 				};
-				this.status = 422;
+				this.status = 400;
 				this.done();
 				return;
 			} else if(typeof this.req.body.captcha === "string") {
@@ -40,7 +40,7 @@ if(user) {
 				} catch(err) {}
 				if(!success) {
 					this.value = {
-						error: "The captcha challenge was failed."
+						error: "The CAPTCHA challenge was failed."
 					};
 					this.status = 422;
 					this.done();
@@ -50,7 +50,7 @@ if(user) {
 				this.value = {
 					error: "The `captcha` value must be a string."
 				};
-				this.status = 422;
+				this.status = 400;
 				this.done();
 				return;
 			}
@@ -62,24 +62,24 @@ if(user) {
 					this.value = {
 						error: "The `name` value must be at least 1 character long."
 					};
-					this.status = 422;
+					this.status = 400;
 					this.done();
 					return;
 				} else if(this.req.body.name.length > 32) {
 					this.value = {
 						error: "The `name` value must be at most 32 characters long."
 					};
-					this.status = 422;
+					this.status = 400;
 					this.done();
 					return;
 				} else {
 					const cooldown = 86400000+user.nameCooldown-this.now;
 					if(cooldown > 0) {
 						this.value = {
-							error: "The `name` value may only be set once per day.",
-							cooldown
+							error: "The `name` value may only be set once per day."
 						};
-						this.status = 422;
+						this.res.set("Retry-After", Math.ceil(cooldown));
+						this.status = 429;
 						this.done();
 						return;
 					} else {
@@ -91,7 +91,7 @@ if(user) {
 				this.value = {
 					error: "The `name` value must be a string."
 				};
-				this.status = 422;
+				this.status = 400;
 				this.done();
 				return;
 			}
@@ -99,7 +99,7 @@ if(user) {
 			this.value = {
 				error: "If signup is incomplete, you must define a `name` value."
 			};
-			this.status = 422;
+			this.status = 400;
 			this.done();
 			return;
 		}
@@ -109,14 +109,14 @@ if(user) {
 					this.value = {
 						error: "Nobody is that old."
 					};
-					this.status = 422;
+					this.status = 400;
 					this.done();
 					return;
 				} else if(this.req.body.birth > this.now) {
 					this.value = {
 						error: "You wish you were that young."
 					};
-					this.status = 422;
+					this.status = 400;
 					this.done();
 					return;
 				} else {
@@ -126,7 +126,7 @@ if(user) {
 				this.value = {
 					error: "The `birth` value must be a number."
 				};
-				this.status = 422;
+				this.status = 400;
 				this.done();
 				return;
 			}
@@ -134,7 +134,7 @@ if(user) {
 			this.value = {
 				error: "If signup is incomplete, you must define a `birth` value."
 			};
-			this.status = 422;
+			this.status = 400;
 			this.done();
 			return;
 		}
@@ -148,7 +148,7 @@ if(user) {
 					this.value = {
 						error: "The `email` value must be a valid email."
 					};
-					this.status = 422;
+					this.status = 400;
 					this.done();
 					return;
 				}
@@ -156,7 +156,7 @@ if(user) {
 				this.value = {
 					error: "The `email` value must be a string."
 				};
-				this.status = 422;
+				this.status = 400;
 				this.done();
 				return;
 			}
@@ -168,7 +168,7 @@ if(user) {
 				this.value = {
 					error: "The `publicEmail` value must be a Boolean."
 				};
-				this.status = 422;
+				this.status = 400;
 				this.done();
 				return;
 			}
