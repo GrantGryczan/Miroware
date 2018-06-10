@@ -16,5 +16,11 @@
 	font-size: 4em;
 	word-break: break-word;
 	word-wrap: break-word;
-	animation: init 1s ease;
+	&:not(.ready) {
+		opacity: 0;
+		pointer-events: none;
+	}
+	&.ready {
+		animation: init 1s ease;
+	}
 }

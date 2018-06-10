@@ -1,3 +1,3 @@
 document.addEventListener("DOMContentLoaded", () => {
-	document.querySelector("#string").classList.remove("hidden");
+	document.querySelector("#string").classList.add("ready");
 });
