@@ -46,7 +46,7 @@ if(user) {
 						}));
 					} else {
 						this.value = {
-							error: "That account does not use that login method."
+							error: "Authentication failed."
 						};
 						this.status = 401;
 						this.done();
@@ -59,9 +59,9 @@ if(user) {
 		this.done();
 	} else {
 		this.value = {
-			error: "You do not have permission to access that user."
+			error: "That user was not found."
 		};
-		this.status = 401;
+		this.status = 404;
 		this.done();
 	}
 } else {
