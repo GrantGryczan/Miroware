@@ -6,9 +6,9 @@ this.description = "Set your settings.";
 this.tags = ["settings", "preferences", "account", "user"];
 this.value = (await load("www/load/head", this)).value;
 this.value += (await load("www/load/body", this)).value;
+this.value += (await load("www/load/pagehead", this)).value;
 const nameCooldown = this.now-this.user.nameCooldown < 86400000;
 this.value += html`
-			<div id="page" class="mdc-elevation--z3">
 				<form id="settings">
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input id="email" name="email" class="mdc-text-field__input" type="email" value="$${this.user.email}" required disabled>
@@ -36,8 +36,8 @@ this.value += html`
 					</div><br>
 					<br>
 					<button id="save" name="save" class="mdc-button mdc-button--raised mdc-ripple" type="submit" disabled>Save</button>
-				</form>
-			</div>`;
+				</form>`;
+this.value += (await load("www/load/pagefoot", this)).value;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
 		<script src="index.js"></script>`;

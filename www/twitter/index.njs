@@ -3,8 +3,11 @@ this.description = "Follow Miroware's tweets!";
 this.tags = ["redirect", "link", "follow", "twitter", "tweet", "tweets", "status", "update", "updates"];
 this.value = (await load("www/load/head", this)).value;
 this.value += (await load("www/load/body", this)).value;
+this.value += (await load("www/load/body", this)).value;
+this.value += (await load("www/load/pagehead", this)).value;
 this.value += html`
-			Redirecting...`;
+				Redirecting...`;
+this.value += (await load("www/load/pagefoot", this)).value;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
 		<script>

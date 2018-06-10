@@ -3,8 +3,10 @@ this.description = "Invite Starbot to one of your own Discord servers!";
 this.tags = ["redirect", "link", "discord", "bot", "authorize", "authorization", "authorizing", "starbot", "star", "stars", "starboard", "board"];
 this.value = (await load("www/load/head", this)).value;
 this.value += (await load("www/load/body", this)).value;
+this.value += (await load("www/load/pagehead", this)).value;
 this.value += html`
-			Redirecting...`;
+				Redirecting...`;
+this.value += (await load("www/load/pagefoot", this)).value;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
 		<script>

@@ -3,8 +3,10 @@ this.description = "Watch Miroware's videos!";
 this.tags = ["redirect", "link", "youtube", "channel"];
 this.value = (await load("www/load/head", this)).value;
 this.value += (await load("www/load/body", this)).value;
+this.value += (await load("www/load/pagehead", this)).value;
 this.value += html`
-			Redirecting...`;
+				Redirecting...`;
+this.value += (await load("www/load/pagefoot", this)).value;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
 		<script>
