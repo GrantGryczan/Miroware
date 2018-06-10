@@ -174,10 +174,7 @@ input:-webkit-autofill {
 }
 .mdc-button {
 	&:enabled {
-		color: rgba(255, 255, 255, 0.6);
-		&:hover, &:focus {
-			color: #ffffff;
-		}
+		color: #ffffff;
 	}
 	&--raised, &--unelevated {
 		&:enabled {
