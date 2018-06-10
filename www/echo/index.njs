@@ -8,7 +8,7 @@ this.value += html`
 this.value += (await load("www/load/body", this)).value;
 this.value += (await load("www/load/pagehead", this)).value;
 this.value += html`
-				<div id="string" class="hidden">$${string}</div>`;
+				<div id="string">$${string}</div>`;
 this.value += (await load("www/load/pagefoot", this)).value;
 this.value += (await load("www/load/belt", this)).value;
 this.value += html`
