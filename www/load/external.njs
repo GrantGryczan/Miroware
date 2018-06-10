@@ -15,7 +15,6 @@ if(this.socialicons) {
 		for(const v of sizes) {
 			(v < 24 ? smallSizes : largeSizes).push(v);
 		}
-		console.log(largeSizes);
 		const bestOfSizes = Math[largeSizes.length ? "min" : "max"].apply(null, largeSizes.length ? largeSizes : smallSizes);
 		return size ? size !== testSizes([size, bestOfSizes]) && bestOfSizes : bestOfSizes;
 	};
@@ -48,7 +47,6 @@ if(this.socialicons) {
 						} else {
 							const bestSize = testSizes(sizes[2].split(" ").map(w => parseInt(w)).filter(w => !isNaN(w)).sort(numerically), size);
 							if(bestSize) {
-								console.log(bestSize, matches[index]);
 								size = bestSize;
 								index = i;
 							}
