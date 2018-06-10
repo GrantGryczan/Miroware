@@ -8,6 +8,17 @@ if(this.socialicons) {
 	const htmlIconsTest = new RegExp(htmlIconExp, "ig");
 	const htmlIconTest = new RegExp(htmlIconExp, "i");
 	const iconSizeTest = / sizes=("|')([^\"']+)\1/i;
+	const numerically = (a, b) => a-b;
+	const testSizes = (sizes, size) => {
+		const smallSizes = [];
+		const largeSizes = [];
+		for(const v of sizes) {
+			(v < 24 ? smallSizes : largeSizes).push(v);
+		}
+		console.log(largeSizes);
+		const bestOfSizes = Math[largeSizes.length ? "min" : "max"].apply(null, largeSizes.length ? largeSizes : smallSizes);
+		return size ? size !== testSizes([size, bestOfSizes]) && bestOfSizes : bestOfSizes;
+	};
 	this.value = html`
 					<div id="externals">`;
 	for(const v of ["discord", "patreon", "youtube", "twitter", "github"]) {
@@ -26,14 +37,29 @@ if(this.socialicons) {
 			const matches = body.match(htmlIconsTest);
 			let icon = "/favicon.ico";
 			if(matches) {
-				let size;
+				let size = Infinity;
 				let index = 0;
 				for(let i = 0; i < matches.length; i++) {
-					console.log(matches[i].match(iconSizeTest));
+					const sizes = matches[i].match(iconSizeTest);
+					if(sizes) {
+						if(sizes[2] === "any") {
+							index = i;
+							break;
+						} else {
+							const bestSize = testSizes(sizes[2].split(" ").map(w => parseInt(w)).filter(w => !isNaN(w)).sort(numerically), size);
+							if(bestSize) {
+								console.log(bestSize, matches[index]);
+								size = bestSize;
+								index = i;
+							}
+						}
+					}
 				}
+				icon = matches[index].match(htmlIconTest)
+				icon = icon[3] || icon[5];
 			}
 			icon = (icon.indexOf("//") === -1) ? (origin + icon) : icon;
-			this.value += html`<a class="external mdc-button" href="/${v}/" title="${context.value.match(htmlTitleTest)[1]}" style="background-image: url(&quot;${icon}&quot;);"></a>`;
+			this.value += html`<a class="external mdc-button" href="/${v}/" title="$${context.value.match(htmlTitleTest)[1]}" style="background-image: url(${icon});"></a>`;
 		}
 	}
 	this.value += html`
