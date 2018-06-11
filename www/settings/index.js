@@ -83,6 +83,13 @@
 			body.querySelector("button").addEventListener("click", removeConnection);
 			body.appendChild(document.createElement("br"));
 		}
+		body.appendChild(document.createElement("br"));
+		const add = html`
+			<button class="mdc-button">
+				<i class="material-icons mdc-button__icon">add</i>Add
+			</button>
+		`;
+		body.appendChild(add);
 		new Miro.dialog("Connections", body);
 	};
 	const showConnectionsResponse = Miro.response(showConnections);
