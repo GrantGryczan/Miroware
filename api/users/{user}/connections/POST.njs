@@ -24,9 +24,7 @@ if(user) {
 	if(isMe) {
 		connect(this).then(data => {
 			validateConnection(this, user, data).then(() => {
-				console.log(1);
 				connect(this, this.req.body.connection).then(data2 => {
-					console.log(data2);
 					this.value = {};
 					this.update.$push = {
 						connections: (this.value.connection = {
@@ -34,6 +32,7 @@ if(user) {
 							id: data2.connection[1]
 						})
 					};
+					this.done();
 				});
 			});
 		});
@@ -42,11 +41,12 @@ if(user) {
 			error: "You do not have permission to edit that user."
 		};
 		this.status = 403;
+		this.done();
 	}
 } else {
 	this.value = {
 		error: "That user was not found."
 	};
 	this.status = 404;
+	this.done();
 }
-this.done();
