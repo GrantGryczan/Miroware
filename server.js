@@ -49,6 +49,7 @@ const connect = (context, connectionString) => {
 		} else if(connection[0] === "Discord") {
 			const catchError = err => {
 				const error = JSON.parse(err.error);
+				console.log(error);
 				context.value = {
 					error: error.error_description || error.error
 				};
