@@ -45,7 +45,7 @@
 		for(const v of node.querySelectorAll("button:not([type])")) {
 			v.type = "button";
 		}
-		for(const v of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded)")) {
+		for(const v of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded), button:not(.mdc-ripple-upgraded)")) {
 			new mdc.ripple.MDCRipple(v);
 		}
 		for(const v of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {

@@ -10,7 +10,7 @@ this.value += html`
 for(const v of []) {
 	const page = String(await fs.readFile(`www/${v}/index.njs`)); // TODO: Use `load` instead of `fs.readFile`.
 	this.value += html`
-			<div class="mdc-card mdc-elevation-transition mdc-elevation--z2 mdc-ripple-surface invisible open" href="/${v}/" style="background-image: url(&quot;/${v}/icon.png&quot;);">
+			<div class="mdc-card mdc-elevation-transition mdc-elevation--z2 mdc-ripple-surface invisible open" href="/${v}/" style="background-image: url(/${v}/icon.png);">
 				<section class="mdc-card__primary">
 					<h1 class="mdc-card__title mdc-card__title--large">${page.match(/<meta property="og:title" content="(.*?)">/)[1]}</h1>
 				</section>

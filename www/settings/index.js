@@ -58,22 +58,29 @@
 			"X-Miro-Connection": `${service} ${code}`
 		});
 	};
+	const _connection = Symbol("connection");
+	const removeConnection = evt => {
+		console.log(evt.target[_connection]);
+	};
 	const showConnections = req => {
 		const body = document.createElement("span");
 		for(const v of req.response.connections) {
-			body.appendChild(html`
+			const card = html`
 				<div class="mdc-card">
 					<div class="mdc-card__area">
 						<h2 class="mdc-card__title mdc-typography--headline6">${v.id}</h2>
 						<h3 class="mdc-card__subtitle mdc-typography--subtitle2">${v.service}</h3>
 					</div>
 					<div class="mdc-card__actions">
-						<div class="mdc-card__action-buttons">
-							<button class="mdc-button mdc-card__action mdc-card__action--button">Remove</button>
+						<div class="mdc-card__action-icons">
+							<button class="mdc-card__action mdc-card__action--icon mdc-icon-button material-icons" title="Remove">delete</button>
 						</div>
 					</div>
 				</div>
-			`);
+			`;
+			card[_connection] = v;
+			body.appendChild(card);
+			body.querySelector("button").addEventListener("click", removeConnection);
 			body.appendChild(document.createElement("br"));
 		}
 		new Miro.dialog("Connections", body);
