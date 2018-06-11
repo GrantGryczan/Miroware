@@ -44,7 +44,7 @@ if(testEmail(this.req.body.email)) {
 				id,
 				token
 			};
-			this.res.cookie("auth",  Buffer.from(`${id}:${token}`).toString("base64"), cookieOptions);
+			this.res.cookie("auth", Buffer.from(`${id}:${token}`).toString("base64"), cookieOptions);
 			this.done();
 		});
 	}
