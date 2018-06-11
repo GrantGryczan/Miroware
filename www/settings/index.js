@@ -66,7 +66,7 @@
 		return Miro.request("POST", "/users/@me/connections", {
 			"X-Miro-Connection": connection.join(" ")
 		}, {
-			connection: arguments.join(" ")
+			connection: Array.prototype.join.call(arguments, " ")
 		});
 	};
 	const add = html`
