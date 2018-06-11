@@ -29,7 +29,7 @@ if(user) {
 					this.update.$push = {
 						connections: (this.value.connection = {
 							service: data2.connection[0],
-							id: data2.connection[1]
+							id: data2.id
 						})
 					};
 					this.done();
