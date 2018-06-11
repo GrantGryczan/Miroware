@@ -165,9 +165,6 @@ body {
 }
 .mdc-card {
 	background-color: #303030;
-	&__primary {
-		padding: 1rem;
-	}
 	&__title {
 		margin: 0;
 	}
@@ -175,9 +172,18 @@ body {
 		margin: 0;
 		color: rgba(255, 255, 255, 0.54);
 	}
-	&__secondary {
-		padding: 0 1rem 8px;
+	&__area {
+		padding: 0 1rem;
 		color: rgba(255, 255, 255, 0.54);
+		&:first-child {
+			padding-top: 1rem;
+		}
+		&:last-child {
+			padding-bottom: 1rem;
+		}
+		.mdc-card__actions ~ & {
+			padding-bottom: 8px;
+		}
 	}
 }
 input:-webkit-autofill {
