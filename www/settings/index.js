@@ -61,7 +61,19 @@
 	const showConnections = req => {
 		const body = document.createElement("span");
 		for(const v of req.response.connections) {
-			body.appendChild(document.createTextNode(`${v.service}: ${v.id}`));
+			body.appendChild(html`
+				<div class="mdc-card">
+					<div class="mdc-card__primary">
+						<h2 class="mdc-card__title mdc-typography--headline6">${v.id}</h2>
+						<h3 class="mdc-card__subtitle mdc-typography--subtitle2">${v.service}</h3>
+					</div>
+					<div class="mdc-card__actions">
+						<div class="mdc-card__action-buttons">
+							<button class="mdc-button mdc-card__action mdc-card__action--button">Remove</button>
+						</div>
+					</div>
+				</div>
+			`);
 			body.appendChild(document.createElement("br"));
 		}
 		new Miro.dialog("Connections", body);
