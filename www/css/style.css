@@ -355,6 +355,9 @@ input:-webkit-autofill {
 	&__body {
 		color: rgba(255, 255, 255, 0.54);
 	}
+	&__header, &__footer {
+		flex-shrink: 0;
+	}
 }
 .mdc-snackbar {
 	z-index: 6;
