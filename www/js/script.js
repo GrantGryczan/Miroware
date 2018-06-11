@@ -434,7 +434,7 @@
 		});
 	};
 	Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location)));
-	Miro.in = false;
+	Miro.in = null;
 	const userMeta = document.querySelector("meta[name='user']");
 	if(userMeta && (Miro.user = JSON.parse(userMeta.getAttribute("content")))) {
 		Miro.in = !!Miro.user.name;
