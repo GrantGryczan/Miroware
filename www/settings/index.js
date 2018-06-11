@@ -59,7 +59,12 @@
 		});
 	};
 	const showConnections = req => {
-		console.log(req.response);
+		const body = document.createElement("span");
+		for(const v of req.response.connections) {
+			body.appendChild(document.createTextNode(`${v.service}: ${v.id}`));
+			body.appendChild(document.createElement("br"));
+		}
+		new Miro.dialog("Connections", body);
 	};
 	const showConnectionsResponse = Miro.response(showConnections);
 	form.querySelector("#manageConnections").addEventListener("click", () => {
