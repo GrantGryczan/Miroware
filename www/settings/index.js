@@ -62,6 +62,9 @@
 	const removeConnection = evt => {
 		console.log(evt.target.parentNode.parentNode[_connection]);
 	};
+	const addConnection = () => {
+		console.log(connection);
+	};
 	const showConnections = req => {
 		const body = document.createElement("span");
 		for(const v of req.response.connections) {
@@ -83,12 +86,12 @@
 			body.querySelector("button").addEventListener("click", removeConnection);
 			body.appendChild(document.createElement("br"));
 		}
-		body.appendChild(document.createElement("br"));
 		const add = html`
 			<button class="mdc-button">
 				<i class="material-icons mdc-button__icon">add</i>Add
 			</button>
 		`;
+		add.addEventListener("click", addConnection);
 		body.appendChild(add);
 		new Miro.dialog("Connections", body);
 	};
