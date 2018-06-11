@@ -89,7 +89,7 @@ const connect = (context, connectionString) => {
 			context.value = {
 				error: `The service of the ${input} is invalid.`
 			};
-			context.status = 422;
+			context.status = 400;
 			context.done();
 		}
 	});
