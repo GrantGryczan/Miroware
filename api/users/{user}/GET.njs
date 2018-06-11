@@ -1,22 +1,26 @@
+const thisID = this.user && String(this.user._id);
 if(this.user && this.params.user === "@me") {
-	this.params.user = String(this.user._id);
+	this.params.user = thisID;
 }
-let userID;
-try {
-	userID = ObjectID(this.params.user);
-} catch(err) {
-	this.value = {
-		error: "That is not a valid user ID."
-	};
-	this.status = 400;
-	this.done();
-	return;
+let user = this.user;
+if(this.params.user !== thisID) {
+	let userID;
+	try {
+		userID = ObjectID(this.params.user);
+	} catch(err) {
+		this.value = {
+			error: "That is not a valid user ID."
+		};
+		this.status = 400;
+		this.done();
+		return;
+	}
+	user = await users.findOne({
+		_id: userID
+	});
 }
-const user = await users.findOne({
-	_id: userID
-});
 if(user) {
-	const isMe = this.user && this.params.user === String(this.user._id) && this.token.scope === 0;
+	const isMe = this.params.user === thisID && this.token.scope === 0;
 	if(isMe || user.name !== null) {
 		this.value = {
 			created: user.created,
