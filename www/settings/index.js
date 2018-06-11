@@ -64,7 +64,7 @@
 	};
 	const sendAdd = function(service, code) {
 		return Miro.request("POST", "/users/@me/connections", {
-			"X-Miro-Connection": Array.prototype.join(connection, " ")
+			"X-Miro-Connection": Array.prototype.join.call(connection, " ")
 		}, {
 			connection: Array.prototype.join.call(arguments, " ")
 		});
