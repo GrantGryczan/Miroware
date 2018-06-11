@@ -62,19 +62,22 @@
 	const removeConnection = evt => {
 		console.log(evt.target.parentNode.parentNode[_connection]);
 	};
+	let newConnection;
 	const sendAdd = (service, code) => Miro.request("PUT", "/users/@me", {
 		"X-Miro-Connection": `${service} ${code}`
 	}, {
-		
+		connection: newConnection
 	});
 	const add = html`
 		<button class="mdc-button">
 			<i class="material-icons mdc-button__icon">add</i>Add
 		</button>
 	`;
+	const showNewConnection = req => {
+		console.log(req.response);
+	};
 	add.addEventListener("click", () => {
-		console.log(connection);
-		Miro.auth("Connections", "Confirm your credentials to continue.", send).then(showConnections);
+		Miro.auth("Add Connection", "Authenticate a new connection for your account.", sendAdd).then(showNewConnection);
 	});
 	const showConnections = req => {
 		const body = document.createElement("span");
