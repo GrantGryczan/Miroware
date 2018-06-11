@@ -35,6 +35,7 @@
 			setTimeout(resolve, delay);
 		});
 	};
+	Miro.mdc = Symbol("mdc");
 	Miro.prepare = node => {
 		if(!(node instanceof Element || node instanceof Document)) {
 			throw new MiroError("The `node` parameter must be an element or a document.");
@@ -46,17 +47,17 @@
 			v.type = "button";
 		}
 		for(const v of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded), button:not(.mdc-ripple-upgraded)")) {
-			new mdc.ripple.MDCRipple(v);
+			v[Miro.mdc] = new mdc.ripple.MDCRipple(v);
 		}
 		for(const v of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
-			new mdc.textField.MDCTextField(v);
+			v[Miro.mdc] = new mdc.textField.MDCTextField(v);
 		}
-		for(const v of node.querySelectorAll(".mdc-checkbox")) {
+		for(const v of node.querySelectorAll(".mdc-checkbox:not(.mdc-checkbox--upgraded)")) {
 			v.querySelector(".mdc-checkbox__background").appendChild(checkmark.cloneNode(true));
-			new mdc.checkbox.MDCCheckbox(v);
+			v[Miro.mdc] = new mdc.checkbox.MDCCheckbox(v);
 		}
 		for(const v of node.querySelectorAll(".mdc-form-field")) {
-			new mdc.formField.MDCFormField(v);
+			v[Miro.mdc] = new mdc.formField.MDCFormField(v);
 		}
 	};
 	const htmlExps = ["$", "&"];
