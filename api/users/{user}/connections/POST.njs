@@ -24,7 +24,7 @@ if(user) {
 	if(isMe) {
 		connect(this).then(data => {
 			validateConnection(this, user, data).then(() => {
-				connect(this, req.body.connect).then(data2 => {
+				connect(this, req.body.connection).then(data2 => {
 					this.value = {};
 					this.update.$push = {
 						connections: (this.value.connection = {
