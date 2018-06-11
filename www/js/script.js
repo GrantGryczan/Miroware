@@ -436,7 +436,7 @@
 	Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location)));
 	Miro.in = false;
 	const userMeta = document.querySelector("meta[name='user']");
-	if(userMeta && Miro.user = JSON.parse(userMeta.getAttribute("content"))) {
+	if(userMeta && (Miro.user = JSON.parse(userMeta.getAttribute("content")))) {
 		Miro.in = !!Miro.user.name;
 		document.querySelector("#logOut").addEventListener("click", () => {
 			new Miro.dialog("Log out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
