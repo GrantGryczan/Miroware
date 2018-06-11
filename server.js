@@ -61,7 +61,7 @@ const connect = (context, connectionString) => {
 					client_secret: youKnow.discord.secret,
 					grant_type: "authorization_code",
 					code: connection[1],
-					redirect_uri: `https://${context.req.host}/login/discord/`
+					redirect_uri: `https://${context.req.hostname}/login/discord/`
 				}
 			}).then(body => {
 				body = JSON.parse(body);
