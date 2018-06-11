@@ -60,7 +60,7 @@
 	};
 	const _connection = Symbol("connection");
 	const removeConnection = evt => {
-		console.log(evt.target[_connection]);
+		console.log(evt.target.parentNode.parentNode[_connection]);
 	};
 	const showConnections = req => {
 		const body = document.createElement("span");
@@ -78,7 +78,7 @@
 					</div>
 				</div>
 			`;
-			card[_connection] = v;
+			card.querySelector(".mdc-card__actions")[_connection] = v;
 			body.appendChild(card);
 			body.querySelector("button").addEventListener("click", removeConnection);
 			body.appendChild(document.createElement("br"));
