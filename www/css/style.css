@@ -349,7 +349,7 @@ input:-webkit-autofill {
 		max-width: 880px;
 		max-height: 100%;
 		margin: 15px;
-		overflow: auto;
+		overflow-y: auto;
 		background-color: #202020;
 	}
 	&__body {
