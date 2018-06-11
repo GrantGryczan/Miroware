@@ -17,7 +17,7 @@
 	},
 	"homepage": "https://miroware.io/",
 	"dependencies": {
-		"aws-sdk": "^2.254.1",
+		"aws-sdk": "^2.255.1",
 		"body-parser": "^1.18.3",
 		"bson-ext": "^2.0.0",
 		"cookie-parser": "^1.4.3",
