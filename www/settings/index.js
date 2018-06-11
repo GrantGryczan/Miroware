@@ -67,7 +67,7 @@
 						<h2 class="mdc-card__title mdc-typography--headline6">${v.id}</h2>
 						<h3 class="mdc-card__subtitle mdc-typography--subtitle2">${v.service}</h3>
 					</div>
-					<div class="mdc-card__area">
+					<div class="mdc-card__actions">
 						<div class="mdc-card__action-buttons">
 							<button class="mdc-button mdc-card__action mdc-card__action--button">Remove</button>
 						</div>
