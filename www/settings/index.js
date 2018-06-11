@@ -62,11 +62,10 @@
 	const removeConnection = evt => {
 		console.log(evt.target.parentNode.parentNode[_connection]);
 	};
-	let newConnection;
-	const sendAdd = (service, code) => Miro.request("PUT", "/users/@me", {
-		"X-Miro-Connection": `${service} ${code}`
+	const sendAdd = (service, code) => Miro.request("POST", "/users/@me/connections", {
+		"X-Miro-Connection": connection.join(" ")
 	}, {
-		connection: newConnection
+		connection: arguments.join(" ")
 	});
 	const add = html`
 		<button class="mdc-button">

@@ -12,12 +12,16 @@ const production = process.argv[2] === "production";
 const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
-const connect = context => {
+const connect = (context, connectionString) => {
 	return new Promise(resolve => {
-		let connection = context.req.get("X-Miro-Connection");
+		let input = "`X-Miro-Connection` header";
+		if(connectionString) {
+			input = "`connection` value";
+		}
+		let connection = connectionString || context.req.get("X-Miro-Connection");
 		if(!connection || (connection = connection.split(" ")).length !== 2) {
 			context.value = {
-				error: "The `X-Miro-Connection` header is not in the format \"<service> <code>\"."
+				error: `The ${input} is not in the format "<service> <code>".`
 			};
 			context.status = 400;
 			context.done();
@@ -83,9 +87,22 @@ const connect = context => {
 			}).catch(catchError);
 		} else {
 			context.value = {
-				error: "The service of the `X-Miro-Credentials` header is invalid."
+				error: `The service of the ${input} is invalid.`
 			};
 			context.status = 422;
+			context.done();
+		}
+	});
+};
+const validateConnection = (context, user, data) => {
+	return new Promise(resolve => {
+		if(user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
+			resolve(true);
+		} else {
+			context.value = {
+				error: "Authentication failed."
+			};
+			context.status = 401;
 			context.done();
 		}
 	});

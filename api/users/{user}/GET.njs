@@ -2,8 +2,9 @@ const thisID = this.user && String(this.user._id);
 if(this.user && this.params.user === "@me") {
 	this.params.user = thisID;
 }
+const isMe = this.params.user === thisID;
 let user = this.user;
-if(this.params.user !== thisID) {
+if(!isMe) {
 	let userID;
 	try {
 		userID = ObjectID(this.params.user);
@@ -20,7 +21,6 @@ if(this.params.user !== thisID) {
 	});
 }
 if(user) {
-	const isMe = this.params.user === thisID && this.token.scope === 0;
 	if(isMe || user.name !== null) {
 		this.value = {
 			created: user.created,
@@ -43,18 +43,12 @@ if(user) {
 			if(this.req.get("X-Miro-Connection")) {
 				const data = await connect(this);
 				if(data) {
-					if(user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
+					validateConnection(this, user, data).then(() => {
 						this.value.connections = user.connections.map(v => ({
 							service: v.service,
 							id: v.id
 						}));
-					} else {
-						this.value = {
-							error: "Authentication failed."
-						};
-						this.status = 401;
-						this.done();
-					}
+					});
 				} else {
 					return;
 				}
