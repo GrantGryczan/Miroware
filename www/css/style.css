@@ -173,7 +173,7 @@ body {
 		color: rgba(255, 255, 255, 0.54);
 	}
 	&__area {
-		padding: 0 1rem 1rem 1rem;
+		padding: 0 1rem;
 		color: rgba(255, 255, 255, 0.54);
 		&:first-child {
 			padding-top: 1rem;
