@@ -197,7 +197,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			req.next();
 		}, cookieParser(youKnow.cookie.secret)],
 		loadStart: [async context => {
-			console.log(context.req.get("User-Agent"));
 			context.now = Date.now();
 			const auth = context.req.auth || (context.req.signedCookies && context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));
 			if(auth) {
