@@ -96,19 +96,6 @@
 		connectionBody.insertBefore(card, add);
 		connectionBody.insertBefore(document.createElement("br"), add);
 	};
-	const addResponse = req => {
-		if(Math.floor(req.status/100) === 2) {
-			pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", sendAdd, pushDialog).then(showNewConnection));
-		} else {
-			savedConnection = null;
-			while(connectDialogs.pop().close());
-		}
-	};
-	add.addEventListener("click", () => {
-		Miro.request("GET", "/users/@me/connections", {
-			"X-Miro-Connection": Array.prototype.join.call(savedConnection, " ")
-		}).then(addResponse);
-	});
 	const showNewConnection = req => {
 		appendCard(req.response);
 	};
@@ -120,6 +107,20 @@
 		}
 		pushDialog(new Miro.dialog("Connections", connectionBody));
 	};
+	const addResponse = req => {
+		if(Math.floor(req.status/100) === 2) {
+			pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", sendAdd, pushDialog).then(showNewConnection));
+		} else {
+			savedConnection = null;
+			while(connectDialogs.pop().close());
+			Miro.auth("Connections", "Your credentials have expired. Revalidate them to continue.", send, pushDialog).then(showConnections);
+		}
+	};
+	add.addEventListener("click", () => {
+		Miro.request("GET", "/users/@me/connections", {
+			"X-Miro-Connection": Array.prototype.join.call(savedConnection, " ")
+		}).then(addResponse);
+	});
 	const showConnectionsResponse = Miro.response(showConnections);
 	form.querySelector("#manageConnections").addEventListener("click", () => {
 		if(savedConnection) {
