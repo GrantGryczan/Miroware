@@ -55,13 +55,18 @@ const connect = (context, connectionString) => {
 				context.status = 422;
 				context.done();
 			};
+			let redirect_uri = context.req.get("Referrer");
+			const pathIndex = redirect_uri.indexOf("/", redirect_uri.indexOf("//")+2);
+			if(pathIndex !== -1) {
+				redirect_uri = `${redirect_uri.slice(0, pathIndex)}/login/discord/`;
+			}
 			request.post("https://discordapp.com/api/oauth2/token", {
 				form: {
 					client_id: youKnow.discord.id,
 					client_secret: youKnow.discord.secret,
 					grant_type: "authorization_code",
 					code: connection[1],
-					redirect_uri: `https://${context.req.hostname}/login/discord/`
+					redirect_uri
 				}
 			}).then(body => {
 				body = JSON.parse(body);
