@@ -73,12 +73,13 @@
 	const send = function(service, code) {
 		return Miro.request("GET", "/users/@me/connections", {
 			"X-Miro-Connection": `${service} ${code}`
-		}).finally(req => {
+		}).then(req => {
 			if(Math.floor(req.status/100) === 2) {
 				if(!savedConnection) {
 					savedConnection = arguments;
 				}
 			}
+			return req;
 		});
 	};
 	const _connection = Symbol("connection");
