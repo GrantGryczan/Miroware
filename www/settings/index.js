@@ -102,7 +102,6 @@
 		connectionBody.insertBefore(document.createElement("br"), add);
 	};
 	const newConnection = req => {
-		console.log(req);
 		appendCard(req.response);
 	};
 	const showConnections = req => {
