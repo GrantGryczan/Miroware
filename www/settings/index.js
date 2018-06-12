@@ -119,6 +119,6 @@
 	add.addEventListener("click", checkToken.bind(null, () => {
 		pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", postConnection, pushDialog).then(showNewConnection));
 	}));
-	form.querySelector("#manageConnections").addEventListener("click", requestConnections));
+	form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
