@@ -23,41 +23,33 @@ if(!isMe) {
 if(user) {
 	if(isMe) {
 		if(this.now-this.token.super < 300000) {
-			connect(this, this.req.body.connection).then(data => {
-				if(this.user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
-					this.value = {
-						error: "Those credentials are already connected to your account."
-					};
-					this.status = 409;
-				} else {
-					this.value = {};
-					this.update.$push = {
-						connections: (this.value = {
-							service: data.connection[0],
-							id: data.id
-						})
-					};
-				}
-				this.done();
-			});
+			if(this.user.connections.some(v => v.service === this.params.service && v.id === this.params.id)) {
+				this.update.$pull.connections = {
+					service: this.params.service,
+					id: this.params.id
+				};
+			} else {
+				this.value = {
+					error: "That connection does not exist."
+				};
+				this.status = 404;
+			}
 		} else {
 			this.value = {
 				error: "Your token is not in super mode."
 			};
 			this.status = 403;
-			this.done();
 		}
 	} else {
 		this.value = {
 			error: "You do not have permission to access that user's connections."
 		};
 		this.status = 403;
-		this.done();
 	}
 } else {
 	this.value = {
 		error: "That user was not found."
 	};
 	this.status = 404;
-	this.done();
 }
+this.done();

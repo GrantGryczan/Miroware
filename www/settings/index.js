@@ -59,6 +59,7 @@
 			if(req.response.super) {
 				success(req);
 			} else {
+				console.log(connectDialogs);
 				let dialog;
 				while(dialog = connectDialogs.pop()) {
 					if(!dialog.closed) {
@@ -71,7 +72,9 @@
 	};
 	const _connection = Symbol("connection");
 	const removeConnection = evt => {
-		console.log(evt.target.parentNode.parentNode[_connection]);
+		checkToken(() => {
+			Miro.request("DELETE", `/users/@me/connections/${evt.target.parentNode.parentNode[_connection].service}/${evt.target.parentNode.parentNode[_connection].id}`).then(connectionsResponse);
+		});
 	};
 	const postConnection = (service, code) => Miro.request("POST", "/users/@me/connections", {}, {
 		connection: `${service} ${code}`
