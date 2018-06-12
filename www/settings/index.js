@@ -71,6 +71,7 @@
 		});
 	};
 	const send = function(service, code) {
+		console.log(arguments);
 		if(!savedConnection) {
 			savedConnection = arguments;
 		}
