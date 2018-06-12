@@ -24,10 +24,17 @@ if(user) {
 	if(isMe) {
 		if(this.now-this.token.super < 300000) {
 			if(this.user.connections.some(v => v.service === this.params.service && v.id === this.params.id)) {
-				this.update.$pull.connections = {
-					service: this.params.service,
-					id: this.params.id
-				};
+				if(this.user.connections.length === 1) {
+					this.value = {
+						error: "You probably need to be able to log in."
+					};
+					this.status = 422;
+				} else {
+					this.update.$pull.connections = {
+						service: this.params.service,
+						id: this.params.id
+					};
+				}
 			} else {
 				this.value = {
 					error: "That connection does not exist."
