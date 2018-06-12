@@ -96,7 +96,7 @@ const connect = (context, connectionString) => {
 };
 const validateConnection = (context, data) => {
 	return new Promise(resolve => {
-		if(user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
+		if(context.user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
 			resolve(true);
 		} else {
 			context.value = {
