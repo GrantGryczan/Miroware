@@ -235,6 +235,10 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						context.update.$set = {
 							updated: context.now,
 						};
+						context.pouchFilter = {
+							...context.userFilter,
+							"pouch.value": hash
+						};
 						context.updatePouch = {
 							$set: {
 								"pouch.$.expire": context.now+cookieOptions.maxAge
@@ -270,10 +274,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}],
 		loadEnd: [async context => {
 			if(context.updatePouch) {
-				users.updateOne({
-					...context.userFilter,
-					"pouch.value": hash
-				}, context.updatePouch);
+				users.updateOne(context.pouchFilter, context.updatePouch);
 			}
 			if(context.update) {
 				users.updateOne(context.userFilter, context.update);
