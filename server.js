@@ -198,7 +198,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}, cookieParser(youKnow.cookie.secret)],
 		loadStart: [async context => {
 			context.now = Date.now();
-			const auth = context.req.auth || (context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));
+			const auth = context.req.auth || (context.req.signedCookies && context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));
 			if(auth) {
 				try {
 					context.user = await users.findOne(context.userFilter = {
