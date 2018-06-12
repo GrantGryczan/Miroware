@@ -52,6 +52,19 @@
 	const connectDialogs = [];
 	const pushDialog = connectDialogs.push.bind(connectDialogs);
 	let savedConnection;
+	const checkConnection = success => {
+		Miro.request("GET", "/users/@me/connections", {
+			"X-Miro-Connection": Array.prototype.join.call(savedConnection, " ")
+		}).then(req => {
+			if(Math.floor(req.status/100) === 2) {
+				success(req);
+			} else {
+				savedConnection = null;
+				while(connectDialogs.pop().close());
+				Miro.auth("Connections", "Your credentials have expired. Revalidate them to continue.", send, pushDialog).then(success);
+			}
+		});
+	};
 	const send = function(service, code) {
 		if(!savedConnection) {
 			savedConnection = arguments;
@@ -107,21 +120,10 @@
 		}
 		pushDialog(new Miro.dialog("Connections", connectionBody));
 	};
-	const addResponse = req => {
-		if(Math.floor(req.status/100) === 2) {
-			pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", sendAdd, pushDialog).then(showNewConnection));
-		} else {
-			savedConnection = null;
-			while(connectDialogs.pop().close());
-			Miro.auth("Connections", "Your credentials have expired. Revalidate them to continue.", send, pushDialog).then(showConnections);
-		}
-	};
-	add.addEventListener("click", () => {
-		Miro.request("GET", "/users/@me/connections", {
-			"X-Miro-Connection": Array.prototype.join.call(savedConnection, " ")
-		}).then(addResponse);
-	});
-	const showConnectionsResponse = Miro.response(showConnections);
+	add.addEventListener("click", checkConnection.bind(null, () => {
+		pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", sendAdd, pushDialog).then(showNewConnection));
+	}));
+	const showConnectionsResponse = checkConnection.bind(null, showConnections);
 	form.querySelector("#manageConnections").addEventListener("click", () => {
 		if(savedConnection) {
 			send.apply(null, savedConnection).then(showConnectionsResponse);
