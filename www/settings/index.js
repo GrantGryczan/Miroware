@@ -91,7 +91,7 @@
 				</div>
 			</div>
 		`;
-		card.querySelector(".mdc-card__actions")[_connection] = v;
+		card.querySelector(".mdc-card__actions")[_connection] = connection;
 		card.querySelector("button").addEventListener("click", removeConnection);
 		connectionBody.insertBefore(card, add);
 		connectionBody.insertBefore(document.createElement("br"), add);
