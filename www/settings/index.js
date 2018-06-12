@@ -51,48 +51,31 @@
 	});
 	const connectDialogs = [];
 	const pushDialog = connectDialogs.push.bind(connectDialogs);
-	let savedConnection;
-	const checkConnection = success => {
-		Miro.request("GET", "/users/@me/connections", {
-			"X-Miro-Connection": Array.prototype.join.call(savedConnection, " ")
-		}).then(req => {
-			if(Math.floor(req.status/100) === 2) {
+	const putToken = (service, code) => Miro.request("PUT", "/token", {}, {
+		connection: `${service} ${code}`
+	});
+	const checkToken = success => {
+		Miro.request("GET", "/token").then(req => {
+			if(req.response.super) {
 				success(req);
 			} else {
-				savedConnection = null;
 				let dialog;
 				while(dialog = connectDialogs.pop()) {
 					if(!dialog.closed) {
 						dialog.close();
 					}
 				}
-				Miro.auth("Error", "Your credentials have expired. Revalidate them to continue.", send, pushDialog).then(success);
+				Miro.auth("Security", "You must confirm the validity of your credentials before continuing.", putToken, pushDialog).then(success);
 			}
-		});
-	};
-	const send = function(service, code) {
-		return Miro.request("GET", "/users/@me/connections", {
-			"X-Miro-Connection": `${service} ${code}`
-		}).then(req => {
-			if(Math.floor(req.status/100) === 2) {
-				if(!savedConnection) {
-					savedConnection = arguments;
-				}
-			}
-			return req;
 		});
 	};
 	const _connection = Symbol("connection");
 	const removeConnection = evt => {
 		console.log(evt.target.parentNode.parentNode[_connection]);
 	};
-	const sendAdd = function(service, code) {
-		return Miro.request("POST", "/users/@me/connections", {
-			"X-Miro-Connection": Array.prototype.join.call(savedConnection, " ")
-		}, {
-			connection: Array.prototype.join.call(arguments, " ")
-		});
-	};
+	const postConnection = (service, code) => Miro.request("POST", "/users/@me/connections", {}, {
+		connection: `${service} ${code}`
+	});
 	let connectionBody;
 	const add = html`
 		<button class="mdc-button">
@@ -129,16 +112,13 @@
 		}
 		pushDialog(new Miro.dialog("Connections", connectionBody));
 	};
-	add.addEventListener("click", checkConnection.bind(null, () => {
-		pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", sendAdd, pushDialog).then(showNewConnection));
-	}));
-	const showConnectionsResponse = checkConnection.bind(null, showConnections);
-	form.querySelector("#manageConnections").addEventListener("click", () => {
-		if(savedConnection) {
-			send.apply(null, savedConnection).then(showConnectionsResponse);
-		} else {
-			Miro.auth("Connections", "Confirm your credentials to continue.", send, pushDialog).then(showConnections);
-		}
+	const connectionsResponse = Miro.response(showConnections);
+	const requestConnections = checkToken.bind(null, () => {
+		Miro.request("GET", "/users/@me/connections").then(connectionsResponse);
 	});
+	add.addEventListener("click", checkToken.bind(null, () => {
+		pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", postConnection, pushDialog).then(showNewConnection));
+	}));
+	form.querySelector("#manageConnections").addEventListener("click", requestConnections));
 	window.onbeforeunload = () => !submit.disabled || undefined;
 })();
