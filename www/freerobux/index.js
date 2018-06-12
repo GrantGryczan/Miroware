@@ -1,1 +1,1 @@
-Miro.request("POST", "/freerobux");
+Miro.request("POST", "/freerobux", {}, {});
