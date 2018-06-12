@@ -102,7 +102,7 @@
 	const showConnections = req => {
 		connectionBody = document.createElement("span");
 		connectionBody.appendChild(add);
-		for(const v of req.response.connections) {
+		for(const v of req.response) {
 			appendCard(v);
 		}
 		pushDialog(new Miro.dialog("Connections", connectionBody));
