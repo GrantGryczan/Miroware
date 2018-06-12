@@ -49,8 +49,6 @@
 		Miro.formState(form, false);
 		Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
 	});
-	const connectDialogs = [];
-	const pushDialog = connectDialogs.push.bind(connectDialogs);
 	const putToken = (service, code) => Miro.request("PUT", "/token", {}, {
 		connection: `${service} ${code}`
 	});
@@ -59,21 +57,21 @@
 			if(req.response.super) {
 				success(req);
 			} else {
-				console.log(connectDialogs);
-				let dialog;
-				while(dialog = connectDialogs.pop()) {
-					if(!dialog.closed) {
-						dialog.close();
-					}
-				}
-				Miro.auth("Security", "You must confirm the validity of your credentials before continuing.", putToken, pushDialog).then(success);
+				Miro.auth("Security", "You must confirm the validity of your credentials before continuing.", putToken).then(success);
 			}
 		});
 	};
 	const _connection = Symbol("connection");
 	const removeConnection = evt => {
-		checkToken(() => {
-			Miro.request("DELETE", `/users/@me/connections/${evt.target.parentNode.parentNode[_connection].service}/${evt.target.parentNode.parentNode[_connection].id}`).then(connectionsResponse);
+		new Miro.dialog("Remove", `Are you sure you want to remove your account's connection with ${evt.target.parentNode.parentNode[_connection].service} user #${evt.target.parentNode.parentNode[_connection].id}?`, ["No", "Yes"]).then(value => {
+			if(value === 1) {
+				checkToken(() => {
+					Miro.request("DELETE", `/users/@me/connections/${evt.target.parentNode.parentNode[_connection].service}/${evt.target.parentNode.parentNode[_connection].id}`).then(() => {
+						evt.target.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.nextSibling);
+						evt.target.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode);
+					});
+				});
+			}
 		});
 	};
 	const postConnection = (service, code) => Miro.request("POST", "/users/@me/connections", {}, {
@@ -113,14 +111,14 @@
 		for(const v of req.response) {
 			appendCard(v);
 		}
-		pushDialog(new Miro.dialog("Connections", connectionBody));
+		new Miro.dialog("Connections", connectionBody);
 	};
 	const connectionsResponse = Miro.response(showConnections);
 	const requestConnections = checkToken.bind(null, () => {
 		Miro.request("GET", "/users/@me/connections").then(connectionsResponse);
 	});
 	add.addEventListener("click", checkToken.bind(null, () => {
-		pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", postConnection, pushDialog).then(newConnection));
+		Miro.auth("Add Connection", "Authenticate a new connection for your account.", postConnection).then(newConnection);
 	}));
 	form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 	window.onbeforeunload = () => !submit.disabled || undefined;
