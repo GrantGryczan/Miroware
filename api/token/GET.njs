@@ -3,7 +3,7 @@ if(this.token) {
 		scope: this.token.scope
 	};
 	if(this.token.scope <= 0) {
-		this.connected = this.now-this.token.connected < 300000;
+		this.super = this.now-this.token.super < 300000;
 	}
 } else {
 	this.value = {
