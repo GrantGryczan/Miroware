@@ -26,7 +26,7 @@ if(user) {
 			connect(this, this.req.body.connection).then(data2 => {
 				this.value = {};
 				this.update.$push = {
-					connections: (this.value.connection = {
+					connections: (this.value = {
 						service: data2.connection[0],
 						id: data2.id
 					})
