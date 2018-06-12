@@ -49,10 +49,10 @@
 		Miro.formState(form, false);
 		Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
 	});
-	let connection;
+	let savedConnection;
 	const send = function(service, code) {
-		if(!connection) {
-			connection = arguments;
+		if(!savedConnection) {
+			savedConnection = arguments;
 		}
 		return Miro.request("GET", "/users/@me", {
 			"X-Miro-Connection": `${service} ${code}`
@@ -64,50 +64,54 @@
 	};
 	const sendAdd = function(service, code) {
 		return Miro.request("POST", "/users/@me/connections", {
-			"X-Miro-Connection": Array.prototype.join.call(connection, " ")
+			"X-Miro-Connection": Array.prototype.join.call(savedConnection, " ")
 		}, {
 			connection: Array.prototype.join.call(arguments, " ")
 		});
 	};
+	let connectionBody;
 	const add = html`
 		<button class="mdc-button">
 			<i class="material-icons mdc-button__icon">add</i>Add
 		</button>
 	`;
-	const showNewConnection = req => {
-		console.log(req.response);
+	const appendCard = connection => {
+		const card = html`
+			<div class="mdc-card">
+				<div class="mdc-card__area">
+					<h2 class="mdc-card__title mdc-typography--headline6">${connection.id}</h2>
+					<h3 class="mdc-card__subtitle mdc-typography--subtitle2">${connection.service}</h3>
+				</div>
+				<div class="mdc-card__actions">
+					<div class="mdc-card__action-icons">
+						<button class="mdc-card__action mdc-card__action--icon mdc-icon-button material-icons" title="Remove">delete</button>
+					</div>
+				</div>
+			</div>
+		`;
+		card.querySelector(".mdc-card__actions")[_connection] = v;
+		card.querySelector("button").addEventListener("click", removeConnection);
+		connectionBody.insertBefore(card, add);
+		connectionBody.insertBefore(document.createElement("br"), add);
 	};
 	add.addEventListener("click", () => {
 		Miro.auth("Add Connection", "Authenticate a new connection for your account.", sendAdd).then(showNewConnection);
 	});
+	const showNewConnection = req => {
+		appendCard(req.response);
+	};
 	const showConnections = req => {
-		const body = document.createElement("span");
+		connectionBody = document.createElement("span");
+		connectionBody.appendChild(add);
 		for(const v of req.response.connections) {
-			const card = html`
-				<div class="mdc-card">
-					<div class="mdc-card__area">
-						<h2 class="mdc-card__title mdc-typography--headline6">${v.id}</h2>
-						<h3 class="mdc-card__subtitle mdc-typography--subtitle2">${v.service}</h3>
-					</div>
-					<div class="mdc-card__actions">
-						<div class="mdc-card__action-icons">
-							<button class="mdc-card__action mdc-card__action--icon mdc-icon-button material-icons" title="Remove">delete</button>
-						</div>
-					</div>
-				</div>
-			`;
-			card.querySelector(".mdc-card__actions")[_connection] = v;
-			body.appendChild(card);
-			body.querySelector("button").addEventListener("click", removeConnection);
-			body.appendChild(document.createElement("br"));
+			appendCard(v);
 		}
-		body.appendChild(add);
-		new Miro.dialog("Connections", body);
+		new Miro.dialog("Connections", connectionBody);
 	};
 	const showConnectionsResponse = Miro.response(showConnections);
 	form.querySelector("#manageConnections").addEventListener("click", () => {
-		if(connection) {
-			send.apply(null, connection).then(showConnectionsResponse);
+		if(savedConnection) {
+			send.apply(null, savedConnection).then(showConnectionsResponse);
 		} else {
 			Miro.auth("Connections", "Confirm your credentials to continue.", send).then(showConnections);
 		}
