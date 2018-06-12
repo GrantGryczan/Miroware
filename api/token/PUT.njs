@@ -3,7 +3,7 @@ if(this.token) {
 		if(typeof this.req.body.connection === "string") {
 			connect(this, this.req.body.connection).then(data => {
 				validateConnection(this, data).then(() => {
-					this.updatePouch["pouch.$.super"] = this.now;
+					this.updatePouch.$set["pouch.$.super"] = this.now;
 					this.done();
 				});
 			});
