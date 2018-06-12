@@ -4,6 +4,7 @@ if(this.token) {
 			connect(this, this.req.body.connection).then(data => {
 				validateConnection(this, data).then(() => {
 					this.updatePouch["pouch.$.super"] = this.now;
+					this.done();
 				});
 			});
 		} else {
