@@ -38,7 +38,7 @@ if(user) {
 		});
 	} else {
 		this.value = {
-			error: "You do not have permission to edit that user."
+			error: "You do not have permission to access that user's connections."
 		};
 		this.status = 403;
 		this.done();

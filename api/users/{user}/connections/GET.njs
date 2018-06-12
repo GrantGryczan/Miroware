@@ -21,30 +21,19 @@ if(!isMe) {
 	});
 }
 if(user) {
-	if(isMe || user.name !== null) {
-		this.value = {
-			created: user.created,
-			updated: user.updated,
-			verified: user.verified,
-			publicEmail: user.publicEmail,
-			name: user.name,
-			desc: user.desc,
-			icon: user.icon
-		};
-		if(isMe || user.publicEmail) {
-			this.value.email = user.email;
-		}
-		if(isMe) {
-			Object.assign(this.value, {
-				unverified: user.unverified,
-				nameCooldown: user.nameCooldown,
-				birth: user.birth
+	if(isMe) {
+		connect(this).then(data => {
+			validateConnection(this, user, data).then(() => {
+				this.value = user.connections.map(v => ({
+					service: v.service,
+					id: v.id
+				}));
+				this.done();
 			});
-		}
-		this.done();
+		});
 	} else {
 		this.value = {
-			error: "That user was not found."
+			error: "You do not have permission to access that user's connections."
 		};
 		this.status = 404;
 		this.done();
