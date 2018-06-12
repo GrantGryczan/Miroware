@@ -215,7 +215,9 @@
 						});
 					});
 				}
+				this.value = null;
 				const close = value => {
+					this.value = value;
 					setTimeout(() => {
 						container.removeChild(dialogElem);
 						Miro.formState(surfaceElem, formState);
@@ -262,6 +264,7 @@
 				if(this.ready) {
 					this[_dialog].close();
 					this[_close](typeof value === "number" ? value : -1);
+					return true;
 				} else {
 					throw new MiroError("The dialog has not finished instantiating and cannot be closed.");
 				}
@@ -402,7 +405,7 @@
 			window.addEventListener("message", receive);
 		}
 	};
-	Miro.auth = (title, message, send, resolveDialog) => {
+	Miro.auth = (title, message, send, dialogCallback) => {
 		if(!(typeof message === "string")) {
 			throw new MiroError("The `message` parameter must be a string.");
 		}
@@ -426,8 +429,8 @@
 			body.appendChild(button);
 		}
 		authDialog = new Miro.dialog(title || "Authenticate", body, ["Cancel"]);
-		if(resolveDialog instanceof Function) {
-			authDialog.then(resolveDialog);
+		if(dialogCallback instanceof Function) {
+			dialogCallback(authDialog);
 		}
 		return new Promise(resolve => {
 			resolveAuth = resolve;

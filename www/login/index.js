@@ -56,9 +56,12 @@
 			Miro.formState(loginForm, true);
 		}
 	};
+	const dialogCallback = dialog => {
+		dialog.then(resolveDialog);
+	};
 	loginForm.addEventListener("submit", evt => {
 		evt.preventDefault();
 		Miro.formState(loginForm, false);
-		Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send, resolveDialog).then(loggedIn);
+		Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send, dialogCallback).then(loggedIn);
 	});
 })();

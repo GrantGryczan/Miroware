@@ -49,12 +49,14 @@
 		Miro.formState(form, false);
 		Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
 	});
+	const connectDialogs = [];
+	const pushDialog = connectDialogs.push.bind(connectDialogs);
 	let savedConnection;
 	const send = function(service, code) {
 		if(!savedConnection) {
 			savedConnection = arguments;
 		}
-		return Miro.request("GET", "/users/@me", {
+		return Miro.request("GET", "/users/@me/connections", {
 			"X-Miro-Connection": `${service} ${code}`
 		});
 	};
@@ -94,8 +96,18 @@
 		connectionBody.insertBefore(card, add);
 		connectionBody.insertBefore(document.createElement("br"), add);
 	};
+	const addResponse = req => {
+		if(Math.floor(req.status/100) === 2) {
+			pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", sendAdd, pushDialog).then(showNewConnection));
+		} else {
+			savedConnection = null;
+			while(connectDialogs.pop().close());
+		}
+	};
 	add.addEventListener("click", () => {
-		Miro.auth("Add Connection", "Authenticate a new connection for your account.", sendAdd).then(showNewConnection);
+		Miro.request("GET", "/users/@me/connections", {
+			"X-Miro-Connection": Array.prototype.join.call(savedConnection, " ")
+		}).then(addResponse);
 	});
 	const showNewConnection = req => {
 		appendCard(req.response);
@@ -106,14 +118,14 @@
 		for(const v of req.response.connections) {
 			appendCard(v);
 		}
-		new Miro.dialog("Connections", connectionBody);
+		pushDialog(new Miro.dialog("Connections", connectionBody));
 	};
 	const showConnectionsResponse = Miro.response(showConnections);
 	form.querySelector("#manageConnections").addEventListener("click", () => {
 		if(savedConnection) {
 			send.apply(null, savedConnection).then(showConnectionsResponse);
 		} else {
-			Miro.auth("Connections", "Confirm your credentials to continue.", send).then(showConnections);
+			Miro.auth("Connections", "Confirm your credentials to continue.", send, pushDialog).then(showConnections);
 		}
 	});
 	window.onbeforeunload = () => !submit.disabled || undefined;
