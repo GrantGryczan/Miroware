@@ -248,7 +248,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							context.res.clearCookie("auth", clearCookieOptions);
 						} else {
 							context.value = {
-								error: "The authorization credentials are using an invalid token."
+								error: "Authentication failed."
 							};
 							context.status = 401;
 							return false;
@@ -259,7 +259,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						context.res.clearCookie("auth", clearCookieOptions);
 					} else {
 						context.value = {
-							error: "The authorization credentials are requesting a user which does not exist."
+							error: "Authentication failed."
 						};
 						context.status = 401;
 						return false;
