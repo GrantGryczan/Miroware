@@ -101,7 +101,8 @@
 		connectionBody.insertBefore(card, add);
 		connectionBody.insertBefore(document.createElement("br"), add);
 	};
-	const showNewConnection = req => {
+	const newConnection = req => {
+		console.log(req);
 		appendCard(req.response);
 	};
 	const showConnections = req => {
@@ -117,7 +118,7 @@
 		Miro.request("GET", "/users/@me/connections").then(connectionsResponse);
 	});
 	add.addEventListener("click", checkToken.bind(null, () => {
-		pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", postConnection, pushDialog).then(showNewConnection));
+		pushDialog(Miro.auth("Add Connection", "Authenticate a new connection for your account.", postConnection, pushDialog).then(newConnection));
 	}));
 	form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 	window.onbeforeunload = () => !submit.disabled || undefined;
