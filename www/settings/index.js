@@ -60,8 +60,13 @@
 				success(req);
 			} else {
 				savedConnection = null;
-				while(connectDialogs.pop().close());
-				Miro.auth("Connections", "Your credentials have expired. Revalidate them to continue.", send, pushDialog).then(success);
+				let dialog;
+				while(dialog = connectDialogs.pop()) {
+					if(!dialog.closed) {
+						dialog.close()
+					}
+				}
+				Miro.auth("Error", "Your credentials have expired. Revalidate them to continue.", send, pushDialog).then(success);
 			}
 		});
 	};

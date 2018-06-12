@@ -217,6 +217,7 @@
 				}
 				this.value = null;
 				const close = value => {
+					this.closed = true;
 					this.value = value;
 					setTimeout(() => {
 						container.removeChild(dialogElem);
