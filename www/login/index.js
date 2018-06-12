@@ -1,6 +1,6 @@
 (() => {
 	const loginForm = document.querySelector("#loginForm");
-	const submits = loginForm.querySelectorAll("button[type=\"submit\"]");
+	const submits = loginForm.querySelectorAll("button[type='submit']");
 	const signupForm = document.querySelector("#signupForm");
 	let signup = false;
 	const getIn = Miro.response(() => {

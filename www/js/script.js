@@ -40,7 +40,7 @@
 		if(!(node instanceof Element || node instanceof Document)) {
 			throw new MiroError("The `node` parameter must be an element or a document.");
 		}
-		for(const v of node.querySelectorAll("input[type=\"email\"]")) {
+		for(const v of node.querySelectorAll("input[type='email']")) {
 			v.maxLength = 254;
 		}
 		for(const v of node.querySelectorAll("button:not([type])")) {
@@ -205,7 +205,7 @@
 			this[_promise] = new Promise(resolve => {
 				let submitted = false;
 				let formState = true;
-				if(!(submitted = !footerElem.querySelector("button[type=\"submit\"]"))) {
+				if(!(submitted = !footerElem.querySelector("button[type='submit']"))) {
 					surfaceElem.addEventListener("submit", evt => {
 						evt.preventDefault();
 						submitted = true;
