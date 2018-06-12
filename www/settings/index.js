@@ -73,7 +73,7 @@
 	const send = function(service, code) {
 		return Miro.request("GET", "/users/@me/connections", {
 			"X-Miro-Connection": `${service} ${code}`
-		}).then(req => {
+		}).finally(req => {
 			if(Math.floor(req.status/100) === 2) {
 				if(!savedConnection) {
 					savedConnection = arguments;
