@@ -67,8 +67,8 @@
 			if(value === 0) {
 				checkToken(() => {
 					Miro.request("DELETE", `/users/@me/connections/${evt.target.parentNode.parentNode.parentNode[_connection].service}/${evt.target.parentNode.parentNode.parentNode[_connection].id}`).then(() => {
-						evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target..parentNodeparentNode.parentNode.nextSibling);
-						evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target..parentNodeparentNode.parentNode);
+						evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.parentNode.nextSibling);
+						evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.parentNode);
 					});
 				});
 			}
