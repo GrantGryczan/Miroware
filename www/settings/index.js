@@ -63,12 +63,12 @@
 	};
 	const _connection = Symbol("connection");
 	const removeConnection = evt => {
-		new Miro.dialog("Remove", `Are you sure you want to remove your account's connection with ${evt.target.parentNode.parentNode[_connection].service} user #${evt.target.parentNode.parentNode[_connection].id}?`, ["Yes", "No"]).then(value => {
+		new Miro.dialog("Remove", `Are you sure you want to remove your account's connection with ${evt.target.parentNode.parentNode.parentNode[_connection].service} user #${evt.target.parentNode.parentNode.parentNode[_connection].id}?`, ["Yes", "No"]).then(value => {
 			if(value === 0) {
 				checkToken(() => {
-					Miro.request("DELETE", `/users/@me/connections/${evt.target.parentNode.parentNode[_connection].service}/${evt.target.parentNode.parentNode[_connection].id}`).then(() => {
-						evt.target.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.nextSibling);
-						evt.target.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode);
+					Miro.request("DELETE", `/users/@me/connections/${evt.target.parentNode.parentNode.parentNode[_connection].service}/${evt.target.parentNode.parentNode.parentNode[_connection].id}`).then(() => {
+						evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target..parentNodeparentNode.parentNode.nextSibling);
+						evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target..parentNodeparentNode.parentNode);
 					});
 				});
 			}
@@ -97,7 +97,7 @@
 				</div>
 			</div>
 		`;
-		card.querySelector(".mdc-card__actions")[_connection] = connection;
+		card[_connection] = connection;
 		card.querySelector("button").addEventListener("click", removeConnection);
 		connectionBody.insertBefore(card, add);
 		connectionBody.insertBefore(document.createElement("br"), add);
