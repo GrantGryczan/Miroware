@@ -98,6 +98,9 @@ const validateConnection = (context, user, data) => {
 	return new Promise(resolve => {
 		if(user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
 			resolve(true);
+			if(context.updatePouch) {
+				context.updatePouch["pouch.$.connected"] = context.now;
+			}
 		} else {
 			context.value = {
 				error: "Authentication failed."
@@ -232,14 +235,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						context.update.$set = {
 							updated: context.now,
 						};
-						users.updateOne({
-							...context.userFilter,
-							"pouch.value": hash
-						}, {
+						context.updatePouch = {
 							$set: {
 								"pouch.$.expire": context.now+cookieOptions.maxAge
 							}
-						});
+						};
 						if(context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {
 							context.res.cookie("auth", context.req.signedCookies.auth, cookieOptions);
 						}
@@ -269,6 +269,12 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.in = context.user ? !!context.user.name : null;
 		}],
 		loadEnd: [async context => {
+			if(context.updatePouch) {
+				users.updateOne({
+					...context.userFilter,
+					"pouch.value": hash
+				}, context.updatePouch);
+			}
 			if(context.update) {
 				users.updateOne(context.userFilter, context.update);
 			}

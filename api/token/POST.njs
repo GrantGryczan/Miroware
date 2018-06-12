@@ -13,7 +13,8 @@ if(testEmail(this.req.body.email)) {
 						pouch: {
 							value: youKnow.crypto.hash(token, user.salt.buffer),
 							scope: 0,
-							expire: this.now+cookieOptions.maxAge
+							expire: this.now+cookieOptions.maxAge,
+							connected: this.now
 						}
 					}
 				});
