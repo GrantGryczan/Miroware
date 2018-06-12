@@ -14,7 +14,7 @@ if(testEmail(this.req.body.email)) {
 							value: youKnow.crypto.hash(token, user.salt.buffer),
 							scope: 0,
 							expire: this.now+cookieOptions.maxAge,
-							connected: this.now
+							super: this.now
 						}
 					}
 				});

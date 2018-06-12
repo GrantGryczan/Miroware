@@ -22,20 +22,24 @@ if(!isMe) {
 }
 if(user) {
 	if(isMe) {
-		connect(this).then(data => {
-			validateConnection(this, user, data).then(() => {
-				connect(this, this.req.body.connection).then(data2 => {
-					this.value = {};
-					this.update.$push = {
-						connections: (this.value.connection = {
-							service: data2.connection[0],
-							id: data2.id
-						})
-					};
-					this.done();
-				});
+		if(this.now-this.token.super < 300000) {
+			connect(this, this.req.body.connection).then(data2 => {
+				this.value = {};
+				this.update.$push = {
+					connections: (this.value.connection = {
+						service: data2.connection[0],
+						id: data2.id
+					})
+				};
+				this.done();
 			});
-		});
+		} else {
+			this.value = {
+				error: "Your token is not in super mode."
+			};
+			this.status = 403;
+			this.done();
+		}
 	} else {
 		this.value = {
 			error: "You do not have permission to access that user's connections."

@@ -94,13 +94,10 @@ const connect = (context, connectionString) => {
 		}
 	});
 };
-const validateConnection = (context, user, data) => {
+const validateConnection = (context, data) => {
 	return new Promise(resolve => {
 		if(user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
 			resolve(true);
-			if(context.updatePouch) {
-				context.updatePouch["pouch.$.connected"] = context.now;
-			}
 		} else {
 			context.value = {
 				error: "Authentication failed."

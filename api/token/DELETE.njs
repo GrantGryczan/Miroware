@@ -12,6 +12,5 @@ if(this.token) {
 		error: "No authorization credentials were specified."
 	};
 	this.status = 404;
-	this.done();
 }
 this.done();

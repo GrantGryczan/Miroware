@@ -17,7 +17,7 @@ if(testEmail(this.req.body.email)) {
 					value: youKnow.crypto.hash(token, salt),
 					scope: 0,
 					expire: this.now+cookieOptions.maxAge,
-					connected: this.now
+					super: this.now
 				}],
 				connections: [{
 					service: data.connection[0],
