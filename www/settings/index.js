@@ -71,12 +71,14 @@
 		});
 	};
 	const send = function(service, code) {
-		console.log(arguments);
-		if(!savedConnection) {
-			savedConnection = arguments;
-		}
 		return Miro.request("GET", "/users/@me/connections", {
 			"X-Miro-Connection": `${service} ${code}`
+		}).then(req => {
+			if(Math.floor(req.status/100) === 2) {
+				if(!savedConnection) {
+					savedConnection = arguments;
+				}
+			}
 		});
 	};
 	const _connection = Symbol("connection");
