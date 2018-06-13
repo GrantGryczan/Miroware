@@ -1,3 +1,4 @@
+this.cache = true;
 this.title = "GitHub";
 this.description = "Engage in Miroware's source code!";
 this.tags = ["redirect", "link", "git", "github", "hub", "repository", "repo", "open", "source", "code"];

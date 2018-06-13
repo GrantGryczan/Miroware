@@ -1,3 +1,4 @@
+this.cache = true;
 this.title = "About";
 this.description = "Learn about Miroware.";
 this.tags = ["about", "info", "information"];

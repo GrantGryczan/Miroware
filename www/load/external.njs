@@ -2,7 +2,7 @@ if(this.socialicons) {
 	this.value = "";
 	this.done();
 } else {
-	this.cache = () => "";
+	this.cache = true;
 	const htmlTitleTest = /<title(?: [^>]*)?>((?:.|\n)*?)<\/title>/i;
 	const htmlIconExp = "<link(?: [^>]*?)? (?:(?:rel=(\"|')(?:[^\"'>]* )?icon(?: [^\"'>]*)?\\1(?: [^>]*?)? href=(\"|')([^\"'>]*?)\\2)|(?:href=(\"|')([^\"'>]*?)\\4(?: [^>]*?)? rel=(\"|')(?:[^\"'>]* )?icon(?: [^\"'>]*)?\\6))(?: [^>]*)?>";
 	const htmlIconsTest = new RegExp(htmlIconExp, "ig");

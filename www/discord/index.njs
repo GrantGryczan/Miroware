@@ -1,3 +1,4 @@
+this.cache = true;
 this.title = "Discord";
 this.description = "Join Miroware's community!";
 this.tags = ["redirect", "link", "discord", "invite", "invitation", "join"];

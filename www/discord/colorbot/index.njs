@@ -1,3 +1,4 @@
+this.cache = true;
 this.title = "Discord Colorbot";
 this.description = "Invite Colorbot to one of your own Discord servers!";
 this.tags = ["redirect", "link", "discord", "bot", "authorize", "authorization", "authorizing", "colorbot", "color", "colors", "role", "roles", "custom"];

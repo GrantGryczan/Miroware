@@ -1,3 +1,4 @@
+this.cache = true;
 this.title = "Discord Starbot";
 this.description = "Invite Starbot to one of your own Discord servers!";
 this.tags = ["redirect", "link", "discord", "bot", "authorize", "authorization", "authorizing", "starbot", "star", "stars", "starboard", "board"];

@@ -116,9 +116,9 @@ if(user) {
 					this.status = 400;
 					this.done();
 					return;
-				} else if(this.req.body.birth > this.now) {
+				} else if(this.req.body.birth > this.now-409968000000) {
 					this.value = {
-						error: "You wish you were that young."
+						error: "You must be at least 13 years of age to sign up."
 					};
 					this.status = 400;
 					this.done();

@@ -1,3 +1,4 @@
+this.cache = true;
 this.title = "Twitter";
 this.description = "Follow Miroware's tweets!";
 this.tags = ["redirect", "link", "follow", "twitter", "tweet", "tweets", "status", "update", "updates"];

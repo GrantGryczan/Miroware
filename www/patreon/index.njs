@@ -1,3 +1,4 @@
+this.cache = true;
 this.title = "Patreon";
 this.description = "Support Miroware's content!";
 this.tags = ["redirect", "link", "patreon", "support", "donate", "donation", "donations", "contribute", "contribution", "contributions", "money"];

@@ -26,7 +26,7 @@ if(testEmail(this.req.body.email)) {
 				created: this.now,
 				updated: this.now,
 				email: this.req.body.email,
-				verified: this.req.body.email === data.email && data.verified,
+				verified: data.verified && this.req.body.email === data.email,
 				unverified: null,
 				emailCode: null,
 				publicEmail: false,
