@@ -89,6 +89,9 @@ body {
 }
 .mdc-drawer {
 	user-select: none;
+	&--temporary {
+		color: rgba(255, 255, 255, 0.87);
+	}
 	&__header {
 		display: none;
 		&-content {
@@ -101,7 +104,6 @@ body {
 	.mdc-list {
 		&, &-item__graphic {
 			padding: 8px 0;
-			color: rgba(255, 255, 255, 0.87);
 		}
 		&-item {
 			&::before {
@@ -127,17 +129,21 @@ body {
 	}
 }
 #externals {
-	padding: 12px;
+	display: inline-block;
+	position: absolute;
+	margin: 10px;
+	padding: 2px;
+	border-radius: 2px;
+	background-color: currentColor;
 	.external {
 		display: inline-block;
 		min-width: 28px;
 		height: 28px;
 		margin: 1px;
 		padding: 0;
-		background-color: #f0f0f0;
 		background-repeat: no-repeat;
 		background-position: center;
-		background-size: 24px 24px;
+		background-size: 24px;
 	}
 }
 #page {
