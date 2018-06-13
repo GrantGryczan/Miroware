@@ -7,7 +7,7 @@ if(this.socialicons) {
 	const htmlIconExp = "<link(?: [^>]*?)? (?:(?:rel=(\"|')(?:[^\"'>]* )?icon(?: [^\"'>]*)?\\1(?: [^>]*?)? href=(\"|')([^\"'>]*?)\\2)|(?:href=(\"|')([^\"'>]*?)\\4(?: [^>]*?)? rel=(\"|')(?:[^\"'>]* )?icon(?: [^\"'>]*)?\\6))(?: [^>]*)?>";
 	const htmlIconsTest = new RegExp(htmlIconExp, "ig");
 	const htmlIconTest = new RegExp(htmlIconExp, "i");
-	const iconSizeTest = / sizes=("|')([^\"']+)\1/i;
+	const iconSizeTest = / sizes=("|')([^"']+)\1/i;
 	const numerically = (a, b) => a-b;
 	const testSizes = (sizes, size) => {
 		const smallSizes = [];

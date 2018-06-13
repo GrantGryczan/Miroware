@@ -171,14 +171,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							req.auth = auth;
 						} else {
 							res.status(400).send({
-								error: "The credentials of the `Authorization` header are not in the format \"<user ID>:<token>\", encoded in base 64."
+								error: 'The credentials of the `Authorization` header are not in the format "<user ID>:<token>", encoded in base 64.'
 							});
 							return;
 						}
 					}
 				} else {
 					res.status(400).send({
-						error: "The `Authorization` header is not in the format \"<type> <credentials>\"."
+						error: 'The `Authorization` header is not in the format "<type> <credentials>".'
 					});
 					return;
 				}

@@ -44,7 +44,7 @@ const permWarn = (guild, perms) => {
 	inform(guild, `An error occured on ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 };
 const noStarboard = guild => {
-	const warning = ", as there is nowhere for starred messages to be placed. No starboard channel has been set!\nAs a member of the Discord server with administrative permission, you can set the starboard channel by entering \">⭐\" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.";
+	const warning = ', as there is nowhere for starred messages to be placed. No starboard channel has been set!\nAs a member of the Discord server with administrative permission, you can set the starboard channel by entering ">⭐" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.';
 	inform(guild, `An error occured on ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 }
 const guildCreate = guild => {
@@ -74,7 +74,7 @@ client.once("ready", () => {
 	client.user.setPresence({
 		status: "online"
 	});
-	client.user.setActivity("Enter \">⭐\" for info.");
+	client.user.setActivity('Enter ">⭐" for info.');
 	for(const [i, v] of client.guilds) {
 		if(data.guilds[i]) {
 			if(data.guilds[i][0] && !v.channels.get(data.guilds[i][0])) {

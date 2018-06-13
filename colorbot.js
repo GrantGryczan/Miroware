@@ -90,7 +90,7 @@ client.once("ready", () => {
 	client.user.setPresence({
 		status: "online"
 	});
-	client.user.setActivity("Enter \">🎨\" for info.");
+	client.user.setActivity('Enter ">🎨" for info.');
 });
 client.on("guildCreate", guild => {
 	if(!data.guilds[guild.id]) {
@@ -173,7 +173,7 @@ client.on("message", async msg => {
 				const contentIsColor = content[0] === "color" || content[0] === "colour";
 				if(contentIsColor || content[0] === "reset") {
 					if(data.guilds[msg.guild.id][0] === 0) {
-						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? " As a member of this server with administrative permission, you can enable it by entering \"`>🎨open`\"." : ""}`).catch(errSendMessages(msg));
+						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? ' As a member of this server with administrative permission, you can enable it by entering ">🎨open".' : ""}`).catch(errSendMessages(msg));
 					} else if(contentIsColor) {
 						if(content[1]) {
 							if(colorTest.test(content[1])) {
