@@ -133,6 +133,7 @@ body {
 #externals {
 	display: inline-block;
 	position: absolute;
+	bottom: 0;
 	margin: 10px;
 	padding: 2px;
 	border-radius: 2px;
