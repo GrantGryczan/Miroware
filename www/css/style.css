@@ -132,7 +132,7 @@ body {
 		}
 	}
 }
-.externalContainer {
+#externalContainer {
 	align-self: flex-start;
 	margin-top: auto;
 	#externals {
