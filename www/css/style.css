@@ -136,8 +136,6 @@ body {
 	align-self: flex-start;
 	margin-top: auto;
 	#externals {
-		position: absolute;
-		bottom: 0;
 		margin: 10px;
 		padding: 2px;
 		border-radius: 2px;
