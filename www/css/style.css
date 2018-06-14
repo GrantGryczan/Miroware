@@ -99,6 +99,8 @@ body {
 		}
 	}
 	&__content {
+		display: flex;
+		flex-direction: column;
 		background-color: #303030;
 	}
 	.mdc-list {
@@ -130,23 +132,26 @@ body {
 		}
 	}
 }
-#externals {
-	display: inline-block;
-	position: absolute;
-	bottom: 0;
-	margin: 10px;
-	padding: 2px;
-	border-radius: 2px;
-	background-color: currentColor;
-	.external {
-		display: inline-block;
-		min-width: 28px;
-		height: 28px;
-		margin: 1px;
-		padding: 0;
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: 24px;
+.externalContainer {
+	align-self: flex-start;
+	margin-top: auto;
+	#externals {
+		position: absolute;
+		bottom: 0;
+		margin: 10px;
+		padding: 2px;
+		border-radius: 2px;
+		background-color: currentColor;
+		.external {
+			display: inline-block;
+			min-width: 28px;
+			height: 28px;
+			margin: 1px;
+			padding: 0;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: 24px;
+		}
 	}
 }
 #page {

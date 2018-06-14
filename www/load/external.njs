@@ -19,7 +19,8 @@ if(this.socialicons) {
 		return size ? size !== testSizes([size, bestOfSizes]) && bestOfSizes : bestOfSizes;
 	};
 	this.value = html`
-					<div id="externals">`;
+					<div id="externalContainer">
+						<div id="externals">`;
 	for(const v of ["discord", "patreon", "youtube", "twitter", "github"]) {
 		const context = await load(`www/${v}/`, {
 			...this,
@@ -61,6 +62,7 @@ if(this.socialicons) {
 		}
 	}
 	this.value += html`
+						</div>
 					</div>`;
 	this.done();
 }
