@@ -17,7 +17,7 @@ this.value = html`
 		<meta property="og:type" content="website">
 		<meta property="og:url" content="https://miroware.io/">
 		<meta property="og:site_name" content="Miroware">
-		<meta property="og:image" content="$${this.image}">
+		<meta property="og:image" content="$${this.image.includes("//") ? this.image : `https://miroware.io${(this.image.startsWith("/") ? "" : "/") + this.image}`}">
 		<meta property="og:title" content="$${this.title}">
 		<meta property="og:description" content="$${this.description}">
 		<meta name="google-signin-client_id" content="${youKnow.google.id}">`;

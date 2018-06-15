@@ -9,7 +9,7 @@
 	const loggedIn = () => {
 		Miro.formState(loginForm, false);
 		if(Miro.in) {
-			location.href = (Miro.query.dest && Miro.query.dest.startsWith("/")) ? Miro.query.dest : "/";
+			location.href = (Miro.query.dest && !Miro.query.dest.includes("//")) ? Miro.query.dest : "/";
 		} else if(Miro.in === false) {
 			setTimeout(() => {
 				signupForm.classList.remove("hidden");
