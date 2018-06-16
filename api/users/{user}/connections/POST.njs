@@ -22,9 +22,9 @@ if(!isMe) {
 }
 if(user) {
 	if(isMe) {
-		if(this.now-this.token.super < 300000) {
+		if(this.now - this.token.super < 300000) {
 			connect(this, this.req.body.connection).then(data => {
-				if(this.user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
+				if(this.user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
 					this.value = {
 						error: "Those credentials are already connected to your account."
 					};

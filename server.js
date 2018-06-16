@@ -56,7 +56,7 @@ const connect = (context, connectionString) => {
 				context.done();
 			};
 			let redirect_uri = context.req.get("Referrer");
-			const pathIndex = redirect_uri.indexOf("/", redirect_uri.indexOf("//")+2);
+			const pathIndex = redirect_uri.indexOf("/", redirect_uri.indexOf("//") + 2);
 			if(pathIndex !== -1) {
 				redirect_uri = `${redirect_uri.slice(0, pathIndex)}/login/discord/`;
 			}
@@ -96,7 +96,7 @@ const connect = (context, connectionString) => {
 };
 const validateConnection = (context, data) => {
 	return new Promise(resolve => {
-		if(context.user.connections.some(v => v.service === data.connection[0] && v.id === data.id)) {
+		if(context.user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
 			resolve(true);
 		} else {
 			context.value = {
@@ -112,7 +112,7 @@ const inputDate = date => {
 	if(day.length < 2) {
 		day = `0${day}`;
 	}
-	let month = String(date.getMonth()+1);
+	let month = String(date.getMonth() + 1);
 	if(month.length < 2) {
 		month = `0${month}`;
 	}
@@ -226,7 +226,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						}
 					};
 					const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
-					const token = context.user.pouch.find(v => v.value.buffer.equals(hash));
+					const token = context.user.pouch.find(token => token.value.buffer.equals(hash));
 					if(token && context.now < token.expire) {
 						context.token = token;
 						context.update.$set = {
@@ -238,7 +238,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						};
 						context.updatePouch = {
 							$set: {
-								"pouch.$.expire": context.now+cookieOptions.maxAge
+								"pouch.$.expire": context.now + cookieOptions.maxAge
 							}
 						};
 						if(context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {

@@ -22,8 +22,8 @@ if(!isMe) {
 }
 if(user) {
 	if(isMe) {
-		if(this.now-this.token.super < 300000) {
-			if(this.user.connections.some(v => v.service === this.params.service && v.id === this.params.id)) {
+		if(this.now - this.token.super < 300000) {
+			if(this.user.connections.some(connection => connection.service === this.params.service && connection.id === this.params.id)) {
 				if(this.user.connections.length === 1) {
 					this.value = {
 						error: "You probably need to be able to log in."

@@ -4,18 +4,18 @@
 	const submit = form.querySelector("#save");
 	const _prev = Symbol("prev");
 	const savePrevs = () => {
-		for(const v of inputs) {
-			v[_prev] = Miro.value(v);
+		for(const input of inputs) {
+			input[_prev] = Miro.value(input);
 		}
 	};
 	savePrevs();
 	const changed = [];
 	const onInput = evt => {
 		changed.length = 0;
-		for(const v of inputs) {
-			if(v.checkValidity()) {
-				if(v[_prev] !== Miro.value(v)) {
-					changed.push(v);
+		for(const input of inputs) {
+			if(input.checkValidity()) {
+				if(input[_prev] !== Miro.value(input)) {
+					changed.push(input);
 				}
 			} else {
 				changed.length = 0;
@@ -43,8 +43,8 @@
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
 		const body = {};
-		for(const v of changed) {
-			body[v.name] = Miro.value(v);
+		for(const elem of changed) {
+			body[elem.name] = Miro.value(elem);
 		}
 		Miro.formState(form, false);
 		Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
@@ -108,9 +108,7 @@
 	const connectionsResponse = Miro.response(req => {
 		connectionBody = document.createElement("span");
 		connectionBody.appendChild(add);
-		for(const v of req.response) {
-			appendCard(v);
-		}
+		req.response.forEach(appendCard);
 		new Miro.dialog("Connections", connectionBody);
 	});
 	const requestConnections = checkToken.bind(null, () => {

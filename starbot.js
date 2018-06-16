@@ -75,9 +75,9 @@ client.once("ready", () => {
 		status: "online"
 	});
 	client.user.setActivity('Enter ">⭐" for info.');
-	for(const [i, v] of client.guilds) {
+	for(const [i, guild] of client.guilds) {
 		if(data.guilds[i]) {
-			if(data.guilds[i][0] && !v.channels.get(data.guilds[i][0])) {
+			if(data.guilds[i][0] && !guild.channels.get(data.guilds[i][0])) {
 				data.guilds[i][0] = null;
 			}
 		} else {

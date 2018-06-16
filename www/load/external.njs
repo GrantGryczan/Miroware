@@ -8,12 +8,12 @@ if(this.socialicons) {
 	const htmlIconsTest = new RegExp(htmlIconExp, "ig");
 	const htmlIconTest = new RegExp(htmlIconExp, "i");
 	const iconSizeTest = / sizes=("|')([^"']+)\1/i;
-	const numerically = (a, b) => a-b;
+	const numerically = (a, b) => a - b;
 	const testSizes = (sizes, size) => {
 		const smallSizes = [];
 		const largeSizes = [];
-		for(const v of sizes) {
-			(v < 24 ? smallSizes : largeSizes).push(v);
+		for(const size of sizes) {
+			(size < 24 ? smallSizes : largeSizes).push(size);
 		}
 		const bestOfSizes = Math[largeSizes.length ? "min" : "max"].apply(null, largeSizes.length ? largeSizes : smallSizes);
 		return size ? size !== testSizes([size, bestOfSizes]) && bestOfSizes : bestOfSizes;
@@ -21,12 +21,12 @@ if(this.socialicons) {
 	this.value = html`
 					<div id="externalContainer">
 						<div id="externals">`;
-	for(const v of ["discord", "patreon", "youtube", "twitter", "github"]) {
-		const context = await load(`www/${v}/`, {
+	for(const service of ["discord", "patreon", "youtube", "twitter", "github"]) {
+		const context = await load(`www/${service}/`, {
 			...this,
 			socialicons: true
 		});
-		const origin = context.redir.slice(0, context.redir.indexOf("/", context.redir.indexOf("//")+2));
+		const origin = context.redir.slice(0, context.redir.indexOf("/", context.redir.indexOf("//") + 2));
 		let body;
 		try {
 			body = await request.get(context.redir);
@@ -46,7 +46,7 @@ if(this.socialicons) {
 							index = i;
 							break;
 						} else {
-							const bestSize = testSizes(sizes[2].split(" ").map(w => parseInt(w)).filter(w => !isNaN(w)).sort(numerically), size);
+							const bestSize = testSizes(sizes[2].split(" ").map(parseInt).filter(isFinite).sort(numerically), size);
 							if(bestSize) {
 								size = bestSize;
 								index = i;
@@ -58,7 +58,7 @@ if(this.socialicons) {
 				icon = icon[3] || icon[5];
 			}
 			icon = (icon.indexOf("//") === -1) ? (origin + icon) : icon;
-			this.value += html`<a class="external mdc-button" href="/${v}/" title="$${context.value.match(htmlTitleTest)[1]}" style="background-image: url(${icon});"></a>`;
+			this.value += html`<a class="external mdc-button" href="/${service}/" title="$${context.value.match(htmlTitleTest)[1]}" style="background-image: url(${icon});"></a>`;
 		}
 	}
 	this.value += html`

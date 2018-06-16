@@ -42,8 +42,8 @@
 	const setSubmit = function() {
 		signup = this.name === "signup";
 	};
-	for(const v of submits) {
-		v.addEventListener("click", setSubmit);
+	for(const input of submits) {
+		input.addEventListener("click", setSubmit);
 	}
 	const send = (service, code) => Miro.request("POST", signup ? "/users" : "/token", {
 		"X-Miro-Connection": `${service} ${code}`

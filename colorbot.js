@@ -8,9 +8,9 @@ const alphanumeric = /^[0-9a-z]*$/i;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 const properColorTest = /^#[\da-f]{6}$/;
 const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
-const byFirstItems = v => v[0];
-const byTextChannels = v => v.type === "text";
-const byColorDiff = (a, b) => a[1]-b[1];
+const byRoles = color => color[0];
+const byTextChannels = channel => channel.type === "text";
+const byColorDiff = (a, b) => a[1] - b[1];
 let data;
 const load = () => {
 	data = JSON.parse(fs.readFileSync("secret/colorbot.json"));
@@ -48,7 +48,7 @@ const guildCreate = guild => {
 };
 const permWarn = (guild, perms) => {
 	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
-	inform(guild, `An error occured on ${italicize(guild.name)+warning}`, `${guild.owner} An error occured${warning}`);
+	inform(guild, `An error occured on ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 };
 const errSendMessages = msg => () => {
 	permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
@@ -68,7 +68,7 @@ const sendHelp = (msg, perm) => {
 	msg.channel.send(help).catch(errSendMessages(msg));
 };
 client.once("ready", () => {
-	for(const [i, v] of client.guilds) {
+	for(const [i] of client.guilds) {
 		if(!data.guilds[i]) {
 			guildCreate(i);
 		}
@@ -79,9 +79,9 @@ client.once("ready", () => {
 			for(const j of Object.keys(data.guilds[i][1])) {
 				data.guilds[i][1][j][1] = data.guilds[i][1][j][1].filter(guild.roles.get.bind(guild.roles));
 			}
-			for(const [j, v] of guild.roles) {
-				if(properColorTest.test(v.name) && v.members.size === 0) {
-					v.delete();
+			for(const [, role] of guild.roles) {
+				if(properColorTest.test(role.name) && role.members.size === 0) {
+					role.delete();
 				}
 			}
 		}
@@ -99,18 +99,18 @@ client.on("guildCreate", guild => {
 	}
 });
 client.on("guildMemberRemove", member => {
-	for(const [i, v] of member.roles) {
-		if(properColorTest.test(v.name) && v.members.size === 0) {
-			v.delete();
+	for(const [, role] of member.roles) {
+		if(properColorTest.test(role.name) && role.members.size === 0) {
+			role.delete();
 			break;
 		}
 	}
 });
 client.on("roleDelete", role => {
-	for(const v of Object.values(data.guilds[role.guild.id][1])) {
-		const roleIndex = v[1].indexOf(role.id);
+	for(const [, roles] of Object.values(data.guilds[role.guild.id][1])) {
+		const roleIndex = roles.indexOf(role.id);
 		if(roleIndex !== -1) {
-			v[1].splice(roleIndex, 1);
+			roles.splice(roleIndex, 1);
 			save();
 			break;
 		}
@@ -130,14 +130,9 @@ const setColor = (member, color, role, msg) => {
 	}).catch(errEmbedLinks(msg));
 };
 const removeColor = member => {
-	for(const [i, v] of member.roles) {
-		if(properColorTest.test(v.name)) {
-			if(v.members.size > 1) {
-				return member.roles.remove(v);
-			} else {
-				return v.delete();
-			}
-			break;
+	for(const [, role] of member.roles) {
+		if(properColorTest.test(role.name)) {
+			return role.members.size > 1 ? member.roles.remove(role) : role.delete();
 		}
 	}
 	return Promise.resolve();
@@ -167,7 +162,7 @@ client.on("message", async msg => {
 				if(spaceIndex === -1) {
 					content = [content, ""];
 				} else {
-					content = [content.slice(0, spaceIndex), content.slice(spaceIndex+1)];
+					content = [content.slice(0, spaceIndex), content.slice(spaceIndex + 1)];
 				}
 				content[0] = content[0].toLowerCase();
 				const contentIsColor = content[0] === "color" || content[0] === "colour";
@@ -179,7 +174,7 @@ client.on("message", async msg => {
 							if(colorTest.test(content[1])) {
 								content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
 								const addColorRole = () => {
-									const currentRole = msg.guild.roles.find(v => v.name === content[1]) || msg.guild.roles.find(v => v.name.toLowerCase() === content[1].toLowerCase());
+									const currentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
 									if(currentRole) {
 										setColor(member, content[1], currentRole, msg);
 									} else {
@@ -199,17 +194,17 @@ client.on("message", async msg => {
 												const green = parseInt(content[1].slice(3, 5), 16);
 												const blue = parseInt(content[1].slice(5, 7), 16);
 												const colors = [];
-												for(const [i, v] of msg.guild.roles) {
-													if(properColorTest.test(v.name)) {
-														const redDiff = parseInt(v.name.slice(1, 3), 16)-red;
-														const greenDiff = parseInt(v.name.slice(3, 5), 16)-green;
-														const blueDiff = parseInt(v.name.slice(5, 7), 16)-blue;
-														colors.push([v, redDiff*redDiff+greenDiff*greenDiff+blueDiff*blueDiff]);
+												for(const [, role] of msg.guild.roles) {
+													if(properColorTest.test(role.name)) {
+														const redDiff = parseInt(role.name.slice(1, 3), 16) - red;
+														const greenDiff = parseInt(role.name.slice(3, 5), 16) - green;
+														const blueDiff = parseInt(role.name.slice(5, 7), 16) - blue;
+														colors.push([role, redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff]);
 													}
 												}
 												msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
 													embed: {
-														description: colors.sort(byColorDiff).slice(0, 20).map(byFirstItems).join(" "),
+														description: colors.sort(byColorDiff).slice(0, 20).map(byRoles).join(" "),
 														color: parseInt(content[1].slice(1), 16)
 													}
 												}).catch(errEmbedLinks(msg));
@@ -248,21 +243,21 @@ client.on("message", async msg => {
 					}
 				} else if(content[0] === "add") {
 					if(content[1]) {
-						const role = msg.guild.roles.find(v => v.name === content[1]) || msg.guild.roles.find(v => v.name.toLowerCase() === content[1].toLowerCase());
-						if(role) {
+						const contentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+						if(contentRole) {
 							let found = false;
 							for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
-								const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(role.id);
+								const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(contentRole.id);
 								if(roleIndex !== -1) {
-									if(member.roles.has(role.id)) {
+									if(member.roles.has(contentRole.id)) {
 										msg.channel.send(`${msg.author} You already have that role.`).catch(errSendMessages(msg));
 									} else {
 										let has = 0;
 										if(data.guilds[msg.guild.id][1][i][0]) {
-											for(const v of data.guilds[msg.guild.id][1][i][1]) {
-												if(member.roles.has(v)) {
+											for(const role of data.guilds[msg.guild.id][1][i][1]) {
+												if(member.roles.has(role)) {
 													if(data.guilds[msg.guild.id][1][i][0] === 1) {
-														member.roles.remove(v);
+														member.roles.remove(role);
 													} else {
 														has++;
 													}
@@ -270,8 +265,8 @@ client.on("message", async msg => {
 											}
 										}
 										if(data.guilds[msg.guild.id][1][i][0] <= 1 || has < data.guilds[msg.guild.id][1][i][0]) {
-											member.roles.add(role).then(() => {
-												msg.channel.send(`${msg.author} ${data.guilds[msg.guild.id][1][i][0] === 1 ? `Your ${italicize(i)} role has been set to ${italicize(role.name)}.` : `The ${italicize(role.name)} role has been added to your ${italicize(i)} roles.`}`).catch(errSendMessages(msg));
+											member.roles.add(contentRole).then(() => {
+												msg.channel.send(`${msg.author} ${data.guilds[msg.guild.id][1][i][0] === 1 ? `Your ${italicize(i)} role has been set to ${italicize(contentRole.name)}.` : `The ${italicize(contentRole.name)} role has been added to your ${italicize(i)} roles.`}`).catch(errSendMessages(msg));
 											}).catch(errManageRoles(msg));
 										} else {
 											msg.channel.send(`${msg.author} You already have ${has} ${italicize(i)} roles, so you need to remove one to add another.`).catch(errSendMessages(msg));
@@ -292,14 +287,14 @@ client.on("message", async msg => {
 					}
 				} else if(content[0] === "remove") {
 					if(content[1]) {
-						const role = msg.guild.roles.find(v => v.name === content[1]) || msg.guild.roles.find(v => v.name.toLowerCase() === content[1].toLowerCase());
-						if(role) {
+						const contentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+						if(contentRole) {
 							let found = false;
-							for(const v of Object.values(data.guilds[msg.guild.id][1])) {
-								const roleIndex = v[1].indexOf(role.id);
+							for(const [, role] of Object.values(data.guilds[msg.guild.id][1])) {
+								const roleIndex = role.indexOf(contentRole.id);
 								if(roleIndex !== -1) {
-									if(member.roles.has(role.id)) {
-										member.roles.remove(role).then(() => {
+									if(member.roles.has(contentRole.id)) {
+										member.roles.remove(contentRole).then(() => {
 											msg.channel.send(`${msg.author} That role has been removed from yourself.`).catch(errSendMessages(msg));
 										}).catch(errManageRoles(msg));
 									} else {
@@ -346,14 +341,14 @@ client.on("message", async msg => {
 							} else {
 								const group = data.guilds[msg.guild.id][1][content[1].slice(0, spaceIndex2)];
 								if(group) {
-									content[1] = content[1].slice(spaceIndex2+1);
-									const role = msg.guild.roles.find(v => v.name === content[1]) || msg.guild.roles.find(v => v.name.toLowerCase() === content[1].toLowerCase());
-									if(role) {
-										if(group[1].includes(role.id)) {
+									content[1] = content[1].slice(spaceIndex2 + 1);
+									const contentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+									if(contentRole) {
+										if(group[1].includes(contentRole.id)) {
 											msg.channel.send(`${msg.author} That role is already in that group.`).catch(errSendMessages(msg));
 										} else {
-											const found = ungroup(msg.guild.id, role.id);
-											group[1].push(role.id);
+											const found = ungroup(msg.guild.id, contentRole.id);
+											group[1].push(contentRole.id);
 											msg.channel.send(`${msg.author} That role has been ${found ? "moved" : "added"} to that group.`).catch(errSendMessages(msg));
 											save();
 										}
@@ -369,9 +364,9 @@ client.on("message", async msg => {
 						}
 					} else if(content[0] === "ungroup") {
 						if(content[1]) {
-							const role = msg.guild.roles.find(v => v.name === content[1]) || msg.guild.roles.find(v => v.name.toLowerCase() === content[1].toLowerCase());
-							if(role) {
-								if(ungroup(msg.guild.id, role.id)) {
+							const contentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+							if(contentRole) {
+								if(ungroup(msg.guild.id, contentRole.id)) {
 									msg.channel.send(`${msg.author} That role has been ungrouped.`).catch(errSendMessages(msg));
 									save();
 								} else {

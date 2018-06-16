@@ -3,7 +3,7 @@ if(this.token) {
 		scope: this.token.scope
 	};
 	if(this.token.scope <= 0) {
-		this.value.super = this.now-this.token.super < 300000;
+		this.value.super = this.now - this.token.super < 300000;
 	}
 } else {
 	this.value = {

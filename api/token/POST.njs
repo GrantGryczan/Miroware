@@ -4,7 +4,7 @@ if(testEmail(this.req.body.email)) {
 	});
 	if(user) {
 		connect(this).then(data => {
-			if(user.connections.find(v => v.service === data.connection[0] && v.id === data.id)) {
+			if(user.connections.find(connection => connection.service === data.connection[0] && connection.id === data.id)) {
 				const token = youKnow.crypto.token();
 				users.updateOne({
 					_id: user._id
@@ -13,7 +13,7 @@ if(testEmail(this.req.body.email)) {
 						pouch: {
 							value: youKnow.crypto.hash(token, user.salt.buffer),
 							scope: 0,
-							expire: this.now+cookieOptions.maxAge,
+							expire: this.now + cookieOptions.maxAge,
 							super: this.now
 						}
 					}

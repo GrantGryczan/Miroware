@@ -22,10 +22,10 @@ if(!isMe) {
 }
 if(user) {
 	if(isMe) {
-		if(this.now-this.token.super < 300000) {
-			this.value = user.connections.map(v => ({
-				service: v.service,
-				id: v.id
+		if(this.now - this.token.super < 300000) {
+			this.value = user.connections.map(connection => ({
+				service: connection.service,
+				id: connection.id
 			}));
 			this.done();
 		} else {

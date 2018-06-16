@@ -59,7 +59,7 @@
 						cards[i].children[j].classList.add("smooth");
 					}
 					cards[i].classList.remove("invisible");
-				}, 50*(i+1));
+				}, 50 * (i + 1));
 			})(i);
 		}
 	});

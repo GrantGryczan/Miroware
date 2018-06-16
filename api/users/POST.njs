@@ -16,7 +16,7 @@ if(testEmail(this.req.body.email)) {
 				pouch: [{
 					value: youKnow.crypto.hash(token, salt),
 					scope: 0,
-					expire: this.now+cookieOptions.maxAge,
+					expire: this.now + cookieOptions.maxAge,
 					super: this.now
 				}],
 				connections: [{

@@ -12,21 +12,16 @@
 	}
 	const doNothing = () => {};
 	const container = document.querySelector("#container");
-	let rawQuery;
-	if(location.href.indexOf("#") !== -1) {
-		rawQuery = location.href.slice(0, location.href.indexOf("#"));
-	} else {
-		rawQuery = location.href;
+	let rawQuery = location.href;
+	const hashIndex = rawQuery.indexOf("#");
+	if(hashIndex !== -1) {
+		rawQuery = rawQuery.slice(0, hashIndex));
 	}
-	if(rawQuery.indexOf("?") !== -1) {
-		rawQuery = rawQuery.slice(rawQuery.indexOf("?")+1).split("&");
-	} else {
-		rawQuery = [];
-	}
+	rawQuery = rawQuery.indexOf("?") !== -1 ? rawQuery.slice(rawQuery.indexOf("?") + 1).split("&") : [];
 	Miro.query = {};
-	for(const v of rawQuery) {
+	for(const pair of rawQuery) {
 		try {
-			const param = v.split("=");
+			const param = pair.split("=");
 			Miro.query[param[0]] = decodeURIComponent(param[1]);
 		} catch(err) {}
 	}
@@ -38,37 +33,43 @@
 			setTimeout(resolve, delay);
 		});
 	};
-	Miro.benchmark = (f, n, data) => {
+	Miro.benchmark = (f, secs, data) => {
 		if(!(f instanceof Function)) {
 			throw new MiroError("The `f` parameter must be a function.");
 		}
 		data = data instanceof Array ? data : [];
-		n = isFinite(n) ? n : 1;
-		
+		if(secs = isFinite(secs) ? Math.abs(secs) : 1) {
+			let i = 0;
+			for(const now = Date.now(); Date.now() - now < 1000; f(i++));
+			data.push(i);
+			return Miro.benchmark(f, secs-1, data);
+		} else {
+			return Miro.average.apply(null, data);
+		}
 	};
 	Miro.mdc = Symbol("mdc");
 	Miro.prepare = node => {
 		if(!(node instanceof Element || node instanceof Document)) {
 			throw new MiroError("The `node` parameter must be an element or a document.");
 		}
-		for(const v of node.querySelectorAll("input[type='email']")) {
-			v.maxLength = 254;
+		for(const elem of node.querySelectorAll("input[type='email']")) {
+			elem.maxLength = 254;
 		}
-		for(const v of node.querySelectorAll("button:not([type])")) {
-			v.type = "button";
+		for(const elem of node.querySelectorAll("button:not([type])")) {
+			elem.type = "button";
 		}
-		for(const v of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded)")) {
-			v[Miro.mdc] = new mdc.ripple.MDCRipple(v);
+		for(const elem of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded)")) {
+			elem[Miro.mdc] = new mdc.ripple.MDCRipple(elem);
 		}
-		for(const v of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
-			v[Miro.mdc] = new mdc.textField.MDCTextField(v);
+		for(const elem of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
+			elem[Miro.mdc] = new mdc.textField.MDCTextField(elem);
 		}
-		for(const v of node.querySelectorAll(".mdc-checkbox:not(.mdc-checkbox--upgraded)")) {
-			v.querySelector(".mdc-checkbox__background").appendChild(checkmark.cloneNode(true));
-			v[Miro.mdc] = new mdc.checkbox.MDCCheckbox(v);
+		for(const elem of node.querySelectorAll(".mdc-checkbox:not(.mdc-checkbox--upgraded)")) {
+			elem.querySelector(".mdc-checkbox__background").appendChild(checkmark.cloneNode(true));
+			elem[Miro.mdc] = new mdc.checkbox.MDCCheckbox(elem);
 		}
-		for(const v of node.querySelectorAll(".mdc-form-field")) {
-			v[Miro.mdc] = new mdc.formField.MDCFormField(v);
+		for(const elem of node.querySelectorAll(".mdc-form-field")) {
+			elem[Miro.mdc] = new mdc.formField.MDCFormField(elem);
 		}
 	};
 	const htmlExps = ["$", "&"];
@@ -84,7 +85,7 @@
 					code = code.replace(...htmlReplacements[j]);
 				}
 			}
-			str += code + strs[i+1];
+			str += code + strs[i + 1];
 		}
 		const elem = document.createElement("span");
 		elem.innerHTML = str.trim() || str;
@@ -111,10 +112,9 @@
 			throw new MiroError("The `input` parameter must be an HTML input element.");
 		}
 		input.disabled = !state;
-		for(const v of mdcTypes) {
-			if(input.parentNode.classList.contains(`mdc-${v}`)) {
-				const disabledClass = `mdc-${v}--disabled`;
-				input.parentNode.classList[state ? "remove" : "add"](disabledClass);
+		for(const mdcType of mdcTypes) {
+			if(input.parentNode.classList.contains(`mdc-${mdcType}`)) {
+				input.parentNode.classList[state ? "remove" : "add"](`mdc-${mdcType}--disabled`);
 			}
 		}
 	};
@@ -127,23 +127,23 @@
 		state = !state;
 		if(form[_disabled] !== state) {
 			form[_disabled] = state;
-			for(const v of form.elements) {
+			for(const elem of form.elements) {
 				if(state) {
-					v[_prevDisabled] = v.disabled;
-					v.disabled = true;
-				} else if(!v[_prevDisabled]) {
-					v.disabled = false;
+					elem[_prevDisabled] = elem.disabled;
+					elem.disabled = true;
+				} else if(!elem[_prevDisabled]) {
+					elem.disabled = false;
 				}
 			}
-			for(const v of mdcTypes) {
-				const mdcClass = `.mdc-${v}`;
-				const disabledClass = `mdc-${v}--disabled`;
-				for(const w of form.querySelectorAll(mdcClass)) {
+			for(const mdcType of mdcTypes) {
+				const mdcClass = `.mdc-${mdcType}`;
+				const disabledClass = `mdc-${mdcType}--disabled`;
+				for(const elem of form.querySelectorAll(mdcClass)) {
 					if(state) {
-						w[_prevDisabled] = w.classList.contains(disabledClass);
-						w.classList.add(disabledClass);
-					} else if(!w[_prevDisabled]) {
-						w.classList.remove(disabledClass);
+						elem[_prevDisabled] = elem.classList.contains(disabledClass);
+						elem.classList.add(disabledClass);
+					} else if(!elem[_prevDisabled]) {
+						elem.classList.remove(disabledClass);
 					}
 				}
 			}
@@ -246,9 +246,7 @@
 					dialog.close();
 					close(buttons.indexOf(evt.target));
 				};
-				for(const v of buttons) {
-					v.addEventListener("click", dialogButton);
-				}
+				elem.forEach(elem.addEventListener.bind(elem, "click", dialogButton));
 				dialog.listen("MDCDialog:cancel", () => {
 					close(-1);
 				});
@@ -309,7 +307,7 @@
 			throw new MiroError("The `success` parameter must be a function if it is defined.");
 		}
 		return async req => {
-			if(Math.floor(req.status/100) === 2) {
+			if(Math.floor(req.status / 100) === 2) {
 				if(success) {
 					success(req);
 				}
@@ -409,7 +407,7 @@
 					if(evt.data.startsWith("code=")) {
 						resolve(evt.data.slice(5));
 					} else {
-						reject(evt.data.slice(evt.data.indexOf("=")+1));
+						reject(evt.data.slice(evt.data.indexOf("=") + 1));
 					}
 				}
 			};
@@ -425,8 +423,8 @@
 		}
 		sendAuth = send;
 		const body = document.createElement("span");
-		for(const v of message.split("\n")) {
-			body.appendChild(document.createTextNode(v));
+		for(const part of message.split("\n")) {
+			body.appendChild(document.createTextNode(part));
 			body.appendChild(document.createElement("br"));
 		}
 		body.appendChild(document.createElement("br"));

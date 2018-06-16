@@ -77,12 +77,12 @@ if(user) {
 					this.done();
 					return;
 				} else {
-					const cooldown = 86400000+user.nameCooldown-this.now;
+					const cooldown = 86400000 + user.nameCooldown - this.now;
 					if(cooldown > 0) {
 						this.value = {
 							error: "The `name` value may only be set once per day."
 						};
-						this.res.set("Retry-After", Math.ceil(cooldown/1000));
+						this.res.set("Retry-After", Math.ceil(cooldown / 1000));
 						this.status = 429;
 						this.done();
 						return;
@@ -116,7 +116,7 @@ if(user) {
 					this.status = 400;
 					this.done();
 					return;
-				} else if(this.req.body.birth > this.now-409968000000) {
+				} else if(this.req.body.birth > this.now - 409968000000) {
 					this.value = {
 						error: "You must be at least 13 years of age to sign up."
 					};
