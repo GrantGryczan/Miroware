@@ -6,14 +6,13 @@
 	const getIn = Miro.response(() => {
 		Miro.in = true;
 	});
+	const showSignupForm = signupForm.classList.remove.bind(signupForm.classList, "hidden");
 	const loggedIn = () => {
 		Miro.formState(loginForm, false);
 		if(Miro.in) {
 			location.href = (Miro.query.dest && !Miro.query.dest.includes("//")) ? Miro.query.dest : "/";
 		} else if(Miro.in === false) {
-			setTimeout(() => {
-				signupForm.classList.remove("hidden");
-			});
+			setTimeout(showSignupForm);
 			const signupDialog = new Miro.dialog("Sign up", signupForm, [{
 				text: "Okay",
 				type: "submit"

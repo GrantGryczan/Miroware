@@ -30,10 +30,21 @@
 			Miro.query[param[0]] = decodeURIComponent(param[1]);
 		} catch(err) {}
 	}
+	const addTwo = (a, b) => a + b;
+	Miro.sum = (...values) => values.reduce(addTwo, 0);
+	Miro.average = (...values) => Miro.sum(...values) / values.length;
 	Miro.wait = delay => {
 		return new Promise(resolve => {
 			setTimeout(resolve, delay);
 		});
+	};
+	Miro.benchmark = (f, n, data) => {
+		if(!(f instanceof Function)) {
+			throw new MiroError("The `f` parameter must be a function.");
+		}
+		data = data instanceof Array ? data : [];
+		n = isFinite(n) ? n : 1;
+		
 	};
 	Miro.mdc = Symbol("mdc");
 	Miro.prepare = node => {
@@ -62,22 +73,21 @@
 	};
 	const htmlExps = ["$", "&"];
 	const htmlReplacements = [[/&/g, "&amp;"], [/</g, "&lt;"], [/>/g, "&gt;"], [/"/g, "&quot;"], [/'/g, "&#39;"], [/`/g, "&#96;"]];
-	window.html = function() {
-		let string = arguments[0][0];
-		const exps = arguments.length-1;
-		for(let i = 0; i < exps; i++) {
-			let code = String(arguments[i+1]);
-			const expIndex = htmlExps.indexOf(arguments[0][i].slice(-1));
+	window.html = (strs, ...exps) => {
+		let str = strs[0];
+		for(let i = 0; i < exps.length; i++) {
+			let code = String(exps[i]);
+			const expIndex = htmlExps.indexOf(strs[i].slice(-1));
 			if(expIndex !== -1) {
-				string = string.slice(0, -1);
+				str = str.slice(0, -1);
 				for(let j = expIndex; j < htmlReplacements.length; j++) {
 					code = code.replace(...htmlReplacements[j]);
 				}
 			}
-			string += code + arguments[0][i+1];
+			str += code + strs[i+1];
 		}
 		const elem = document.createElement("span");
-		elem.innerHTML = string.trim() || string;
+		elem.innerHTML = str.trim() || str;
 		Miro.prepare(elem);
 		return elem.childNodes.length === 1 ? elem.firstChild : elem;
 	};
