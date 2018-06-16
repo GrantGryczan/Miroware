@@ -14,12 +14,13 @@
 	const dialogCallback = dialog => {
 		dialog.body.appendChild(captchaElem);
 	};
+	let signupDialog;
 	const send = (service, code) => Miro.request("POST", "/users", {}, {
 		connection: `${service} ${code}`,
 		captcha: captchaInput.value,
-		email: signupForm.elements.email.value,
-		name: signupForm.elements.name.value,
-		birthday: signupForm.elements.birthday.valueAsNumber
+		email: signupDialog.form.elements.email.value,
+		name: signupDialog.form.elements.name.value,
+		birthday: signupDialog.form.elements.birthday.valueAsNumber
 	});
 	const loggedIn = () => {
 		location.reload();
@@ -27,10 +28,7 @@
 	loginForm.addEventListener("submit", evt => {
 		evt.preventDefault();
 		if(signup) {
-			if(!signupForm.elements.email) {
-				signupForm.elements.email = loginForm.elements.email;
-			}
-			const signupDialog = new Miro.dialog("Sign up", signupForm, [{
+			signupDialog = new Miro.dialog("Sign up", signupForm, [{
 				text: "Okay",
 				type: "submit"
 			}, "Cancel"]).then(value => {
@@ -38,6 +36,9 @@
 					Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send, dialogCallback).then(loggedIn);
 				}
 			});
+			if(!signupDialog.form.elements.email) {
+				signupDialog.form.elements.email = loginForm.elements.email;
+			}
 		}
 	});
 })();
