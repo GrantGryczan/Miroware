@@ -246,7 +246,9 @@
 					dialog.close();
 					close(buttons.indexOf(evt.target));
 				};
-				elem.forEach(elem.addEventListener.bind(elem, "click", dialogButton));
+				for(const elem of buttons) {
+					elem.addEventListener("click", dialogButton);
+				}
 				dialog.listen("MDCDialog:cancel", () => {
 					close(-1);
 				});
