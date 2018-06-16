@@ -1,5 +1,6 @@
 if(this.user) {
 	this.redirect = this.req.query.dest && !this.req.query.dest.includes("//") ? this.query.dest : "/";
+	this.done();
 	return;
 }
 this.title = "Log in";
