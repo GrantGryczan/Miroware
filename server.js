@@ -119,7 +119,7 @@ const inputDate = date => {
 	return `${date.getFullYear()}-${month}-${day}`;
 };
 const notLoggedIn = context => {
-	if(context.in) {
+	if(context.user) {
 		return false;
 	} else {
 		context.redirect = `/login/?dest=${encodeURIComponent(context.req.url)}`;
@@ -267,7 +267,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					}
 				}
 			}
-			context.in = context.user ? !!context.user.name : null;
 		}],
 		loadEnd: [async context => {
 			if(context.updatePouch) {

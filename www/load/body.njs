@@ -32,7 +32,7 @@ this.value = html`
 							<a class="mdc-list-item${this.req.decodedPath === "/" ? " visiting" : '" href="/'}">
 								<i class="material-icons mdc-list-item__graphic">home</i> Home
 							</a>`;
-if(this.in) {
+if(this.user) {
 	this.value += html`
 							<a class="mdc-list-item${this.req.decodedPath === "/settings/" ? " visiting" : '" href="/settings/'}">
 								<i class="material-icons mdc-list-item__graphic">settings</i> Settings

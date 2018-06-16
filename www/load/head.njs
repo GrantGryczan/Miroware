@@ -21,7 +21,7 @@ this.value = html`
 		<meta property="og:title" content="$${this.title}">
 		<meta property="og:description" content="$${this.description}">
 		<meta name="google-signin-client_id" content="${youKnow.google.id}">`;
-if(this.in !== null) {
+if(this.user) {
 	this.value += html`
 		<meta name="user" content="$${JSON.stringify((await load("api/users/@me", {
 			...this,
