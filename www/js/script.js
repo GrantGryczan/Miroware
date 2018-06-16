@@ -33,18 +33,18 @@
 			setTimeout(resolve, delay);
 		});
 	};
-	Miro.benchmark = (f, secs, data) => {
+	Miro.benchmark = (f, n, data) => {
 		if(!(f instanceof Function)) {
 			throw new MiroError("The `f` parameter must be a function.");
 		}
 		data = data instanceof Array ? data : [];
-		if(secs = isFinite(secs) ? Math.abs(secs) : 1) {
+		if(n = isFinite(n) ? Math.abs(n) : 1) {
 			let i = 0;
-			for(const now = Date.now(); Date.now() - now < 1000; f(i++));
+			for(const now = Date.now(); Date.now() - now < 100; f(i++));
 			data.push(i);
-			return Miro.benchmark(f, secs-1, data);
+			return Miro.benchmark(f, n-1, data);
 		} else {
-			return Miro.average.apply(null, data);
+			return Miro.average(...data);
 		}
 	};
 	Miro.mdc = Symbol("mdc");
@@ -447,9 +447,8 @@
 			resolveAuth = resolve;
 		});
 	};
-	Miro.in = null;
 	const userMeta = document.querySelector("meta[name='user']");
-	if(userMeta && (Miro.user = JSON.parse(userMeta.getAttribute("content"))) && (Miro.in = !!Miro.user.name)) {
+	if(userMeta && (Miro.user = JSON.parse(userMeta.getAttribute("content")))) {
 		Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location)));
 		document.querySelector("#logOut").addEventListener("click", () => {
 			new Miro.dialog("Log Out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
