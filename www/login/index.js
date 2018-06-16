@@ -2,65 +2,40 @@
 	const loginForm = document.querySelector("#loginForm");
 	const submits = loginForm.querySelectorAll("button[type='submit']");
 	const signupForm = document.querySelector("#signupForm");
+	const captchaElem = document.querySelector(".g-recaptcha");
 	let signup = false;
-	const getIn = Miro.response(() => {
-		Miro.in = true;
+	const setSubmit = evt => {
+		signup = evt.target.name === "signup";
+	};
+	for(const input of submits) {
+		input.addEventListener("click", setSubmit);
+	}
+	const dialogCallback = dialog => {
+		dialog.body.appendChild(captchaElem);
+	};
+	const send = (service, code) => Miro.request("POST", "/users", {}, {
+		connection: `${service} ${code}`,
+		captcha: signupDialog.form.elements["g-recaptcha-response"].value,
+		email: loginForm.elements.email.value,
+		name: loginForm.elements.name.value,
+		birthday: loginForm.elements.birthday.valueAsNumber
 	});
-	const showSignupForm = signupForm.classList.remove.bind(signupForm.classList, "hidden");
 	const loggedIn = () => {
 		Miro.formState(loginForm, false);
-		if(Miro.in) {
-			location.href = (Miro.query.dest && !Miro.query.dest.includes("//")) ? Miro.query.dest : "/";
-		} else if(Miro.in === false) {
-			setTimeout(showSignupForm);
+		//location.href = Miro.query.dest && !Miro.query.dest.includes("//") ? Miro.query.dest : "/";
+		location.reload();
+	};
+	loginForm.addEventListener("submit", evt => {
+		evt.preventDefault();
+		if(signup) {
 			const signupDialog = new Miro.dialog("Sign up", signupForm, [{
 				text: "Okay",
 				type: "submit"
 			}, "Cancel"]).then(value => {
 				if(value === 0) {
-					if(signupDialog.form.elements["g-recaptcha-response"] && signupDialog.form.elements["g-recaptcha-response"].value) {
-						Miro.request("PUT", "/users/@me", {}, {
-							captcha: signupDialog.form.elements["g-recaptcha-response"].value,
-							name: signupDialog.form.elements.name.value,
-							birth: signupDialog.form.elements.birthday.valueAsNumber,
-						}).then(getIn).finally(loggedIn);
-					} else {
-						new Miro.dialog("Error", "You must complete the CAPTCHA challenge before authenticating.").then(loggedIn);
-					}
-				} else {
-					Miro.logOut();
+					Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send, dialogCallback).then(loggedIn);
 				}
 			});
-		} else {
-			location.reload();
 		}
-	};
-	if(Miro.in !== null) {
-		loggedIn();
-		return;
-	}
-	const setSubmit = function() {
-		signup = this.name === "signup";
-	};
-	for(const input of submits) {
-		input.addEventListener("click", setSubmit);
-	}
-	const send = (service, code) => Miro.request("POST", signup ? "/users" : "/token", {
-		"X-Miro-Connection": `${service} ${code}`
-	}, {
-		email: loginForm.email.value
-	});
-	const resolveDialog = value => {
-		if(value !== -2) {
-			Miro.formState(loginForm, true);
-		}
-	};
-	const dialogCallback = dialog => {
-		dialog.then(resolveDialog);
-	};
-	loginForm.addEventListener("submit", evt => {
-		evt.preventDefault();
-		Miro.formState(loginForm, false);
-		Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send, dialogCallback).then(loggedIn);
 	});
 })();

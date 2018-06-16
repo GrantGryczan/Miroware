@@ -287,9 +287,9 @@
 	document.querySelector("#menu").addEventListener("click", () => {
 		drawer.open = !drawer.open;
 	});
-	const progress = new mdc.linearProgress.MDCLinearProgress(document.querySelector(".mdc-linear-progress"));
+	Miro.progress = new mdc.linearProgress.MDCLinearProgress(document.querySelector(".mdc-linear-progress"));
 	const closeProgress = () => {
-		progress.close();
+		Miro.progress.close();
 		window.removeEventListener("load", closeProgress);
 	};
 	window.addEventListener("load", closeProgress);
@@ -327,7 +327,7 @@
 			} else {
 				throw new MiroError("The `url` parameter must be a string.");
 			}
-			progress.open();
+			Miro.progress.open();
 			body = body !== undefined && (body instanceof Object ? body : {});
 			headers = headers instanceof Object ? headers : {};
 			if(body) {
@@ -344,7 +344,7 @@
 			}
 			req.onreadystatechange = () => {
 				if(req.readyState === XMLHttpRequest.DONE) {
-					progress.close();
+					Miro.progress.close();
 					(req.status === 0 ? reject : resolve)(req);
 				}
 			};
