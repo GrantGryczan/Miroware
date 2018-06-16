@@ -37,7 +37,7 @@
 				}
 			});
 			if(!signupDialog.form.elements.email) {
-				signupDialog.form.elements.email = loginForm.elements.email;
+				signupDialog.form.elements.email.value = loginForm.elements.email.value;
 			}
 		}
 	});
