@@ -1,3 +1,7 @@
+if(this.user) {
+	this.redirect = this.req.query.dest && !this.req.query.dest.includes("//") ? this.query.dest : "/";
+	return;
+}
 this.title = "Log in";
 this.description = "Log into your Miroware account.";
 this.tags = ["login", "log", "in", "signup", "sign", "up", "signin", "into", "to", "account", "user", "create"];
