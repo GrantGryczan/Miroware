@@ -3,6 +3,7 @@
 	const submits = loginForm.querySelectorAll("button[type='submit']");
 	const signupForm = document.querySelector("#signupForm");
 	const captchaElem = document.querySelector(".g-recaptcha");
+	const captchaInput = captchaElem.querySelector("[name='g-recaptcha-response']");
 	let signup = false;
 	const setSubmit = evt => {
 		signup = evt.target.name === "signup";
@@ -15,19 +16,20 @@
 	};
 	const send = (service, code) => Miro.request("POST", "/users", {}, {
 		connection: `${service} ${code}`,
-		captcha: signupDialog.form.elements["g-recaptcha-response"].value,
-		email: loginForm.elements.email.value,
-		name: loginForm.elements.name.value,
-		birthday: loginForm.elements.birthday.valueAsNumber
+		captcha: captchaInput.value,
+		email: signupForm.elements.email.value,
+		name: signupForm.elements.name.value,
+		birthday: signupForm.elements.birthday.valueAsNumber
 	});
 	const loggedIn = () => {
-		Miro.formState(loginForm, false);
-		//location.href = Miro.query.dest && !Miro.query.dest.includes("//") ? Miro.query.dest : "/";
 		location.reload();
 	};
 	loginForm.addEventListener("submit", evt => {
 		evt.preventDefault();
 		if(signup) {
+			if(!signupForm.elements.email) {
+				signupForm.elements.email = loginForm.elements.email;
+			}
 			const signupDialog = new Miro.dialog("Sign up", signupForm, [{
 				text: "Okay",
 				type: "submit"
