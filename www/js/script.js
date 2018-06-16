@@ -15,7 +15,7 @@
 	let rawQuery = location.href;
 	const hashIndex = rawQuery.indexOf("#");
 	if(hashIndex !== -1) {
-		rawQuery = rawQuery.slice(0, hashIndex));
+		rawQuery = rawQuery.slice(0, hashIndex);
 	}
 	rawQuery = rawQuery.indexOf("?") !== -1 ? rawQuery.slice(rawQuery.indexOf("?") + 1).split("&") : [];
 	Miro.query = {};
