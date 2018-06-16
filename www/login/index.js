@@ -36,7 +36,7 @@
 					Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send, dialogCallback).then(loggedIn);
 				}
 			});
-			if(!signupDialog.form.elements.email) {
+			if(!signupDialog.form.elements.email.value) {
 				signupDialog.form.elements.email.value = loginForm.elements.email.value;
 			}
 		}
