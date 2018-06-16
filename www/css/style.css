@@ -361,10 +361,10 @@ input:-webkit-autofill {
 		max-width: 880px;
 		max-height: 100%;
 		margin: 15px;
-		overflow-y: auto;
 		background-color: #202020;
 	}
 	&__body {
+		overflow-y: auto;
 		color: rgba(255, 255, 255, 0.54);
 	}
 	&__header, &__footer {
