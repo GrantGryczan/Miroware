@@ -39,6 +39,7 @@
 			if(!signupDialog.form.elements.email.value) {
 				signupDialog.form.elements.email.value = loginForm.elements.email.value;
 			}
+			signupDialog.form.elements.name.focus();
 		}
 	});
 })();
