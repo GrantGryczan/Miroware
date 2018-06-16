@@ -15,7 +15,7 @@ if(this.socialicons) {
 		for(const size of sizes) {
 			(size < 24 ? smallSizes : largeSizes).push(size);
 		}
-		const bestOfSizes = Math[largeSizes.length ? "min" : "max"].apply(null, largeSizes.length ? largeSizes : smallSizes);
+		const bestOfSizes = Math[largeSizes.length ? "min" : "max"](...(largeSizes.length ? largeSizes : smallSizes));
 		return size ? size !== testSizes([size, bestOfSizes]) && bestOfSizes : bestOfSizes;
 	};
 	this.value = html`
