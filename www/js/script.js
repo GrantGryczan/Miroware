@@ -163,7 +163,14 @@
 				throw new MiroError("The `buttons` parameter must be an array if it is defined.");
 			}
 			if(typeof body === "string") {
-				body = document.createTextNode(body);
+				body = document.createElement("span");
+				const lines = body.split("\n");
+				for(let i = 0; i < lines.length; i++) {
+					if(i !== 0) {
+						body.appendChild(document.createElement("br"));
+					}
+					body.appendChild(document.createTextNode(lines[i]));
+				}
 			} else if(!(body instanceof Node)) {
 				throw new MiroError("The `body` parameter must be a string or a DOM node.");
 			}
@@ -452,7 +459,7 @@
 	});
 	Miro.checkSuper = success => {
 		if(!(success instanceof Function)) {
-			throw Miro
+			throw new MiroError("The `success` parameter must be a function.");
 		}
 		Miro.request("GET", "/token").then(Miro.response(req => {
 			if(req.response.super) {

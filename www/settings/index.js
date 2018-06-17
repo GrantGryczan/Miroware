@@ -103,9 +103,12 @@
 	}));
 	form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 	window.onbeforeunload = () => !submit.disabled || undefined;
+	const afterDeletion = Miro.response(() => {
+		location.reload();
+	});
 	const deleteAccount = value => {
 		if(value === 0) {
-			Miro.request("DELETE", "/users/@me");
+			Miro.request("DELETE", "/users/@me").then(afterDeletion);
 		}
 	};
 	document.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(null, () => {
