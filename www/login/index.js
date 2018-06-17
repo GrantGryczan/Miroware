@@ -35,7 +35,7 @@
 	});
 	const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
 		connection: `${service} ${code}`,
-		email: signupDialog.form.elements.email.value
+		email: loginForm.elements.email.value
 	});
 	const loggedIn = () => {
 		location.reload();
