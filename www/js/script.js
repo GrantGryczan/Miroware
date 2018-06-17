@@ -163,8 +163,8 @@
 				throw new MiroError("The `buttons` parameter must be an array if it is defined.");
 			}
 			if(typeof body === "string") {
-				body = document.createElement("span");
 				const lines = body.split("\n");
+				body = document.createElement("span");
 				for(let i = 0; i < lines.length; i++) {
 					if(i !== 0) {
 						body.appendChild(document.createElement("br"));
