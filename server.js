@@ -15,7 +15,7 @@ const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const connect = context => {
 	return new Promise(resolve => {
 		let connection = context.req.body.connection;
-		if(!connection || (connection = connection.split(" ")).length !== 2) {
+		if(typeof connection !== "string" || (connection = connection.split(" ")).length !== 2) {
 			context.value = {
 				error: 'The `connection` value is not in the format "<service> <code>".'
 			};
