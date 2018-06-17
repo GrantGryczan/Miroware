@@ -29,7 +29,7 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<div class="mdc-text-field">
-						<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="32" required>
+						<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="32" autofocus required>
 						<label class="mdc-floating-label" for="name">Username</label>
 						<div class="mdc-line-ripple"></div>
 					</div><br>

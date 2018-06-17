@@ -40,7 +40,6 @@
 			if(!signupDialog.form.elements.email.value) {
 				signupDialog.form.elements.email.value = loginForm.elements.email.value;
 			}
-			setTimeout(signupDialog.form.elements.name.focus.bind(signupDialog.form.elements.name));
 		}
 	});
 })();
