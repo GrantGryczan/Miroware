@@ -14,7 +14,7 @@ this.value += (await load("www/load/body", this)).value;
 this.value += html`
 			<form id="loginForm">
 				<div class="mdc-text-field">
-					<input id="email" name="email" class="mdc-text-field__input" type="email" required>
+					<input id="email" name="email" class="mdc-text-field__input" type="email" autofocus required>
 					<label class="mdc-floating-label" for="email">Email</label>
 					<div class="mdc-line-ripple"></div>
 				</div><br>
