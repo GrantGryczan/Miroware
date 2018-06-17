@@ -16,14 +16,17 @@
 		dialog.body.appendChild(document.createElement("br"));
 		dialog.body.appendChild(captchaElem);
 	};
+	window.captchaCallback = (...args) => console.log(...args);
 	let signupDialog;
-	const send = (service, code) => Miro.request("POST", "/users", {}, {
-		connection: `${service} ${code}`,
-		captcha: captchaInput.value,
-		email: signupDialog.form.elements.email.value,
-		name: signupDialog.form.elements.name.value,
-		birth: signupDialog.form.elements.birth.valueAsNumber
-	});
+	const signUp = (service, code) => {
+		return Miro.request("POST", "/users", {}, {
+			connection: `${service} ${code}`,
+			captcha: captchaInput.value,
+			email: signupDialog.form.elements.email.value,
+			name: signupDialog.form.elements.name.value,
+			birth: signupDialog.form.elements.birth.valueAsNumber
+		});
+	};
 	const loggedIn = () => {
 		location.reload();
 	};
@@ -35,13 +38,15 @@
 				type: "submit"
 			}, "Cancel"]).then(value => {
 				if(value === 0) {
-					Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", send, dialogCallback).then(loggedIn);
+					Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", signUp, dialogCallback).then(loggedIn);
 				}
 			});
 			if(!signupDialog.form.elements.email.value) {
 				signupDialog.form.elements.email.value = loginForm.elements.email.value;
 			}
 			setTimeout(signupDialog.form.elements.name.focus.bind(signupDialog.form.elements.name));
+		} else {
+			
 		}
 	});
 })();
