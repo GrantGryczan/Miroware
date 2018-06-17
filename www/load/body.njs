@@ -1,6 +1,6 @@
 this.value = html`
 	</head>
-	<body class="mdc-typography${this.in ? " in" : ""}">
+	<body class="mdc-typography">
 		<div id="container">
 			<header class="mdc-top-app-bar mdc-elevation--z2">
 				<div class="mdc-top-app-bar__row">

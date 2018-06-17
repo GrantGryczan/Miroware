@@ -22,43 +22,6 @@ if(!isMe) {
 }
 if(user) {
 	if(isMe) {
-		const notIn = this.in === false;
-		if(notIn) {
-			if(this.req.body.captcha === undefined) {
-				this.value = {
-					error: "If signup is incomplete, you must define a `captcha` value."
-				};
-				this.status = 400;
-				this.done();
-				return;
-			} else if(typeof this.req.body.captcha === "string") {
-				let success = false;
-				try {
-					({success} = JSON.parse(await request.post("https://www.google.com/recaptcha/api/siteverify", {
-						form: {
-							secret: youKnow.captcha.secret,
-							response: this.req.body.captcha,
-							remoteip: this.req.ip
-						}
-					})));
-				} catch(err) {}
-				if(!success) {
-					this.value = {
-						error: "The CAPTCHA challenge was failed."
-					};
-					this.status = 422;
-					this.done();
-					return;
-				}
-			} else {
-				this.value = {
-					error: "The `captcha` value must be a string."
-				};
-				this.status = 400;
-				this.done();
-				return;
-			}
-		}
 		if(this.req.body.name !== undefined) {
 			if(typeof this.req.body.name === "string") {
 				this.req.body.name = this.req.body.name.trim();
@@ -99,44 +62,28 @@ if(user) {
 				this.done();
 				return;
 			}
-		} else if(notIn) {
-			this.value = {
-				error: "If signup is incomplete, you must define a `name` value."
-			};
-			this.status = 400;
-			this.done();
-			return;
 		}
-		if(this.req.body.birth !== undefined) {
-			if(typeof this.req.body.birth === "number") {
-				if(this.req.body.birth < -8640000000000000) {
-					this.value = {
-						error: "Nobody is that old."
-					};
-					this.status = 400;
-					this.done();
-					return;
-				} else if(this.req.body.birth > this.now - 409968000000) {
-					this.value = {
-						error: "You must be at least 13 years of age to sign up."
-					};
-					this.status = 400;
-					this.done();
-					return;
-				} else {
-					this.update.$set.birth = this.req.body.birth;
-				}
-			} else {
+		if(typeof this.req.body.birth === "number") {
+			if(this.req.body.birth < -8640000000000000) {
 				this.value = {
-					error: "The `birth` value must be a number."
+					error: "Nobody is that old."
 				};
 				this.status = 400;
 				this.done();
 				return;
+			} else if(this.req.body.birth - this.now > -409968000000) {
+				this.value = {
+					error: "You must be at least 13 years of age to sign up."
+				};
+				this.status = 400;
+				this.done();
+				return;
+			} else {
+				this.update.$set.birth = this.req.body.birth;
 			}
-		} else if(notIn) {
+		} else {
 			this.value = {
-				error: "If signup is incomplete, you must define a `birth` value."
+				error: "The `birth` value must be a number."
 			};
 			this.status = 400;
 			this.done();
@@ -176,9 +123,6 @@ if(user) {
 				this.done();
 				return;
 			}
-		}
-		if(notIn) {
-			this.update.$set.created = this.now;
 		}
 	} else {
 		this.value = {

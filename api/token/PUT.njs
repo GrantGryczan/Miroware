@@ -1,7 +1,7 @@
 if(this.token) {
 	if(this.token.scope <= 0) {
 		if(typeof this.req.body.connection === "string") {
-			connect(this, this.req.body.connection).then(data => {
+			connect(this).then(data => {
 				validateConnection(this, data).then(() => {
 					this.updatePouch.$set["pouch.$.super"] = this.now;
 					this.done();

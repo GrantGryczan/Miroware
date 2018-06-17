@@ -12,16 +12,12 @@ const production = process.argv[2] === "production";
 const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
-const connect = (context, connectionString) => {
+const connect = context => {
 	return new Promise(resolve => {
-		let input = "`X-Miro-Connection` header";
-		if(connectionString) {
-			input = "`connection` value";
-		}
-		let connection = connectionString || context.req.get("X-Miro-Connection");
+		let connection = context.req.body.connection;
 		if(!connection || (connection = connection.split(" ")).length !== 2) {
 			context.value = {
-				error: `The ${input} is not in the format "<service> <code>".`
+				error: 'The `connection` value is not in the format "<service> <code>".'
 			};
 			context.status = 400;
 			context.done();
@@ -87,7 +83,7 @@ const connect = (context, connectionString) => {
 			}).catch(catchError);
 		} else {
 			context.value = {
-				error: `The service of the ${input} is invalid.`
+				error: "The service of the `connection` value is invalid."
 			};
 			context.status = 400;
 			context.done();

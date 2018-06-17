@@ -9,6 +9,84 @@ if(testEmail(this.req.body.email)) {
 		this.done();
 	} else {
 		connect(this).then(async data => {
+			if(typeof this.req.body.captcha === "string") {
+				let success = false;
+				try {
+					({success} = JSON.parse(await request.post("https://www.google.com/recaptcha/api/siteverify", {
+						form: {
+							secret: youKnow.captcha.secret,
+							response: this.req.body.captcha,
+							remoteip: this.req.ip
+						}
+					})));
+				} catch(err) {}
+				if(!success) {
+					this.value = {
+						error: "The CAPTCHA challenge was failed."
+					};
+					this.status = 422;
+					this.done();
+					return;
+				}
+			} else {
+				this.value = {
+					error: "The `captcha` value must be a string."
+				};
+				this.status = 400;
+				this.done();
+				return;
+			}
+			if(typeof this.req.body.name === "string") {
+				this.req.body.name = this.req.body.name.trim();
+				if(this.req.body.name.length < 1) {
+					this.value = {
+						error: "The `name` value must be at least 1 character long."
+					};
+					this.status = 400;
+					this.done();
+					return;
+				} else if(this.req.body.name.length > 32) {
+					this.value = {
+						error: "The `name` value must be at most 32 characters long."
+					};
+					this.status = 400;
+					this.done();
+					return;
+				}
+			} else {
+				this.value = {
+					error: "The `name` value must be a string."
+				};
+				this.status = 400;
+				this.done();
+				return;
+			}
+			if(typeof this.req.body.birth === "number") {
+				if(this.req.body.birth < -8640000000000000) {
+					this.value = {
+						error: "Nobody is that old."
+					};
+					this.status = 400;
+					this.done();
+					return;
+				} else if(this.req.body.birth - this.now > -409968000000) {
+					this.value = {
+						error: "You must be at least 13 years of age to sign up."
+					};
+					this.status = 400;
+					this.done();
+					return;
+				} else {
+					this.update.$set.birth = this.req.body.birth;
+				}
+			} else {
+				this.value = {
+					error: "The `birth` value must be a number."
+				};
+				this.status = 400;
+				this.done();
+				return;
+			}
 			const token = youKnow.crypto.token();
 			const salt = youKnow.crypto.salt();
 			const insertData = {
