@@ -12,6 +12,7 @@
 		input.addEventListener("click", setSubmit);
 	}
 	const dialogCallback = dialog => {
+		dialog.body.appendChild(document.createElement("br"));
 		dialog.body.appendChild(captchaElem);
 	};
 	let signupDialog;
