@@ -10,10 +10,16 @@
 	for(const input of submits) {
 		input.addEventListener("click", setSubmit);
 	}
+	const enableFormOnAuthCancel = value => {
+		if(value !== -2) {
+			Miro.formState(loginForm, true);
+		}
+	};
 	const dialogCallback = dialog => {
 		dialog.body.appendChild(document.createElement("br"));
 		dialog.body.appendChild(document.createElement("br"));
 		dialog.body.appendChild(captchaElem);
+		dialog.then(enableFormOnAuthCancel);
 	};
 	let signupDialog;
 	const signUp = (service, code) => {
@@ -35,6 +41,7 @@
 	};
 	loginForm.addEventListener("submit", evt => {
 		evt.preventDefault();
+		Miro.formState(loginForm, false);
 		if(signup) {
 			signupDialog = new Miro.dialog("Sign up", signupForm, [{
 				text: "Okay",
@@ -42,6 +49,8 @@
 			}, "Cancel"]).then(value => {
 				if(value === 0) {
 					Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", signUp, dialogCallback).then(loggedIn);
+				} else {
+					Miro.formState(loginForm, true);
 				}
 			});
 			if(!signupDialog.form.elements.email.value) {
