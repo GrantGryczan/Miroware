@@ -33,7 +33,6 @@
 		name: signupDialog.form.elements.name.value,
 		birth: signupDialog.form.elements.birth.valueAsNumber
 	});
-	signUp._async = true;
 	const loggedIn = () => {
 		location.reload();
 	};
