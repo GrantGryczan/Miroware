@@ -269,11 +269,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		}],
 		loadEnd: [async context => {
-			if(context.updatePouch) {
-				users.updateOne(context.pouchFilter, context.updatePouch);
-			}
 			if(context.update) {
 				users.updateOne(context.userFilter, context.update);
+				if(context.updatePouch) {
+					users.updateOne(context.pouchFilter, context.updatePouch);
+				}
 			}
 		}]
 	});

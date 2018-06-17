@@ -447,6 +447,21 @@
 			resolveAuth = resolve;
 		});
 	};
+	const putToken = (service, code) => Miro.request("PUT", "/token", {}, {
+		connection: `${service} ${code}`
+	});
+	Miro.checkSuper = success => {
+		if(!(success instanceof Function)) {
+			throw Miro
+		}
+		Miro.request("GET", "/token").then(Miro.response(req => {
+			if(req.response.super) {
+				success(req);
+			} else {
+				Miro.auth("Security", "You must confirm the validity of your credentials before continuing.", putToken).then(success);
+			}
+		}));
+	};
 	const userMeta = document.querySelector("meta[name='user']");
 	if(userMeta && (Miro.user = JSON.parse(userMeta.getAttribute("content")))) {
 		Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location)));

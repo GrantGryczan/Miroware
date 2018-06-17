@@ -35,7 +35,7 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<br>
-					<button id="save" name="save" class="mdc-button mdc-button--raised mdc-ripple" type="submit" disabled>Save</button>
+					<button id="save" class="mdc-button mdc-button--raised mdc-ripple spaced" type="submit" disabled>Save</button> <button id="delete" class="mdc-button mdc-ripple spaced">Delete</button>
 				</form>`;
 this.value += (await load("www/load/pagefoot", this)).value;
 this.value += (await load("www/load/belt", this)).value;
