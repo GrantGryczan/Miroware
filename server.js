@@ -104,15 +104,19 @@ const validateConnection = (context, data) => {
 	});
 };
 const inputDate = date => {
-	let day = String(date.getDate());
-	if(day.length < 2) {
-		day = `0${day}`;
+	let year = String(date.getFullYear());
+	if(year.length < 4) {
+		year = `0${year}`;
 	}
 	let month = String(date.getMonth() + 1);
 	if(month.length < 2) {
 		month = `0${month}`;
 	}
-	return `${date.getFullYear()}-${month}-${day}`;
+	let day = String(date.getDate());
+	if(day.length < 2) {
+		day = `0${day}`;
+	}
+	return `${year}-${month}-${day}`;
 };
 const notLoggedIn = context => {
 	if(context.user) {
