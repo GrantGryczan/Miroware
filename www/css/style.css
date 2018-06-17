@@ -377,3 +377,8 @@ input:-webkit-autofill {
 		color: #a1a1a1;
 	}
 }
+.grecaptcha-badge {
+	border-radius: 3px;
+	box-shadow: none !important;
+	overflow: hidden;
+}
