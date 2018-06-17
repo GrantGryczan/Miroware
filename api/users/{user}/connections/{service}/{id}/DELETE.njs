@@ -26,7 +26,7 @@ if(user) {
 			if(this.user.connections.some(connection => connection.service === this.params.service && connection.id === this.params.id)) {
 				if(this.user.connections.length === 1) {
 					this.value = {
-						error: "You probably need to be able to log in."
+						error: "You probably need to be able to log in with at least one connection."
 					};
 					this.status = 422;
 				} else {
