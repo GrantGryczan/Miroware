@@ -318,10 +318,9 @@
 			}
 		}
 	};
-	const _request = Symbol("request");
 	const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
 	Miro.request = (method, url, headers, body) => {
-		const request = new Promise((resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			method = typeof method === "string" ? method.toUpperCase() : "GET";
 			if(typeof url === "string") {
 				url = apiOrigin + (url.startsWith("/") ? "" : "/") + url;
@@ -351,8 +350,6 @@
 			};
 			req.send((body && JSON.stringify(body)) || undefined);
 		});
-		request[_request] = true;
-		return request;
 	};
 	let authDialog;
 	let sendAuth;
@@ -374,12 +371,8 @@
 			new Promise(auth).then(code => {
 				try {
 					Miro.block(false);
-					setTimeout(async () => {
-						let sending = sendAuth(auth.name, code);
-						if(!sendAuth[_request]) {
-							sendAuth = await sendAuth;
-						}
-						sendAuth.then(closeAndResolveAuth);
+					setTimeout(() => {
+						sendAuth(auth.name, code).then(closeAndResolveAuth);
 					});
 				} catch(err) {
 					throw new MiroError("The `send` parameter must be a promise (of `Miro.request` or which resolves a `Miro.request`).");
