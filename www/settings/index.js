@@ -112,6 +112,6 @@
 		}
 	};
 	document.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(null, () => {
-		new Miro.dialog("Delete", "Are you sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"], deleteAccount);
+		new Miro.dialog("Delete", "Are you sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(deleteAccount);
 	}));
 })();
