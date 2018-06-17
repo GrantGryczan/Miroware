@@ -27,6 +27,7 @@
 					birth: signupDialog.form.elements.birth.valueAsNumber
 				}).then(resolve);
 			};
+			grecaptcha.execute();
 		});
 	};
 	const loggedIn = () => {

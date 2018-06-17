@@ -34,8 +34,8 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<div class="mdc-text-field">
-						<input id="birthday" name="birthday" class="mdc-text-field__input" type="date" max="${inputDate(new Date())}" required>
-						<label class="mdc-floating-label alwaysFloat" for="birthday">Birthday</label>
+						<input id="birth" name="birth" class="mdc-text-field__input" type="date" max="${inputDate(new Date())}" required>
+						<label class="mdc-floating-label alwaysFloat" for="birth">Birthday</label>
 						<div class="mdc-line-ripple"></div>
 					</div>
 				</span>
