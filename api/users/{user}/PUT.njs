@@ -63,31 +63,33 @@ if(user) {
 				return;
 			}
 		}
-		if(typeof this.req.body.birth === "number") {
-			if(this.req.body.birth < -8640000000000000) {
-				this.value = {
-					error: "Nobody is that old."
-				};
-				this.status = 400;
-				this.done();
-				return;
-			} else if(this.req.body.birth - this.now > -409968000000) {
-				this.value = {
-					error: "You must be at least 13 years of age to sign up."
-				};
-				this.status = 400;
-				this.done();
-				return;
+		if(this.req.body.birth !== undefined) {
+			if(typeof this.req.body.birth === "number") {
+				if(this.req.body.birth < -8640000000000000) {
+					this.value = {
+						error: "Nobody is that old."
+					};
+					this.status = 400;
+					this.done();
+					return;
+				} else if(this.req.body.birth - this.now > -409968000000) {
+					this.value = {
+						error: "You must be at least 13 years of age to sign up."
+					};
+					this.status = 400;
+					this.done();
+					return;
+				} else {
+					this.update.$set.birth = this.req.body.birth;
+				}
 			} else {
-				this.update.$set.birth = this.req.body.birth;
+				this.value = {
+					error: "The `birth` value must be a number."
+				};
+				this.status = 400;
+				this.done();
+				return;
 			}
-		} else {
-			this.value = {
-				error: "The `birth` value must be a number."
-			};
-			this.status = 400;
-			this.done();
-			return;
 		}
 		if(this.req.body.email !== undefined) {
 			if(typeof this.req.body.email === "string") {
