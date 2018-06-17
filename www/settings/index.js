@@ -34,12 +34,8 @@
 		changed.length = 0;
 		submit.disabled = true;
 	};
-	const putResponse = Miro.response(() => {
-		setTimeout(setForm);
-	});
-	const enableForm = () => {
-		Miro.formState(form, true);
-	};
+	const putResponse = Miro.response(setTimeout.bind(setForm));
+	const enableForm = Miro.formState.bind(null, form, true);
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
 		const body = {};
