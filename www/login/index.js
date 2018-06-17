@@ -22,7 +22,7 @@
 		captcha: captchaInput.value,
 		email: signupDialog.form.elements.email.value,
 		name: signupDialog.form.elements.name.value,
-		birthday: signupDialog.form.elements.birthday.valueAsNumber
+		birth: signupDialog.form.elements.birth.valueAsNumber
 	});
 	const loggedIn = () => {
 		location.reload();
