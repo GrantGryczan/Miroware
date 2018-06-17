@@ -33,6 +33,10 @@
 		name: signupDialog.form.elements.name.value,
 		birth: signupDialog.form.elements.birth.valueAsNumber
 	});
+	const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
+		connection: `${service} ${code}`,
+		email: signupDialog.form.elements.email.value
+	});
 	const loggedIn = () => {
 		location.reload();
 	};
@@ -45,7 +49,7 @@
 				type: "submit"
 			}, "Cancel"]).then(value => {
 				if(value === 0) {
-					Miro.auth(signup ? "Sign up" : "Log in", signup ? "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up." : "Choose a login method.", signUp, dialogCallback).then(loggedIn);
+					Miro.auth("Sign up", "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback).then(loggedIn);
 				} else {
 					Miro.formState(loginForm, true);
 				}
@@ -55,7 +59,7 @@
 			}
 			setTimeout(signupDialog.form.elements.name.focus.bind(signupDialog.form.elements.name));
 		} else {
-			
+			Miro.auth("Log in", "Choose a login method.", logIn, dialogCallback).then(loggedIn);
 		}
 	});
 })();
