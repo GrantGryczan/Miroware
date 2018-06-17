@@ -106,9 +106,9 @@ if(testEmail(this.req.body.email)) {
 				unverified: null,
 				emailCode: null,
 				publicEmail: false,
-				name: null,
+				name: this.req.body.name,
 				nameCooldown: 0,
-				birth: null,
+				birth: this.req.body.birth,
 				desc: "",
 				icon: null
 			};
