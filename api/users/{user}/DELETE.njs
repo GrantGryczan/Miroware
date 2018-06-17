@@ -23,11 +23,9 @@ if(!isMe) {
 if(user) {
 	if(isMe) {
 		if(this.now - this.token.super < 300000) {
-			connect(this).then(data => {
-				this.update = false;
-				users.deleteOne(this.userFilter);
-				this.done();
-			});
+			this.update = false;
+			users.deleteOne(this.userFilter);
+			this.done();
 		} else {
 			this.value = {
 				error: "Your token is not in super mode."
