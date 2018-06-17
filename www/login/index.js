@@ -26,6 +26,7 @@
 	const loggedIn = () => {
 		location.reload();
 	};
+	const focusOnName = signupDialog.form.elements.name.focus.bind(signupDialog.form.elements.name);
 	loginForm.addEventListener("submit", evt => {
 		evt.preventDefault();
 		if(signup) {
@@ -40,7 +41,7 @@
 			if(!signupDialog.form.elements.email.value) {
 				signupDialog.form.elements.email.value = loginForm.elements.email.value;
 			}
-			signupDialog.form.elements.name.focus();
+			setTimeout(focusOnName);
 		}
 	});
 })();
