@@ -76,8 +76,6 @@ if(testEmail(this.req.body.email)) {
 					this.status = 400;
 					this.done();
 					return;
-				} else {
-					this.update.$set.birth = this.req.body.birth;
 				}
 			} else {
 				this.value = {

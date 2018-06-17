@@ -22,20 +22,18 @@
 		dialog.then(enableFormOnAuthCancel);
 	};
 	let signupDialog;
-	const signUp = (service, code) => {
-		return new Promise(resolve => {
-			window.captchaCallback = captchaValue => {
-				Miro.request("POST", "/users", {}, {
-					connection: `${service} ${code}`,
-					captcha: captchaValue,
-					email: signupDialog.form.elements.email.value,
-					name: signupDialog.form.elements.name.value,
-					birth: signupDialog.form.elements.birth.valueAsNumber
-				}).then(resolve);
-			};
-			grecaptcha.execute();
-		});
+	const executeCaptcha = resolve => {
+		window.captchaCallback = resolve;
+		grecaptcha.execute();
 	};
+	const signUp = async (service, code) => Miro.request("POST", "/users", {}, {
+		connection: `${service} ${code}`,
+		captcha: await new Promise(executeCaptcha),
+		email: signupDialog.form.elements.email.value,
+		name: signupDialog.form.elements.name.value,
+		birth: signupDialog.form.elements.birth.valueAsNumber
+	});
+	signUp._async = true;
 	const loggedIn = () => {
 		location.reload();
 	};
