@@ -254,7 +254,7 @@ input:-webkit-autofill {
 			color: #e96363;
 		}
 		&.mdc-text-field--textarea {
-			&, & textarea {
+			&, & .mdc-text-field__input:focus {
 				border-color: #e96363;
 			}
 		}
