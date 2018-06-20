@@ -285,6 +285,9 @@ input:-webkit-autofill {
 			}
 		}
 	}
+	&--focused:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) .mdc-floating-label {
+		color: #e96363;
+	}
 	&--invalid:not(.mdc-text-field--disabled) {
 		.mdc-text-field__input {
 			border-bottom-color: #b00020;
