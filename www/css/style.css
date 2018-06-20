@@ -25,7 +25,7 @@ body {
 	margin: 0;
 	overflow: hidden;
 	background-color: #202020;
-	color: #ffffff;
+	color: rgba(255, 255, 255, 0.87);
 }
 .hidden {
 	display: none;
@@ -72,7 +72,7 @@ body {
 	&:enabled {
 		color: rgba(255, 255, 255, 0.6);
 		&:hover, &:focus {
-			color: #ffffff;
+			color: rgba(255, 255, 255, 0.87);
 		}
 	}
 	&:disabled {
@@ -197,7 +197,7 @@ body {
 }
 .mdc-button {
 	&:enabled {
-		color: #ffffff;
+		color: rgba(255, 255, 255, 0.87);
 	}
 	&--raised, &--unelevated {
 		&:enabled {
@@ -208,7 +208,7 @@ body {
 		&:enabled {
 			border-color: rgba(255, 255, 255, 0.6);
 			&:hover, &:focus {
-				border-color: #ffffff;
+				border-color: rgba(255, 255, 255, 0.87);
 			}
 		}
 		&:disabled {
@@ -295,7 +295,7 @@ input:-webkit-autofill {
 			.mdc-text-field__input {
 				border-bottom-color: rgba(255, 255, 255, 0.5);
 				&:hover {
-					border-bottom-color: #ffffff;
+					border-bottom-color: rgba(255, 255, 255, 0.87);
 				}
 			}
 			.mdc-floating-label {
