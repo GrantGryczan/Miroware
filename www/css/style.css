@@ -250,6 +250,9 @@ input:-webkit-autofill {
 			cursor: default;
 		}
 	}
+	&--focused:not(&--disabled):not(&--invalid) .mdc-floating-label {
+		color: #e96363;
+	}
 	&--disabled .mdc-floating-label {
 		color: rgba(255, 255, 255, 0.37);
 	}
@@ -277,9 +280,6 @@ input:-webkit-autofill {
 				color: rgba(255, 255, 255, 0.6);
 			}
 		}
-	}
-	&--focused:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) .mdc-floating-label {
-		color: #e96363;
 	}
 	&--invalid:not(.mdc-text-field--disabled) {
 		.mdc-text-field__input {
