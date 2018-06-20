@@ -39,7 +39,7 @@ if(this.user) {
 								<i class="material-icons mdc-list-item__graphic">settings</i> Settings
 							</a>
 							<a class="mdc-list-item${this.req.decodedPath === myProfile ? " visiting" : `" href="${myProfile}`}">
-								<i class="material-icons mdc-list-item__graphic">account_circle</i> Profile
+								<i class="material-icons mdc-list-item__graphic">account_box</i> Profile
 							</a>
 							<a id="logOut" class="mdc-list-item" href="javascript:;">
 								<i class="material-icons mdc-list-item__graphic">person</i> Log out
