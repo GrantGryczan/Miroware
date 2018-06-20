@@ -249,10 +249,8 @@ input:-webkit-autofill {
 			transform: translateY(-100%) scale(0.75);
 		}
 	}
-	&--textarea:not(&--disabled) {
-		&, & .mdc-text-field__input:focus {
-			border-color: rgba(255, 255, 255, 0.73);
-		}
+	&:not(&--disabled) .mdc-floating-label {
+		color: rgba(255, 255, 255, 0.6);
 	}
 	&--focused:not(&--disabled) {
 		&:not(.mdc-text-field--invalid) .mdc-floating-label {
@@ -262,6 +260,11 @@ input:-webkit-autofill {
 			&, & .mdc-text-field__input:focus {
 				border-color: #e96363;
 			}
+		}
+	}
+	&--textarea:not(&--disabled) {
+		&, & .mdc-text-field__input:focus {
+			border-color: rgba(255, 255, 255, 0.73);
 		}
 	}
 	&--disabled .mdc-floating-label {
