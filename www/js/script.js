@@ -101,15 +101,15 @@
 		container.classList[state ? "add" : "remove"]("hidden");
 	};
 	Miro.value = input => {
-		if(!(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement)) {
-			throw new MiroError("The `input` parameter must be an HTML input or textarea element.");
+		if(!(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement)) {
+			throw new MiroError("The `input` parameter must be an HTML `input`, `textarea`, or `select` element.");
 		}
 		return input.type === "checkbox" ? input.checked : (input.type === "date" ? input.valueAsNumber : input.value);
 	};
 	const mdcTypes = ["checkbox", "radio", "select", "slider", "text-field"];
 	Miro.inputState = (input, state) => {
 		if(!(input instanceof HTMLInputElement)) {
-			throw new MiroError("The `input` parameter must be an HTML input element.");
+			throw new MiroError("The `input` parameter must be an HTML `input` element.");
 		}
 		input.disabled = !state;
 		for(const mdcType of mdcTypes) {
@@ -122,7 +122,7 @@
 	const _prevDisabled = Symbol("prevDisabled");
 	Miro.formState = (form, state) => {
 		if(!(form instanceof HTMLFormElement)) {
-			throw new MiroError("The `form` parameter must be an HTML form element.");
+			throw new MiroError("The `form` parameter must be an HTML `form` element.");
 		}
 		state = !state;
 		if(form[_disabled] !== state) {

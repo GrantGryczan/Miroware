@@ -2,9 +2,15 @@
 	const form = document.querySelector("#settings");
 	const submit = form.querySelector("#save");
 	const _prev = Symbol("prev");
+	const _element = Symbol("element");
+	for(const input of form.elements) {
+		input[_element] = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
+	}
 	const savePrevs = () => {
 		for(const input of form.elements) {
-			input[_prev] = Miro.value(input);
+			if(input[_element]) {
+				input[_prev] = Miro.value(input);
+			}
 		}
 	};
 	savePrevs();
@@ -12,13 +18,15 @@
 	const onInput = evt => {
 		changed.length = 0;
 		for(const input of form.elements) {
-			if(input.checkValidity()) {
-				if(input[_prev] !== Miro.value(input)) {
-					changed.push(input);
+			if(input[_element]) {
+				if(input.checkValidity()) {
+					if(input[_prev] !== Miro.value(input)) {
+						changed.push(input);
+					}
+				} else {
+					changed.length = 0;
+					break;
 				}
-			} else {
-				changed.length = 0;
-				break;
 			}
 		}
 		submit.disabled = !changed.length;
