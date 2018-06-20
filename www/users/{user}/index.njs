@@ -1,7 +1,6 @@
 const thisID = this.user && String(this.user._id);
-console.log(this.params.user);
 if(this.user && this.params.user === "@me") {
-	this.redirect = `/user/${this.user._id}/`;
+	this.redirect = `/users/${this.user._id}/`;
 	this.done();
 	return;
 }
