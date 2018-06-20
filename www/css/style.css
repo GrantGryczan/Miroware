@@ -249,6 +249,11 @@ input:-webkit-autofill {
 			transform: translateY(-100%) scale(0.75);
 		}
 	}
+	&--textarea:not(&--disabled) {
+		&, & .mdc-text-field__input:focus {
+			border-color: rgba(255, 255, 255, 0.73);
+		}
+	}
 	&--focused:not(&--disabled) {
 		&:not(.mdc-text-field--invalid) .mdc-floating-label {
 			color: #e96363;
