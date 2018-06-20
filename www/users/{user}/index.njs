@@ -30,8 +30,6 @@ if(user) {
 				$${user.desc}`;
 	this.value += (await load("www/load/pagefoot", this)).value;
 	this.value += (await load("www/load/belt", this)).value;
-	this.value += html`
-		<script src="index.js"></script>`;
 	this.value += (await load("www/load/foot", this)).value;
 } else {
 	await load("error/404", this);
