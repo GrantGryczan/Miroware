@@ -16,7 +16,7 @@
 		}
 	};
 	const dialogCallback = dialog => {
-		if(!signup) {
+		if(signup) {
 			dialog.body.appendChild(document.createElement("br"));
 			dialog.body.appendChild(document.createElement("br"));
 			dialog.body.appendChild(captchaElem);
