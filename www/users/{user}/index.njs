@@ -32,7 +32,7 @@ if(user) {
 				</div>
 				<br>
 				<br>
-				<small>(Profiles, among other features, were deemed comparatively insignificant. Development on more practical services takes higher priority.)</small>`;
+				<small>(Profiles, among other features, were deemed comparatively insignificant. Development on more practical services currently takes higher priority.)</small>`;
 	this.value += (await load("www/load/pagefoot", this)).value;
 	this.value += (await load("www/load/belt", this)).value;
 	this.value += (await load("www/load/foot", this)).value;
