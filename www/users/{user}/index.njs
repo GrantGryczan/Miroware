@@ -20,6 +20,6 @@ if(user) {
 		<script src="index.js"></script>`;
 	this.value += (await load("www/load/foot", this)).value;
 } else {
-	load("error/404", this);
+	await load("error/404", this);
 }
 this.done();
