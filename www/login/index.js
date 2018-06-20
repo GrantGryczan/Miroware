@@ -16,9 +16,11 @@
 		}
 	};
 	const dialogCallback = dialog => {
-		dialog.body.appendChild(document.createElement("br"));
-		dialog.body.appendChild(document.createElement("br"));
-		dialog.body.appendChild(captchaElem);
+		if(!signup) {
+			dialog.body.appendChild(document.createElement("br"));
+			dialog.body.appendChild(document.createElement("br"));
+			dialog.body.appendChild(captchaElem);
+		}
 		dialog.then(enableFormOnAuthCancel);
 	};
 	let signupDialog;
