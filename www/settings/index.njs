@@ -36,7 +36,7 @@ this.value += html`
 					</div><br>
 					<br>
 					<div class="mdc-text-field mdc-text-field--textarea">
-						<textarea id="desc" name="desc" class="mdc-text-field__input" maxlength="16384" required></textarea>
+						<textarea id="desc" name="desc" class="mdc-text-field__input" maxlength="16384"></textarea>
 						<label class="mdc-floating-label alwaysFloat" for="desc">Description</label>
 						<div class="mdc-line-ripple"></div>
 					</div><br>
