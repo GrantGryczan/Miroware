@@ -1,3 +1,7 @@
+const thisID = this.user && String(this.user._id);
+if(this.user && this.params.user === "@me") {
+	this.redirect = `/user/${this.user._id}`;
+}
 const user = await users.findOne({
 	_id: this.params.user
 });
