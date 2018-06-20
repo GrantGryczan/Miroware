@@ -11,7 +11,7 @@ if(!isMe) {
 	try {
 		userID = ObjectID(this.params.user);
 	} catch(err) {
-		await load("error/400", this);
+		Object.assign(this, await load("error/400", this));
 		this.done();
 		return;
 	}
@@ -32,6 +32,6 @@ if(user) {
 	this.value += (await load("www/load/belt", this)).value;
 	this.value += (await load("www/load/foot", this)).value;
 } else {
-	await load("error/404", this);
+	Object.assign(this, await load("error/404", this));
 }
 this.done();
