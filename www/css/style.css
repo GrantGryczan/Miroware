@@ -250,9 +250,14 @@ input:-webkit-autofill {
 			cursor: default;
 		}
 	}
-	&--disabled {
-		.mdc-floating-label {
-			color: rgba(255, 255, 255, 0.37);
+	&--disabled .mdc-floating-label {
+		color: rgba(255, 255, 255, 0.37);
+	}
+	&--textarea {
+		&, &.mdc-text-field--disabled {
+			.mdc-floating-label {
+				background-color: transparent
+			}
 		}
 	}
 }
