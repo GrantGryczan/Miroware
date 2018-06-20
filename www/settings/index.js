@@ -1,10 +1,9 @@
 (() => {
 	const form = document.querySelector("#settings");
-	const inputs = form.querySelectorAll("input");
 	const submit = form.querySelector("#save");
 	const _prev = Symbol("prev");
 	const savePrevs = () => {
-		for(const input of inputs) {
+		for(const input of form.elements) {
 			input[_prev] = Miro.value(input);
 		}
 	};
@@ -12,7 +11,7 @@
 	const changed = [];
 	const onInput = evt => {
 		changed.length = 0;
-		for(const input of inputs) {
+		for(const input of form.elements) {
 			if(input.checkValidity()) {
 				if(input[_prev] !== Miro.value(input)) {
 					changed.push(input);
