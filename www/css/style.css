@@ -250,7 +250,7 @@ input:-webkit-autofill {
 		}
 	}
 	&--focused:not(&--disabled) {
-		:not(.mdc-text-field--invalid) .mdc-floating-label {
+		&:not(.mdc-text-field--invalid) .mdc-floating-label {
 			color: #e96363;
 		}
 		&.mdc-text-field--textarea {
