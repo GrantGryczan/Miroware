@@ -12,6 +12,7 @@ const production = process.argv[2] === "production";
 const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
+const lineBreaks = /\n/g;
 const connect = context => {
 	return new Promise(resolve => {
 		let connection = context.req.body.connection;

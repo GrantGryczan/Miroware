@@ -28,7 +28,7 @@ if(user) {
 	this.value += (await load("www/load/pagehead", this)).value;
 	this.value += html`
 				<div id="desc">
-					$${user.desc}
+					${html`$${user.desc}`.replace(lineBreaks, "<br>")}
 				</div>
 				<br>
 				<br>
