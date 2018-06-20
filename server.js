@@ -197,52 +197,64 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			req.next();
 		}, cookieParser(youKnow.cookie.secret)],
 		loadStart: [async context => {
-			context.now = Date.now();
-			const auth = context.req.auth || (context.req.signedCookies && context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));
-			if(auth) {
-				try {
-					context.user = await users.findOne(context.userFilter = {
-						_id: ObjectID(auth[0])
-					});
-				} catch(err) {
-					if(context.req.signedCookies.auth) {
-						context.res.clearCookie("auth", clearCookieOptions);
-					} else {
-						context.value = {
-							error: err.message
-						};
-						context.status = 400;
-						return false;
+			if(context.depth === 1) {
+				context.now = Date.now();
+				const auth = context.req.auth || (context.req.signedCookies && context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));
+				if(auth) {
+					try {
+						context.user = await users.findOne(context.userFilter = {
+							_id: ObjectID(auth[0])
+						});
+					} catch(err) {
+						if(context.req.signedCookies.auth) {
+							context.res.clearCookie("auth", clearCookieOptions);
+						} else {
+							context.value = {
+								error: err.message
+							};
+							context.status = 400;
+							return false;
+						}
 					}
-				}
-				if(context.user) {
-					context.update = {
-						$pull: {
-							pouch: {
-								expire: {
-									$lte: context.now
+					if(context.user) {
+						context.update = {
+							$pull: {
+								pouch: {
+									expire: {
+										$lte: context.now
+									}
 								}
 							}
-						}
-					};
-					const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
-					const token = context.user.pouch.find(token => token.value.buffer.equals(hash));
-					if(token && context.now < token.expire) {
-						context.token = token;
-						context.update.$set = {
-							updated: context.now,
 						};
-						context.pouchFilter = {
-							...context.userFilter,
-							"pouch.value": hash
-						};
-						context.updatePouch = {
-							$set: {
-								"pouch.$.expire": context.now + cookieOptions.maxAge
+						const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
+						const token = context.user.pouch.find(token => token.value.buffer.equals(hash));
+						if(token && context.now < token.expire) {
+							context.token = token;
+							context.update.$set = {
+								updated: context.now,
+							};
+							context.pouchFilter = {
+								...context.userFilter,
+								"pouch.value": hash
+							};
+							context.updatePouch = {
+								$set: {
+									"pouch.$.expire": context.now + cookieOptions.maxAge
+								}
+							};
+							if(context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {
+								context.res.cookie("auth", context.req.signedCookies.auth, cookieOptions);
 							}
-						};
-						if(context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {
-							context.res.cookie("auth", context.req.signedCookies.auth, cookieOptions);
+						} else {
+							if(context.req.signedCookies.auth) {
+								context.res.clearCookie("auth", clearCookieOptions);
+							} else {
+								context.value = {
+									error: "Authentication failed."
+								};
+								context.status = 401;
+								return false;
+							}
 						}
 					} else {
 						if(context.req.signedCookies.auth) {
@@ -255,21 +267,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							return false;
 						}
 					}
-				} else {
-					if(context.req.signedCookies.auth) {
-						context.res.clearCookie("auth", clearCookieOptions);
-					} else {
-						context.value = {
-							error: "Authentication failed."
-						};
-						context.status = 401;
-						return false;
-					}
 				}
 			}
 		}],
 		loadEnd: [async context => {
-			if(context.update) {
+			if(context.depth === 1 && context.update) {
 				users.updateOne(context.userFilter, context.update);
 				if(context.updatePouch) {
 					users.updateOne(context.pouchFilter, context.updatePouch);
