@@ -254,7 +254,9 @@ input:-webkit-autofill {
 			color: #e96363;
 		}
 		&.mdc-text-field--textarea {
-			border-color: #e96363;
+			&, & textarea {
+				border-color: #e96363;
+			}
 		}
 	}
 	&--disabled .mdc-floating-label {
