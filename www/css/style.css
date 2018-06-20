@@ -247,7 +247,6 @@ input:-webkit-autofill {
 		pointer-events: none;
 		&.alwaysFloat {
 			transform: translateY(-100%) scale(0.75);
-			cursor: default;
 		}
 	}
 	&--focused:not(&--disabled):not(&--invalid) .mdc-floating-label {
