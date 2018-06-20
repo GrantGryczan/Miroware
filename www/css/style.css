@@ -195,12 +195,6 @@ body {
 		}
 	}
 }
-input:-webkit-autofill {
-	&, &:focus {
-		box-shadow: 0 0 0 30px #202020 inset;
-		-webkit-text-fill-color: rgba(255, 255, 255, 0.87);
-	}
-}
 .mdc-button {
 	&:enabled {
 		color: #ffffff;
@@ -238,6 +232,15 @@ input:-webkit-autofill {
 	&:disabled {
 		color: rgba(255, 255, 255, 0.19);
 	}
+}
+input:-webkit-autofill {
+	&, &:focus {
+		box-shadow: 0 0 0 30px #202020 inset;
+		-webkit-text-fill-color: rgba(255, 255, 255, 0.87);
+	}
+}
+textarea {
+	resize: none;
 }
 :not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth).mdc-text-field {
 	&:not(.mdc-text-field--disabled) {

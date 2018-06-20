@@ -35,6 +35,12 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<br>
+					<div class="mdc-text-field mdc-text-field--textarea">
+						<textarea id="desc" name="desc" class="mdc-text-field__input" maxlength="16384" required>
+						<label class="mdc-floating-label alwaysFloat" for="desc">Description</label>
+						<div class="mdc-line-ripple"></div>
+					</div><br>
+					<br>
 					<button id="save" class="mdc-button mdc-button--raised mdc-ripple spaced" type="submit" disabled>Save</button> <button id="delete" class="mdc-button mdc-ripple spaced">Delete</button>
 				</form>`;
 this.value += (await load("www/load/pagefoot", this)).value;

@@ -126,6 +126,28 @@ if(user) {
 				return;
 			}
 		}
+		if(this.req.body.desc !== undefined) {
+			if(typeof this.req.body.desc === "string") {
+				this.req.body.desc = this.req.body.desc.trim();
+				if(this.req.body.name.length > 16384) {
+					this.value = {
+						error: "The `desc` value must be at most 16 KB large."
+					};
+					this.status = 400;
+					this.done();
+					return;
+				} else {
+					this.update.$set.desc = this.req.body.desc;
+				}
+			} else {
+				this.value = {
+					error: "The `desc` value must be a string."
+				};
+				this.status = 400;
+				this.done();
+				return;
+			}
+		}
 	} else {
 		this.value = {
 			error: "You do not have permission to edit that user."

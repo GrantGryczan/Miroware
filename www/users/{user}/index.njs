@@ -25,10 +25,10 @@ if(user) {
 	this.tags = ["account", "user", "profile"];
 	this.value = (await load("www/load/head", this)).value;
 	this.value += (await load("www/load/body", this)).value;
+	this.value += (await load("www/load/pagehead", this)).value;
 	this.value += html`
-			<div id="page">
-				
-			</div>`;
+				$${user.desc}`;
+	this.value += (await load("www/load/pagefoot", this)).value;
 	this.value += (await load("www/load/belt", this)).value;
 	this.value += html`
 		<script src="index.js"></script>`;
