@@ -249,8 +249,13 @@ input:-webkit-autofill {
 			transform: translateY(-100%) scale(0.75);
 		}
 	}
-	&--focused:not(&--disabled):not(&--invalid) .mdc-floating-label {
-		color: #e96363;
+	&--focused:not(&--disabled) {
+		:not(.mdc-text-field--invalid) .mdc-floating-label {
+			color: #e96363;
+		}
+		&.mdc-text-field--textarea {
+			border-color: #e96363;
+		}
 	}
 	&--disabled .mdc-floating-label {
 		color: rgba(255, 255, 255, 0.37);
