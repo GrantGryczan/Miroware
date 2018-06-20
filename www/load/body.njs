@@ -33,7 +33,7 @@ this.value = html`
 								<i class="material-icons mdc-list-item__graphic">home</i> Home
 							</a>`;
 if(this.user) {
-	const myProfile = `/profile/${this.user._id}/`;
+	const myProfile = `/users/${this.user._id}/`;
 	this.value += html`
 							<a class="mdc-list-item${this.req.decodedPath === "/settings/" ? " visiting" : '" href="/settings/'}">
 								<i class="material-icons mdc-list-item__graphic">settings</i> Settings
