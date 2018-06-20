@@ -239,9 +239,6 @@ input:-webkit-autofill {
 		-webkit-text-fill-color: rgba(255, 255, 255, 0.87);
 	}
 }
-textarea {
-	resize: none;
-}
 :not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth).mdc-text-field {
 	&:not(.mdc-text-field--disabled) {
 		.mdc-text-field__input {
@@ -293,6 +290,14 @@ textarea {
 			transform: translateY(-100%) scale(0.75);
 			cursor: default;
 		}
+	}
+}
+textarea {
+	resize: none;
+}
+.mdc-text-field {
+	&:not(.mdc-text-field--disabled) .mdc-text-field__input {
+		color: rgba(255, 255, 255, 0.87);
 	}
 }
 .mdc-text-field-helper-text {
