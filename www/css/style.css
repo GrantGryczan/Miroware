@@ -256,7 +256,7 @@ input:-webkit-autofill {
 	&--textarea {
 		&, &.mdc-text-field--disabled {
 			.mdc-floating-label {
-				background-color: transparent
+				background-color: transparent;
 			}
 		}
 	}
