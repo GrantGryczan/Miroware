@@ -262,13 +262,21 @@ input:-webkit-autofill {
 			}
 		}
 	}
-	&--textarea:not(&--disabled) {
-		&, & .mdc-text-field__input:focus {
-			border-color: rgba(255, 255, 255, 0.73);
+	&--textarea {
+		&:not(.mdc-text-field--disabled) {
+			&, & .mdc-text-field__input:focus {
+				border-color: rgba(255, 255, 255, 0.73);
+			}
+		}
+		&.mdc-text-field--disabled {
+			border-color: rgba(255, 255, 255, 0.12);
+			background-color: initial;
 		}
 	}
-	&--disabled .mdc-floating-label {
-		color: rgba(255, 255, 255, 0.37);
+	&--disabled {
+		.mdc-text-field__input, .mdc-floating-label {
+			color: rgba(255, 255, 255, 0.37);
+		}
 	}
 	&--textarea {
 		&, &.mdc-text-field--disabled {
