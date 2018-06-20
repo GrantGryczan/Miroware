@@ -1,12 +1,25 @@
 const thisID = this.user && String(this.user._id);
+console.log(this.params.user);
 if(this.user && this.params.user === "@me") {
 	this.redirect = `/user/${this.user._id}/`;
 	this.done();
 	return;
 }
-const user = await users.findOne({
-	_id: this.params.user
-});
+const isMe = this.params.user === thisID;
+let user = this.user;
+if(!isMe) {
+	let userID;
+	try {
+		userID = ObjectID(this.params.user);
+	} catch(err) {
+		await load("error/400", this);
+		this.done();
+		return;
+	}
+	user = await users.findOne({
+		_id: userID
+	});
+}
 if(user) {
 	this.title = user.name;
 	this.description = user.desc;
