@@ -118,8 +118,10 @@
 			Miro.request("DELETE", "/users/@me").then(afterDeletion);
 		}
 	});
-	const confirmDeleteAccount = () => {
-		new Miro.dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(deleteAccount);
+	const confirmDeleteAccount = value => {
+		if(value === 0) {
+			new Miro.dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(deleteAccount);
+		}
 	};
 	document.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(null, () => {
 		new Miro.dialog("Delete", "Are you sure you want to delete your account?", ["Yes", "No"]).then(confirmDeleteAccount);
