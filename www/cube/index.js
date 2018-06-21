@@ -44,7 +44,7 @@ const downloadFrames = () => {
 	for(let i = 0; i < 64; i++) {
 		render(i);
 		link.href = renderer.domElement.toDataURL();
-		link.download = `cube${i - offset}`;
+		link.download = `cube${i}`;
 		link.click();
 	}
 }
