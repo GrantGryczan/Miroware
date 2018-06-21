@@ -123,7 +123,7 @@
 	};
 	const confirmDeleteAccount = value => {
 		if(value === 0) {
-			new Miro.dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(deleteAccount);
+			new Miro.dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(checkDeleteAccount);
 		}
 	};
 	document.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(null, () => {
