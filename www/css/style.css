@@ -244,7 +244,7 @@ body {
 @-webkit-keyframes autofill {
 	to {
 		color: rgba(255, 255, 255, 0.87);
-		background: transparent;
+		background-color: transparent;
 	}
 }
 
