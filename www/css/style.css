@@ -26,6 +26,7 @@ body {
 	overflow: hidden;
 	background-color: #202020;
 	color: rgba(255, 255, 255, 0.87);
+	caret-color: #ffffff;
 }
 .hidden {
 	display: none;
