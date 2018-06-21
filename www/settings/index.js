@@ -114,10 +114,13 @@
 		location.reload();
 	});
 	const deleteAccount = Miro.checkSuper.bind(null, value => {
-		if(value === 0) {
-			Miro.request("DELETE", "/users/@me").then(afterDeletion);
-		}
+		Miro.request("DELETE", "/users/@me").then(afterDeletion);
 	});
+	const checkDeleteAccount = () => {
+		if(value === 0) {
+			deleteAccount();
+		}
+	};
 	const confirmDeleteAccount = value => {
 		if(value === 0) {
 			new Miro.dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(deleteAccount);
