@@ -39,9 +39,10 @@ const animate = () => {
 	render(frame = (frame + 1) % 64);
 	setTimeout(animate, 40);
 };
-const downloadFrames = () => {
+const download = max => {
+	max = typeof max === "number" ? max : 64;
 	const link = document.createElement("a");
-	for(let i = 0; i < 64; i++) {
+	for(let i = 0; i < max; i++) {
 		render(i);
 		link.href = renderer.domElement.toDataURL();
 		link.download = `cube${i}`;
