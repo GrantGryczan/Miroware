@@ -113,10 +113,10 @@
 	const afterDeletion = Miro.response(() => {
 		location.reload();
 	});
-	const deleteAccount = Miro.checkSuper.bind(null, value => {
+	const deleteAccount = Miro.checkSuper.bind(null, () => {
 		Miro.request("DELETE", "/users/@me").then(afterDeletion);
 	});
-	const checkDeleteAccount = () => {
+	const checkDeleteAccount = value => {
 		if(value === 0) {
 			deleteAccount();
 		}
