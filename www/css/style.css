@@ -241,14 +241,16 @@ body {
 		color: rgba(255, 255, 255, 0.19);
 	}
 }
-input:-webkit-autofill {
-	&, &:focus {
-		box-shadow: 0 0 0 30px #202020 inset;
-		#page & {
-			box-shadow: 0 0 0 30px #282828 inset;
-		}
-		-webkit-text-fill-color: rgba(255, 255, 255, 0.87);
+@-webkit-keyframes autofill {
+	to {
+		color: rgba(255, 255, 255, 0.87);
+		background: transparent;
 	}
+}
+
+input:-webkit-autofill {
+	-webkit-animation-name: autofill;
+	-webkit-animation-fill-mode: both;
 }
 .mdc-text-field {
 	.mdc-line-ripple {
