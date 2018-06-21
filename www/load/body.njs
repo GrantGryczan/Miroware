@@ -52,7 +52,8 @@ if(this.user) {
 }
 this.value += html`
 						</div>
-						<hr class="mdc-list-divider">`;
+						<hr class="mdc-list-divider">
+						<div id="legal">Miroware © 2018</div>`;
 this.value += (await load("www/load/external", this)).value;
 this.value += html`
 					</nav>

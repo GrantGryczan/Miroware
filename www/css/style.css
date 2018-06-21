@@ -132,6 +132,11 @@ body {
 		}
 	}
 }
+#legal {
+	margin: 16px;
+	opacity: 0.75;
+	font-size: small;
+}
 #externalContainer {
 	align-self: flex-start;
 	margin-top: auto;
