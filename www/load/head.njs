@@ -30,7 +30,7 @@ if(this.user) {
 }
 this.value += html`
 		<title>$${this.title}</title>
-		<link rel="icon" href="/images/icon/cubecover.png">
+		<link rel="icon" href="/images/icon/cover.png">
 		<link rel="stylesheet" href="/css/style.css">
 		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>
 		<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-110090319-1");</script>`;

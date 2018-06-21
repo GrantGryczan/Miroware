@@ -6,7 +6,7 @@ this.value += html`
 		<link rel="stylesheet" href="index.css">`;
 this.value += (await load("www/load/body", this)).value;
 this.value += html`
-			<div class="wrapper">`;
+			<div id="wrapper">`;
 for(const v of []) {
 	const page = String(await fs.readFile(`www/${v}/index.njs`)); // TODO: Use `load` instead of `fs.readFile`.
 	this.value += html`
