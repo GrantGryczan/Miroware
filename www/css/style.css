@@ -28,6 +28,9 @@ body {
 .hidden {
 	display: none;
 }
+.spaced + .spaced {
+	margin-left: 8px;
+}
 #container {
 	position: absolute;
 	width: 100%;
@@ -173,9 +176,6 @@ body {
 	@media (min-width: 1520px) {
 		max-width: 1280px;
 	}
-}
-.spaced + .spaced {
-	margin-left: 8px;
 }
 .mdc-ripple-surface {
 	user-select: none;
