@@ -2,6 +2,7 @@
 	console.log("Discord voice notification extension by Grant Gryczan\nhttps://miroware.io/");
 	if(global.notifExtActive) {
 		new Notification("Error: Voice notifications already active");
+		document.currentScript.remove();
 		return;
 	} else {
 		global.notifExtActive = true;
