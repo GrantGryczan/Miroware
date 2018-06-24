@@ -17,7 +17,7 @@ const save = () => {
 	fs.writeFileSync("secret/starbot.json", JSON.stringify(data));
 };
 const client = new Discord.Client();
-const exitOnError = () => {
+const exitOnError = err => {
 	console.error(err);
 	process.exit(1);
 };
