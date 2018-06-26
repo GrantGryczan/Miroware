@@ -6,10 +6,10 @@
 		background-color: #303030;
 	}
 	&-thumb {
-		border-radius: 6px;
 		border: 2px solid transparent;
-		background-color: #484848;
+		border-radius: 6px;
 		background-clip: content-box;
+		background-color: #484848;
 		&:active {
 			background-color: #606060;
 		}
