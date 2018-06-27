@@ -4,7 +4,7 @@ this.value = html`
 		<div id="container">
 			<header class="mdc-top-app-bar mdc-elevation--z2">
 				<div class="mdc-top-app-bar__row">
-					<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+					<div class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
 						<button id="menu" class="mdc-top-app-bar__navigation-icon mdc-fab mdc-fab--mini material-icons" type="button">
 							<span class="mdc-fab__icon">menu</span>
 						</button>
