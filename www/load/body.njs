@@ -9,7 +9,7 @@ this.value = html`
 							<span class="mdc-fab__icon">menu</span>
 						</button>
 						<span class="mdc-top-app-bar__title">$${this.title}</span>
-					</section>
+					</div>
 				</div>
 				<div class="mdc-linear-progress mdc-linear-progress--indeterminate">
 					<div class="mdc-linear-progress__buffering-dots"></div>

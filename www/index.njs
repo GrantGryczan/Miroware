@@ -13,11 +13,11 @@ for(const v of []) {
 			<div class="mdc-card mdc-elevation-transition mdc-elevation--z2 mdc-ripple-surface invisible open" href="/${v}/" style="background-image: url(/${v}/icon.png);">
 				<div class="mdc-card__primary">
 					<h1 class="mdc-card__title mdc-card__title--large">${page.match(/<meta property="og:title" content="(.*?)">/)[1]}</h1>
-				</section>
-				<div class="mdc-card__supporting-text">${page.match(/<meta property="og:description" content="(.*?)">/)[1]}</section>
+				</div>
+				<div class="mdc-card__supporting-text">${page.match(/<meta property="og:description" content="(.*?)">/)[1]}</div>
 				<div class="mdc-card__actions">
 					<a class="mdc-button mdc-button--compact mdc-card__action" href="/${v}/">Open</a>
-				</section>
+				</div>
 			</div>`;
 }
 this.value += html`
