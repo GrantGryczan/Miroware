@@ -28,11 +28,9 @@
 	const addTwo = (a, b) => a + b;
 	Miro.sum = (...values) => values.reduce(addTwo, 0);
 	Miro.average = (...values) => Miro.sum(...values) / values.length;
-	Miro.wait = delay => {
-		return new Promise(resolve => {
-			setTimeout(resolve, delay);
-		});
-	};
+	Miro.wait = delay => new Promise(resolve => {
+		setTimeout(resolve, delay);
+	});
 	Miro.benchmark = (f, n, data) => {
 		if(!(f instanceof Function)) {
 			throw new MiroError("The `f` parameter must be a function.");
@@ -327,8 +325,8 @@
 	};
 	const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
 	Miro.request = (method, url, headers, body) => {
+		method = typeof method === "string" ? method.toUpperCase() : "GET";
 		return new Promise((resolve, reject) => {
-			method = typeof method === "string" ? method.toUpperCase() : "GET";
 			if(typeof url === "string") {
 				url = apiOrigin + (url.startsWith("/") ? "" : "/") + url;
 			} else {

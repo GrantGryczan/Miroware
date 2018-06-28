@@ -14,14 +14,15 @@ const testEmail = email => emailTest.test(email) && email.length <= 254;
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const lineBreaks = /\n/g;
 const connect = context => {
+	let connection = context.req.body.connection;
 	return new Promise(resolve => {
-		let connection = context.req.body.connection;
 		if(typeof connection !== "string" || (connection = connection.split(" ")).length !== 2) {
 			context.value = {
 				error: 'The `connection` value is not in the format "<service> <code>".'
 			};
 			context.status = 400;
 			context.done();
+			return;
 		}
 		if(connection[0] === "Google") {
 			googleAuthClient.verifyIdToken({
