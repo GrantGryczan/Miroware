@@ -15,7 +15,7 @@
 	};
 	savePrevs();
 	const changed = [];
-	const onInput = event => {
+	const onInput = evt => {
 		changed.length = 0;
 		for(const input of form.elements) {
 			if(input[_element]) {
@@ -43,8 +43,8 @@
 	};
 	const putResponse = Miro.response(setTimeout.bind(null, setForm));
 	const enableForm = Miro.formState.bind(null, form, true);
-	form.addEventListener("submit", event => {
-		event.preventDefault();
+	form.addEventListener("submit", evt => {
+		evt.preventDefault();
 		const body = {};
 		for(const elem of changed) {
 			body[elem.name] = Miro.value(elem);
@@ -53,13 +53,13 @@
 		Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
 	});
 	const _connection = Symbol("connection");
-	const removeConnection = event => {
-		new Miro.dialog("Remove", `Are you sure you want to remove your account's connection with ${event.target.parentNode.parentNode.parentNode[_connection].service} user #${event.target.parentNode.parentNode.parentNode[_connection].id}?`, ["Yes", "No"]).then(value => {
+	const removeConnection = evt => {
+		new Miro.dialog("Remove", `Are you sure you want to remove your account's connection with ${evt.target.parentNode.parentNode.parentNode[_connection].service} user #${evt.target.parentNode.parentNode.parentNode[_connection].id}?`, ["Yes", "No"]).then(value => {
 			if(value === 0) {
 				Miro.checkSuper(() => {
-					Miro.request("DELETE", `/users/@me/connections/${event.target.parentNode.parentNode.parentNode[_connection].service}/${event.target.parentNode.parentNode.parentNode[_connection].id}`).then(Miro.response(() => {
-						event.target.parentNode.parentNode.parentNode.parentNode.removeChild(event.target.parentNode.parentNode.parentNode.nextSibling);
-						event.target.parentNode.parentNode.parentNode.parentNode.removeChild(event.target.parentNode.parentNode.parentNode);
+					Miro.request("DELETE", `/users/@me/connections/${evt.target.parentNode.parentNode.parentNode[_connection].service}/${evt.target.parentNode.parentNode.parentNode[_connection].id}`).then(Miro.response(() => {
+						evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.parentNode.nextSibling);
+						evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.parentNode);
 					}));
 				});
 			}

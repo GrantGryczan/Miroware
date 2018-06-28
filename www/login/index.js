@@ -4,8 +4,8 @@
 	const signupForm = document.querySelector("#signupForm");
 	const captchaElem = document.querySelector(".g-recaptcha");
 	let signup = false;
-	const setSubmit = event => {
-		signup = event.target.name === "signup";
+	const setSubmit = evt => {
+		signup = evt.target.name === "signup";
 	};
 	for(const input of submits) {
 		input.addEventListener("click", setSubmit);
@@ -42,8 +42,8 @@
 	const loggedIn = () => {
 		location.reload();
 	};
-	loginForm.addEventListener("submit", event => {
-		event.preventDefault();
+	loginForm.addEventListener("submit", evt => {
+		evt.preventDefault();
 		Miro.formState(loginForm, false);
 		if(signup) {
 			signupDialog = new Miro.dialog("Sign up", signupForm, [{

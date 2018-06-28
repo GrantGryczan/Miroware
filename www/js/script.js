@@ -221,8 +221,8 @@
 				let submitted = false;
 				let formState = true;
 				if(!(submitted = !footerElem.querySelector("button[type='submit']"))) {
-					surfaceElem.addEventListener("submit", event => {
-						event.preventDefault();
+					surfaceElem.addEventListener("submit", evt => {
+						evt.preventDefault();
 						submitted = true;
 						setTimeout(() => {
 							formState = !surfaceElem[_disabled];
@@ -241,15 +241,15 @@
 					resolve(value);
 				};
 				this[_close] = close;
-				const dialogButton = async event => {
-					if(!submitted && event.target.type === "submit") {
+				const dialogButton = async evt => {
+					if(!submitted && evt.target.type === "submit") {
 						await Miro.wait();
 						if(!submitted) {
 							return;
 						}
 					}
 					dialog.close();
-					close(buttons.indexOf(event.target));
+					close(buttons.indexOf(evt.target));
 				};
 				for(const elem of buttons) {
 					elem.addEventListener("click", dialogButton);
@@ -403,18 +403,18 @@
 					reject("The Discord authentication page was closed.");
 				}
 			}, 200);
-			const receive = event => {
-				if(event.origin === window.origin) {
+			const receive = evt => {
+				if(evt.origin === window.origin) {
 					window.removeEventListener("message", receive);
 					clearInterval(winClosedPoll);
-					const ampIndex = event.data.indexOf("&");
+					const ampIndex = evt.data.indexOf("&");
 					if(ampIndex !== -1) {
-						event.data = event.data.slice(ampIndex);
+						evt.data = evt.data.slice(ampIndex);
 					}
-					if(event.data.startsWith("code=")) {
-						resolve(event.data.slice(5));
+					if(evt.data.startsWith("code=")) {
+						resolve(evt.data.slice(5));
 					} else {
-						reject(event.data.slice(event.data.indexOf("=") + 1));
+						reject(evt.data.slice(evt.data.indexOf("=") + 1));
 					}
 				}
 			};

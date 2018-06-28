@@ -29,8 +29,8 @@
 				closeCard(card);
 			}
 		};
-		let clickCard = function(event) {
-			if(event.target.tagName !== "A") {
+		let clickCard = function(evt) {
+			if(evt.target.tagName !== "A") {
 				toggleCard(this);
 			}
 		};
