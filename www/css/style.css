@@ -249,15 +249,16 @@ input:-webkit-autofill {
 	-webkit-animation-name: autofill;
 	-webkit-animation-fill-mode: both;
 }
+label {
+	pointer-events: none;
+}
+.alwaysFloat {
+	color: rgba(0, 0, 0, 0.6);
+	transform: translateY(-100%) scale(0.75);
+}
 .mdc-text-field {
 	.mdc-line-ripple {
 		background-color: #b54040;
-	}
-	.mdc-floating-label {
-		pointer-events: none;
-		&.alwaysFloat {
-			transform: translateY(-100%) scale(0.75);
-		}
 	}
 	&:not(&--disabled) .mdc-floating-label {
 		color: rgba(255, 255, 255, 0.6);
