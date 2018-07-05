@@ -1,13 +1,11 @@
 ::-webkit-scrollbar {
 	width: 12px;
 	height: 12px;
-	border-radius: 6px;
 	&-track {
-		background-color: #303030;
+		background-color: transparent;
 	}
 	&-thumb {
 		border: 2px solid transparent;
-		border-radius: 6px;
 		background-clip: content-box;
 		background-color: #484848;
 		&:active {
