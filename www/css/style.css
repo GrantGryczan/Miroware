@@ -16,12 +16,14 @@
 		background-color: #303030;
 	}
 }
+* {
+	caret-color: currentColor !important;
+}
 body {
 	margin: 0;
 	overflow: hidden;
 	background-color: #202020;
 	color: rgba(255, 255, 255, 0.87);
-	caret-color: #ffffff;
 }
 .hidden {
 	display: none;
