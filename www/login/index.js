@@ -46,7 +46,7 @@
 		evt.preventDefault();
 		Miro.formState(loginForm, false);
 		if(signup) {
-			signupDialog = new Miro.dialog("Sign up", signupForm, [{
+			signupDialog = new Miro.Dialog("Sign up", signupForm, [{
 				text: "Okay",
 				type: "submit"
 			}, "Cancel"]).then(value => {

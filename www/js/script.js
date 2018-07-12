@@ -287,7 +287,7 @@
 			});
 		}
 	}
-	Miro.dialog = MiroDialog;
+	Miro.Dialog = MiroDialog;
 	const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector("#drawer"));
 	document.querySelector("#menu").addEventListener("click", () => {
 		drawer.open = !drawer.open;
@@ -319,7 +319,7 @@
 					success(req);
 				}
 			} else {
-				await new Miro.dialog("Error", (req.response && req.response.error) || req.statusText || "An unknown network error occurred.");
+				await new Miro.Dialog("Error", (req.response && req.response.error) || req.statusText || "An unknown network error occurred.");
 			}
 		}
 	};
@@ -360,7 +360,7 @@
 	let sendAuth;
 	let resolveAuth;
 	const authFailed = data => {
-		new Miro.dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
+		new Miro.Dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
 	};
 	const catchAuth = err => {
 		Miro.block(false);
@@ -444,7 +444,7 @@
 			button.addEventListener("click", clickAuth(auths[i]));
 			body.appendChild(button);
 		}
-		authDialog = new Miro.dialog(title || "Authenticate", body, ["Cancel"]);
+		authDialog = new Miro.Dialog(title || "Authenticate", body, ["Cancel"]);
 		if(dialogCallback instanceof Function) {
 			dialogCallback(authDialog);
 		}
@@ -471,7 +471,7 @@
 	if(userMeta && (Miro.user = JSON.parse(userMeta.getAttribute("content")))) {
 		Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location)));
 		document.querySelector("#logOut").addEventListener("click", () => {
-			new Miro.dialog("Log Out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
+			new Miro.Dialog("Log Out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
 				if(value === 0) {
 					Miro.logOut();
 				}

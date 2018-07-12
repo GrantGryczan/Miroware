@@ -54,7 +54,7 @@
 	});
 	const _connection = Symbol("connection");
 	const removeConnection = evt => {
-		new Miro.dialog("Remove", `Are you sure you want to remove your account's connection with ${evt.target.parentNode.parentNode.parentNode[_connection].service} user #${evt.target.parentNode.parentNode.parentNode[_connection].id}?`, ["Yes", "No"]).then(value => {
+		new Miro.Dialog("Remove", `Are you sure you want to remove your account's connection with ${evt.target.parentNode.parentNode.parentNode[_connection].service} user #${evt.target.parentNode.parentNode.parentNode[_connection].id}?`, ["Yes", "No"]).then(value => {
 			if(value === 0) {
 				Miro.checkSuper(() => {
 					Miro.request("DELETE", `/users/@me/connections/${evt.target.parentNode.parentNode.parentNode[_connection].service}/${evt.target.parentNode.parentNode.parentNode[_connection].id}`).then(Miro.response(() => {
@@ -100,7 +100,7 @@
 		connectionBody = document.createElement("span");
 		connectionBody.appendChild(add);
 		req.response.forEach(appendCard);
-		new Miro.dialog("Connections", connectionBody);
+		new Miro.Dialog("Connections", connectionBody);
 	});
 	const requestConnections = Miro.checkSuper.bind(null, () => {
 		Miro.request("GET", "/users/@me/connections").then(connectionsResponse);
@@ -123,10 +123,10 @@
 	};
 	const confirmDeleteAccount = value => {
 		if(value === 0) {
-			new Miro.dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(checkDeleteAccount);
+			new Miro.Dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(checkDeleteAccount);
 		}
 	};
 	document.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(null, () => {
-		new Miro.dialog("Delete", "Are you sure you want to delete your account?", ["Yes", "No"]).then(confirmDeleteAccount);
+		new Miro.Dialog("Delete", "Are you sure you want to delete your account?", ["Yes", "No"]).then(confirmDeleteAccount);
 	}));
 })();
