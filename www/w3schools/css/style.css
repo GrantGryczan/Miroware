@@ -1,0 +1,52 @@
+body {
+	background-color: lime;
+	color: magenta;
+}
+header {
+	height: 225px;
+	background-image: url(../images/logo.png);
+}
+nav {
+	margin-left: 50%;
+	padding-top: 200px;
+	font-size: 25px;
+}
+main {
+	margin: 16px 0;
+	padding: 8px;
+	text-align: right;
+	font-family: fantasy;
+	font-weight: bold;
+}
+p {
+	font-size: 2em;
+}
+footer {
+	padding: 8px;
+	background-image: url(../images/logo.png);
+	color: red;
+}
+#watermark {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0.1;
+	background-image: url(../images/watermark.png);
+	background-repeat: no-repeat;
+	background-position: bottom center;
+	pointer-events: none;
+}
+iframe {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	border: none;
+	pointer-events: none;
+}
+.hidden {
+	opacity: 0;
+}
