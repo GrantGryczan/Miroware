@@ -99,20 +99,24 @@ client.on("guildCreate", guild => {
 	}
 });
 client.on("guildMemberRemove", member => {
-	for(const [, role] of member.roles) {
-		if(properColorTest.test(role.name) && role.members.size === 0) {
-			role.delete();
-			break;
+	if(member.guild.available) {
+		for(const [, role] of member.roles) {
+			if(properColorTest.test(role.name) && role.members.size === 0) {
+				role.delete();
+				break;
+			}
 		}
 	}
 });
 client.on("roleDelete", role => {
-	for(const [, roles] of Object.values(data.guilds[role.guild.id][1])) {
-		const roleIndex = roles.indexOf(role.id);
-		if(roleIndex !== -1) {
-			roles.splice(roleIndex, 1);
-			save();
-			break;
+	if(role.guild.available) {
+		for(const [, roles] of Object.values(data.guilds[role.guild.id][1])) {
+			const roleIndex = roles.indexOf(role.id);
+			if(roleIndex !== -1) {
+				roles.splice(roleIndex, 1);
+				save();
+				break;
+			}
 		}
 	}
 });
