@@ -438,7 +438,7 @@ client.on("message", async msg => {
 				sendHelp(msg, perm);
 			}
 		}
-	} else if(prefix.test(content)) {
+	} else if(prefix.test(msg.content)) {
 		sendHelp(msg, true);
 	}
 });
