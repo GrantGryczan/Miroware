@@ -62,7 +62,7 @@ const errManageRoles = msg => () => {
 const sendHelp = (msg, perm) => {
 	let help = `${msg.author} You can use the following commands.${(data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🎨color <hex color code>\`\nSet your color${perm ? ", if open color mode is enabled" : ""}.\n\n\`>🎨reset\`\nReset your color role${perm ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🎨list\`\nList all role groups and their roles.\n\n\`>🎨add <role name>\`\nGive yourself a role.\n\n\`>🎨remove <role name>\`\nRemove a role from yourself.`;
 	if(perm) {
-		help += `\n\nAs a member of this server with administrative permission, you can use the following commands.\n\n\`>🎨open\`\nToggle open color mode. This is disabled by default.\n\n\`>🎨create <group name>\`\nCreate a role group.\n\n\`>🎨group <group name> <role name>\`\nAdd a role to a role group.\n\n\`>🎨ungroup <role name>\`\nRemove a role from its role group.\n\n\`>🎨limit <group name> <number>\`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n\`>🎨rename <group name> <new group name>\`\nRename a role group.\n\n\`>🎨delete <group name>\`\nDelete a role group.`;
+		help += "\n\nWith administrative permission, you can use the following commands.\n\n`>🎨open`\nToggle open color mode. This is disabled by default.\n\n`>🎨create <group name>`\nCreate a role group.\n\n`>🎨group <group name> <role name>`\nAdd a role to a role group.\n\n`>🎨ungroup <role name>`\nRemove a role from its role group.\n\n`>🎨limit <group name> <number>`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n`>🎨rename <group name> <new group name>`\nRename a role group.\n\n`>🎨delete <group name>`\nDelete a role group.";
 	}
 	help += "\n\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/colorbot/>.";
 	msg.channel.send(help).catch(errSendMessages(msg));
@@ -154,7 +154,10 @@ const ungroup = (guild, role) => {
 	return found;
 };
 client.on("message", async msg => {
-	if(msg.channel.type === "text" && !msg.system) {
+	if(msg.system) {
+		return;
+	}
+	if(msg.channel.type === "text") {
 		let content = msg.content;
 		if(prefix.test(content)) {
 			const member = msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author);
@@ -172,7 +175,7 @@ client.on("message", async msg => {
 				const contentIsColor = content[0] === "color" || content[0] === "colour";
 				if(contentIsColor || content[0] === "reset") {
 					if(data.guilds[msg.guild.id][0] === 0) {
-						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? ' As a member of this server with administrative permission, you can enable it by entering ">🎨open".' : ""}`).catch(errSendMessages(msg));
+						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? ' With administrative permission, you can enable it by entering ">🎨open".' : ""}`).catch(errSendMessages(msg));
 					} else if(contentIsColor) {
 						if(content[1]) {
 							if(colorTest.test(content[1])) {
@@ -435,6 +438,8 @@ client.on("message", async msg => {
 				sendHelp(msg, perm);
 			}
 		}
+	} else if(prefix.test(content)) {
+		sendHelp(msg, true);
 	}
 });
 client.login(data.token);
