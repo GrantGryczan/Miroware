@@ -45,7 +45,6 @@
 			return Miro.average(...data);
 		}
 	};
-	Miro.mdc = Symbol("mdc");
 	Miro.prepare = node => {
 		if(!(node instanceof Element || node instanceof Document)) {
 			throw new MiroError("The `node` parameter must be an element or a document.");
@@ -57,17 +56,17 @@
 			elem.type = "button";
 		}
 		for(const elem of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded)")) {
-			elem[Miro.mdc] = new mdc.ripple.MDCRipple(elem);
+			elem._mdc = new mdc.ripple.MDCRipple(elem);
 		}
 		for(const elem of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
-			elem[Miro.mdc] = new mdc.textField.MDCTextField(elem);
+			elem._mdc = new mdc.textField.MDCTextField(elem);
 		}
 		for(const elem of node.querySelectorAll(".mdc-checkbox:not(.mdc-checkbox--upgraded)")) {
 			elem.querySelector(".mdc-checkbox__background").appendChild(checkmark.cloneNode(true));
-			elem[Miro.mdc] = new mdc.checkbox.MDCCheckbox(elem);
+			elem._mdc = new mdc.checkbox.MDCCheckbox(elem);
 		}
 		for(const elem of node.querySelectorAll(".mdc-form-field")) {
-			elem[Miro.mdc] = new mdc.formField.MDCFormField(elem);
+			elem._mdc = new mdc.formField.MDCFormField(elem);
 		}
 	};
 	const htmlExps = ["$", "&"];
@@ -116,20 +115,18 @@
 			}
 		}
 	};
-	const _disabled = Symbol("disabled");
-	const _prevDisabled = Symbol("prevDisabled");
 	Miro.formState = (form, state) => {
 		if(!(form instanceof HTMLFormElement)) {
 			throw new MiroError("The `form` parameter must be an HTML `form` element.");
 		}
 		state = !state;
-		if(form[_disabled] !== state) {
-			form[_disabled] = state;
+		if(form._disabled !== state) {
+			form._disabled = state;
 			for(const elem of form.elements) {
 				if(state) {
-					elem[_prevDisabled] = elem.disabled;
+					elem._prevDisabled = elem.disabled;
 					elem.disabled = true;
-				} else if(!elem[_prevDisabled]) {
+				} else if(!elem._prevDisabled) {
 					elem.disabled = false;
 				}
 			}
@@ -138,9 +135,9 @@
 				const disabledClass = `mdc-${mdcType}--disabled`;
 				for(const elem of form.querySelectorAll(mdcClass)) {
 					if(state) {
-						elem[_prevDisabled] = elem.classList.contains(disabledClass);
+						elem._prevDisabled = elem.classList.contains(disabledClass);
 						elem.classList.add(disabledClass);
-					} else if(!elem[_prevDisabled]) {
+					} else if(!elem._prevDisabled) {
 						elem.classList.remove(disabledClass);
 					}
 				}
@@ -225,7 +222,7 @@
 						evt.preventDefault();
 						submitted = true;
 						setTimeout(() => {
-							formState = !surfaceElem[_disabled];
+							formState = !surfaceElem._disabled;
 							Miro.formState(surfaceElem, false);
 						});
 					});
