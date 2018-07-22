@@ -1,6 +1,7 @@
 (() => {
 	const rules = [];
 	let ready = false;
+	let audioValues;
 	const slide = () => {
 		for(const rule of rules) {
 			if(MSPFA.p >= rule[0] && MSPFA.p <= rule[1]) {
@@ -13,17 +14,18 @@
 				rule[3]._pause = true;
 			}
 		}
-		for(const rule of rules) {
-			if(rule[3]._pause) {
-				rule[3].pause();
-				rule[3].currentTime = 0;
-				delete rule[3]._pause;
+		for(const audio of audioValues) {
+			if(audio._pause) {
+				audio.pause();
+				audio.currentTime = 0;
 			}
+			delete audio._pause;
 		}
 	};
 	let loaded = 0;
 	const load = () => {
 		if(++loaded === rules.length) {
+			audioValues = Object.values(audios);
 			ready = true;
 			slide();
 		}
