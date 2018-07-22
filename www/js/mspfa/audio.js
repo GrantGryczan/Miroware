@@ -4,12 +4,13 @@
 	const slide = () => {
 		for(const rule of rules) {
 			if(MSPFA.p >= rule[0] && MSPFA.p <= rule[1]) {
-				if(rule[2].paused) {
-					rule[2].play();
+				rule[3].volume = rule[2];
+				if(rule[3].paused) {
+					rule[3].play();
 				}
-			} else if(!rule[2].paused) {
-				rule[2].pause();
-				rule[2].currentTime = 0;
+			} else if(!rule[3].paused) {
+				rule[3].pause();
+				rule[3].currentTime = 0;
 			}
 		}
 	};
@@ -31,14 +32,15 @@
 		MSPFA.dialog("Error", message, ["Okay"]);
 		load();
 	};
-	const ruleTest = /@mspfa audio (\d+) (\d+) (.+?)(?:;|\n|$)/g;
+	const ruleTest = /@mspfa audio(?: (\d+))?(?: (\d+))?(?: ([\d\.]+))? (.+?)(?:;|\n|$)/g;
 	let ruleMatch;
 	while(ruleMatch = ruleTest.exec(MSPFA.story.y)) {
-		const audio = new Audio(ruleMatch[3]);
+		const audio = new Audio(ruleMatch[4]);
 		audio.loop = true;
 		audio.addEventListener("canplay", load);
 		audio.addEventListener("error", error);
-		rules.push([parseInt(ruleMatch[1]) || 1, parseInt(ruleMatch[2]) || Infinity, audio]);
+		const minPage = parseInt(ruleMatch[1]) || 1;
+		rules.push([minPage, ruleMatch[2] ? parseInt(ruleMatch[2]) || Infinity : minPage, Number(ruleMatch[3]) || 1, audio]);
 	}
 	MSPFA.slide.push(slide);
 })();
