@@ -11,15 +11,11 @@
 	const byIcon = elem => elem.firstChild.style.backgroundImage.split('"')[1];
 	const stored = {};
 	let parentFound = false;
-	/*const options = {
-		silent: true
-	};*/
 	setInterval(() => {
 		const parent = document.querySelector("[class^='wrapperConnectedVoice'] + div");
 		if(parent) {
 			if(!parentFound) {
 				parentFound = true;
-				//new Notification("Voice notifications connected", options);
 			}
 			const names = Array.prototype.map.call(parent.querySelectorAll("[class^='name']"), byContent);
 			const icons = Array.prototype.map.call(parent.querySelectorAll("[class^='avatarContainer']"), byIcon);
@@ -45,7 +41,6 @@
 			}
 		} else if(parentFound) {
 			parentFound = false;
-			//new Notification("Voice notifications disconnected", options);
 		}
 	}, 1000);
 })();
