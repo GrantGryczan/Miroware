@@ -35,6 +35,7 @@
 	let ruleMatch;
 	while(ruleMatch = ruleTest.exec(MSPFA.story.y)) {
 		const audio = new Audio(ruleMatch[3]);
+		audio.loop = true;
 		audio.addEventListener("canplay", load);
 		audio.addEventListener("error", error);
 		rules.push([parseInt(ruleMatch[1]) || 1, parseInt(ruleMatch[2]) || Infinity, audio]);
