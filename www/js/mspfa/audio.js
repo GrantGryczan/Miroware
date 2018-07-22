@@ -9,7 +9,7 @@
 					rule[3].play();
 				}
 				rule[3]._pause = false;
-			} else if(!rule[3].paused) {
+			} else if(!rule[3].paused && rule[3]._pause === undefined) {
 				rule[3]._pause = true;
 			}
 		}
