@@ -40,7 +40,7 @@
 		audio.addEventListener("canplay", load);
 		audio.addEventListener("error", error);
 		const minPage = parseInt(ruleMatch[1]) || 1;
-		rules.push([minPage, ruleMatch[2] ? parseInt(ruleMatch[2]) || Infinity : minPage, Number(ruleMatch[3]) || 1, audio]);
+		rules.push([minPage, ruleMatch[2] ? parseInt(ruleMatch[2]) || Infinity : (ruleMatch[1] ? minPage : Infinity), Number(ruleMatch[3]) || 1, audio]);
 	}
 	MSPFA.slide.push(slide);
 })();
