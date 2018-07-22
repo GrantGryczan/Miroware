@@ -8,9 +8,16 @@
 				if(rule[3].paused) {
 					rule[3].play();
 				}
+				rule[3]._pause = false;
 			} else if(!rule[3].paused) {
+				rule[3]._pause = true;
+			}
+		}
+		for(const rule of rules) {
+			if(rule[3]._pause) {
 				rule[3].pause();
 				rule[3].currentTime = 0;
+				delete rule[3]._pause;
 			}
 		}
 	};
