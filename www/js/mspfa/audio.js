@@ -39,15 +39,20 @@
 		MSPFA.dialog("Error", message, ["Okay"]);
 		load();
 	};
+	const audios = {};
 	const ruleTest = /@mspfa audio(?: (\d+))?(?: (\d+))?(?: ([\d\.]+))? (.+?)(?:;|\n|$)/g;
 	let ruleMatch;
 	while(ruleMatch = ruleTest.exec(MSPFA.story.y)) {
-		const audio = new Audio(ruleMatch[4]);
-		audio.loop = true;
-		audio.addEventListener("canplay", load);
-		audio.addEventListener("error", error);
+		if(audios[ruleMatch[4]]) {
+			load();
+		} else {
+			audios[ruleMatch[4]] = new Audio(ruleMatch[4]);
+			audios[ruleMatch[4]].loop = true;
+			audios[ruleMatch[4]].addEventListener("canplay", load);
+			audios[ruleMatch[4]].addEventListener("error", error);
+		}
 		const minPage = parseInt(ruleMatch[1]) || 1;
-		rules.push([minPage, ruleMatch[2] ? parseInt(ruleMatch[2]) || Infinity : (ruleMatch[1] ? minPage : Infinity), Number(ruleMatch[3]) || 1, audio]);
+		rules.push([minPage, ruleMatch[2] ? parseInt(ruleMatch[2]) || Infinity : (ruleMatch[1] ? minPage : Infinity), Number(ruleMatch[3]) || 1, audios[ruleMatch[4]]]);
 	}
 	MSPFA.slide.push(slide);
 })();
