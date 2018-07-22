@@ -15,6 +15,7 @@
 	};
 	let loaded = 0;
 	const load = () => {
+		console.log(loaded, rules.length);
 		if(++loaded === rules.length) {
 			ready = true;
 			slide();
