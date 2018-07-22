@@ -1,10 +1,9 @@
 (() => {
 	const rules = [];
 	let ready = false;
-	let p = 0;
 	const slide = () => {
 		for(const rule of rules) {
-			if(p >= rule[0] && p <= rule[1]) {
+			if(MSPFA.p >= rule[0] && MSPFA.p <= rule[1]) {
 				if(rule[2].paused) {
 					rule[2].play();
 				}
@@ -40,8 +39,5 @@
 		audio.addEventListener("error", error);
 		rules.push([parseInt(ruleMatch[1]) || 1, parseInt(ruleMatch[2]) || Infinity, audio]);
 	}
-	MSPFA.slide.push(page => {
-		p = page;
-		slide();
-	});
+	MSPFA.slide.push(slide);
 })();
