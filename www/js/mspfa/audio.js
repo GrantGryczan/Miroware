@@ -15,7 +15,6 @@
 	};
 	let loaded = 0;
 	const load = () => {
-		console.log(loaded, rules.length);
 		if(++loaded === rules.length) {
 			ready = true;
 			slide();
@@ -36,7 +35,7 @@
 	let ruleMatch;
 	while(ruleMatch = ruleTest.exec(MSPFA.story.y)) {
 		const audio = new Audio(ruleMatch[3]);
-		audio.addEventListener("load", load);
+		audio.addEventListener("canplay", load);
 		audio.addEventListener("error", error);
 		rules.push([parseInt(ruleMatch[1]) || 1, parseInt(ruleMatch[2]) || Infinity, audio]);
 	}
