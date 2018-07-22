@@ -1,6 +1,7 @@
 (() => {
 	const rules = [];
 	let ready = false;
+	let p = 0;
 	const slide = () => {
 		for(const rule of rules) {
 			if(p >= rule[0] && p <= rule[1]) {
