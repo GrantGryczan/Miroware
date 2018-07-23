@@ -3,23 +3,25 @@
 	let ready = false;
 	let audioValues;
 	const slide = () => {
-		for(const rule of rules) {
-			if(MSPFA.p >= rule[0] && MSPFA.p <= rule[1]) {
-				rule[3].volume = rule[2];
-				if(rule[3].paused) {
-					rule[3].play();
+		if(ready) {
+			for(const rule of rules) {
+				if(MSPFA.p >= rule[0] && MSPFA.p <= rule[1]) {
+					rule[3].volume = rule[2];
+					if(rule[3].paused) {
+						rule[3].play();
+					}
+					rule[3]._pause = false;
+				} else if(!rule[3].paused && rule[3]._pause === undefined) {
+					rule[3]._pause = true;
 				}
-				rule[3]._pause = false;
-			} else if(!rule[3].paused && rule[3]._pause === undefined) {
-				rule[3]._pause = true;
 			}
-		}
-		for(const audio of audioValues) {
-			if(audio._pause) {
-				audio.pause();
-				audio.currentTime = 0;
+			for(const audio of audioValues) {
+				if(audio._pause) {
+					audio.pause();
+					audio.currentTime = 0;
+				}
+				delete audio._pause;
 			}
-			delete audio._pause;
 		}
 	};
 	let loaded = 0;
