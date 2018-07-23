@@ -1,34 +1,31 @@
 (() => {
 	const rules = [];
-	let ready = false;
 	let audioValues;
 	const slide = () => {
-		if(ready) {
-			for(const rule of rules) {
-				if(MSPFA.p >= rule[0] && MSPFA.p <= rule[1]) {
-					rule[3].volume = rule[2];
-					if(rule[3].paused) {
-						rule[3].play();
-					}
-					rule[3]._pause = false;
-				} else if(!rule[3].paused && rule[3]._pause === undefined) {
-					rule[3]._pause = true;
+		for(const rule of rules) {
+			if(MSPFA.p >= rule[0] && MSPFA.p <= rule[1]) {
+				rule[3].volume = rule[2];
+				if(rule[3].paused) {
+					rule[3].play();
 				}
+				rule[3]._pause = false;
+			} else if(!rule[3].paused && rule[3]._pause === undefined) {
+				rule[3]._pause = true;
 			}
-			for(const audio of audioValues) {
-				if(audio._pause) {
-					audio.pause();
-					audio.currentTime = 0;
-				}
-				delete audio._pause;
+		}
+		for(const audio of audioValues) {
+			if(audio._pause) {
+				audio.pause();
+				audio.currentTime = 0;
 			}
+			delete audio._pause;
 		}
 	};
 	let loaded = 0;
 	const load = () => {
 		if(++loaded === rules.length) {
 			audioValues = Object.values(audios);
-			ready = true;
+			MSPFA.slide.push(slide);
 			slide();
 		}
 	};
@@ -58,5 +55,4 @@
 		const minPage = parseInt(ruleMatch[1]) || 1;
 		rules.push([minPage, ruleMatch[2] ? parseInt(ruleMatch[2]) || Infinity : (ruleMatch[1] ? minPage : Infinity), Number(ruleMatch[3]) || 1, audios[ruleMatch[4]]]);
 	}
-	MSPFA.slide.push(slide);
 })();
