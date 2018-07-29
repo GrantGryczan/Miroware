@@ -45,6 +45,6 @@ this.value += html`
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
-		<script src="index.js"></script>`;
+		<script src="script.js"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();

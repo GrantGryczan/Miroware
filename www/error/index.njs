@@ -2,7 +2,7 @@ this.title = "Error";
 this.description = "An error occured.";
 this.value = (await load("load/head", this)).value;
 this.value += html`
-		<link rel="stylesheet" href="index.css">`;
+		<link rel="stylesheet" href="style.css">`;
 this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="error"></div>`;

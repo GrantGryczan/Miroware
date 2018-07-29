@@ -4,7 +4,7 @@ this.description = string;
 this.tags = ["quote", "string"];
 this.value = (await load("load/head", this)).value;
 this.value += html`
-		<link rel="stylesheet" href="index.css">`;
+		<link rel="stylesheet" href="style.css">`;
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
@@ -12,6 +12,6 @@ this.value += html`
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
-		<script src="index.js"></script>`;
+		<script src="script.js"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
