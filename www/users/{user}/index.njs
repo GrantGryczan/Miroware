@@ -23,9 +23,9 @@ if(user) {
 	this.title = user.name;
 	this.description = user.desc;
 	this.tags = ["account", "user", "profile"];
-	this.value = (await load("www/load/head", this)).value;
-	this.value += (await load("www/load/body", this)).value;
-	this.value += (await load("www/load/pagehead", this)).value;
+	this.value = (await load("load/head", this)).value;
+	this.value += (await load("load/body", this)).value;
+	this.value += (await load("load/pagehead", this)).value;
 	this.value += html`
 				<div id="desc">
 					${html`$${user.desc}`.replace(lineBreaks, "<br>")}
@@ -33,9 +33,9 @@ if(user) {
 				<br>
 				<br>
 				<small>(Profiles, among other features, were deemed comparatively insignificant. Development on more practical services currently takes higher priority.)</small>`;
-	this.value += (await load("www/load/pagefoot", this)).value;
-	this.value += (await load("www/load/belt", this)).value;
-	this.value += (await load("www/load/foot", this)).value;
+	this.value += (await load("load/pagefoot", this)).value;
+	this.value += (await load("load/belt", this)).value;
+	this.value += (await load("load/foot", this)).value;
 } else {
 	Object.assign(this, await load("error/404", this));
 }

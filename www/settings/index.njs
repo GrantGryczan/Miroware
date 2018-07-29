@@ -4,9 +4,9 @@ if(notLoggedIn(this)) {
 this.title = "Settings";
 this.description = "Set your settings.";
 this.tags = ["settings", "preferences", "account", "user"];
-this.value = (await load("www/load/head", this)).value;
-this.value += (await load("www/load/body", this)).value;
-this.value += (await load("www/load/pagehead", this)).value;
+this.value = (await load("load/head", this)).value;
+this.value += (await load("load/body", this)).value;
+this.value += (await load("load/pagehead", this)).value;
 const nameCooldown = this.now - this.user.nameCooldown < 86400000;
 this.value += html`
 				<form id="settings">
@@ -42,9 +42,9 @@ this.value += html`
 					<br>
 					<button id="save" class="mdc-button mdc-button--raised mdc-ripple spaced" type="submit" disabled>Save</button> <button id="delete" class="mdc-button mdc-ripple spaced">Delete</button>
 				</form>`;
-this.value += (await load("www/load/pagefoot", this)).value;
-this.value += (await load("www/load/belt", this)).value;
+this.value += (await load("load/pagefoot", this)).value;
+this.value += (await load("load/belt", this)).value;
 this.value += html`
 		<script src="index.js"></script>`;
-this.value += (await load("www/load/foot", this)).value;
+this.value += (await load("load/foot", this)).value;
 this.done();

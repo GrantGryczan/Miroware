@@ -54,7 +54,7 @@ this.value += html`
 						</div>
 						<hr class="mdc-list-divider">
 						<div id="legal">© Miroware 2017-${new Date().getFullYear()}</div>`;
-this.value += (await load("www/load/external", this)).value;
+this.value += (await load("load/external", this)).value;
 this.value += html`
 					</nav>
 				</nav>

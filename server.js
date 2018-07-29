@@ -154,6 +154,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		eval: myEval,
 		domain,
 		errorDir: "error",
+		loadDirs: ["load"],
 		httpPort: 8081,
 		httpsRedirect: production,
 		subdomains: {

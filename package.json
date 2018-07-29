@@ -17,7 +17,7 @@
 	},
 	"homepage": "https://miroware.io/",
 	"dependencies": {
-		"aws-sdk": "^2.255.1",
+		"aws-sdk": "^2.282.1",
 		"body-parser": "^1.18.3",
 		"bson-ext": "^2.0.0",
 		"cookie-parser": "^1.4.3",
@@ -26,12 +26,12 @@
 		"fs-extra": "^5.0.0",
 		"google-auth-library": "^1.6.1",
 		"mime": "^2.3.1",
-		"mongodb": "^3.0.10",
+		"mongodb": "^3.1.1",
 		"php-date": "^2.1.1",
 		"redbird": "^0.7.0",
 		"replthis": "^1.0.1",
 		"request": "^2.87.0",
 		"request-promise-native": "^1.0.5",
-		"servecube": "^1.15.9"
+		"servecube": "^1.15.10"
 	}
 }
