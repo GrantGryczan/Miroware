@@ -11,7 +11,7 @@ this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
 		<script>
-			location.replace("${this.redir = "https://discordapp.com/oauth2/authorize?client_id=343262365195698177&scope=identify&response_type=code"}");
+			location.replace("${this.redir = "https://discord.gg/Ax9qEhN"}");
 		</script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
