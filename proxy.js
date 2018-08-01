@@ -9,7 +9,8 @@ const redbird = require("redbird")({
 		key: "/etc/letsencrypt/live/miroware.io/privkey.pem",
 		cert: "/etc/letsencrypt/live/miroware.io/cert.pem",
 		ca: "/etc/letsencrypt/live/miroware.io/chain.pem"
-	}
+	},
+	bunyan: false
 });
 redbird.register("pipe.miroware.io", "http://localhost:8082");
 const cdgOptions = {
