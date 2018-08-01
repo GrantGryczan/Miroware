@@ -1,4 +1,4 @@
-"use strict";
+errManageRoles(msg.guild)"use strict";
 console.log("< Colorbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
@@ -57,8 +57,8 @@ const errSendMessages = msg => () => {
 const errEmbedLinks = msg => () => {
 	permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 };
-const errManageRoles = msg => () => {
-	permWarn(msg.guild, "manage roles, above mine or otherwise");
+const errManageRoles = guild => () => {
+	permWarn(guild, "manage roles, above mine or otherwise");
 };
 const sendHelp = (msg, perm) => {
 	const noGuild = !msg.guild;
@@ -84,7 +84,7 @@ client.once("ready", () => {
 			}
 			for(const [, role] of guild.roles) {
 				if(properColorTest.test(role.name) && role.members.size === 0) {
-					role.delete();
+					role.delete().catch(errManageRoles(guild));
 				}
 			}
 		}
@@ -105,7 +105,7 @@ client.on("guildMemberRemove", member => {
 	if(member.guild.available) {
 		for(const [, role] of member.roles) {
 			if(properColorTest.test(role.name) && role.members.size === 0) {
-				role.delete();
+				role.delete().catch(errManageRoles(member.guild));
 				break;
 			}
 		}
@@ -124,7 +124,7 @@ client.on("roleDelete", role => {
 	}
 });
 const setColor = (member, color, role, msg) => {
-	member.roles.add(role).catch(errManageRoles(msg));
+	member.roles.add(role).catch(errManageRoles(msg.guild));
 	const embed = {
 		title: color,
 		color: parseInt(color.slice(1), 16)
@@ -222,7 +222,7 @@ client.on("message", async msg => {
 										});
 									}
 								};
-								removeColor(member).then(addColorRole).catch(errManageRoles(msg));
+								removeColor(member).then(addColorRole).catch(errManageRoles(msg.guild));
 							} else {
 								msg.channel.send(`${msg.author} That's not a valid hex color code! If you don't know how hex color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
 							}
@@ -232,7 +232,7 @@ client.on("message", async msg => {
 					} else if(content[0] === "reset") {
 						removeColor(member).then(() => {
 							msg.channel.send(`${msg.author} Your color role has been reset.`).catch(errSendMessages(msg));
-						}).catch(errManageRoles(msg));
+						}).catch(errManageRoles(msg.guild));
 					}
 				} else if(content[0] === "list") {
 					if(Object.keys(data.guilds[msg.guild.id][1]).length) {
@@ -277,7 +277,7 @@ client.on("message", async msg => {
 										if(data.guilds[msg.guild.id][1][i][0] <= 1 || has < data.guilds[msg.guild.id][1][i][0]) {
 											member.roles.add(contentRole).then(() => {
 												msg.channel.send(`${msg.author} ${data.guilds[msg.guild.id][1][i][0] === 1 ? `Your ${italicize(i)} role has been set to ${italicize(contentRole.name)}.` : `The ${italicize(contentRole.name)} role has been added to your ${italicize(i)} roles.`}`).catch(errSendMessages(msg));
-											}).catch(errManageRoles(msg));
+											}).catch(errManageRoles(msg.guild));
 										} else {
 											msg.channel.send(`${msg.author} You already have ${has} ${italicize(i)} roles, so you need to remove one to add another.`).catch(errSendMessages(msg));
 										}
