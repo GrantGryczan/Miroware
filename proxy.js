@@ -12,7 +12,9 @@ const redbird = require("redbird")({
 	}
 });
 redbird.register("pipe.miroware.io", "http://localhost:8082");
-redbird.register("comedy-dot.gold", "http://localhost:8082");
+redbird.register("comedy-dot.gold", "http://localhost:8082", {
+	secure: false
+});
 redbird.addResolver(() => "http://localhost:8081");
 fs.watch(__filename, () => {
 	setTimeout(() => {
