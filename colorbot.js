@@ -1,3 +1,4 @@
+"use strict";
 console.log("< Colorbot >");
 const fs = require("fs");
 const Discord = require("discord.js");

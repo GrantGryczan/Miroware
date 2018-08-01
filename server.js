@@ -1,3 +1,4 @@
+"use strict";
 console.log("< Server >");
 const crypto = require("crypto");
 const fs = require("fs-extra");

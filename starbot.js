@@ -1,3 +1,4 @@
+"use strict";
 console.log("< Starbot >");
 const fs = require("fs");
 const Discord = require("discord.js");

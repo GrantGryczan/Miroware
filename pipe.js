@@ -1,3 +1,4 @@
+"use strict";
 console.log("< Pipe >")
 const fs = require("fs");
 const http = require("http");

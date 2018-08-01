@@ -1,3 +1,4 @@
+"use strict";
 console.log("< Proxy >");
 const fs = require("fs");
 const redbird = require("redbird")({
