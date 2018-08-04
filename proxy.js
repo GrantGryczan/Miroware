@@ -21,6 +21,8 @@ const listener = (req, res) => {
 	if(req.headers.host) {
 		if(req.headers.host.endsWith(".gold")) {
 			target = "http://localhost:8180";
+		} else if(req.headers.host.endsWith(".gg")) {
+			target = "http://localhost:8083";
 		} else if(req.headers.host.startsWith("pipe.")) {
 			target = "http://localhost:8082";
 		}
