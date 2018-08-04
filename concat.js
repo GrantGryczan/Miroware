@@ -11,7 +11,7 @@ app.use((req, res) => {
 });
 app.get("*", (req, res) => {
 	if(req.subdomain === "") {
-		if(req.decodedURL === "/") {
+		if(req.url === "/") {
 			res.redirect("https://miroware.io/concat/");
 		} else {
 			console.log(req.value);
