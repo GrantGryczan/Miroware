@@ -17,7 +17,7 @@ const ggContext = tls.createSecureContext({
 });
 const proxy = httpProxy.createProxyServer();
 const listener = (req, res) => {
-	let target = "http://localhost:8081"
+	let target = "http://localhost:8081";
 	if(req.headers.host) {
 		if(req.headers.host.endsWith(".gold")) {
 			target = "http://localhost:8180";
