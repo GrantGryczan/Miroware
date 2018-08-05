@@ -48,11 +48,13 @@
 		}
 	});
 	const byValue = input => input.value;
+	const enableForm = Miro.formState.bind(null, form, true);
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
 		const urls = Array.prototype.map.call(entries.querySelectorAll("input"), byValue);
 		history.pushState(0, "", `${location.pathname}?anon=${form.elements.anon.checked}&sub=${encodeURIComponent(form.elements.sub.value)}&val=${encodeURIComponent(form.elements.val.value)}&urls=${encodeURIComponent(urls.join(","))}`);
 		if(urls.length) {
+			Miro.formState(form, false);
 			Miro.request("POST", "/users/@me/concats", {}, {
 				anon: form.elements.anon.checked,
 				sub: form.elements.sub.value,
@@ -72,7 +74,7 @@
 					document.execCommand("copy");
 				});
 				new Miro.Dialog("Concat", body);
-			}));
+			})).finally(enableForm);
 		} else {
 			new Miro.Dialog("Error", "You must specify at least one URL.");
 		}
