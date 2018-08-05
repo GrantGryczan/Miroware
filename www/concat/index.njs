@@ -7,7 +7,7 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<form>
+				<form id="config">
 					<div id="url">
 						<span id="sub"${this.req.query.sub ? "" : ' class="hidden"'}>
 							<div class="mdc-text-field">
