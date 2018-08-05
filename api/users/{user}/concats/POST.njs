@@ -54,7 +54,7 @@ if(user) {
 		if(typeof concat.val === "string") {
 			if(concat.val.length > 255) {
 				this.value = {
-					error: "The `val` value must be at most 255 characters long."
+					error: "The encoded `val` value must be at most 255 characters long."
 				};
 				this.status = 400;
 				this.done();
