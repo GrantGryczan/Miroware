@@ -5,11 +5,12 @@ const http = require("http");
 const https = require("https");
 const tls = require("tls");
 const httpProxy = require("http-proxy");
-const ioContext = tls.createSecureContext({
+const ioContextOptions = {
 	key: fs.readFileSync("/etc/letsencrypt/live/miroware.io/privkey.pem"),
 	cert: fs.readFileSync("/etc/letsencrypt/live/miroware.io/cert.pem"),
 	ca: fs.readFileSync("/etc/letsencrypt/live/miroware.io/chain.pem")
-});
+};
+const ioContext = tls.createSecureContext(ioContextOptions);
 const ggContext = tls.createSecureContext({
 	key: fs.readFileSync("/etc/letsencrypt/live/miro.gg/privkey.pem"),
 	cert: fs.readFileSync("/etc/letsencrypt/live/miro.gg/cert.pem"),
@@ -36,7 +37,7 @@ https.createServer({
 	SNICallback: (domain, callback) => {
 		callback(null, domain.endsWith(".gg") ? ggContext : ioContext);
 	},
-	...ioContext
+	...ioContextOptions
 }, listener).listen(8443);
 fs.watch(__filename, () => {
 	setTimeout(() => {
