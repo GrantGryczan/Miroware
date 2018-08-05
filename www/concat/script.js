@@ -5,10 +5,10 @@
 	form.elements.enableSub.addEventListener("input", () => {
 		sub.classList[form.elements.enableSub.checked ? "remove" : "add"]("hidden");
 		if(form.elements.enableSub.checked) {
-			form.elements.sub.focus();
+			form.elements.sub.select();
 		} else {
 			form.elements.sub.value = "";
-			form.elements.val.focus();
+			form.elements.val.select();
 		}
 	});
 	form.elements.anon.addEventListener("input", form.elements.val.focus.bind(form.elements.val));
@@ -33,7 +33,7 @@
 			input.value = url;
 		}
 		if(noFocus !== true) {
-			input.focus();
+			input.select();
 		}
 	};
 	if(Miro.query.urls) {
