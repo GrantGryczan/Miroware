@@ -14,7 +14,7 @@ this.value += html`
 								<input name="sub" class="mdc-text-field__input" type="text" value="${this.req.query.sub || ""}" maxlength="246">
 								<div class="mdc-line-ripple"></div>
 						</div>.</span>miro.gg/<div class="mdc-text-field">
-							<input name="val" class="mdc-text-field__input" type="text" value="${this.req.query.val || ""}" maxlength="256" autofocus>
+							<input name="val" class="mdc-text-field__input" type="text" value="${this.req.query.val || ""}" maxlength="256"${this.req.query.val ? "" : " autofocus"}>
 							<div class="mdc-line-ripple"></div>
 						</div>
 					</div>
