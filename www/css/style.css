@@ -240,6 +240,11 @@ main {
 	}
 }
 .mdc-icon-button {
+	height: 40px;
+	width: 40px;
+	padding: 0;
+	vertical-align: middle;
+	font-size: 1em;
 	&:not(:disabled) {
 		color: rgba(255, 255, 255, 0.38);
 	}
