@@ -157,7 +157,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		errorDir: "error",
 		loadDirs: ["load"],
 		httpPort: 8081,
-		httpsRedirect: production,
 		subdomains: {
 			d: "www/",
 			api: "api/"
