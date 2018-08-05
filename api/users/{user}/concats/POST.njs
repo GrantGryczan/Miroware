@@ -52,9 +52,9 @@ if(user) {
 			return;
 		}
 		if(typeof concat.val === "string") {
-			if(concat.val.length > 63) {
+			if(concat.val.length > 255) {
 				this.value = {
-					error: "The `val` value must be at most 63 characters long."
+					error: "The `val` value must be at most 255 characters long."
 				};
 				this.status = 400;
 				this.done();
