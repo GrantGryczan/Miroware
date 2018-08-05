@@ -110,7 +110,8 @@ if(testEmail(this.req.body.email)) {
 				nameCooldown: 0,
 				birth: this.req.body.birth,
 				desc: "",
-				icon: null
+				icon: null,
+				concats: []
 			};
 			if(!insertData.verified) {
 				insertData.unverified = this.req.body.email;

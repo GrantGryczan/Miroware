@@ -1,0 +1,16 @@
+form {
+	text-align: center;
+}
+#url {
+	font-size: 2em;
+}
+#url * {
+	font-size: inherit !important;
+}
+#url #sub input {
+	text-align: right;
+}
+#options {
+	padding: 1em 0;
+	opacity: 0.75;
+}
