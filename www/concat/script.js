@@ -2,6 +2,16 @@
 	const form = document.querySelector("form");
 	const sub = form.querySelector("#sub");
 	const entries = form.querySelector("#entries");
+	const save = form.querySelector("#save");
+	form.elements.val.addEventListener("change", () => {
+		const encoded = encodeURI(form.elements.val.value);
+		if(form.elements.val.value !== encoded) {
+			new Miro.Dialog("Warning", html`
+				"$${form.elements.val.value}" has not yet been encoded.<br>
+				After you save this concat, "$${encoded}" will be used instead.
+			`);
+		}
+	});
 	form.elements.enableSub.addEventListener("input", () => {
 		sub.classList[form.elements.enableSub.checked ? "remove" : "add"]("hidden");
 		if(form.elements.enableSub.checked) {
@@ -11,9 +21,8 @@
 			form.elements.val.select();
 		}
 	});
-	form.elements.anon.addEventListener("input", form.elements.val.focus.bind(form.elements.val));
 	form.querySelector(".help").addEventListener("click", () => {
-		new Miro.Dialog("Help", html`
+		new Miro.Dialog("Info", html`
 			Adding only one URL will make your concat act as a regular redirect.<br>
 			Adding multiple URLs will make your concat randomly redirect between them.
 		`);
@@ -53,30 +62,38 @@
 		evt.preventDefault();
 		const urls = Array.prototype.map.call(entries.querySelectorAll("input"), byValue);
 		history.pushState(0, "", `${location.pathname}?anon=${form.elements.anon.checked}&sub=${encodeURIComponent(form.elements.sub.value)}&val=${encodeURIComponent(form.elements.val.value)}&urls=${encodeURIComponent(urls.join(","))}`);
-		if(urls.length) {
-			Miro.formState(form, false);
-			Miro.request("POST", "/users/@me/concats", {}, {
-				anon: form.elements.anon.checked,
-				sub: form.elements.sub.value,
-				val: form.elements.val.value,
-				urls
-			}).then(Miro.response(req => {
-				const body = html`
-					Concat successfully created!<br>
-					<div class="mdc-text-field">
-						<input class="mdc-text-field__input" type="text" value="${req.response.url}">
-						<div class="mdc-line-ripple"></div>
-					</div>
-				`;
-				const input = body.querySelector("input");
-				body.querySelector("button").addEventListener("click", () => {
-					input.select();
-					document.execCommand("copy");
-				});
-				new Miro.Dialog("Concat", body);
-			})).finally(enableForm);
+		if(Miro.user) {
+			if(urls.length) {
+				Miro.formState(form, false);
+				Miro.request("POST", "/users/@me/concats", {}, {
+					anon: form.elements.anon.checked,
+					sub: form.elements.sub.value,
+					val: form.elements.val.value,
+					urls
+				}).then(Miro.response(req => {
+					const body = html`
+						Concat successfully created!<br>
+						<div class="mdc-text-field">
+							<input class="mdc-text-field__input" type="text" value="${req.response.url}">
+							<div class="mdc-line-ripple"></div>
+						</div>
+					`;
+					const input = body.querySelector("input");
+					body.querySelector("button").addEventListener("click", () => {
+						input.select();
+						document.execCommand("copy");
+					});
+					new Miro.Dialog("Concat", body);
+				})).finally(enableForm);
+			} else {
+				new Miro.Dialog("Error", "You must specify at least one URL.");
+			}
 		} else {
-			new Miro.Dialog("Error", "You must specify at least one URL.");
+			new Miro.Dialog("Error", "You must be logged in to save your own concats.", ["Log in", "Cancel"]).then(value => {
+				if(value === 0) {
+					Miro.logIn();
+				}
+			});
 		}
 	});
 })();

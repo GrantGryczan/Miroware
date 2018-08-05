@@ -38,7 +38,8 @@ if(user) {
 			Object.assign(this.value, {
 				unverified: user.unverified,
 				nameCooldown: user.nameCooldown,
-				birth: user.birth
+				birth: user.birth,
+				concats: user.concats
 			});
 		}
 		this.done();
