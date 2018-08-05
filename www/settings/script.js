@@ -68,7 +68,7 @@
 	let connectionBody;
 	const add = html`
 		<button class="mdc-button">
-			<i class="material-icons mdc-button__icon">add</i>Add
+			<i class="mdc-button__icon material-icons">add</i>Add
 		</button>
 	`;
 	const appendCard = connection => {

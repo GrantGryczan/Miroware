@@ -30,24 +30,24 @@ this.value = html`
 					<nav class="mdc-drawer__content mdc-list-group">
 						<div class="mdc-list">
 							<a class="mdc-list-item${this.req.decodedPath === "/" ? " visiting" : '" href="/'}">
-								<i class="material-icons mdc-list-item__graphic">home</i> Home
+								<i class="mdc-list-item__graphic material-icons">home</i> Home
 							</a>`;
 if(this.user) {
 	const myProfile = `/users/${this.user._id}/`;
 	this.value += html`
 							<a class="mdc-list-item${this.req.decodedPath === "/settings/" ? " visiting" : '" href="/settings/'}">
-								<i class="material-icons mdc-list-item__graphic">settings</i> Settings
+								<i class="mdc-list-item__graphic material-icons">settings</i> Settings
 							</a>
 							<a class="mdc-list-item${this.req.decodedPath === myProfile ? " visiting" : `" href="${myProfile}`}">
-								<i class="material-icons mdc-list-item__graphic">account_box</i> Profile
+								<i class="mdc-list-item__graphic material-icons">account_box</i> Profile
 							</a>
 							<a id="logOut" class="mdc-list-item" href="javascript:;">
-								<i class="material-icons mdc-list-item__graphic">person</i> Log out
+								<i class="mdc-list-item__graphic material-icons">person</i> Log out
 							</a>`;
 } else {
 	this.value += html`
 							<a id="logIn" class="mdc-list-item${this.req.decodedPath === "/login/" ? " visiting" : html`" href="/login/?dest=$${encodeURIComponent(this.req.url)}`}">
-								<i class="material-icons mdc-list-item__graphic">person</i> Log in
+								<i class="mdc-list-item__graphic material-icons">person</i> Log in
 							</a>`;
 }
 this.value += html`

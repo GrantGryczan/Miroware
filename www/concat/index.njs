@@ -18,13 +18,13 @@ this.value += html`
 							<div class="mdc-line-ripple"></div>
 						</div>
 					</div>
-					<div id="options">
+					<div id="flags">
 						<div class="mdc-form-field spaced">
 							<div class="mdc-checkbox">
 								<input id="enableSub" name="enableSub" class="mdc-checkbox__native-control" type="checkbox"${this.req.query.sub ? " checked" : ""}>
 								<div class="mdc-checkbox__background"></div>
 							</div>
-							<label for="enableSub">Enable subdomain</label>
+							<label for="enableSub">Custom subdomain</label>
 						</div><div class="mdc-form-field spaced">
 							<div class="mdc-checkbox">
 								<input id="anon" name="anon" class="mdc-checkbox__native-control" type="checkbox"${this.req.query.anon === "true" ? " checked" : ""}>
@@ -32,6 +32,13 @@ this.value += html`
 							</div>
 							<label for="anon">Anonymous</label>
 						</div>
+					</div>
+					<div id="targets">
+						URL Target(s) <button class="help mdc-icon-button material-icons">help</button><br>
+						<div id="entries"></div>
+						<button id="addEntry" class="mdc-button">
+							<i class="mdc-button__icon material-icons">add</i>Add
+						</button>
 					</div>
 					<button class="mdc-button mdc-button--raised mdc-ripple" type="submit">Create</button>
 				</form>`;

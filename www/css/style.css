@@ -31,6 +31,12 @@ body {
 .spaced + .spaced {
 	margin-left: 8px;
 }
+.help {
+	width: 1em;
+	height: 1em;
+	padding: 0;
+	vertical-align: bottom;
+}
 #container {
 	position: absolute;
 	width: 100%;
