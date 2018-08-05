@@ -19,7 +19,7 @@
 		margin: 0 auto;
 		text-align: left;
 		font-size: 1.25em;
-		@media (min-width: 451px) {
+		@media (min-width: 571px) {
 			width: 450px;
 		}
 		#entries {
