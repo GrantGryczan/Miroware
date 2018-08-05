@@ -7,11 +7,11 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<form id="config">
+				<form id="config" autocomplete="off">
 					<div id="url">
 						<span id="sub"${this.req.query.sub ? "" : ' class="hidden"'}>
 							<div class="mdc-text-field">
-								<input name="sub" class="mdc-text-field__input" type="text" value="${this.req.query.sub || ""}" maxlength="246" spellcheck="false">
+								<input name="sub" class="mdc-text-field__input" type="text" value="${this.req.query.sub || ""}" maxlength="246" spellcheck="false" autocomplete="on">
 								<div class="mdc-line-ripple"></div>
 						</div>.</span>miro.gg/<div class="mdc-text-field">
 							<input name="val" class="mdc-text-field__input" type="text" value="${this.req.query.val || ""}" maxlength="256" spellcheck="false"${this.req.query.val ? "" : " autofocus"}>
