@@ -474,6 +474,9 @@
 				}
 			});
 		});
+	} else {
+		const logIn = document.querySelector("#logIn");
+		Miro.logIn = logIn.click.bind(logIn);
 	}
 	Miro.prepare(document);
 })();
