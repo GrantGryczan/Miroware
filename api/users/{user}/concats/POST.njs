@@ -81,11 +81,12 @@ if(user) {
 				keeper: found.anon && keeper._id
 			};
 			this.status = 422;
-			this.done();
-			return;
 		} else {
 			this.update.$push = {
 				concats: concat
+			};
+			this.value = {
+				url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
 			};
 		}
 	} else {
