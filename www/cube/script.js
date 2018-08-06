@@ -1,3 +1,4 @@
+"use strict";
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({
 	alpha: true,

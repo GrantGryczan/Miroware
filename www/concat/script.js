@@ -1,3 +1,4 @@
+"use strict";
 (() => {
 	const form = document.querySelector("form");
 	const sub = form.querySelector("#sub");

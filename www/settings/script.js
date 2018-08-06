@@ -1,3 +1,4 @@
+"use strict";
 (() => {
 	const form = document.querySelector("#settings");
 	const submit = form.querySelector("#save");

@@ -1,3 +1,4 @@
+"use strict";
 (() => {
 	console.log("Discord voice notification extension by Grant Gryczan\nhttps://miroware.io/");
 	if(global.notifExtActive) {
