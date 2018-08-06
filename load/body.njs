@@ -29,16 +29,16 @@ this.value = html`
 					</header>
 					<nav class="mdc-drawer__content mdc-list-group">
 						<div class="mdc-list">
-							<a class="mdc-list-item${this.req.decodedPath === "/" ? " visiting" : '" href="/'}">
+							<a class="mdc-list-item${this.req.decodedPath === "/" ? " mdc-list-item--disabled" : '" href="/'}">
 								<i class="mdc-list-item__graphic material-icons">home</i> Home
 							</a>`;
 if(this.user) {
 	const myProfile = `/users/${this.user._id}/`;
 	this.value += html`
-							<a class="mdc-list-item${this.req.decodedPath === "/settings/" ? " visiting" : '" href="/settings/'}">
+							<a class="mdc-list-item${this.req.decodedPath === "/settings/" ? " mdc-list-item--disabled" : '" href="/settings/'}">
 								<i class="mdc-list-item__graphic material-icons">settings</i> Settings
 							</a>
-							<a class="mdc-list-item${this.req.decodedPath === myProfile ? " visiting" : `" href="${myProfile}`}">
+							<a class="mdc-list-item${this.req.decodedPath === myProfile ? " mdc-list-item--disabled" : `" href="${myProfile}`}">
 								<i class="mdc-list-item__graphic material-icons">account_box</i> Profile
 							</a>
 							<a id="logOut" class="mdc-list-item" href="javascript:;">
@@ -46,7 +46,7 @@ if(this.user) {
 							</a>`;
 } else {
 	this.value += html`
-							<a id="logIn" class="mdc-list-item${this.req.decodedPath === "/login/" ? " visiting" : html`" href="/login/?dest=$${encodeURIComponent(this.req.url)}`}">
+							<a id="logIn" class="mdc-list-item${this.req.decodedPath === "/login/" ? " mdc-list-item--disabled" : html`" href="/login/?dest=$${encodeURIComponent(this.req.url)}`}">
 								<i class="mdc-list-item__graphic material-icons">person</i> Log in
 							</a>`;
 }
