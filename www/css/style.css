@@ -381,6 +381,7 @@ select option {
 		}
 		.mdc-select__native-control {
 			border-bottom-color: rgba(255, 255, 255, 0.42);
+			color: rgba(255, 255, 255, 0.87);
 			&:hover {
 				border-bottom-color: rgba(255, 255, 255, 0.87);
 			}
@@ -389,7 +390,7 @@ select option {
 					color: #e96363;
 				}
 				& ~ .mdc-line-ripple {
-					color: #b54040;
+					background-color: #b54040;
 				}
 			}
 		}
