@@ -43,6 +43,7 @@ if(user) {
 				concats: concat
 			};
 			this.value = {
+				...concat,
 				url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
 			};
 		}

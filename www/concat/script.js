@@ -50,13 +50,16 @@
 			evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
 		}
 	});
+	let appendConcat;
 	if(Miro.user) {
 		const saves = form.querySelector("#saves");
-		for(const concat of Miro.user.concats) {
+		appendConcat = concat => {
 			const option = html`<option>$${concat.sub ? `${concat.sub}.` : ""}miro.gg/$${concat.val}</option>`;
 			option._concat = concat;
 			saves.appendChild(option);
-		}
+			return option;
+		};
+		Miro.user.concats.forEach(appendConcat);
 		saves.addEventListener("change", () => {
 			save.textContent = (selected = saves.options[saves.selectedIndex]._concat) ? "Save" : "Create";
 			deleteConcat.classList[selected ? "remove" : "add"]("hidden");
@@ -116,7 +119,11 @@
 			document.execCommand("copy");
 		});
 		const dialog = new Miro.Dialog("Concat", body);
-		if(!selected) {
+		if(selected) {
+			const selectedOption = saves.options[saves.selectedIndex];
+			appendConcat(req.response).selected = true;
+			saves.removeChild(selectedOption);
+		} else {
 			dialog.then(allDone);
 		}
 	});

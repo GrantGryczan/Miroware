@@ -37,6 +37,7 @@ if(user) {
 				$set: set
 			});
 			this.value = {
+				...concat,
 				url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
 			};
 		} else {
