@@ -66,7 +66,7 @@ this.value += html`
 									$sum: "$size"
 								}
 							}
-						}]).next()).count}</b> concats have been created to this day!
+						}]).next()).count}</b> concats have been created in total!
 					</div>
 				</form>`;
 this.value += (await load("load/pagefoot", this)).value;
