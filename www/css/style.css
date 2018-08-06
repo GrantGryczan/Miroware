@@ -380,9 +380,9 @@ select option {
 			color: rgba(255, 255, 255, 0.6);
 		}
 		.mdc-select__native-control {
-			border-bottom-color: rgba(0, 0, 0, 0.42);
+			border-bottom-color: rgba(255, 255, 255, 0.42);
 			&:hover {
-				border-bottom-color: rgba(0, 0, 0, 0.87);
+				border-bottom-color: rgba(255, 255, 255, 0.87);
 			}
 			&:focus {
 				& ~ .mdc-floating-label {
