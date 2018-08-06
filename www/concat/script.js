@@ -134,12 +134,6 @@
 	if(!location.href.endsWith(location.pathname)) {
 		history.replaceState(0, "", location.pathname);
 	}
-	const checkLogin = value => {
-		if(value === 0) {
-			history.replaceState(0, "", `${location.pathname}?anon=${form.elements.anon.checked}&sub=${encodeURIComponent(form.elements.sub.value)}&val=${encodeURIComponent(form.elements.val.value)}&urls=${encodeURIComponent(urls.join(","))}`);
-			Miro.logIn();
-		}
-	};
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
 		const urls = Array.prototype.map.call(entries.querySelectorAll("input"), byValue);
@@ -156,7 +150,12 @@
 				new Miro.Dialog("Error", "You must specify at least one URL.");
 			}
 		} else {
-			new Miro.Dialog("Error", "You must be logged in to create concats.", ["Log in", "Cancel"]).then(checkLogin);
+			new Miro.Dialog("Error", "You must be logged in to create concats.", ["Log in", "Cancel"]).then(value => {
+				if(value === 0) {
+					history.replaceState(0, "", `${location.pathname}?anon=${form.elements.anon.checked}&sub=${encodeURIComponent(form.elements.sub.value)}&val=${encodeURIComponent(form.elements.val.value)}&urls=${encodeURIComponent(urls.join(","))}`);
+					Miro.logIn();
+				}
+			});
 		}
 	});
 })();
