@@ -116,12 +116,8 @@ a {
 	}
 	.mdc-list {
 		color: inherit;
-		&, &-item__graphic {
-			padding: 8px 0;
-			color: inherit;
-		}
-		&-item {
-			&::before {
+		&:not(.mdc-list--non-interactive) > &-item:not(&-item--disabled) {
+			&::before, &::after {
 				background-color: #ffffff;
 			}
 			&:hover::before {
@@ -137,6 +133,10 @@ a {
 				opacity: 0.5;
 				pointer-events: none;
 			}
+		}
+		&, &-item__graphic {
+			padding: 8px 0;
+			color: inherit;
 		}
 	}
 }
