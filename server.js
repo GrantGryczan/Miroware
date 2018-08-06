@@ -154,6 +154,102 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		domain: cookieOptions.domain,
 		path: cookieOptions.path
 	};
+	const sanitizeConcat = context => {
+		return new Promise(resolve => {
+			const concat = {
+				anon: !!context.req.body.anon,
+				sub: context.req.body.sub.trim().toLowerCase(),
+				val: encodeURI(context.req.body.val),
+				urls: context.req.body.urls
+			};
+			if(typeof concat.sub === "string") {
+				if(concat.sub.length > 63) {
+					context.value = {
+						error: "The `sub` value must be at most 63 characters long."
+					};
+					context.status = 400;
+					context.done();
+					return;
+				} else if(!testSubdomain(concat.sub)) {
+					context.value = {
+						error: "The `sub` value may only contain alphanumeric characters, hyphens and underscores if not on the ends, and periods if not on the ends nor consecutive."
+					};
+					context.status = 400;
+					context.done();
+					return;
+				}
+			} else {
+				context.value = {
+					error: "The `sub` value must be a string."
+				};
+				context.status = 400;
+				context.done();
+				return;
+			}
+			if(typeof concat.val === "string") {
+				if(concat.val.length > 255) {
+					context.value = {
+						error: "The encoded `val` value must be at most 255 characters long."
+					};
+					context.status = 400;
+					context.done();
+					return;
+				}
+			} else {
+				context.value = {
+					error: "The `val` value must be a string."
+				};
+				context.status = 400;
+				context.done();
+				return;
+			}
+			if(concat.urls instanceof Array) {
+				if(concat.urls.length > 1023) {
+					context.value = {
+						error: "The `urls` value must have at most 1023 items."
+					};
+					context.status = 400;
+					context.done();
+					return;
+				} else {
+					for(const url of concat.urls) {
+						if(typeof url === "string") {
+							if(url.length > 511) {
+								context.value = {
+									error: "Items of the `urls` value must be at most 511 characters long."
+								};
+								context.status = 400;
+								context.done();
+								return;
+							} else if(!urlTest.test(url)) {
+								context.value = {
+									error: "Items of the `urls` value must be valid URLs."
+								};
+								context.status = 400;
+								context.done();
+								return;
+							}
+						} else {
+							context.value = {
+								error: "Items of the `urls` value must be strings."
+							};
+							context.status = 400;
+							context.done();
+							return;
+						}
+					}
+				}
+			} else {
+				context.value = {
+					error: "The `urls` value must be an array."
+				};
+				context.status = 400;
+				context.done();
+				return;
+			}
+			resolve(concat);
+		});
+	};
 	const cube = await serve({
 		eval: myEval,
 		domain,
