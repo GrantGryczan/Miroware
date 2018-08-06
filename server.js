@@ -153,6 +153,44 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		domain: cookieOptions.domain,
 		path: cookieOptions.path
 	};
+	const parseUser = context => {
+		return new Promise(resolve => {
+			const thisID = context.user && String(context.user._id);
+			if(context.user && context.params.user === "@me") {
+				context.params.user = thisID;
+			}
+			const isMe = context.params.user === thisID;
+			let user = context.user;
+			if(!isMe) {
+				let userID;
+				try {
+					userID = ObjectID(context.params.user);
+				} catch(err) {
+					context.value = {
+						error: "That is not a valid user ID."
+					};
+					context.status = 400;
+					context.done();
+					return;
+				}
+				user = await users.findOne({
+					_id: userID
+				});
+			}
+			if(user) {
+				resolve({
+					user,
+					isMe
+				});
+			} else {
+				context.value = {
+					error: "That user was not found."
+				};
+				context.status = 404;
+				context.done();
+			}
+		});
+	};
 	const sanitizeConcat = (context, put) => {
 		return new Promise(resolve => {
 			const concat = {
