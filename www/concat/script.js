@@ -10,6 +10,42 @@
 		location.href = location.pathname;
 	};
 	const enableForm = Miro.formState.bind(null, form, true);
+	form.querySelector("#help").addEventListener("click", () => {
+		new Miro.Dialog("Info", html`
+			Adding only one URL will make your concat act as a regular redirect.<br>
+			Adding multiple URLs will make your concat randomly redirect between them.
+		`);
+	});
+	const addEntry = (noFocus, url) => {
+		const entry = html`
+			<div class="entry">
+				<div class="mdc-text-field spaced">
+					<input class="mdc-text-field__input" type="url" required>
+					<div class="mdc-line-ripple"></div>
+				</div><button class="mdc-icon-button material-icons spaced">close</button>
+			</div>
+		`;
+		entries.appendChild(entry);
+		const input = entry.querySelector("input");
+		if(url) {
+			input.value = url;
+		}
+		if(noFocus !== true) {
+			input.select();
+		}
+	};
+	const addEachEntry = addEntry.bind(null, true);
+	if(Miro.query.urls) {
+		Miro.query.urls.split(",").forEach(addEachEntry);
+	} else {
+		addEntry(true);
+	}
+	form.querySelector("#addEntry").addEventListener("click", addEntry);
+	entries.addEventListener("click", evt => {
+		if(evt.target instanceof HTMLButtonElement) {
+			evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
+		}
+	});
 	if(Miro.user) {
 		const saves = form.querySelector("#saves");
 		for(const concat of Miro.user.concats) {
@@ -20,6 +56,18 @@
 		saves.addEventListener("change", () => {
 			save.textContent = (selected = saves.options[saves.selectedIndex]._concat) ? "Save" : "Create";
 			deleteConcat.classList[selected ? "remove" : "add"]("hidden");
+			form.elements.sub.value = selected ? selected.sub : "";
+			form.elements.val.value = selected ? selected.val : "";
+			form.elements.enableSub.checked = selected && selected.sub;
+			form.elements.anon.checked = selected && selected.anon;
+			while(entries.children.length) {
+				entries.removeChild(entries.lastChild);
+			}
+			if(selected) {
+				selected.urls.forEach(addEachEntry);
+			} else {
+				addEntry(true);
+			}
 		});
 		const confirmDeleteConcat = value => {
 			if(value === 0) {
@@ -47,41 +95,6 @@
 		} else {
 			form.elements.sub.value = "";
 			form.elements.val.select();
-		}
-	});
-	form.querySelector("#help").addEventListener("click", () => {
-		new Miro.Dialog("Info", html`
-			Adding only one URL will make your concat act as a regular redirect.<br>
-			Adding multiple URLs will make your concat randomly redirect between them.
-		`);
-	});
-	const addEntry = (noFocus, url) => {
-		const entry = html`
-			<div class="entry">
-				<div class="mdc-text-field spaced">
-					<input class="mdc-text-field__input" type="url" required>
-					<div class="mdc-line-ripple"></div>
-				</div><button class="mdc-icon-button material-icons spaced">close</button>
-			</div>
-		`;
-		entries.appendChild(entry);
-		const input = entry.querySelector("input");
-		if(url) {
-			input.value = url;
-		}
-		if(noFocus !== true) {
-			input.select();
-		}
-	};
-	if(Miro.query.urls) {
-		Miro.query.urls.split(",").forEach(addEntry.bind(null, true));
-	} else {
-		addEntry(true);
-	}
-	form.querySelector("#addEntry").addEventListener("click", addEntry);
-	entries.addEventListener("click", evt => {
-		if(evt.target instanceof HTMLButtonElement) {
-			evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
 		}
 	});
 	const byValue = input => input.value;
