@@ -54,7 +54,6 @@
 		const saves = form.querySelector("#saves");
 		for(const concat of Miro.user.concats) {
 			const option = html`<option>$${concat.sub ? `${concat.sub}.` : ""}miro.gg/$${concat.val}</option>`;
-			concat.val = decodeURI(concat.val);
 			option._concat = concat;
 			saves.appendChild(option);
 		}
@@ -62,7 +61,7 @@
 			save.textContent = (selected = saves.options[saves.selectedIndex]._concat) ? "Save" : "Create";
 			deleteConcat.classList[selected ? "remove" : "add"]("hidden");
 			form.elements.sub.value = selected ? selected.sub : "";
-			form.elements.val.value = selected ? selected.val : "";
+			form.elements.val.value = selected ? decodeURI(selected.val) : "";
 			form.elements.enableSub.checked = selected && selected.sub;
 			form.elements.anon.checked = selected && selected.anon;
 			while(entries.childNodes.length) {
