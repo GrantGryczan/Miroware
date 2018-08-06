@@ -9,6 +9,7 @@
 	const allDone = () => {
 		location.href = location.pathname;
 	};
+	const enableForm = Miro.formState.bind(null, form, true);
 	if(Miro.user) {
 		const saves = form.querySelector("#saves");
 		for(const concat of Miro.user.concats) {
@@ -99,7 +100,6 @@
 		});
 		new Miro.Dialog("Concat", body).then(allDone);
 	});
-	const enableForm = Miro.formState.bind(null, form, true);
 	if(!location.href.endsWidth(location.pathname)) {
 		history.replaceState(0, "", location.pathname);
 	}
