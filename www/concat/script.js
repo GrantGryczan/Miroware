@@ -50,6 +50,16 @@
 			evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
 		}
 	});
+	const changeEnableSub = () => {
+		sub.classList[form.elements.enableSub.checked ? "remove" : "add"]("hidden");
+		if(form.elements.enableSub.checked) {
+			form.elements.sub.select();
+		} else {
+			form.elements.sub.value = "";
+			form.elements.val.select();
+		}
+	};
+	form.elements.enableSub.addEventListener("change", changeEnableSub);
 	let appendConcat;
 	if(Miro.user) {
 		const saves = form.querySelector("#saves");
@@ -63,10 +73,11 @@
 		saves.addEventListener("change", () => {
 			save.textContent = (selected = saves.options[saves.selectedIndex]._concat) ? "Save" : "Create";
 			deleteConcat.classList[selected ? "remove" : "add"]("hidden");
+			form.elements.enableSub.checked = selected && selected.sub;
+			changeEnableSub();
+			form.elements.anon.checked = selected && selected.anon;
 			form.elements.sub.value = selected ? selected.sub : "";
 			form.elements.val.value = selected ? decodeURI(selected.val) : "";
-			form.elements.enableSub.checked = selected && selected.sub;
-			form.elements.anon.checked = selected && selected.anon;
 			while(entries.childNodes.length) {
 				entries.removeChild(entries.lastChild);
 			}
@@ -93,15 +104,6 @@
 				"$${form.elements.val.value}" has not yet been encoded.<br>
 				After you save this concat, "$${encoded}" will be used instead.
 			`);
-		}
-	});
-	form.elements.enableSub.addEventListener("input", () => {
-		sub.classList[form.elements.enableSub.checked ? "remove" : "add"]("hidden");
-		if(form.elements.enableSub.checked) {
-			form.elements.sub.select();
-		} else {
-			form.elements.sub.value = "";
-			form.elements.val.select();
 		}
 	});
 	const byValue = input => input.value;
