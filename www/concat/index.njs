@@ -6,7 +6,16 @@ this.value += html`
 		<link rel="stylesheet" href="style.css">`;
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
-this.value += html`
+this.value += (this.user ? html`
+				<div>
+					<div class="mdc-select">
+						<select id="saves" class="mdc-select__native-control">
+							<option value="" selected>New concat</option>
+						</select>
+						<label class="mdc-floating-label">Concat</label>
+						<div class="mdc-line-ripple"></div>
+					</div>
+				</div>` : "") + html`
 				<form id="config" autocomplete="off">
 					<div id="url">
 						<span id="sub"${this.req.query.sub ? "" : ' class="hidden"'}>

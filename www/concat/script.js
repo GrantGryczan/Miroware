@@ -4,6 +4,19 @@
 	const sub = form.querySelector("#sub");
 	const entries = form.querySelector("#entries");
 	const save = form.querySelector("#save");
+	const delete = form.querySelector("#delete");
+	let selected;
+	if(Miro.user) {
+		const saves = form.querySelector("#saves");
+		for(const concat of Miro.user.concats) {
+			const option = html`<option>$${concat.sub ? `${concat.sub}.` : ""}miro.gg/$${concat.val}</option>`;
+			option._concat = concat;
+			saves.appendChild(option);
+		}
+		saves.addEventListener("change", () => {
+			selected = saves.options[saves.selectedIndex]._concat;
+		});
+	}
 	form.elements.val.addEventListener("change", () => {
 		const encoded = encodeURI(form.elements.val.value);
 		if(form.elements.val.value !== encoded) {
@@ -61,9 +74,9 @@
 	const allDone = () => {
 		location.href = location.pathname;
 	};
-	const postResponse = Miro.response(req => {
+	const response = Miro.response(req => {
 		const body = html`
-			Concat successfully created!<br>
+			Concat successfully saved!<br>
 			<div class="mdc-text-field spaced">
 				<input class="mdc-text-field__input" type="text" value="$${req.response.url}" readonly>
 				<div class="mdc-line-ripple"></div>
@@ -77,24 +90,27 @@
 		new Miro.Dialog("Concat", body).then(allDone);
 	});
 	const enableForm = Miro.formState.bind(null, form, true);
+	if(!location.href.endsWidth(location.pathname)) {
+		history.replaceState(0, "", location.pathname);
+	}
 	const checkLogin = value => {
 		if(value === 0) {
+			history.replaceState(0, "", `${location.pathname}?anon=${form.elements.anon.checked}&sub=${encodeURIComponent(form.elements.sub.value)}&val=${encodeURIComponent(form.elements.val.value)}&urls=${encodeURIComponent(urls.join(","))}`);
 			Miro.logIn();
 		}
 	};
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
 		const urls = Array.prototype.map.call(entries.querySelectorAll("input"), byValue);
-		history.pushState(0, "", `${location.pathname}?anon=${form.elements.anon.checked}&sub=${encodeURIComponent(form.elements.sub.value)}&val=${encodeURIComponent(form.elements.val.value)}&urls=${encodeURIComponent(urls.join(","))}`);
 		if(Miro.user) {
 			if(urls.length) {
 				Miro.formState(form, false);
-				Miro.request("POST", "/users/@me/concats", {}, {
+				Miro.request(selected ? "PUT" : "POST", `/users/@me/concats${selected ? `?sub=${encodeURIComponent(selected.sub)}&val=${encodeURIComponent(selected.val)}` : ""}`, {}, {
 					anon: form.elements.anon.checked,
 					sub: form.elements.sub.value,
 					val: form.elements.val.value,
 					urls
-				}).then(postResponse).finally(enableForm);
+				}).then(response).finally(enableForm);
 			} else {
 				new Miro.Dialog("Error", "You must specify at least one URL.");
 			}
