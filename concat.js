@@ -17,7 +17,7 @@ const youKnow = require("./secret/youknow.js");
 		req.val = req.url.startsWith("/") ? req.url.slice(1) : req.url;
 		req.next();
 	});
-	app.get("*", (req, res) => {
+	app.get("*", async (req, res) => {
 		const keeper = await users.findOne({
 			concats: {
 				$elemMatch: {
