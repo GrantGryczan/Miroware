@@ -153,7 +153,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		domain: cookieOptions.domain,
 		path: cookieOptions.path
 	};
-	const sanitizeConcat = context => {
+	const sanitizeConcat = (context, put) => {
 		return new Promise(resolve => {
 			const concat = {
 				anon: !!context.req.body.anon,
@@ -261,7 +261,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					}
 				}
 			}).then(keeper => {
-				if(keeper) {
+				if(keeper && (this.req.query.sub !== concat.sub || this.req.query.val !== concat.val)) {
 					const found = keeper.concats.find(item => item.sub === concat.sub && item.val === concat.val);
 					context.value = {
 						error: `That concat is already taken${found.anon ? "" : html` by <a href="/users/${keeper._id}/">$${keeper.name}</a>`}.`,
