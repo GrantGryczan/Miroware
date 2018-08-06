@@ -154,7 +154,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		path: cookieOptions.path
 	};
 	const parseUser = context => {
-		return new Promise(resolve => {
+		return new Promise(async resolve => {
 			const thisID = context.user && String(context.user._id);
 			if(context.user && context.params.user === "@me") {
 				context.params.user = thisID;
