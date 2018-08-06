@@ -395,6 +395,9 @@ select option {
 			}
 		}
 	}
+	&--disabled .mdc-floating-label {
+		color: rgba(255, 255, 255, 0.37);
+	}
 }
 .mdc-checkbox {
 	&--disabled ~ label {
