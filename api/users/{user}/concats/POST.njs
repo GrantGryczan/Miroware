@@ -80,7 +80,7 @@ if(user) {
 			const found = keeper.concats.find(item => item.sub === concat.sub && item.val === concat.val);
 			this.value = {
 				error: `That concat is already taken$${found.anon ? "" : html` by <a href="/users/${keeper._id}/">$${keeper.name}</a>`}.`,
-				keeper: found.anon && keeper._id
+				keeper: !found.anon && keeper._id
 			};
 			this.status = 422;
 		} else {
