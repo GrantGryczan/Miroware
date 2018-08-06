@@ -285,8 +285,13 @@ textarea {
 	.mdc-line-ripple {
 		background-color: #b54040;
 	}
-	&:not(&--disabled) .mdc-floating-label {
-		color: rgba(255, 255, 255, 0.6);
+	&:not(&--disabled) {
+		.mdc-text-field__input {
+			color: rgba(255, 255, 255, 0.87);
+		}
+		.mdc-floating-label {
+			color: rgba(255, 255, 255, 0.6);
+		}
 	}
 	&--focused:not(&--disabled) {
 		&:not(.mdc-text-field--invalid) .mdc-floating-label {
@@ -323,20 +328,15 @@ textarea {
 	}
 }
 :not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth).mdc-text-field {
-	&:not(.mdc-text-field--disabled) {
+	&:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) {
 		.mdc-text-field__input {
-			color: rgba(255, 255, 255, 0.87);
+			border-bottom-color: rgba(255, 255, 255, 0.42);
+			&:hover {
+				border-bottom-color: rgba(255, 255, 255, 0.87);
+			}
 		}
-		&:not(.mdc-text-field--invalid) {
-			.mdc-text-field__input {
-				border-bottom-color: rgba(255, 255, 255, 0.42);
-				&:hover {
-					border-bottom-color: rgba(255, 255, 255, 0.87);
-				}
-			}
-			.mdc-floating-label {
-				color: rgba(255, 255, 255, 0.6);
-			}
+		.mdc-floating-label {
+			color: rgba(255, 255, 255, 0.6);
 		}
 	}
 	&--focused:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) .mdc-floating-label {
