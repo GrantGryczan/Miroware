@@ -23,6 +23,7 @@ if(!isMe) {
 if(user) {
 	if(isMe || user.name !== null) {
 		this.value = {
+			id: user._id,
 			created: user.created,
 			updated: user.updated,
 			verified: user.verified,

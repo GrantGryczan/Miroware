@@ -35,8 +35,8 @@ this.value = html`
 if(this.user) {
 	const myProfile = `/users/${this.user._id}/`;
 	this.value += html`
-							<a class="mdc-list-item${this.req.decodedPath === "/settings/" ? " mdc-list-item--disabled" : '" href="/settings/'}">
-								<i class="mdc-list-item__graphic material-icons">settings</i> Settings
+							<a class="mdc-list-item${this.req.decodedPath === "/account/" ? " mdc-list-item--disabled" : '" href="/account/'}">
+								<i class="mdc-list-item__graphic material-icons">settings</i> Account
 							</a>
 							<a class="mdc-list-item${this.req.decodedPath === myProfile ? " mdc-list-item--disabled" : `" href="${myProfile}`}">
 								<i class="mdc-list-item__graphic material-icons">account_box</i> Profile

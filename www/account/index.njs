@@ -1,15 +1,15 @@
 if(notLoggedIn(this)) {
 	return;
 }
-this.title = "Settings";
-this.description = "Set your settings.";
-this.tags = ["settings", "preferences", "account", "user"];
+this.title = "Account";
+this.description = "Do things about your account.";
+this.tags = ["account", "user", "settings", "preferences", "options"];
 this.value = (await load("load/head", this)).value;
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 const nameCooldown = this.now - this.user.nameCooldown < 86400000;
 this.value += html`
-				<form id="settings">
+				<form id="form">
 					<div class="mdc-text-field mdc-text-field--disabled">
 						<input id="email" name="email" class="mdc-text-field__input" type="email" value="$${this.user.email}" required disabled>
 						<label class="mdc-floating-label" for="email">Email</label>
@@ -40,7 +40,7 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<br>
-					<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" disabled>Save</button> <button id="delete" class="mdc-button spaced mdc-ripple">Delete</button>
+					<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" disabled>Save</button><button id="delete" class="mdc-button spaced mdc-ripple">Delete</button><button id="download" class="mdc-button spaced mdc-ripple">Delete</button>
 				</form>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;

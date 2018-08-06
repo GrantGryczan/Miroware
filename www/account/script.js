@@ -1,6 +1,6 @@
 "use strict";
 (() => {
-	const form = document.querySelector("#settings");
+	const form = document.querySelector("#form");
 	const submit = form.querySelector("#save");
 	for(const input of form.elements) {
 		input._element = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
