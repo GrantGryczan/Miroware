@@ -19,7 +19,7 @@
 		}
 		saves.addEventListener("change", () => {
 			save.textContent = (selected = saves.options[saves.selectedIndex]._concat) ? "Save" : "Create";
-			delet.classList[selected ? "remove" : "add"]("hidden");
+			deleteConcat.classList[selected ? "remove" : "add"]("hidden");
 		});
 		const confirmDeleteConcat = value => {
 			if(value === 0) {
