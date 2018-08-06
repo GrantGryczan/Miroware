@@ -115,7 +115,10 @@
 			input.select();
 			document.execCommand("copy");
 		});
-		new Miro.Dialog("Concat", body).then(allDone);
+		const dialog = new Miro.Dialog("Concat", body);
+		if(!selected) {
+			dialog.then(allDone);
+		}
 	});
 	if(!location.href.endsWith(location.pathname)) {
 		history.replaceState(0, "", location.pathname);
