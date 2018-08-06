@@ -40,7 +40,7 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<br>
-					<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" disabled>Save</button><button id="delete" class="mdc-button spaced mdc-ripple">Delete</button><button id="download" class="mdc-button spaced mdc-ripple">Delete</button>
+					<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" disabled>Save</button><button id="delete" class="mdc-button spaced mdc-ripple">Delete</button><button id="download" class="mdc-button spaced mdc-ripple">Download</button>
 				</form>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
