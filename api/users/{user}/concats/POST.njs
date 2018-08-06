@@ -69,10 +69,12 @@ if(user) {
 			return;
 		}
 		const keeper = await users.findOne({
-			concats: [{
-				sub: concat.sub,
-				val: concat.val
-			}]
+			concats: {
+				$elemMatch: {
+					sub: concat.sub,
+					val: concat.val
+				}
+			}
 		});
 		if(keeper) {
 			const found = keeper.concats.find(item => item.sub === concat.sub && item.val === concat.val);
