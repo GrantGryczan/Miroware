@@ -711,11 +711,4 @@
 	  return ContinueSentinel;
 	}
   };
-})(
-  // In sloppy mode, unbound `this` refers to the global object, fallback to
-  // Function constructor if we're in global strict mode. That is sadly a form
-  // of indirect eval which violates Content Security Policy.
-  (function() {
-	return this || (typeof self === "object" && self);
-  })() || Function("return this")()
-);
+})(window);
