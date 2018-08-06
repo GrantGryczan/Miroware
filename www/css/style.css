@@ -116,20 +116,22 @@ a {
 	}
 	.mdc-list {
 		color: inherit;
-		&:not(.mdc-list--non-interactive) > .mdc-list-item:not(.mdc-list-item--disabled) {
-			&::before, &::after {
-				background-color: #ffffff;
+		&:not(.mdc-list--non-interactive) > .mdc-list-item {
+			&:not(.mdc-list-item--disabled) {
+				&::before, &::after {
+					background-color: #ffffff;
+				}
+				&:hover::before {
+					opacity: 0.06;
+				}
+				&:focus::before {
+					opacity: 0.12;
+				}
+				&:active::before {
+					opacity: 0.18;
+				}
 			}
-			&:hover::before {
-				opacity: 0.06;
-			}
-			&:focus::before {
-				opacity: 0.12;
-			}
-			&:active::before {
-				opacity: 0.18;
-			}
-			&.visiting {
+			&--disabled {
 				opacity: 0.5;
 				pointer-events: none;
 			}
