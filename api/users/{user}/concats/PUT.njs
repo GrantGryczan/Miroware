@@ -30,7 +30,7 @@ if(user) {
 				set[`concats.$.${i}`] = concat[i];
 			}
 			users.updateOne({
-				...context.userFilter,
+				...this.userFilter,
 				"concats.sub": found.sub,
 				"concats.val": found.val
 			}, {
