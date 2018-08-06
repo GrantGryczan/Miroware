@@ -61,6 +61,9 @@
 		for(const elem of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
 			elem._mdc = new mdc.textField.MDCTextField(elem);
 		}
+		for(const elem of node.querySelectorAll(".mdc-select")) {
+			elem._mdc = new mdc.select.MDCSelect(elem);
+		}
 		for(const elem of node.querySelectorAll(".mdc-checkbox:not(.mdc-checkbox--upgraded)")) {
 			elem.querySelector(".mdc-checkbox__background").appendChild(checkmark.cloneNode(true));
 			elem._mdc = new mdc.checkbox.MDCCheckbox(elem);
