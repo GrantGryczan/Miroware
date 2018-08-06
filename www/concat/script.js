@@ -54,6 +54,7 @@
 		const saves = form.querySelector("#saves");
 		for(const concat of Miro.user.concats) {
 			const option = html`<option>$${concat.sub ? `${concat.sub}.` : ""}miro.gg/$${concat.val}</option>`;
+			concat.val = decodeURI(concat.val);
 			option._concat = concat;
 			saves.appendChild(option);
 		}
