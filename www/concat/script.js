@@ -57,6 +57,21 @@
 		}
 	});
 	const byValue = input => input.value;
+	const postResponse = Miro.response(req => {
+		const body = html`
+			Concat successfully created!<br>
+			<div class="mdc-text-field spaced">
+				<input class="mdc-text-field__input" type="text" value="$${req.response.url}" readonly>
+				<div class="mdc-line-ripple"></div>
+			</div><button class="mdc-icon-button material-icons spaced" type="button">link</button>
+		`;
+		const input = body.querySelector("input");
+		body.querySelector("button").addEventListener("click", () => {
+			input.select();
+			document.execCommand("copy");
+		});
+		new Miro.Dialog("Concat", body);
+	});
 	const enableForm = Miro.formState.bind(null, form, true);
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
@@ -70,21 +85,7 @@
 					sub: form.elements.sub.value,
 					val: form.elements.val.value,
 					urls
-				}).then(Miro.response(req => {
-					const body = html`
-						Concat successfully created!<br>
-						<div class="mdc-text-field spaced">
-							<input class="mdc-text-field__input" type="text" value="$${req.response.url}" readonly>
-							<div class="mdc-line-ripple"></div>
-						</div><button class="mdc-icon-button material-icons spaced" type="button">link</button>
-					`;
-					const input = body.querySelector("input");
-					body.querySelector("button").addEventListener("click", () => {
-						input.select();
-						document.execCommand("copy");
-					});
-					new Miro.Dialog("Concat", body);
-				})).finally(enableForm);
+				}).then(postResponse).finally(enableForm);
 			} else {
 				new Miro.Dialog("Error", "You must specify at least one URL.");
 			}
