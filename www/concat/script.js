@@ -121,6 +121,7 @@
 		body.querySelector("button").addEventListener("click", () => {
 			input.select();
 			document.execCommand("copy");
+			Miro.snackbar("Linked copied to clipboard");
 		});
 		const dialog = new Miro.Dialog("Concat", body);
 		if(selected) {
