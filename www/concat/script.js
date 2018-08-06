@@ -57,6 +57,9 @@
 		}
 	});
 	const byValue = input => input.value;
+	const allDone = () => {
+		location.href = location.pathname;
+	};
 	const postResponse = Miro.response(req => {
 		const body = html`
 			Concat successfully created!<br>
@@ -70,9 +73,14 @@
 			input.select();
 			document.execCommand("copy");
 		});
-		new Miro.Dialog("Concat", body);
+		new Miro.Dialog("Concat", body).then(allDone);
 	});
 	const enableForm = Miro.formState.bind(null, form, true);
+	const checkLogin = value => {
+		if(value === 0) {
+			Miro.logIn();
+		}
+	};
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
 		const urls = Array.prototype.map.call(entries.querySelectorAll("input"), byValue);
@@ -90,11 +98,7 @@
 				new Miro.Dialog("Error", "You must specify at least one URL.");
 			}
 		} else {
-			new Miro.Dialog("Error", "You must be logged in to save your own concats.", ["Log in", "Cancel"]).then(value => {
-				if(value === 0) {
-					Miro.logIn();
-				}
-			});
+			new Miro.Dialog("Error", "You must be logged in to create concats.", ["Log in", "Cancel"]).then(checkLogin);
 		}
 	});
 })();

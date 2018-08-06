@@ -467,16 +467,18 @@
 	const userMeta = document.querySelector("meta[name='user']");
 	if(userMeta && (Miro.user = JSON.parse(userMeta.getAttribute("content")))) {
 		Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location)));
+		const checkLogout = value => {
+			if(value === 0) {
+				Miro.logOut();
+			}
+		};
 		document.querySelector("#logOut").addEventListener("click", () => {
-			new Miro.Dialog("Log Out", "Are you sure you want to log out?", ["Yes", "No"]).then(value => {
-				if(value === 0) {
-					Miro.logOut();
-				}
-			});
+			new Miro.Dialog("Log Out", "Are you sure you want to log out?", ["Yes", "No"]).then(checkLogout);
 		});
 	} else {
-		const logIn = document.querySelector("#logIn");
-		Miro.logIn = logIn.click.bind(logIn);
+		Miro.logIn = () => {
+			location.href = `/login/?dest=${encodeURIComponent(location.href.slice(location.href.indexOf("/", location.href.indexOf("//") + 2)))}`;
+		};
 	}
 	Miro.prepare(document);
 })();
