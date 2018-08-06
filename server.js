@@ -253,7 +253,24 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				context.done();
 				return;
 			}
-			resolve(concat);
+			const keeper = await users.findOne({
+				concats: {
+					$elemMatch: {
+						sub: concat.sub,
+						val: concat.val
+					}
+				}
+			});
+			if(keeper) {
+				const found = keeper.concats.find(item => item.sub === concat.sub && item.val === concat.val);
+				this.value = {
+					error: `That concat is already taken${found.anon ? "" : html` by <a href="/users/${keeper._id}/">$${keeper.name}</a>`}.`,
+					keeper: !found.anon && keeper._id
+				};
+				this.status = 422;
+			} else {
+				resolve(concat);
+			}
 		});
 	};
 	const cube = await serve({

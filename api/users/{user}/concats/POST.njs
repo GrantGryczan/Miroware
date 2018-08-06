@@ -23,30 +23,13 @@ if(!isMe) {
 if(user) {
 	if(isMe) {
 		const concat = await sanitizeConcat(this);
-		const keeper = await users.findOne({
-			concats: {
-				$elemMatch: {
-					sub: concat.sub,
-					val: concat.val
-				}
-			}
-		});
-		if(keeper) {
-			const found = keeper.concats.find(item => item.sub === concat.sub && item.val === concat.val);
-			this.value = {
-				error: `That concat is already taken${found.anon ? "" : html` by <a href="/users/${keeper._id}/">$${keeper.name}</a>`}.`,
-				keeper: !found.anon && keeper._id
-			};
-			this.status = 422;
-		} else {
-			this.update.$push = {
-				concats: concat
-			};
-			this.value = {
-				...concat,
-				url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
-			};
-		}
+		this.update.$push = {
+			concats: concat
+		};
+		this.value = {
+			...concat,
+			url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
+		};
 	} else {
 		this.value = {
 			error: "You do not have permission to access that user's concats."
