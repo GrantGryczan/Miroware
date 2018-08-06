@@ -278,6 +278,9 @@ label {
 .alwaysFloat {
 	transform: translateY(-100%) scale(0.75);
 }
+textarea {
+	resize: none;
+}
 .mdc-text-field {
 	.mdc-line-ripple {
 		background-color: #b54040;
@@ -326,7 +329,7 @@ label {
 		}
 		&:not(.mdc-text-field--invalid) {
 			.mdc-text-field__input {
-				border-bottom-color: rgba(255, 255, 255, 0.5);
+				border-bottom-color: rgba(255, 255, 255, 0.42);
 				&:hover {
 					border-bottom-color: rgba(255, 255, 255, 0.87);
 				}
@@ -362,64 +365,34 @@ label {
 		margin-top: 8px;
 	}
 }
-textarea {
-	resize: none;
-}
 .mdc-text-field-helper-text {
 	opacity: 0.5;
 	&, .mdc-text-field:not(.mdc-text-field--disabled) + &, .mdc-text-field--disabled + & {
 		color: rgba(255, 255, 255, 0.6);
 	}
 }
+select option {
+	background-color: #202020;
+}
 .mdc-select {
-	.mdc-line-ripple {
-		background-color: #b54040;
-	}
-	&--focused:not(&--disabled) {
-		&:not(.mdc-select--invalid) .mdc-floating-label {
-			color: #e96363;
-		}
-	}
-	&:not(&--disabled) {
-		.mdc-select__native-control {
-			color: rgba(255, 255, 255, 0.87);
-		}
-		&:not(.mdc-select--invalid) {
-			.mdc-select__native-control {
-				border-bottom-color: rgba(255, 255, 255, 0.5);
-				&:hover {
-					border-bottom-color: rgba(255, 255, 255, 0.87);
-				}
-			}
-			.mdc-floating-label {
-				color: rgba(255, 255, 255, 0.6);
-			}
-		}
+	&:not(.mdc-select--disabled) {
 		.mdc-floating-label {
 			color: rgba(255, 255, 255, 0.6);
 		}
-	}
-	&--focused:not(.mdc-select--disabled):not(.mdc-select--invalid) .mdc-floating-label {
-		color: #e96363;
-	}
-	&--invalid:not(.mdc-select--disabled) {
 		.mdc-select__native-control {
-			border-bottom-color: #b00020;
+			border-bottom-color: rgba(0, 0, 0, 0.42);
 			&:hover {
-				border-bottom-color: #d50000;
+				border-bottom-color: rgba(0, 0, 0, 0.87);
+			}
+			&:focus {
+				& ~ .mdc-floating-label {
+					color: #e96363;
+				}
+				& ~ .mdc-line-ripple {
+					color: #b54040;
+				}
 			}
 		}
-		.mdc-floating-label {
-			color: #d50000;
-		}
-	}
-	&--disabled {
-		.mdc-select__native-control, .mdc-floating-label {
-			color: rgba(255, 255, 255, 0.37);
-		}
-	}
-	&:not(.mdc-select--disabled), &--disabled {
-		border-bottom-color: rgba(255, 255, 255, 0.12);
 	}
 }
 .mdc-checkbox {
