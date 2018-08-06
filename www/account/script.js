@@ -128,6 +128,6 @@
 		new Miro.Dialog("Delete", "Are you sure you want to delete your account?", ["Yes", "No"]).then(confirmDeleteAccount);
 	}));
 	form.querySelector("#download").addEventListener("click", () => {
-		html`<a href="https://api.miroware.io/users/@me.njs" download="${Miro.user.id}.json">Delete</a>`.click();
+		html`<a href="/account/data.json" download="${Miro.user.id}.json">Delete</a>`.click();
 	});
 })();
