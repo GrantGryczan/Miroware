@@ -251,7 +251,7 @@ main {
 	&::before, &::after {
 		background-color: #ffffff;
 	}
-	&.help {
+	&.inline {
 		width: 1em;
 		height: 1em;
 		padding: 0;

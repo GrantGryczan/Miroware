@@ -22,7 +22,7 @@
 			form.elements.val.select();
 		}
 	});
-	form.querySelector(".help").addEventListener("click", () => {
+	form.querySelector("#help").addEventListener("click", () => {
 		new Miro.Dialog("Info", html`
 			Adding only one URL will make your concat act as a regular redirect.<br>
 			Adding multiple URLs will make your concat randomly redirect between them.

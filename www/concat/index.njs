@@ -34,7 +34,7 @@ this.value += html`
 						</div>
 					</div>
 					<div id="targets">
-						URL Target(s) <button class="help mdc-icon-button material-icons">help</button><br>
+						URL Target(s) <button id="help" class="mdc-icon-button inline material-icons">help</button><br>
 						<div id="entries"></div>
 						<button id="addEntry" class="mdc-button">
 							<i class="mdc-button__icon material-icons">add</i>Add
