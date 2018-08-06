@@ -34,7 +34,7 @@
 				input.value = url;
 			}
 			if(noFocus !== true) {
-				setTimeout(input.select.bind(input));
+				input.select();
 			}
 		}
 	};
