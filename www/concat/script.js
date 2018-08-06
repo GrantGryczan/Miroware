@@ -1,6 +1,6 @@
 "use strict";
 (() => {
-	const form = document.querySelector("form");
+	const form = document.querySelector("#form");
 	const sub = form.querySelector("#sub");
 	const entries = form.querySelector("#entries");
 	const save = form.querySelector("#save");

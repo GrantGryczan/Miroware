@@ -7,7 +7,7 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<form id="config" autocomplete="off">${(this.user ? html`
+				<form id="form" autocomplete="off">${(this.user ? html`
 					<div>
 						<div class="mdc-select">
 							<select id="saves" class="mdc-select__native-control">
@@ -49,7 +49,25 @@ this.value += html`
 							<i class="mdc-button__icon material-icons">add</i>Add
 						</button>
 					</div>
-					<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit">Create</button><button id="delete" class="mdc-button spaced hidden">Delete</button>
+					<div>
+						<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit">Create</button><button id="delete" class="mdc-button spaced hidden">Delete</button>
+					</div>
+					<div id="details">
+						<b>$${(await users.aggregate([{
+							$project: {
+								size: {
+									$size: "$concats"
+								}
+							}
+						}, {
+							$group: {
+								_id: null,
+								count: {
+									$sum: "$size"
+								}
+							}
+						}]).next()).count}</b> concats have been created to this day!
+					</div>
 				</form>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;

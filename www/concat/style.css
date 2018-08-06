@@ -1,4 +1,4 @@
-#config {
+#form {
 	text-align: center;
 	& > * {
 		margin-bottom: 1em !important;
@@ -36,5 +36,9 @@
 				}
 			}
 		}
+	}
+	#details {
+		margin-top: 32px;
+		opacity: 0.5;
 	}
 }
