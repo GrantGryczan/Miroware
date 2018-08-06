@@ -127,7 +127,12 @@
 	form.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(null, () => {
 		new Miro.Dialog("Delete", "Are you sure you want to delete your account?", ["Yes", "No"]).then(confirmDeleteAccount);
 	}));
+	const confirmDownload = value => {
+		if(value === 0) {
+			html`<a href="/account/data.json" download="${Miro.user.id}.json"></a>`.click();
+		}
+	};
 	form.querySelector("#download").addEventListener("click", () => {
-		html`<a href="/account/data.json" download="${Miro.user.id}.json"></a>`.click();
+		new Miro.Dialog("Download", "Would you like a copy of your user data?", ["Yes", "No"]).then(confirmDownload);
 	});
 })();
