@@ -17,21 +17,25 @@
 		`);
 	});
 	const addEntry = (noFocus, url) => {
-		const entry = html`
-			<div class="entry">
-				<div class="mdc-text-field spaced">
-					<input class="mdc-text-field__input" type="url" required>
-					<div class="mdc-line-ripple"></div>
-				</div><button class="mdc-icon-button material-icons spaced">close</button>
-			</div>
-		`;
-		entries.appendChild(entry);
-		const input = entry.querySelector("input");
-		if(url) {
-			input.value = url;
-		}
-		if(noFocus !== true) {
-			input.select();
+		if(entries.childNodes.length > 1023) {
+			new Miro.Dialog("Error", "You can stop now.");
+		} else {
+			const entry = html`
+				<div class="entry">
+					<div class="mdc-text-field spaced">
+						<input class="mdc-text-field__input" type="url" maxlength="511" required>
+						<div class="mdc-line-ripple"></div>
+					</div><button class="mdc-icon-button material-icons spaced">close</button>
+				</div>
+			`;
+			entries.appendChild(entry);
+			const input = entry.querySelector("input");
+			if(url) {
+				input.value = url;
+			}
+			if(noFocus !== true) {
+				input.select();
+			}
 		}
 	};
 	const addEachEntry = addEntry.bind(null, true);
@@ -60,7 +64,7 @@
 			form.elements.val.value = selected ? selected.val : "";
 			form.elements.enableSub.checked = selected && selected.sub;
 			form.elements.anon.checked = selected && selected.anon;
-			while(entries.children.length) {
+			while(entries.childNodes.length) {
 				entries.removeChild(entries.lastChild);
 			}
 			if(selected) {

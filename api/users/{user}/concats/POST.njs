@@ -25,7 +25,8 @@ if(user) {
 		const concat = {
 			anon: !!this.req.body.anon,
 			sub: this.req.body.sub.trim().toLowerCase(),
-			val: encodeURI(this.req.body.val)
+			val: encodeURI(this.req.body.val),
+			urls: this.req.body.urls
 		};
 		if(typeof concat.sub === "string") {
 			if(concat.sub.length > 63) {
@@ -63,6 +64,50 @@ if(user) {
 		} else {
 			this.value = {
 				error: "The `val` value must be a string."
+			};
+			this.status = 400;
+			this.done();
+			return;
+		}
+		if(concat.urls instanceof Array) {
+			if(concat.urls.length > 1023) {
+				this.value = {
+					error: "The `urls` value must have at most 1023 items."
+				};
+				this.status = 400;
+				this.done();
+				return;
+			} else {
+				for(const url of concat.urls) {
+					if(typeof url === "string") {
+						if(url.length > 511) {
+							this.value = {
+								error: "Items of the `urls` value must be at most 511 characters long."
+							};
+							this.status = 400;
+							this.done();
+							return;
+						} else if(!urlTest.test(url)) {
+							this.value = {
+								error: "Items of the `urls` value must be valid URLs."
+							};
+							this.status = 400;
+							this.done();
+							return;
+						}
+					} else {
+						this.value = {
+							error: "Items of the `urls` value must be strings."
+						};
+						this.status = 400;
+						this.done();
+						return;
+					}
+				}
+			}
+		} else {
+			this.value = {
+				error: "The `urls` value must be an array."
 			};
 			this.status = 400;
 			this.done();
