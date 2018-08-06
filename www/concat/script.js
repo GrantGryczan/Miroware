@@ -100,7 +100,7 @@
 		});
 		new Miro.Dialog("Concat", body).then(allDone);
 	});
-	if(!location.href.endsWidth(location.pathname)) {
+	if(!location.href.endsWith(location.pathname)) {
 		history.replaceState(0, "", location.pathname);
 	}
 	const checkLogin = value => {
