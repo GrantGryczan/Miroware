@@ -49,7 +49,7 @@ this.value += html`
 							<i class="mdc-button__icon material-icons">add</i>Add
 						</button>
 					</div>
-					<button id="delete" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit">Create</button><button id="delete" class="mdc-button spaced hidden">Delete</button>
+					<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit">Create</button><button id="delete" class="mdc-button spaced hidden">Delete</button>
 				</form>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
