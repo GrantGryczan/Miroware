@@ -124,7 +124,10 @@
 			new Miro.Dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(checkDeleteAccount);
 		}
 	};
-	document.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(null, () => {
+	form.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(null, () => {
 		new Miro.Dialog("Delete", "Are you sure you want to delete your account?", ["Yes", "No"]).then(confirmDeleteAccount);
 	}));
+	form.querySelector("#download").addEventListener("click", () => {
+		html`<a href="https://api.miroware.io/users/@me" download="${Miro.user.id}.json">Delete</a>`.click();
+	});
 })();
