@@ -13,8 +13,7 @@ const production = process.argv[2] === "production";
 const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
 const urlTest = /^https?:\/\/./;
-const subdomainTest = /^(?:[0-9a-z](?:[-\._0-9a-z]*[0-9a-z])?)?$/;
-const testSubdomain = subdomain => subdomainTest.test(subdomain) && !subdomain.includes("..");
+const subdomainTest = /^(?:[0-9a-z](?:[-_0-9a-z]*[0-9a-z])?)?$/;
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const lineBreaks = /\n/g;
 const connect = context => {
@@ -170,9 +169,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					context.status = 400;
 					context.done();
 					return;
-				} else if(!testSubdomain(concat.sub)) {
+				} else if(!subdomainTest.test(concat.sub)) {
 					context.value = {
-						error: "The `sub` value may only contain alphanumeric characters, hyphens and underscores if not on the ends, and periods if not on the ends nor consecutive."
+						error: "The `sub` value may only contain alphanumeric characters amd hyphens and underscores if not on the ends."
 					};
 					context.status = 400;
 					context.done();
