@@ -121,8 +121,9 @@
 		const dialog = new Miro.Dialog("Concat", body);
 		if(selected) {
 			const selectedOption = saves.options[saves.selectedIndex];
-			saves.value = appendConcat(req.response).value = "true";
-			saves.options[saves.selectedIndex].value = "";
+			const option = appendConcat(selected = req.response);
+			option.selected = true;
+			saves.insertBefore(option, selectedOption);
 			saves.removeChild(selectedOption);
 		} else {
 			dialog.then(allDone);
