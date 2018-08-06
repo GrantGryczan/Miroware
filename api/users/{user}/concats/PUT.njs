@@ -25,9 +25,17 @@ if(user) {
 		const found = this.user.concats.find(item => item.sub === this.req.query.sub && item.val === this.req.query.val);
 		if(found) {
 			const concat = await sanitizeConcat(this);
+			const set = {};
 			for(const i of Object.keys(concat)) {
-				this.update.$set[`concats.$.${i}`] = concat[i];
+				set[`concats.$.${i}`] = concat[i];
 			}
+			users.updateOne({
+				...context.userFilter,
+				"concats.sub": found.sub,
+				"concats.val": found.val
+			}, {
+				$set: set
+			});
 			this.value = {
 				url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
 			};
