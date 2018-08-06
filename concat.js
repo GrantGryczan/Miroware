@@ -3,25 +3,38 @@ console.log("< Concat >")
 const fs = require("fs");
 const http = require("http");
 const express = require("express");
-const app = express();
-app.use((req, res) => {
-	req.subdomain = req.subdomains.join(".");
-	req.value = req.url.startsWith("/") ? req.url.slice(1) : req.url;
-	req.next();
-});
-app.get("*", (req, res) => {
-	if(req.subdomain === "") {
-		if(req.url === "/") {
-			res.redirect("https://miroware.io/concat/");
+const {MongoClient} = require("mongodb");
+const youKnow = require("./secret/youknow.js");
+(async () => {
+	require("replthis")(v => eval(v));
+	const db = (await MongoClient.connect(youKnow.db, {
+		native_parser: true
+	})).db("web");
+	const users = db.collection("users");
+	const app = express();
+	app.use((req, res) => {
+		req.sub = req.subdomains.join(".");
+		req.val = req.url.startsWith("/") ? req.url.slice(1) : req.url;
+		req.next();
+	});
+	app.get("*", (req, res) => {
+		const keeper = await users.findOne({
+			concats: {
+				$elemMatch: {
+					sub: req.sub,
+					val: req.val
+				}
+			}
+		});
+		if(keeper) {
+			const found = keeper.concats.find(item => item.sub === req.sub && item.val === req.val);
+			res.redirect(found.urls.length === 1 ? found.urls[0] : found.urls[Math.floor(Math.random() * found.urls.length)]);
 		} else {
-			console.log(req.value);
+			res.send("Nope.");
 		}
-	} else if(req.subdomain === "w") {
-		res.redirect(`https://miroware.io/${req.value}`);
-	}
-});
-http.createServer(app).listen(8083);
+	});
+	http.createServer(app).listen(8083);
+})();
 fs.watch(__filename, () => {
 	process.exit();
 });
-require("replthis")(v => eval(v));

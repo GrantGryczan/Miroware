@@ -204,7 +204,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				return;
 			}
 			if(concat.urls instanceof Array) {
-				if(concat.urls.length > 1023) {
+				if(concat.urls.length < 1) {
+					context.value = {
+						error: "The `urls` value must have at least 1 item."
+					};
+					context.status = 400;
+					context.done();
+					return;
+				} else if(concat.urls.length > 1023) {
 					context.value = {
 						error: "The `urls` value must have at most 1023 items."
 					};
