@@ -75,6 +75,8 @@
 			deleteConcat.classList[selected ? "remove" : "add"]("hidden");
 			form.elements.enableSub.checked = selected && selected.sub;
 			changeEnableSub();
+			form.elements.sub.blur();
+			form.elements.val.blur();
 			form.elements.anon.checked = selected && selected.anon;
 			form.elements.sub.value = selected ? selected.sub : "";
 			form.elements.val.value = selected ? decodeURI(selected.val) : "";
