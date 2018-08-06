@@ -31,14 +31,9 @@ hr {
 	border: none;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
-a:link {
-	color: #ffffff;
-}
-a:visited {
-	color: rgba(255, 255, 255, 0.5);
-}
-a:active {
-	color: #ee0000;
+a {
+	color: inherit;
+	text-decoration: underline;
 }
 .hidden {
 	display: none;
