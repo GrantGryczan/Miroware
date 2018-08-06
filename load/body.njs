@@ -53,6 +53,12 @@ if(this.user) {
 this.value += html`
 						</div>
 						<hr class="mdc-list-divider">
+						<div class="mdc-list">
+							<a class="mdc-list-item${this.req.decodedPath === "/concat/" ? " mdc-list-item--disabled" : '" href="/concat/'}">
+								<i class="mdc-list-item__graphic material-icons">link</i> Concat
+							</a>
+						</div>
+						<hr class="mdc-list-divider">
 						<div id="legal">© Miroware 2017-${new Date().getFullYear()}</div>`;
 this.value += (await load("load/external", this)).value;
 this.value += html`
