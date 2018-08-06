@@ -30,7 +30,7 @@ const youKnow = require("./secret/youknow.js");
 			const found = keeper.concats.find(item => item.sub === req.sub && item.val === req.val);
 			res.redirect(found.urls.length === 1 ? found.urls[0] : found.urls[Math.floor(Math.random() * found.urls.length)]);
 		} else {
-			res.send("Nope.");
+			res.redirect(`https://miroware.io/concat/?sub=${encodeURIComponent(req.sub)}&val=${encodeURIComponent(req.val)}`);
 		}
 	});
 	http.createServer(app).listen(8083);
