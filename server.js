@@ -282,7 +282,10 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					users.updateOne(context.pouchFilter, context.updatePouch);
 				}
 			}
-		}]
+		}],
+		babelOptions: {
+			plugins: ["iife-wrap"]
+		}
 	});
 	const {load} = cube;
 })();

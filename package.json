@@ -18,6 +18,7 @@
 	"homepage": "https://miroware.io/",
 	"dependencies": {
 		"aws-sdk": "^2.282.1",
+		"babel-plugin-iife-wrap": "^1.1.0",
 		"body-parser": "^1.18.3",
 		"bson-ext": "^2.0.0",
 		"cookie-parser": "^1.4.3",
@@ -32,6 +33,6 @@
 		"replthis": "^1.0.1",
 		"request": "^2.87.0",
 		"request-promise-native": "^1.0.5",
-		"servecube": "^1.15.13"
+		"servecube": "^1.15.14"
 	}
 }
