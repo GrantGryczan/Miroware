@@ -12,6 +12,7 @@ const youKnow = require("./secret/youknow.js");
 const production = process.argv[2] === "production";
 const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
+const urlTest = /^https?:\/\/./;
 const subdomainTest = /^(?:[0-9a-z](?:[-_0-9a-z]*[0-9a-z])?)?$/;
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const lineBreaks = /\n/g;
@@ -260,6 +261,13 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							if(url.length > 511) {
 								context.value = {
 									error: "Items of the `urls` value must be at most 511 characters long."
+								};
+								context.status = 400;
+								context.done();
+								return;
+							} else if(!urlTest.test(url)) {
+								context.value = {
+									error: "Items of the `urls` value must be valid URLs."
 								};
 								context.status = 400;
 								context.done();
