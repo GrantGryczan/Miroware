@@ -348,12 +348,17 @@
 				req.setRequestHeader(i, headers[i]);
 			}
 			req.onreadystatechange = () => {
+				console.log(req.readyState);
 				if(req.readyState === XMLHttpRequest.DONE) {
 					Miro.progress.close();
 					(req.status === 0 ? reject : resolve)(req);
 				}
 			};
-			req.send((body && JSON.stringify(body)) || undefined);
+			try {
+				req.send((body && JSON.stringify(body)) || undefined);
+			} catch(err) {
+				console.log(err);
+			}
 		});
 	};
 	let authDialog;
