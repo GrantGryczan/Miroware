@@ -360,7 +360,7 @@
 	let sendAuth;
 	let resolveAuth;
 	const authFailed = data => {
-		new Miro.Dialog("Error", (data && ((data.response && data.response.error) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
+		new Miro.Dialog("Error", (data && ((data.response && data.response.error && html`${req.response.error}`) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
 	};
 	const catchAuth = err => {
 		Miro.block(false);
