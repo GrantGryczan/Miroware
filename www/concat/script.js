@@ -115,13 +115,13 @@
 			<div class="mdc-text-field spaced">
 				<input class="mdc-text-field__input" type="text" value="$${req.response.url}" readonly>
 				<div class="mdc-line-ripple"></div>
-			</div><button class="mdc-icon-button material-icons spaced" type="button">link</button>
+			</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button>
 		`;
 		const input = body.querySelector("input");
 		body.querySelector("button").addEventListener("click", () => {
 			input.select();
 			document.execCommand("copy");
-			Miro.snackbar("Linked copied to clipboard");
+			Miro.snackbar("URL copied to clipboard");
 		});
 		const dialog = new Miro.Dialog("Concat", body);
 		if(selected) {
