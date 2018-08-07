@@ -326,7 +326,7 @@
 	const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
 	Miro.request = (method, url, headers, body) => {
 		method = typeof method === "string" ? method.toUpperCase() : "GET";
-		return new Promise((resolve, reject) => {
+		return new Promise(resolve => {
 			if(typeof url === "string") {
 				url = apiOrigin + (url.startsWith("/") ? "" : "/") + url;
 			} else {
@@ -348,17 +348,12 @@
 				req.setRequestHeader(i, headers[i]);
 			}
 			req.onreadystatechange = () => {
-				console.log(req.readyState);
 				if(req.readyState === XMLHttpRequest.DONE) {
 					Miro.progress.close();
-					(req.status === 0 ? reject : resolve)(req);
+					resolve(req);
 				}
 			};
-			try {
-				req.send((body && JSON.stringify(body)) || undefined);
-			} catch(err) {
-				console.log(err);
-			}
+			req.send((body && JSON.stringify(body)) || undefined);
 		});
 	};
 	let authDialog;
