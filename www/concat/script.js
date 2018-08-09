@@ -6,9 +6,6 @@
 	const save = form.querySelector("#save");
 	const deleteConcat = form.querySelector("#delete");
 	let selected;
-	const allDone = () => {
-		location.href = location.pathname;
-	};
 	const enableForm = Miro.formState.bind(null, form, true);
 	form.querySelector("#help").addEventListener("click", () => {
 		new Miro.Dialog("Info", html`
@@ -70,7 +67,7 @@
 			return option;
 		};
 		Miro.user.concats.forEach(appendConcat);
-		saves.addEventListener("change", () => {
+		const changeSave = () => {
 			save.textContent = (selected = saves.options[saves.selectedIndex]._concat) ? "Save" : "Create";
 			deleteConcat.classList[selected ? "remove" : "add"]("hidden");
 			form.elements.enableSub.checked = selected && selected.sub;
@@ -88,11 +85,17 @@
 			} else {
 				addEntry(true);
 			}
-		});
+		};
+		saves.addEventListener("change", changeSave);
+		const doneDeleting = () => {
+			saves.options[0].selected = true;
+			saves.removeChild(saves.options[saves.selectedIndex]);
+			changeSave();
+		};
 		const confirmDeleteConcat = value => {
 			if(value === 0) {
 				Miro.formState(form, false);
-				Miro.request("DELETE", `/users/@me/concats?sub=${encodeURIComponent(selected.sub)}&val=${encodeURIComponent(selected.val)}`).then(allDone).finally(enableForm);
+				Miro.request("DELETE", `/users/@me/concats?sub=${encodeURIComponent(selected.sub)}&val=${encodeURIComponent(selected.val)}`).then(doneDeleting);
 			}
 		};
 		deleteConcat.addEventListener("click", () => {
@@ -131,7 +134,7 @@
 			saves.insertBefore(option, selectedOption);
 			saves.removeChild(selectedOption);
 		} else {
-			dialog.then(allDone);
+			appendConcat(selected = req.response).selected = true;
 		}
 	});
 	if(!location.href.endsWith(location.pathname)) {
