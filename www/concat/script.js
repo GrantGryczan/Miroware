@@ -137,6 +137,7 @@
 			saves.removeChild(selectedOption);
 		} else {
 			appendConcat(selected = req.response).selected = true;
+			changeSave();
 		}
 	});
 	if(!location.href.endsWith(location.pathname)) {
