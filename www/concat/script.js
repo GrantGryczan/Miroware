@@ -121,7 +121,8 @@
 			<div class="mdc-text-field spaced">
 				<input class="mdc-text-field__input" type="text" value="$${req.response.url}" readonly>
 				<div class="mdc-line-ripple"></div>
-			</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button>
+			</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
+			<a href="$${req.response.url}" target="_blank">Preview link</a>
 		`;
 		const input = body.querySelector("input");
 		body.querySelector("button").addEventListener("click", () => {
