@@ -58,6 +58,7 @@
 	};
 	form.elements.enableSub.addEventListener("change", changeEnableSub);
 	let appendConcat;
+	let changeSave;
 	if(Miro.user) {
 		const saves = form.querySelector("#saves");
 		appendConcat = concat => {
@@ -67,7 +68,7 @@
 			return option;
 		};
 		Miro.user.concats.forEach(appendConcat);
-		const changeSave = () => {
+		changeSave = () => {
 			save.textContent = (selected = saves.options[saves.selectedIndex]._concat) ? "Save" : "Create";
 			deleteConcat.classList[selected ? "remove" : "add"]("hidden");
 			form.elements.enableSub.checked = selected && selected.sub;
