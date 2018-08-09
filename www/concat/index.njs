@@ -23,7 +23,7 @@ this.value += html`
 					<div id="url">
 						<span id="sub"${this.req.query.sub ? "" : ' class="hidden"'}>
 							<div class="mdc-text-field">
-								<input name="sub" class="mdc-text-field__input" type="text" value="${this.req.query.sub || ""}" maxlength="63" spellcheck="false" autocomplete="on">
+								<input name="sub" class="mdc-text-field__input" type="text" value="${this.req.query.sub || ""}" maxlength="63" spellcheck="false">
 								<div class="mdc-line-ripple"></div>
 						</div>.</span>miro.gg/<div class="mdc-text-field">
 							<input name="val" class="mdc-text-field__input" type="text" value="${this.req.query.val || ""}" maxlength="255" spellcheck="false"${this.req.query.sub || this.req.query.val ? "" : " autofocus"}>
