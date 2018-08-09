@@ -89,8 +89,9 @@
 		saves.addEventListener("change", changeSave);
 		const doneDeleting = () => {
 			Miro.formState(form, true);
+			const selectedOption = saves.options[saves.selectedIndex];
 			saves.options[0].selected = true;
-			saves.removeChild(saves.options[saves.selectedIndex]);
+			saves.removeChild(selectedOption);
 			changeSave();
 		};
 		const confirmDeleteConcat = value => {
