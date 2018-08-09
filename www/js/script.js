@@ -467,9 +467,8 @@
 			}
 		}));
 	};
-	const userMeta = document.querySelector("meta[name='user']");
-	if(userMeta && (Miro.user = JSON.parse(userMeta.getAttribute("content")))) {
-		Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location)));
+	if(Miro.in = JSON.parse(document.querySelector("meta[name='in']").getAttribute("content"))) {
+		Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location, false)));
 		const checkLogout = value => {
 			if(value === 0) {
 				Miro.logOut();
@@ -483,5 +482,6 @@
 			location.href = `/login/?dest=${encodeURIComponent(location.href.slice(location.href.indexOf("/", location.href.indexOf("//") + 2)))}`;
 		};
 	}
+	Miro.data = JSON.parse(document.querySelector("meta[name='data']").getAttribute("content"));
 	Miro.prepare(document);
 })();

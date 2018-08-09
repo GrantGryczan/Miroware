@@ -40,9 +40,7 @@
 		connection: `${service} ${code}`,
 		email: loginForm.elements.email.value
 	});
-	const loggedIn = () => {
-		location.reload();
-	};
+	const loggedIn = location.reload.bind(location, false);
 	loginForm.addEventListener("submit", evt => {
 		evt.preventDefault();
 		Miro.formState(loginForm, false);

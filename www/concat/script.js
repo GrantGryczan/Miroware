@@ -59,7 +59,7 @@
 	form.elements.enableSub.addEventListener("change", changeEnableSub);
 	let appendConcat;
 	let changeSave;
-	if(Miro.user) {
+	if(Miro.in) {
 		const saves = form.querySelector("#saves");
 		appendConcat = concat => {
 			const option = html`<option>$${concat.sub ? `${concat.sub}.` : ""}miro.gg/$${concat.val}</option>`;
@@ -67,7 +67,7 @@
 			saves.appendChild(option);
 			return option;
 		};
-		Miro.user.concats.forEach(appendConcat);
+		Miro.data.forEach(appendConcat);
 		changeSave = () => {
 			save.textContent = (selected = saves.options[saves.selectedIndex]._concat) ? "Save" : "Create";
 			deleteConcat.classList[selected ? "remove" : "add"]("hidden");
@@ -147,7 +147,7 @@
 	form.addEventListener("submit", evt => {
 		evt.preventDefault();
 		const urls = Array.prototype.map.call(entries.querySelectorAll("input"), byValue);
-		if(Miro.user) {
+		if(Miro.in) {
 			if(urls.length) {
 				Miro.formState(form, false);
 				Miro.request(selected ? "PUT" : "POST", `/users/@me/concats${selected ? `?sub=${encodeURIComponent(selected.sub)}&val=${encodeURIComponent(selected.val)}` : ""}`, {}, {

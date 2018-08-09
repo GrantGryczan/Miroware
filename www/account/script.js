@@ -108,9 +108,7 @@
 	}));
 	form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 	window.onbeforeunload = () => !submit.disabled || undefined;
-	const afterDeletion = Miro.response(() => {
-		location.reload();
-	});
+	const afterDeletion = Miro.response(location.reload.bind(location, false));
 	const deleteAccount = Miro.checkSuper.bind(null, () => {
 		Miro.request("DELETE", "/users/@me").then(afterDeletion);
 	});
@@ -129,7 +127,7 @@
 	}));
 	const confirmDownload = value => {
 		if(value === 0) {
-			html`<a href="/account/data.json" download="${Miro.user.id}.json"></a>`.click();
+			html`<a href="/account/data.json" download="user.json"></a>`.click();
 		}
 	};
 	form.querySelector("#download").addEventListener("click", () => {
