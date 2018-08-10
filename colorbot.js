@@ -31,7 +31,7 @@ client.once("disconnect", exitOnError);
 const inform = (guild, str1, str2) => {
 	if(guild.available) {
 		guild.owner.send(str1).catch(() => {
-			const channels = guild.channels.filterArray(byTextChannels);
+			const channels = guild.channels.filter(byTextChannels);
 			let i = -1;
 			const testChannel = () => {
 				i++;
