@@ -35,12 +35,14 @@
 		if(!(f instanceof Function)) {
 			throw new MiroError("The `f` parameter must be a function.");
 		}
-		data = data instanceof Array ? data : [];
+		if(!(data instanceof Array)) {
+			data = [];
+		}
 		if(n = isFinite(n) ? Math.abs(n) : 1) {
 			let i = 0;
 			for(const now = Date.now(); Date.now() - now < 100; f(i++));
 			data.push(i);
-			return Miro.benchmark(f, n-1, data);
+			return Miro.benchmark(f, n - 1, data);
 		} else {
 			return Miro.average(...data);
 		}
