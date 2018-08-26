@@ -4,7 +4,7 @@ if(testEmail(this.req.body.email)) {
 	});
 	if(user) {
 		connect(this).then(data => {
-			if(user.connections.find(connection => connection.service === data.connection[0] && connection.id === data.id)) {
+			if(user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
 				const token = youKnow.crypto.token();
 				users.updateOne({
 					_id: user._id
