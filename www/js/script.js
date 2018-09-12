@@ -91,6 +91,9 @@
 		return elem.childNodes.length === 1 ? elem.firstChild : elem;
 	};
 	html.escape = code => {
+		if(typeof code !== "string") {
+			throw new MiroError("The `code` parameter must be a string.");
+		}
 		for(const htmlReplacement of htmlReplacements) {
 			code = code.replace(...htmlReplacement);
 		}
