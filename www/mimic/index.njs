@@ -8,13 +8,13 @@ this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
 				<div class="mdc-text-field mdc-text-field--textarea mdc-text-field--fullwidth">
-					<textarea id="input" class="mdc-text-field__input"></textarea>
+					<textarea id="input" class="mdc-text-field__input" rows="8"></textarea>
 					<label class="mdc-floating-label" for="input">Input</label>
 					<div class="mdc-line-ripple"></div>
 				</div>
 				<button id="start" class="mdc-button mdc-button--raised mdc-ripple">Generate</button><br>
 				<div class="mdc-text-field mdc-text-field--textarea mdc-text-field--fullwidth">
-					<textarea id="output" class="mdc-text-field__input" readonly></textarea>
+					<textarea id="output" class="mdc-text-field__input" rows="8" readonly></textarea>
 					<label class="mdc-floating-label alwaysFloat" for="input">Output</label>
 					<div class="mdc-line-ripple"></div>
 				</div>`;
