@@ -280,7 +280,7 @@ label {
 .alwaysFloat {
 	transform: translateY(-100%) scale(0.75);
 	.mdc-text-field--textarea & {
-		   transform: translateY(-50%) scale(0.923);
+		transform: translateY(-50%) scale(0.923);
 	}
 }
 textarea {
