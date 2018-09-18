@@ -22,7 +22,7 @@ const start = () => {
 		dictAfter[value].push(values[i + 1]);
 	}
 	let string = "";
-	while(!string) {
+	while(input.value && !string) {
 		let phrase = "\n";
 		while(true) {
 			phrase = randomItem(dictAfter[phrase]);
@@ -32,6 +32,7 @@ const start = () => {
 				break;
 			}
 		}
+		debugger;
 	}
 	output.value = string;
 };
