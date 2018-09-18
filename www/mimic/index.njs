@@ -18,6 +18,7 @@ this.value += html`
 					<label class="mdc-floating-label alwaysFloat" for="output">Output</label>
 					<div class="mdc-line-ripple"></div>
 				</div>
+				<br>
 				<div class="mdc-text-field mdc-text-field--dense">
 					<input id="splitExp" class="mdc-text-field__input" value="([^\\w])"></input>
 					<label class="mdc-floating-label" for="splitExp">Split expression</label>
