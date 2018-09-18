@@ -15,7 +15,12 @@ this.value += html`
 				<button id="start" class="mdc-button mdc-button--raised mdc-ripple">Generate</button><br>
 				<div class="mdc-text-field mdc-text-field--textarea mdc-text-field--fullwidth">
 					<textarea id="output" class="mdc-text-field__input" rows="8" readonly></textarea>
-					<label class="mdc-floating-label alwaysFloat" for="input">Output</label>
+					<label class="mdc-floating-label alwaysFloat" for="output">Output</label>
+					<div class="mdc-line-ripple"></div>
+				</div>
+				<div class="mdc-text-field mdc-text-field--dense">
+					<input id="splitExp" class="mdc-text-field__input" value="([^\\w])"></input>
+					<label class="mdc-floating-label" for="splitExp">Split expression</label>
 					<div class="mdc-line-ripple"></div>
 				</div>`;
 this.value += (await load("load/pagefoot", this)).value;
