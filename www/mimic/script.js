@@ -22,13 +22,15 @@ const start = () => {
 		dictAfter[value].push(values[i + 1]);
 	}
 	let string = "";
-	let phrase = "\n";
-	while(true) {
-		phrase = randomItem(dictAfter[phrase]);
-		if(phrase) {
-			string += phrase;
-		} else {
-			break;
+	while(!string) {
+		let phrase = "\n";
+		while(true) {
+			phrase = randomItem(dictAfter[phrase]);
+			if(phrase) {
+				string += phrase;
+			} else {
+				break;
+			}
 		}
 	}
 	output.value = string;
