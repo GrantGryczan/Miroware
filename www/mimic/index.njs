@@ -19,7 +19,11 @@ this.value += html`
 					<div class="mdc-line-ripple"></div>
 				</div>
 				<br>
-				<div class="mdc-text-field mdc-text-field--dense">
+				<div class="mdc-text-field mdc-text-field--dense spaced">
+					<input id="depthInput" class="mdc-text-field__input" type="number" min="1" value="3"></input>
+					<label class="mdc-floating-label" for="splitExp">Memory depth</label>
+					<div class="mdc-line-ripple"></div>
+				</div><div class="mdc-text-field mdc-text-field--dense spaced">
 					<input id="splitExp" class="mdc-text-field__input" value="([^\\w])"></input>
 					<label class="mdc-floating-label" for="splitExp">Split expression</label>
 					<div class="mdc-line-ripple"></div>
