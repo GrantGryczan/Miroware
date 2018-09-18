@@ -6,6 +6,7 @@ const splitExp = document.querySelector("#splitExp");
 output.addEventListener("focus", output.select.bind(output));
 const truthy = item => item;
 const _phrases = Symbol("phrases");
+const _value = Symbol("value");
 const start = () => {
 	let splitTest;
 	try {
@@ -45,10 +46,10 @@ const start = () => {
 			if(!entry[phrase]) {
 				entry[phrase] = {
 					[_phrases]: [],
-					value: 0
+					[_value]: 0
 				};
 			}
-			(entry = entry[phrase]).value++;
+			(entry = entry[phrase])[_value]++;
 		}
 	}
 	console.log(dictionary);
@@ -63,8 +64,9 @@ const start = () => {
 				phrase = entryPhrases[Math.floor(Math.random() * entryPhrases.length)];
 				if(phrase) {
 					string += phrase;
-					chance = entry[phrase].value / entryPhrases.length;
-					entry = entry[phrase];
+					const entryPhrase = entry[phrase];
+					chance = entryPhrase[_value] / entryPhrases.length;
+					entry = entryPhrase;
 				} else {
 					break loop;
 				}
