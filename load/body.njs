@@ -57,6 +57,9 @@ this.value += html`
 							<a class="mdc-list-item${this.req.decodedPath === "/concat/" ? " mdc-list-item--disabled" : '" href="/concat/'}">
 								<i class="mdc-list-item__graphic material-icons">link</i> Concat
 							</a>
+							<a class="mdc-list-item${this.req.decodedPath === "/mimic/" ? " mdc-list-item--disabled" : '" href="/mimic/'}">
+								<i class="mdc-list-item__graphic material-icons">scatter_plot</i> Mimic
+							</a>
 						</div>
 						<hr class="mdc-list-divider">
 						<div id="legal">© Miroware 2017-${new Date().getFullYear()}</div>`;
