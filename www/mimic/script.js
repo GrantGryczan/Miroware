@@ -2,7 +2,7 @@
 const input = document.querySelector("#input");
 const output = document.querySelector("#output");
 const depthInput = document.querySelector("#depthInput");
-const splitExp = document.querySelector("#splitExp");
+const spitInput = document.querySelector("#spitInput");
 output.addEventListener("focus", output.select.bind(output));
 document.querySelector("#help").addEventListener("click", () => {
 	new Miro.Dialog("Help", html`
@@ -16,7 +16,7 @@ const _value = Symbol("value");
 const start = () => {
 	let splitTest;
 	try {
-		splitTest = new RegExp(splitExp.value);
+		splitTest = new RegExp(spitInput.value);
 	} catch(err) {
 		new Miro.Dialog("Error", "The split expression must be a valid JavaScript regular expression.");
 		return;
