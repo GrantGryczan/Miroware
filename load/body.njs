@@ -58,7 +58,7 @@ this.value += html`
 								<i class="mdc-list-item__graphic material-icons">link</i> Concat
 							</a>
 							<a class="mdc-list-item${this.req.decodedPath === "/mimic/" ? " mdc-list-item--disabled" : '" href="/mimic/'}">
-								<i class="mdc-list-item__graphic material-icons">scatter_plot</i> Mimic
+								<i class="mdc-list-item__graphic material-icons">memory</i> Mimic
 							</a>
 						</div>
 						<hr class="mdc-list-divider">
