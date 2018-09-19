@@ -28,7 +28,7 @@ this.value += html`
 					<input id="splitExp" class="mdc-text-field__input" value="([^\\w])"></input>
 					<label class="mdc-floating-label" for="splitExp">Split expression</label>
 					<div class="mdc-line-ripple"></div>
-				</div>`;
+				</div><button id="help" class="mdc-icon-button material-icons spaced">help</button>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
