@@ -52,7 +52,6 @@ const start = () => {
 			(entry = entry[phrase])[_value]++;
 		}
 	}
-	console.log(dictionary);
 	let string = "";
 	while(!string) {
 		let phrase = "\n";
