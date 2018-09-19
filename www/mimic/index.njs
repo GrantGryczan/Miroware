@@ -22,11 +22,11 @@ this.value += html`
 				<br>
 				<div class="mdc-text-field mdc-text-field--dense spaced">
 					<input id="depthInput" class="mdc-text-field__input" type="number" min="1" max="2000" value="3"></input>
-					<label class="mdc-floating-label" for="spitInput">Depth</label>
+					<label class="mdc-floating-label" for="splitInput">Depth</label>
 					<div class="mdc-line-ripple"></div>
 				</div><div class="mdc-text-field mdc-text-field--dense spaced">
-					<input id="spitInput" class="mdc-text-field__input" value="([^\\w])"></input>
-					<label class="mdc-floating-label" for="spitInput">Split</label>
+					<input id="splitInput" class="mdc-text-field__input" value="([^\\w])"></input>
+					<label class="mdc-floating-label" for="splitInput">Split</label>
 					<div class="mdc-line-ripple"></div>
 				</div><button id="help" class="mdc-icon-button material-icons spaced">help</button>`;
 this.value += (await load("load/pagefoot", this)).value;
