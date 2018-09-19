@@ -60,13 +60,14 @@ const start = () => {
 			let chance = 1;
 			let entry = dictionary[phrase];
 			for(let i = 1; i <= depth && Math.random() < chance; i++) {
+				const prevPhrase = phrase;
 				const entryPhrases = entry[_phrases];
 				phrase = entryPhrases[Math.floor(Math.random() * entryPhrases.length)];
 				if(phrase) {
 					string += phrase;
-					const entryPhrase = entry[phrase];
-					chance = entryPhrase[_value] / entryPhrases.length;
-					entry = entryPhrase;
+					const dictionaryPhrase = dictionary[prevPhrase]
+					chance = dictionaryPhrase[phrase][_value] / dictionaryPhrase[_phrases].length;
+					entry = entry[phrase];
 				} else {
 					break loop;
 				}
