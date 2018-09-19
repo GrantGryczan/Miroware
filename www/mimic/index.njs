@@ -7,7 +7,7 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<p>Miroware Mimic is a makeshift AI that does a poor job at looking for patterns in text to generate more text.</p>
+				<p>Miroware Mimic is a makeshift AI that does a poor job at looking for patterns in text to generate more text, purely for comical purposes.</p>
 				<div class="mdc-text-field mdc-text-field--textarea mdc-text-field--fullwidth">
 					<textarea id="input" class="mdc-text-field__input" rows="8"></textarea>
 					<label class="mdc-floating-label" for="input">Input</label>
