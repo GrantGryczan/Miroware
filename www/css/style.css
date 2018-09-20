@@ -273,9 +273,9 @@ input:-webkit-autofill {
 }
 label {
 	pointer-events: none;
-}
-.mdc-form-field label {
-	pointer-events: initial;
+	.mdc-form-field & {
+		pointer-events: initial;
+	}
 }
 .alwaysFloat {
 	transform: translateY(-100%) scale(0.75);
