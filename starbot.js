@@ -72,11 +72,13 @@ const sendHelp = (msg, perm) => {
 		noStarboard(msg.guild);
 	}
 };
-client.once("ready", () => {
+const present = () => {
 	client.user.setPresence({
 		status: "online"
 	});
 	client.user.setActivity('Enter ">⭐" for info.');
+};
+client.once("ready", () => {
 	for(const [i, guild] of client.guilds) {
 		if(data.guilds[i]) {
 			if(data.guilds[i][0] && !guild.channels.get(data.guilds[i][0])) {
@@ -87,6 +89,8 @@ client.once("ready", () => {
 		}
 	}
 	save();
+	setInterval(present, 60000);
+	present();
 });
 client.on("guildCreate", guild => {
 	if(!data.guilds[guild.id]) {

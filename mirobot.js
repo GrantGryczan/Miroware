@@ -20,12 +20,16 @@ process.once("unhandledRejection", exitOnError);
 client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
 let guild;
-client.once("ready", () => {
-	guild = client.guilds.get("343250948233101312");
+const present = () => {
 	client.user.setPresence({
 		status: "online"
 	});
 	client.user.setActivity("with magic");
+};
+client.once("ready", () => {
+	guild = client.guilds.get("343250948233101312");
+	setInterval(present, 60000);
+	present();
 });
 const prefix = /^> ?/;
 client.on("message", async msg => {

@@ -70,6 +70,12 @@ const sendHelp = (msg, perm) => {
 	help += "\n\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/colorbot/>.";
 	msg.channel.send(help).catch(errSendMessages(msg));
 };
+const present = () => {
+	client.user.setPresence({
+		status: "online"
+	});
+	client.user.setActivity('Enter ">🎨" for info.');
+};
 client.once("ready", () => {
 	for(const [i] of client.guilds) {
 		if(!data.guilds[i]) {
@@ -90,10 +96,8 @@ client.once("ready", () => {
 		}
 	}
 	save();
-	client.user.setPresence({
-		status: "online"
-	});
-	client.user.setActivity('Enter ">🎨" for info.');
+	setInterval(present, 60000);
+	present();
 });
 client.on("guildCreate", guild => {
 	if(!data.guilds[guild.id]) {
