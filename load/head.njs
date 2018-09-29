@@ -13,7 +13,7 @@ this.value = html`
 		<meta name="author" content="$${this.author}">
 		<meta name="description" content="$${this.description}">
 		<meta name="keywords" content="$${["miroware", "miro", "ware", "grantgryczan", "grant", "gryczan", "magic", ...this.tags].join(",")}">
-		<meta name="theme-color" content="${userAgent && userAgent.includes("Discordbot") ? "#ff0000" : "#202020"}">
+		<meta name="theme-color" content="#202020">
 		<meta property="og:type" content="website">
 		<meta property="og:url" content="https://miroware.io$${this.req.decodedURL}">
 		<meta property="og:site_name" content="Miroware">
