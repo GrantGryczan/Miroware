@@ -77,16 +77,16 @@ const present = () => {
 	client.user.setActivity('Enter ">🎨" for info.');
 };
 client.once("ready", () => {
-	for(const [i] of client.guilds) {
-		if(!data.guilds[i]) {
-			guildCreate(i);
+	for(const [id] of client.guilds) {
+		if(!data.guilds[id]) {
+			guildCreate(id);
 		}
 	}
-	for(const i of Object.keys(data.guilds)) {
-		const guild = client.guilds.get(i);
+	for(const id of Object.keys(data.guilds)) {
+		const guild = client.guilds.get(id);
 		if(guild) {
-			for(const j of Object.keys(data.guilds[i][1])) {
-				data.guilds[i][1][j][1] = data.guilds[i][1][j][1].filter(guild.roles.get.bind(guild.roles));
+			for(const group of Object.keys(data.guilds[id][1])) {
+				data.guilds[id][1][group][1] = data.guilds[id][1][group][1].filter(guild.roles.get.bind(guild.roles));
 			}
 			for(const [, role] of guild.roles) {
 				if(properColorTest.test(role.name) && role.members.size === 0) {
@@ -99,9 +99,9 @@ client.once("ready", () => {
 	setInterval(present, 60000);
 	present();
 });
-client.on("guildCreate", guild => {
-	if(!data.guilds[guild.id]) {
-		guildCreate(guild.id);
+client.on("guildCreate", ({id}) => {
+	if(!data.guilds[id]) {
+		guildCreate(id);
 		save();
 	}
 });
@@ -148,12 +148,12 @@ const removeColor = member => {
 	}
 	return Promise.resolve();
 };
-const ungroup = (guild, role) => {
+const ungroup = (id, role) => {
 	let found = false;
-	for(const i of Object.keys(data.guilds[guild][1])) {
-		const roleIndex = data.guilds[guild][1][i][1].indexOf(role);
+	for(const group of Object.keys(data.guilds[id][1])) {
+		const roleIndex = data.guilds[id][1][group][1].indexOf(role);
 		if(roleIndex !== -1) {
-			data.guilds[guild][1][i][1].splice(roleIndex, 1);
+			data.guilds[id][1][group][1].splice(roleIndex, 1);
 			found = true;
 			break;
 		}
@@ -241,10 +241,10 @@ client.on("message", async msg => {
 				} else if(content[0] === "list") {
 					if(Object.keys(data.guilds[msg.guild.id][1]).length) {
 						const fields = [];
-						for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
+						for(const group of Object.keys(data.guilds[msg.guild.id][1])) {
 							fields.push({
-								name: `${i} (${data.guilds[msg.guild.id][1][i][0] ? `limit: ${data.guilds[msg.guild.id][1][i][0]}` : "no limit"})`,
-								value: data.guilds[msg.guild.id][1][i][1].length ? data.guilds[msg.guild.id][1][i][1].map(msg.guild.roles.get.bind(msg.guild.roles)).join(" ") : "(empty)"
+								name: `${group} (${data.guilds[msg.guild.id][1][group][0] ? `limit: ${data.guilds[msg.guild.id][1][group][0]}` : "no limit"})`,
+								value: data.guilds[msg.guild.id][1][group][1].length ? data.guilds[msg.guild.id][1][group][1].map(msg.guild.roles.get.bind(msg.guild.roles)).join(" ") : "(empty)"
 							});
 						}
 						msg.channel.send(String(msg.author), {
@@ -260,17 +260,17 @@ client.on("message", async msg => {
 						const contentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
 						if(contentRole) {
 							let found = false;
-							for(const i of Object.keys(data.guilds[msg.guild.id][1])) {
-								const roleIndex = data.guilds[msg.guild.id][1][i][1].indexOf(contentRole.id);
+							for(const group of Object.keys(data.guilds[msg.guild.id][1])) {
+								const roleIndex = data.guilds[msg.guild.id][1][group][1].indexOf(contentRole.id);
 								if(roleIndex !== -1) {
 									if(member.roles.has(contentRole.id)) {
 										msg.channel.send(`${msg.author} You already have that role.`).catch(errSendMessages(msg));
 									} else {
 										let has = 0;
-										if(data.guilds[msg.guild.id][1][i][0]) {
-											for(const role of data.guilds[msg.guild.id][1][i][1]) {
+										if(data.guilds[msg.guild.id][1][group][0]) {
+											for(const role of data.guilds[msg.guild.id][1][group][1]) {
 												if(member.roles.has(role)) {
-													if(data.guilds[msg.guild.id][1][i][0] === 1) {
+													if(data.guilds[msg.guild.id][1][group][0] === 1) {
 														member.roles.remove(role);
 													} else {
 														has++;
@@ -278,12 +278,12 @@ client.on("message", async msg => {
 												}
 											}
 										}
-										if(data.guilds[msg.guild.id][1][i][0] <= 1 || has < data.guilds[msg.guild.id][1][i][0]) {
+										if(data.guilds[msg.guild.id][1][group][0] <= 1 || has < data.guilds[msg.guild.id][1][group][0]) {
 											member.roles.add(contentRole).then(() => {
-												msg.channel.send(`${msg.author} ${data.guilds[msg.guild.id][1][i][0] === 1 ? `Your ${italicize(i)} role has been set to ${italicize(contentRole.name)}.` : `The ${italicize(contentRole.name)} role has been added to your ${italicize(i)} roles.`}`).catch(errSendMessages(msg));
+												msg.channel.send(`${msg.author} ${data.guilds[msg.guild.id][1][group][0] === 1 ? `Your ${italicize(group)} role has been set to ${italicize(contentRole.name)}.` : `The ${italicize(contentRole.name)} role has been added to your ${italicize(group)} roles.`}`).catch(errSendMessages(msg));
 											}).catch(errManageRoles(msg.guild));
 										} else {
-											msg.channel.send(`${msg.author} You already have ${has} ${italicize(i)} roles, so you need to remove one to add another.`).catch(errSendMessages(msg));
+											msg.channel.send(`${msg.author} You already have ${has} ${italicize(group)} roles, so you need to remove one to add another.`).catch(errSendMessages(msg));
 										}
 									}
 									found = true;

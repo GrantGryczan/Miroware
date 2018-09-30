@@ -351,8 +351,8 @@
 			req.withCredentials = true;
 			req.open(method, url, true);
 			req.responseType = "json";
-			for(const i of Object.keys(headers)) {
-				req.setRequestHeader(i, headers[i]);
+			for(const header of Object.keys(headers)) {
+				req.setRequestHeader(header, headers[header]);
 			}
 			req.onreadystatechange = () => {
 				if(req.readyState === XMLHttpRequest.DONE) {
@@ -442,13 +442,13 @@
 			body.appendChild(document.createElement("br"));
 		}
 		body.appendChild(document.createElement("br"));
-		for(const i of Object.keys(auths)) {
+		for(const service of Object.keys(auths)) {
 			const button = document.createElement("button");
 			button.classList.add("mdc-button");
 			button.classList.add("mdc-button--unelevated");
 			button.classList.add("spaced");
-			button.textContent = i;
-			button.addEventListener("click", clickAuth(auths[i]));
+			button.textContent = service;
+			button.addEventListener("click", clickAuth(auths[service]));
 			body.appendChild(button);
 		}
 		authDialog = new Miro.Dialog(title || "Authenticate", body, ["Cancel"]);

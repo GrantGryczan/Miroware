@@ -79,13 +79,13 @@ const present = () => {
 	client.user.setActivity('Enter ">⭐" for info.');
 };
 client.once("ready", () => {
-	for(const [i, guild] of client.guilds) {
-		if(data.guilds[i]) {
-			if(data.guilds[i][0] && !guild.channels.get(data.guilds[i][0])) {
-				data.guilds[i][0] = null;
+	for(const [id, guild] of client.guilds) {
+		if(data.guilds[id]) {
+			if(data.guilds[id][0] && !guild.channels.get(data.guilds[id][0])) {
+				data.guilds[id][0] = null;
 			}
 		} else {
-			guildCreate(i);
+			guildCreate(id);
 		}
 	}
 	save();

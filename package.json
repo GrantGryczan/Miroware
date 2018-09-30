@@ -20,10 +20,10 @@
 	},
 	"homepage": "https://miroware.io/",
 	"dependencies": {
-		"aws-sdk": "^2.291.0",
+		"aws-sdk": "^2.325.0",
 		"babel-plugin-iife-wrap": "^1.1.0",
 		"body-parser": "^1.18.3",
-		"bson-ext": "^2.0.0",
+		"bson-ext": "^2.0.1",
 		"cookie-parser": "^1.4.3",
 		"discord.js": "github:hydrabolt/discord.js",
 		"express": "^4.16.2",
@@ -31,11 +31,11 @@
 		"google-auth-library": "^1.6.1",
 		"http-proxy": "^1.17.0",
 		"mime": "^2.3.1",
-		"mongodb": "^3.1.1",
+		"mongodb": "^3.1.6",
 		"php-date": "^2.1.1",
-		"replthis": "^1.0.1",
+		"replthis": "^1.0.2",
 		"request": "^2.88.0",
 		"request-promise-native": "^1.0.5",
-		"servecube": "^1.15.17"
+		"servecube": "^1.15.19"
 	}
 }

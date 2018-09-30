@@ -4,8 +4,8 @@ if(isMe) {
 	if(found) {
 		const concat = await sanitizeConcat(this, true);
 		const set = {};
-		for(const i of Object.keys(concat)) {
-			set[`concats.$.${i}`] = concat[i];
+		for(const key of Object.keys(concat)) {
+			set[`concats.$.${key}`] = concat[key];
 		}
 		users.updateOne({
 			...this.userFilter,
