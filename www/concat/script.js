@@ -39,7 +39,7 @@
 	if(Miro.query.urls) {
 		Miro.query.urls.split(",").forEach(addEachEntry);
 	} else {
-		addEntry(!(Miro.query.sub || Miro.query.val));
+		addEntry(!Miro.query.val);
 	}
 	form.querySelector("#addEntry").addEventListener("click", addEntry);
 	entries.addEventListener("click", evt => {
