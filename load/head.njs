@@ -2,7 +2,7 @@ this.title = this.title === undefined ? "Miroware" : this.title;
 this.author = this.author === undefined ? "Grant Gryczan" : this.author;
 this.description = this.description === undefined ? "Hello, world!" : this.description;
 this.tags = this.tags instanceof Array ? this.tags : [];
-this.image = this.image === undefined ? "/images/icon/main.png" : this.image;
+this.image = this.image === undefined ? "/images/icon/cube.png" : this.image;
 const userAgent = this.req.get("User-Agent");
 this.value = html`
 <!DOCTYPE html>
