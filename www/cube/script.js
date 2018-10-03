@@ -40,7 +40,7 @@ window.animate = () => {
 	render(frame = (frame + 1) % 64);
 	setTimeout(animate, 40);
 };
-window.download = max => {
+window.download = async max => {
 	max = typeof max === "number" ? max : 64;
 	const link = document.createElement("a");
 	for(let i = 0; i < max; i++) {
@@ -48,7 +48,8 @@ window.download = max => {
 		link.href = renderer.domElement.toDataURL();
 		link.download = `cube${i}`;
 		link.click();
+		await Miro.wait(200);
 	}
-}
+};
 document.querySelector("#wrapper").appendChild(renderer.domElement);
 animate();
