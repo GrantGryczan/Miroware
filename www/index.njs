@@ -6,7 +6,7 @@ this.value += html`
 		<link rel="stylesheet" href="style.css">`;
 this.value += (await load("load/body", this)).value;
 this.value += html`
-			<div id="banner"></div>`;
+			<div id="wrapper"></div>`;
 this.value += (await load("load/belt", this)).value;
 this.value += (await load("load/foot", this)).value;
 this.done();
