@@ -13,7 +13,6 @@ if(!(this.tags instanceof Array)) {
 if(this.image === undefined) {
 	this.image = "/images/icon/cube.png";
 }
-console.log(this.req.branches);
 this.value = html`
 <!DOCTYPE html>
 <html lang="en">
@@ -32,8 +31,7 @@ this.value = html`
 		<meta property="og:description" content="$${this.description}">
 		<meta name="google-signin-client_id" content="${youKnow.google.id}">
 		<meta name="in" content="${!!this.user}">
-		<meta name="data" content="$${this.data ? JSON.stringify(this.data) : null}">`;
-this.value += html`
+		<meta name="data" content="$${this.data ? JSON.stringify(this.data) : null}">
 		<title>$${this.title}</title>
 		<link rel="icon" href="$${this.icon}">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
