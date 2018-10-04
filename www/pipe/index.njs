@@ -11,5 +11,7 @@ this.value += html`
 				<button id="go" class="mdc-button mdc-button--raised mdc-ripple">Go to Your Pipe</button>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
+this.value += html`
+		<script src="script.js"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
