@@ -10,8 +10,7 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<div id="banner"></div>
-				<a id="go" class="mdc-button mdc-button--raised mdc-ripple" href="@me/">Go to Your Pipe</a>`;
+				Soon...`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
