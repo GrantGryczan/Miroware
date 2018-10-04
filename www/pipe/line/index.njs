@@ -1,9 +1,7 @@
-if(!this.user) {
-	this.redirect = "/pipe/";
-	this.done();
+if(notLoggedIn(this)) {
 	return;
 }
-this.title = `Pipe / ${this.user.name}`;
+this.title = "Pipe";
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;
