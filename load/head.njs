@@ -11,7 +11,10 @@ if(!(this.tags instanceof Array)) {
 	this.tags = [];
 }
 if(this.image === undefined) {
-	this.image = "/images/icon/cube.png";
+	this.image = "/images/icon/full.png";
+}
+if(this.icon === undefined) {
+	this.icon = "/images/icon/cover.png";
 }
 this.value = html`
 <!DOCTYPE html>
@@ -26,8 +29,8 @@ this.value = html`
 		<meta property="og:type" content="website">
 		<meta property="og:site_name" content="Miroware">
 		<meta property="og:url" content="https://miroware.io$${this.req.decodedURL}">
-		<meta property="og:image" content="$${this.image.includes("//") ? this.image : `https://miroware.io${(this.image.startsWith("/") ? "" : "/") + this.image}`}">
 		<meta property="og:title" content="$${this.title}">
+		<meta property="og:image" content="$${this.image.includes("//") ? this.image : `https://miroware.io${(this.image.startsWith("/") ? "" : "/") + this.image}`}">
 		<meta property="og:description" content="$${this.description}">
 		<meta name="google-signin-client_id" content="${youKnow.google.id}">
 		<meta name="in" content="${!!this.user}">

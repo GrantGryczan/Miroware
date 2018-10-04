@@ -1,6 +1,8 @@
 this.title = "Pipe";
 this.description = "Upload stuff for free.";
 this.tags = ["pipe", "file", "files", "host", "hosting", "hoster", "upload", "uploader", "image", "images", "direct", "link", "links", "url", "urls", "free"];
+this.image = "/pipe/images/icon/full.png";
+this.icon = "/pipe/images/icon/cover.png";
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;
