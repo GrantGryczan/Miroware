@@ -1,9 +1,18 @@
-this.title = this.title === undefined ? "Miroware" : this.title;
-this.author = this.author === undefined ? "Grant Gryczan" : this.author;
-this.description = this.description === undefined ? "Hello, world!" : this.description;
-this.tags = this.tags instanceof Array ? this.tags : [];
-this.image = this.image === undefined ? "/images/icon/cube.png" : this.image;
-const userAgent = this.req.get("User-Agent");
+if(this.title === undefined) {
+	this.title = "Miroware";
+}
+if(this.author === undefined) {
+	this.author = "Grant Gryczan";
+}
+if(this.description === undefined) {
+	this.description = "Hello, world!";
+}
+if(!(this.tags instanceof Array)) {
+	this.tags = [];
+}
+if(this.image === undefined) {
+	this.image = "/images/icon/cube.png";
+}
 console.log(this.req.branches);
 this.value = html`
 <!DOCTYPE html>
@@ -26,7 +35,7 @@ this.value = html`
 		<meta name="data" content="$${this.data ? JSON.stringify(this.data) : null}">`;
 this.value += html`
 		<title>$${this.title}</title>
-		<link rel="icon" href="/images/icon/cover.png">
+		<link rel="icon" href="$${this.icon}">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="https://unpkg.com/material-components-web@0.38.0/dist/material-components-web.min.css">
