@@ -4,6 +4,7 @@ this.description = this.description === undefined ? "Hello, world!" : this.descr
 this.tags = this.tags instanceof Array ? this.tags : [];
 this.image = this.image === undefined ? "/images/icon/cube.png" : this.image;
 const userAgent = this.req.get("User-Agent");
+console.log(this.req.branch);
 this.value = html`
 <!DOCTYPE html>
 <html lang="en">
