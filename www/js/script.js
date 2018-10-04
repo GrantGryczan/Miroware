@@ -485,8 +485,8 @@
 			new Miro.Dialog("Log Out", "Are you sure you want to log out?", ["Yes", "No"]).then(checkLogout);
 		});
 	} else {
-		Miro.logIn = () => {
-			location.href = `/login/?dest=${encodeURIComponent(location.href.slice(location.href.indexOf("/", location.href.indexOf("//") + 2)))}`;
+		Miro.logIn = dest => {
+			location.href = `/login/?dest=${encodeURIComponent(dest || location.href.slice(location.href.indexOf("/", location.href.indexOf("//") + 2)))}`;
 		};
 	}
 	Miro.data = JSON.parse(document.querySelector("meta[name='data']").getAttribute("content"));
