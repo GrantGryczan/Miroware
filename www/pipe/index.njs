@@ -5,9 +5,11 @@ this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;
 this.value += (await load("load/body", this)).value;
+this.value += html`
+			<div id="banner"></div>`;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				Soon...`;
+				test`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
