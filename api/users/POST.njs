@@ -111,7 +111,8 @@ if(testEmail(this.req.body.email)) {
 				birth: this.req.body.birth,
 				desc: "",
 				icon: null,
-				concats: []
+				concats: [],
+				pipe: []
 			};
 			if(!insertData.verified) {
 				insertData.unverified = this.req.body.email;
