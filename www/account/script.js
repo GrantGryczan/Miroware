@@ -33,8 +33,9 @@
 	form.addEventListener("input", onInput);
 	form.addEventListener("change", onInput);
 	const setForm = () => {
+		changed.length = 0;
+		submit.disabled = true;
 		if(changed.includes(form.elements.email)) {
-			changed.length = 0;
 			location.reload();
 			return;
 		}
@@ -42,8 +43,6 @@
 			Miro.inputState(form.elements.name, false);
 		}
 		savePrevs();
-		changed.length = 0;
-		submit.disabled = true;
 	};
 	const putResponse = Miro.response(setTimeout.bind(null, setForm));
 	const enableForm = Miro.formState.bind(null, form, true);
