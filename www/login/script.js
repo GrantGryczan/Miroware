@@ -60,7 +60,7 @@
 			}
 			setTimeout(signupDialog.form.elements.name.focus.bind(signupDialog.form.elements.name));
 		} else {
-			Miro.auth("Log in", "Choose a login method.", logIn, dialogCallback).then(loggedIn);
+			Miro.auth("Login", "Choose a login method.", logIn, dialogCallback).then(loggedIn);
 		}
 	});
 })();
