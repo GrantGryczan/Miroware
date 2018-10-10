@@ -202,7 +202,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		const verifyLink = `https://miroware.io/account/verification/?code=${encodeURIComponent(set.emailCode = crypto.randomBytes(50).toString("base64"))}`;
 		transporter.sendMail({
 			from: "Miroware <info@miroware.io>",
-			to: `${JSON.stringify(user.name)} <${set.unverified || user.email}>`,
+			to: `${JSON.stringify(user.name)} <${set.unverified}>`,
 			subject: "Miroware / Account Verification",
 			text: "Verify your Miroware account.",
 			html: html`
