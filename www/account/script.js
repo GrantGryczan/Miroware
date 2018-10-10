@@ -33,6 +33,10 @@
 	form.addEventListener("input", onInput);
 	form.addEventListener("change", onInput);
 	const setForm = () => {
+		if(changed.includes(form.elements.email)) {
+			location.reload();
+			return;
+		}
 		if(changed.includes(form.elements.name)) {
 			Miro.inputState(form.elements.name, false);
 		}
@@ -108,9 +112,9 @@
 	}));
 	form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 	window.onbeforeunload = () => !submit.disabled || undefined;
-	const afterDeletion = Miro.response(location.reload.bind(location, false));
+	const respondReload = Miro.response(location.reload.bind(location, false));
 	const deleteAccount = Miro.checkSuper.bind(null, () => {
-		Miro.request("DELETE", "/users/@me").then(afterDeletion);
+		Miro.request("DELETE", "/users/@me").then(respondReload);
 	});
 	const checkDeleteAccount = value => {
 		if(value === 0) {
@@ -132,5 +136,21 @@
 	};
 	form.querySelector("#download").addEventListener("click", () => {
 		new Miro.Dialog("Download", "Would you like a copy of your user data?", ["Yes", "No"]).then(confirmDownload);
+	});
+	const confirmVerifyEmail = value => {
+		if(value === 0) {
+			Miro.request("DELETE", "/users/@me/verification").then(respondReload);
+		}
+	};
+	form.querySelector("#verifyEmail").addEventListener("click", () => {
+		new Miro.Dialog("Account Verification", "Are you sure you want to resend the verification email?", ["Yes", "No"]).then(confirmVerifyEmail);
+	});
+	const confirmCancelVerify = value => {
+		if(value === 0) {
+			Miro.request("POST", "/users/@me/verification").then(respondReload);
+		}
+	};
+	form.querySelector("#cancelVerify").addEventListener("click", () => {
+		new Miro.Dialog("Account Verification", "Are you sure you want to cancel the account verification?", ["Yes", "No"]).then(confirmCancelVerify);
 	});
 })();
