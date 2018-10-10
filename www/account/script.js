@@ -32,12 +32,14 @@
 	};
 	form.addEventListener("input", onInput);
 	form.addEventListener("change", onInput);
+	const reload = location.reload.bind(location, false);
 	const setForm = () => {
 		changed.length = 0;
 		submit.disabled = true;
 		if(changed.includes(form.elements.email)) {
-			location.reload();
-			return;
+			new Miro.Dialog("Account Verification", html`
+				A verification email has sent to <b>$${form.elements.email.value}</b>.
+			`).then(reload);
 		}
 		if(changed.includes(form.elements.name)) {
 			Miro.inputState(form.elements.name, false);
@@ -112,7 +114,7 @@
 	}));
 	form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 	window.onbeforeunload = () => !submit.disabled || undefined;
-	const respondReload = Miro.response(location.reload.bind(location, false));
+	const respondReload = Miro.response(reload);
 	const deleteAccount = Miro.checkSuper.bind(null, () => {
 		Miro.request("DELETE", "/users/@me").then(respondReload);
 	});
