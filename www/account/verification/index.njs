@@ -1,4 +1,4 @@
-const user = await users.findOne({
+const user = typeof this.req.query.code === "string" && await users.findOne({
 	emailCode: this.req.query.code
 });
 if(user && !await users.findOne({
