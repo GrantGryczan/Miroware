@@ -3,7 +3,10 @@ const user = typeof this.req.query.code === "string" && await users.findOne({
 });
 if(user) {
 	if(await users.findOne({
-		email: user.unverified
+		email: user.unverified,
+		$not: {
+			_id: user._id
+		}
 	})) {
 		users.updateOne({
 			_id: user._id
