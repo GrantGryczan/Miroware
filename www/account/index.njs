@@ -10,8 +10,8 @@ this.value += (await load("load/pagehead", this)).value;
 const nameCooldown = this.now - this.user.nameCooldown < 86400000;
 this.value += html`
 				<form id="form">
-					<div class="mdc-text-field mdc-text-field--disabled">
-						<input id="email" name="email" class="mdc-text-field__input" type="email" value="$${this.user.email}" required disabled>
+					<div class="mdc-text-field">
+						<input id="email" name="email" class="mdc-text-field__input" type="email" value="$${this.user.email}" required>
 						<label class="mdc-floating-label" for="email">Email</label>
 						<div class="mdc-line-ripple"></div>
 					</div><br>
