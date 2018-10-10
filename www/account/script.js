@@ -34,8 +34,6 @@
 	form.addEventListener("change", onInput);
 	const reload = location.reload.bind(location, false);
 	const setForm = () => {
-		changed.length = 0;
-		submit.disabled = true;
 		if(changed.includes(form.elements.email)) {
 			new Miro.Dialog("Account Verification", html`
 				A verification email has sent to <b>$${form.elements.email.value}</b>.
@@ -44,6 +42,8 @@
 		if(changed.includes(form.elements.name)) {
 			Miro.inputState(form.elements.name, false);
 		}
+		changed.length = 0;
+		submit.disabled = true;
 		savePrevs();
 	};
 	const putResponse = Miro.response(setTimeout.bind(null, setForm));
