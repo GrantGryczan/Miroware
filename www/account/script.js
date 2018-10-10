@@ -139,7 +139,7 @@
 	});
 	const confirmVerifyEmail = value => {
 		if(value === 0) {
-			Miro.request("DELETE", "/users/@me/verification").then(respondReload);
+			Miro.request("POST", "/users/@me/verification", {}, {}).then(respondReload);
 		}
 	};
 	form.querySelector("#verifyEmail").addEventListener("click", () => {
@@ -147,7 +147,7 @@
 	});
 	const confirmCancelVerify = value => {
 		if(value === 0) {
-			Miro.request("POST", "/users/@me/verification", {}, {}).then(respondReload);
+			Miro.request("DELETE", "/users/@me/verification").then(respondReload);
 		}
 	};
 	form.querySelector("#cancelVerify").addEventListener("click", () => {
