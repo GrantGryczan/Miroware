@@ -5,7 +5,7 @@ if(user) {
 	if(await users.findOne({
 		email: user.unverified,
 		_id: {
-			$not: user._id
+			$ne: user._id
 		}
 	})) {
 		users.updateOne({
