@@ -14,7 +14,10 @@ this.value += html`
 						<input id="email" name="email" class="mdc-text-field__input" type="email" value="$${this.user.email}" required>
 						<label class="mdc-floating-label" for="email">Email</label>
 						<div class="mdc-line-ripple"></div>
-					</div><br>
+					</div>` + (this.user.emailCode ? html`
+					<p class="mdc-text-field-helper-text">
+						A verification email has been sent to <b>$${this.user.unverified || this.user.email}</b>. Click <a id="verifyEmail" href="javascript:;">here</a> to resend it.
+					</p>` : html`<br>`) + html`
 					<div class="mdc-form-field">
 						<div class="mdc-checkbox">
 							<input id="publicEmail" name="publicEmail" class="mdc-checkbox__native-control" type="checkbox"${this.user.publicEmail ? " checked" : ""}>

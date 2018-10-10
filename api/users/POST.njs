@@ -117,7 +117,7 @@ if(testEmail(this.req.body.email)) {
 			};
 			if(!insertData.verified) {
 				insertData.unverified = this.req.body.email;
-				sendVerificationEmail(insertData);
+				verifyEmail(insertData);
 			}
 			const id = String((await users.insertOne(insertData)).ops[0]._id);
 			this.value = {

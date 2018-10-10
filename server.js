@@ -195,7 +195,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.done();
 		}
 	});
-	const sendVerificationEmail = (user, set) => {
+	const verifyEmail = (user, set) => {
 		const verifyLink = `https://miroware.io/account/verification/?code=${encodeURIComponent((set || user).emailCode = crypto.randomBytes(50).toString("base64"))}`;
 		transporter.sendMail({
 			from: "Miroware <info@miroware.io>",
