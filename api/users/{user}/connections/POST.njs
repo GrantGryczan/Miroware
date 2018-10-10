@@ -6,7 +6,7 @@ if(isMe) {
 				this.value = {
 					error: "Those credentials are already connected to your account."
 				};
-				this.status = 409;
+				this.status = 422;
 			} else {
 				this.value = {};
 				this.update.$push = {

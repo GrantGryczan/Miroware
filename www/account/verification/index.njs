@@ -1,7 +1,9 @@
 const user = await users.findOne({
 	emailCode: this.req.query.code
 });
-if(user) {
+if(user && !await users.findOne({
+	email: user.unverified
+})) {
 	users.updateOne({
 		_id: user._id
 	}, {

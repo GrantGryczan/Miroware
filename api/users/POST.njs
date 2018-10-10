@@ -1,11 +1,12 @@
 if(testEmail(this.req.body.email)) {
+	this.req.body.email = this.req.body.email.trim().toLowerCase();
 	if(await users.findOne({
 		email: this.req.body.email
 	})) {
 		this.value = {
 			error: "That email is already in use."
 		};
-		this.status = 409;
+		this.status = 422;
 		this.done();
 	} else {
 		connect(this).then(async data => {
