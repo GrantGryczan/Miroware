@@ -71,8 +71,8 @@ if(isMe) {
 	}
 	if(this.req.body.email !== undefined) {
 		if(typeof this.req.body.email === "string") {
-			this.req.body.email = this.req.body.email.trim().toLowerCase();
 			if(testEmail(this.req.body.email)) {
+				this.req.body.email = this.req.body.email.trim().toLowerCase();
 				if(await users.findOne({
 					email: this.req.body.email
 				})) {
@@ -83,8 +83,8 @@ if(isMe) {
 					this.done();
 					return;
 				} else {
-					insertData.unverified = this.req.body.email;
-					sendVerificationEmail(insertData);
+					this.update.$set.unverified = this.req.body.email;
+					sendVerificationEmail(user, this.update.$set);
 				}
 			} else {
 				this.value = {

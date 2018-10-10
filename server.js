@@ -195,11 +195,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.done();
 		}
 	});
-	const sendVerificationEmail = insertData => {
-		const verifyLink = `https://miroware.io/account/verification/?code=${encodeURIComponent(insertData.emailCode = crypto.randomBytes(50).toString("base64"))}`;
+	const sendVerificationEmail = (user, set) => {
+		const verifyLink = `https://miroware.io/account/verification/?code=${encodeURIComponent((set || user).emailCode = crypto.randomBytes(50).toString("base64"))}`;
 		transporter.sendMail({
 			from: "Miroware <info@miroware.io>",
-			to: `${JSON.stringify(insertData.name)} <${insertData.unverified}>`,
+			to: `${JSON.stringify(user.name)} <${user.unverified}>`,
 			subject: "Miroware / Account Verification",
 			text: "Verify your Miroware account.",
 			html: html`
