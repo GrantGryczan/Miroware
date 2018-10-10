@@ -34,6 +34,7 @@
 	form.addEventListener("change", onInput);
 	const setForm = () => {
 		if(changed.includes(form.elements.email)) {
+			changed.length = 0;
 			location.reload();
 			return;
 		}
