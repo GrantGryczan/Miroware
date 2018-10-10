@@ -74,7 +74,7 @@ if(isMe) {
 			this.req.body.email = this.req.body.email.trim();
 			if(testEmail(this.req.body.email)) {
 				insertData.unverified = this.req.body.email;
-				// TODO
+				sendVerificationEmail(insertData);
 			} else {
 				this.value = {
 					error: "The `email` value must be a valid email."

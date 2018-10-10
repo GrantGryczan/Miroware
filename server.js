@@ -7,13 +7,19 @@ const cookieParser = require("cookie-parser");
 const request = require("request-promise-native");
 const mime = require("mime");
 const {MongoClient, ObjectID} = require("mongodb");
+const nodemailer = require("nodemailer");
 const {OAuth2Client} = require("google-auth-library");
 const youKnow = require("./secret/youknow.js");
 const production = process.argv[2] === "production";
-const emailTest = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+const emailTest = /^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
 const urlTest = /^https?:\/\/./;
 const subdomainTest = /^(?:[0-9a-z](?:[-_0-9a-z]*[0-9a-z])?)?$/;
+const transporter = nodemailer.createTransport({
+	sendmail: true,
+	newline: "unix",
+	path: "/usr/sbin/sendmail"
+});
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const lineBreaks = /\n/g;
 const connect = context => {
@@ -153,166 +159,175 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		domain: cookieOptions.domain,
 		path: cookieOptions.path
 	};
-	const parseUser = context => {
-		return new Promise(async resolve => {
-			const thisID = context.user && String(context.user._id);
-			if(context.user && context.params.user === "@me") {
-				context.params.user = thisID;
-			}
-			const isMe = context.params.user === thisID;
-			let user = context.user;
-			if(!isMe) {
-				let userID;
-				try {
-					userID = ObjectID(context.params.user);
-				} catch(err) {
-					context.value = {
-						error: "That is not a valid user ID."
-					};
-					context.status = 400;
-					context.done();
-					return;
-				}
-				user = await users.findOne({
-					_id: userID
-				});
-			}
-			if(user) {
-				resolve({
-					user,
-					isMe
-				});
-			} else {
+	const parseUser = context => new Promise(async resolve => {
+		const thisID = context.user && String(context.user._id);
+		if(context.user && context.params.user === "@me") {
+			context.params.user = thisID;
+		}
+		const isMe = context.params.user === thisID;
+		let user = context.user;
+		if(!isMe) {
+			let userID;
+			try {
+				userID = ObjectID(context.params.user);
+			} catch(err) {
 				context.value = {
-					error: "That user was not found."
+					error: "That is not a valid user ID."
 				};
-				context.status = 404;
+				context.status = 400;
 				context.done();
+				return;
 			}
+			user = await users.findOne({
+				_id: userID
+			});
+		}
+		if(user) {
+			resolve({
+				user,
+				isMe
+			});
+		} else {
+			context.value = {
+				error: "That user was not found."
+			};
+			context.status = 404;
+			context.done();
+		}
+	});
+	const sendVerificationEmail = insertData => {
+		const verifyLink = `https://miroware.io/account/verification/?code=${encodeURIComponent(insertData.emailCode = crypto.randomBytes(50).toString("base64"))}`;
+		transporter.sendMail({
+			from: "Miroware <info@miroware.io>",
+			to: `${JSON.stringify(insertData.name)} <${insertData.unverified}>`,
+			subject: "Miroware / Account Verification",
+			text: "Verify your Miroware account.",
+			html: html`
+				Click the following link to verify your Miroware account.<br>
+				<a href="${verifyLink}">${verifyLink}</a>
+			`
 		});
 	};
-	const sanitizeConcat = (context, put) => {
-		return new Promise(resolve => {
-			const concat = {
-				anon: !!context.req.body.anon,
-				sub: context.req.body.sub.trim().toLowerCase(),
-				val: encodeURI(context.req.body.val),
-				urls: context.req.body.urls
+	const sanitizeConcat = (context, put) => new Promise(resolve => {
+		const concat = {
+			anon: !!context.req.body.anon,
+			sub: context.req.body.sub.trim().toLowerCase(),
+			val: encodeURI(context.req.body.val),
+			urls: context.req.body.urls
+		};
+		if(typeof concat.sub === "string") {
+			if(concat.sub.length > 63) {
+				context.value = {
+					error: "The `sub` value must be at most 63 characters long."
+				};
+				context.status = 400;
+				context.done();
+				return;
+			} else if(!subdomainTest.test(concat.sub)) {
+				context.value = {
+					error: "The `sub` value may only contain alphanumeric characters, and hyphens and underscores if not on the ends."
+				};
+				context.status = 400;
+				context.done();
+				return;
+			}
+		} else {
+			context.value = {
+				error: "The `sub` value must be a string."
 			};
-			if(typeof concat.sub === "string") {
-				if(concat.sub.length > 63) {
-					context.value = {
-						error: "The `sub` value must be at most 63 characters long."
-					};
-					context.status = 400;
-					context.done();
-					return;
-				} else if(!subdomainTest.test(concat.sub)) {
-					context.value = {
-						error: "The `sub` value may only contain alphanumeric characters, and hyphens and underscores if not on the ends."
-					};
-					context.status = 400;
-					context.done();
-					return;
-				}
-			} else {
+			context.status = 400;
+			context.done();
+			return;
+		}
+		if(typeof concat.val === "string") {
+			if(concat.val.length > 255) {
 				context.value = {
-					error: "The `sub` value must be a string."
+					error: "The encoded `val` value must be at most 255 characters long."
 				};
 				context.status = 400;
 				context.done();
 				return;
 			}
-			if(typeof concat.val === "string") {
-				if(concat.val.length > 255) {
-					context.value = {
-						error: "The encoded `val` value must be at most 255 characters long."
-					};
-					context.status = 400;
-					context.done();
-					return;
-				}
-			} else {
+		} else {
+			context.value = {
+				error: "The `val` value must be a string."
+			};
+			context.status = 400;
+			context.done();
+			return;
+		}
+		if(concat.urls instanceof Array) {
+			if(concat.urls.length < 1) {
 				context.value = {
-					error: "The `val` value must be a string."
+					error: "The `urls` value must have at least 1 item."
 				};
 				context.status = 400;
 				context.done();
 				return;
-			}
-			if(concat.urls instanceof Array) {
-				if(concat.urls.length < 1) {
-					context.value = {
-						error: "The `urls` value must have at least 1 item."
-					};
-					context.status = 400;
-					context.done();
-					return;
-				} else if(concat.urls.length > 1023) {
-					context.value = {
-						error: "The `urls` value must have at most 1023 items."
-					};
-					context.status = 400;
-					context.done();
-					return;
-				} else {
-					for(const url of concat.urls) {
-						if(typeof url === "string") {
-							if(url.length > 511) {
-								context.value = {
-									error: "Items of the `urls` value must be at most 511 characters long."
-								};
-								context.status = 400;
-								context.done();
-								return;
-							} else if(!urlTest.test(url)) {
-								context.value = {
-									error: "Items of the `urls` value must be valid URLs."
-								};
-								context.status = 400;
-								context.done();
-								return;
-							}
-						} else {
+			} else if(concat.urls.length > 1023) {
+				context.value = {
+					error: "The `urls` value must have at most 1023 items."
+				};
+				context.status = 400;
+				context.done();
+				return;
+			} else {
+				for(const url of concat.urls) {
+					if(typeof url === "string") {
+						if(url.length > 511) {
 							context.value = {
-								error: "Items of the `urls` value must be strings."
+								error: "Items of the `urls` value must be at most 511 characters long."
+							};
+							context.status = 400;
+							context.done();
+							return;
+						} else if(!urlTest.test(url)) {
+							context.value = {
+								error: "Items of the `urls` value must be valid URLs."
 							};
 							context.status = 400;
 							context.done();
 							return;
 						}
+					} else {
+						context.value = {
+							error: "Items of the `urls` value must be strings."
+						};
+						context.status = 400;
+						context.done();
+						return;
 					}
 				}
-			} else {
-				context.value = {
-					error: "The `urls` value must be an array."
-				};
-				context.status = 400;
-				context.done();
-				return;
 			}
-			users.findOne({
-				concats: {
-					$elemMatch: {
-						sub: concat.sub,
-						val: concat.val
-					}
+		} else {
+			context.value = {
+				error: "The `urls` value must be an array."
+			};
+			context.status = 400;
+			context.done();
+			return;
+		}
+		users.findOne({
+			concats: {
+				$elemMatch: {
+					sub: concat.sub,
+					val: concat.val
 				}
-			}).then(keeper => {
-				if(keeper && (!put || context.req.query.sub !== concat.sub || context.req.query.val !== concat.val)) {
-					const found = keeper.concats.find(item => item.sub === concat.sub && item.val === concat.val);
-					context.value = {
-						error: `That concat is already taken${found.anon ? "" : html` by <a href="/users/${keeper._id}/">$${keeper.name}</a>`}.`,
-						keeper: !found.anon && keeper._id
-					};
-					context.status = 422;
-					context.done();
-				} else {
-					resolve(concat);
-				}
-			});
+			}
+		}).then(keeper => {
+			if(keeper && (!put || context.req.query.sub !== concat.sub || context.req.query.val !== concat.val)) {
+				const found = keeper.concats.find(item => item.sub === concat.sub && item.val === concat.val);
+				context.value = {
+					error: `That concat is already taken${found.anon ? "" : html` by <a href="/users/${keeper._id}/">$${keeper.name}</a>`}.`,
+					keeper: !found.anon && keeper._id
+				};
+				context.status = 422;
+				context.done();
+			} else {
+				resolve(concat);
+			}
 		});
-	};
+	});
 	const cube = await serve({
 		eval: myEval,
 		domain,

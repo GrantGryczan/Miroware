@@ -32,7 +32,7 @@
 		"http-proxy": "^1.17.0",
 		"mime": "^2.3.1",
 		"mongodb": "^3.1.6",
-		"php-date": "^2.1.1",
+		"nodemailer": "^4.6.8",
 		"replthis": "^1.0.2",
 		"request": "^2.88.0",
 		"request-promise-native": "^1.0.5",
