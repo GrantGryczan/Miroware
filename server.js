@@ -196,10 +196,13 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}
 	});
 	const verifyEmail = (user, set) => {
-		const verifyLink = `https://miroware.io/account/verification/?code=${encodeURIComponent((set || user).emailCode = crypto.randomBytes(50).toString("base64"))}`;
+		if(!set) {
+			set = user;
+		}
+		const verifyLink = `https://miroware.io/account/verification/?code=${encodeURIComponent(set.emailCode = crypto.randomBytes(50).toString("base64"))}`;
 		transporter.sendMail({
 			from: "Miroware <info@miroware.io>",
-			to: `${JSON.stringify(user.name)} <${user.unverified || user.email}>`,
+			to: `${JSON.stringify(user.name)} <${set.unverified || user.email}>`,
 			subject: "Miroware / Account Verification",
 			text: "Verify your Miroware account.",
 			html: html`
