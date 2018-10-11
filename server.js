@@ -388,7 +388,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				}
 			}
 			req.next();
-		}, cookieParser(youKnow.cookie.secret)],
+		}, cookieParser(youKnow.cookie)],
 		loadStart: [async context => {
 			if(context.depth === 1) {
 				context.now = Date.now();
