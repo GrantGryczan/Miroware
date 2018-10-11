@@ -17,7 +17,6 @@ if(isMe) {
 			Bucket: "miroware-pipe",
 			Key: found.id,
 			ContentLength: found.size,
-			ContentType: found.type,
 			Body: this.req.body
 		}, err => {
 			// TODO: Purge item from CF cache
