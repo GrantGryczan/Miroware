@@ -1,9 +1,10 @@
 "use strict";
 const addFile = file => {
-	const {xhr} = Miro.request("POST", "/users/@me/pipe", {
+	const request = Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream"
-	}, file).then(Miro.response(console.log));
-	xhr.upload.addEventListener("progress", console.log);
+	}, file);
+	request.then(Miro.response(console.log));
+	request.xhr.upload.addEventListener("progress", console.log);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
