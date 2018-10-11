@@ -50,6 +50,7 @@ const s3 = new AWS.S3({
 						res.status(err.statusCode).send(err.message);
 					} else {
 						res.set("Content-Type", item.mime).send(data.Body);
+						console.log(new Date(), req.url);
 					}
 				});
 			} else {
