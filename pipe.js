@@ -45,7 +45,7 @@ const s3 = new AWS.S3({
 				if(item) {
 					s3.getObject({
 						Bucket: "miroware-pipe",
-						Key: path
+						Key: item.id
 					}, (err, data) => {
 						if(err) {
 							res.status(err.statusCode).send(err.message);
