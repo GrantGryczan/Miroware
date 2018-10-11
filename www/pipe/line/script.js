@@ -9,7 +9,7 @@ const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.multiple = true;
 fileInput.addEventListener("change", () => {
-	fileInput.files.forEach(addFile);
+	Array.prototype.forEach.call(fileInput.files, addFile);
 	fileInput.value = null;
 });
 const uploadButton = document.querySelector("#uploadButton");
