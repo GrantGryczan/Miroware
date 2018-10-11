@@ -369,7 +369,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					return;
 				}
 			}
-			if(req.dir === "api" && bodyMethods.includes(req.method)) {
+			if(req.dir === "api" && bodyMethods.includes(req.method) && req.get("Content-Type") === "application/json") {
 				res.set("Content-Type", "application/json");
 				try {
 					req.body = JSON.parse(req.body);

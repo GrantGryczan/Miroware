@@ -339,12 +339,9 @@ Miro.request = (method, url, headers, body) => {
 			throw new MiroError("The `url` parameter must be a string.");
 		}
 		Miro.progress.open();
-		body = body !== undefined && (body instanceof Object ? body : {});
 		headers = headers instanceof Object ? headers : {};
-		if(body) {
+		if(body instanceof Object && !headers["Content-Type"]) {
 			headers["Content-Type"] = "application/json";
-		} else {
-			delete headers["Content-Type"];
 		}
 		const req = new XMLHttpRequest();
 		req.withCredentials = true;
@@ -359,7 +356,7 @@ Miro.request = (method, url, headers, body) => {
 				resolve(req);
 			}
 		};
-		req.send((body && JSON.stringify(body)) || undefined);
+		req.send((body && (headers["Content-Type"] === "application/json" ? JSON.stringify(body) : body)) || undefined);
 	});
 };
 let authDialog;

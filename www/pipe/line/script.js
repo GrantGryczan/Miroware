@@ -1,9 +1,12 @@
 "use strict";
 const addFile = file => {
-	const reader = new FileReader();
+	/*const reader = new FileReader();
 	reader.addEventListener("progress", console.log);
 	reader.addEventListener("loadend", console.log);
-	reader.readAsArrayBuffer(file);
+	reader.readAsArrayBuffer(file);*/
+	Miro.request("POST", "/users/@me/pipe", {
+		"Content-Type": "application/octet-stream"
+	}, file);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
