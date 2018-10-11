@@ -170,6 +170,7 @@ a {
 main {
 	margin: 0 auto;
 	padding: 60px;
+	box-sizing: border-box;
 	background-color: #282828;
 	word-break: break-word;
 	word-wrap: break-word;
