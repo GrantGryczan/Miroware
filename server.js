@@ -208,6 +208,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			html: html`
 				Click the following link to verify your Miroware account.<br>
 				<a href="${verifyLink}">${verifyLink}</a>
+				<p>
+					<i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i>
+				</p>
 			`
 		});
 	};
