@@ -30,7 +30,6 @@ if(isMe) {
 						"pipe.$.size": this.req.body.length
 					}
 				});
-				this.value = item;
 				request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
 					headers: {
 						"X-Auth-Email": youKnow.cloudflare.email,
@@ -40,7 +39,7 @@ if(isMe) {
 					body: JSON.stringify({
 						files: [`https://pipe.miroware.io/${user.id}/${found.name}`]
 					})
-				}).catch(console.warn);
+				});
 			}
 			this.done();
 		});
