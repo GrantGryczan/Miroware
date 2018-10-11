@@ -16,7 +16,7 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div>` + (this.user.emailCode ? html`
 					<p class="mdc-text-field-helper-text">
-						A verification email has been sent to <b>$${this.user.unverified}</b>. Click <a id="verifyEmail" href="javascript:;">here</a> to resend${this.user.verified ? html` or click <a id="cancelVerify" href="javascript:;">here</a> to cancel` : ""}.
+						A verification email has been sent to <b>$${this.user.unverified}</b>. Click <a id="verifyEmail" href="javascript:;">here</a> to resend${this.user.verified ? html` or click <a id="cancelVerify" href="javascript:;">here</a> to cancel` : ""}. Be sure to check your spam folder!
 					</p>` : html`<br>`) + html`
 					<div class="mdc-form-field">
 						<div class="mdc-checkbox">
