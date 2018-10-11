@@ -9,6 +9,7 @@ const mime = require("mime");
 const {MongoClient, ObjectID} = require("mongodb");
 const nodemailer = require("nodemailer");
 const {OAuth2Client} = require("google-auth-library");
+const AWS = require("aws-sdk");
 const youKnow = require("./secret/youknow.js");
 const production = process.argv[2] === "production";
 const lineBreaks = /\n/g;
