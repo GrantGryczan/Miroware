@@ -96,13 +96,13 @@ const appendCard = connection => {
 	connectionBody.insertBefore(card, add);
 	connectionBody.insertBefore(document.createElement("br"), add);
 };
-const newConnection = req => {
-	appendCard(req.response);
+const newConnection = xhr => {
+	appendCard(xhr.response);
 };
-const connectionsResponse = Miro.response(req => {
+const connectionsResponse = Miro.response(xhr => {
 	connectionBody = document.createElement("span");
 	connectionBody.appendChild(add);
-	req.response.forEach(appendCard);
+	xhr.response.forEach(appendCard);
 	new Miro.Dialog("Connections", connectionBody);
 });
 const requestConnections = Miro.checkSuper.bind(null, () => {

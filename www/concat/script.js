@@ -114,14 +114,14 @@ form.elements.val.addEventListener("change", () => {
 	}
 });
 const byValue = input => input.value;
-const response = Miro.response(req => {
+const response = Miro.response(xhr => {
 	const body = html`
 		Concat successfully saved!<br>
 		<div class="mdc-text-field spaced">
-			<input class="mdc-text-field__input" type="text" value="$${req.response.url}" readonly>
+			<input class="mdc-text-field__input" type="text" value="$${xhr.response.url}" readonly>
 			<div class="mdc-line-ripple"></div>
 		</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
-		<a href="$${req.response.url}" target="_blank">Preview link</a>
+		<a href="$${xhr.response.url}" target="_blank">Preview link</a>
 	`;
 	const input = body.querySelector("input");
 	body.querySelector("button").addEventListener("click", () => {
@@ -132,12 +132,12 @@ const response = Miro.response(req => {
 	const dialog = new Miro.Dialog("Concat", body);
 	if(selected) {
 		const selectedOption = saves.options[saves.selectedIndex];
-		const option = appendConcat(selected = req.response);
+		const option = appendConcat(selected = xhr.response);
 		option.selected = true;
 		saves.insertBefore(option, selectedOption);
 		saves.removeChild(selectedOption);
 	} else {
-		appendConcat(selected = req.response).selected = true;
+		appendConcat(selected = xhr.response).selected = true;
 		changeSave();
 	}
 });

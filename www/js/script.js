@@ -319,20 +319,20 @@ Miro.response = success => {
 	if(success && !(success instanceof Function)) {
 		throw new MiroError("The `success` parameter must be a function if it is defined.");
 	}
-	return async req => {
-		if(Math.floor(req.status / 100) === 2) {
+	return async xhr => {
+		if(Math.floor(xhr.status / 100) === 2) {
 			if(success) {
-				success(req);
+				success(xhr);
 			}
 		} else {
-			await new Miro.Dialog("Error", (req.response && req.response.error && html`${req.response.error}`) || req.statusText || "An unknown network error occurred.");
+			await new Miro.Dialog("Error", (xhr.response && xhr.response.error && html`${xhr.response.error}`) || xhr.statusText || "An unknown network error occurred.");
 		}
 	}
 };
 const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
 Miro.request = (method, url, headers, body) => {
 	method = typeof method === "string" ? method.toUpperCase() : "GET";
-	return new Promise(resolve => {
+	const request = new Promise(resolve => {
 		if(typeof url === "string") {
 			url = apiOrigin + (url.startsWith("/") ? "" : "/") + url;
 		} else {
@@ -343,35 +343,36 @@ Miro.request = (method, url, headers, body) => {
 		if(body instanceof Object && !headers["Content-Type"]) {
 			headers["Content-Type"] = "application/json";
 		}
-		const req = new XMLHttpRequest();
-		req.withCredentials = true;
-		req.open(method, url, true);
-		req.responseType = "json";
+		const xhr = request.xhr = new XMLHttpRequest();
+		xhr.withCredentials = true;
+		xhr.open(method, url, true);
+		xhr.responseType = "json";
 		for(const header of Object.keys(headers)) {
-			req.setRequestHeader(header, headers[header]);
+			xhr.setRequestHeader(header, headers[header]);
 		}
-		req.onreadystatechange = () => {
-			if(req.readyState === XMLHttpRequest.DONE) {
+		xhr.onreadystatechange = () => {
+			if(xhr.readyState === XMLHttpRequest.DONE) {
 				Miro.progress.close();
-				resolve(req);
+				resolve(xhr);
 			}
 		};
-		req.send((body && (headers["Content-Type"] === "application/json" ? JSON.stringify(body) : body)) || undefined);
+		xhr.send((body && (headers["Content-Type"] === "application/json" ? JSON.stringify(body) : body)) || undefined);
 	});
+	return request;
 };
 let authDialog;
 let sendAuth;
 let resolveAuth;
 const authFailed = data => {
-	new Miro.Dialog("Error", (data && ((data.response && data.response.error && html`${req.response.error}`) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
+	new Miro.Dialog("Error", (data && ((data.response && data.response.error && html`${xhr.response.error}`) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
 };
 const catchAuth = err => {
 	Miro.block(false);
 	authFailed(err);
 };
-const closeAndResolveAuth = Miro.response(req => {
+const closeAndResolveAuth = Miro.response(xhr => {
 	authDialog.close(-2);
-	resolveAuth(req);
+	resolveAuth(xhr);
 });
 const clickAuth = auth => {
 	return () => {
@@ -462,9 +463,9 @@ Miro.checkSuper = success => {
 	if(!(success instanceof Function)) {
 		throw new MiroError("The `success` parameter must be a function.");
 	}
-	Miro.request("GET", "/token").then(Miro.response(req => {
-		if(req.response.super) {
-			success(req);
+	Miro.request("GET", "/token").then(Miro.response(xhr => {
+		if(xhr.response.super) {
+			success(xhr);
 		} else {
 			Miro.auth("Security", "You must confirm the validity of your credentials before continuing.", putToken).then(success);
 		}
