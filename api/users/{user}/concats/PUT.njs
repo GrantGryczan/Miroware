@@ -22,7 +22,7 @@ if(isMe) {
 		this.value = {
 			error: "You do not own that concat."
 		};
-		this.status = 403;
+		this.status = 404;
 	}
 } else {
 	this.value = {
