@@ -17,7 +17,7 @@ const s3 = new AWS.S3({
 	})).db("web");
 	const users = db.collection("users");
 	const app = express();
-	app.get("*", (req, res) => {
+	app.get("*", async (req, res) => {
 		let path;
 		try {
 			path = decodeURIComponent(req.url);
@@ -42,17 +42,22 @@ const s3 = new AWS.S3({
 			if(user) {
 				path = path.join("/");
 				const item = user.pipe.find(item => item.name === path);
-				s3.getObject({
-					Bucket: "miroware-pipe",
-					Key: path
-				}, (err, data) => {
-					if(err) {
-						res.status(err.statusCode).send(err.message);
-					} else {
-						res.set("Content-Type", item.mime).send(data.Body);
-						console.log(new Date(), req.url);
-					}
-				});
+				if(item) {
+					s3.getObject({
+						Bucket: "miroware-pipe",
+						Key: path
+					}, (err, data) => {
+						if(err) {
+							res.status(err.statusCode).send(err.message);
+						} else {
+							res.set("Content-Type", item.mime).send(data.Body);
+							console.log(new Date(), req.url);
+						}
+					});
+				} else {
+					res.sendStatus(404);
+					return;
+				}
 			} else {
 				res.sendStatus(404);
 				return;
