@@ -11,6 +11,7 @@ const nodemailer = require("nodemailer");
 const {OAuth2Client} = require("google-auth-library");
 const youKnow = require("./secret/youknow.js");
 const production = process.argv[2] === "production";
+const lineBreaks = /\n/g;
 const emailTest = /^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
 const urlTest = /^https?:\/\/./;
@@ -21,7 +22,10 @@ const transporter = nodemailer.createTransport({
 	path: "/usr/sbin/sendmail"
 });
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
-const lineBreaks = /\n/g;
+const s3 = new AWS.S3({
+	credentials: new AWS.Credentials(youKnow.s3),
+	sslEnabled: true
+});
 const connect = context => {
 	let connection = context.req.body.connection;
 	return new Promise(resolve => {

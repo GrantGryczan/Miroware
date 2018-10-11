@@ -4,19 +4,19 @@ const fs = require("fs");
 const http = require("http");
 const express = require("express");
 const AWS = require("aws-sdk");
-const youKnow = require("./secret/tee.js");
-const app = express();
+const youKnow = require("./secret/youknow.js");
 const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
+const app = express();
 app.use((req, res) => {
 	res.set("Content-Type", "text/plain");
 	try {
 		req.decodedURL = decodeURIComponent(req.url);
 		req.next();
 	} catch(err) {
-		res.send("Error 400: Bad Request");
+		res.sendStatus(400);
 	}
 });
 app.get("*", (req, res) => {
@@ -34,21 +34,6 @@ app.get("*", (req, res) => {
 			}
 		});
 	}
-});
-app.post("*", (req, res) => {
-	s3.putObject({
-		Body: req.body,
-		Bucket: "miroware-pipe",
-		Key: req.decodedURL.slice(1),
-		ContentType: mime.getType(req.decodedURL),
-		ServerSideEncryption: "AES256"
-	}, function(err) {
-		if(err) {
-			res.status(err.statusCode).send(`Error ${err.statusCode}: ${err.message}`);
-		} else {
-			res.send();
-		}
-	});
 });
 http.createServer(app).listen(8082);
 fs.watch(__filename, () => {

@@ -28,7 +28,8 @@ if(isMe) {
 	this.update.$push = {
 		pipe: this.value = {
 			id: String(new ObjectID()),
-			name: this.req.body.name
+			name: this.req.body.name,
+			type: mime.getType(this.req.body.name) || "application/octet-stream"
 		}
 	};
 } else {
