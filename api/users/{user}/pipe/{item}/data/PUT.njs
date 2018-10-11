@@ -15,10 +15,9 @@ if(isMe) {
 		};
 		s3.putObject({
 			Bucket: "miroware-pipe",
-			Key: found.name,
+			Key: found.id,
 			ContentType: found.type,
-			Body: this.req.body/*,
-			ServerSideEncryption: "AES256"*/
+			Body: this.req.body
 		}, err => {
 			// TODO: Purge item from CF cache
 			if(err) {
