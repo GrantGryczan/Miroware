@@ -178,6 +178,7 @@ main {
 		max-width: calc(100% - 120px);
 		min-height: calc(100% - 120px);
 		margin: 0;
+		padding: 30px;
 	}
 	@media (min-width: 1021px) and (max-width: 1519px) {
 		max-width: 780px;
