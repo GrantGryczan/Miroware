@@ -174,17 +174,17 @@ main {
 	word-break: break-word;
 	word-wrap: break-word;
 	@media (max-width: 1020px) {
-		width: calc(100% - 120px);
-		max-width: calc(100% - 120px);
-		min-height: calc(100% - 120px);
+		width: calc(100%);
+		max-width: calc(100%);
+		min-height: calc(100%);
 		margin: 0;
 		padding: 30px;
 	}
 	@media (min-width: 1021px) and (max-width: 1519px) {
-		max-width: 780px;
+		max-width: 900px;
 	}
 	@media (min-width: 1520px) {
-		max-width: 1280px;
+		max-width: 1400px;
 	}
 }
 .mdc-ripple-surface {
