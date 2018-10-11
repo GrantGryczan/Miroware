@@ -11,7 +11,7 @@ this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
 				<button id="uploadButton" class="mdc-button mdc-button--raised mdc-ripple">
-					<i class="mdc-button__icon material-icons">upload</i>Upload
+					<i class="mdc-button__icon material-icons">add</i>Upload
 				</button>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
