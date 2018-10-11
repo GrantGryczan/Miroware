@@ -11,7 +11,7 @@ if(isMe) {
 			return;
 		}
 		const item = {
-			size: this.body.length
+			size: this.req.body.length
 		};
 		const set = {};
 		for(const key of Object.keys(item)) {
