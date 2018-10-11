@@ -1,6 +1,6 @@
 const {user, isMe} = await parseUser(this);
 if(isMe) {
-	const found = this.user.pipe.find(item => item.id === this.params.item);
+	const found = user.pipe.find(item => item.id === this.params.item);
 	if(found) {
 		if(this.req.get("Content-Type") !== "application/octet-stream") {
 			this.value = {
@@ -10,33 +10,37 @@ if(isMe) {
 			this.done();
 			return;
 		}
-		const item = {
-			size: this.req.body.length
-		};
 		s3.putObject({
 			Bucket: "miroware-pipe",
 			Key: found.id,
-			ContentLength: found.size,
+			ContentLength: this.req.body.length,
 			Body: this.req.body
 		}, err => {
-			// TODO: Purge item from CF cache
 			if(err) {
 				this.value = {
 					error: err.message
 				};
 				this.status = err.statusCode;
 			} else {
-				const set = {};
-				for(const key of Object.keys(item)) {
-					set[`pipe.$.${key}`] = item[key];
-				}
 				users.updateOne({
 					...this.userFilter,
 					"pipe.id": found.id
 				}, {
-					$set: set
+					$set: {
+						"pipe.$.size": this.req.body.length
+					}
 				});
 				this.value = item;
+				request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
+					headers: {
+						"X-Auth-Email": youKnow.cloudflare.email,
+						"X-Auth-Key": youKnow.cloudflare.key,
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						files: [`https://pipe.miroware.io/${user.id}/${found.name}`]
+					})
+				});
 			}
 			this.done();
 		});
