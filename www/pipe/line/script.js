@@ -1,7 +1,9 @@
 "use strict";
 const addFile = file => {
 	console.log(file);
-	Miro.request("POST", "/users/@me/pipe").then(Miro.response(xhr => {
+	Miro.request("POST", "/users/@me/pipe", {}, {
+		name: file.name
+	}).then(Miro.response(xhr => {
 		Miro.request("PUT", `/users/@me/pipe/${xhr.response.id}/data`, {
 			"Content-Type": "application/octet-stream"
 		}, file, xhr => {
