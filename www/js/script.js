@@ -332,6 +332,7 @@ Miro.response = success => {
 const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
 Miro.request = (method, url, headers, body) => {
 	method = typeof method === "string" ? method.toUpperCase() : "GET";
+	let xhr;
 	const request = new Promise(resolve => {
 		if(typeof url === "string") {
 			url = apiOrigin + (url.startsWith("/") ? "" : "/") + url;
@@ -343,7 +344,7 @@ Miro.request = (method, url, headers, body) => {
 		if(body instanceof Object && !headers["Content-Type"]) {
 			headers["Content-Type"] = "application/json";
 		}
-		const xhr = request.xhr = new XMLHttpRequest();
+		xhr = new XMLHttpRequest();
 		xhr.withCredentials = true;
 		xhr.open(method, url, true);
 		xhr.responseType = "json";
@@ -358,6 +359,7 @@ Miro.request = (method, url, headers, body) => {
 		};
 		xhr.send((body && (headers["Content-Type"] === "application/json" ? JSON.stringify(body) : body)) || undefined);
 	});
+	request.xhr = xhr;
 	return request;
 };
 let authDialog;
