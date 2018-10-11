@@ -23,6 +23,7 @@ if(isMe) {
 		}, {
 			$set: set
 		});
+		// TODO: Purge item from CF cache
 		this.value = item;
 	} else {
 		this.value = {

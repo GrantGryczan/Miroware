@@ -27,7 +27,7 @@ if(isMe) {
 	}
 	this.update.$push = {
 		pipe: this.value = {
-			id: new ObjectID(),
+			id: String(new ObjectID()),
 			name: this.req.body.name
 		}
 	};
