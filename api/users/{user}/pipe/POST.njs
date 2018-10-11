@@ -29,7 +29,7 @@ if(isMe) {
 		pipe: this.value = {
 			id: String(new ObjectID()),
 			name: this.req.body.name,
-			type: mime.getType(this.req.body.name) || "application/octet-stream"
+			mime: mime.getType(this.req.body.name) || "application/octet-stream"
 		}
 	};
 } else {
