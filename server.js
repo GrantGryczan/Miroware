@@ -369,15 +369,17 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					return;
 				}
 			}
-			if(req.dir === "api" && bodyMethods.includes(req.method) && req.get("Content-Type") === "application/json") {
+			if(req.dir === "api" && bodyMethods.includes(req.method)) {
 				res.set("Content-Type", "application/json");
-				try {
-					req.body = JSON.parse(req.body);
-				} catch(err) {
-					res.status(400).send({
-						error: err.message
-					});
-					return;
+				if(req.get("Content-Type") === "application/json") {
+					try {
+						req.body = JSON.parse(req.body);
+					} catch(err) {
+						res.status(400).send({
+							error: err.message
+						});
+						return;
+					}
 				}
 			}
 			req.next();
