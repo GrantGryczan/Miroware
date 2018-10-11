@@ -3,7 +3,7 @@ const addFile = file => {
 	const reader = new FileReader();
 	reader.addEventListener("progress", console.log);
 	reader.addEventListener("loadend", console.log);
-	reader.readAsArrayBuffer(files[i]);
+	reader.readAsArrayBuffer(file);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
