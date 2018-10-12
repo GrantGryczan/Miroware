@@ -57,7 +57,7 @@ document.addEventListener("dragover", evt => {
 	}
 }, true);
 document.addEventListener("dragleave", evt => {
-	dragLeaveTimeout(indicateTarget, 100);
+	dragLeaveTimeout = setTimeout(indicateTarget, 100);
 }, {
 	capture: true,
 	passive: true
