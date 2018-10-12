@@ -143,16 +143,20 @@ const notLoggedIn = context => {
 		return true;
 	}
 };
-const purgeCache = (...files) => request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
-	headers: {
-		"X-Auth-Email": youKnow.cloudflare.email,
-		"X-Auth-Key": youKnow.cloudflare.key,
-		"Content-Type": "application/json"
-	},
-	body: JSON.stringify({
-		files
-	})
-});
+const purgeCache = (...files) => {
+	for(let i = 0; i < files.length; i += 30) {
+		request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
+			headers: {
+				"X-Auth-Email": youKnow.cloudflare.email,
+				"X-Auth-Key": youKnow.cloudflare.key,
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				files.slice(i, i + 30)
+			})
+		});
+	}
+};
 const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
 	const myEval = v => eval(v);
@@ -505,7 +509,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}],
 		loadEnd: [async context => {
 			if(context.depth === 1 && context.update) {
-				console.log(context.update);
 				users.updateOne(context.userFilter, context.update);
 				if(context.updatePouch) {
 					users.updateOne(context.pouchFilter, context.updatePouch);
