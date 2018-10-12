@@ -8,8 +8,9 @@ window.captchaCallback = response => {
 	}
 };
 const executeCaptcha = resolve => {
-	captchaCallbacks.push(resolve);
-	grecaptcha.execute();
+	if(captchaCallbacks.push(resolve) === 1) {
+		grecaptcha.execute();
+	}
 };
 const addFile = file => {
 	console.log(file);
