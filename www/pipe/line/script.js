@@ -21,7 +21,7 @@ fileInput.addEventListener("change", () => {
 });
 const uploadButton = document.body.querySelector("#uploadButton");
 uploadButton.addEventListener("click", fileInput.click.bind(fileInput));
-const targetIndicator = container.querySelector("#targetIndicator");
+const targetIndicator = document.body.querySelector("#targetIndicator");
 const indicateTarget = target => {
 	if(target) {
 		const rect = target.getBoundingClientRect();
