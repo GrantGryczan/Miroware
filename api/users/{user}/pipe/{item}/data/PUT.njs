@@ -39,7 +39,7 @@ if(isMe) {
 					body: JSON.stringify({
 						files: [`https://pipe.miroware.io/${user.id}/${found.name}`]
 					})
-				}).then(console.log);
+				});
 			}
 			this.done();
 		});
