@@ -490,6 +490,6 @@ if(Miro.in = JSON.parse(document.head.querySelector("meta[name='in']").getAttrib
 	};
 }
 Miro.data = JSON.parse(document.head.querySelector("meta[name='data']").getAttribute("content"));
-Miro.focused = () => !container.querySelector(".mdc-dialog");
+Miro.focused = () => !(drawer.open || container.querySelector(".mdc-dialog"));
 Miro.typing = () => container.querySelector("input:not([type='button']):not([type='submit']):not([type='reset']):focus, textarea:focus");
 Miro.prepare(document);
