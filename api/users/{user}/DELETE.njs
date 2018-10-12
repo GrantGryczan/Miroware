@@ -14,9 +14,6 @@ if(isMe) {
 				};
 				this.status = err.statusCode;
 			} else {
-				this.update.$pull.pipe = {
-					id: found.id
-				};
 				purgeCache(...user.pipe.map(item => `https://pipe.miroware.io/${user._id}/${item.name}`));
 			}
 			this.done();
