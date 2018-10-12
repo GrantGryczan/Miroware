@@ -15,7 +15,7 @@ if(isMe) {
 				this.update.$pull.pipe = {
 					id: found.id
 				};
-				purgeCache(`https://pipe.miroware.io/${user.id}/${found.name}`);
+				purgeCache(`https://pipe.miroware.io/${user._id}/${found.name}`);
 			}
 			this.done();
 		});

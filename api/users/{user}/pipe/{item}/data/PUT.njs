@@ -30,7 +30,7 @@ if(isMe) {
 						"pipe.$.size": this.req.body.length
 					}
 				});
-				purgeCache(`https://pipe.miroware.io/${user.id}/${found.name}`);
+				purgeCache(`https://pipe.miroware.io/${user._id}/${found.name}`);
 			}
 			this.done();
 		});
