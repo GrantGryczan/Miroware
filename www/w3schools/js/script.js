@@ -1,5 +1,5 @@
 "use strict";
-const iframe = document.querySelector("iframe");
+const iframe = document.body.querySelector("iframe");
 let moving = false;
 document.addEventListener("mousemove", () => {
 	moving = true;

@@ -10,7 +10,7 @@ class MiroError extends Error {
 	}
 }
 const doNothing = () => {};
-const container = document.querySelector("#container");
+const container = document.body.querySelector("#container");
 let rawQuery = location.href;
 const hashIndex = rawQuery.indexOf("#");
 if(hashIndex !== -1) {
@@ -294,17 +294,17 @@ class MiroDialog {
 	}
 }
 Miro.Dialog = MiroDialog;
-const drawer = new mdc.drawer.MDCTemporaryDrawer(document.querySelector("#drawer"));
-document.querySelector("#menu").addEventListener("click", () => {
+const drawer = new mdc.drawer.MDCTemporaryDrawer(container.querySelector("#drawer"));
+container.querySelector("#menu").addEventListener("click", () => {
 	drawer.open = !drawer.open;
 });
-Miro.progress = new mdc.linearProgress.MDCLinearProgress(document.querySelector(".mdc-linear-progress"));
+Miro.progress = new mdc.linearProgress.MDCLinearProgress(container.querySelector(".mdc-linear-progress"));
 const closeProgress = () => {
 	Miro.progress.close();
 	window.removeEventListener("load", closeProgress);
 };
 window.addEventListener("load", closeProgress);
-const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector("#snackbar"));
+const snackbar = new mdc.snackbar.MDCSnackbar(document.body.querySelector("#snackbar"));
 Miro.snackbar = (message, actionText, actionHandler) => {
 	const dataObj = {
 		message
@@ -474,14 +474,14 @@ Miro.checkSuper = success => {
 		}
 	}));
 };
-if(Miro.in = JSON.parse(document.querySelector("meta[name='in']").getAttribute("content"))) {
+if(Miro.in = JSON.parse(document.head.querySelector("meta[name='in']").getAttribute("content"))) {
 	Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location, false)));
 	const checkLogout = value => {
 		if(value === 0) {
 			Miro.logOut();
 		}
 	};
-	document.querySelector("#logOut").addEventListener("click", () => {
+	container.querySelector("#logOut").addEventListener("click", () => {
 		new Miro.Dialog("Log Out", "Are you sure you want to log out?", ["Yes", "No"]).then(checkLogout);
 	});
 } else {
@@ -489,5 +489,7 @@ if(Miro.in = JSON.parse(document.querySelector("meta[name='in']").getAttribute("
 		location.href = `/login/?dest=${encodeURIComponent(dest || location.href.slice(location.href.indexOf("/", location.href.indexOf("//") + 2)))}`;
 	};
 }
-Miro.data = JSON.parse(document.querySelector("meta[name='data']").getAttribute("content"));
+Miro.data = JSON.parse(document.head.querySelector("meta[name='data']").getAttribute("content"));
+Miro.focused = () => !container.querySelector(".mdc-dialog");
+Miro.typing = () => container.querySelector("input:not([type='button']):not([type='submit']):not([type='reset']):focus, textarea:focus");
 Miro.prepare(document);

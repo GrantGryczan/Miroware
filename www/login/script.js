@@ -1,8 +1,8 @@
 "use strict";
-const loginForm = document.querySelector("#loginForm");
+const loginForm = document.body.querySelector("#loginForm");
 const submits = loginForm.querySelectorAll("button[type='submit']");
-const signupForm = document.querySelector("#signupForm");
-const captchaElem = document.querySelector(".g-recaptcha");
+const signupForm = document.body.querySelector("#signupForm");
+const captchaElem = document.body.querySelector(".g-recaptcha");
 let signup = false;
 const setSubmit = evt => {
 	signup = evt.target.name === "signup";

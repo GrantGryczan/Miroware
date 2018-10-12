@@ -1,10 +1,10 @@
 "use strict";
-const input = document.querySelector("#input");
-const output = document.querySelector("#output");
-const depthInput = document.querySelector("#depthInput");
-const splitInput = document.querySelector("#splitInput");
+const input = document.body.querySelector("#input");
+const output = document.body.querySelector("#output");
+const depthInput = document.body.querySelector("#depthInput");
+const splitInput = document.body.querySelector("#splitInput");
 output.addEventListener("focus", output.select.bind(output));
-document.querySelector("#help").addEventListener("click", () => {
+document.body.querySelector("#help").addEventListener("click", () => {
 	new Miro.Dialog("Help", html`
 		<p>The memory depth determines how many phrases Mimic is able to remember at a time. 1 is the minimum, causing the least powerful setting of pattern recognition, only ever allowing Mimic to remember 1 previous phrase while putting together output text. More depth means somewhat more similarity to the original input.</p>
 		<p>The split expression is a regular expression used to split input text into what defines a phrase. "([^\\w])" is the default, which basically splits between words, numbers, and punctuation. If you empty the split expression box completely, it will split on all characters, allowing for the composition of gibberish words that don't exist. Other than that, don't worry about this setting if you don't know how it works.</p>
@@ -81,4 +81,4 @@ const start = () => {
 	}
 	output.value = string;
 };
-document.querySelector("#start").addEventListener("click", start);
+document.body.querySelector("#start").addEventListener("click", start);

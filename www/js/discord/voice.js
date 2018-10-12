@@ -13,7 +13,7 @@
 	const stored = {};
 	let parentFound = false;
 	setInterval(() => {
-		const parent = document.querySelector("[class^='wrapperConnectedVoice'] + div");
+		const parent = document.body.querySelector("[class^='wrapperConnectedVoice'] + div");
 		if(parent) {
 			if(!parentFound) {
 				parentFound = true;

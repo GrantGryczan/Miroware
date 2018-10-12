@@ -51,5 +51,5 @@ window.download = async max => {
 		await Miro.wait(200);
 	}
 };
-document.querySelector("#wrapper").appendChild(renderer.domElement);
+document.body.querySelector("#wrapper").appendChild(renderer.domElement);
 animate();
