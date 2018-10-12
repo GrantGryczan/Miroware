@@ -211,7 +211,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}
 	});
 	const verifyCaptcha = context => new Promise(async resolve => {
-		const captcha = this.req.get("X-Captcha");
+		const captcha = context.req.get("X-Captcha");
 		if(typeof captcha === "string") {
 			let success = false;
 			try {
@@ -219,25 +219,25 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					form: {
 						secret: youKnow.captcha.secret,
 						response: captcha,
-						remoteip: this.req.ip
+						remoteip: context.req.ip
 					}
 				})));
 			} catch(err) {}
 			if(success) {
 				resolve();
 			} else {
-				this.value = {
+				context.value = {
 					error: "The CAPTCHA challenge was failed."
 				};
-				this.status = 422;
-				this.done();
+				context.status = 422;
+				context.done();
 			}
 		} else {
-			this.value = {
+			context.value = {
 				error: "The `captcha` value must be a string."
 			};
-			this.status = 400;
-			this.done();
+			context.status = 400;
+			context.done();
 		}
 	});
 	const verifyEmail = (user, set) => {
