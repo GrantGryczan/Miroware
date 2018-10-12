@@ -17,7 +17,10 @@ const addFile = file => {
 			});
 		}).then(Miro.response(() => {
 			new Miro.Dialog("Upload", html`<a href="$${xhr.response.url}" target="_blank">$${xhr.response.url}</a>`);
-		}, failure));
+		}, () => {
+			failure();
+			Miro.request("DELETE", `/users/@me/pipe/${xhr.response.id}`);
+		}));
 	}, failure));
 };
 const fileInput = document.createElement("input");
