@@ -1,7 +1,9 @@
 "use strict";
 const captchaCallbacks = [];
 window.captchaCallback = response => {
-	captchaCallbacks.forEach(callback => callback(response));
+	while(captchaCallbacks.length) {
+		captchaCallbacks.shift()(response);
+	}
 };
 const executeCaptcha = resolve => {
 	const response = grecaptcha.getResponse();
