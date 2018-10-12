@@ -1,4 +1,5 @@
 "use strict";
+const container = document.body.querySelector("#container");
 const addFile = file => {
 	console.log(file);
 	Miro.request("POST", "/users/@me/pipe", {}, {
@@ -19,9 +20,9 @@ fileInput.addEventListener("change", () => {
 	Array.prototype.forEach.call(fileInput.files, addFile);
 	fileInput.value = null;
 });
-const uploadButton = document.body.querySelector("#uploadButton");
+const uploadButton = container.querySelector("#uploadButton");
 uploadButton.addEventListener("click", fileInput.click.bind(fileInput));
-const targetIndicator = document.body.querySelector("#targetIndicator");
+const targetIndicator = container.querySelector("#targetIndicator");
 const indicateTarget = target => {
 	if(target) {
 		const rect = target.getBoundingClientRect();
