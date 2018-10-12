@@ -16,6 +16,7 @@ this.value += html`
 				</button>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
+			<div id="targetIndicator"></div>
 			<div class="g-recaptcha" data-sitekey="${youKnow.captcha.site}" data-size="invisible" data-callback="captchaCallback"></div>`;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
