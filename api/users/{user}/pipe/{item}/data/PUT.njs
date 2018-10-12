@@ -10,7 +10,6 @@ if(isMe) {
 			this.done();
 			return;
 		}
-		await verifyCaptcha(this);
 		s3.putObject({
 			Bucket: "miroware-pipe",
 			Key: found.id,
