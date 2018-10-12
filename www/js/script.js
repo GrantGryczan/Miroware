@@ -315,18 +315,16 @@ Miro.snackbar = (message, actionText, actionHandler) => {
 	}
 	snackbar.show(dataObj);
 };
-Miro.response = success => {
-	if(success && !(success instanceof Function)) {
-		throw new MiroError("The `success` parameter must be a function if it is defined.");
-	}
-	return async xhr => {
-		if(Math.floor(xhr.status / 100) === 2) {
-			if(success) {
-				success(xhr);
-			}
-		} else {
-			await new Miro.Dialog("Error", (xhr.response && xhr.response.error && html`${xhr.response.error}`) || xhr.statusText || "An unknown network error occurred.");
+Miro.response = (success, failure) => async xhr => {
+	if(Math.floor(xhr.status / 100) === 2) {
+		if(success instanceof Function) {
+			success(xhr);
 		}
+	} else {
+		if(failure instanceof Function) {
+			failure(xhr);
+		}
+		await new Miro.Dialog("Error", (xhr.response && xhr.response.error && html`${xhr.response.error}`) || xhr.statusText || "An unknown error occurred.");
 	}
 };
 const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
@@ -367,7 +365,7 @@ let authDialog;
 let sendAuth;
 let resolveAuth;
 const authFailed = data => {
-	new Miro.Dialog("Error", (data && ((data.response && data.response.error && html`${xhr.response.error}`) || data.statusText || data.details || data.error || data)) || "An unknown network error occurred.");
+	new Miro.Dialog("Error", (data && ((data.response && data.response.error && html`${xhr.response.error}`) || data.statusText || data.details || data.error || data)) || "An unknown error occurred.");
 };
 const catchAuth = err => {
 	Miro.block(false);

@@ -32,6 +32,10 @@ if(isMe) {
 			mime: mime.getType(this.req.body.name) || "application/octet-stream"
 		}
 	};
+	this.value = {
+		...this.value,
+		user: user._id
+	};
 } else {
 	this.value = {
 		error: "You do not have permission to access that user's pipe."

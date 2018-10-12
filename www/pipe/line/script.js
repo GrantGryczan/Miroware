@@ -1,17 +1,24 @@
 "use strict";
 const container = document.body.querySelector("#container");
+let loading = 0;
 const addFile = file => {
-	console.log(file);
+	loading++;
+	const failure = () => {
+		loading--;
+	};
 	Miro.request("POST", "/users/@me/pipe", {}, {
 		name: file.name
 	}).then(Miro.response(async xhr => {
-		console.log(xhr.response);
 		Miro.request("PUT", `/users/@me/pipe/${xhr.response.id}/data`, {
 			"Content-Type": "application/octet-stream"
 		}, file, xhr => {
-			xhr.upload.addEventListener("progress", console.log);
-		}).then(Miro.response(console.log));
-	}));
+			xhr.upload.addEventListener("progress", evt => {
+				console.log(evt.loaded, evt.total, Math.floor(evt.loaded / evt.total));
+			});
+		}).then(Miro.response(() => {
+			new Miro.Dialog("Upload", `https://pipe.miroware.io/${xhr.response.user}/${encodeURIComponent(xhr.response.name)}`);
+		}, failure));
+	}, failure));
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
