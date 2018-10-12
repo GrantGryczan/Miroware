@@ -16,7 +16,6 @@ if(isMe) {
 			} else {
 				purgeCache(...user.pipe.map(item => `https://pipe.miroware.io/${user._id}/${item.name}`));
 			}
-			this.done();
 		});
 		users.deleteOne(this.userFilter);
 	} else {
