@@ -27,6 +27,9 @@ const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
+const byS3Object = item => ({
+	Key: item.id
+});
 const connect = context => {
 	let connection = context.req.body.connection;
 	return new Promise(resolve => {
