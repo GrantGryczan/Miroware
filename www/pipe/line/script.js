@@ -36,9 +36,15 @@ const indicateTarget = target => {
 let allowDrag = true;
 document.addEventListener("dragstart", () => {
 	allowDrag = false;
+}, {
+	capture: true,
+	passive: true
 });
 document.addEventListener("dragend", () => {
 	allowDrag = true;
+}, {
+	capture: true,
+	passive: true
 });
 document.addEventListener("dragover", evt => {
 	evt.preventDefault();
@@ -50,6 +56,9 @@ document.addEventListener("dragover", evt => {
 }, true);
 document.addEventListener("dragleave", evt => {
 	indicateTarget();
+}, {
+	capture: true,
+	passive: true
 });
 document.addEventListener("drop", evt => {
 	evt.preventDefault();
@@ -61,4 +70,4 @@ document.addEventListener("drop", evt => {
 		}
 		indicateTarget();
 	}
-});
+}, true);
