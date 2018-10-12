@@ -1,11 +1,7 @@
 main {
-	padding-top: 0;
-	text-align: center;
-}
-#banner {
 	padding-top: 512px;
-	background-image: url(images/icon/cube.gif);
+	background-image: url(/pipe/images/icon/cube.gif);
 	background-position: center top;
 	background-repeat: no-repeat;
-	background-clip: border-box;
+	text-align: center;
 }
