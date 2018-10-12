@@ -24,12 +24,15 @@ const dialogCallback = dialog => {
 	dialog.then(enableFormOnAuthCancel);
 };
 let signupDialog;
+const captchaCallbacks = [];
+window.captchaCallback = response => {
+	captchaCallbacks.forEach(callback => callback(response));
+};
 const executeCaptcha = resolve => {
 	const response = grecaptcha.getResponse();
 	if(response) {
 		resolve(response);
-	} else {
-		window.captchaCallback = resolve;
+	} else if(captchaCallbacks.push(resolve) === 1) {
 		grecaptcha.execute();
 	}
 };
