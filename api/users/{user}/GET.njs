@@ -16,8 +16,7 @@ if(isMe) {
 	Object.assign(this.value, {
 		unverified: user.unverified,
 		nameCooldown: user.nameCooldown,
-		birth: user.birth,
-		concats: user.concats
+		birth: user.birth
 	});
 }
 this.done();
