@@ -505,6 +505,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}],
 		loadEnd: [async context => {
 			if(context.depth === 1 && context.update) {
+				console.log(context.update);
 				users.updateOne(context.userFilter, context.update);
 				if(context.updatePouch) {
 					users.updateOne(context.pouchFilter, context.updatePouch);
