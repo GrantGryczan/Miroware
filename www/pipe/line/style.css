@@ -5,7 +5,7 @@
 	opacity: 0;
 	z-index: 5;
 	pointer-events: none;
-	background-color: #8000ff;
+	background-color: #ff8000;
 	transition: opacity 0.15s ease-out;
 }
 #targetIndicator.visible {
