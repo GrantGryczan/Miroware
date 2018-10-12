@@ -21,7 +21,7 @@ if(isMe) {
 					this.done();
 					return;
 				} else {
-					set["pipe.$.name"] = this.req.body.name;
+					purgeCache(`https://pipe.miroware.io/${user._id}/${found.name}`, `https://pipe.miroware.io/${user._id}/${set["pipe.$.name"] = this.req.body.name}`);
 				}
 			} else {
 				this.value = {
@@ -38,10 +38,6 @@ if(isMe) {
 		}, {
 			$set: set
 		});
-		this.value = {
-			...found,
-			...set
-		};
 	} else {
 		this.value = {
 			error: "That item does not exist."
