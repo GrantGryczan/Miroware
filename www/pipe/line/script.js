@@ -8,6 +8,7 @@ const addFile = file => {
 	Miro.request("POST", "/users/@me/pipe", {}, {
 		name: file.name
 	}).then(Miro.response(async xhr => {
+		console.log(xhr.response);
 		Miro.request("PUT", `/users/@me/pipe/${xhr.response.id}/data`, {
 			"Content-Type": "application/octet-stream",
 			"X-Captcha": await new Promise(executeCaptcha)
