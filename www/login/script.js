@@ -24,17 +24,10 @@ const dialogCallback = dialog => {
 	dialog.then(enableFormOnAuthCancel);
 };
 let signupDialog;
-const captchaCallbacks = [];
-window.captchaCallback = response => {
-	captchaCallbacks.forEach(callback => callback(response));
-};
 const executeCaptcha = resolve => {
-	const response = grecaptcha.getResponse();
-	if(response) {
-		resolve(response);
-	} else if(captchaCallbacks.push(resolve) === 1) {
-		grecaptcha.execute();
-	}
+	grecaptcha.reset();
+	window.captchaCallback = resolve;
+	grecaptcha.execute();
 };
 const signUp = async (service, code) => Miro.request("POST", "/users", {
 	"X-Captcha": await new Promise(executeCaptcha)

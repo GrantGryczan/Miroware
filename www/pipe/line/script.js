@@ -1,17 +1,8 @@
 "use strict";
-const captchaCallbacks = [];
-window.captchaCallback = response => {
-	while(captchaCallbacks.length) {
-		captchaCallbacks.shift()(response);
-	}
-};
 const executeCaptcha = resolve => {
-	const response = grecaptcha.getResponse();
-	if(response) {
-		resolve(response);
-	} else if(captchaCallbacks.push(resolve) === 1) {
-		grecaptcha.execute();
-	}
+	grecaptcha.reset();
+	window.captchaCallback = resolve;
+	grecaptcha.execute();
 };
 const addFile = file => {
 	console.log(file);
