@@ -210,6 +210,36 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.done();
 		}
 	});
+	const verifyCaptcha = context => new Promise(async resolve => {
+		const captcha = this.req.get("X-Captcha");
+		if(typeof captcha === "string") {
+			let success = false;
+			try {
+				({success} = JSON.parse(await request.post("https://www.google.com/recaptcha/api/siteverify", {
+					form: {
+						secret: youKnow.captcha.secret,
+						response: captcha,
+						remoteip: this.req.ip
+					}
+				})));
+			} catch(err) {}
+			if(success) {
+				resolve();
+			} else {
+				this.value = {
+					error: "The CAPTCHA challenge was failed."
+				};
+				this.status = 422;
+				this.done();
+			}
+		} else {
+			this.value = {
+				error: "The `captcha` value must be a string."
+			};
+			this.status = 400;
+			this.done();
+		}
+	});
 	const verifyEmail = (user, set) => {
 		if(!set) {
 			set = user;

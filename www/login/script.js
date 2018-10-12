@@ -28,9 +28,10 @@ const executeCaptcha = resolve => {
 	window.captchaCallback = resolve;
 	grecaptcha.execute();
 };
-const signUp = async (service, code) => Miro.request("POST", "/users", {}, {
+const signUp = async (service, code) => Miro.request("POST", "/users", {
+	"X-Captcha": await new Promise(executeCaptcha)
+}, {
 	connection: `${service} ${code}`,
-	captcha: await new Promise(executeCaptcha),
 	email: signupDialog.form.elements.email.value,
 	name: signupDialog.form.elements.name.value,
 	birth: signupDialog.form.elements.birth.valueAsNumber

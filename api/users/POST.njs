@@ -10,33 +10,7 @@ if(testEmail(this.req.body.email)) {
 		this.done();
 	} else {
 		connect(this).then(async data => {
-			if(typeof this.req.body.captcha === "string") {
-				let success = false;
-				try {
-					({success} = JSON.parse(await request.post("https://www.google.com/recaptcha/api/siteverify", {
-						form: {
-							secret: youKnow.captcha.secret,
-							response: this.req.body.captcha,
-							remoteip: this.req.ip
-						}
-					})));
-				} catch(err) {}
-				if(!success) {
-					this.value = {
-						error: "The CAPTCHA challenge was failed."
-					};
-					this.status = 422;
-					this.done();
-					return;
-				}
-			} else {
-				this.value = {
-					error: "The `captcha` value must be a string."
-				};
-				this.status = 400;
-				this.done();
-				return;
-			}
+			await verifyCaptcha(this);
 			if(typeof this.req.body.name === "string") {
 				this.req.body.name = this.req.body.name.trim();
 				if(this.req.body.name.length < 1) {
