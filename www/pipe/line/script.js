@@ -79,3 +79,32 @@ document.addEventListener("drop", evt => {
 		indicateTarget();
 	}
 }, true);
+const htmlFilenameTest = /\/([^\/]+?)"/;
+document.addEventListener("paste", async evt => {
+	if(Miro.focused() && !Miro.typing()) {
+		if(evt.clipboardData.items.length) {
+			let file;
+			let string;
+			for(const item of evt.clipboardData.items) {
+				if(item.kind === "file") {
+					file = item;
+				} else if(item.kind === "string") {
+					string = item;
+				}
+			}
+			if(file) {
+				file = file.getAsFile();
+				if(string) {
+					const htmlFilename = (await new Promise(string.getAsString.bind(string))).match(htmlFilenameTest);
+					Object.defineProperty(file, "name", {
+						value: htmlFilename ? htmlFilename[1] : "Image"
+					});
+				}
+				addFile(file);
+			}
+		}
+	}
+}, {
+	capture: true,
+	passive: true
+});
