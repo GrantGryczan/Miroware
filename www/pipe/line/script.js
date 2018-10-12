@@ -13,7 +13,7 @@ const addFile = file => {
 			"Content-Type": "application/octet-stream"
 		}, file, xhr => {
 			xhr.upload.addEventListener("progress", evt => {
-				console.log(evt.loaded, evt.total, Math.floor(evt.loaded / evt.total));
+				console.log(evt.loaded, evt.total, Math.floor(100 * evt.loaded / evt.total));
 			});
 		}).then(Miro.response(() => {
 			new Miro.Dialog("Upload", `https://pipe.miroware.io/${xhr.response.user}/${encodeURIComponent(xhr.response.name)}`);
