@@ -152,7 +152,7 @@ const purgeCache = (...files) => {
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify({
-				files.slice(i, i + 30)
+				files: files.slice(i, i + 30)
 			})
 		});
 	}
