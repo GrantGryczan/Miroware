@@ -34,7 +34,8 @@ if(isMe) {
 	};
 	this.value = {
 		...this.value,
-		user: user._id
+		user: user._id,
+		url: `https://pipe.miroware.io/${user._id}/${encodeURIComponent(this.req.body.name)}`
 	};
 } else {
 	this.value = {

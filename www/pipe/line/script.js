@@ -16,7 +16,7 @@ const addFile = file => {
 				console.log(evt.loaded, evt.total, Math.floor(100 * evt.loaded / evt.total));
 			});
 		}).then(Miro.response(() => {
-			new Miro.Dialog("Upload", `https://pipe.miroware.io/${xhr.response.user}/${encodeURIComponent(xhr.response.name)}`);
+			new Miro.Dialog("Upload", html`<a href="$${xhr.response.url}" target="_blank">$${xhr.response.url}</a>`);
 		}, failure));
 	}, failure));
 };
