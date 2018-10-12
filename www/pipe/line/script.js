@@ -49,7 +49,10 @@ document.addEventListener("dragend", () => {
 let dragLeaveTimeout;
 document.addEventListener("dragover", evt => {
 	evt.preventDefault();
-	clearTimeout(dragLeaveTimeout);
+	if(dragLeaveTimeout) {
+		clearTimeout(dragLeaveTimeout);
+		dragLeaveTimeout = null;
+	}
 	if(allowDrag && Miro.focused()) {
 		if(evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
 			indicateTarget(container);
@@ -57,6 +60,9 @@ document.addEventListener("dragover", evt => {
 	}
 }, true);
 document.addEventListener("dragleave", evt => {
+	if(dragLeaveTimeout) {
+		clearTimeout(dragLeaveTimeout);
+	}
 	dragLeaveTimeout = setTimeout(indicateTarget, 100);
 }, {
 	capture: true,
