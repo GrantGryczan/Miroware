@@ -6,7 +6,8 @@ this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
 this.value = (await load("load/head", this)).value;
 this.value += html`
-		<link rel="stylesheet" href="style.css">`;
+		<link rel="stylesheet" href="style.css">
+		<script src="https://www.google.com/recaptcha/api.js" async defer></script>`;
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
@@ -14,6 +15,8 @@ this.value += html`
 					<i class="mdc-button__icon material-icons">add</i>Upload
 				</button>`;
 this.value += (await load("load/pagefoot", this)).value;
+this.value += html`
+			<div class="g-recaptcha" data-sitekey="${youKnow.captcha.site}" data-size="invisible" data-callback="captchaCallback"></div>`;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
 		<script src="script.js"></script>`;

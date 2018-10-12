@@ -227,14 +227,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				resolve();
 			} else {
 				context.value = {
-					error: "The CAPTCHA challenge was failed."
+					error: "You failed the CAPTCHA challenge."
 				};
 				context.status = 422;
 				context.done();
 			}
 		} else {
 			context.value = {
-				error: "The `captcha` value must be a string."
+				error: "The `X-Captcha` header must be a string."
 			};
 			context.status = 400;
 			context.done();

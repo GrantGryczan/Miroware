@@ -1,11 +1,16 @@
 "use strict";
+const executeCaptcha = resolve => {
+	window.captchaCallback = resolve;
+	grecaptcha.execute();
+};
 const addFile = file => {
 	console.log(file);
 	Miro.request("POST", "/users/@me/pipe", {}, {
 		name: file.name
-	}).then(Miro.response(xhr => {
+	}).then(Miro.response(async xhr => {
 		Miro.request("PUT", `/users/@me/pipe/${xhr.response.id}/data`, {
-			"Content-Type": "application/octet-stream"
+			"Content-Type": "application/octet-stream",
+			"X-Captcha": await new Promise(executeCaptcha)
 		}, file, xhr => {
 			xhr.upload.addEventListener("progress", console.log);
 		}).then(Miro.response(console.log));
