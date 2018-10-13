@@ -116,3 +116,4 @@ document.addEventListener("paste", async evt => {
 	capture: true,
 	passive: true
 });
+window.onbeforeunload = () => !loading || undefined;
