@@ -78,7 +78,8 @@ const s3 = new AWS.S3({
 					"User-Agent": "MirowarePipe"
 				}
 			}, response => {
-				response.pipe(res);
+				response.on("data", res.write.bind(res));
+				response.on("end", res.end.bind(res));
 			});
 		}
 	});
