@@ -46,10 +46,11 @@ const s3 = new AWS.S3({
 					_id: userID
 				});
 				if(user) {
-					path = path.join("/");
-					if(path.endsWith("/")) {
-						path += "index.html";
+					const lastIndex = path.length - 1;
+					if(path[lastIndex] === "") {
+						path[lastIndex] = "index.html";
 					}
+					path = path.join("/");
 					const item = user.pipe.find(item => item.name === path);
 					if(item) {
 						s3.getObject({
