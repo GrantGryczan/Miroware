@@ -19,8 +19,8 @@ const s3 = new AWS.S3({
 	const users = db.collection("users");
 	const app = express();
 	app.get("*", async (req, res) => {
-		let path = req.path.slice(1);
 		if(req.subdomains.join(".") === "piped") {
+			let path = req.path.slice(1);
 			if(req.get("User-Agent") !== "MirowarePipe") {
 				res.redirect(307, `https://pipe.miroware.io/${path}`);
 				return;
@@ -75,7 +75,7 @@ const s3 = new AWS.S3({
 		} else {
 			https.get({
 				hostname: "piped.miroware.io",
-				path,
+				path: req.path,
 				headers: {
 					"User-Agent": "MirowarePipe"
 				}
