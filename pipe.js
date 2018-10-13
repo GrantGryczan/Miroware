@@ -22,12 +22,10 @@ const s3 = new AWS.S3({
 	app.get("*", async (req, res) => {
 		if(req.subdomains.join(".") === "piped") {
 			let path = req.path.slice(1);
-			const userAgentIndex = userAgents.indexOf(req.get("User-Agent"));
-			if(userAgentIndex === -1) {
+			if(!userAgents.includes(req.get("User-Agent"))) {
 				res.redirect(307, `https://pipe.miroware.io/${path}`);
 				return;
 			}
-			userAgents.splice(userAgentIndex, 1);
 			try {
 				path = decodeURIComponent(path);
 			} catch(err) {
@@ -78,7 +76,7 @@ const s3 = new AWS.S3({
 			}
 		} else {
 			const userAgent = `MirowarePipe (${Math.random()})`;
-			userAgents.push(userAgent);
+			const userAgentIndex = userAgents.push(userAgent) - 1;
 			https.get({
 				hostname: "piped.miroware.io",
 				path: req.path,
@@ -87,6 +85,7 @@ const s3 = new AWS.S3({
 				}
 			}, response => {
 				response.pipe(res);
+				userAgents.splice(userAgentIndex, 1);
 			});
 		}
 	});
