@@ -1,6 +1,7 @@
 #uploadButton {
-	width: 100%;
-	height: 4em;
+	position: fixed;
+	right: 1em;
+	bottom: 1em;
 }
 #targetIndicator {
 	position: absolute;
