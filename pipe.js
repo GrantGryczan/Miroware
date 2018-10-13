@@ -31,7 +31,6 @@ const s3 = new AWS.S3({
 				res.status(400).send(err.message);
 				return;
 			}
-			console.log(path);
 			if(path === "/") {
 				res.redirect(308, "https://miroware.io/pipe/");
 			} else {
@@ -52,6 +51,7 @@ const s3 = new AWS.S3({
 					if(path.endsWith("/")) {
 						path += "index.html";
 					}
+					console.log(path);
 					const item = user.pipe.find(item => item.name === path);
 					if(item) {
 						s3.getObject({
