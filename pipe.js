@@ -73,13 +73,14 @@ const s3 = new AWS.S3({
 				}
 			}
 		} else {
-			https.get(`https://piped.miroware.io/${path}`, {
+			https.get({
+				hostname: "piped.miroware.io",
+				path,
 				headers: {
 					"User-Agent": "MirowarePipe"
 				}
 			}, response => {
-				response.on("data", res.write.bind(res));
-				response.on("end", res.end.bind(res));
+				response.pipe(res);
 			});
 		}
 	});
