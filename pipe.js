@@ -31,7 +31,6 @@ const s3 = new AWS.S3({
 				res.status(400).send(err.message);
 				return;
 			}
-			console.log(path);
 			if(path === "/") {
 				res.redirect(308, "https://miroware.io/pipe/");
 			} else {
@@ -40,7 +39,6 @@ const s3 = new AWS.S3({
 				try {
 					userID = ObjectID(userID);
 				} catch(err) {
-					console.log(1);
 					res.sendStatus(404);
 					return;
 				}
@@ -66,12 +64,10 @@ const s3 = new AWS.S3({
 							}
 						});
 					} else {
-						console.log(2);
 						res.sendStatus(404);
 						return;
 					}
 				} else {
-					console.log(3);
 					res.sendStatus(404);
 					return;
 				}
