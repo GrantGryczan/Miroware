@@ -226,7 +226,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					form: {
 						secret: youKnow.captcha.secret,
 						response: captcha,
-						remoteip: context.req.ip
+						remoteip: context.req.get("CF-Connecting-IP") || context.req.ip
 					}
 				})));
 			} catch(err) {}

@@ -17,6 +17,7 @@ const ggContext = tls.createSecureContext({
 	ca: fs.readFileSync("/etc/letsencrypt/live/miro.gg/chain.pem")
 });
 const proxy = httpProxy.createProxyServer();
+const pipeTest = /^piped?\./;
 const listener = (req, res) => {
 	let target = "http://localhost:8081";
 	if(req.headers.host) {
@@ -24,7 +25,7 @@ const listener = (req, res) => {
 			target = "http://localhost:8180";
 		} else if(req.headers.host.endsWith(".gg")) {
 			target = "http://localhost:8083";
-		} else if(req.headers.host.startsWith("pipe.")) {
+		} else if(pipeTest.test(req.headers.host)) {
 			target = "http://localhost:8082";
 		}
 	}
