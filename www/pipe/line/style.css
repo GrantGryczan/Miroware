@@ -1,3 +1,6 @@
+.mdc-linear-progress .mdc-linear-progress__bar-inner {
+	background-color: #bf7f40;
+}
 #uploadButton {
 	position: fixed;
 	right: 1em;
