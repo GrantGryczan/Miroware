@@ -1,21 +1,35 @@
 const {user, isMe} = await parseUser(this);
 if(isMe) {
-	if(typeof this.req.body.name === "string") {
-		this.req.body.name = this.req.body.name.trim();
-		if(this.req.body.name.length < 1) {
+	if(this.req.get("Content-Type") !== "application/octet-stream") {
+		this.value = {
+			error: 'The `Content-Type` header must be "application/octet-stream".'
+		};
+		this.status = 400;
+		this.done();
+		return;
+	}
+	let data;
+	try {
+		data = JSON.parse(this.req.get("X-Data"));
+	} catch(err) {
+		this.value = {
+			error: "The `X-Data` header must be valid JSON."
+		};
+		this.status = 400;
+		this.done();
+		return;
+	}
+	if(typeof data.name === "string") {
+		data.name = data.name.trim();
+		if(data.name.length < 1) {
 			this.value = {
 				error: "The `name` value must be at least 1 character long."
 			};
 			this.status = 400;
 			this.done();
 			return;
-		} else if(this.req.body.name.length > 255) {
-			this.value = {
-				error: "The `name` value must be at most 255 characters long."
-			};
-			this.status = 400;
-			this.done();
-			return;
+		} else if(data.name.length > 255) {
+			data.name = data.name.slice(0, 255);
 		}
 	} else {
 		this.value = {
@@ -29,15 +43,31 @@ if(isMe) {
 		pipe: this.value = {
 			id: String(new ObjectID()),
 			date: Date.now(),
-			name: this.req.body.name,
-			mime: mime.getType(this.req.body.name) || "application/octet-stream"
+			name: data.name,
+			mime: mime.getType(data.name) || "application/octet-stream",
+			size: this.req.body.length
 		}
 	};
 	this.value = {
 		...this.value,
-		user: user._id,
-		url: `https://pipe.miroware.io/${user._id}/${encodeURIComponent(this.req.body.name)}`
+		url: `https://pipe.miroware.io/${user._id}/${encodeURIComponent(data.name)}`
 	};
+	s3.putObject({
+		Bucket: "miroware-pipe",
+		Key: this.value.id,
+		ContentLength: this.value.size,
+		Body: this.req.body
+	}, err => {
+		if(err) {
+			this.value = {
+				error: err.message
+			};
+			this.status = err.statusCode;
+		} else {
+			purgeCache(`https://pipe.miroware.io/${user._id}/${this.value.name}`);
+		}
+		this.done();
+	});
 } else {
 	this.value = {
 		error: "You do not have permission to access that user's pipe."
