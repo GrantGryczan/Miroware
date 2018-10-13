@@ -77,27 +77,6 @@ a {
 		}
 	}
 }
-.mdc-fab {
-	background: none;
-	box-shadow: none;
-	&:enabled {
-		color: rgba(255, 255, 255, 0.6);
-		&:hover, &:focus {
-			color: rgba(255, 255, 255, 0.87);
-		}
-	}
-	&:disabled {
-		color: rgba(255, 255, 255, 0.3);
-		cursor: default;
-		pointer-events: none;
-		&:hover, &:focus, &:active {
-			box-shadow: none;
-			&::before, &::after {
-				opacity: 0;
-			}
-		}
-	}
-}
 .mdc-drawer {
 	user-select: none;
 	&--temporary {
