@@ -76,7 +76,7 @@ const s3 = new AWS.S3({
 			}
 		} else {
 			const userAgent = `MirowarePipe (${Math.random()})`;
-			const userAgentIndex = userAgents.push(userAgent) - 1;
+			userAgents.push(userAgent);
 			https.get({
 				hostname: "piped.miroware.io",
 				path: req.path,
@@ -85,7 +85,7 @@ const s3 = new AWS.S3({
 				}
 			}, response => {
 				response.pipe(res);
-				userAgents.splice(userAgentIndex, 1);
+				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 		}
 	});
