@@ -28,6 +28,7 @@ if(isMe) {
 	this.update.$push = {
 		pipe: this.value = {
 			id: String(new ObjectID()),
+			date: Date.now(),
 			name: this.req.body.name,
 			mime: mime.getType(this.req.body.name) || "application/octet-stream"
 		}
