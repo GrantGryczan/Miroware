@@ -22,17 +22,16 @@ const s3 = new AWS.S3({
 		if(req.subdomains.join(".") === "piped") {
 			let path = req.path.slice(1);
 			if(req.get("User-Agent") !== "MirowarePipe") {
-				console.log(-1, req.path);
 				res.redirect(307, `https://pipe.miroware.io/${path}`);
 				return;
 			}
-			console.log(1, req.path);
 			try {
 				path = decodeURIComponent(path);
 			} catch(err) {
 				res.status(400).send(err.message);
 				return;
 			}
+			console.log(path);
 			if(path === "/") {
 				res.redirect(308, "https://miroware.io/pipe/");
 			} else {
@@ -41,6 +40,7 @@ const s3 = new AWS.S3({
 				try {
 					userID = ObjectID(userID);
 				} catch(err) {
+					console.log(1);
 					res.sendStatus(404);
 					return;
 				}
@@ -66,10 +66,12 @@ const s3 = new AWS.S3({
 							}
 						});
 					} else {
+						console.log(2);
 						res.sendStatus(404);
 						return;
 					}
 				} else {
+					console.log(3);
 					res.sendStatus(404);
 					return;
 				}
@@ -82,7 +84,6 @@ const s3 = new AWS.S3({
 					"User-Agent": "MirowarePipe"
 				}
 			}, response => {
-				console.log(0, req.path);
 				response.pipe(res);
 			});
 		}
