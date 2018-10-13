@@ -22,9 +22,11 @@ const s3 = new AWS.S3({
 		if(req.subdomains.join(".") === "piped") {
 			let path = req.path.slice(1);
 			if(req.get("User-Agent") !== "MirowarePipe") {
+				console.log(-1, req.path);
 				res.redirect(307, `https://pipe.miroware.io/${path}`);
 				return;
 			}
+			console.log(1, req.path);
 			try {
 				path = decodeURIComponent(path);
 			} catch(err) {
@@ -80,6 +82,7 @@ const s3 = new AWS.S3({
 					"User-Agent": "MirowarePipe"
 				}
 			}, response => {
+				console.log(0, req.path);
 				response.pipe(res);
 			});
 		}
