@@ -5,7 +5,7 @@ this.value = html`
 			<header class="mdc-top-app-bar mdc-elevation--z2">
 				<div class="mdc-top-app-bar__row">
 					<div class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-						<button id="menu" class="mdc-top-app-bar__navigation-icon" type="button">
+						<button id="menu" class="mdc-top-app-bar__navigation-icon" type="button" title="Menu">
 							<i class="material-icons">menu</i>
 						</button>
 						<span class="mdc-top-app-bar__title">$${this.title}</span>
