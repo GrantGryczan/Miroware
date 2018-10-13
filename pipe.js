@@ -85,6 +85,7 @@ const s3 = new AWS.S3({
 				}
 			}, response => {
 				response.pipe(res);
+				res.set("Content-Type", response.headers["content-type"]);
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 		}
