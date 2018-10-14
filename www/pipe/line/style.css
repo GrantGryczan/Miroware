@@ -17,9 +17,12 @@
 		border-bottom: 1px solid #373737;
 	}
 	#nameHead {
-		width: 60%;
+		width: 55%;
 	}
-	#typeHead, #dateHead {
+	#typeHead {
+		width: 20%;
+	}
+	#dateHead {
 		width: 15%;
 	}
 	#sizeHead {
