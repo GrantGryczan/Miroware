@@ -7,10 +7,17 @@
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	.file.loading {
-		background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
-		background-repeat: no-repeat;
-		background-size: 0;
+	.file {
+		user-select: none;
+		&.loading {
+			background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
+			background-repeat: no-repeat;
+			background-size: 0;
+			cursor: default;
+		}
+		&.ready {
+			cursor: pointer;
+		}
 	}
 	th, td {
 		padding: 0.75em 0.25em;

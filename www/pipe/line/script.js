@@ -78,6 +78,7 @@ const addFile = file => {
 		sizeData.title = file.size;
 		dateData.textContent = getDate(xhr.response.date);
 		fileElement.classList.remove("loading");
+		fileElement.classList.add("ready");
 	}, () => {
 		fileElement.parentNode.removeChild(fileElement);
 	})).finally(subtractLoading);
@@ -176,3 +177,15 @@ document.addEventListener("paste", async evt => {
 	passive: true
 });
 window.onbeforeunload = () => loading || undefined;
+document.addEventListener("click", evt => {
+	let target = evt.target;
+	while(target && target.classList && !target.classList.contains("file")) {
+		target = target.parentNode;
+	}
+	if(target && target.classList && target.classList.contains("file")) {
+		console.log(target);
+	}
+}, {
+	capture: true,
+	passive: true
+});
