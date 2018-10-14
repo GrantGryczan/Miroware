@@ -43,20 +43,24 @@ const subtractLoading = () => {
 };
 const addFile = file => {
 	loading++;
-	let xhr;
+	const fileSize = getSize(file.size);
 	const fileElement = html`
 		<table>
 			<tbody>
 				<tr class="file loading" title="$${file.name}">
 					<td class="nameData">$${file.name}</td>
 					<td class="typeData">$${file.type || "..."}</td>
-					<td class="sizeData">${getSize(file.size)}</td>
+					<td class="sizeData">${fileSize}</td>
 					<td class="dateData">${getDate(Date.now())}</td>
 				</tr>
 			</tbody>
 		</table>
 	`.querySelector("tr");
+	const typeData = fileElement.querySelector(".typeData");
+	const sizeData = fileElement.querySelector(".sizeData");
+	const dateData = fileElement.querySelector(".dateData");
 	files.insertBefore(fileElement, files.firstChild);
+	let xhr;
 	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
 		"X-Data": JSON.stringify({
@@ -66,9 +70,12 @@ const addFile = file => {
 		xhr = xhrArg;
 		xhr.upload.addEventListener("progress", evt => {
 			fileElement.style.backgroundSize = `${100 * evt.loaded / evt.total}%`;
+			sizeData.textContent = `${getSize(evt.loaded)} / ${fileSize}`;
 		});
 	}).then(Miro.response(() => {
-		new Miro.Dialog("Upload", html`<a href="$${xhr.response.url}" target="_blank">$${xhr.response.url}</a>`);
+		typeData.textContent = xhr.response.mime;
+		sizeData.textContent = fileSize;
+		dateData.textContent = getDate(xhr.response.date);
 	}, () => {
 		fileElement.parentNode.removeChild(fileElement);
 	})).finally(subtractLoading);
