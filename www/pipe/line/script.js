@@ -1,11 +1,11 @@
 "use strict";
 const container = document.body.querySelector("#container");
 let loading = 0;
+const subtractLoading = () => {
+	loading--;
+};
 const addFile = file => {
 	loading++;
-	const failure = () => {
-		loading--;
-	};
 	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
 		"X-Data": JSON.stringify({
@@ -17,7 +17,7 @@ const addFile = file => {
 		});
 	}).then(Miro.response(xhr => {
 		new Miro.Dialog("Upload", html`<a href="$${xhr.response.url}" target="_blank">$${xhr.response.url}</a>`);
-	}, failure));
+	})).finally(subtractLoading);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
