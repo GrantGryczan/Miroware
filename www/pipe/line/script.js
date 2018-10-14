@@ -65,7 +65,7 @@ const addFile = file => {
 	}, file, xhrArg => {
 		xhr = xhrArg;
 		xhr.upload.addEventListener("progress", evt => {
-			console.log(100 * evt.loaded / evt.total);
+			fileElement.style.backgroundSize = `${100 * evt.loaded / evt.total}%`;
 		});
 	}).then(Miro.response(() => {
 		new Miro.Dialog("Upload", html`<a href="$${xhr.response.url}" target="_blank">$${xhr.response.url}</a>`);
