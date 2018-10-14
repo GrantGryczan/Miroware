@@ -19,7 +19,7 @@ this.value += html`
 					</thead>
 					<tbody id="files">`;
 for(const item of user.pipe) {
-	this.html += html`
+	this.value += html`
 						<tr class="file">
 							<td class="nameData" title="$${item.name}">$${item.name}</td>
 							<td class="sizeData" title="${item.size}">${getSize(item.size)}</td>
