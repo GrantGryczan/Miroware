@@ -329,6 +329,7 @@ document.addEventListener("keydown", evt => {
 				}
 			}
 		} else if(evt.keyCode === 65) { // ^`A`
+			evt.preventDefault();
 			for(const item of items.querySelectorAll(".item:not(.selected)")) {
 				item.classList.add("selected");
 			}
