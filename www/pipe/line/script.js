@@ -364,7 +364,7 @@ const removeItem = itemElement => {
 		updateSelection();
 	}, () => {
 		itemElement.classList.remove("loading");
-	});
+	}));
 };
 const confirmRemoveItem = itemElement => {
 	new Miro.Dialog("Remove Item", html`
