@@ -1,6 +1,7 @@
 "use strict";
 const container = document.body.querySelector("#container");
-const items = container.querySelector("#items");
+const page = container.querySelector("main");
+const items = page.querySelector("#items");
 const getSize = size => {
 	if(size < 1024) {
 		return `${size} B`;
@@ -197,9 +198,17 @@ document.addEventListener("paste", async evt => {
 window.onbeforeunload = () => loading || undefined;
 let selectedItem = null;
 let focusedItem = null;
-const selectItem = (target, evt) => {
+const selectItem = (target, evt, button) => {
 	const superKey = evt.ctrlKey || evt.metaKey;
-	if(evt.shiftKey) {
+	if(button === 2 && !(superKey || evt.shiftKey)) {
+		if(!target.classList.contains("selected")) {
+			for(const item of items.querySelectorAll(".item.selected")) {
+				item.classList.remove("selected");
+			}
+			target.classList.add("selected");
+			selectedItem = focusedItem = target;
+		}
+	} else if(evt.shiftKey) {
 		let selecting = !selectedItem;
 		const classListMethod = superKey && selectedItem && !selectedItem.classList.contains("selected") ? "remove" : "add";
 		for(const itemElement of items.querySelectorAll(".item")) {
@@ -222,6 +231,7 @@ const selectItem = (target, evt) => {
 		}
 	} else {
 		selectedItem = target;
+		focusedItem = target;
 		if(superKey) {
 			target.classList.toggle("selected");
 		} else {
@@ -234,18 +244,43 @@ const selectItem = (target, evt) => {
 			}
 			if(target.classList[othersSelected ? "add" : "toggle"]("selected") === false) {
 				selectedItem = null;
-				focusedItem = target;
 			}
 		}
 	}
 };
-document.addEventListener("click", evt => {
-	let target = evt.target;
-	while(target && target.classList && !target.classList.contains("item")) {
-		target = target.parentNode;
+let mouseTarget;
+let mouseDown = -1;
+let mouseMoved = false;
+document.addEventListener("mousedown", evt => {
+	mouseMoved = false;
+	mouseTarget = evt.target;
+	mouseDown = evt.button;
+	if(evt.target.parentNode.classList.contains("item")) {
+		focusedItem = evt.target.parentNode;
 	}
-	if(target && target.classList && target.classList.contains("item")) {
-		selectItem(target, evt);
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("mousemove", evt => {
+	if(evt.target.parentNode.classList.contains("item") && !mouseMoved) {
+		selectItem(evt.target.parentNode, evt, 2);
+	}
+	mouseMoved = true;
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("mouseup", evt => {
+	if(!mouseMoved && mouseDown !== -1 && page.contains(evt.target)) {
+		if(evt.target.parentNode.classList.contains("item")) {
+			selectItem(evt.target.parentNode, evt, evt.button);
+		} else {
+			for(const item of items.querySelectorAll(".item.selected")) {
+				item.classList.remove("selected");
+			}
+			selectedItem = focusedItem = null;
+		}
 	}
 }, {
 	capture: true,
