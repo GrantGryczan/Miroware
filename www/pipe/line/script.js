@@ -76,7 +76,6 @@ const addFile = file => {
 			</tbody>
 		</table>
 	`.querySelector("tr");
-	const typeData = itemElement.querySelector(".typeData");
 	const sizeData = itemElement.querySelector(".sizeData");
 	const typeData = itemElement.querySelector(".typeData");
 	const dateData = itemElement.querySelector(".dateData");
