@@ -42,7 +42,7 @@ const createItemElement = item => {
 	const itemElement = html`
 		<table>
 			<tbody>
-				<tr class="item ready">
+				<tr class="item">
 					<td class="nameData" title="$${item.name}">$${item.name}</td>
 					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
 					<td class="dateData">${getDate(item.date)}</td>
@@ -92,12 +92,11 @@ const addFile = file => {
 			sizeData.title = `${evt.loaded} B / ${evt.total} B`;
 		});
 	}).then(Miro.response(() => {
-		itemElement._item = xhr.response;
+		Miro.data.push(itemElement._item = xhr.response);
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
 		dateData.textContent = getDate(xhr.response.date);
 		itemElement.classList.remove("loading");
-		itemElement.classList.add("ready");
 	}, () => {
 		itemElement.parentNode.removeChild(itemElement);
 	})).finally(subtractLoading);
@@ -247,6 +246,7 @@ const selectItem = (target, evt, button) => {
 			}
 		}
 	}
+	updateSelection();
 };
 let mouseX = 0;
 let mouseY = 0;
@@ -292,6 +292,7 @@ document.addEventListener("mouseup", evt => {
 				item.classList.remove("selected");
 			}
 			selectedItem = focusedItem = null;
+			updateSelection();
 		}
 	}
 	mouseTarget = null;
@@ -304,12 +305,15 @@ document.addEventListener("keydown", evt => {
 	if(!Miro.typing() && Miro.focused()) {
 		const superKey = evt.ctrlKey || evt.metaKey;
 		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
-			// TODO
+			removeSelectedItems();
+		} else if(evt.keyCode === 13) { // `enter`
+			openItem();
 		} else if(evt.keyCode === 27) { // `esc`
 			for(const item of items.querySelectorAll(".item.selected")) {
 				item.classList.remove("selected");
 			}
 			selectedItem = focusedItem = null;
+			updateSelection();
 		} else if(evt.keyCode === 38) { // `up`
 			evt.preventDefault();
 			const item = focusedItem ? focusedItem.previousElementSibling || items.lastElementChild : items.firstElementChild;
@@ -333,14 +337,69 @@ document.addEventListener("keydown", evt => {
 			for(const item of items.querySelectorAll(".item:not(.selected)")) {
 				item.classList.add("selected");
 			}
+			updateSelection();
 		}
 	}
 }, true);
 document.addEventListener("dblclick", evt => {
 	if(!mouseMoved && evt.target.parentNode.classList.contains("item")) {
 		selectItem(evt.target.parentNode, evt, 2);
+		openItem();
 	}
 }, {
 	capture: true,
 	passive: true
 });
+const removeItem = itemElement => {
+	itemElement.classList.add("loading");
+	Miro.request("DELETE", `/users/@me/pipe/${itemElement._item.id}`).then(Miro.response(() => {
+		if(selectedItem === itemElement) {
+			selectedItem = null;
+		}
+		if(focusedItem === itemElement) {
+			focusedItem = null;
+		}
+		itemElement.parentNode.remove(itemElement);
+		Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
+		updateSelection();
+	}, () => {
+		itemElement.classList.remove("loading");
+	});
+};
+const confirmRemoveItem = itemElement => {
+	new Miro.Dialog("Remove Item", html`
+		Are you sure you want to remove <b>$${itemElement._item.name}</b>?<br>
+		Items inside directories will also be removed.<br>
+		This cannot be undone.
+	`, ["Yes", "No"]).then(value => {
+		if(value === 0) {
+			removeItem(itemElement);
+		}
+	});
+};
+const confirmRemoveItems = itemElements => {
+	if(itemElements.length) {
+		if(itemElements.length === 1) {
+			confirmRemoveItem(itemElements[0]);
+		} else if(itemElements.length !== 1) {
+			new Miro.Dialog("Remove Items", html`
+				Are you sure you want to remove all those items?<br>
+				Items inside directories will also be removed.<br>
+				This cannot be undone.
+			`, ["Yes", "No"]).then(value => {
+				if(value === 0) {
+					itemElements.forEach(removeItem);
+				}
+			});
+		}
+	}
+};
+const removeSelectedItems = () => {
+	confirmRemoveItems(items.querySelectorAll(".item.selected"));
+};
+const updateSelection = () => {
+	// TODO
+};
+const openItem = () => {
+	// TODO
+};
