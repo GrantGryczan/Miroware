@@ -13,10 +13,10 @@ this.value += html`
 				<p>Miroware Pipe is in the pre-alpha stage. Do not expect things to work, and upload files with intent to test rather than host. All files uploaded during this stage will eventually be deleted.</p>
 				<table id="table">
 					<thead>
-						<th>Name</th>
-						<th>Date</th>
-						<th>Type</th>
-						<th>Size</th>
+						<th id="nameHead">Name</th>
+						<th id="dateHead">Date</th>
+						<th id="typeHead">Type</th>
+						<th id="sizeHead">Size</th>
 					</thead>
 					<tbody></tbody>
 				</table>`;

@@ -3,6 +3,18 @@
 }
 #table {
 	width: 100%;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+#nameHead {
+	width: 60%;
+}
+#dateHead, #sizeHead {
+	width: 10%;
+}
+#typeHead {
+	width: 20%;
 }
 #uploadButton {
 	position: fixed;
