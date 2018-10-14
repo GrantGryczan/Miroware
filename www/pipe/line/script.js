@@ -282,6 +282,8 @@ document.addEventListener("mouseup", evt => {
 			selectedItem = focusedItem = null;
 		}
 	}
+	mouseTarget = null;
+	mouseDown = -1;
 }, {
 	capture: true,
 	passive: true
