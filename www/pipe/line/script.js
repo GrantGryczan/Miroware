@@ -248,11 +248,18 @@ const selectItem = (target, evt, button) => {
 		}
 	}
 };
+let mouseX = 0;
+let mouseY = 0;
 let mouseTarget;
 let mouseDown = -1;
 let mouseMoved = false;
 document.addEventListener("mousedown", evt => {
 	mouseMoved = false;
+	mouseX = evt.clientX;
+	mouseY = evt.clientY;
+	if(evt.button !== 0 && evt.button !== 2) {
+		return;
+	}
 	mouseTarget = evt.target;
 	mouseDown = evt.button;
 	if(evt.target.parentNode.classList.contains("item")) {
@@ -263,7 +270,12 @@ document.addEventListener("mousedown", evt => {
 	passive: true
 });
 document.addEventListener("mousemove", evt => {
-	if(mouseTarget.parentNode.classList.contains("item") && !mouseMoved) {
+	if(evt.clientX === mouseX && evt.clientY === mouseY) {
+		return;
+	}
+	mouseX = evt.clientX;
+	mouseY = evt.clientY;
+	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode.classList.contains("item") && !mouseMoved) {
 		selectItem(evt.target.parentNode, evt, 2);
 	}
 	mouseMoved = true;
