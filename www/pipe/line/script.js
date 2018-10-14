@@ -263,7 +263,7 @@ document.addEventListener("mousedown", evt => {
 	passive: true
 });
 document.addEventListener("mousemove", evt => {
-	if(evt.target.parentNode.classList.contains("item") && !mouseMoved) {
+	if(mouseTarget.parentNode.classList.contains("item") && !mouseMoved) {
 		selectItem(evt.target.parentNode, evt, 2);
 	}
 	mouseMoved = true;
