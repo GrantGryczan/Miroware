@@ -101,15 +101,6 @@ const addFile = file => {
 		itemElement.parentNode.removeChild(itemElement);
 	})).finally(subtractLoading);
 };
-const fileInput = document.createElement("input");
-fileInput.type = "file";
-fileInput.multiple = true;
-fileInput.addEventListener("change", () => {
-	Array.prototype.forEach.call(fileInput.files, addFile);
-	fileInput.value = null;
-});
-const addButton = container.querySelector("#addButton");
-addButton.addEventListener("click", fileInput.click.bind(fileInput));
 const targetIndicator = document.body.querySelector("#targetIndicator");
 const indicateTarget = target => {
 	if(target) {
@@ -399,9 +390,6 @@ const confirmRemoveItems = itemElements => {
 const removeSelectedItems = () => {
 	confirmRemoveItems(items.querySelectorAll(".item.selected"));
 };
-const updateSelection = () => {
-	// TODO
-};
 const openItem = itemElement => {
 	const body = html`
 		<div class="mdc-text-field spaced">
@@ -417,4 +405,34 @@ const openItem = itemElement => {
 		Miro.snackbar("URL copied to clipboard");
 	});
 	new Miro.Dialog("Item", body);
+};
+const fileInput = document.createElement("input");
+fileInput.type = "file";
+fileInput.multiple = true;
+fileInput.addEventListener("change", () => {
+	Array.prototype.forEach.call(fileInput.files, addFile);
+	fileInput.value = null;
+});
+const addButton = container.querySelector("#addButton");
+addButton.addEventListener("click", fileInput.click.bind(fileInput));
+const directoryButton = container.querySelector("#directoryButton");
+const removeButton = container.querySelector("#removeButton");
+removeButton.addEventListener("click", removeSelectedItems);
+const infoButton = container.querySelector("#infoButton");
+infoButton.addEventListener("click", () => {
+	openItem(items.querySelector(".item.selected"));
+});
+const updateSelection = () => {
+	const itemElements = items.querySelectorAll(".item.selected");
+	if(itemElements.length === 0) {
+		removeButton.classList.add("mdc-fab--exited");
+		infoButton.classList.add("mdc-fab--exited");
+	} else {
+		removeButton.classList.remove("mdc-fab--exited");
+		if(itemElements.length === 1) {
+			infoButton.classList.remove("mdc-fab--exited");
+		} else {
+			infoButton.classList.add("mdc-fab--exited");
+		}
+	}
 };
