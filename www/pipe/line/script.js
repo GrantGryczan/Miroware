@@ -416,5 +416,5 @@ const openItem = itemElement => {
 		document.execCommand("copy");
 		Miro.snackbar("URL copied to clipboard");
 	});
-	const dialog = new Miro.Dialog("Item", body);
+	new Miro.Dialog("Item", body);
 };

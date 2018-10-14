@@ -129,7 +129,7 @@ const response = Miro.response(xhr => {
 		document.execCommand("copy");
 		Miro.snackbar("URL copied to clipboard");
 	});
-	const dialog = new Miro.Dialog("Concat", body);
+	new Miro.Dialog("Concat", body);
 	if(selected) {
 		const selectedOption = saves.options[saves.selectedIndex];
 		const option = appendConcat(selected = xhr.response);
