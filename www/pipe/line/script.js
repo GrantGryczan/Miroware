@@ -143,9 +143,9 @@ document.addEventListener("drop", evt => {
 	if(allowDrag && Miro.focused()) {
 		if(evt.dataTransfer.files.length) {
 			Array.prototype.forEach.call(evt.dataTransfer.files, addFile);
-		} else if(project && evt.dataTransfer.types.includes("text/uri-list")) {
+		}/* else if(evt.dataTransfer.types.includes("text/uri-list")) {
 			addFileFromURI(evt.dataTransfer.getData("text/uri-list"));
-		}
+		}*/
 		indicateTarget();
 	}
 }, true);
@@ -177,13 +177,57 @@ document.addEventListener("paste", async evt => {
 	passive: true
 });
 window.onbeforeunload = () => loading || undefined;
+let selectedFile = null;
+let focusedFile = null;
+const selectFile = (target, evt) => {
+	const superKey = evt.ctrlKey || evt.metaKey;
+	if(evt.shiftKey) {
+		let selecting = !selectedFile;
+		const classListMethod = superKey && selectedFile && !selectedFile.classList.contains("selected") ? "remove" : "add";
+		for(const fileElement of files.querySelectorAll(".file")) {
+			if(fileElement === selectedFile || fileElement === target) {
+				if(selecting) {
+					fileElement.classList[classListMethod]("selected");
+					selecting = false;
+					continue;
+				} else {
+					fileElement.classList[classListMethod]("selected");
+					if(selectedFile !== target) {
+						selecting = true;
+					}
+				}
+			} else if(selecting) {
+				fileElement.classList[classListMethod]("selected");
+			} else if(!superKey) {
+				fileElement.classList.remove("selected");
+			}
+		}
+	} else {
+		selectedFile = target;
+		if(superKey) {
+			target.classList.toggle("selected");
+		} else {
+			let othersSelected = false;
+			for(const fileElement of files.querySelectorAll(".file.selected")) {
+				if(fileElement !== target) {
+					othersSelected = true;
+					fileElement.classList.remove("selected");
+				}
+			}
+			if(target.classList[othersSelected ? "add" : "toggle"]("selected") === false) {
+				selectedFile = null;
+				focusedFile = target;
+			}
+		}
+	}
+};
 document.addEventListener("click", evt => {
 	let target = evt.target;
 	while(target && target.classList && !target.classList.contains("file")) {
 		target = target.parentNode;
 	}
 	if(target && target.classList && target.classList.contains("file")) {
-		console.log(target);
+		selectFile(target, evt);
 	}
 }, {
 	capture: true,

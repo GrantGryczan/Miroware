@@ -10,6 +10,7 @@
 	.file {
 		user-select: none;
 		&.loading {
+			opacity: 0.75;
 			background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
 			background-repeat: no-repeat;
 			background-size: 0;
@@ -17,6 +18,9 @@
 		}
 		&.ready {
 			cursor: pointer;
+		}
+		&.selected {
+			background-color: rgba(255, 128, 0, 0.5);
 		}
 	}
 	th, td {
