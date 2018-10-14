@@ -37,8 +37,8 @@ main {
 }
 #uploadButton {
 	position: fixed;
-	right: 1em;
-	bottom: 1em;
+	right: 14px;
+	bottom: 14px;
 	background-color: #df7f20;
 }
 #targetIndicator {
