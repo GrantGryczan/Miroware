@@ -7,17 +7,16 @@ const addFile = file => {
 		loading--;
 	};
 	Miro.request("POST", "/users/@me/pipe", {
-			"Content-Type": "application/octet-stream",
-			"X-Data": JSON.stringify({
-				name: file.name
-			})
-		}, file).then(Miro.response(async xhr => {
-			xhr.upload.addEventListener("progress", evt => {
-				console.log(evt.loaded, evt.total, Math.floor(10000 * evt.loaded / evt.total) / 100);
-			});
-		}).then(Miro.response(() => {
-			new Miro.Dialog("Upload", html`<a href="$${xhr.response.url}" target="_blank">$${xhr.response.url}</a>`);
-		}, failure);
+		"Content-Type": "application/octet-stream",
+		"X-Data": JSON.stringify({
+			name: file.name
+		})
+	}, file, xhr => {
+		xhr.upload.addEventListener("progress", evt => {
+			console.log(evt.loaded, evt.total, Math.floor(10000 * evt.loaded / evt.total) / 100);
+		});
+	}).then(Miro.response(xhr => {
+		new Miro.Dialog("Upload", html`<a href="$${xhr.response.url}" target="_blank">$${xhr.response.url}</a>`);
 	}, failure));
 };
 const fileInput = document.createElement("input");

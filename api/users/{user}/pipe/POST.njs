@@ -29,7 +29,12 @@ if(isMe) {
 			this.done();
 			return;
 		} else if(data.name.length > 255) {
-			data.name = data.name.slice(0, 255);
+			this.value = {
+				error: "The `name` value must be at most 255 characters long."
+			};
+			this.status = 400;
+			this.done();
+			return;
 		}
 	} else {
 		this.value = {
@@ -39,19 +44,6 @@ if(isMe) {
 		this.done();
 		return;
 	}
-	this.update.$push = {
-		pipe: this.value = {
-			id: String(new ObjectID()),
-			date: Date.now(),
-			name: data.name,
-			mime: mime.getType(data.name) || "application/octet-stream",
-			size: this.req.body.length
-		}
-	};
-	this.value = {
-		...this.value,
-		url: `https://pipe.miroware.io/${user._id}/${encodeURIComponent(data.name)}`
-	};
 	s3.putObject({
 		Bucket: "miroware-pipe",
 		Key: this.value.id,
@@ -64,7 +56,19 @@ if(isMe) {
 			};
 			this.status = err.statusCode;
 		} else {
-			purgeCache(`https://pipe.miroware.io/${user._id}/${this.value.name}`);
+			this.update.$push = {
+				pipe: this.value = {
+					id: String(new ObjectID()),
+					date: Date.now(),
+					name: data.name,
+					mime: mime.getType(data.name) || "application/octet-stream",
+					size: this.req.body.length
+				}
+			};
+			purgeCache((this.value = {
+				...this.value,
+				url: `https://pipe.miroware.io/${user._id}/${encodeURIComponent(data.name)}`
+			}).url);
 		}
 		this.done();
 	});
