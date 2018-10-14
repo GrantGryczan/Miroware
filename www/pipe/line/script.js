@@ -315,7 +315,7 @@ document.addEventListener("keydown", evt => {
 			const item = focusedItem ? focusedItem.previousElementSibling || items.lastElementChild : items.firstElementChild;
 			if(item) {
 				focusedItem = item;
-				if(!superKey) {
+				if(evt.shiftKey || !superKey) {
 					selectItem(item, evt);
 				}
 			}
@@ -324,10 +324,18 @@ document.addEventListener("keydown", evt => {
 			const item = focusedItem ? focusedItem.nextElementSibling || items.firstElementChild : items.firstElementChild;
 			if(item) {
 				focusedItem = item;
-				if(!superKey) {
+				if(evt.shiftKey || !superKey) {
 					selectItem(item, evt);
 				}
 			}
 		}
 	}
 }, true);
+document.addEventListener("dblclick", evt => {
+	if(!mouseMoved && evt.target.parentNode.classList.contains("item")) {
+		selectItem(evt.target.parentNode, 2);
+	}
+}, {
+	capture: true,
+	passive: true
+});
