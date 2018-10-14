@@ -41,6 +41,13 @@ main {
 	position: fixed;
 	background-color: #808080;
 }
+#addContainer {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	width: 94px;
+	height: 191px;
+}
 #addButton {
 	right: 23px;
 	bottom: 23px;

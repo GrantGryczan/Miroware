@@ -25,12 +25,14 @@ this.value += html`
 				</table>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
-			<button id="addButton" class="mdc-fab mdc-ripple" title="Add files">
-				<i class="mdc-fab__icon material-icons">add</i>
-			</button>
-			<button id="directoryButton" class="mdc-fab mdc-ripple mdc-fab--mini mdc-fab--exited" title="Add directory">
-				<i class="mdc-fab__icon material-icons">create_new_folder</i>
-			</button>
+			<div id="addContainer">
+				<button id="addButton" class="mdc-fab mdc-ripple" title="Add files">
+					<i class="mdc-fab__icon material-icons">add</i>
+				</button>
+				<button id="directoryButton" class="mdc-fab mdc-ripple mdc-fab--mini mdc-fab--exited" title="Add directory">
+					<i class="mdc-fab__icon material-icons">create_new_folder</i>
+				</button>
+			</div>
 			<button id="removeButton" class="mdc-fab mdc-ripple mdc-fab--mini mdc-fab--exited" title="Remove">
 				<i class="mdc-fab__icon material-icons">delete</i>
 			</button>
