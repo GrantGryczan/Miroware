@@ -77,5 +77,5 @@ if(isMe) {
 		error: "You do not have permission to access that user's pipe."
 	};
 	this.status = 403;
+	this.done();
 }
-this.done();
