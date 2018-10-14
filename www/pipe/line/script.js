@@ -15,7 +15,6 @@ const addFile = file => {
 		xhr.upload.addEventListener("progress", evt => {
 			console.log(evt.loaded, evt.total, Math.floor(10000 * evt.loaded / evt.total) / 100);
 		});
-		setTimeout(xhr.abort.bind(xhr), 1000);
 	}).then(Miro.response(xhr => {
 		new Miro.Dialog("Upload", html`<a href="$${xhr.response.url}" target="_blank">$${xhr.response.url}</a>`);
 	})).finally(subtractLoading);
