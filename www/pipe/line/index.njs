@@ -14,9 +14,9 @@ this.value += html`
 				<table id="table">
 					<thead>
 						<th id="nameHead">Name</th>
-						<th id="dateHead">Date</th>
 						<th id="typeHead">Type</th>
 						<th id="sizeHead">Size</th>
+						<th id="dateHead">Date</th>
 					</thead>
 					<tbody></tbody>
 				</table>`;
