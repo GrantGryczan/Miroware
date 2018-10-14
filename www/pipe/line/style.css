@@ -9,15 +9,12 @@
 	white-space: nowrap;
 	.file {
 		user-select: none;
+		cursor: pointer;
 		&.loading {
-			opacity: 0.75;
+			opacity: 0.5;
 			background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
 			background-repeat: no-repeat;
 			background-size: 0;
-			cursor: default;
-		}
-		&.ready {
-			cursor: pointer;
 		}
 		&.selected {
 			background-color: rgba(255, 128, 0, 0.5);
