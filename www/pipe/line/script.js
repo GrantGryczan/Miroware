@@ -47,11 +47,11 @@ const addFile = file => {
 	const fileElement = html`
 		<table>
 			<tbody>
-				<tr class="file loading" title="$${file.name}">
-					<td class="nameData">$${file.name}</td>
+				<tr class="file loading">
+					<td class="nameData" title="$${file.name}">$${file.name}</td>
 					<td class="typeData">-</td>
-					<td class="sizeData">-</td>
-					<td class="dateData">${getDate(Date.now())}</td>
+					<td class="sizeData">0 / $${fileSize}</td>
+					<td class="dateData">-</td>
 				</tr>
 			</tbody>
 		</table>
@@ -73,7 +73,7 @@ const addFile = file => {
 			sizeData.textContent = `${getSize(evt.loaded)} / ${fileSize}`;
 		});
 	}).then(Miro.response(() => {
-		typeData.textContent = xhr.response.mime;
+		typeData.textContent = typeData.title = xhr.response.mime;
 		sizeData.textContent = fileSize;
 		dateData.textContent = getDate(xhr.response.date);
 		fileElement.classList.remove("loading");
