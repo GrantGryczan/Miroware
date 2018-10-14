@@ -105,6 +105,7 @@ const addFile = file => {
 		typeData.textContent = typeData.title = xhr.response.type;
 		dateData.textContent = getDate(xhr.response.date);
 		itemElement.classList.remove("loading");
+		updateSelection();
 	}, () => {
 		itemElement.parentNode.removeChild(itemElement);
 	})).finally(subtractLoading);
