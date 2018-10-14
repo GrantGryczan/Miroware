@@ -37,11 +37,22 @@ main {
 		background-color: rgba(255, 128, 0, 0.5);
 	}
 }
-#uploadButton {
+.mdc-fab {
 	position: fixed;
-	right: 14px;
-	bottom: 14px;
+	background-color: #808080;
+}
+#addButton {
+	right: 23px;
+	bottom: 23px;
 	background-color: #df7f20;
+}
+#removeButton {
+	right: 95px;
+	bottom: 31px;
+}
+#infoButton {
+	right: 151px;
+	bottom: 31px;
 }
 #targetIndicator {
 	position: absolute;

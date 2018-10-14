@@ -108,8 +108,8 @@ fileInput.addEventListener("change", () => {
 	Array.prototype.forEach.call(fileInput.files, addFile);
 	fileInput.value = null;
 });
-const uploadButton = container.querySelector("#uploadButton");
-uploadButton.addEventListener("click", fileInput.click.bind(fileInput));
+const addButton = container.querySelector("#addButton");
+addButton.addEventListener("click", fileInput.click.bind(fileInput));
 const targetIndicator = document.body.querySelector("#targetIndicator");
 const indicateTarget = target => {
 	if(target) {
