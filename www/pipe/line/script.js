@@ -359,7 +359,7 @@ const removeItem = itemElement => {
 		if(focusedItem === itemElement) {
 			focusedItem = null;
 		}
-		itemElement.parentNode.remove(itemElement);
+		itemElement.parentNode.removeChild(itemElement);
 		Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
 		updateSelection();
 	}, () => {
