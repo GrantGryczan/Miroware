@@ -56,7 +56,7 @@ if(isMe) {
 			this.value = {
 				error: err.message
 			};
-			this.status = err.statusCode;
+			this.status = err.statusCode || 422;
 			console.dir(err);
 		} else {
 			this.update.$push = {
