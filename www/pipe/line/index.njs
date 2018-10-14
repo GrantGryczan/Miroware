@@ -22,7 +22,7 @@ for(const item of this.user.pipe) {
 	this.value += html`
 						<tr class="file ready" data-id="${item.id}">
 							<td class="nameData" title="$${item.name}">$${item.name}</td>
-							<td class="sizeData" title="${item.size}">${getSize(item.size)}</td>
+							<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
 							<td class="dateData">${getDate(item.date)}</td>
 						</tr>`;
 }
