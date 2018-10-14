@@ -58,7 +58,7 @@ main {
 	.mdc-line-ripple {
 		background-color: #b57a40;
 	}
-	:not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth)&--focused:not(&--disabled):not(.mdc-text-field--invalid) .mdc-floating-label {
+	&--focused:not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth):not(&--disabled):not(.mdc-text-field--invalid) .mdc-floating-label {
 		color: #e9a663;
 	}
 }
