@@ -4,7 +4,7 @@ if(testEmail(this.req.body.email)) {
 		email: this.req.body.email
 	})) {
 		this.value = {
-			error: "That email is already in use."
+			error: "That email is already taken."
 		};
 		this.status = 422;
 		this.done();

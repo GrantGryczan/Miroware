@@ -35,6 +35,13 @@ if(isMe) {
 			this.status = 400;
 			this.done();
 			return;
+		} else if(this.user.pipe.find(item => item.name === this.req.body.name)) {
+			this.value = {
+				error: "That name is already taken."
+			};
+			this.status = 422;
+			this.done();
+			return;
 		}
 	} else {
 		this.value = {
