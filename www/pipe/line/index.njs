@@ -10,7 +10,16 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<p>Miroware Pipe is in the pre-alpha stage. Do not expect things to work, and upload files with intent to test rather than host. All files uploaded during this stage will eventually be deleted.</p>`;
+				<p>Miroware Pipe is in the pre-alpha stage. Do not expect things to work, and upload files with intent to test rather than host. All files uploaded during this stage will eventually be deleted.</p>
+				<table id="table">
+					<thead>
+						<th>Name</th>
+						<th>Date</th>
+						<th>Type</th>
+						<th>Size</th>
+					</thead>
+					<tbody></tbody>
+				</table>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
 			<button id="uploadButton" class="mdc-fab mdc-ripple" title="Add file(s)">

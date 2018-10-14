@@ -1,6 +1,9 @@
 .mdc-linear-progress .mdc-linear-progress__bar-inner {
 	background-color: #b4783c;
 }
+#table {
+	width: 100%;
+}
 #uploadButton {
 	position: fixed;
 	right: 1em;
