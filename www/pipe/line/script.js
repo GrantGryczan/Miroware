@@ -316,7 +316,7 @@ document.addEventListener("keydown", evt => {
 			if(item) {
 				focusedItem = item;
 				if(!superKey) {
-					selectItem(item);
+					selectItem(item, evt);
 				}
 			}
 		} else if(evt.keyCode === 40) { // `down`
@@ -325,7 +325,7 @@ document.addEventListener("keydown", evt => {
 			if(item) {
 				focusedItem = item;
 				if(!superKey) {
-					selectItem(item);
+					selectItem(item, evt);
 				}
 			}
 		}
