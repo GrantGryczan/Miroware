@@ -3,11 +3,13 @@
 }
 #table {
 	width: 100%;
+	border-spacing: 0;
 	text-align: left;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	th, td {
-		padding: 0 0.25em;
+		padding: 0.25em;
+		border-bottom: 1px solid #373737;
 	}
 	#nameHead {
 		width: 60%;
