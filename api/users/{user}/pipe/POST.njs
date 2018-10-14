@@ -1,5 +1,4 @@
 const {user, isMe} = await parseUser(this);
-console.log(0);
 if(isMe) {
 	if(this.req.get("Content-Type") !== "application/octet-stream") {
 		this.value = {
@@ -45,11 +44,11 @@ if(isMe) {
 		this.done();
 		return;
 	}
-	console.log(1);
+	const id = String(new ObjectID());
 	s3.putObject({
 		Bucket: "miroware-pipe",
-		Key: this.value.id,
-		ContentLength: this.value.size,
+		Key: id,
+		ContentLength: this.req.body.length,
 		Body: this.req.body
 	}, err => {
 		if(err) {
@@ -57,11 +56,10 @@ if(isMe) {
 				error: err.message
 			};
 			this.status = err.statusCode || 422;
-			console.dir(err);
 		} else {
 			this.update.$push = {
 				pipe: this.value = {
-					id: String(new ObjectID()),
+					id,
 					date: Date.now(),
 					name: data.name,
 					mime: mime.getType(data.name) || "application/octet-stream",
@@ -72,10 +70,8 @@ if(isMe) {
 				...this.value,
 				url: `https://pipe.miroware.io/${user._id}/${encodeURIComponent(data.name)}`
 			}).url);
-			console.log(2);
 		}
 		this.done();
-		console.log(3);
 	});
 } else {
 	this.value = {
