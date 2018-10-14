@@ -14,7 +14,7 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<p>Miroware Pipe is in the beta stage. Do not expect consistent stability.</p>
+				<p>Miroware Pipe is in the beta stage. Do not expect consistent stability or full functionality.</p>
 				<table id="table">
 					<thead>
 						<th id="nameHead">Name</th>
