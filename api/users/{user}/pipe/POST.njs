@@ -57,6 +57,7 @@ if(isMe) {
 				error: err.message
 			};
 			this.status = err.statusCode;
+			console.log(err);
 		} else {
 			this.update.$push = {
 				pipe: this.value = {
