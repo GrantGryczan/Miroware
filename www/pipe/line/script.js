@@ -50,7 +50,7 @@ const addFile = file => {
 				<tr class="file loading">
 					<td class="nameData" title="$${file.name}">$${file.name}</td>
 					<td class="typeData">-</td>
-					<td class="sizeData">0 / $${fileSize}</td>
+					<td class="sizeData" title="0 / ${file.size}">0 / ${fileSize}</td>
 					<td class="dateData">-</td>
 				</tr>
 			</tbody>
@@ -71,10 +71,12 @@ const addFile = file => {
 		xhr.upload.addEventListener("progress", evt => {
 			fileElement.style.backgroundSize = `${100 * evt.loaded / evt.total}%`;
 			sizeData.textContent = `${getSize(evt.loaded)} / ${fileSize}`;
+			sizeData.title = `${evt.loaded} / ${evt.total}`;
 		});
 	}).then(Miro.response(() => {
 		typeData.textContent = typeData.title = xhr.response.mime;
 		sizeData.textContent = fileSize;
+		sizeData.title = file.size;
 		dateData.textContent = getDate(xhr.response.date);
 		fileElement.classList.remove("loading");
 	}, () => {
