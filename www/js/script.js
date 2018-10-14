@@ -320,7 +320,7 @@ Miro.response = (success, failure) => async xhr => {
 		if(success instanceof Function) {
 			success(xhr);
 		}
-	} else {
+	} else if(xhr.readyState) {
 		if(failure instanceof Function) {
 			failure(xhr);
 		}
