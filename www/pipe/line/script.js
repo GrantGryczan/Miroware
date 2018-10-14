@@ -51,7 +51,7 @@ const addFile = file => {
 					<td class="nameData">$${file.name}</td>
 					<td class="typeData">$${file.type || "..."}</td>
 					<td class="sizeData">${getSize(file.size)}</td>
-					<td class="dateData">${getData(Date.now())}</td>
+					<td class="dateData">${getDate(Date.now())}</td>
 				</tr>
 			</tbody>
 		</table>
