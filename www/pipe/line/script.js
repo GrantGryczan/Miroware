@@ -300,3 +300,34 @@ document.addEventListener("mouseup", evt => {
 	capture: true,
 	passive: true
 });
+document.addEventListener("keydown", evt => {
+	if(!Miro.typing() && Miro.focused()) {
+		const superKey = evt.ctrlKey || evt.metaKey;
+		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
+			// TODO
+		} else if(evt.keyCode === 27) { // `esc`
+			for(const item of items.querySelectorAll(".item.selected")) {
+				item.classList.remove("selected");
+			}
+			selectedItem = focusedItem = null;
+		} else if(evt.keyCode === 38) { // `up`
+			evt.preventDefault();
+			const item = focusedItem ? focusedItem.previousElementSibling || items.lastElementChild : items.firstElementChild;
+			if(item) {
+				focusedItem = item;
+				if(!superKey) {
+					selectItem(item);
+				}
+			}
+		} else if(evt.keyCode === 40) { // `down`
+			evt.preventDefault();
+			const item = focusedItem ? focusedItem.nextElementSibling || items.firstElementChild : items.firstElementChild;
+			if(item) {
+				focusedItem = item;
+				if(!superKey) {
+					selectItem(item);
+				}
+			}
+		}
+	}
+}, true);
