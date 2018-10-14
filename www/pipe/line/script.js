@@ -49,7 +49,7 @@ const addFile = file => {
 			<tbody>
 				<tr class="file loading" title="$${file.name}">
 					<td class="nameData">$${file.name}</td>
-					<td class="typeData">$${file.type || "..."}</td>
+					<td class="typeData">$${file.type || "-"}</td>
 					<td class="sizeData">${fileSize}</td>
 					<td class="dateData">${getDate(Date.now())}</td>
 				</tr>
