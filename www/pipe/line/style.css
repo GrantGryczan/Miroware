@@ -54,3 +54,13 @@ main {
 #targetIndicator.visible {
 	opacity: 0.2;
 }
+.mdc-text-field {
+	.mdc-line-ripple {
+		background-color: #b57a40;
+	}
+	&--focused:not(&--disabled) {
+		&:not(.mdc-text-field--invalid) .mdc-floating-label {
+			color: #e9a663;
+		}
+	}
+}
