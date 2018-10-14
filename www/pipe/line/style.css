@@ -10,12 +10,17 @@ main {
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	cursor: pointer;
-	th, td {
-		padding: 0.75em 0.25em;
-		border-bottom: 1px solid #373737;
-		overflow: hidden;
-		text-overflow: ellipsis;
+	tr {
+		cursor: pointer;
+	}
+	th {
+		cursor: pointer;
+		&, td {
+			padding: 0.75em 0.25em;
+			border-bottom: 1px solid #373737;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	}
 }
 #nameHead {
@@ -58,7 +63,7 @@ main {
 	.mdc-line-ripple {
 		background-color: #b57a40;
 	}
-	&--focused:not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth):not(&--disabled):not(.mdc-text-field--invalid) .mdc-floating-label {
+	&--focused:not(&--textarea):not(&--fullwidth):not(&--disabled):not(&--invalid) .mdc-floating-label {
 		color: #e9a663;
 	}
 }

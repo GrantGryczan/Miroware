@@ -24,6 +24,7 @@ body {
 	overflow: hidden;
 	background-color: #202020;
 	color: rgba(255, 255, 255, 0.87);
+	-webkit-tap-highlight-color: transparent;
 }
 hr {
 	height: 0;
