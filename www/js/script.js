@@ -226,16 +226,16 @@ class MiroDialog {
 		this[_promise] = new Promise(resolve => {
 			let submitted = false;
 			let formState = true;
-			if(!(submitted = !footerElem.querySelector("button[type='submit']"))) {
-				surfaceElem.addEventListener("submit", evt => {
-					evt.preventDefault();
-					submitted = true;
-					setTimeout(() => {
-						formState = !surfaceElem._disabled;
-						Miro.formState(surfaceElem, false);
-					});
+			surfaceElem.addEventListener("submit", (submitted = !footerElem.querySelector("button[type='submit']")) ? evt => {
+				evt.preventDefault();
+			} : evt => {
+				evt.preventDefault();
+				submitted = true;
+				setTimeout(() => {
+					formState = !surfaceElem._disabled;
+					Miro.formState(surfaceElem, false);
 				});
-			}
+			});
 			this.value = null;
 			const close = value => {
 				this.closed = true;
