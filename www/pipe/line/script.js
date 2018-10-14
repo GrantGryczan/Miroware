@@ -36,7 +36,7 @@ const getSize = size => {
 	size /= 1024;
 	return `${Math.round(100 * size) / 100} YB`;
 };
-const getDate = date => new Date(date).toString().split(" ").slice(1, -2).join(" ");
+const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
 let loading = 0;
 const subtractLoading = () => {
 	loading--;
