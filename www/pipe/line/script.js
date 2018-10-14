@@ -364,7 +364,7 @@ const removeItem = itemElement => {
 		Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
 		updateSelection();
 	};
-	if(itemElement.classList.contains("loading")) {
+	if(itemElement._xhr) {
 		itemElement._xhr.abort();
 		removeItemElement();
 	} else {
