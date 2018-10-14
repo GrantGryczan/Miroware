@@ -40,6 +40,9 @@ main {
 .mdc-fab {
 	position: fixed;
 	background-color: #808080;
+	&--exited {
+		pointer-events: none;
+	}
 }
 #addContainer {
 	position: fixed;

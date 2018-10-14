@@ -76,24 +76,29 @@ const addFile = file => {
 			</tbody>
 		</table>
 	`.querySelector("tr");
+	itemElement._item = file;
 	const sizeData = itemElement.querySelector(".sizeData");
 	const typeData = itemElement.querySelector(".typeData");
 	const dateData = itemElement.querySelector(".dateData");
 	items.insertBefore(itemElement, items.firstChild);
-	let xhr;
 	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
 		"X-Data": JSON.stringify({
 			name: file.name
 		})
-	}, file, xhrArg => {
-		xhr = xhrArg;
-		xhr.upload.addEventListener("progress", evt => {
-			itemElement.style.backgroundSize = `${100 * evt.loaded / evt.total}%`;
+	}, file, xhr => {
+		itemElement._xhr = xhr;
+		itemElement._xhr.upload.addEventListener("progress", evt => {
+			const percentage = 100 * evt.loaded / evt.total;
+			itemElement.style.backgroundSize = `${percentage}%`;
 			sizeData.textContent = `${getSize(evt.loaded)} / ${fileSize}`;
 			sizeData.title = `${evt.loaded} B / ${evt.total} B`;
+			if(percentage === 100) {
+				delete itemElement._xhr;
+				updateSelection();
+			}
 		});
-	}).then(Miro.response(() => {
+	}).then(Miro.response(xhr => {
 		Miro.data.push(itemElement._item = xhr.response);
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
@@ -348,7 +353,7 @@ document.addEventListener("dblclick", evt => {
 });
 const removeItem = itemElement => {
 	itemElement.classList.add("loading");
-	Miro.request("DELETE", `/users/@me/pipe/${itemElement._item.id}`).then(Miro.response(() => {
+	const removeItemElement = () => {
 		if(selectedItem === itemElement) {
 			selectedItem = null;
 		}
@@ -358,9 +363,15 @@ const removeItem = itemElement => {
 		itemElement.parentNode.removeChild(itemElement);
 		Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
 		updateSelection();
-	}, () => {
-		itemElement.classList.remove("loading");
-	}));
+	};
+	if(itemElement.classList.contains("loading")) {
+		itemElement._xhr.abort();
+		removeItemElement();
+	} else {
+		Miro.request("DELETE", `/users/@me/pipe/${itemElement._item.id}`).then(Miro.response(removeItemElement, () => {
+			itemElement.classList.remove("loading");
+		}));
+	}
 };
 const confirmRemoveItem = itemElement => {
 	new Miro.Dialog("Remove Item", html`
@@ -429,13 +440,28 @@ const updateSelection = () => {
 	const itemElements = items.querySelectorAll(".item.selected");
 	if(itemElements.length === 0) {
 		removeButton.classList.add("mdc-fab--exited");
+		removeButton.blur();
 		infoButton.classList.add("mdc-fab--exited");
+		infoButton.blur();
 	} else {
-		removeButton.classList.remove("mdc-fab--exited");
+		let safeToRemove = true;
+		for(const itemElement of itemElements) {
+			if(itemElement.classList.contains("loading") && !itemElement._xhr) {
+				safeToRemove = false;
+				break;
+			}
+		}
+		if(safeToRemove) {
+			removeButton.classList.remove("mdc-fab--exited");
+		} else {
+			removeButton.classList.add("mdc-fab--exited");
+			removeButton.blur();
+		}
 		if(itemElements.length === 1 && !itemElements[0].classList.contains("loading")) {
 			infoButton.classList.remove("mdc-fab--exited");
 		} else {
 			infoButton.classList.add("mdc-fab--exited");
+			infoButton.blur();
 		}
 	}
 };
