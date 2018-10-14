@@ -19,6 +19,7 @@ this.value += html`
 					<thead>
 						<th id="nameHead">Name</th>
 						<th id="sizeHead">Size</th>
+						<th id="typeHead">Type</th>
 						<th id="dateHead">Date</th>
 					</thead>
 					<tbody id="items"></tbody>

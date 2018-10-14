@@ -21,10 +21,10 @@ main {
 	}
 }
 #nameHead {
-	width: 60%;
+	width: 55%;
 }
-#sizeHead, #dateHead {
-	width: 20%;
+#sizeHead, #typeHead, #dateHead {
+	width: 15%;
 }
 .item {
 	&.loading {

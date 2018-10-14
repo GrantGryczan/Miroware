@@ -45,6 +45,7 @@ const createItemElement = item => {
 				<tr class="item">
 					<td class="nameData" title="$${item.name}">$${item.name}</td>
 					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
+					<td class="typeData" title="$${item.type}">$${item.type}</td>
 					<td class="dateData">${getDate(item.date)}</td>
 				</tr>
 			</tbody>
@@ -69,6 +70,7 @@ const addFile = file => {
 				<tr class="item loading">
 					<td class="nameData" title="$${file.name}">$${file.name}</td>
 					<td class="sizeData" title="- / ${file.size} B">- / ${fileSize}</td>
+					<td class="typeData">-</td>
 					<td class="dateData">-</td>
 				</tr>
 			</tbody>
@@ -76,6 +78,7 @@ const addFile = file => {
 	`.querySelector("tr");
 	const typeData = itemElement.querySelector(".typeData");
 	const sizeData = itemElement.querySelector(".sizeData");
+	const typeData = itemElement.querySelector(".typeData");
 	const dateData = itemElement.querySelector(".dateData");
 	items.insertBefore(itemElement, items.firstChild);
 	let xhr;
@@ -95,6 +98,7 @@ const addFile = file => {
 		Miro.data.push(itemElement._item = xhr.response);
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
+		typeData.textContent = typeData.title = xhr.response.type;
 		dateData.textContent = getDate(xhr.response.date);
 		itemElement.classList.remove("loading");
 	}, () => {
