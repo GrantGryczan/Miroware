@@ -307,7 +307,9 @@ document.addEventListener("keydown", evt => {
 		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
 			removeSelectedItems();
 		} else if(evt.keyCode === 13) { // `enter`
-			openItem();
+			if(focusedItem) {
+				openItem(focusedItem);
+			}
 		} else if(evt.keyCode === 27) { // `esc`
 			for(const item of items.querySelectorAll(".item.selected")) {
 				item.classList.remove("selected");
@@ -344,7 +346,7 @@ document.addEventListener("keydown", evt => {
 document.addEventListener("dblclick", evt => {
 	if(!mouseMoved && evt.target.parentNode.classList.contains("item")) {
 		selectItem(evt.target.parentNode, evt, 2);
-		openItem();
+		openItem(evt.target.parentNode);
 	}
 }, {
 	capture: true,
@@ -400,6 +402,19 @@ const removeSelectedItems = () => {
 const updateSelection = () => {
 	// TODO
 };
-const openItem = () => {
-	// TODO
+const openItem = itemElement => {
+	const body = html`
+		<div class="mdc-text-field spaced">
+			<input id="url" class="mdc-text-field__input" type="text" value="$${itemElement._item.url}" readonly>
+			<label class="mdc-floating-label alwaysFloat" for="url">URL</label>
+			<div class="mdc-line-ripple"></div>
+		</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button>
+	`;
+	const input = body.querySelector("input");
+	body.querySelector("button").addEventListener("click", () => {
+		input.select();
+		document.execCommand("copy");
+		Miro.snackbar("URL copied to clipboard");
+	});
+	const dialog = new Miro.Dialog("Item", body);
 };
