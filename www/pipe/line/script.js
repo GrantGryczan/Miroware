@@ -47,7 +47,7 @@ const addFile = file => {
 	const fileElement = html`
 		<table>
 			<tbody>
-				<tr id="file_$${this.id}" class="file loading" title="$${file.name}">
+				<tr class="file loading" title="$${file.name}">
 					<td class="nameData">$${file.name}</td>
 					<td class="typeData">$${file.type || "..."}</td>
 					<td class="sizeData">${getSize(file.size)}</td>
