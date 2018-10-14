@@ -8,7 +8,7 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	th, td {
-		padding: 0.25em;
+		padding: 0.5em 0.25em;
 		border-bottom: 1px solid #373737;
 	}
 	#nameHead {
