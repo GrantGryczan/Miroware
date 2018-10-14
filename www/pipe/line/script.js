@@ -74,7 +74,7 @@ const addFile = file => {
 			sizeData.title = `${evt.loaded} / ${evt.total}`;
 		});
 	}).then(Miro.response(() => {
-		typeData.textContent = typeData.title = xhr.response.mime;
+		typeData.textContent = typeData.title = xhr.response.type;
 		sizeData.textContent = fileSize;
 		sizeData.title = file.size;
 		dateData.textContent = getDate(xhr.response.date);

@@ -62,7 +62,7 @@ if(isMe) {
 					id,
 					date: Date.now(),
 					name: data.name,
-					mime: mime.getType(data.name) || "application/octet-stream",
+					type: mime.getType(data.name) || "application/octet-stream",
 					size: this.req.body.length
 				}
 			};
