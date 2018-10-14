@@ -10,10 +10,10 @@
 #nameHead {
 	width: 60%;
 }
-#typeHead {
-	width: 20%;
+#typeHead, #dateHead {
+	width: 15%;
 }
-#sizeHead, #dateHead {
+#sizeHead {
 	width: 10%;
 }
 #uploadButton {
