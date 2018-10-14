@@ -432,7 +432,7 @@ const updateSelection = () => {
 		infoButton.classList.add("mdc-fab--exited");
 	} else {
 		removeButton.classList.remove("mdc-fab--exited");
-		if(itemElements.length === 1) {
+		if(itemElements.length === 1 && !itemElements[0].classList.contains("loading")) {
 			infoButton.classList.remove("mdc-fab--exited");
 		} else {
 			infoButton.classList.add("mdc-fab--exited");
