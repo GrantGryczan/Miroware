@@ -19,38 +19,38 @@ const urlTest = /^https?:\/\/./;
 const subdomainTest = /^(?:[0-9a-z](?:[-_0-9a-z]*[0-9a-z])?)?$/;
 const mimeTest = /^[^\x00-\x20()<>@,;:\\"/[\]?.=]+\/[^\x00-\x20()<>@,;:\\"/[\]?.=]+$/;
 const getSize = size => {
-	if(size < 1024) {
+	if(size < 1000) {
 		return `${size} B`;
 	}
-	size /= 1024;
-	if(size < 1024) {
-		return `${Math.round(100 * size) / 100} KB`;
+	size /= 1000;
+	if(size < 1000) {
+		return `${Math.round(100 * size) / 100} kB`;
 	}
-	size /= 1024;
-	if(size < 1024) {
+	size /= 1000;
+	if(size < 1000) {
 		return `${Math.round(100 * size) / 100} MB`;
 	}
-	size /= 1024;
-	if(size < 1024) {
+	size /= 1000;
+	if(size < 1000) {
 		return `${Math.round(100 * size) / 100} GB`;
 	}
-	size /= 1024;
-	if(size < 1024) {
+	size /= 1000;
+	if(size < 1000) {
 		return `${Math.round(100 * size) / 100} TB`;
 	}
-	size /= 1024;
-	if(size < 1024) {
+	size /= 1000;
+	if(size < 1000) {
 		return `${Math.round(100 * size) / 100} PB`;
 	}
-	size /= 1024;
-	if(size < 1024) {
+	size /= 1000;
+	if(size < 1000) {
 		return `${Math.round(100 * size) / 100} EB`;
 	}
-	size /= 1024;
-	if(size < 1024) {
+	size /= 1000;
+	if(size < 1000) {
 		return `${Math.round(100 * size) / 100} ZB`;
 	}
-	size /= 1024;
+	size /= 1000;
 	return `${Math.round(100 * size) / 100} YB`;
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
