@@ -42,7 +42,7 @@ if(isMe) {
 					this.status = 400;
 					this.done();
 					return;
-				} else if(mimeTest.test(this.req.body.type)) {
+				} else if(!mimeTest.test(this.req.body.type)) {
 					this.value = {
 						error: "The `type` value must be a valid MIME type."
 					};
