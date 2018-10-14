@@ -17,7 +17,17 @@ this.value += html`
 						<th id="sizeHead">Size</th>
 						<th id="dateHead">Date</th>
 					</thead>
-					<tbody id="files"></tbody>
+					<tbody id="files">`;
+for(const item of ) {
+	this.html += html`
+						<tr class="file">
+							<td class="nameData" title="$${item.name}">$${item.name}</td>
+							<td class="sizeData" title="${item.size}">${getSize(item.size)}</td>
+							<td class="dateData">${getDate(item.date)}</td>
+						</tr>`;
+}
+this.value += html`
+					</tbody>
 				</table>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
