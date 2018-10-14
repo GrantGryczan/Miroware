@@ -18,7 +18,7 @@ this.value += html`
 						<th id="dateHead">Date</th>
 					</thead>
 					<tbody id="files">`;
-for(const item of ) {
+for(const item of user.pipe) {
 	this.html += html`
 						<tr class="file">
 							<td class="nameData" title="$${item.name}">$${item.name}</td>
