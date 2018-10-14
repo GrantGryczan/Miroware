@@ -1,36 +1,38 @@
 .mdc-linear-progress .mdc-linear-progress__bar-inner {
 	background-color: #b4783c;
 }
-#table {
-	width: 100%;
-	border-spacing: 0;
-	table-layout: fixed;
-	text-align: left;
-	white-space: nowrap;
+main {
 	user-select: none;
-	cursor: pointer;
-	.item {
-		&.loading {
-			opacity: 0.7;
-			background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
-			background-repeat: no-repeat;
-			background-size: 0;
+	#table {
+		width: 100%;
+		border-spacing: 0;
+		table-layout: fixed;
+		text-align: left;
+		white-space: nowrap;
+		cursor: pointer;
+		.item {
+			&.loading {
+				opacity: 0.7;
+				background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
+				background-repeat: no-repeat;
+				background-size: 0;
+			}
+			&.selected {
+				background-color: rgba(255, 128, 0, 0.5);
+			}
 		}
-		&.selected {
-			background-color: rgba(255, 128, 0, 0.5);
+		th, td {
+			padding: 0.75em 0.25em;
+			border-bottom: 1px solid #373737;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
-	}
-	th, td {
-		padding: 0.75em 0.25em;
-		border-bottom: 1px solid #373737;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	#nameHead {
-		width: 60%;
-	}
-	#sizeHead, #dateHead {
-		width: 20%;
+		#nameHead {
+			width: 60%;
+		}
+		#sizeHead, #dateHead {
+			width: 20%;
+		}
 	}
 }
 #uploadButton {
