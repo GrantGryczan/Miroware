@@ -4,6 +4,7 @@
 #table {
 	width: 100%;
 	border-spacing: 0;
+	table-layout: fixed;
 	text-align: left;
 	text-overflow: ellipsis;
 	white-space: nowrap;
