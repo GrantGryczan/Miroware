@@ -1,22 +1,76 @@
 "use strict";
 const container = document.body.querySelector("#container");
+const files = container.querySelector("#files");
+const getSize = size => {
+	if(size < 1024) {
+		return `${size} B`;
+	}
+	size /= 1024;
+	if(size < 1024) {
+		return `${Math.round(100 * size) / 100} KB`;
+	}
+	size /= 1024;
+	if(size < 1024) {
+		return `${Math.round(100 * size) / 100} MB`;
+	}
+	size /= 1024;
+	if(size < 1024) {
+		return `${Math.round(100 * size) / 100} GB`;
+	}
+	size /= 1024;
+	if(size < 1024) {
+		return `${Math.round(100 * size) / 100} TB`;
+	}
+	size /= 1024;
+	if(size < 1024) {
+		return `${Math.round(100 * size) / 100} PB`;
+	}
+	size /= 1024;
+	if(size < 1024) {
+		return `${Math.round(100 * size) / 100} EB`;
+	}
+	size /= 1024;
+	if(size < 1024) {
+		return `${Math.round(100 * size) / 100} ZB`;
+	}
+	size /= 1024;
+	return `${Math.round(100 * size) / 100} YB`;
+};
+const getDate = date => new Date(date).toString().split(" ").slice(1, -2).join(" ");
 let loading = 0;
 const subtractLoading = () => {
 	loading--;
 };
 const addFile = file => {
 	loading++;
+	let xhr;
+	const fileElement = html`
+		<table>
+			<tbody>
+				<tr id="file_$${this.id}" class="file loading" title="$${file.name}">
+					<td class="nameData">$${file.name}</td>
+					<td class="typeData">$${file.type || "..."}</td>
+					<td class="sizeData">${getSize(file.size)}</td>
+					<td class="dateData">${getData(Date.now())}</td>
+				</tr>
+			</tbody>
+		</table>
+	`.querySelector("tr");
+	files.insertBefore(fileElement, files.firstChild);
 	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
 		"X-Data": JSON.stringify({
 			name: file.name
 		})
-	}, file, xhr => {
+	}, file, xhrArg => {
+		xhr = xhrArg;
 		xhr.upload.addEventListener("progress", evt => {
-			console.log(evt.loaded, evt.total, Math.floor(10000 * evt.loaded / evt.total) / 100);
+			console.log(100 * evt.loaded / evt.total);
 		});
-	}).then(Miro.response(xhr => {
+	}).then(Miro.response(() => {
 		new Miro.Dialog("Upload", html`<a href="$${xhr.response.url}" target="_blank">$${xhr.response.url}</a>`);
+	}, () => {
+		fileElement.parentNode.removeChild(fileElement);
 	})).finally(subtractLoading);
 };
 const fileInput = document.createElement("input");

@@ -18,7 +18,7 @@ this.value += html`
 						<th id="sizeHead">Size</th>
 						<th id="dateHead">Date</th>
 					</thead>
-					<tbody></tbody>
+					<tbody id="files"></tbody>
 				</table>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
