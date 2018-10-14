@@ -46,6 +46,10 @@ main {
 	bottom: 23px;
 	background-color: #df7f20;
 }
+#directoryButton {
+	right: 31px;
+	bottom: 95px;
+}
 #removeButton {
 	right: 95px;
 	bottom: 31px;
