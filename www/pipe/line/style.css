@@ -19,10 +19,10 @@
 		text-overflow: ellipsis;
 	}
 	#nameHead {
-		width: 55%;
+		width: 60%;
 	}
-	#typeHead, #sizeHead, #dateHead {
-		width: 15%;
+	#sizeHead, #dateHead {
+		width: 20%;
 	}
 }
 #uploadButton {
