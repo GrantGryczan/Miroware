@@ -328,6 +328,10 @@ document.addEventListener("keydown", evt => {
 					selectItem(item, evt);
 				}
 			}
+		} else if(evt.keyCode === 65) { // ^`A`
+			for(const item of items.querySelectorAll(".item:not(.selected)")) {
+				item.classList.add("selected");
+			}
 		}
 	}
 }, true);
