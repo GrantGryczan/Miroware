@@ -7,7 +7,7 @@
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	.file {
+	.item {
 		user-select: none;
 		cursor: pointer;
 		&.loading {

@@ -1,6 +1,6 @@
 "use strict";
 const container = document.body.querySelector("#container");
-const files = container.querySelector("#files");
+const items = container.querySelector("#items");
 const getSize = size => {
 	if(size < 1024) {
 		return `${size} B`;
@@ -37,6 +37,24 @@ const getSize = size => {
 	return `${Math.round(100 * size) / 100} YB`;
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
+const createItemElement = item => {
+	const itemElement = html`
+		<table>
+			<tbody>
+				<tr class="item ready">
+					<td class="nameData" title="$${item.name}">$${item.name}</td>
+					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
+					<td class="dateData">${getDate(item.date)}</td>
+				</tr>
+			</tbody>
+		</table>
+	`.querySelector("tr");
+	itemElement._item = item;
+	return itemElement;
+};
+for(const item of Miro.data) {
+	items.insertBefore(createItemElement(item), items.firstChild);
+}
 let loading = 0;
 const subtractLoading = () => {
 	loading--;
@@ -44,10 +62,10 @@ const subtractLoading = () => {
 const addFile = file => {
 	loading++;
 	const fileSize = getSize(file.size);
-	const fileElement = html`
+	const itemElement = html`
 		<table>
 			<tbody>
-				<tr class="file loading">
+				<tr class="item loading">
 					<td class="nameData" title="$${file.name}">$${file.name}</td>
 					<td class="sizeData" title="- / ${file.size} B">- / ${fileSize}</td>
 					<td class="dateData">-</td>
@@ -55,10 +73,10 @@ const addFile = file => {
 			</tbody>
 		</table>
 	`.querySelector("tr");
-	const typeData = fileElement.querySelector(".typeData");
-	const sizeData = fileElement.querySelector(".sizeData");
-	const dateData = fileElement.querySelector(".dateData");
-	files.insertBefore(fileElement, files.firstChild);
+	const typeData = itemElement.querySelector(".typeData");
+	const sizeData = itemElement.querySelector(".sizeData");
+	const dateData = itemElement.querySelector(".dateData");
+	items.insertBefore(itemElement, items.firstChild);
 	let xhr;
 	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
@@ -68,19 +86,19 @@ const addFile = file => {
 	}, file, xhrArg => {
 		xhr = xhrArg;
 		xhr.upload.addEventListener("progress", evt => {
-			fileElement.style.backgroundSize = `${100 * evt.loaded / evt.total}%`;
+			itemElement.style.backgroundSize = `${100 * evt.loaded / evt.total}%`;
 			sizeData.textContent = `${getSize(evt.loaded)} / ${fileSize}`;
 			sizeData.title = `${evt.loaded} B / ${evt.total} B`;
 		});
 	}).then(Miro.response(() => {
-		fileElement._file = xhr.response;
+		itemElement._item = xhr.response;
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
 		dateData.textContent = getDate(xhr.response.date);
-		fileElement.classList.remove("loading");
-		fileElement.classList.add("ready");
+		itemElement.classList.remove("loading");
+		itemElement.classList.add("ready");
 	}, () => {
-		fileElement.parentNode.removeChild(fileElement);
+		itemElement.parentNode.removeChild(itemElement);
 	})).finally(subtractLoading);
 };
 const fileInput = document.createElement("input");
@@ -144,7 +162,7 @@ document.addEventListener("drop", evt => {
 		if(evt.dataTransfer.files.length) {
 			Array.prototype.forEach.call(evt.dataTransfer.files, addFile);
 		}/* else if(evt.dataTransfer.types.includes("text/uri-list")) {
-			addFileFromURI(evt.dataTransfer.getData("text/uri-list"));
+			addURI(evt.dataTransfer.getData("text/uri-list"));
 		}*/
 		indicateTarget();
 	}
@@ -154,11 +172,11 @@ document.addEventListener("paste", async evt => {
 	if(Miro.focused() && !Miro.typing() && evt.clipboardData.items.length) {
 		let file;
 		let string;
-		for(const item of evt.clipboardData.items) {
-			if(item.kind === "file") {
-				file = item;
-			} else if(item.kind === "string") {
-				string = item;
+		for(const dataTransferItem of evt.clipboardData.items) {
+			if(dataTransferItem.kind === "file") {
+				file = dataTransferItem;
+			} else if(dataTransferItem.kind === "string") {
+				string = dataTransferItem;
 			}
 		}
 		if(file) {
@@ -177,57 +195,57 @@ document.addEventListener("paste", async evt => {
 	passive: true
 });
 window.onbeforeunload = () => loading || undefined;
-let selectedFile = null;
-let focusedFile = null;
-const selectFile = (target, evt) => {
+let selectedItem = null;
+let focusedItem = null;
+const selectItem = (target, evt) => {
 	const superKey = evt.ctrlKey || evt.metaKey;
 	if(evt.shiftKey) {
-		let selecting = !selectedFile;
-		const classListMethod = superKey && selectedFile && !selectedFile.classList.contains("selected") ? "remove" : "add";
-		for(const fileElement of files.querySelectorAll(".file")) {
-			if(fileElement === selectedFile || fileElement === target) {
+		let selecting = !selectedItem;
+		const classListMethod = superKey && selectedItem && !selectedItem.classList.contains("selected") ? "remove" : "add";
+		for(const itemElement of items.querySelectorAll(".item")) {
+			if(itemElement === selectedItem || itemElement === target) {
 				if(selecting) {
-					fileElement.classList[classListMethod]("selected");
+					itemElement.classList[classListMethod]("selected");
 					selecting = false;
 					continue;
 				} else {
-					fileElement.classList[classListMethod]("selected");
-					if(selectedFile !== target) {
+					itemElement.classList[classListMethod]("selected");
+					if(selectedItem !== target) {
 						selecting = true;
 					}
 				}
 			} else if(selecting) {
-				fileElement.classList[classListMethod]("selected");
+				itemElement.classList[classListMethod]("selected");
 			} else if(!superKey) {
-				fileElement.classList.remove("selected");
+				itemElement.classList.remove("selected");
 			}
 		}
 	} else {
-		selectedFile = target;
+		selectedItem = target;
 		if(superKey) {
 			target.classList.toggle("selected");
 		} else {
 			let othersSelected = false;
-			for(const fileElement of files.querySelectorAll(".file.selected")) {
-				if(fileElement !== target) {
+			for(const itemElement of items.querySelectorAll(".item.selected")) {
+				if(itemElement !== target) {
 					othersSelected = true;
-					fileElement.classList.remove("selected");
+					itemElement.classList.remove("selected");
 				}
 			}
 			if(target.classList[othersSelected ? "add" : "toggle"]("selected") === false) {
-				selectedFile = null;
-				focusedFile = target;
+				selectedItem = null;
+				focusedItem = target;
 			}
 		}
 	}
 };
 document.addEventListener("click", evt => {
 	let target = evt.target;
-	while(target && target.classList && !target.classList.contains("file")) {
+	while(target && target.classList && !target.classList.contains("item")) {
 		target = target.parentNode;
 	}
-	if(target && target.classList && target.classList.contains("file")) {
-		selectFile(target, evt);
+	if(target && target.classList && target.classList.contains("item")) {
+		selectItem(target, evt);
 	}
 }, {
 	capture: true,

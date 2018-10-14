@@ -4,6 +4,10 @@ if(notLoggedIn(this)) {
 this.title = "Pipe";
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
+this.data = (await load("api/users/@me/pipe", {
+	...this,
+	method: "GET"
+})).value;
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;
@@ -17,17 +21,7 @@ this.value += html`
 						<th id="sizeHead">Size</th>
 						<th id="dateHead">Date</th>
 					</thead>
-					<tbody id="files">`;
-for(const item of this.user.pipe) {
-	this.value += html`
-						<tr class="file ready" data-id="${item.id}">
-							<td class="nameData" title="$${item.name}">$${item.name}</td>
-							<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
-							<td class="dateData">${getDate(item.date)}</td>
-						</tr>`;
-}
-this.value += html`
-					</tbody>
+					<tbody id="items"></tbody>
 				</table>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
