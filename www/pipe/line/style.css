@@ -7,6 +7,7 @@
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
+	user-select: none;
 	cursor: pointer;
 	.item {
 		&.loading {
@@ -24,7 +25,6 @@
 		border-bottom: 1px solid #373737;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		user-select: none;
 	}
 	#nameHead {
 		width: 60%;
