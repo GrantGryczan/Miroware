@@ -76,6 +76,7 @@ const addFile = file => {
 		typeData.textContent = xhr.response.mime;
 		sizeData.textContent = fileSize;
 		dateData.textContent = getDate(xhr.response.date);
+		fileElement.classList.remove("loading");
 	}, () => {
 		fileElement.parentNode.removeChild(fileElement);
 	})).finally(subtractLoading);
