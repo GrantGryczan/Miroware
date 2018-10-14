@@ -15,10 +15,10 @@ this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
 			<button id="uploadButton" class="mdc-fab mdc-ripple" title="Add file(s)">
 				<i class="mdc-fab__icon material-icons">add</i>
-			</button>
-			<div id="targetIndicator"></div>`;
+			</button>`;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
+		<div id="targetIndicator"></div>
 		<script src="script.js"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
