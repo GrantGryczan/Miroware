@@ -348,6 +348,7 @@ document.addEventListener("mouseup", evt => {
 								itemElement.parentNode.removeChild(itemElement);
 							})).finally(() => {
 								itemElement.classList.remove("loading");
+								updateSelection();
 							});
 						}
 					}
@@ -355,6 +356,7 @@ document.addEventListener("mouseup", evt => {
 						indicatedTarget.classList.add("selected");
 					}
 					indicateTarget();
+					updateSelection();
 				}
 			} else {
 				selectItem(mouseTarget.parentNode, evt, evt.button);
