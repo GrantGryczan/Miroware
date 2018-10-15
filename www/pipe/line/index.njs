@@ -16,15 +16,15 @@ this.value += (await load("load/pagehead", this)).value;
 this.value += html`
 				<p>Miroware Pipe is in the beta stage. Do not expect consistent stability or full functionality.</p>
 				<h2 id="path">
-					/ <a href="#">${this.user._id}</a>
+					/ <a class="pathLink" href="#">${this.user._id}</a>
 					<span id="pathItems"></span>
 				</h2>
 				<table id="table">
 					<thead>
-						<th id="nameHead">Name</th>
-						<th id="sizeHead">Size</th>
-						<th id="typeHead">Type</th>
-						<th id="dateHead">Date</th>
+						<th id="nameHead" class="head">Name</th>
+						<th id="sizeHead" class="head">Size</th>
+						<th id="typeHead" class="head">Type</th>
+						<th id="dateHead" class="head">Date</th>
 					</thead>
 					<tbody id="items"></tbody>
 				</table>`;

@@ -4,7 +4,7 @@ const page = container.querySelector("main");
 const items = page.querySelector("#items");
 let parent = "";
 const getName = name => parent ? name.slice(parent.length + 1) : name;
-const concatParent = name => parent ? `${parent}/${name}` : name;
+const applyParent = name => parent ? `${parent}/${name}` : name;
 const getSize = size => {
 	if(size < 1000) {
 		return `${size} B`;
@@ -79,7 +79,7 @@ const render = () => {
 		let hash = "";
 		for(const name of parent.split("/")) {
 			hash += `${name}/`;
-			pathItems.appendChild(html` / <a href="#$${hash.slice(0, -1)}">$${name}</a>`);
+			pathItems.appendChild(html` / <a class="pathLink" href="#$${hash.slice(0, -1)}">$${name}</a>`);
 		}
 	}
 	while(items.lastChild) {
@@ -114,7 +114,7 @@ const addFile = file => {
 	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
 		"X-Data": JSON.stringify({
-			name: concatParent(file.name)
+			name: applyParent(file.name)
 		})
 	}, file, xhr => {
 		itemElement._xhr = xhr;
@@ -306,8 +306,15 @@ document.addEventListener("mousemove", evt => {
 	}
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
-	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode.classList.contains("item") && !mouseMoved) {
-		selectItem(evt.target.parentNode, evt, 2);
+	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode.classList.contains("item")) {
+		if(!mouseMoved) {
+			selectItem(mouseTarget.parentNode, evt, 2);
+		}
+		if(evt.target.parentNode.classList.contains("item")) {
+			indicateTarget(evt.target.parentNode);
+		} else if(evt.target.classList.contains("pathLink")) {
+			indicateTarget(evt.target);
+		}
 	}
 	mouseMoved = true;
 }, {
@@ -315,15 +322,25 @@ document.addEventListener("mousemove", evt => {
 	passive: true
 });
 document.addEventListener("mouseup", evt => {
-	if(!mouseMoved && mouseDown !== -1 && page.contains(evt.target)) {
+	if(mouseDown !== -1 && page.contains(evt.target)) {
 		if(evt.target.parentNode.classList.contains("item")) {
-			selectItem(evt.target.parentNode, evt, evt.button);
-		} else {
-			for(const item of items.querySelectorAll(".item.selected")) {
-				item.classList.remove("selected");
+			if(mouseMoved) {
+				if(evt.target !== mouseTarget) {
+					// TODO: Move item
+				}
+			} else {
+				selectItem(evt.target.parentNode, evt, evt.button);
 			}
-			selectedItem = focusedItem = null;
-			updateSelection();
+		} else if(!mouseMoved) {
+			if(evt.target.classList.contains("head")) {
+				// TODO: Sort items
+			} else {
+				for(const item of items.querySelectorAll(".item.selected")) {
+					item.classList.remove("selected");
+				}
+				selectedItem = focusedItem = null;
+				updateSelection();
+			}
 		}
 	}
 	mouseTarget = null;
@@ -398,6 +415,10 @@ const removeItem = itemElement => {
 		}
 		itemElement.parentNode.removeChild(itemElement);
 		Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
+		if(itemElement._item.type === "/") {
+			const prefix = `${itemElement._item.name}/`;
+			Miro.data = Miro.data.filter(item => !item.startsWith(prefix));
+		}
 		updateSelection();
 	};
 	if(itemElement._xhr) {
@@ -455,7 +476,7 @@ const itemInfo = itemElement => {
 					itemElement.classList.add("loading");
 					updateSelection();
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
-						name: concatParent(dialog.form.elements.name.value)
+						name: applyParent(dialog.form.elements.name.value)
 					}).then(Miro.response(xhr => {
 						itemElement._item = Miro.data[Miro.data.indexOf(itemElement._item)] = xhr.response;
 						const nameData = itemElement.querySelector(".nameData");
