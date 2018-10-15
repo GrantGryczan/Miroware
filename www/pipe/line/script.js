@@ -463,6 +463,16 @@ const openItem = itemElement => {
 	});
 	setTimeout(url.select.bind(url));
 };
+const openItems = itemElements => {
+	let size = 0;
+	for(const itemElement of itemElements) {
+		size += itemElement._item.size;
+	}
+	new Miro.Dialog("Items", html`
+		Items selected: <b>${itemElements.length}</b><br>
+		Total size: <b>${getSize(size)}</b> (<b>${size} B</b>)
+	`);
+};
 const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.multiple = true;
@@ -479,7 +489,12 @@ removeButton.addEventListener("click", () => {
 });
 const infoButton = container.querySelector("#infoButton");
 infoButton.addEventListener("click", () => {
-	openItem(items.querySelector(".item.selected"));
+	const itemElements = items.querySelectorAll(".item.selected");
+	if(itemElements.length === 1) {
+		openItem(itemElements[0]);
+	} else {
+		openItems(itemElements);
+	}
 });
 const updateSelection = () => {
 	const itemElements = items.querySelectorAll(".item.selected");
@@ -489,20 +504,24 @@ const updateSelection = () => {
 		infoButton.classList.add("mdc-fab--exited");
 		infoButton.blur();
 	} else {
-		let safeToRemove = true;
+		let removeSafe = true;
+		let infoSafe = true;
 		for(const itemElement of itemElements) {
-			if(itemElement.classList.contains("loading") && !itemElement._xhr) {
-				safeToRemove = false;
-				break;
+			if(itemElement.classList.contains("loading")) {
+				infoSafe = false;
+				if(!itemElement._xhr) {
+					removeSafe = false;
+					break;
+				}
 			}
 		}
-		if(safeToRemove) {
+		if(removeSafe) {
 			removeButton.classList.remove("mdc-fab--exited");
 		} else {
 			removeButton.classList.add("mdc-fab--exited");
 			removeButton.blur();
 		}
-		if(itemElements.length === 1 && !itemElements[0].classList.contains("loading")) {
+		if(infoSafe) {
 			infoButton.classList.remove("mdc-fab--exited");
 		} else {
 			infoButton.classList.add("mdc-fab--exited");
