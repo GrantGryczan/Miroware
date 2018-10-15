@@ -718,7 +718,7 @@ const openItem = itemElement => {
 	}
 };
 const hashChange = () => {
-	const target = location.hash.slice(1);
+	const target = decodeURIComponent(location.hash.slice(1));
 	if(target === "" || Miro.data.pipe.find(item => item.type === "/" && item.name === target)) {
 		parent = target;
 	} else {
