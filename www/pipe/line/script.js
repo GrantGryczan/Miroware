@@ -77,7 +77,7 @@ const render = () => {
 	let hash = "";
 	for(const name of parent.split("/")) {
 		hash += `${name}/`;
-		pathItems.appendChild(html` / <a href="#$${pathSum.slice(0, -1)}">$${name}</a>`);
+		pathItems.appendChild(html` / <a href="#$${hash.slice(0, -1)}">$${name}</a>`);
 	}
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
