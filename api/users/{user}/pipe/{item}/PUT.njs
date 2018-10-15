@@ -27,9 +27,23 @@ if(isMe) {
 					this.status = 400;
 					this.done();
 					return;
+				} else if(this.req.body.name.includes("//")) {
+					this.value = {
+						error: "The `name` value cannot contain multiple consecutive slashes."
+					};
+					this.status = 400;
+					this.done();
+					return;
 				} else if(this.user.pipe.some(item => item.name === this.req.body.name)) {
 					this.value = {
 						error: "That name is already taken."
+					};
+					this.status = 422;
+					this.done();
+					return;
+				} else if(found.type === "/" && this.req.body.name.startsWith(`${found.name}/`)) {
+					this.value = {
+						error: "Directories cannot be moved into themselves."
 					};
 					this.status = 422;
 					this.done();
@@ -38,7 +52,7 @@ if(isMe) {
 					const slashIndex = this.req.body.name.lastIndexOf("/");
 					if(slashIndex !== -1) {
 						const parent = this.req.body.name.slice(0, slashIndex);
-						if(!this.user.pipe.some(item => item.type === "/" && item.name === parent && item !== found)) {
+						if(!this.user.pipe.some(item => item.type === "/" && item.name === parent)) {
 							this.value = {
 								error: "The parent directory does not exist."
 							};

@@ -34,6 +34,13 @@ if(isMe) {
 			this.status = 400;
 			this.done();
 			return;
+		} else if(this.req.body.name.includes("//")) {
+			this.value = {
+				error: "The `name` value cannot contain multiple consecutive slashes."
+			};
+			this.status = 400;
+			this.done();
+			return;
 		} else if(this.user.pipe.some(item => item.name === data.name)) {
 			this.value = {
 				error: "That name is already taken."
