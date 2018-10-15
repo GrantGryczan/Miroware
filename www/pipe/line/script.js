@@ -2,6 +2,8 @@
 const container = document.body.querySelector("#container");
 const page = container.querySelector("main");
 const items = page.querySelector("#items");
+let parent = "";
+const getName = name => parent === "" ? name : name.slice(parent.length + 1);
 const getSize = size => {
 	if(size < 1000) {
 		return `${size} B`;
@@ -38,10 +40,8 @@ const getSize = size => {
 	return `${Math.round(100 * size) / 100} YB`;
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
-let parent = "";
-const pathItems = document.querySelector("#pathItems");
 const createItemElement = item => {
-	const name = parent === "" ? item.name : item.name.slice(parent.length + 1);
+	const name = getName(item.name);
 	const date = new Date(item.date);
 	const itemElement = (item.type === "/" ? html`
 		<table>
@@ -69,7 +69,16 @@ const createItemElement = item => {
 	itemElement._item = item;
 	return itemElement;
 };
-const renderItems = () => {
+const pathItems = page.querySelector("#pathItems");
+const render = () => {
+	while(pathItems.lastChild) {
+		pathItems.removeChild(pathItems.lastChild);
+	}
+	let hash = "";
+	for(const name of parent.split("/")) {
+		hash += `${name}/`;
+		pathItems.appendChild(html` / <a href="#$${pathSum.slice(0, -1)}">$${name}</a>`);
+	}
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
@@ -399,7 +408,7 @@ const removeItem = itemElement => {
 };
 const confirmRemoveItem = itemElement => {
 	new Miro.Dialog("Remove Item", html`
-		Are you sure you want to remove <b>$${itemElement._item.name}</b>?<br>
+		Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>
 		Items inside directories will also be removed.<br>
 		This cannot be undone.
 	`, ["Yes", "No"]).then(value => {
@@ -663,7 +672,7 @@ const hashChange = () => {
 		new Miro.Dialog("Error", "The target directory does not exist.");
 		return;
 	}
-	renderItems();
+	render();
 };
 if(!location.hash) {
 	location.hash = "#";
