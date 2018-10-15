@@ -20,7 +20,14 @@ if(isMe) {
 					this.status = 400;
 					this.done();
 					return;
-				} else if(this.user.pipe.find(item => item.name === this.req.body.name)) {
+				} else if(data.name.startsWith("/") || data.name.endsWith("/")) {
+					this.value = {
+						error: "The `name` value cannot start or end with a slash."
+					};
+					this.status = 400;
+					this.done();
+					return;
+				} else if(this.user.pipe.some(item => item.name === this.req.body.name)) {
 					this.value = {
 						error: "That name is already taken."
 					};
@@ -28,8 +35,20 @@ if(isMe) {
 					this.done();
 					return;
 				} else {
-					item.name = this.req.body.name;
+					const slashIndex = this.req.body.name.lastIndexOf("/");
+					if(slashIndex !== -1) {
+						const parent = this.req.body.name.slice(0, slashIndex);
+						if(!this.user.pipe.some(item => item.type === "/" && item.name === parent)) {
+							this.value = {
+								error: "The parent directory does not exist."
+							};
+							this.status = 422;
+							this.done();
+							return;
+						}
+					}
 				}
+				item.name = this.req.body.name;
 			} else {
 				this.value = {
 					error: "The `name` value must be a string."

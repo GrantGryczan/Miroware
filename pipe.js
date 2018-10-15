@@ -49,7 +49,7 @@ const s3 = new AWS.S3({
 				});
 				if(user) {
 					path = path.join("/");
-					const item = user.pipe.find(item => item.name === path);
+					const item = user.pipe.find(item => item.type !== "/" && item.name === path);
 					if(item) {
 						s3.getObject({
 							Bucket: "miroware-pipe",

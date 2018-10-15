@@ -39,14 +39,17 @@ const getSize = size => {
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
 const createItemElement = item => {
+	const typeDir = item.type === "/";
 	const date = new Date(item.date);
 	const itemElement = html`
 		<table>
 			<tbody>
-				<tr class="item">
-					<td class="nameData" title="$${item.name}">$${item.name}</td>
+				<tr class="item type${typeDir ? "Dir" : "File"}">
+					<td class="nameData" title="$${item.name}">$${item.name}</td>${typeDir ? `
+					<td class="sizeData">-</td>
+					<td class="typeData">-</td>` : `
 					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
-					<td class="typeData" title="$${item.type}">$${item.type}</td>
+					<td class="typeData" title="$${item.type}">$${item.type}</td>`}
 					<td class="dateData" title="$${date}">$${getDate(date)}</td>
 				</tr>
 			</tbody>
@@ -63,7 +66,7 @@ const addFile = file => {
 	const itemElement = html`
 		<table>
 			<tbody>
-				<tr class="item loading">
+				<tr class="item typeFile loading">
 					<td class="nameData" title="$${file.name}">$${file.name}</td>
 					<td class="sizeData" title="- / ${file.size} B">- / ${fileSize}</td>
 					<td class="typeData">-</td>
@@ -486,13 +489,9 @@ addButton.addEventListener("click", fileInput.click.bind(fileInput));
 const directoryButton = addContainer.querySelector("#directoryButton");
 addContainer.addEventListener("mouseover", () => {
 	directoryButton.classList.remove("mdc-fab--exited");
-}, {
-	passive: true
 });
 addContainer.addEventListener("mouseout", () => {
 	directoryButton.classList.add("mdc-fab--exited");
-}, {
-	passive: true
 });
 const removeButton = container.querySelector("#removeButton");
 removeButton.addEventListener("click", () => {
@@ -540,4 +539,49 @@ const updateSelection = () => {
 		}
 	}
 };
-
+const addDirectory = name => {
+	const itemElement = html`
+		<table>
+			<tbody>
+				<tr class="item typeDir loading">
+					<td class="nameData" title="$${name}">$${name}</td>
+					<td class="sizeData">-</td>
+					<td class="typeData">-</td>
+					<td class="dateData">-</td>
+				</tr>
+			</tbody>
+		</table>
+	`.querySelector("tr");
+	const dateData = itemElement.querySelector(".dateData");
+	items.insertBefore(itemElement, items.firstChild);
+	Miro.request("POST", "/users/@me/pipe", {
+		"X-Data": JSON.stringify({
+			name,
+			type: "/"
+		})
+	}).then(Miro.response(xhr => {
+		Miro.data.pipe.push(itemElement._item = xhr.response);
+		const date = new Date(xhr.response.date);
+		dateData.textContent = getDate(date);
+		dateData.title = date;
+		itemElement.classList.remove("loading");
+	}, () => {
+		itemElement.parentNode.removeChild(itemElement);
+	})).finally(updateSelection);
+};
+directoryButton.addEventListener("click", () => {
+	const dialog = new Miro.Dialog("Add Directory", html`
+		<div class="mdc-text-field">
+			<input id="name" name="name" class="mdc-text-field__input" type="text" value="Folder" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" required>
+			<label class="mdc-floating-label" for="name">Name</label>
+			<div class="mdc-line-ripple"></div>
+		</div>
+	`, [{
+		text: "Okay",
+		type: "submit"
+	}, "Cancel"]).then(value => {
+		if(value === 0) {
+			addDirectory(dialog.form.elements.name.value);
+		}
+	});
+});
