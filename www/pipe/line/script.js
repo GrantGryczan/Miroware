@@ -333,17 +333,32 @@ document.addEventListener("mousemove", evt => {
 	passive: true
 });
 document.addEventListener("mouseup", evt => {
-	if(mouseDown !== -1 && page.contains(evt.target)) {
-		if(evt.target.parentNode.classList.contains("item")) {
-			if(mouseMoved) {
-				if(evt.target !== mouseTarget) {
-					// TODO: Move item
+	if(mouseDown !== -1 && page.contains(mouseTarget)) {
+		if(mouseTarget.parentNode.classList.contains("item")) {
+			const itemElement = mouseTarget.parentNode;
+			if(indicatedTarget) {
+				itemElement.classList.add("loading");
+				let name;
+				if(indicatedTarget.href) {
+					name = indicatedTarget.href.slice(1);
+				} else {
+					name = indicatedTarget._item.name;
 				}
+				name += `/${getName(itemElement._item.name)}`;
+				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
+					name
+				}).then(Miro.response(xhr => {
+					Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
+					itemElement.parentNode.removeChild(itemElement);
+				})).finally(() => {
+					itemElement.classList.remove("loading");
+				});
+				indicateTarget();
 			} else {
-				selectItem(evt.target.parentNode, evt, evt.button);
+				selectItem(itemElement, evt, evt.button);
 			}
 		} else if(!mouseMoved) {
-			if(evt.target.classList.contains("head")) {
+			if(mouseTarget.classList.contains("head")) {
 				// TODO: Sort items
 			} else {
 				for(const item of items.querySelectorAll(".item.selected")) {
@@ -428,7 +443,7 @@ const removeItem = itemElement => {
 		Miro.data.pipe.splice(Miro.data.pipe.indexOf(itemElement._item), 1);
 		if(itemElement._item.type === "/") {
 			const prefix = `${itemElement._item.name}/`;
-			Miro.data.pipe = Miro.data.pipe.filter(item => !item.startsWith(prefix));
+			Miro.data.pipe = Miro.data.pipe.filter(item => !item.name.startsWith(prefix));
 		}
 		updateSelection();
 	};
