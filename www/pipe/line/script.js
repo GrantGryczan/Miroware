@@ -328,8 +328,8 @@ document.addEventListener("keydown", evt => {
 				removeButton.click();
 			}
 		} else if(evt.keyCode === 13) { // `enter`
-			if(!infoButton.classList.contains("mdc-fab--exited")) {
-				infoButton.click();
+			if(!openButton.classList.contains("mdc-fab--exited")) {
+				openButton.click();
 			}
 		} else if(evt.keyCode === 27) { // `esc`
 			for(const item of items.querySelectorAll(".item.selected")) {
@@ -367,8 +367,8 @@ document.addEventListener("keydown", evt => {
 document.addEventListener("dblclick", evt => {
 	if(!mouseMoved && evt.target.parentNode.classList.contains("item")) {
 		selectItem(evt.target.parentNode, evt, 2);
-		if(!infoButton.classList.contains("mdc-fab--exited")) {
-			infoButton.click();
+		if(!openButton.classList.contains("mdc-fab--exited")) {
+			openButton.click();
 		}
 	}
 }, {
