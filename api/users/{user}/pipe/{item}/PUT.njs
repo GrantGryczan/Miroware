@@ -38,7 +38,7 @@ if(isMe) {
 					const slashIndex = this.req.body.name.lastIndexOf("/");
 					if(slashIndex !== -1) {
 						const parent = this.req.body.name.slice(0, slashIndex);
-						if(!this.user.pipe.some(item => item.type === "/" && item.name === parent)) {
+						if(!this.user.pipe.some(item => item.type === "/" && item.name === parent && item !== found)) {
 							this.value = {
 								error: "The parent directory does not exist."
 							};
