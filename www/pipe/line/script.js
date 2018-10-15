@@ -415,69 +415,101 @@ const confirmRemoveItems = itemElements => {
 	}
 };
 const openItem = itemElement => {
-	const body = html`
-		<div class="mdc-text-field">
-			<input id="name" class="mdc-text-field__input" type="text" value="$${itemElement._item.name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
-			<label class="mdc-floating-label" for="name">Name</label>
-			<div class="mdc-line-ripple"></div>
-		</div><br>
-		<div class="mdc-text-field">
-			<input id="type" class="mdc-text-field__input" type="text" value="$${itemElement._item.type}" maxlength="255" size="24" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+$" spellcheck="false" required>
-			<label class="mdc-floating-label" for="type">Type</label>
-			<div class="mdc-line-ripple"></div>
-		</div><br>
-		<div class="mdc-text-field spaced">
-			<input id="url" class="mdc-text-field__input" type="url" value="$${itemElement._item.url}" size="24" readonly>
-			<label class="mdc-floating-label" for="url">URL</label>
-			<div class="mdc-line-ripple"></div>
-		</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
-		<a href="$${itemElement._item.url}" target="_blank">Preview link</a>
-	`;
-	const name = body.querySelector("#name");
-	const type = body.querySelector("#type");
-	const url = body.querySelector("#url");
-	body.querySelector("button").addEventListener("click", () => {
-		url.select();
-		document.execCommand("copy");
-		Miro.snackbar("URL copied to clipboard");
-	});
-	new Miro.Dialog("Item", body, [{
-		text: "Okay",
-		type: "submit"
-	}, "Cancel"]).then(value => {
-		if(value === 0) {
-			const changedName = itemElement._item.name !== name.value;
-			const changedType = itemElement._item.type !== type.value;
-			if(changedName || changedType) {
-				itemElement.classList.add("loading");
-				updateSelection();
-				const data = {};
+	if(itemElement._item.type === "/") {
+		const dialog = new Miro.Dialog("Item", html`
+			<div class="mdc-text-field">
+				<input id="name" name="name" class="mdc-text-field__input" type="text" value="$${itemElement._item.name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" required>
+				<label class="mdc-floating-label" for="name">Name</label>
+				<div class="mdc-line-ripple"></div>
+			</div>
+		`, [{
+			text: "Okay",
+			type: "submit"
+		}, "Cancel"]).then(value => {
+			if(value === 0) {
+				const changedName = itemElement._item.name !== dialog.form.elements.name.value;
 				if(changedName) {
-					data.name = name.value;
-				}
-				if(changedType) {
-					data.type = type.value;
-				}
-				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
-					Miro.data.pipe.splice(Miro.data.pipe.indexOf(itemElement._item), 1);
-					Miro.data.pipe.push(itemElement._item = xhr.response);
-					const nameData = itemElement.querySelector(".nameData");
-					nameData.textContent = nameData.title = xhr.response.name;
-					const typeData = itemElement.querySelector(".typeData");
-					typeData.textContent = typeData.title = xhr.response.type;
-				})).finally(() => {
-					itemElement.classList.remove("loading");
+					itemElement.classList.add("loading");
 					updateSelection();
-				});
+					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
+						name: dialog.form.elements.name.value
+					}).then(Miro.response(xhr => {
+						Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = itemElement._item = xhr.response;
+						const nameData = itemElement.querySelector(".nameData");
+						nameData.textContent = nameData.title = xhr.response.name;
+					})).finally(() => {
+						itemElement.classList.remove("loading");
+						updateSelection();
+					});
+				}
 			}
-		}
-	});
-	setTimeout(url.select.bind(url));
+		});
+	} else {
+		const body = html`
+			<div class="mdc-text-field">
+				<input id="name" class="mdc-text-field__input" type="text" value="$${itemElement._item.name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+				<label class="mdc-floating-label" for="name">Name</label>
+				<div class="mdc-line-ripple"></div>
+			</div><br>
+			<div class="mdc-text-field">
+				<input id="type" class="mdc-text-field__input" type="text" value="$${itemElement._item.type}" maxlength="255" size="24" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+$" spellcheck="false" required>
+				<label class="mdc-floating-label" for="type">Type</label>
+				<div class="mdc-line-ripple"></div>
+			</div><br>
+			<div class="mdc-text-field spaced">
+				<input id="url" class="mdc-text-field__input" type="url" value="$${itemElement._item.url}" size="24" readonly>
+				<label class="mdc-floating-label" for="url">URL</label>
+				<div class="mdc-line-ripple"></div>
+			</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
+			<a href="$${itemElement._item.url}" target="_blank">Preview link</a>
+		`;
+		const name = body.querySelector("#name");
+		const type = body.querySelector("#type");
+		const url = body.querySelector("#url");
+		body.querySelector("button").addEventListener("click", () => {
+			url.select();
+			document.execCommand("copy");
+			Miro.snackbar("URL copied to clipboard");
+		});
+		new Miro.Dialog("Item", body, [{
+			text: "Okay",
+			type: "submit"
+		}, "Cancel"]).then(value => {
+			if(value === 0) {
+				const changedName = itemElement._item.name !== name.value;
+				const changedType = itemElement._item.type !== type.value;
+				if(changedName || changedType) {
+					itemElement.classList.add("loading");
+					updateSelection();
+					const data = {};
+					if(changedName) {
+						data.name = name.value;
+					}
+					if(changedType) {
+						data.type = type.value;
+					}
+					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+						Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = itemElement._item = xhr.response;
+						const nameData = itemElement.querySelector(".nameData");
+						nameData.textContent = nameData.title = xhr.response.name;
+						const typeData = itemElement.querySelector(".typeData");
+						typeData.textContent = typeData.title = xhr.response.type;
+					})).finally(() => {
+						itemElement.classList.remove("loading");
+						updateSelection();
+					});
+				}
+			}
+		});
+		setTimeout(url.select.bind(url));
+	}
 };
 const openItems = itemElements => {
 	let size = 0;
 	for(const itemElement of itemElements) {
-		size += itemElement._item.size;
+		if(itemElement._item.type !== "/") {
+			size += itemElement._item.size;
+		}
 	}
 	new Miro.Dialog("Items", html`
 		Items selected: <b>${itemElements.length}</b><br>
