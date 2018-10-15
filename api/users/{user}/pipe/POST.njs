@@ -58,7 +58,7 @@ if(isMe) {
 		ContentLength: this.req.body.length,
 		Body: this.req.body,
 		Metadata: {
-			user: user._id
+			user: String(user._id)
 		}
 	}, err => {
 		if(err) {
