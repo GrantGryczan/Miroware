@@ -338,7 +338,7 @@ document.addEventListener("mouseup", evt => {
 			if(mouseMoved) {
 				if(indicatedTarget) {
 					for(const itemElement of items.querySelectorAll(".item.selected")) {
-						item.classList.remove("selected");
+						itemElement.classList.remove("selected");
 						if(!itemElement.classList.contains("loading")) {
 							itemElement.classList.add("loading");
 							Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
