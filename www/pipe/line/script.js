@@ -448,7 +448,10 @@ const openItem = itemElement => {
 					nameData.textContent = nameData.title = xhr.response.name;
 					const typeData = itemElement.querySelector(".typeData");
 					typeData.textContent = typeData.title = xhr.response.type;
-				})).finally(updateSelection);
+				})).finally(() => {
+					itemElement.classList.remove("loading");
+					updateSelection();
+				});
 			}
 		}
 	});
