@@ -336,24 +336,26 @@ document.addEventListener("mouseup", evt => {
 	if(mouseDown !== -1 && page.contains(mouseTarget)) {
 		if(mouseTarget.parentNode.classList.contains("item")) {
 			const itemElement = mouseTarget.parentNode;
-			if(indicatedTarget) {
-				itemElement.classList.add("loading");
-				let name;
-				if(indicatedTarget.href) {
-					name = indicatedTarget.href.slice(1);
-				} else {
-					name = indicatedTarget._item.name;
+			if(mouseMoved) {
+				if(indicatedTarget) {
+					itemElement.classList.add("loading");
+					let name;
+					if(indicatedTarget.href) {
+						name = indicatedTarget.href.slice(1);
+					} else {
+						name = indicatedTarget._item.name;
+					}
+					name += `/${getName(itemElement._item.name)}`;
+					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
+						name
+					}).then(Miro.response(xhr => {
+						Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
+						itemElement.parentNode.removeChild(itemElement);
+					})).finally(() => {
+						itemElement.classList.remove("loading");
+					});
+					indicateTarget();
 				}
-				name += `/${getName(itemElement._item.name)}`;
-				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
-					name
-				}).then(Miro.response(xhr => {
-					Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
-					itemElement.parentNode.removeChild(itemElement);
-				})).finally(() => {
-					itemElement.classList.remove("loading");
-				});
-				indicateTarget();
 			} else {
 				selectItem(itemElement, evt, evt.button);
 			}
