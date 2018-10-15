@@ -70,7 +70,7 @@ if(isMe) {
 		}
 		const set = {};
 		for(const key of Object.keys(item)) {
-			set[`concats.$.${key}`] = item[key];
+			set[`pipe.$.${key}`] = item[key];
 		}
 		users.updateOne({
 			...this.userFilter,
