@@ -79,7 +79,6 @@ const renderItems = () => {
 		}
 	}
 };
-renderItems();
 const addFile = file => {
 	const fileSize = getSize(file.size);
 	const itemElement = html`
@@ -654,7 +653,7 @@ const openItem = itemElement => {
 		window.open(itemElement._item.url);
 	}
 };
-window.addEventListener("hashchange", () => {
+const hashChange = () => {
 	const target = location.hash.slice(1);
 	if(target === "" || Miro.data.find(item => item.type === "/" && item.name === target)) {
 		parent = target;
@@ -664,4 +663,10 @@ window.addEventListener("hashchange", () => {
 		return;
 	}
 	renderItems();
-});
+};
+window.addEventListener("hashchange", hashChange);
+if(location.hash) {
+	hashChange();
+} else {
+	location.hash = "#";
+}
