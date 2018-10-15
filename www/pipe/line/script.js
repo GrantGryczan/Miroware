@@ -487,14 +487,12 @@ const directoryButton = addContainer.querySelector("#directoryButton");
 addContainer.addEventListener("mouseover", () => {
 	directoryButton.classList.remove("mdc-fab--exited");
 }, {
-	capture: true,
 	passive: true
 });
 addContainer.addEventListener("mouseout", () => {
 	directoryButton.classList.add("mdc-fab--exited");
 	directoryButton.blur();
 }, {
-	capture: true,
 	passive: true
 });
 const removeButton = container.querySelector("#removeButton");
