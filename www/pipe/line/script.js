@@ -2,13 +2,6 @@
 const container = document.body.querySelector("#container");
 const page = container.querySelector("main");
 const items = page.querySelector("#items");
-const getName = name => {
-	const slashIndex = name.lastIndexOf("/");
-	if(slashIndex !== -1) {
-		name = name.slice(slashIndex + 1);
-	}
-	return name;
-};
 const getSize = size => {
 	if(size < 1000) {
 		return `${size} B`;
@@ -46,13 +39,12 @@ const getSize = size => {
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
 const createItemElement = item => {
-	const name = getName(item.name);
 	const date = new Date(item.date);
 	const itemElement = (item.type === "/" ? html`
 		<table>
 			<tbody>
 				<tr class="item typeDir">
-					<td class="nameData" title="$${name}">$${name}</td>
+					<td class="nameData" title="$${item.name}">$${item.name}</td>
 					<td class="sizeData">-</td>
 					<td class="typeData">-</td>
 					<td class="dateData" title="$${date}">$${getDate(date)}</td>
@@ -63,7 +55,7 @@ const createItemElement = item => {
 		<table>
 			<tbody>
 				<tr class="item typeFile">
-					<td class="nameData" title="$${name}">$${name}</td>
+					<td class="nameData" title="$${item.name}">$${item.name}</td>
 					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
 					<td class="typeData" title="$${item.type}">$${item.type}</td>
 					<td class="dateData" title="$${date}">$${getDate(date)}</td>
