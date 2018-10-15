@@ -417,7 +417,7 @@ const openItem = itemElement => {
 		</div><br>
 		<div class="mdc-text-field spaced">
 			<input id="url" class="mdc-text-field__input" type="url" value="$${itemElement._item.url}" size="24" readonly>
-			<label class="mdc-floating-label alwaysFloat" for="url">URL</label>
+			<label class="mdc-floating-label" for="url">URL</label>
 			<div class="mdc-line-ripple"></div>
 		</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
 		<a href="$${itemElement._item.url}" target="_blank">Preview link</a>
