@@ -1,6 +1,6 @@
 const {user, isMe} = await parseUser(this);
 if(isMe) {
-	const found = this.user.pipe.find(item => item.sub === this.req.query.sub && item.val === this.req.query.val);
+	const found = this.user.pipe.find(item => item.id === this.params.item);
 	if(found) {
 		const item = {};
 		if(this.req.body.name !== undefined) {
