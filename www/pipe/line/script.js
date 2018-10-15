@@ -664,9 +664,8 @@ const hashChange = () => {
 	}
 	renderItems();
 };
-window.addEventListener("hashchange", hashChange);
-if(location.hash) {
-	hashChange();
-} else {
+if(!location.hash) {
 	location.hash = "#";
 }
+hashChange();
+window.addEventListener("hashchange", hashChange);
