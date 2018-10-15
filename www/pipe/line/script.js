@@ -341,8 +341,10 @@ document.addEventListener("mouseup", evt => {
 						itemElement.classList.remove("selected");
 						if(!itemElement.classList.contains("loading")) {
 							itemElement.classList.add("loading");
+							const targetParent = indicatedTarget.href ? indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1) : indicatedTarget._item.name;
+							const name = getName(itemElement._item.name);
 							Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
-								name: `${indicatedTarget.href ? indicatedTarget.href.slice(1) : indicatedTarget._item.name}/${getName(itemElement._item.name)}`
+								name: targetParent ? `${targetParent}/${name}` : name
 							}).then(Miro.response(xhr => {
 								Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
 								itemElement.parentNode.removeChild(itemElement);
