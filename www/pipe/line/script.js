@@ -55,7 +55,7 @@ const createItemElement = item => {
 	itemElement._item = item;
 	return itemElement;
 };
-for(const item of Miro.data) {
+for(const item of Miro.data.pipe) {
 	items.insertBefore(createItemElement(item), items.firstChild);
 }
 const addFile = file => {
@@ -95,7 +95,7 @@ const addFile = file => {
 			}
 		});
 	}).then(Miro.response(xhr => {
-		Miro.data.push(itemElement._item = xhr.response);
+		Miro.data.pipe.push(itemElement._item = xhr.response);
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
 		typeData.textContent = typeData.title = xhr.response.type;
@@ -363,7 +363,7 @@ const removeItem = itemElement => {
 			focusedItem = null;
 		}
 		itemElement.parentNode.removeChild(itemElement);
-		Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
+		Miro.data.pipe.splice(Miro.data.pipe.indexOf(itemElement._item), 1);
 		updateSelection();
 	};
 	if(itemElement._xhr) {
@@ -448,8 +448,8 @@ const openItem = itemElement => {
 					data.type = type.value;
 				}
 				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
-					Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
-					Miro.data.push(itemElement._item = xhr.response);
+					Miro.data.pipe.splice(Miro.data.pipe.indexOf(itemElement._item), 1);
+					Miro.data.pipe.push(itemElement._item = xhr.response);
 					const nameData = itemElement.querySelector(".nameData");
 					nameData.textContent = nameData.title = xhr.response.name;
 					const typeData = itemElement.querySelector(".typeData");
