@@ -43,6 +43,9 @@ this.value += html`
 			</button>
 			<button id="infoButton" class="mdc-fab mdc-ripple mdc-fab--mini mdc-fab--exited" title="Info">
 				<i class="mdc-fab__icon material-icons">info</i>
+			</button>
+			<button id="openButton" class="mdc-fab mdc-ripple mdc-fab--mini mdc-fab--exited" title="Open">
+				<i class="mdc-fab__icon material-icons">keyboard_return</i>
 			</button>`;
 this.value += (await load("load/belt", this)).value;
 this.value += html`

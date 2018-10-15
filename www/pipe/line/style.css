@@ -72,6 +72,10 @@ main {
 	right: 151px;
 	bottom: 31px;
 }
+#openButton {
+	right: 207px;
+	bottom: 31px;
+}
 #targetIndicator {
 	position: absolute;
 	width: 1px;

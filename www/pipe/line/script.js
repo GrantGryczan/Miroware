@@ -417,7 +417,7 @@ const confirmRemoveItems = itemElements => {
 		}
 	}
 };
-const openItem = itemElement => {
+const itemInfo = itemElement => {
 	if(itemElement._item.type === "/") {
 		const dialog = new Miro.Dialog("Item", html`
 			<div class="mdc-text-field">
@@ -507,7 +507,7 @@ const openItem = itemElement => {
 		setTimeout(url.select.bind(url));
 	}
 };
-const openItems = itemElements => {
+const itemsInfo = itemElements => {
 	let size = 0;
 	for(const itemElement of itemElements) {
 		if(itemElement._item.type !== "/") {
@@ -544,10 +544,14 @@ const infoButton = container.querySelector("#infoButton");
 infoButton.addEventListener("click", () => {
 	const itemElements = items.querySelectorAll(".item.selected");
 	if(itemElements.length === 1) {
-		openItem(itemElements[0]);
+		itemInfo(itemElements[0]);
 	} else {
-		openItems(itemElements);
+		itemsInfo(itemElements);
 	}
+});
+const openButton = container.querySelector("#openButton");
+openButton.addEventListener("click", () => {
+	openItem(items.querySelector(".item.selected"));
 });
 const updateSelection = () => {
 	const itemElements = items.querySelectorAll(".item.selected");
@@ -556,6 +560,8 @@ const updateSelection = () => {
 		removeButton.blur();
 		infoButton.classList.add("mdc-fab--exited");
 		infoButton.blur();
+		openButton.classList.add("mdc-fab--exited");
+		openButton.blur();
 	} else {
 		let removeSafe = true;
 		let infoSafe = true;
@@ -576,9 +582,14 @@ const updateSelection = () => {
 		}
 		if(infoSafe) {
 			infoButton.classList.remove("mdc-fab--exited");
+			if(itemElements.length === 1) {
+				openButton.classList.remove("mdc-fab--exited");
+			}
 		} else {
 			infoButton.classList.add("mdc-fab--exited");
 			infoButton.blur();
+			openButton.classList.add("mdc-fab--exited");
+			openButton.blur();
 		}
 	}
 };
@@ -628,3 +639,10 @@ directoryButton.addEventListener("click", () => {
 		}
 	});
 });
+const openItem = itemElement => {
+	if(itemElement._item.type === "/") {
+		location.hash = `#${itemElement._item.name}`;
+	} else {
+		window.open(itemElement._item.url);
+	}
+};
