@@ -74,7 +74,7 @@ const renderItems = () => {
 		items.removeChild(items.lastChild);
 	}
 	for(const item of Miro.data) {
-		if(item.name.slice(parent.length).lastIndexOf("/") === 0) {
+		if((parent === "" && !item.name.includes("/")) || item.name.slice(parent.length).lastIndexOf("/") === 0) {
 			items.insertBefore(createItemElement(item), items.firstChild);
 		}
 	}
