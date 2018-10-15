@@ -21,7 +21,7 @@ if(isMe) {
 				s3.deleteObjects({
 					Bucket: "miroware-pipe",
 					Delete: {
-						Objects: fileItems.map(byS3Object);
+						Objects: fileItems.map(byS3Object)
 					}
 				}, err => {
 					if(err) {
