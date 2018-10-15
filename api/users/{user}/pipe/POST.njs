@@ -56,7 +56,10 @@ if(isMe) {
 		Bucket: "miroware-pipe",
 		Key: id,
 		ContentLength: this.req.body.length,
-		Body: this.req.body
+		Body: this.req.body,
+		Metadata: {
+			user: user._id
+		}
 	}, err => {
 		if(err) {
 			this.value = {
