@@ -34,7 +34,7 @@ if(isMe) {
 			this.status = 400;
 			this.done();
 			return;
-		} else if(this.req.body.name.includes("//")) {
+		} else if(data.name.includes("//")) {
 			this.value = {
 				error: "The `name` value cannot contain multiple consecutive slashes."
 			};
