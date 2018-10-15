@@ -39,22 +39,30 @@ const getSize = size => {
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
 const createItemElement = item => {
-	const typeDir = item.type === "/";
 	const date = new Date(item.date);
-	const itemElement = html`
+	const itemElement = (item.type === "/" ? html`
 		<table>
 			<tbody>
-				<tr class="item type${typeDir ? "Dir" : "File"}">
-					<td class="nameData" title="$${item.name}">$${item.name}</td>${typeDir ? `
+				<tr class="item typeDir">
+					<td class="nameData" title="$${item.name}">$${item.name}</td>
 					<td class="sizeData">-</td>
-					<td class="typeData">-</td>` : `
-					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
-					<td class="typeData" title="$${item.type}">$${item.type}</td>`}
+					<td class="typeData">-</td>
 					<td class="dateData" title="$${date}">$${getDate(date)}</td>
 				</tr>
 			</tbody>
 		</table>
-	`.querySelector("tr");
+	` : html`
+		<table>
+			<tbody>
+				<tr class="item typeFile">
+					<td class="nameData" title="$${item.name}">$${item.name}</td>
+					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
+					<td class="typeData" title="$${item.type}">$${item.type}</td>
+					<td class="dateData" title="$${date}">$${getDate(date)}</td>
+				</tr>
+			</tbody>
+		</table>
+	`).querySelector("tr");
 	itemElement._item = item;
 	return itemElement;
 };
