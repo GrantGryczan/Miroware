@@ -20,7 +20,7 @@ if(isMe) {
 					this.status = 400;
 					this.done();
 					return;
-				} else if(data.name.startsWith("/") || data.name.endsWith("/")) {
+				} else if(this.req.body.name.startsWith("/") || this.req.body.name.endsWith("/")) {
 					this.value = {
 						error: "The `name` value cannot start or end with a slash."
 					};
