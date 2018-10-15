@@ -305,10 +305,12 @@ document.addEventListener("keydown", evt => {
 	if(!Miro.typing() && Miro.focused()) {
 		const superKey = evt.ctrlKey || evt.metaKey;
 		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
-			removeSelectedItems();
+			if(!removeButton.classList.contains("mdc-fab--exited")) {
+				removeButton.click();
+			}
 		} else if(evt.keyCode === 13) { // `enter`
-			if(focusedItem) {
-				openItem(focusedItem);
+			if(!infoButton.classList.contains("mdc-fab--exited")) {
+				infoButton.click();
 			}
 		} else if(evt.keyCode === 27) { // `esc`
 			for(const item of items.querySelectorAll(".item.selected")) {
@@ -346,7 +348,9 @@ document.addEventListener("keydown", evt => {
 document.addEventListener("dblclick", evt => {
 	if(!mouseMoved && evt.target.parentNode.classList.contains("item")) {
 		selectItem(evt.target.parentNode, evt, 2);
-		openItem(evt.target.parentNode);
+		if(!evt.target.classList.contains("loading")) {
+			openItem(evt.target.parentNode);
+		}
 	}
 }, {
 	capture: true,
@@ -402,9 +406,7 @@ const confirmRemoveItems = itemElements => {
 		}
 	}
 };
-const removeSelectedItems = () => {
-	confirmRemoveItems(items.querySelectorAll(".item.selected"));
-};
+const removeSelectedItems = ;
 const openItem = itemElement => {
 	const body = html`
 		<div class="mdc-text-field spaced">
@@ -432,7 +434,9 @@ const addButton = container.querySelector("#addButton");
 addButton.addEventListener("click", fileInput.click.bind(fileInput));
 const directoryButton = container.querySelector("#directoryButton");
 const removeButton = container.querySelector("#removeButton");
-removeButton.addEventListener("click", removeSelectedItems);
+removeButton.addEventListener("click", () => {
+	confirmRemoveItems(items.querySelectorAll(".item.selected"));
+});
 const infoButton = container.querySelector("#infoButton");
 infoButton.addEventListener("click", () => {
 	openItem(items.querySelector(".item.selected"));
