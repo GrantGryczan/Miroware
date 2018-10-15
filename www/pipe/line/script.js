@@ -335,29 +335,29 @@ document.addEventListener("mousemove", evt => {
 document.addEventListener("mouseup", evt => {
 	if(mouseDown !== -1 && page.contains(mouseTarget)) {
 		if(mouseTarget.parentNode.classList.contains("item")) {
-			const itemElement = mouseTarget.parentNode;
 			if(mouseMoved) {
 				if(indicatedTarget) {
-					itemElement.classList.add("loading");
-					let name;
-					if(indicatedTarget.href) {
-						name = indicatedTarget.href.slice(1);
-					} else {
-						name = indicatedTarget._item.name;
+					for(const itemElement of items.querySelectorAll(".item.selected")) {
+						item.classList.remove("selected");
+						if(!itemElement.classList.contains("loading")) {
+							itemElement.classList.add("loading");
+							Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
+								name: `${indicatedTarget.href ? indicatedTarget.href.slice(1) : indicatedTarget._item.name}/${getName(itemElement._item.name)}`
+							}).then(Miro.response(xhr => {
+								Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
+								itemElement.parentNode.removeChild(itemElement);
+							})).finally(() => {
+								itemElement.classList.remove("loading");
+							});
+						}
 					}
-					name += `/${getName(itemElement._item.name)}`;
-					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
-						name
-					}).then(Miro.response(xhr => {
-						Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
-						itemElement.parentNode.removeChild(itemElement);
-					})).finally(() => {
-						itemElement.classList.remove("loading");
-					});
+					if(!indicatedTarget.href) {
+						indicatedTarget.classList.add("selected");
+					}
 					indicateTarget();
 				}
 			} else {
-				selectItem(itemElement, evt, evt.button);
+				selectItem(mouseTarget.parentNode, evt, evt.button);
 			}
 		} else if(!mouseMoved) {
 			if(mouseTarget.classList.contains("head")) {
