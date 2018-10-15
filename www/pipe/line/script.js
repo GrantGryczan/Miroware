@@ -38,13 +38,16 @@ const getSize = size => {
 	return `${Math.round(100 * size) / 100} YB`;
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
+let parent = "";
+const pathItems = document.querySelector("#pathItems");
 const createItemElement = item => {
+	const name = item.name.slice(parent.length);
 	const date = new Date(item.date);
 	const itemElement = (item.type === "/" ? html`
 		<table>
 			<tbody>
 				<tr class="item typeDir">
-					<td class="nameData" title="$${item.name}">$${item.name}</td>
+					<td class="nameData" title="$${name}">$${name}</td>
 					<td class="sizeData">-</td>
 					<td class="typeData">-</td>
 					<td class="dateData" title="$${date}">$${getDate(date)}</td>
@@ -55,7 +58,7 @@ const createItemElement = item => {
 		<table>
 			<tbody>
 				<tr class="item typeFile">
-					<td class="nameData" title="$${item.name}">$${item.name}</td>
+					<td class="nameData" title="$${name}">$${name}</td>
 					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
 					<td class="typeData" title="$${item.type}">$${item.type}</td>
 					<td class="dateData" title="$${date}">$${getDate(date)}</td>
@@ -579,9 +582,6 @@ const updateSelection = () => {
 		}
 	}
 };
-const slashTemplate = html`<span class="slash"> / </span>`;
-const path = document.querySelector("#path");
-path.appendChild(slashTemplate);
 const addDirectory = name => {
 	const itemElement = html`
 		<table>
