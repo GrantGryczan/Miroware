@@ -306,14 +306,18 @@ document.addEventListener("mousemove", evt => {
 	}
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
-	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode.classList.contains("item")) {
+	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode.classList.contains("item") && !mouseTarget.parentNode.classList.contains("loading")) {
 		if(!mouseMoved) {
 			selectItem(mouseTarget.parentNode, evt, 2);
 		}
 		if(evt.target.parentNode.classList.contains("item")) {
-			indicateTarget(evt.target.parentNode);
+			if(evt.target.parentNode !== mouseTarget.parentNode && !evt.target.parentNode.classList.contains("loading")) {
+				indicateTarget(evt.target.parentNode);
+			}
 		} else if(evt.target.classList.contains("pathLink")) {
 			indicateTarget(evt.target);
+		} else {
+			indicateTarget();
 		}
 	}
 	mouseMoved = true;
