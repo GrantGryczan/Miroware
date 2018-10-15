@@ -406,7 +406,6 @@ const confirmRemoveItems = itemElements => {
 		}
 	}
 };
-const removeSelectedItems = ;
 const openItem = itemElement => {
 	const body = html`
 		<div class="mdc-text-field spaced">
