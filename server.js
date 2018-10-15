@@ -31,6 +31,10 @@ const s3 = new AWS.S3({
 const byS3Object = item => ({
 	Key: item.id
 });
+const byDBQueryObject = item => ({
+	id: item.id
+});
+const pipeFiles = item => item.type !== "/";
 const connect = context => {
 	let connection = context.req.body.connection;
 	return new Promise(resolve => {
