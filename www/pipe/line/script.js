@@ -75,12 +75,20 @@ const render = () => {
 	while(path.lastChild) {
 		path.removeChild(path.lastChild);
 	}
-	path.appendChild(html`/ <a class="pathLink" href="#">${Miro.data.user}</a>`);
+	path.appendChild(html`
+		<span>
+			/ <a class="pathLink" href="#">${Miro.data.user}</a>
+		</span>
+	`);
 	if(parent) {
 		let hash = "";
 		for(const name of parent.split("/")) {
 			hash += `${name}/`;
-			path.appendChild(html` / <a class="pathLink" href="#$${hash.slice(0, -1)}">$${name}</a>`);
+			path.appendChild(html`
+				<span>
+					/ <a class="pathLink" href="#$${hash.slice(0, -1)}">$${name}</a>
+				</span>
+			`);
 		}
 	}
 	const pathLinks = path.querySelectorAll(".pathLink");
