@@ -41,7 +41,7 @@ const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" 
 let parent = "";
 const pathItems = document.querySelector("#pathItems");
 const createItemElement = item => {
-	const name = item.name.slice(parent.length);
+	const name = item.name.slice(parent.length + 1);
 	const date = new Date(item.date);
 	const itemElement = (item.type === "/" ? html`
 		<table>
@@ -69,9 +69,17 @@ const createItemElement = item => {
 	itemElement._item = item;
 	return itemElement;
 };
-for(const item of Miro.data) {
-	items.insertBefore(createItemElement(item), items.firstChild);
-}
+const renderItems = () => {
+	while(items.lastChild) {
+		items.removeChild(items.lastChild);
+	}
+	for(const item of Miro.data) {
+		if(item.name.slice(parent.length).lastIndexOf("/") === 0) {
+			items.insertBefore(createItemElement(item), items.firstChild);
+		}
+	}
+};
+renderItems();
 const addFile = file => {
 	const fileSize = getSize(file.size);
 	const itemElement = html`
@@ -646,3 +654,14 @@ const openItem = itemElement => {
 		window.open(itemElement._item.url);
 	}
 };
+window.addEventListener("hashchange", () => {
+	const target = location.hash.slice(1);
+	if(target === "" || Miro.data.find(item => item.type === "/" && item.name === target)) {
+		parent = target;
+	} else {
+		location.hash = "#";
+		new Miro.Dialog("Error", "The target directory does not exist.");
+		return;
+	}
+	renderItems();
+});
