@@ -434,7 +434,7 @@ const openItem = itemElement => {
 			const changedName = itemElement._item.name !== name.value;
 			const changedType = itemElement._item.type !== type.value;
 			if(changedName || changedType) {
-				inputElement.classList.add("loading");
+				itemElement.classList.add("loading");
 				updateSelection();
 				const data = {};
 				if(changedName) {
