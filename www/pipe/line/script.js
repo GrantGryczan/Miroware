@@ -460,6 +460,7 @@ const openItem = itemElement => {
 			}
 		}
 	});
+	url.select();
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
