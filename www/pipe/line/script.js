@@ -425,7 +425,7 @@ const openItem = itemElement => {
 	const type = body.querySelector("#type");
 	const url = body.querySelector("#url");
 	body.querySelector("button").addEventListener("click", () => {
-		input.select();
+		url.select();
 		document.execCommand("copy");
 		Miro.snackbar("URL copied to clipboard");
 	});
