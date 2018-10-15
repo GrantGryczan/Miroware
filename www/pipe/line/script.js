@@ -480,9 +480,18 @@ fileInput.addEventListener("change", () => {
 	Array.prototype.forEach.call(fileInput.files, addFile);
 	fileInput.value = null;
 });
-const addButton = container.querySelector("#addButton");
+const addContainer = container.querySelector("#addContainer");
+const addButton = addContainer.querySelector("#addButton");
 addButton.addEventListener("click", fileInput.click.bind(fileInput));
-const directoryButton = container.querySelector("#directoryButton");
+const directoryButton = addContainer.querySelector("#directoryButton");
+addContainer.addEventListener("mouseover", directoryButton.classList.remove.bind(directoryButton.classList, "mdc-fab--exited"), {
+	capture: true,
+	passive: true
+});
+addContainer.addEventListener("mouseout", directoryButton.classList.add.bind(directoryButton.classList, "mdc-fab--exited"), {
+	capture: true,
+	passive: true
+});
 const removeButton = container.querySelector("#removeButton");
 removeButton.addEventListener("click", () => {
 	confirmRemoveItems(items.querySelectorAll(".item.selected"));
@@ -529,3 +538,4 @@ const updateSelection = () => {
 		}
 	}
 };
+
