@@ -57,7 +57,7 @@ if(isMe) {
 					this.done();
 					return;
 				} else {
-					item.type = this.req.body.type;
+					item.type = this.req.body.type.toLowerCase();
 				}
 			} else {
 				this.value = {
