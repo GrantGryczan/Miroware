@@ -57,12 +57,7 @@ const createItemElement = item => {
 for(const item of Miro.data) {
 	items.insertBefore(createItemElement(item), items.firstChild);
 }
-let loading = 0;
-const subtractLoading = () => {
-	loading--;
-};
 const addFile = file => {
-	loading++;
 	const fileSize = getSize(file.size);
 	const itemElement = html`
 		<table>
@@ -105,10 +100,9 @@ const addFile = file => {
 		typeData.textContent = typeData.title = xhr.response.type;
 		dateData.textContent = getDate(xhr.response.date);
 		itemElement.classList.remove("loading");
-		updateSelection();
 	}, () => {
 		itemElement.parentNode.removeChild(itemElement);
-	})).finally(subtractLoading);
+	})).finally(updateSelection);
 };
 const targetIndicator = document.body.querySelector("#targetIndicator");
 const indicateTarget = target => {
@@ -194,7 +188,7 @@ document.addEventListener("paste", async evt => {
 	capture: true,
 	passive: true
 });
-window.onbeforeunload = () => loading || undefined;
+window.onbeforeunload = () => items.querySelector(".item.loading") || undefined;
 let selectedItem = null;
 let focusedItem = null;
 const selectItem = (target, evt, button) => {
