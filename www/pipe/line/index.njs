@@ -31,20 +31,20 @@ this.value += html`
 this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
 			<div id="addContainer">
-				<button id="addButton" class="mdc-fab mdc-ripple" title="Add files">
+				<button id="addButton" class="mdc-fab" title="Add files">
 					<i class="mdc-fab__icon material-icons">add</i>
 				</button>
-				<button id="directoryButton" class="mdc-fab mdc-ripple mdc-fab--mini mdc-fab--exited" title="Add directory">
+				<button id="directoryButton" class="mdc-fab mdc-fab--mini mdc-fab--exited" title="Add directory">
 					<i class="mdc-fab__icon material-icons">folder</i>
 				</button>
 			</div>
-			<button id="removeButton" class="mdc-fab mdc-ripple mdc-fab--mini mdc-fab--exited" title="Remove">
+			<button id="removeButton" class="mdc-fab mdc-fab--mini mdc-fab--exited" title="Remove">
 				<i class="mdc-fab__icon material-icons">delete</i>
 			</button>
-			<button id="infoButton" class="mdc-fab mdc-ripple mdc-fab--mini mdc-fab--exited" title="Info">
+			<button id="infoButton" class="mdc-fab mdc-fab--mini mdc-fab--exited" title="Info">
 				<i class="mdc-fab__icon material-icons">info</i>
 			</button>
-			<button id="openButton" class="mdc-fab mdc-ripple mdc-fab--mini mdc-fab--exited" title="Open">
+			<button id="openButton" class="mdc-fab mdc-fab--mini mdc-fab--exited" title="Open">
 				<i class="mdc-fab__icon material-icons">keyboard_return</i>
 			</button>`;
 this.value += (await load("load/belt", this)).value;
