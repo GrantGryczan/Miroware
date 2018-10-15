@@ -579,6 +579,9 @@ const updateSelection = () => {
 		}
 	}
 };
+const slashTemplate = html`<span class="slash"> / </span>`;
+const path = document.querySelector("#path");
+path.appendChild(slashTemplate);
 const addDirectory = name => {
 	const itemElement = html`
 		<table>

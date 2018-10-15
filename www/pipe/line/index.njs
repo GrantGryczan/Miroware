@@ -18,6 +18,7 @@ this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
 				<p>Miroware Pipe is in the beta stage. Do not expect consistent stability or full functionality.</p>
+				<h2 id="path"></h2>
 				<table id="table">
 					<thead>
 						<th id="nameHead">Name</th>

@@ -10,8 +10,9 @@ main {
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	th, tr {
-		cursor: pointer;
+	cursor: pointer;
+	th {
+		font-weight: normal;
 	}
 	th, td {
 		padding: 0.75em 0.25em;
