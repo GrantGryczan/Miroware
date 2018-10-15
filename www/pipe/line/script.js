@@ -3,7 +3,7 @@ const container = document.body.querySelector("#container");
 const page = container.querySelector("main");
 const items = page.querySelector("#items");
 let parent = "";
-const getName = name => parent === "" ? name : name.slice(parent.length + 1);
+const getName = name => !parent ? name : name.slice(parent.length + 1);
 const getSize = size => {
 	if(size < 1000) {
 		return `${size} B`;
@@ -74,16 +74,18 @@ const render = () => {
 	while(pathItems.lastChild) {
 		pathItems.removeChild(pathItems.lastChild);
 	}
-	let hash = "";
-	for(const name of parent.split("/")) {
-		hash += `${name}/`;
-		pathItems.appendChild(html` / <a href="#$${hash.slice(0, -1)}">$${name}</a>`);
+	if(parent) {
+		let hash = "";
+		for(const name of parent.split("/")) {
+			hash += `${name}/`;
+			pathItems.appendChild(html` / <a href="#$${hash.slice(0, -1)}">$${name}</a>`);
+		}
 	}
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
 	for(const item of Miro.data) {
-		if((parent === "" && !item.name.includes("/")) || item.name.slice(parent.length).lastIndexOf("/") === 0) {
+		if((!parent && !item.name.includes("/")) || item.name.slice(parent.length).lastIndexOf("/") === 0) {
 			items.insertBefore(createItemElement(item), items.firstChild);
 		}
 	}
