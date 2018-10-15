@@ -429,7 +429,10 @@ const openItem = itemElement => {
 		document.execCommand("copy");
 		Miro.snackbar("URL copied to clipboard");
 	});
-	new Miro.Dialog("Item", body, ["Okay", "Cancel"]).then(value => {
+	new Miro.Dialog("Item", body, [{
+		text: "Okay",
+		type: "submit"
+	}, "Cancel"]).then(value => {
 		if(value === 0) {
 			const changedName = itemElement._item.name !== name.value;
 			const changedType = itemElement._item.type !== type.value;
