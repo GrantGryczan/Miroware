@@ -444,6 +444,8 @@ const openItem = itemElement => {
 					data.type = type.value;
 				}
 				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+					Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
+					Miro.data.push(itemElement._item = xhr.response);
 					const nameData = itemElement.querySelector(".nameData");
 					nameData.textContent = nameData.title = xhr.response.name;
 					const typeData = itemElement.querySelector(".typeData");
