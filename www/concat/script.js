@@ -118,7 +118,7 @@ const response = Miro.response(xhr => {
 	const body = html`
 		Concat successfully saved!<br>
 		<div class="mdc-text-field spaced">
-			<input class="mdc-text-field__input" type="text" value="$${xhr.response.url}" readonly>
+			<input class="mdc-text-field__input" type="url" value="$${xhr.response.url}" readonly>
 			<div class="mdc-line-ripple"></div>
 		</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
 		<a href="$${xhr.response.url}" target="_blank">Preview link</a>
