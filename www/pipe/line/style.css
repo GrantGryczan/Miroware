@@ -4,6 +4,9 @@
 main {
 	user-select: none;
 }
+#path {
+	font-weight: normal;
+}
 #table {
 	width: 100%;
 	border-spacing: 0;
