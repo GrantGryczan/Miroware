@@ -78,6 +78,7 @@ const renderItems = () => {
 			items.insertBefore(createItemElement(item), items.firstChild);
 		}
 	}
+	updateSelection();
 };
 const addFile = file => {
 	const fileSize = getSize(file.size);
