@@ -3,7 +3,8 @@ const container = document.body.querySelector("#container");
 const page = container.querySelector("main");
 const items = page.querySelector("#items");
 let parent = "";
-const getName = name => !parent ? name : name.slice(parent.length + 1);
+const getName = name => parent ? name.slice(parent.length + 1) : name;
+const concatParent = name => parent ? `${parent}/${name}` : name;
 const getSize = size => {
 	if(size < 1000) {
 		return `${size} B`;
@@ -113,7 +114,7 @@ const addFile = file => {
 	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
 		"X-Data": JSON.stringify({
-			name: file.name
+			name: concatParent(file.name)
 		})
 	}, file, xhr => {
 		itemElement._xhr = xhr;
@@ -454,7 +455,7 @@ const itemInfo = itemElement => {
 					itemElement.classList.add("loading");
 					updateSelection();
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
-						name: dialog.form.elements.name.value
+						name: concatParent(dialog.form.elements.name.value)
 					}).then(Miro.response(xhr => {
 						itemElement._item = Miro.data[Miro.data.indexOf(itemElement._item)] = xhr.response;
 						const nameData = itemElement.querySelector(".nameData");
