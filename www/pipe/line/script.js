@@ -39,6 +39,7 @@ const getSize = size => {
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
 const createItemElement = item => {
+	const date = new Date(item.date);
 	const itemElement = html`
 		<table>
 			<tbody>
@@ -46,7 +47,7 @@ const createItemElement = item => {
 					<td class="nameData" title="$${item.name}">$${item.name}</td>
 					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
 					<td class="typeData" title="$${item.type}">$${item.type}</td>
-					<td class="dateData">${getDate(item.date)}</td>
+					<td class="dateData" title="$${date}">$${getDate(date)}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -98,7 +99,9 @@ const addFile = file => {
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
 		typeData.textContent = typeData.title = xhr.response.type;
-		dateData.textContent = getDate(xhr.response.date);
+		const date = new Date(xhr.response.date);
+		dateData.textContent = getDate(date);
+		dateData.title = date;
 		itemElement.classList.remove("loading");
 	}, () => {
 		itemElement.parentNode.removeChild(itemElement);
@@ -402,19 +405,53 @@ const confirmRemoveItems = itemElements => {
 };
 const openItem = itemElement => {
 	const body = html`
+		<div class="mdc-text-field">
+			<input id="name" class="mdc-text-field__input" type="text" value="$${itemElement._item.name}" maxlength="255" required>
+			<label class="mdc-floating-label alwaysFloat" for="name">Name</label>
+			<div class="mdc-line-ripple"></div>
+		</div><br>
+		<div class="mdc-text-field">
+			<input id="type" class="mdc-text-field__input" type="text" value="$${itemElement._item.type}" maxlength="255" required>
+			<label class="mdc-floating-label alwaysFloat" for="type">Type</label>
+			<div class="mdc-line-ripple"></div>
+		</div><br>
 		<div class="mdc-text-field spaced">
-			<input id="url" class="mdc-text-field__input" type="text" value="$${itemElement._item.url}" size="24" readonly>
+			<input id="url" class="mdc-text-field__input" type="url" value="$${itemElement._item.url}" size="24" readonly>
 			<label class="mdc-floating-label alwaysFloat" for="url">URL</label>
 			<div class="mdc-line-ripple"></div>
 		</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button>
 	`;
-	const input = body.querySelector("input");
+	const name = body.querySelector("#name");
+	const type = body.querySelector("#type");
+	const url = body.querySelector("#url");
 	body.querySelector("button").addEventListener("click", () => {
 		input.select();
 		document.execCommand("copy");
 		Miro.snackbar("URL copied to clipboard");
 	});
-	new Miro.Dialog("Item", body);
+	new Miro.Dialog("Item", body, ["Okay", "Cancel"]).then(value => {
+		if(value === 0) {
+			const changedName = itemElement._item.name !== name.value;
+			const changedType = itemElement._item.type !== type.value;
+			if(changedName || changedType) {
+				inputElement.classList.add("loading");
+				updateSelection();
+				const data = {};
+				if(changedName) {
+					data.name = name.value;
+				}
+				if(changedType) {
+					data.type = type.value;
+				}
+				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+					const nameData = itemElement.querySelector(".nameData");
+					nameData.textContent = nameData.title = xhr.response.name;
+					const typeData = itemElement.querySelector(".typeData");
+					typeData.textContent = typeData.title = xhr.response.type;
+				})).finally(updateSelection);
+			}
+		}
+	});
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
