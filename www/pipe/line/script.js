@@ -406,7 +406,7 @@ const confirmRemoveItems = itemElements => {
 const openItem = itemElement => {
 	const body = html`
 		<div class="mdc-text-field">
-			<input id="name" class="mdc-text-field__input" type="text" value="$${itemElement._item.name}" maxlength="255" size="24" required>
+			<input id="name" class="mdc-text-field__input" type="text" value="$${itemElement._item.name}" maxlength="255" size="24" autocomplete="off" required>
 			<label class="mdc-floating-label alwaysFloat" for="name">Name</label>
 			<div class="mdc-line-ripple"></div>
 		</div><br>
