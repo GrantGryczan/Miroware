@@ -41,7 +41,7 @@ const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" 
 let parent = "";
 const pathItems = document.querySelector("#pathItems");
 const createItemElement = item => {
-	const name = item.name.slice(parent.length + 1);
+	const name = parent === "" ? item.name : item.name.slice(parent.length + 1);
 	const date = new Date(item.date);
 	const itemElement = (item.type === "/" ? html`
 		<table>
