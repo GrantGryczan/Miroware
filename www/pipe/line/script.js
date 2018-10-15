@@ -153,7 +153,9 @@ const addFile = file => {
 	})).finally(updateSelection);
 };
 const targetIndicator = document.body.querySelector("#targetIndicator");
+let indicatedTarget;
 const indicateTarget = target => {
+	indicatedTarget = target;
 	if(target) {
 		const rect = target.getBoundingClientRect();
 		targetIndicator.style.transform = `translate(${rect.left + rect.width / 2 - 0.5}px, ${rect.top + rect.height / 2 - 0.5}px) scale(${rect.width}, ${rect.height})`;
@@ -317,17 +319,13 @@ document.addEventListener("mousemove", evt => {
 	}
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
-	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode.classList.contains("item") && !mouseTarget.parentNode.classList.contains("loading")) {
+	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode.classList.contains("item")) {
 		if(!mouseMoved) {
 			selectItem(mouseTarget.parentNode, evt, 2);
 		}
-		/*if(evt.target.classList.contains("pathLink")) {
-			indicateTarget(evt.target);
-		} else if(evt.target.parentNode !== mouseTarget.parentNode && evt.target.parentNode.classList.contains("item") && !evt.target.parentNode.classList.contains("loading")) {
-			indicateTarget(evt.target.parentNode);
-		} else {
-			indicateTarget();
-		}*/
+		if(!mouseTarget.parentNode.classList.contains("loading")) {
+			indicateTarget(evt.target.parentNode !== mouseTarget.parentNode && (evt.target.classList.contains("pathLink") ? evt.target.href && evt.target : evt.target.parentNode.classList.contains("item") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode));
+		}
 	}
 	mouseMoved = true;
 }, {
