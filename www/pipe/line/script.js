@@ -84,7 +84,7 @@ const render = () => {
 		}
 	}
 	const pathLinks = path.querySelectorAll(".pathLink");
-	pathLinks[pathLinks.length - 1].href = "";
+	pathLinks[pathLinks.length - 1].removeAttribute("href");
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
