@@ -348,7 +348,7 @@ document.addEventListener("keydown", evt => {
 document.addEventListener("dblclick", evt => {
 	if(!mouseMoved && evt.target.parentNode.classList.contains("item")) {
 		selectItem(evt.target.parentNode, evt, 2);
-		if(!evt.target.classList.contains("loading")) {
+		if(!evt.target.parentNode.classList.contains("loading")) {
 			openItem(evt.target.parentNode);
 		}
 	}
