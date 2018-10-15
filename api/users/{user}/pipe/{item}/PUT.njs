@@ -59,6 +59,14 @@ if(isMe) {
 			}
 		}
 		if(this.req.body.type !== undefined) {
+			if(found.type === "/") {
+				this.value = {
+					error: "The `type` value cannot be changed for a directory."
+				};
+				this.status = 422;
+				this.done();
+				return;
+			}
 			if(typeof this.req.body.type === "string") {
 				this.req.body.type = this.req.body.type.trim();
 				if(this.req.body.type.length > 255) {
