@@ -70,22 +70,25 @@ const createItemElement = item => {
 	itemElement._item = item;
 	return itemElement;
 };
-const pathItems = page.querySelector("#pathItems");
+const path = page.querySelector("#path");
 const render = () => {
-	while(pathItems.lastChild) {
-		pathItems.removeChild(pathItems.lastChild);
+	while(path.lastChild) {
+		path.removeChild(path.lastChild);
 	}
+	path.appendChild(html`/ <a class="pathLink" href="#">${Miro.data.user}</a>`);
 	if(parent) {
 		let hash = "";
 		for(const name of parent.split("/")) {
 			hash += `${name}/`;
-			pathItems.appendChild(html` / <a class="pathLink" href="#$${hash.slice(0, -1)}">$${name}</a>`);
+			path.appendChild(html` / <a class="pathLink" href="#$${hash.slice(0, -1)}">$${name}</a>`);
 		}
 	}
+	const pathLinks = path.querySelectorAll(".pathLink");
+	pathLinks[pathLinks.length - 1].href = "";
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
-	for(const item of Miro.data) {
+	for(const item of Miro.data.pipe) {
 		if((!parent && !item.name.includes("/")) || item.name.slice(parent.length).lastIndexOf("/") === 0) {
 			items.insertBefore(createItemElement(item), items.firstChild);
 		}
@@ -129,7 +132,7 @@ const addFile = file => {
 			}
 		});
 	}).then(Miro.response(xhr => {
-		Miro.data.push(itemElement._item = xhr.response);
+		Miro.data.pipe.push(itemElement._item = xhr.response);
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
 		typeData.textContent = typeData.title = xhr.response.type;
@@ -310,15 +313,13 @@ document.addEventListener("mousemove", evt => {
 		if(!mouseMoved) {
 			selectItem(mouseTarget.parentNode, evt, 2);
 		}
-		if(evt.target.parentNode.classList.contains("item")) {
-			if(evt.target.parentNode !== mouseTarget.parentNode && !evt.target.parentNode.classList.contains("loading")) {
-				indicateTarget(evt.target.parentNode);
-			}
-		} else if(evt.target.classList.contains("pathLink")) {
+		/*if(evt.target.classList.contains("pathLink")) {
 			indicateTarget(evt.target);
+		} else if(evt.target.parentNode !== mouseTarget.parentNode && evt.target.parentNode.classList.contains("item") && !evt.target.parentNode.classList.contains("loading")) {
+			indicateTarget(evt.target.parentNode);
 		} else {
 			indicateTarget();
-		}
+		}*/
 	}
 	mouseMoved = true;
 }, {
@@ -418,10 +419,10 @@ const removeItem = itemElement => {
 			focusedItem = null;
 		}
 		itemElement.parentNode.removeChild(itemElement);
-		Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
+		Miro.data.pipe.splice(Miro.data.pipe.indexOf(itemElement._item), 1);
 		if(itemElement._item.type === "/") {
 			const prefix = `${itemElement._item.name}/`;
-			Miro.data = Miro.data.filter(item => !item.startsWith(prefix));
+			Miro.data.pipe = Miro.data.pipe.filter(item => !item.startsWith(prefix));
 		}
 		updateSelection();
 	};
@@ -482,7 +483,7 @@ const itemInfo = itemElement => {
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
 						name: applyParent(dialog.form.elements.name.value)
 					}).then(Miro.response(xhr => {
-						itemElement._item = Miro.data[Miro.data.indexOf(itemElement._item)] = xhr.response;
+						itemElement._item = Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
 						const nameData = itemElement.querySelector(".nameData");
 						nameData.textContent = nameData.title = xhr.response.name;
 					})).finally(() => {
@@ -537,7 +538,7 @@ const itemInfo = itemElement => {
 						data.type = type.value;
 					}
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
-						itemElement._item = Miro.data[Miro.data.indexOf(itemElement._item)] = xhr.response;
+						itemElement._item = Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
 						const nameData = itemElement.querySelector(".nameData");
 						nameData.textContent = nameData.title = xhr.response.name;
 						const typeData = itemElement.querySelector(".typeData");
@@ -659,7 +660,7 @@ const addDirectory = name => {
 			type: "/"
 		})
 	}).then(Miro.response(xhr => {
-		Miro.data.push(itemElement._item = xhr.response);
+		Miro.data.pipe.push(itemElement._item = xhr.response);
 		const date = new Date(xhr.response.date);
 		dateData.textContent = getDate(date);
 		dateData.title = date;
@@ -693,7 +694,7 @@ const openItem = itemElement => {
 };
 const hashChange = () => {
 	const target = location.hash.slice(1);
-	if(target === "" || Miro.data.find(item => item.type === "/" && item.name === target)) {
+	if(target === "" || Miro.data.pipe.find(item => item.type === "/" && item.name === target)) {
 		parent = target;
 	} else {
 		location.hash = "#";
