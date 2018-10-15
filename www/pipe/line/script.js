@@ -69,7 +69,7 @@ const createItemElement = item => {
 	itemElement._item = item;
 	return itemElement;
 };
-for(const item of Miro.data.pipe) {
+for(const item of Miro.data) {
 	items.insertBefore(createItemElement(item), items.firstChild);
 }
 const addFile = file => {
@@ -109,7 +109,7 @@ const addFile = file => {
 			}
 		});
 	}).then(Miro.response(xhr => {
-		Miro.data.pipe.push(itemElement._item = xhr.response);
+		Miro.data.push(itemElement._item = xhr.response);
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
 		typeData.textContent = typeData.title = xhr.response.type;
@@ -377,7 +377,7 @@ const removeItem = itemElement => {
 			focusedItem = null;
 		}
 		itemElement.parentNode.removeChild(itemElement);
-		Miro.data.pipe.splice(Miro.data.pipe.indexOf(itemElement._item), 1);
+		Miro.data.splice(Miro.data.indexOf(itemElement._item), 1);
 		updateSelection();
 	};
 	if(itemElement._xhr) {
@@ -437,7 +437,7 @@ const openItem = itemElement => {
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
 						name: dialog.form.elements.name.value
 					}).then(Miro.response(xhr => {
-						itemElement._item = Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
+						itemElement._item = Miro.data[Miro.data.indexOf(itemElement._item)] = xhr.response;
 						const nameData = itemElement.querySelector(".nameData");
 						nameData.textContent = nameData.title = xhr.response.name;
 					})).finally(() => {
@@ -492,7 +492,7 @@ const openItem = itemElement => {
 						data.type = type.value;
 					}
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
-						itemElement._item = Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
+						itemElement._item = Miro.data[Miro.data.indexOf(itemElement._item)] = xhr.response;
 						const nameData = itemElement.querySelector(".nameData");
 						nameData.textContent = nameData.title = xhr.response.name;
 						const typeData = itemElement.querySelector(".typeData");
@@ -603,7 +603,7 @@ const addDirectory = name => {
 			type: "/"
 		})
 	}).then(Miro.response(xhr => {
-		Miro.data.pipe.push(itemElement._item = xhr.response);
+		Miro.data.push(itemElement._item = xhr.response);
 		const date = new Date(xhr.response.date);
 		dateData.textContent = getDate(date);
 		dateData.title = date;
