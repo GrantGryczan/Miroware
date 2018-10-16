@@ -58,7 +58,7 @@ const getItemElement = item => {
 				<div class="td dateData" title="$${date}">$${getDate(date)}</div>
 			</a>
 		` : html`
-			<a class="tr item typeFile" href="$${getURL(item)}">
+			<a class="tr item typeFile" href="$${getURL(item)}" target="_blank">
 				<div class="td iconData">
 					<i class="material-icons">insert_drive_file</i>
 				</div>
@@ -152,7 +152,7 @@ const addFile = async file => {
 	}
 	const fileSize = getSize(file.size);
 	const itemElement = html`
-		<a class="tr item typeFile loading">
+		<a class="tr item typeFile loading" target="_blank">
 			<div class="td iconData">
 				<i class="material-icons">insert_drive_file</i>
 			</div>
