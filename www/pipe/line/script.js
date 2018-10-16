@@ -71,6 +71,21 @@ const createItemElement = item => {
 	return itemElement;
 };
 const path = page.querySelector("#path");
+const itemsToRender = item => (!parent && !item.name.includes("/")) || item.name.slice(parent.length).lastIndexOf("/") === 0;
+const sort = {
+	name: (a, b) => {
+		stringA = stringA.name.toLowerCase();
+		stringB = stringB.name.toLowerCase();
+		return stringA < stringB ? -1 : 1;
+	},
+	size: (a, b) => b.size - a.size,
+	type: (a, b) => {
+		stringA = stringA.type.toLowerCase();
+		stringB = stringB.type.toLowerCase();
+		return stringA < stringB ? -1 : (stringA > stringB ? 1 : b.date - a.date);
+	},
+	date: (a, b) => b.date - a.date
+};
 const render = () => {
 	while(path.lastChild) {
 		path.removeChild(path.lastChild);
@@ -96,10 +111,12 @@ const render = () => {
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
-	for(const item of Miro.data.pipe) {
-		if((!parent && !item.name.includes("/")) || item.name.slice(parent.length).lastIndexOf("/") === 0) {
-			items.insertBefore(createItemElement(item), items.firstChild);
-		}
+	if(!(localStorage.pipe_sortItems in sort)) {
+		localStorage.pipe_sortItems = "date";
+	}
+	const itemArray = Miro.data.pipe.filter(itemsToRender).sort(sort[localStorage.pipe_sortItems]);
+	for(const item of localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
+		items.insertBefore(createItemElement(item), items.firstChild);
 	}
 	updateSelection();
 };
