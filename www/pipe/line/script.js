@@ -796,9 +796,7 @@ const openItem = itemElement => {
 	}
 };
 items.addEventListener("click", evt => {
-	if(evt.target.classList.contains("item")) {
-		evt.preventDefault();
-	}
+	evt.preventDefault();
 }, true);
 const sortIcon = html`<i id="sortIcon" class="material-icons">arrow_downward</i>`;
 const heads = page.querySelector("#heads");
