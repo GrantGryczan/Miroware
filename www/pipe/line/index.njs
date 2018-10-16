@@ -1,7 +1,7 @@
 if(notLoggedIn(this)) {
 	return;
 }
-this.title = "Pipe";
+this.title = "Pipe Beta";
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
 this.data = {
