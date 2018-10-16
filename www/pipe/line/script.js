@@ -751,7 +751,7 @@ const addDirectory = async name => {
 	items.insertBefore(itemElement, items.firstChild);
 	Miro.request("POST", "/users/@me/pipe", {
 		"X-Data": JSON.stringify({
-			name,
+			name: applyParent(name),
 			type: "/"
 		})
 	}).then(Miro.response(xhr => {
