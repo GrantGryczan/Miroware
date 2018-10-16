@@ -21,6 +21,9 @@ main {
 		border-bottom: 1px solid #373737;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		* {
+			pointer-events: none;
+		}
 	}
 }
 .head {
@@ -38,7 +41,6 @@ main {
 #sortIcon {
 	padding-left: 0.5em;
 	vertical-align: middle;
-	pointer-events: none;
 	&.reverse {
 		transform: scaleY(-1);
 	}
