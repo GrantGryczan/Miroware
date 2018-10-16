@@ -26,6 +26,9 @@ main {
 .head {
 	line-height: 24px;
 }
+#iconHead {
+	width: calc(1em + 10px);
+}
 #nameHead {
 	width: 55%;
 }
