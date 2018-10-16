@@ -123,7 +123,25 @@ if(isMe) {
 			...found,
 			...item
 		};
-		purgeCache(`https://pipe.miroware.io/${user._id}/${found.type}`, this.value.url = `https://pipe.miroware.io/${user._id}/${encodeURIComponent(this.value.name)}`);
+		const urls = [`https://pipe.miroware.io/${user._id}/${encodeURIComponent(found.name)}`, this.value.url = `https://pipe.miroware.io/${user._id}/${encodeURIComponent(this.value.name)}`];
+		if(found.type === "/" && item.name) {
+			const prefix = `${found.name}/`;
+			for(const child of user.pipe) {
+				if(child.name.startsWith(prefix)) {
+					const name = item.name + child.name.slice(found.name.length);
+					users.updateOne({
+						...this.userFilter,
+						"pipe.id": child.id
+					}, {
+						$set: {
+							"pipe.$.name": name
+						}
+					});
+					urls.push(`https://pipe.miroware.io/${user._id}/${encodeURIComponent(child.name)}`, `https://pipe.miroware.io/${user._id}/${encodeURIComponent(name)}`);
+				}
+			}
+		}
+		purgeCache(...urls);
 	} else {
 		this.value = {
 			error: "That item does not exist."

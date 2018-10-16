@@ -31,7 +31,7 @@ if(isMe) {
 						this.status = err.statusCode;
 						delete this.update.$pull.pipe;
 					} else {
-						purgeCache(...fileItems.map(item => `https://pipe.miroware.io/${user._id}/${item.name}`));
+						purgeCache(...fileItems.map(item => `https://pipe.miroware.io/${user._id}/${encodeURIComponent(item.name)}`));
 					}
 					this.done();
 				});
@@ -52,7 +52,7 @@ if(isMe) {
 					this.update.$pull.pipe = {
 						id: found.id
 					};
-					purgeCache(`https://pipe.miroware.io/${user._id}/${found.name}`);
+					purgeCache(`https://pipe.miroware.io/${user._id}/${encodeURIComponent(found.name)}`);
 				}
 				this.done();
 			});
