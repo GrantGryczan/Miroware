@@ -73,6 +73,7 @@ const getItemElement = item => {
 	}
 };
 const path = page.querySelector("#path");
+document.body.querySelector(".mdc-top-app-bar__title").appendChild(path);
 const itemsToRender = item => (!parent && !item.name.includes("/")) || item.name.slice(parent.length).lastIndexOf("/") === 0;
 const sort = {
 	name: (a, b) => {

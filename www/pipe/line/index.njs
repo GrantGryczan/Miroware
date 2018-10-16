@@ -17,7 +17,7 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<h2 id="path"></h2>
+				<span id="path"></span>
 				<div id="table" class="table">
 					<div id="heads" class="thead">
 						<div id="iconHead" class="th"></div>
