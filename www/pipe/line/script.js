@@ -81,12 +81,12 @@ const render = () => {
 		</span>
 	`);
 	if(parent) {
-		let hash = "";
+		let hashSum = "";
 		for(const name of parent.split("/")) {
-			hash += `${name}/`;
+			hashSum += `${name}/`;
 			path.appendChild(html`
 				<span>
-					/ <a class="pathLink" href="#$${hash.slice(0, -1)}">$${name}</a>
+					/ <a class="pathLink" href="#$${hashSum.slice(0, -1)}">$${name}</a>
 				</span>
 			`);
 		}
@@ -730,6 +730,7 @@ const openItem = itemElement => {
 };
 const hashChange = () => {
 	if(items.querySelector(".item.loading")) {
+		location.hash = `#${parent}`;
 		location.reload();
 		return;
 	}
