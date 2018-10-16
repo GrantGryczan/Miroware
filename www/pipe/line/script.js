@@ -47,7 +47,7 @@ const createItemElement = item => {
 	const itemElement = (item.type === "/" ? html`
 		<table>
 			<tbody>
-				<tr class="item mdc-ripple typeDir">
+				<tr class="item typeDir">
 					<td class="nameData" title="$${name}">$${name}</td>
 					<td class="sizeData">-</td>
 					<td class="typeData">-</td>
@@ -58,7 +58,7 @@ const createItemElement = item => {
 	` : html`
 		<table>
 			<tbody>
-				<tr class="item mdc-ripple typeFile">
+				<tr class="item typeFile">
 					<td class="nameData" title="$${name}">$${name}</td>
 					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
 					<td class="typeData" title="$${item.type}">$${item.type}</td>
@@ -108,7 +108,7 @@ const addFile = file => {
 	const itemElement = html`
 		<table>
 			<tbody>
-				<tr class="item mdc-ripple typeFile loading">
+				<tr class="item typeFile loading">
 					<td class="nameData" title="$${file.name}">$${file.name}</td>
 					<td class="sizeData" title="- / ${file.size} B">- / ${fileSize}</td>
 					<td class="typeData">-</td>
@@ -679,7 +679,7 @@ const addDirectory = name => {
 	const itemElement = html`
 		<table>
 			<tbody>
-				<tr class="item mdc-ripple typeDir loading">
+				<tr class="item typeDir loading">
 					<td class="nameData" title="$${name}">$${name}</td>
 					<td class="sizeData">-</td>
 					<td class="typeData">-</td>

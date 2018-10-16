@@ -21,10 +21,10 @@ this.value += html`
 				<h2 id="path"></h2>
 				<table id="table">
 					<thead>
-						<th id="nameHead" class="head mdc-ripple">Name</th>
-						<th id="sizeHead" class="head mdc-ripple">Size</th>
-						<th id="typeHead" class="head mdc-ripple">Type</th>
-						<th id="dateHead" class="head mdc-ripple">Date</th>
+						<th id="nameHead" class="head">Name</th>
+						<th id="sizeHead" class="head">Size</th>
+						<th id="typeHead" class="head">Type</th>
+						<th id="dateHead" class="head">Date</th>
 					</thead>
 					<tbody id="items"></tbody>
 				</table>`;
