@@ -46,6 +46,7 @@ main {
 	}
 }
 .item {
+	text-decoration: none;
 	&.loading {
 		opacity: 0.7;
 		background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
