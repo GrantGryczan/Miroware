@@ -18,16 +18,16 @@ this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
 				<h2 id="path"></h2>
-				<table id="table">
-					<thead id="heads">
-						<th id="iconHead"></th>
-						<th id="nameHead" class="head" data-sort="name">Name</th>
-						<th id="sizeHead" class="head" data-sort="size">Size</th>
-						<th id="typeHead" class="head" data-sort="type">Type</th>
-						<th id="dateHead" class="head" data-sort="date">Date</th>
-					</thead>
-					<tbody id="items"></tbody>
-				</table>`;
+				<div id="table" class="table">
+					<div id="heads" class="thead">
+						<div id="iconHead" class="th"></div>
+						<div id="nameHead" class="th head" data-sort="name">Name</div>
+						<div id="sizeHead" class="th head" data-sort="size">Size</div>
+						<div id="typeHead" class="th head" data-sort="type">Type</div>
+						<div id="dateHead" class="th head" data-sort="date">Date</div>
+					</div>
+					<div id="items" class="tbody"></div>
+				</div>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
 			<div id="addContainer">

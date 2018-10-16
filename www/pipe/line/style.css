@@ -13,10 +13,10 @@ main {
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	th {
+	.th {
 		font-weight: normal;
 	}
-	th, td {
+	.th, .td {
 		padding: 0.5em 0.25em;
 		border-bottom: 1px solid #373737;
 		overflow: hidden;
