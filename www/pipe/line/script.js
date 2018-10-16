@@ -79,7 +79,7 @@ const sort = {
 		return stringA < stringB ? 1 : -1;
 	},
 	size: (a, b) => ((a.size || Infinity) - (b.size || Infinity)) || a.date - b.date,
-	type: (a, b) => a.type < b.type ? 1 : (a.type > b.type ? -1 : a.date - b.date);
+	type: (a, b) => a.type < b.type ? 1 : (a.type > b.type ? -1 : a.date - b.date),
 	date: (a, b) => a.date - b.date
 };
 const render = () => {
