@@ -614,7 +614,7 @@ const itemInfo = itemElement => {
 					updateSelection();
 					const data = {};
 					if(changedName) {
-						data.name = dialog.form.elements.name.value;
+						data.name = applyParent(dialog.form.elements.name.value);
 					}
 					if(changedType) {
 						data.type = dialog.form.elements.type.value;
