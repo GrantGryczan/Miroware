@@ -41,7 +41,7 @@ const getSize = size => {
 	return `${Math.round(10 * size) / 10} YB`;
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
-const createItemElement = item => {
+const getItemElement = item => {
 	if(item.element) {
 		return item.element;
 	} else {
@@ -110,6 +110,7 @@ const render = () => {
 	}
 	const pathLinks = path.querySelectorAll(".pathLink");
 	pathLinks[pathLinks.length - 1].removeAttribute("href");
+	const loading = items.querySelectorAll(".item.loading");
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
@@ -121,7 +122,12 @@ const render = () => {
 	heads.querySelector(`.head[data-sort="${localStorage.pipe_sortItems}"]`).appendChild(sortIcon);
 	const itemArray = Miro.data.pipe.filter(itemsToRender).sort(sort[localStorage.pipe_sortItems]);
 	for(const item of reverseItems ? itemArray.reverse() : itemArray) {
-		items.insertBefore(createItemElement(item), items.firstChild);
+		items.insertBefore(getItemElement(item), items.firstChild);
+	}
+	for(const itemElement of loading) {
+		if(!itemElement.parentNode) {
+			items.insertBefore(itemElement, items.firstChild);
+		}
 	}
 	updateSelection();
 };
@@ -191,9 +197,11 @@ const addFile = async file => {
 		dateData.textContent = getDate(date);
 		dateData.title = date;
 		itemElement.classList.remove("loading");
+		render();
 	}, () => {
 		itemElement.parentNode.removeChild(itemElement);
-	})).finally(updateSelection);
+		updateSelection();
+	}));
 };
 const targetIndicator = document.body.querySelector("#targetIndicator");
 let indicatedTarget;
@@ -399,10 +407,12 @@ document.addEventListener("mouseup", evt => {
 								}
 								itemElement._item.name = xhr.response.name;
 								itemElement.parentNode.removeChild(itemElement);
-							})).finally(() => {
+								itemElement.classList.remove("loading");
+								render();
+							}, () => {
 								itemElement.classList.remove("loading");
 								updateSelection();
-							});
+							}));
 						}
 					}
 					if(!indicatedTarget.href) {
@@ -563,10 +573,12 @@ const itemInfo = itemElement => {
 					}).then(Miro.response(xhr => {
 						const nameData = itemElement.querySelector(".nameData");
 						itemElement._item.name = nameData.textContent = nameData.title = xhr.response.name;
-					})).finally(() => {
+						itemElement.classList.remove("loading");
+						render();
+					}, () => {
 						itemElement.classList.remove("loading");
 						updateSelection();
-					});
+					}));
 				}
 			}
 		});
@@ -619,10 +631,12 @@ const itemInfo = itemElement => {
 						itemElement._item.name = nameData.textContent = nameData.title = xhr.response.name;
 						const typeData = itemElement.querySelector(".typeData");
 						typeData.textContent = typeData.title = xhr.response.type;
-					})).finally(() => {
+						itemElement.classList.remove("loading");
+						render();
+					}, () => {
 						itemElement.classList.remove("loading");
 						updateSelection();
-					});
+					}));
 				}
 			}
 		});
@@ -745,9 +759,11 @@ const addDirectory = name => {
 		dateData.textContent = getDate(date);
 		dateData.title = date;
 		itemElement.classList.remove("loading");
+		render();
 	}, () => {
 		itemElement.parentNode.removeChild(itemElement);
-	})).finally(updateSelection);
+		updateSelection();
+	}));
 };
 directoryButton.addEventListener("click", () => {
 	const dialog = new Miro.Dialog("Add Directory", html`
@@ -782,13 +798,7 @@ heads.addEventListener("click", evt => {
 		} else {
 			localStorage.pipe_sortItems = sortKey;
 		}
-		const loading = items.querySelectorAll(".item.loading");
 		render();
-		for(const itemElement of loading) {
-			if(!itemElement.parentNode) {
-				items.insertBefore(itemElement, items.firstChild);
-			}
-		}
 	}
 }, {
 	capture: true,
