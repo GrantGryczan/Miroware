@@ -78,13 +78,13 @@ const sort = {
 		stringB = stringB.name.toLowerCase();
 		return stringA < stringB ? -1 : 1;
 	},
-	size: (a, b) => b.size - a.size,
+	size: (a, b) => a.size - b.size,
 	type: (a, b) => {
 		stringA = stringA.type.toLowerCase();
 		stringB = stringB.type.toLowerCase();
-		return stringA < stringB ? -1 : (stringA > stringB ? 1 : b.date - a.date);
+		return stringA < stringB ? -1 : (stringA > stringB ? 1 : a.date - b.date);
 	},
-	date: (a, b) => b.date - a.date
+	date: (a, b) => a.date - b.date
 };
 const render = () => {
 	while(path.lastChild) {
