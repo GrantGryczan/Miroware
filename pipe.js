@@ -33,48 +33,45 @@ const s3 = new AWS.S3({
 				res.status(400).send(err.message);
 				return;
 			}
-			if(path === "") {
-				res.redirect(308, "https://miroware.io/pipe/");
-			} else {
-				path = path.split("/");
-				let userID = path.shift();
-				try {
-					userID = ObjectID(userID);
-				} catch(err) {
-					res.sendStatus(404);
-					return;
-				}
-				const user = await users.findOne({
-					_id: userID
-				});
-				if(user) {
-					path = path.join("/");
-					const item = user.pipe.find(item => item.type !== "/" && item.name === path);
-					if(item) {
-						s3.getObject({
-							Bucket: "miroware-pipe",
-							Key: item.id
-						}, (err, data) => {
-							if(err) {
-								res.status(err.statusCode).send(err.message);
-							} else {
-								res.set("Content-Type", item.type).send(data.Body);
-								console.log(new Date(), req.url);
-							}
-						});
-					} else {
-						res.sendStatus(404);
-						return;
-					}
+			let userID = (path = path.split("/")).shift();
+			try {
+				userID = ObjectID(userID);
+			} catch(err) {
+				res.sendStatus(404);
+				return;
+			}
+			const user = await users.findOne({
+				_id: userID
+			});
+			if(user) {
+				path = path.join("/");
+				const item = user.pipe.find(item => item.type !== "/" && item.name === path);
+				if(item) {
+					s3.getObject({
+						Bucket: "miroware-pipe",
+						Key: item.id
+					}, (err, data) => {
+						if(err) {
+							res.status(err.statusCode).send(err.message);
+						} else {
+							res.set("Content-Type", item.type).send(data.Body);
+							console.log(new Date(), req.url);
+						}
+					});
 				} else {
 					res.sendStatus(404);
 					return;
 				}
+			} else {
+				res.sendStatus(404);
+				return;
 			}
+		} else if(path === "/") {
+			res.redirect(308, "https://miroware.io/pipe/");
 		} else {
 			const userAgent = `MirowarePipe (${Math.random()})`;
 			userAgents.push(userAgent);
-			if(path !== "/" && path.endsWith("/")) {
+			if(path.endsWith("/")) {
 				path += "index.html";
 			}
 			https.get({
