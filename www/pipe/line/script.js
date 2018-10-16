@@ -76,13 +76,13 @@ const sort = {
 	name: (a, b) => {
 		const stringA = a.name.toLowerCase();
 		const stringB = b.name.toLowerCase();
-		return stringA < stringB ? -1 : 1;
+		return stringA < stringB ? 1 : -1;
 	},
 	size: (a, b) => a.size - b.size,
 	type: (a, b) => {
 		const stringA = a.type.toLowerCase();
 		const stringB = b.type.toLowerCase();
-		return stringA < stringB ? -1 : (stringA > stringB ? 1 : a.date - b.date);
+		return stringA < stringB ? 1 : (stringA > stringB ? -1 : a.date - b.date);
 	},
 	date: (a, b) => a.date - b.date
 };
