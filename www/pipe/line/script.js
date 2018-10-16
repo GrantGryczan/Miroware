@@ -108,7 +108,7 @@ const render = () => {
 		items.removeChild(items.lastChild);
 	}
 	if(!(localStorage.pipe_sortItems in sort)) {
-		localStorage.pipe_sortItems = "date";
+		localStorage.pipe_sortItems = "type";
 	}
 	const reverseItems = +localStorage.pipe_reverseItems;
 	sortIcon.classList[reverseItems ? "add" : "remove"]("reverse");
