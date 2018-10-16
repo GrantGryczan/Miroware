@@ -16,7 +16,7 @@ if(isMe) {
 					};
 					this.status = err.statusCode;
 				} else {
-					purgeCache(...fileItems.map(item => `https://pipe.miroware.io/${user._id}/${encodeURIComponent(item.name)}`));
+					purgeCache(...fileItems.map(item => `https://pipe.miroware.io/${user._id}/${encodeURI(item.name)}`));
 					users.deleteOne(this.userFilter);
 				}
 				this.done();

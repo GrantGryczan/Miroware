@@ -2,7 +2,7 @@ const {user, isMe} = await parseUser(this);
 if(isMe) {
 	this.value = user.pipe;
 	for(const item of this.value) {
-		item.url = `https://pipe.miroware.io/${user._id}/${encodeURIComponent(item.name)}`;
+		item.url = `https://pipe.miroware.io/${user._id}/${encodeURI(item.name)}`;
 	}
 } else {
 	this.value = {

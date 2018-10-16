@@ -148,7 +148,7 @@ if(isMe) {
 				};
 				purgeCache((this.value = {
 					...this.value,
-					url: `https://pipe.miroware.io/${user._id}/${encodeURIComponent(data.name)}`
+					url: `https://pipe.miroware.io/${user._id}/${encodeURI(data.name)}`
 				}).url);
 			}
 			this.done();
