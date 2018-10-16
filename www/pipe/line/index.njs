@@ -27,7 +27,11 @@ this.value += html`
 						<div id="dateHead" class="th head" data-sort="date">Date</div>
 					</div>
 					<div id="items" class="tbody"></div>
-				</div>`;
+				</div>
+				<p id="shill">
+					<br>
+					Hosting can get expensive, so any donations to <a href="/patreon/" target="_blank">my Patreon</a> would be greatly appreciated!
+				</p>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += html`
 			<div id="addContainer">
