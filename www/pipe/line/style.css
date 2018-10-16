@@ -92,6 +92,10 @@ main {
 	right: 207px;
 	bottom: 31px;
 }
+#linkButton {
+	right: 263px;
+	bottom: 31px;
+}
 #targetIndicator {
 	position: absolute;
 	width: 1px;
