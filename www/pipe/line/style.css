@@ -13,7 +13,6 @@ main {
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	cursor: pointer;
 	th {
 		font-weight: normal;
 	}
