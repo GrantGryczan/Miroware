@@ -602,10 +602,10 @@ const itemInfo = itemElement => {
 		`, [{
 			text: "Okay",
 			type: "submit"
-		}, "Cancel"]).then(value => {
+		}, "Cancel"]).then(async value => {
 			if(value === 0) {
 				let changedName = itemElement._item.name !== dialog.form.elements.name.value;
-				if(changedName && !(dialog.form.elements.name.value = await (checkName(dialog.form.elements.name.value)))) {
+				if(changedName && !(dialog.form.elements.name.value = await checkName(dialog.form.elements.name.value))) {
 					changedName = false;
 				}
 				const changedType = itemElement._item.type !== dialog.form.elements.type.value;
