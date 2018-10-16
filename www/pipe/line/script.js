@@ -728,10 +728,16 @@ const openItem = itemElement => {
 		window.open(itemElement._item.url);
 	}
 };
+let changeHash = false;
 const hashChange = () => {
+	if(changeHash) {
+		changeHash = false;
+		return;
+	}
 	if(items.querySelector(".item.loading")) {
 		location.reload();
-		location.hash = `#${parent}`; // TODO: Fix this
+		changeHash = true;
+		location.hash = `#${parent}`;
 		return;
 	}
 	const target = decodeURI(location.hash.slice(1));
