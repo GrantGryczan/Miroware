@@ -155,7 +155,6 @@ const purgeCache = (...files) => {
 	for(let i = 0; i < files.length; i += 30) {
 		const slicedFiles = files.slice(i, i + 30);
 		for(const file of slicedFiles) {
-			console.log("PURGE", file);
 			if(file.endsWith("/index.html")) {
 				const altFile = file.slice(0, -10);
 				if(slicedFiles.length < 30) {
@@ -164,7 +163,7 @@ const purgeCache = (...files) => {
 				files.push(altFile);
 			}
 		}
-		request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
+		request.delete(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
 			headers: {
 				"X-Auth-Email": youKnow.cloudflare.email,
 				"X-Auth-Key": youKnow.cloudflare.key,
