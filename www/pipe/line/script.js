@@ -346,7 +346,15 @@ document.addEventListener("mouseup", evt => {
 							Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
 								name: targetParent ? `${targetParent}/${name}` : name
 							}).then(Miro.response(xhr => {
-								Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
+								if(itemElement._item.type === "/") {
+									const prefix = `${itemElement._item.name}/`;
+									for(const item of Miro.data.pipe) {
+										if(item.name.startsWith(prefix)) {
+											item.name = xhr.response.name + item.name.slice(itemElement._item.name.length);
+										}
+									}
+								}
+								itemElement._item.name = xhr.response.name;
 								itemElement.parentNode.removeChild(itemElement);
 							})).finally(() => {
 								itemElement.classList.remove("loading");
@@ -510,9 +518,8 @@ const itemInfo = itemElement => {
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
 						name: applyParent(dialog.form.elements.name.value)
 					}).then(Miro.response(xhr => {
-						itemElement._item = Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
 						const nameData = itemElement.querySelector(".nameData");
-						nameData.textContent = nameData.title = xhr.response.name;
+						itemElement._item.name = nameData.textContent = nameData.title = xhr.response.name;
 					})).finally(() => {
 						itemElement.classList.remove("loading");
 						updateSelection();
@@ -565,9 +572,8 @@ const itemInfo = itemElement => {
 						data.type = type.value;
 					}
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
-						itemElement._item = Miro.data.pipe[Miro.data.pipe.indexOf(itemElement._item)] = xhr.response;
 						const nameData = itemElement.querySelector(".nameData");
-						nameData.textContent = nameData.title = xhr.response.name;
+						itemElement._item.name = nameData.textContent = nameData.title = xhr.response.name;
 						const typeData = itemElement.querySelector(".typeData");
 						typeData.textContent = typeData.title = xhr.response.type;
 					})).finally(() => {
@@ -657,6 +663,9 @@ const updateSelection = () => {
 			infoButton.classList.remove("mdc-fab--exited");
 			if(itemElements.length === 1) {
 				openButton.classList.remove("mdc-fab--exited");
+			} else {
+				openButton.classList.add("mdc-fab--exited");
+				openButton.blur();
 			}
 		} else {
 			infoButton.classList.add("mdc-fab--exited");
