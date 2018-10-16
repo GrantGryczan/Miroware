@@ -789,14 +789,14 @@ directoryButton.addEventListener("click", () => {
 	});
 });
 const openItem = itemElement => {
-	if(itemElement._item.type === "/") {
-		location.hash = itemElement.href;
-	} else {
-		window.open(itemElement.href);
-	}
+	itemElement._click = true;
+	itemElement.click();
 };
 items.addEventListener("click", evt => {
-	evt.preventDefault();
+	if(!evt.target.parentNode._click) {
+		delete evt.target.parentNode._click;
+		evt.preventDefault();
+	}
 }, true);
 const sortIcon = html`<i id="sortIcon" class="material-icons">arrow_downward</i>`;
 const heads = page.querySelector("#heads");
