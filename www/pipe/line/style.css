@@ -30,8 +30,9 @@ main {
 	width: 15%;
 }
 #sortIcon {
-	padding-left: 1em;
-	vertical-align: middle;
+	padding-left: 0.5em;
+	vertical-align: sub;
+	pointer-events: none;
 	&.reverse {
 		transform: scaleY(-1);
 	}
