@@ -127,7 +127,7 @@ const render = () => {
 };
 const byName = item => item.name;
 const addFile = async file => {
-	let name = applyParent(file.name);
+	let name = file.name;
 	const names = Miro.data.pipe.map(byName);
 	while(names.includes(name)) {
 		const dialog = new Miro.Dialog("Rename", html`
@@ -152,7 +152,7 @@ const addFile = async file => {
 			<tbody>
 				<tr class="item typeFile loading">
 					<td class="iconData material-icons">insert_drive_file</td>
-					<td class="nameData" title="$${file.name}">$${file.name}</td>
+					<td class="nameData" title="$${name}">$${name}</td>
 					<td class="sizeData" title="- / ${file.size} B">- / ${fileSize}</td>
 					<td class="typeData">-</td>
 					<td class="dateData">-</td>
@@ -168,7 +168,7 @@ const addFile = async file => {
 	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
 		"X-Data": JSON.stringify({
-			name
+			name: applyParent(name)
 		})
 	}, file, xhr => {
 		itemElement._xhr = xhr;
