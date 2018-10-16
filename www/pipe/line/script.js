@@ -584,7 +584,7 @@ const itemInfo = itemElement => {
 	} else {
 		const dialog = new Miro.Dialog("Item", html`
 			<div class="mdc-text-field">
-				<input id="name" class="mdc-text-field__input" type="text" value="$${itemElement._item.name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+				<input id="name" class="mdc-text-field__input" type="text" value="$${getName(itemElement._item.name)}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
 				<label class="mdc-floating-label" for="name">Name</label>
 				<div class="mdc-line-ripple"></div>
 			</div><br>
@@ -604,7 +604,7 @@ const itemInfo = itemElement => {
 			type: "submit"
 		}, "Cancel"]).then(async value => {
 			if(value === 0) {
-				let changedName = itemElement._item.name !== dialog.form.elements.name.value;
+				let changedName = getName(itemElement._item.name) !== dialog.form.elements.name.value;
 				if(changedName && !(dialog.form.elements.name.value = await checkName(dialog.form.elements.name.value))) {
 					changedName = false;
 				}
