@@ -572,7 +572,7 @@ const itemInfo = itemElement => {
 					name: applyParent(dialog.form.elements.name.value)
 				}).then(Miro.response(xhr => {
 					const nameData = itemElement.querySelector(".nameData");
-					itemElement._item.name = nameData.textContent = nameData.title = xhr.response.name;
+					nameData.textContent = nameData.title = getName(itemElement._item.name = xhr.response.name);
 					itemElement.classList.remove("loading");
 					render();
 				}, () => {
@@ -621,7 +621,7 @@ const itemInfo = itemElement => {
 					}
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
 						const nameData = itemElement.querySelector(".nameData");
-						itemElement._item.name = nameData.textContent = nameData.title = xhr.response.name;
+						nameData.textContent = nameData.title = getName(itemElement._item.name = xhr.response.name);
 						const typeData = itemElement.querySelector(".typeData");
 						typeData.textContent = typeData.title = xhr.response.type;
 						itemElement.classList.remove("loading");
