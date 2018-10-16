@@ -74,7 +74,7 @@ const s3 = new AWS.S3({
 		} else {
 			const userAgent = `MirowarePipe (${Math.random()})`;
 			userAgents.push(userAgent);
-			if(path.endsWith("/")) {
+			if(path !== "/" && path.endsWith("/")) {
 				path += "index.html";
 			}
 			https.get({
