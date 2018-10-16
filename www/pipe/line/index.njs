@@ -20,11 +20,11 @@ this.value += html`
 				<p>Miroware Pipe is in the beta stage. Do not expect consistent stability or full functionality.</p>
 				<h2 id="path"></h2>
 				<table id="table">
-					<thead>
-						<th id="nameHead" class="head">Name</th>
-						<th id="sizeHead" class="head">Size</th>
-						<th id="typeHead" class="head">Type</th>
-						<th id="dateHead" class="head">Date</th>
+					<thead id="heads">
+						<th id="nameHead" class="head" data-sort="name">Name</th>
+						<th id="sizeHead" class="head" data-sort="size">Size</th>
+						<th id="typeHead" class="head" data-sort="type">Type</th>
+						<th id="dateHead" class="head" data-sort="date">Date</th>
 					</thead>
 					<tbody id="items"></tbody>
 				</table>`;

@@ -29,6 +29,12 @@ main {
 #sizeHead, #typeHead, #dateHead {
 	width: 15%;
 }
+#sortIcon {
+	vertical-align: middle;
+	&.reverse {
+		transform: scaleY(-1);
+	}
+}
 .item {
 	&.loading {
 		opacity: 0.7;

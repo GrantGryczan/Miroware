@@ -79,11 +79,7 @@ const sort = {
 		return stringA < stringB ? 1 : -1;
 	},
 	size: (a, b) => ((a.size || Infinity) - (b.size || Infinity)) || a.date - b.date,
-	type: (a, b) => {
-		const stringA = a.type.toLowerCase();
-		const stringB = b.type.toLowerCase();
-		return stringA < stringB ? 1 : (stringA > stringB ? -1 : a.date - b.date);
-	},
+	type: (a, b) => a.type < b.type ? 1 : (a.type > b.type ? -1 : a.date - b.date);
 	date: (a, b) => a.date - b.date
 };
 const render = () => {
@@ -114,8 +110,11 @@ const render = () => {
 	if(!(localStorage.pipe_sortItems in sort)) {
 		localStorage.pipe_sortItems = "date";
 	}
+	const reverseItems = +localStorage.pipe_reverseItems;
+	sortIcon.classList[reverseItems ? "add" : "remove"]("reverse");
+	heads.querySelector(`.head[data-sort="${localStorage.pipe_sortItems}"]`).appendChild(sortIcon);
 	const itemArray = Miro.data.pipe.filter(itemsToRender).sort(sort[localStorage.pipe_sortItems]);
-	for(const item of +localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
+	for(const item of reverseItems ? itemArray.reverse() : itemArray) {
 		items.insertBefore(createItemElement(item), items.firstChild);
 	}
 	updateSelection();
@@ -745,6 +744,22 @@ const openItem = itemElement => {
 		window.open(itemElement._item.url);
 	}
 };
+const sortIcon = html`<i id="sortIcon" class="material-icons">arrow_downward</i>`;
+const heads = page.querySelector("#heads");
+heads.addEventListener("click", evt => {
+	if(evt.target.classList.contains("head")) {
+		const sortKey = evt.target.getAttribute("data-sort");
+		if(localStorage.pipe_sortItems === sortKey) {
+			localStorage.pipe_reverseItems = !+localStorage.pipe_reverseItems;
+		} else {
+			localStorage.pipe_sortItems = sortKey;
+		}
+		render();
+	}
+}, {
+	capture: true,
+	passive: true
+});
 let changeHash = false;
 const hashChange = () => {
 	if(changeHash) {
