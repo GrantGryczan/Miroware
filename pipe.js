@@ -33,7 +33,7 @@ const s3 = new AWS.S3({
 				res.status(400).send(err.message);
 				return;
 			}
-			if(path === "/") {
+			if(path === "") {
 				res.redirect(308, "https://miroware.io/pipe/");
 			} else {
 				path = path.split("/");
