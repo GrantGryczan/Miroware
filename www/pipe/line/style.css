@@ -23,6 +23,9 @@ main {
 		text-overflow: ellipsis;
 	}
 }
+.head {
+	line-height: 24px;
+}
 #nameHead {
 	width: 55%;
 }
@@ -31,7 +34,7 @@ main {
 }
 #sortIcon {
 	padding-left: 0.5em;
-	vertical-align: sub;
+	vertical-align: middle;
 	pointer-events: none;
 	&.reverse {
 		transform: scaleY(-1);
