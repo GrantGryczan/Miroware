@@ -750,7 +750,7 @@ heads.addEventListener("click", evt => {
 	if(evt.target.classList.contains("head")) {
 		const sortKey = evt.target.getAttribute("data-sort");
 		if(localStorage.pipe_sortItems === sortKey) {
-			localStorage.pipe_reverseItems = !+localStorage.pipe_reverseItems;
+			localStorage.pipe_reverseItems = +!+localStorage.pipe_reverseItems;
 		} else {
 			localStorage.pipe_sortItems = sortKey;
 		}
