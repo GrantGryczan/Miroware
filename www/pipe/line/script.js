@@ -41,6 +41,7 @@ const getSize = size => {
 	return `${Math.round(10 * size) / 10} YB`;
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
+const getURL = item => `https://pipe.miroware.io/${Miro.data.user}/${encodeURI(item.name)}`;
 const getItemElement = item => {
 	if(item.element) {
 		return item.element;
@@ -590,6 +591,7 @@ const itemInfo = itemElement => {
 		});
 	} else {
 		const name = getName(itemElement._item.name);
+		const url = getURL(itemElement._item);
 		const dialog = new Miro.Dialog("Item", html`
 			<div class="mdc-text-field">
 				<input id="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
@@ -602,11 +604,11 @@ const itemInfo = itemElement => {
 				<div class="mdc-line-ripple"></div>
 			</div><br>
 			<div class="mdc-text-field spaced">
-				<input id="url" class="mdc-text-field__input" type="url" value="$${itemElement._item.url}" size="24" readonly>
+				<input id="url" class="mdc-text-field__input" type="url" value="$${url}" size="24" readonly>
 				<label class="mdc-floating-label" for="url">URL</label>
 				<div class="mdc-line-ripple"></div>
 			</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
-			<a href="$${itemElement._item.url}" target="_blank">Preview link</a>
+			<a href="$${url}" target="_blank">Preview link</a>
 		`, [{
 			text: "Okay",
 			type: "submit"
@@ -794,7 +796,7 @@ const openItem = itemElement => {
 	if(itemElement._item.type === "/") {
 		location.hash = `#${itemElement._item.name}`;
 	} else {
-		window.open(itemElement._item.url);
+		window.open(getURL(itemElement._item.url));
 	}
 };
 const sortIcon = html`<i id="sortIcon" class="material-icons">arrow_downward</i>`;

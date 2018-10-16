@@ -123,7 +123,7 @@ if(isMe) {
 			...found,
 			...item
 		};
-		const urls = [`https://pipe.miroware.io/${user._id}/${encodeURI(found.name)}`, this.value.url = `https://pipe.miroware.io/${user._id}/${encodeURI(this.value.name)}`];
+		const urls = [`https://pipe.miroware.io/${user._id}/${encodeURI(found.name)}`, `https://pipe.miroware.io/${user._id}/${encodeURI(this.value.name)}`];
 		if(found.type === "/" && item.name) {
 			const prefix = `${found.name}/`;
 			for(const child of user.pipe) {
