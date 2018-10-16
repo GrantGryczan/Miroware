@@ -444,13 +444,9 @@ document.addEventListener("keydown", evt => {
 	if(!Miro.typing() && Miro.focused()) {
 		const superKey = evt.ctrlKey || evt.metaKey;
 		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
-			if(!removeButton.classList.contains("mdc-fab--exited")) {
-				removeButton.click();
-			}
+			removeButton.click();
 		} else if(evt.keyCode === 13) { // `enter`
-			if(!openButton.classList.contains("mdc-fab--exited")) {
-				openButton.click();
-			}
+			openButton.click();
 		} else if(evt.keyCode === 27) { // `esc`
 			for(const item of items.querySelectorAll(".item.selected")) {
 				item.classList.remove("selected");
@@ -487,9 +483,7 @@ document.addEventListener("keydown", evt => {
 document.addEventListener("dblclick", evt => {
 	if(!mouseMoved && evt.target.parentNode.classList.contains("item")) {
 		selectItem(evt.target.parentNode, evt, 2);
-		if(!openButton.classList.contains("mdc-fab--exited")) {
-			openButton.click();
-		}
+		openButton.click();
 	}
 }, {
 	capture: true,
@@ -679,10 +673,16 @@ addContainer.addEventListener("mouseout", () => {
 });
 const removeButton = document.body.querySelector("#removeButton");
 removeButton.addEventListener("click", () => {
+	if(removeButton.classList.contains("mdc-fab--exited")) {
+		return;
+	}
 	confirmRemoveItems(items.querySelectorAll(".item.selected"));
 });
 const infoButton = document.body.querySelector("#infoButton");
 infoButton.addEventListener("click", () => {
+	if(infoButton.classList.contains("mdc-fab--exited")) {
+		return;
+	}
 	const itemElements = items.querySelectorAll(".item.selected");
 	if(itemElements.length === 1) {
 		itemInfo(itemElements[0]);
@@ -692,10 +692,16 @@ infoButton.addEventListener("click", () => {
 });
 const openButton = document.body.querySelector("#openButton");
 openButton.addEventListener("click", () => {
+	if(openButton.classList.contains("mdc-fab--exited")) {
+		return;
+	}
 	openItem(items.querySelector(".item.selected"));
 });
 const linkButton = document.body.querySelector("#linkButton");
 linkButton.addEventListener("click", () => {
+	if(linkButton.classList.contains("mdc-fab--exited")) {
+		return;
+	}
 	const input = document.createElement("input");
 	input.value = getURL(items.querySelector(".item.selected")._item);
 	page.appendChild(input);
