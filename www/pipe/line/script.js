@@ -42,33 +42,37 @@ const getSize = size => {
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
 const createItemElement = item => {
-	const name = getName(item.name);
-	const date = new Date(item.date);
-	const itemElement = (item.type === "/" ? html`
-		<table>
-			<tbody>
-				<tr class="item typeDir">
-					<td class="nameData" title="$${name}">$${name}</td>
-					<td class="sizeData">-</td>
-					<td class="typeData">-</td>
-					<td class="dateData" title="$${date}">$${getDate(date)}</td>
-				</tr>
-			</tbody>
-		</table>
-	` : html`
-		<table>
-			<tbody>
-				<tr class="item typeFile">
-					<td class="nameData" title="$${name}">$${name}</td>
-					<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
-					<td class="typeData" title="$${item.type}">$${item.type}</td>
-					<td class="dateData" title="$${date}">$${getDate(date)}</td>
-				</tr>
-			</tbody>
-		</table>
-	`).querySelector("tr");
-	itemElement._item = item;
-	return itemElement;
+	if(item.element) {
+		return item.element;
+	} else {
+		const name = getName(item.name);
+		const date = new Date(item.date);
+		const itemElement = (item.type === "/" ? html`
+			<table>
+				<tbody>
+					<tr class="item typeDir">
+						<td class="nameData" title="$${name}">$${name}</td>
+						<td class="sizeData">-</td>
+						<td class="typeData">-</td>
+						<td class="dateData" title="$${date}">$${getDate(date)}</td>
+					</tr>
+				</tbody>
+			</table>
+		` : html`
+			<table>
+				<tbody>
+					<tr class="item typeFile">
+						<td class="nameData" title="$${name}">$${name}</td>
+						<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
+						<td class="typeData" title="$${item.type}">$${item.type}</td>
+						<td class="dateData" title="$${date}">$${getDate(date)}</td>
+					</tr>
+				</tbody>
+			</table>
+		`).querySelector("tr");
+		(item.element = itemElement)._item = item;
+		return itemElement;
+	}
 };
 const path = page.querySelector("#path");
 const itemsToRender = item => (!parent && !item.name.includes("/")) || item.name.slice(parent.length).lastIndexOf("/") === 0;
@@ -156,7 +160,7 @@ const addFile = file => {
 			}
 		});
 	}).then(Miro.response(xhr => {
-		Miro.data.pipe.push(itemElement._item = xhr.response);
+		Miro.data.pipe.push((xhr.response.element = itemElement)._item = xhr.response);
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
 		typeData.textContent = typeData.title = xhr.response.type;
@@ -712,7 +716,7 @@ const addDirectory = name => {
 			type: "/"
 		})
 	}).then(Miro.response(xhr => {
-		Miro.data.pipe.push(itemElement._item = xhr.response);
+		Miro.data.pipe.push((xhr.response.element = itemElement)._item = xhr.response);
 		const date = new Date(xhr.response.date);
 		dateData.textContent = getDate(date);
 		dateData.title = date;
@@ -754,7 +758,13 @@ heads.addEventListener("click", evt => {
 		} else {
 			localStorage.pipe_sortItems = sortKey;
 		}
+		const loading = items.querySelectorAll(".item.loading");
 		render();
+		for(const itemElement of loading) {
+			if(!itemElement.parentNode) {
+				items.insertBefore(itemElement, items.firstChild);
+			}
+		}
 	}
 }, {
 	capture: true,
