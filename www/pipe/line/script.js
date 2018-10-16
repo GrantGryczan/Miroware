@@ -74,14 +74,14 @@ const path = page.querySelector("#path");
 const itemsToRender = item => (!parent && !item.name.includes("/")) || item.name.slice(parent.length).lastIndexOf("/") === 0;
 const sort = {
 	name: (a, b) => {
-		stringA = stringA.name.toLowerCase();
-		stringB = stringB.name.toLowerCase();
+		const stringA = stringA.name.toLowerCase();
+		const stringB = stringB.name.toLowerCase();
 		return stringA < stringB ? -1 : 1;
 	},
 	size: (a, b) => a.size - b.size,
 	type: (a, b) => {
-		stringA = stringA.type.toLowerCase();
-		stringB = stringB.type.toLowerCase();
+		const stringA = stringA.type.toLowerCase();
+		const stringB = stringB.type.toLowerCase();
 		return stringA < stringB ? -1 : (stringA > stringB ? 1 : a.date - b.date);
 	},
 	date: (a, b) => a.date - b.date
