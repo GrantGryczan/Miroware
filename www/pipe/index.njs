@@ -1,5 +1,5 @@
 this.title = "Pipe";
-this.description = "Upload stuff for free.";
+this.description = "Host your files with decency.";
 this.tags = ["pipe", "file", "files", "host", "hosting", "hoster", "upload", "uploader", "image", "images", "direct", "link", "links", "url", "urls", "free"];
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
