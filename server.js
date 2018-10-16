@@ -163,7 +163,7 @@ const purgeCache = (...files) => {
 				files.push(altFile);
 			}
 		}
-		request.delete(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
+		request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
 			headers: {
 				"X-Auth-Email": youKnow.cloudflare.email,
 				"X-Auth-Key": youKnow.cloudflare.key,
