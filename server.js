@@ -172,7 +172,7 @@ const purgeCache = (...files) => {
 			body: JSON.stringify({
 				files: slicedFiles
 			})
-		});
+		}).then(console.log);
 	}
 };
 const bodyMethods = ["POST", "PUT", "PATCH"];
