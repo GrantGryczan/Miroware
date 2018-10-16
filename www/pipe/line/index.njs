@@ -21,6 +21,7 @@ this.value += html`
 				<h2 id="path"></h2>
 				<table id="table">
 					<thead id="heads">
+						<th id="iconHead"></th>
 						<th id="nameHead" class="head" data-sort="name">Name</th>
 						<th id="sizeHead" class="head" data-sort="size">Size</th>
 						<th id="typeHead" class="head" data-sort="type">Type</th>
