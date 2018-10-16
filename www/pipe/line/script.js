@@ -11,34 +11,34 @@ const getSize = size => {
 	}
 	size /= 1000;
 	if(size < 1000) {
-		return `${Math.round(100 * size) / 100} kB`;
+		return `${Math.round(10 * size) / 10} kB`;
 	}
 	size /= 1000;
 	if(size < 1000) {
-		return `${Math.round(100 * size) / 100} MB`;
+		return `${Math.round(10 * size) / 10} MB`;
 	}
 	size /= 1000;
 	if(size < 1000) {
-		return `${Math.round(100 * size) / 100} GB`;
+		return `${Math.round(10 * size) / 10} GB`;
 	}
 	size /= 1000;
 	if(size < 1000) {
-		return `${Math.round(100 * size) / 100} TB`;
+		return `${Math.round(10 * size) / 10} TB`;
 	}
 	size /= 1000;
 	if(size < 1000) {
-		return `${Math.round(100 * size) / 100} PB`;
+		return `${Math.round(10 * size) / 10} PB`;
 	}
 	size /= 1000;
 	if(size < 1000) {
-		return `${Math.round(100 * size) / 100} EB`;
+		return `${Math.round(10 * size) / 10} EB`;
 	}
 	size /= 1000;
 	if(size < 1000) {
-		return `${Math.round(100 * size) / 100} ZB`;
+		return `${Math.round(10 * size) / 10} ZB`;
 	}
 	size /= 1000;
-	return `${Math.round(100 * size) / 100} YB`;
+	return `${Math.round(10 * size) / 10} YB`;
 };
 const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
 const createItemElement = item => {
