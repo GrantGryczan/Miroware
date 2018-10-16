@@ -145,7 +145,7 @@ const checkName = name => {
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]);
-		name = await dialog === 0 ? dialog.form.elements.name.value : null;
+		name = (await dialog) === 0 ? dialog.form.elements.name.value : null;
 	}
 	return name;
 };
