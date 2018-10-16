@@ -134,7 +134,7 @@ const render = () => {
 const byName = item => item.name;
 const checkName = name => {
 	const names = Miro.data.pipe.map(byName);
-	while(names.includes(name)) {
+	while(names.includes(applyParent(name))) {
 		const dialog = new Miro.Dialog("Rename", html`
 			The name specified for <b>$${name}</b> is already taken. Please enter a new one.<br>
 			<div class="mdc-text-field">
