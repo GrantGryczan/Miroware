@@ -794,7 +794,7 @@ const openItem = itemElement => {
 };
 items.addEventListener("click", evt => {
 	if(!evt.target.parentNode._click) {
-		delete evt.target.parentNode._click;
+		evt.target.parentNode._click = false;
 		evt.preventDefault();
 	}
 }, true);
