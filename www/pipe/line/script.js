@@ -145,7 +145,7 @@ const checkName = async name => {
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]);
-		name = (await dialog) === 0 ? dialog.form.elements.name.value : null;
+		name = await dialog === 0 ? dialog.form.elements.name.value : null;
 	}
 	return name;
 };
@@ -605,7 +605,7 @@ const itemInfo = itemElement => {
 		}, "Cancel"]).then(value => {
 			if(value === 0) {
 				let changedName = itemElement._item.name !== dialog.form.elements.name.value;
-				if(changedName && !(dialog.form.elements.name.value = await checkName(dialog.form.elements.name.value))) {
+				if(changedName && !(dialog.form.elements.name.value = await (checkName(dialog.form.elements.name.value)))) {
 					changedName = false;
 				}
 				const changedType = itemElement._item.type !== dialog.form.elements.type.value;
