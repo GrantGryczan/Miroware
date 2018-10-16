@@ -724,7 +724,7 @@ const updateSelection = () => {
 		}
 		if(removeClass && infoClass && itemElements.length === 1) {
 			openClass = "remove";
-			if(itemElements[0].type !== "/") {
+			if(itemElements[0]._item.type !== "/") {
 				linkClass = "remove";
 			}
 		}
