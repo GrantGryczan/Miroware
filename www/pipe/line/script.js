@@ -789,10 +789,10 @@ directoryButton.addEventListener("click", () => {
 	});
 });
 const openItem = itemElement => {
-	if(itemElement._item.type === "/") {
-		location.href = itemElement.href;
-	} else {
+	if(itemElement.target === "_blank") {
 		window.open(itemElement.href);
+	} else {
+		location.href = itemElement.href;
 	}
 };
 items.addEventListener("click", evt => {
