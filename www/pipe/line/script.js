@@ -730,8 +730,8 @@ const openItem = itemElement => {
 };
 const hashChange = () => {
 	if(items.querySelector(".item.loading")) {
-		location.hash = `#${parent}`;
 		location.reload();
+		location.hash = `#${parent}`;
 		return;
 	}
 	const target = decodeURI(location.hash.slice(1));
