@@ -469,8 +469,18 @@ select option {
 		color: #a1a1a1;
 	}
 }
-.grecaptcha-badge {
-	border-radius: 3px;
-	box-shadow: none !important;
-	overflow: hidden;
+.table {
+	display: table;
+}
+.thead {
+	display: table-header-group;
+}
+.tbody {
+	display: table-row-group;
+}
+.tr {
+	display: table-row;
+}
+.td, .th {
+	display: table-cell;
 }

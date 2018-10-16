@@ -18,3 +18,8 @@
 		transform: translateX(-50%);
 	}
 }
+.grecaptcha-badge {
+	border-radius: 3px;
+	box-shadow: none !important;
+	overflow: hidden;
+}
