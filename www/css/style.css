@@ -471,16 +471,25 @@ select option {
 }
 .table {
 	display: table;
+	border-collapse: separate;
+	border-spacing: 2px;
 }
 .thead {
 	display: table-header-group;
+	vertical-align: middle;
+	border-color: inherit;
 }
 .tbody {
 	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
 }
 .tr {
 	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit;
 }
 .td, .th {
 	display: table-cell;
+	vertical-align: inherit;
 }
