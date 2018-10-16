@@ -48,7 +48,7 @@ const getItemElement = item => {
 		const name = getName(item.name);
 		const date = new Date(item.date);
 		const itemElement = item.type === "/" ? html`
-			<div class="tr item typeDir">
+			<a class="tr item typeDir" href="#$${name}">
 				<div class="td iconData">
 					<i class="material-icons">folder</i>
 				</div>
@@ -56,9 +56,9 @@ const getItemElement = item => {
 				<div class="td sizeData">-</div>
 				<div class="td typeData">-</div>
 				<div class="td dateData" title="$${date}">$${getDate(date)}</div>
-			</div>
+			</a>
 		` : html`
-			<div class="tr item typeFile">
+			<a class="tr item typeFile" href="$${getURL(item)}">
 				<div class="td iconData">
 					<i class="material-icons">insert_drive_file</i>
 				</div>
@@ -66,7 +66,7 @@ const getItemElement = item => {
 				<div class="td sizeData" title="${item.size} B">${getSize(item.size)}</div>
 				<div class="td typeData" title="$${item.type}">$${item.type}</div>
 				<div class="td dateData" title="$${date}">$${getDate(date)}</div>
-			</div>
+			</a>
 		`;
 		(item.element = itemElement)._item = item;
 		return itemElement;
@@ -152,7 +152,7 @@ const addFile = async file => {
 	}
 	const fileSize = getSize(file.size);
 	const itemElement = html`
-		<div class="tr item typeFile loading">
+		<a class="tr item typeFile loading">
 			<div class="td iconData">
 				<i class="material-icons">insert_drive_file</i>
 			</div>
@@ -160,7 +160,7 @@ const addFile = async file => {
 			<div class="td sizeData" title="- / ${file.size} B">- / ${fileSize}</div>
 			<div class="td typeData">-</div>
 			<div class="td dateData">-</div>
-		</div>
+		</a>
 	`;
 	itemElement._item = file;
 	const sizeData = itemElement.querySelector(".sizeData");
@@ -186,6 +186,7 @@ const addFile = async file => {
 		});
 	}).then(Miro.response(xhr => {
 		Miro.data.pipe.push((xhr.response.element = itemElement)._item = xhr.response);
+		itemElement.href = getURL(itemElement._item);
 		sizeData.textContent = fileSize;
 		sizeData.title = `${file.size} B`;
 		typeData.textContent = typeData.title = xhr.response.type;
@@ -402,6 +403,7 @@ document.addEventListener("mouseup", evt => {
 									}
 								}
 								itemElement._item.name = xhr.response.name;
+								itemElement.href = itemElement._item.type === "/" ? `#${itemElement._item.name}` : getURL(itemElement._item);
 								itemElement.parentNode.removeChild(itemElement);
 								itemElement.classList.remove("loading");
 								render();
@@ -574,6 +576,7 @@ const itemInfo = itemElement => {
 					}
 					const nameData = itemElement.querySelector(".nameData");
 					nameData.textContent = nameData.title = getName(itemElement._item.name = xhr.response.name);
+					itemElement.href = `#${itemElement._item.name}`;
 					itemElement.classList.remove("loading");
 					render();
 				}, () => {
@@ -625,6 +628,7 @@ const itemInfo = itemElement => {
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
 						const nameData = itemElement.querySelector(".nameData");
 						nameData.textContent = nameData.title = getName(itemElement._item.name = xhr.response.name);
+						itemElement.href = getURL(itemElement._item);
 						const typeData = itemElement.querySelector(".typeData");
 						typeData.textContent = typeData.title = xhr.response.type;
 						itemElement.classList.remove("loading");
@@ -738,7 +742,7 @@ const addDirectory = async name => {
 		return;
 	}
 	const itemElement = html`
-		<div class="tr item typeDir loading">
+		<a class="tr item typeDir loading">
 			<div class="td iconData">
 				<i class="material-icons">folder</i>
 			</div>
@@ -746,7 +750,7 @@ const addDirectory = async name => {
 			<div class="td sizeData">-</div>
 			<div class="td typeData">-</div>
 			<div class="td dateData">-</div>
-		</div>
+		</a>
 	`;
 	const dateData = itemElement.querySelector(".dateData");
 	items.insertBefore(itemElement, items.firstChild);
@@ -757,6 +761,7 @@ const addDirectory = async name => {
 		})
 	}).then(Miro.response(xhr => {
 		Miro.data.pipe.push((xhr.response.element = itemElement)._item = xhr.response);
+		itemElement.href = `#${xhr.response.name}`;
 		const date = new Date(xhr.response.date);
 		dateData.textContent = getDate(date);
 		dateData.title = date;
