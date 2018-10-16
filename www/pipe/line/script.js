@@ -78,7 +78,7 @@ const sort = {
 		const stringB = b.name.toLowerCase();
 		return stringA < stringB ? 1 : -1;
 	},
-	size: (a, b) => a.size - b.size,
+	size: (a, b) => ((a.size || Infinity) - (b.size || Infinity)) || a.date - b.date,
 	type: (a, b) => {
 		const stringA = a.type.toLowerCase();
 		const stringB = b.type.toLowerCase();
@@ -115,7 +115,7 @@ const render = () => {
 		localStorage.pipe_sortItems = "date";
 	}
 	const itemArray = Miro.data.pipe.filter(itemsToRender).sort(sort[localStorage.pipe_sortItems]);
-	for(const item of localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
+	for(const item of +localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
 		items.insertBefore(createItemElement(item), items.firstChild);
 	}
 	updateSelection();
