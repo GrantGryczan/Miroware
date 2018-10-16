@@ -705,26 +705,26 @@ linkButton.addEventListener("click", () => {
 });
 const updateSelection = () => {
 	const itemElements = items.querySelectorAll(".item.selected");
-	let removeClass = "remove";
-	let infoClass = "remove";
-	let openClass = "remove";
-	let linkClass = "remove";
+	let removeClass = "add";
+	let infoClass = "add";
+	let openClass = "add";
+	let linkClass = "add";
 	if(itemElements.length) {
-		removeClass = "add";
-		infoClass = "add";
+		removeClass = "remove";
+		infoClass = "remove";
 		for(const itemElement of itemElements) {
 			if(itemElement.classList.contains("loading")) {
-				infoClass = "remove";
+				infoClass = "add";
 				if(!itemElement._xhr) {
-					removeClass = "remove";
+					removeClass = "add";
 					break;
 				}
 			}
 		}
 		if(removeClass && infoClass && itemElements.length === 1) {
-			openClass = "add";
+			openClass = "remove";
 			if(itemElements[0].type !== "/") {
-				linkClass = "add";
+				linkClass = "remove";
 			}
 		}
 	}
