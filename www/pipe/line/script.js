@@ -132,7 +132,7 @@ const render = () => {
 	updateSelection();
 };
 const byName = item => item.name;
-const checkName = name => {
+const checkName = async name => {
 	const names = Miro.data.pipe.map(byName);
 	while(names.includes(applyParent(name))) {
 		const dialog = new Miro.Dialog("Rename", html`
