@@ -702,6 +702,7 @@ linkButton.addEventListener("click", () => {
 	input.select();
 	document.execCommand("copy");
 	input.parentNode.removeChild(input);
+	Miro.snackbar("URL copied to clipboard");
 });
 const updateSelection = () => {
 	const itemElements = items.querySelectorAll(".item.selected");
