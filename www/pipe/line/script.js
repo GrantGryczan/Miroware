@@ -49,7 +49,9 @@ const getItemElement = item => {
 		const date = new Date(item.date);
 		const itemElement = item.type === "/" ? html`
 			<div class="tr item typeDir">
-				<div class="td iconData material-icons">folder</div>
+				<div class="td iconData">
+					<i class="material-icons">folder</i>
+				</div>
 				<div class="td nameData" title="$${name}">$${name}</div>
 				<div class="td sizeData">-</div>
 				<div class="td typeData">-</div>
@@ -57,7 +59,9 @@ const getItemElement = item => {
 			</div>
 		` : html`
 			<div class="tr item typeFile">
-				<div class="td iconData material-icons">insert_drive_file</div>
+				<div class="td iconData">
+					<i class="material-icons">insert_drive_file</i>
+				</div>
 				<div class="td nameData" title="$${name}">$${name}</div>
 				<div class="td sizeData" title="${item.size} B">${getSize(item.size)}</div>
 				<div class="td typeData" title="$${item.type}">$${item.type}</div>
@@ -149,7 +153,9 @@ const addFile = async file => {
 	const fileSize = getSize(file.size);
 	const itemElement = html`
 		<div class="tr item typeFile loading">
-			<div class="td iconData material-icons">insert_drive_file</div>
+			<div class="td iconData">
+				<i class="material-icons">insert_drive_file</i>
+			</div>
 			<div class="td nameData" title="$${name}">$${name}</div>
 			<div class="td sizeData" title="- / ${file.size} B">- / ${fileSize}</div>
 			<div class="td typeData">-</div>
@@ -733,7 +739,9 @@ const addDirectory = async name => {
 	}
 	const itemElement = html`
 		<div class="tr item typeDir loading">
-			<div class="td iconData material-icons">folder</div>
+			<div class="td iconData">
+				<i class="material-icons">folder</i>
+			</div>
 			<div class="td nameData" title="$${name}">$${name}</div>
 			<div class="td sizeData">-</div>
 			<div class="td typeData">-</div>
