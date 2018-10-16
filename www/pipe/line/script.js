@@ -565,7 +565,7 @@ const itemInfo = itemElement => {
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]).then(async value => {
-			if(value === 0 && itemElement._item.name !== dialog.form.elements.name.value && (dialog.form.elements.name.value = await checkName(dialog.form.elements.name.value))) {
+			if(value === 0 && itemElement._item.name !== dialog.form.elements.name.value && (dialog.form.elements.name.value = (await checkName(dialog.form.elements.name.value)))) {
 				itemElement.classList.add("loading");
 				updateSelection();
 				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
