@@ -790,11 +790,16 @@ directoryButton.addEventListener("click", () => {
 });
 const openItem = itemElement => {
 	if(itemElement._item.type === "/") {
-		location.hash = `#${itemElement._item.name}`;
+		location.hash = itemElement.href;
 	} else {
-		window.open(getURL(itemElement._item));
+		window.open(itemElement.href);
 	}
 };
+items.addEventListener("click", evt => {
+	if(evt.target.classList.contains("item")) {
+		evt.preventDefault();
+	}
+}, true);
 const sortIcon = html`<i id="sortIcon" class="material-icons">arrow_downward</i>`;
 const heads = page.querySelector("#heads");
 heads.addEventListener("click", evt => {
