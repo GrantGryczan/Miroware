@@ -22,7 +22,7 @@ const s3 = new AWS.S3({
 	app.get("*", async (req, res) => {
 		let path = req.path;
 		if(path === "/") {
-			res.redirect(308, "https://miroware.io/pipe/");
+			res.redirect(/*308, */"https://miroware.io/pipe/");
 		} else if(req.subdomains.join(".") === "piped") {
 			path = path.slice(1);
 			if(!userAgents.includes(req.get("User-Agent"))) {
