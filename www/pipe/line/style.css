@@ -29,12 +29,14 @@ main {
 }
 #heads {
 	background-color: inherit;
+	& > * {
+		position: sticky;
+		top: 0;
+		background-color: inherit;
+	}
 }
 .head {
-	position: sticky;
-	top: 0;
 	line-height: 24px;
-	background-color: inherit;
 }
 #iconHead {
 	width: calc(1em + 10px);
