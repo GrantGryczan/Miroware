@@ -572,6 +572,12 @@ const itemInfo = itemElement => {
 				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
 					name: applyParent(dialog.form.elements.name.value)
 				}).then(Miro.response(xhr => {
+					const prefix = `${itemElement._item.name}/`;
+					for(const item of Miro.data.pipe) {
+						if(item.name.startsWith(prefix)) {
+							item.name = xhr.response.name + item.name.slice(itemElement._item.name.length);
+						}
+					}
 					const nameData = itemElement.querySelector(".nameData");
 					nameData.textContent = nameData.title = getName(itemElement._item.name = xhr.response.name);
 					itemElement.classList.remove("loading");
