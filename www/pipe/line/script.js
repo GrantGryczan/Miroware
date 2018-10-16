@@ -125,7 +125,27 @@ const render = () => {
 	}
 	updateSelection();
 };
-const addFile = file => {
+const byName = item => item.name;
+const addFile = async file => {
+	let name = applyParent(file.name);
+	const names = Miro.data.pipe.map(byName);
+	while(names.includes(name)) {
+		const dialog = new Miro.Dialog("Rename", html`
+			The name specified for <b>$${name}</b> is already taken. Please enter a new one.<br>
+			<div class="mdc-text-field">
+				<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+				<div class="mdc-line-ripple"></div>
+			</div>
+		`, [{
+			text: "Okay",
+			type: "submit"
+		}, "Cancel"]);
+		if(await dialog === 0) {
+			name = dialog.form.elements.name.value;
+		} else {
+			return;
+		}
+	}
 	const fileSize = getSize(file.size);
 	const itemElement = html`
 		<table>
@@ -148,7 +168,7 @@ const addFile = file => {
 	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
 		"X-Data": JSON.stringify({
-			name: applyParent(file.name)
+			name
 		})
 	}, file, xhr => {
 		itemElement._xhr = xhr;
