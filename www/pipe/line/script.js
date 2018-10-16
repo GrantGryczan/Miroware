@@ -796,7 +796,7 @@ const openItem = itemElement => {
 	if(itemElement._item.type === "/") {
 		location.hash = `#${itemElement._item.name}`;
 	} else {
-		window.open(getURL(itemElement._item.url));
+		window.open(getURL(itemElement._item));
 	}
 };
 const sortIcon = html`<i id="sortIcon" class="material-icons">arrow_downward</i>`;
