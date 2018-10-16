@@ -132,8 +132,7 @@ const render = () => {
 	updateSelection();
 };
 const byName = item => item.name;
-const addFile = async file => {
-	let name = file.name;
+const checkName = name => {
 	const names = Miro.data.pipe.map(byName);
 	while(names.includes(name)) {
 		const dialog = new Miro.Dialog("Rename", html`
@@ -146,11 +145,14 @@ const addFile = async file => {
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]);
-		if(await dialog === 0) {
-			name = dialog.form.elements.name.value;
-		} else {
-			return;
-		}
+		name = await dialog === 0 ? dialog.form.elements.name.value : null;
+	}
+	return name;
+};
+const addFile = async file => {
+	const name = await checkName(file.name);
+	if(!name) {
+		return;
 	}
 	const fileSize = getSize(file.size);
 	const itemElement = html`
@@ -562,28 +564,25 @@ const itemInfo = itemElement => {
 		`, [{
 			text: "Okay",
 			type: "submit"
-		}, "Cancel"]).then(value => {
-			if(value === 0) {
-				const changedName = itemElement._item.name !== dialog.form.elements.name.value;
-				if(changedName) {
-					itemElement.classList.add("loading");
+		}, "Cancel"]).then(async value => {
+			if(value === 0 && itemElement._item.name !== dialog.form.elements.name.value && (dialog.form.elements.name.value = await checkName(dialog.form.elements.name.value))) {
+				itemElement.classList.add("loading");
+				updateSelection();
+				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
+					name: applyParent(dialog.form.elements.name.value)
+				}).then(Miro.response(xhr => {
+					const nameData = itemElement.querySelector(".nameData");
+					itemElement._item.name = nameData.textContent = nameData.title = xhr.response.name;
+					itemElement.classList.remove("loading");
+					render();
+				}, () => {
+					itemElement.classList.remove("loading");
 					updateSelection();
-					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
-						name: applyParent(dialog.form.elements.name.value)
-					}).then(Miro.response(xhr => {
-						const nameData = itemElement.querySelector(".nameData");
-						itemElement._item.name = nameData.textContent = nameData.title = xhr.response.name;
-						itemElement.classList.remove("loading");
-						render();
-					}, () => {
-						itemElement.classList.remove("loading");
-						updateSelection();
-					}));
-				}
+				}));
 			}
 		});
 	} else {
-		const body = html`
+		const dialog = new Miro.Dialog("Item", html`
 			<div class="mdc-text-field">
 				<input id="name" class="mdc-text-field__input" type="text" value="$${itemElement._item.name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
 				<label class="mdc-floating-label" for="name">Name</label>
@@ -600,31 +599,25 @@ const itemInfo = itemElement => {
 				<div class="mdc-line-ripple"></div>
 			</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
 			<a href="$${itemElement._item.url}" target="_blank">Preview link</a>
-		`;
-		const name = body.querySelector("#name");
-		const type = body.querySelector("#type");
-		const url = body.querySelector("#url");
-		body.querySelector("button").addEventListener("click", () => {
-			url.select();
-			document.execCommand("copy");
-			Miro.snackbar("URL copied to clipboard");
-		});
-		new Miro.Dialog("Item", body, [{
+		`, [{
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]).then(value => {
 			if(value === 0) {
-				const changedName = itemElement._item.name !== name.value;
-				const changedType = itemElement._item.type !== type.value;
+				let changedName = itemElement._item.name !== dialog.form.elements.name.value;
+				if(changedName && !(dialog.form.elements.name.value = await checkName(dialog.form.elements.name.value))) {
+					changedName = false;
+				}
+				const changedType = itemElement._item.type !== dialog.form.elements.type.value;
 				if(changedName || changedType) {
 					itemElement.classList.add("loading");
 					updateSelection();
 					const data = {};
 					if(changedName) {
-						data.name = name.value;
+						data.name = dialog.form.elements.name.value;
 					}
 					if(changedType) {
-						data.type = type.value;
+						data.type = dialog.form.elements.type.value;
 					}
 					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
 						const nameData = itemElement.querySelector(".nameData");
@@ -640,7 +633,12 @@ const itemInfo = itemElement => {
 				}
 			}
 		});
-		setTimeout(url.select.bind(url));
+		dialog.form.querySelector("button").addEventListener("click", () => {
+			dialog.form.elements.url.select();
+			document.execCommand("copy");
+			Miro.snackbar("URL copied to clipboard");
+		});
+		setTimeout(dialog.form.elements.url.select.bind(dialog.form.elements.url));
 	}
 };
 const itemsInfo = itemElements => {
@@ -732,7 +730,10 @@ const updateSelection = () => {
 		}
 	}
 };
-const addDirectory = name => {
+const addDirectory = async name => {
+	if(!(name = await checkName(name))) {
+		return;
+	}
 	const itemElement = html`
 		<table>
 			<tbody>
