@@ -694,48 +694,44 @@ const openButton = document.body.querySelector("#openButton");
 openButton.addEventListener("click", () => {
 	openItem(items.querySelector(".item.selected"));
 });
+const linkButton = document.body.querySelector("#linkButton");
+linkButton.addEventListener("click", () => {
+	const input = document.createElement("input");
+	input.value = getURL(items.querySelector(".item.selected")._item);
+	page.appendChild(input);
+	input.select();
+	document.execCommand("copy");
+	input.parentNode.removeChild(input);
+});
 const updateSelection = () => {
 	const itemElements = items.querySelectorAll(".item.selected");
-	if(itemElements.length === 0) {
-		removeButton.classList.add("mdc-fab--exited");
-		removeButton.blur();
-		infoButton.classList.add("mdc-fab--exited");
-		infoButton.blur();
-		openButton.classList.add("mdc-fab--exited");
-		openButton.blur();
-	} else {
-		let removeSafe = true;
-		let infoSafe = true;
+	let removeClass = "remove";
+	let infoClass = "remove";
+	let openClass = "remove";
+	let linkClass = "remove";
+	if(itemElements.length) {
+		removeClass = "add";
+		infoClass = "add";
 		for(const itemElement of itemElements) {
 			if(itemElement.classList.contains("loading")) {
-				infoSafe = false;
+				infoClass = "remove";
 				if(!itemElement._xhr) {
-					removeSafe = false;
+					removeClass = "remove";
 					break;
 				}
 			}
 		}
-		if(removeSafe) {
-			removeButton.classList.remove("mdc-fab--exited");
-		} else {
-			removeButton.classList.add("mdc-fab--exited");
-			removeButton.blur();
-		}
-		if(infoSafe) {
-			infoButton.classList.remove("mdc-fab--exited");
-			if(itemElements.length === 1) {
-				openButton.classList.remove("mdc-fab--exited");
-			} else {
-				openButton.classList.add("mdc-fab--exited");
-				openButton.blur();
+		if(removeClass && infoClass && itemElements.length === 1) {
+			openClass = "add";
+			if(itemElements[0].type !== "/") {
+				linkClass = "add";
 			}
-		} else {
-			infoButton.classList.add("mdc-fab--exited");
-			infoButton.blur();
-			openButton.classList.add("mdc-fab--exited");
-			openButton.blur();
 		}
 	}
+	removeButton.classList[removeClass]("mdc-fab--exited");
+	infoButton.classList[infoClass]("mdc-fab--exited");
+	openButton.classList[openClass]("mdc-fab--exited");
+	linkButton.classList[linkClass]("mdc-fab--exited");
 };
 const addDirectory = async name => {
 	if(!(name = await checkName(name))) {
