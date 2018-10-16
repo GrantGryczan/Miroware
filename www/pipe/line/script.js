@@ -1,6 +1,5 @@
 "use strict";
-const container = document.body.querySelector("#container");
-const page = container.querySelector("main");
+const page = document.body.querySelector("main");
 const items = page.querySelector("#items");
 let parent = "";
 const getName = name => parent ? name.slice(parent.length + 1) : name;
@@ -241,7 +240,7 @@ document.addEventListener("dragover", evt => {
 	}
 	if(allowDrag && Miro.focused()) {
 		if(evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
-			indicateTarget(container);
+			indicateTarget(page);
 		}
 	}
 }, true);
@@ -670,7 +669,7 @@ fileInput.addEventListener("change", () => {
 	Array.prototype.forEach.call(fileInput.files, addFile);
 	fileInput.value = null;
 });
-const addContainer = container.querySelector("#addContainer");
+const addContainer = document.body.querySelector("#addContainer");
 const addButton = addContainer.querySelector("#addButton");
 addButton.addEventListener("click", fileInput.click.bind(fileInput));
 const directoryButton = addContainer.querySelector("#directoryButton");
@@ -680,11 +679,11 @@ addContainer.addEventListener("mouseover", () => {
 addContainer.addEventListener("mouseout", () => {
 	directoryButton.classList.add("mdc-fab--exited");
 });
-const removeButton = container.querySelector("#removeButton");
+const removeButton = document.body.querySelector("#removeButton");
 removeButton.addEventListener("click", () => {
 	confirmRemoveItems(items.querySelectorAll(".item.selected"));
 });
-const infoButton = container.querySelector("#infoButton");
+const infoButton = document.body.querySelector("#infoButton");
 infoButton.addEventListener("click", () => {
 	const itemElements = items.querySelectorAll(".item.selected");
 	if(itemElements.length === 1) {
@@ -693,7 +692,7 @@ infoButton.addEventListener("click", () => {
 		itemsInfo(itemElements);
 	}
 });
-const openButton = container.querySelector("#openButton");
+const openButton = document.body.querySelector("#openButton");
 openButton.addEventListener("click", () => {
 	openItem(items.querySelector(".item.selected"));
 });
