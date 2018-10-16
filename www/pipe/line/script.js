@@ -47,31 +47,23 @@ const getItemElement = item => {
 	} else {
 		const name = getName(item.name);
 		const date = new Date(item.date);
-		const itemElement = (item.type === "/" ? html`
-			<table>
-				<tbody>
-					<tr class="item typeDir">
-						<td class="iconData material-icons">folder</td>
-						<td class="nameData" title="$${name}">$${name}</td>
-						<td class="sizeData">-</td>
-						<td class="typeData">-</td>
-						<td class="dateData" title="$${date}">$${getDate(date)}</td>
-					</tr>
-				</tbody>
-			</table>
+		const itemElement = item.type === "/" ? html`
+			<div class="tr item typeDir">
+				<div class="td iconData material-icons">folder</div>
+				<div class="td nameData" title="$${name}">$${name}</div>
+				<div class="td sizeData">-</div>
+				<div class="td typeData">-</div>
+				<div class="td dateData" title="$${date}">$${getDate(date)}</div>
+			</div>
 		` : html`
-			<table>
-				<tbody>
-					<tr class="item typeFile">
-						<td class="iconData material-icons">insert_drive_file</td>
-						<td class="nameData" title="$${name}">$${name}</td>
-						<td class="sizeData" title="${item.size} B">${getSize(item.size)}</td>
-						<td class="typeData" title="$${item.type}">$${item.type}</td>
-						<td class="dateData" title="$${date}">$${getDate(date)}</td>
-					</tr>
-				</tbody>
-			</table>
-		`).querySelector("tr");
+			<div class="tr item typeFile">
+				<div class="td iconData material-icons">insert_drive_file</div>
+				<div class="td nameData" title="$${name}">$${name}</div>
+				<div class="td sizeData" title="${item.size} B">${getSize(item.size)}</div>
+				<div class="td typeData" title="$${item.type}">$${item.type}</div>
+				<div class="td dateData" title="$${date}">$${getDate(date)}</div>
+			</div>
+		`;
 		(item.element = itemElement)._item = item;
 		return itemElement;
 	}
@@ -156,18 +148,14 @@ const addFile = async file => {
 	}
 	const fileSize = getSize(file.size);
 	const itemElement = html`
-		<table>
-			<tbody>
-				<tr class="item typeFile loading">
-					<td class="iconData material-icons">insert_drive_file</td>
-					<td class="nameData" title="$${name}">$${name}</td>
-					<td class="sizeData" title="- / ${file.size} B">- / ${fileSize}</td>
-					<td class="typeData">-</td>
-					<td class="dateData">-</td>
-				</tr>
-			</tbody>
-		</table>
-	`.querySelector("tr");
+		<div class="tr item typeFile loading">
+			<div class="td iconData material-icons">insert_drive_file</div>
+			<div class="td nameData" title="$${name}">$${name}</div>
+			<div class="td sizeData" title="- / ${file.size} B">- / ${fileSize}</div>
+			<div class="td typeData">-</div>
+			<div class="td dateData">-</div>
+		</div>
+	`;
 	itemElement._item = file;
 	const sizeData = itemElement.querySelector(".sizeData");
 	const typeData = itemElement.querySelector(".typeData");
@@ -744,18 +732,14 @@ const addDirectory = async name => {
 		return;
 	}
 	const itemElement = html`
-		<table>
-			<tbody>
-				<tr class="item typeDir loading">
-					<td class="iconData material-icons">folder</td>
-					<td class="nameData" title="$${name}">$${name}</td>
-					<td class="sizeData">-</td>
-					<td class="typeData">-</td>
-					<td class="dateData">-</td>
-				</tr>
-			</tbody>
-		</table>
-	`.querySelector("tr");
+		<div class="tr item typeDir loading">
+			<div class="td iconData material-icons">folder</div>
+			<div class="td nameData" title="$${name}">$${name}</div>
+			<div class="td sizeData">-</div>
+			<div class="td typeData">-</div>
+			<div class="td dateData">-</div>
+		</div>
+	`;
 	const dateData = itemElement.querySelector(".dateData");
 	items.insertBefore(itemElement, items.firstChild);
 	Miro.request("POST", "/users/@me/pipe", {
