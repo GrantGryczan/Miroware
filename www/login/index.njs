@@ -25,7 +25,7 @@ this.value += html`
 				<span id="signupForm">
 					<div class="mdc-text-field">
 						<input id="email" name="email" class="mdc-text-field__input" type="email" required>
-						<label class="mdc-floating-label" for="email">Email</label>
+						<label class="mdc-floating-label mdc-floating-label--float-above" for="email">Email</label>
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<div class="mdc-text-field">
