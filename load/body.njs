@@ -54,6 +54,9 @@ this.value += html`
 						</div>
 						<hr class="mdc-list-divider">
 						<div class="mdc-list">
+							<a class="mdc-list-item${this.req.decodedPath.startsWith("/pipe/") ? " mdc-list-item--disabled" : '" href="/pipe/'}">
+								<i class="mdc-list-item__graphic material-icons">upload_file</i> Pipe
+							</a>
 							<a class="mdc-list-item${this.req.decodedPath === "/concat/" ? " mdc-list-item--disabled" : '" href="/concat/'}">
 								<i class="mdc-list-item__graphic material-icons">link</i> Concat
 							</a>
