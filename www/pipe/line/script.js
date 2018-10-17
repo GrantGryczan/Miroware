@@ -48,7 +48,7 @@ const getItemElement = item => {
 		const name = getName(item.name);
 		const date = new Date(item.date);
 		const itemElement = item.type === "/" ? html`
-			<a class="tr item typeDir" href="#$${name}" draggable="false">
+			<a class="tr item typeDir" href="#$${name}" draggable="false" ondragstart="return false;">
 				<div class="td iconData">
 					<i class="material-icons">folder</i>
 				</div>
@@ -58,7 +58,7 @@ const getItemElement = item => {
 				<div class="td dateData" title="$${date}">$${getDate(date)}</div>
 			</a>
 		` : html`
-			<a class="tr item typeFile" href="$${getURL(item)}" target="_blank" draggable="false">
+			<a class="tr item typeFile" href="$${getURL(item)}" target="_blank" draggable="false" ondragstart="return false;">
 				<div class="td iconData">
 					<i class="material-icons">insert_drive_file</i>
 				</div>
@@ -153,7 +153,7 @@ const addFile = async file => {
 	}
 	const fileSize = getSize(file.size);
 	const itemElement = html`
-		<a class="tr item typeFile loading" target="_blank" draggable="false">
+		<a class="tr item typeFile loading" target="_blank" draggable="false" ondragstart="return false;">
 			<div class="td iconData">
 				<i class="material-icons">insert_drive_file</i>
 			</div>
@@ -745,7 +745,7 @@ const addDirectory = async name => {
 		return;
 	}
 	const itemElement = html`
-		<a class="tr item typeDir loading" draggable="false">
+		<a class="tr item typeDir loading" draggable="false" ondragstart="return false;">
 			<div class="td iconData">
 				<i class="material-icons">folder</i>
 			</div>
