@@ -35,9 +35,9 @@ if(testEmail(this.req.body.email)) {
 		});
 	} else {
 		this.value = {
-			error: "Authentication failed."
+			error: "That email is not registered."
 		};
-		this.status = 401;
+		this.status = 422;
 		this.done();
 	}
 } else {
