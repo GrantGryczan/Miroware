@@ -598,8 +598,11 @@ const itemInfo = itemElement => {
 				<input id="url" class="mdc-text-field__input" type="url" value="$${url}" size="24" readonly>
 				<label class="mdc-floating-label" for="url">URL</label>
 				<div class="mdc-line-ripple"></div>
-			</div><button class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
-			<a href="$${url}" target="_blank">Preview link</a>
+			</div><button name="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
+			<a href="$${url}" target="_blank">Preview link</a><br>
+			<a class="mdc-button mdc-button--dense" href="$${url}" download="$${dialog.form.elements.name.value}">
+				<i class="mdc-button__icon material-icons">file_download</i> Download
+			</a>
 		`, [{
 			text: "Okay",
 			type: "submit"
@@ -635,12 +638,11 @@ const itemInfo = itemElement => {
 				}
 			}
 		});
-		dialog.form.querySelector("button").addEventListener("click", () => {
+		dialog.form.elements.copyURL.addEventListener("click", () => {
 			dialog.form.elements.url.select();
 			document.execCommand("copy");
 			Miro.snackbar("URL copied to clipboard");
 		});
-		setTimeout(dialog.form.elements.url.select.bind(dialog.form.elements.url));
 	}
 };
 const itemsInfo = itemElements => {
