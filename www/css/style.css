@@ -191,16 +191,16 @@ main {
 	}
 }
 .mdc-button {
-	&:enabled {
+	&:not(:disabled) {
 		color: rgba(255, 255, 255, 0.87);
 	}
 	&--raised, &--unelevated {
-		&:enabled {
+		&:not(:disabled) {
 			background-color: #404040;
 		}
 	}
 	&--outlined {
-		&:enabled {
+		&:not(:disabled) {
 			border-color: rgba(255, 255, 255, 0.6);
 			&:hover, &:focus {
 				border-color: rgba(255, 255, 255, 0.87);
@@ -400,7 +400,7 @@ select option {
 	}
 	&__native-control {
 		&:checked, &:indeterminate {
-			&:enabled {
+			&:not(:disabled) {
 				& ~ .mdc-checkbox__background {
 					border-color: #505050;
 					background-color: #505050;
@@ -414,7 +414,7 @@ select option {
 			}
 		}
 		&:not(:checked):not(:indeterminate) {
-			&:enabled ~ .mdc-checkbox__background {
+			&:not(:disabled) ~ .mdc-checkbox__background {
 				border-color: rgba(255, 255, 255, 0.54);
 			}
 			&:disabled ~ .mdc-checkbox__background {
