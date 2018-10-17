@@ -79,6 +79,7 @@ a {
 }
 .mdc-drawer {
 	user-select: none;
+	-moz-user-select: -moz-none;
 	&--temporary {
 		color: rgba(255, 255, 255, 0.87);
 	}
@@ -166,6 +167,7 @@ main {
 }
 .mdc-ripple-surface {
 	user-select: none;
+	-moz-user-select: -moz-none;
 }
 .mdc-card {
 	background-color: #303030;
@@ -443,6 +445,7 @@ select option {
 .mdc-form-field {
 	color: rgba(255, 255, 255, 0.87);
 	user-select: none;
+	-moz-user-select: -moz-none;
 }
 .mdc-dialog {
 	&__surface {

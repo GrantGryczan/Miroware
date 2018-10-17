@@ -3,6 +3,7 @@
 }
 main {
 	user-select: none;
+	-moz-user-select: -moz-none;
 }
 #table {
 	width: 100%;
