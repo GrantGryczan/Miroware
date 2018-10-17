@@ -600,7 +600,7 @@ const itemInfo = itemElement => {
 				<div class="mdc-line-ripple"></div>
 			</div><button name="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
 			<a href="$${url}" target="_blank">Preview link</a><br>
-			<a class="mdc-button mdc-button--dense" href="$${url}" download="$${dialog.form.elements.name.value}">
+			<a class="mdc-button mdc-button--dense" href="$${url}" download="$${name}">
 				<i class="mdc-button__icon material-icons">file_download</i> Download
 			</a>
 		`, [{
