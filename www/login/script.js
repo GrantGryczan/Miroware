@@ -64,7 +64,7 @@ loginForm.addEventListener("submit", evt => {
 			}
 		});
 		signupDialog.form.elements.email.value = loginForm.elements.email.value;
-		signupDialog.form.elements.email.classList.add("mdc-floating-label--float-above");
+		signupDialog.form.elements.email.labels[0].classList.add("mdc-floating-label--float-above");
 		setTimeout(signupDialog.form.elements.name.focus.bind(signupDialog.form.elements.name));
 	} else {
 		Miro.auth("Login", "Choose a login method.", logIn, dialogCallback).then(loggedIn);
