@@ -105,6 +105,9 @@ main {
 	right: 263px;
 	bottom: 31px;
 }
+#download {
+	margin-top: 8px;
+}
 #targetIndicator {
 	position: absolute;
 	width: 1px;

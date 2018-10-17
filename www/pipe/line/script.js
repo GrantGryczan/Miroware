@@ -585,25 +585,24 @@ const itemInfo = itemElement => {
 		const url = getURL(itemElement._item);
 		const dialog = new Miro.Dialog("Item", html`
 			<div class="mdc-text-field">
-				<input id="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+				<input id="name" name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
 				<label class="mdc-floating-label" for="name">Name</label>
 				<div class="mdc-line-ripple"></div>
 			</div><br>
 			<div class="mdc-text-field">
-				<input id="type" class="mdc-text-field__input" type="text" value="$${itemElement._item.type}" maxlength="255" size="24" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+$" spellcheck="false" required>
+				<input id="type" name="type" class="mdc-text-field__input" type="text" value="$${itemElement._item.type}" maxlength="255" size="24" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+$" spellcheck="false" required>
 				<label class="mdc-floating-label" for="type">Type</label>
 				<div class="mdc-line-ripple"></div>
 			</div><br>
 			<div class="mdc-text-field spaced">
-				<input id="url" class="mdc-text-field__input" type="url" value="$${url}" size="24" readonly>
+				<input id="url" name="url" class="mdc-text-field__input" type="url" value="$${url}" size="24" readonly>
 				<label class="mdc-floating-label" for="url">URL</label>
 				<div class="mdc-line-ripple"></div>
 			</div><button name="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
 			<a href="$${url}" target="_blank">Preview link</a><br>
-			<br>
-			<a class="mdc-button mdc-button--dense" href="$${url}" download="$${name}">
+			<button id="download" name="download" class="mdc-button mdc-button--dense">
 				<i class="mdc-button__icon material-icons">file_download</i> Download
-			</a>
+			</button>
 		`, [{
 			text: "Okay",
 			type: "submit"
@@ -643,6 +642,9 @@ const itemInfo = itemElement => {
 			dialog.form.elements.url.select();
 			document.execCommand("copy");
 			Miro.snackbar("URL copied to clipboard");
+		});
+		dialog.form.elements.download.addEventListener("click", () => {
+			html`<a href="$${url}" download="$${dialog.form.elements.name.value}"></a>`.click();
 		});
 	}
 };
