@@ -48,7 +48,7 @@ const getItemElement = item => {
 		const name = getName(item.name);
 		const date = new Date(item.date);
 		const itemElement = item.type === "/" ? html`
-			<a class="tr item typeDir" href="#$${name}" draggable="false" ondragstart="return false;">
+			<a class="tr item typeDir" href="#$${item.name}" draggable="false" ondragstart="return false;">
 				<div class="td iconData">
 					<i class="material-icons">folder</i>
 				</div>
