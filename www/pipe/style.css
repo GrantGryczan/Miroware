@@ -2,9 +2,9 @@
 	background-color: #b4783c;
 }
 main {
-	padding-top: 512px;
+	padding-bottom: 512px;
 	background-image: url(/pipe/images/icon/cube.gif);
-	background-position: center top;
+	background-position: center bottom;
 	background-repeat: no-repeat;
 	text-align: center;
 }
