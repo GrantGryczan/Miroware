@@ -82,7 +82,7 @@ const s3 = new AWS.S3({
 				}
 			}, response => {
 				response.pipe(res);
-				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]);
+				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]).set("Access-Control-Allow-Origin", "*");
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 		}
