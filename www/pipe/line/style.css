@@ -64,6 +64,9 @@ main {
 		background-color: rgba(255, 128, 0, 0.5);
 	}
 }
+.iconData > i {
+	vertical-align: middle;
+}
 #shill {
 	opacity: 0.5;
 }
