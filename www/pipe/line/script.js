@@ -400,6 +400,9 @@ document.addEventListener("mouseup", evt => {
 									for(const item of Miro.data.pipe) {
 										if(item.name.startsWith(prefix)) {
 											item.name = xhr.response.name + item.name.slice(itemElement._item.name.length);
+											if(item.element) {
+												item.element.href = item.type === "/" ? `#${item.name}` : getURL(item);
+											}
 										}
 									}
 								}
@@ -567,6 +570,9 @@ const itemInfo = itemElement => {
 					for(const item of Miro.data.pipe) {
 						if(item.name.startsWith(prefix)) {
 							item.name = xhr.response.name + item.name.slice(itemElement._item.name.length);
+							if(item.element) {
+								item.element.href = item.type === "/" ? `#${item.name}` : getURL(item);
+							}
 						}
 					}
 					const nameData = itemElement.querySelector(".nameData");
