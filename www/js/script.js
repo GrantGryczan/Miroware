@@ -375,15 +375,14 @@ const closeAndResolveAuth = Miro.response(xhr => {
 	authDialog.close(-2);
 	resolveAuth(xhr);
 });
-const clickAuth = auth => {
+const clickAuth = service => {
 	return () => {
 		Miro.block(true);
-		new Promise(auth).then(code => {
+		new Promise(auths[service]).then(code => {
 			try {
 				Miro.block(false);
 				setTimeout(() => {
-					sendAuth(auth.name, code).then(closeAndResolveAuth);
-					console.log(auth);
+					sendAuth(service, code).then(closeAndResolveAuth);
 				});
 			} catch(err) {
 				throw new MiroError("The `send` parameter must be a promise (of `Miro.request` or which resolves a `Miro.request`).");
@@ -447,7 +446,7 @@ Miro.auth = (title, message, send, dialogCallback) => {
 		button.classList.add("mdc-button--unelevated");
 		button.classList.add("spaced");
 		button.textContent = service;
-		button.addEventListener("click", clickAuth(auths[service]));
+		button.addEventListener("click", clickAuth(service));
 		body.appendChild(button);
 	}
 	authDialog = new Miro.Dialog(title || "Authenticate", body, ["Cancel"]);
