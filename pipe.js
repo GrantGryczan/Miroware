@@ -69,6 +69,7 @@ const s3 = new AWS.S3({
 				return;
 			}
 		} else {
+			res.set("Access-Control-Allow-Origin", "*");
 			const userAgent = `MirowarePipe (${Math.random()})`;
 			userAgents.push(userAgent);
 			if(path.endsWith("/")) {
@@ -81,7 +82,7 @@ const s3 = new AWS.S3({
 					"User-Agent": userAgent
 				}
 			}, response => {
-				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]).set("Access-Control-Allow-Origin", "*");
+				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]);
 				response.pipe(res);
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
