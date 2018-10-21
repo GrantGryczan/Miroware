@@ -69,6 +69,7 @@ const s3 = new AWS.S3({
 				return;
 			}
 		} else {
+			console.log(0, new Date(), req.url);
 			res.set("Access-Control-Allow-Origin", "*");
 			const userAgent = `MirowarePipe (${Math.random()})`;
 			userAgents.push(userAgent);
