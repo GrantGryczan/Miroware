@@ -383,6 +383,7 @@ const clickAuth = auth => {
 				Miro.block(false);
 				setTimeout(() => {
 					sendAuth(auth.name, code).then(closeAndResolveAuth);
+					console.log(auth);
 				});
 			} catch(err) {
 				throw new MiroError("The `send` parameter must be a promise (of `Miro.request` or which resolves a `Miro.request`).");
