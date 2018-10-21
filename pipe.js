@@ -56,7 +56,7 @@ const s3 = new AWS.S3({
 						if(err) {
 							res.status(err.statusCode).send(err.message);
 						} else {
-							res.set("Content-Type", item.type).send(data.Body);
+							res.set("Content-Type", item.type).set("Access-Control-Allow-Origin", "*").send(data.Body);
 							console.log(new Date(), req.url);
 						}
 					});
@@ -70,7 +70,6 @@ const s3 = new AWS.S3({
 			}
 		} else {
 			console.log(0, new Date(), req.url);
-			res.set("Access-Control-Allow-Origin", "*");
 			const userAgent = `MirowarePipe (${Math.random()})`;
 			userAgents.push(userAgent);
 			if(path.endsWith("/")) {
@@ -83,8 +82,8 @@ const s3 = new AWS.S3({
 					"User-Agent": userAgent
 				}
 			}, response => {
-				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]);
 				response.pipe(res);
+				res.status(response.statusCode);
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 		}
