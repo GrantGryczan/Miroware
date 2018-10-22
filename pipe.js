@@ -56,7 +56,7 @@ const s3 = new AWS.S3({
 						if(err) {
 							res.status(err.statusCode).send(err.message);
 						} else {
-							res.set("Content-Type", item.type).send(data.Body);
+							res.set("Content-Type", item.type).set("Content-Length", data.Body.length).send(data.Body);
 							console.log(new Date(), req.url);
 						}
 					});
@@ -82,7 +82,7 @@ const s3 = new AWS.S3({
 				}
 			}, response => {
 				response.pipe(res);
-				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]).set("Access-Control-Allow-Origin", "*");
+				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]).set("Content-Length", response.headers["content-length"]).set("Access-Control-Allow-Origin", "*");
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 		}
