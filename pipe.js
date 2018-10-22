@@ -69,7 +69,7 @@ const s3 = new AWS.S3({
 				return;
 			}
 		} else {
-			console.log(0, new Date(), req.url);
+			console.log(1, new Date(), req.url);
 			const userAgent = `MirowarePipe (${Math.random()})`;
 			userAgents.push(userAgent);
 			if(path.endsWith("/")) {
