@@ -75,7 +75,7 @@ const s3 = new AWS.S3({
 			if(path.endsWith("/")) {
 				path += "index.html";
 			}
-			https.get({
+			http.get({
 				hostname: "piped.miroware.io",
 				path,
 				headers: {
