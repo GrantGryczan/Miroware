@@ -56,7 +56,7 @@ const s3 = new AWS.S3({
 						if(err) {
 							res.status(err.statusCode).send(err.message);
 						} else {
-							res.set("Content-Type", item.type).set("Access-Control-Allow-Origin", "*").send(data.Body);
+							res.set("Content-Type", item.type).send(data.Body);
 							console.log(new Date(), req.url);
 						}
 					});
@@ -69,13 +69,12 @@ const s3 = new AWS.S3({
 				return;
 			}
 		} else {
-			console.log(1, new Date(), req.url);
 			const userAgent = `MirowarePipe (${Math.random()})`;
 			userAgents.push(userAgent);
 			if(path.endsWith("/")) {
 				path += "index.html";
 			}
-			http.get({
+			https.get({
 				hostname: "piped.miroware.io",
 				path,
 				headers: {
@@ -83,7 +82,7 @@ const s3 = new AWS.S3({
 				}
 			}, response => {
 				response.pipe(res);
-				res.status(response.statusCode);
+				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]).set("Access-Control-Allow-Origin", "*");
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 		}
