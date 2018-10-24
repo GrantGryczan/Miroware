@@ -77,13 +77,6 @@ main {
 		pointer-events: none;
 	}
 }
-#addContainer {
-	position: fixed;
-	right: 0;
-	bottom: 0;
-	width: 94px;
-	height: 191px;
-}
 #addButton {
 	right: 23px;
 	bottom: 23px;

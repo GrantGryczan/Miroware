@@ -368,6 +368,7 @@ document.addEventListener("mousemove", evt => {
 	}
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
+	directoryButton.classList[mouseX < window.innerWidth - 94 && mouseY < window.innerHeight - 191 ? "add" : "remove"]("mdc-fab--exited");
 	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode.classList.contains("item")) {
 		if(!mouseMoved) {
 			selectItem(mouseTarget.parentNode, evt, 2);
@@ -667,16 +668,9 @@ fileInput.addEventListener("change", () => {
 	Array.prototype.forEach.call(fileInput.files, addFile);
 	fileInput.value = null;
 });
-const addContainer = document.body.querySelector("#addContainer");
-const addButton = addContainer.querySelector("#addButton");
+const addButton = document.body.querySelector("#addButton");
 addButton.addEventListener("click", fileInput.click.bind(fileInput));
-const directoryButton = addContainer.querySelector("#directoryButton");
-addContainer.addEventListener("mouseover", () => {
-	directoryButton.classList.remove("mdc-fab--exited");
-});
-addContainer.addEventListener("mouseout", () => {
-	directoryButton.classList.add("mdc-fab--exited");
-});
+const directoryButton = document.body.querySelector("#directoryButton");
 const removeButton = document.body.querySelector("#removeButton");
 removeButton.addEventListener("click", () => {
 	if(removeButton.classList.contains("mdc-fab--exited")) {
