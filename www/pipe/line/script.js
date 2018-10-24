@@ -368,7 +368,7 @@ document.addEventListener("mousemove", evt => {
 	}
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
-	directoryButton.classList[mouseX < window.innerWidth - 94 || mouseY < window.innerHeight - 191 ? "add" : "remove"]("mdc-fab--exited");
+	directoryButton.classList[mouseX < window.innerWidth - 94 || mouseY < window.innerHeight - 191 || !Miro.focused() ? "add" : "remove"]("mdc-fab--exited");
 	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode.classList.contains("item")) {
 		if(!mouseMoved) {
 			selectItem(mouseTarget.parentNode, evt, 2);
