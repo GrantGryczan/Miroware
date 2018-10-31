@@ -16,7 +16,7 @@ if(isMe) {
 					};
 					this.status = err.statusCode;
 				} else {
-					purgeCache(...fileItems.map(item => `https://pipe.miroware.io/${user._id}/${encodeURI(item.name)}`));
+					purgeCache(...fileItems.map(item => `https://pipe.miroware.io/${user._id}/${encodeURI(item.name)}`), ...fileItems.map(item => `https://piped.miroware.io/${user._id}/${encodeURI(item.name)}`)); // TODO: `flatMap` and define `encodedName`
 					users.deleteOne(this.userFilter);
 				}
 				this.done();

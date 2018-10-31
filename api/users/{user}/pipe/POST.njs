@@ -146,7 +146,8 @@ if(isMe) {
 						size: this.req.body.length
 					}
 				};
-				purgeCache(`https://pipe.miroware.io/${user._id}/${encodeURI(data.name)}`);
+				const encodedName = encodeURI(data.name);
+				purgeCache(`https://pipe.miroware.io/${user._id}/${encodedName}`, `https://piped.miroware.io/${user._id}/${encodedName}`);
 			}
 			this.done();
 		});
