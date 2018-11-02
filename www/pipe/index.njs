@@ -10,7 +10,7 @@ this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
 				<p>
-					Miroware Pipe lets you upload any type of files to link from any applicable website, forever for free.
+					Miroware Pipe lets you upload any type of file to link from any applicable website, forever for free.
 				</p>
 				<a class="mdc-button mdc-button--raised mdc-ripple" href="line/">Go to Your Pipe</a>`;
 this.value += (await load("load/pagefoot", this)).value;
