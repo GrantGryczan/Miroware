@@ -166,7 +166,7 @@ const purgeCache = async (...files) => {
 				files.push(altFile);
 			}
 		}
-		let i = 0;
+		let errors = 0;
 		do {
 			await wait(1000);
 			try {
@@ -181,7 +181,7 @@ const purgeCache = async (...files) => {
 					})
 				});
 			} catch(err) {
-				if(++i < 60) {
+				if(++errors < 60) {
 					continue;
 				} else {
 					throw err;
@@ -288,13 +288,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			to: `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`,
 			subject: "Miroware / Account Verification",
 			text: "Verify your Miroware account.",
-			html: html`
-				Click the following link to verify your Miroware account.<br>
-				<a href="${verifyLink}">${verifyLink}</a>
-				<p>
-					<i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i>
-				</p>
-			`
+			html: html` Click the following link to verify your Miroware account.<br> <a href="${verifyLink}">${verifyLink}</a> <p> <i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i> </p> `
 		});
 	};
 	const sanitizeConcat = (context, put) => new Promise(resolve => {
