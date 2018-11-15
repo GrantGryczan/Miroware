@@ -35,6 +35,9 @@ const byDBQueryObject = item => ({
 	id: item.id
 });
 const pipeFiles = item => item.type !== "/";
+const wait = delay => new Promise(resolve => {
+	setTimeout(resolve, delay);
+});
 const connect = context => {
 	let connection = context.req.body.connection;
 	return new Promise(resolve => {
@@ -151,7 +154,7 @@ const notLoggedIn = context => {
 		return true;
 	}
 };
-const purgeCache = (...files) => {
+const purgeCache = async (...files) => {
 	for(let i = 0; i < files.length; i += 30) {
 		const slicedFiles = files.slice(i, i + 30);
 		for(const file of slicedFiles) {
@@ -163,16 +166,25 @@ const purgeCache = (...files) => {
 				files.push(altFile);
 			}
 		}
-		request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
-			headers: {
-				"X-Auth-Email": youKnow.cloudflare.email,
-				"X-Auth-Key": youKnow.cloudflare.key,
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-				files: slicedFiles
-			})
-		});
+		do {
+			await wait(1000);
+			try {
+				await request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
+					headers: {
+						"X-Auth-Email": youKnow.cloudflare.email,
+						"X-Auth-Key": youKnow.cloudflare.key,
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						files: slicedFiles
+					})
+				});
+			} catch(err) {
+				console.warn(err);
+				continue;
+			}
+			break;
+		} while(true);
 	}
 };
 const bodyMethods = ["POST", "PUT", "PATCH"];
