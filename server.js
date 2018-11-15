@@ -166,8 +166,9 @@ const purgeCache = async (...files) => {
 				files.push(altFile);
 			}
 		}
+		let i = 0;
 		do {
-			await wait(5000);
+			await wait(1000);
 			try {
 				await request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
 					headers: {
@@ -180,8 +181,11 @@ const purgeCache = async (...files) => {
 					})
 				});
 			} catch(err) {
-				console.warn(err);
-				continue;
+				if(++i < 60) {
+					continue;
+				} else {
+					throw err;
+				}
 			}
 			break;
 		} while(true);
