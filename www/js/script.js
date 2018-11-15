@@ -30,22 +30,6 @@ Miro.average = (...values) => Miro.sum(...values) / values.length;
 Miro.wait = delay => new Promise(resolve => {
 	setTimeout(resolve, delay);
 });
-Miro.benchmark = (f, n, data) => {
-	if(!(f instanceof Function)) {
-		throw new MiroError("The `f` parameter must be a function.");
-	}
-	if(!(data instanceof Array)) {
-		data = [];
-	}
-	if(n = isFinite(n) ? Math.abs(n) : 1) {
-		let i = 0;
-		for(const now = Date.now(); Date.now() - now < 100; f(i++));
-		data.push(i);
-		return Miro.benchmark(f, n - 1, data);
-	} else {
-		return Miro.average(...data);
-	}
-};
 Miro.prepare = node => {
 	if(!(node instanceof Element || node instanceof Document)) {
 		throw new MiroError("The `node` parameter must be an element or a document.");
