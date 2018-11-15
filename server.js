@@ -167,7 +167,7 @@ const purgeCache = async (...files) => {
 			}
 		}
 		do {
-			await wait(1000);
+			await wait(5000);
 			try {
 				await request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
 					headers: {
