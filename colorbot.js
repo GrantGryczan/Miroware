@@ -5,7 +5,6 @@ const Discord = require("discord.js");
 const prefix = /^> ?🎨 */;
 const spaces = / +/g;
 const underscores = /_/g;
-const alphanumeric = /^[0-9a-z]*$/i;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 const properColorTest = /^#[\da-f]{6}$/;
 const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
@@ -335,8 +334,6 @@ client.on("message", async msg => {
 						if(content[1]) {
 							if(content[1].includes(" ")) {
 								msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(errSendMessages(msg));
-							} else if(!alphanumeric.test(content[1])) {
-								msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(errSendMessages(msg));
 							} else if(data.guilds[msg.guild.id][1][content[1]]) {
 								msg.channel.send(`${msg.author} A group by that name already exists.`).catch(errSendMessages(msg));
 							} else {
@@ -411,8 +408,6 @@ client.on("message", async msg => {
 							msg.channel.send(`${msg.author} No group name was specified.`).catch(errSendMessages(msg));
 						} else if(content[1].length > 2) {
 							msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(errSendMessages(msg));
-						} else if(!alphanumeric.test(content[1][1])) {
-							msg.channel.send(`${msg.author} Group names must be alphanumeric.`).catch(errSendMessages(msg));
 						} else if(data.guilds[msg.guild.id][1][content[1][1]]) {
 							msg.channel.send(`${msg.author} A group by that name already exists.`).catch(errSendMessages(msg));
 						} else if(data.guilds[msg.guild.id][1][content[1][0]]) {
