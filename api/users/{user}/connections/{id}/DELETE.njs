@@ -1,7 +1,7 @@
 const {user, isMe} = await parseUser(this);
 if(isMe) {
 	if(this.now - this.token.super < 300000) {
-		if(this.user.connections.some(connection => connection.service === this.params.service && connection.id === this.params.id)) {
+		if(this.user.connections.some(connection => connection.id === this.params.id)) {
 			if(this.user.connections.length === 1) {
 				this.value = {
 					error: "You probably need to be able to log in with at least one connection."
@@ -9,7 +9,6 @@ if(isMe) {
 				this.status = 422;
 			} else {
 				this.update.$pull.connections = {
-					service: this.params.service,
 					id: this.params.id
 				};
 			}

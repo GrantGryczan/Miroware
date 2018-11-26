@@ -12,7 +12,18 @@ for(const input of submits) {
 }
 const forgot = html`<a class="transparent" href="javascript:;">Forgot your login? Click here.</a>`;
 forgot.addEventListener("click", () => {
-	new Miro.Dialog("Forgot Login", "Not yet...");
+	new Miro.Dialog("Forgot Login", html`
+		Are you sure you want to send a new password connection to <b>$${loginForm.elements.email.value}</b>?<br>
+		The password will be automatically disconnected once you use it. No other connections will be removed or created, and you would have to update the connections in your account settings manually not to forget your login again.
+	`, ["Yes", "No"]).then(value => {
+		if(value === 0) {
+			Miro.request("POST", "/forgotten_login", {}, {
+				email: loginForm.elements.email.value
+			}).then(Miro.response(() => {
+				new Miro.Dialog("Forgot Login", "An email with a temporary password connection has been sent.");
+			}));
+		}
+	});
 });
 const enableFormOnAuthCancel = value => {
 	if(value !== -2) {

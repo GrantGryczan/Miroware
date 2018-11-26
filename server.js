@@ -119,6 +119,11 @@ const connect = (context, user) => {
 				const hash = youKnow.crypto.hash(connection[1], user.salt.buffer);
 				const foundConnection = user.connections.find(foundConnection => foundConnection.service === "password" && foundConnection.hash.buffer.equals(hash));
 				if(foundConnection) {
+					if(foundConnection.once) {
+						this.update.$pull.connections = {
+							id: foundConnection.id
+						};
+					}
 					resolve({
 						connection,
 						id: foundConnection.id
@@ -320,7 +325,13 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			to: `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`,
 			subject: "Miroware / Account Verification",
 			text: "Verify your Miroware account.",
-			html: html` Click the following link to verify your Miroware account.<br> <a href="${verifyLink}">${verifyLink}</a> <p> <i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i> </p> `
+			html: html`
+				Click the following link to verify your Miroware account.<br>
+				<a href="${verifyLink}">${verifyLink}</a>
+				<p>
+					<i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i>
+				</p>
+			`
 		});
 	};
 	const sanitizeConcat = (context, put) => new Promise(resolve => {
