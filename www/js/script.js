@@ -349,7 +349,9 @@ let authDialog;
 let sendAuth;
 let resolveAuth;
 const authFailed = data => {
-	new Miro.Dialog("Error", (data && ((data.response && data.response.error && html`${xhr.response.error}`) || data.statusText || data.details || data.error || data)) || "An unknown error occurred.");
+	if(data) {
+		new Miro.Dialog("Error", (data.response && data.response.error && html`${xhr.response.error}`) || data.statusText || data.details || data.error || data);
+	}
 };
 const catchAuth = err => {
 	Miro.block(false);
