@@ -25,7 +25,7 @@ if(testEmail(this.req.body.email)) {
 			$push: {
 				connections: {
 					service: "password",
-					id: String(ObjectID()),
+					id: `temp_${ObjectID()}`,
 					hash: youKnow.crypto.hash(password, user.salt.buffer),
 					once: true
 				}
