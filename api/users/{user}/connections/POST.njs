@@ -9,15 +9,17 @@ if(isMe) {
 				this.status = 422;
 			} else {
 				this.value = {};
-				this.update.$push = {
-					connections: (this.value = {
-						service: data.connection[0],
-						id: data.id
-					})
+				const connection = {
+					service: data.connection[0],
+					id: data.id
 				};
 				if(data.connection[0] === "password") {
-					this.value.hash = youKnow.crypto.hash(data.connection[1], user.salt.buffer);
+					connection.hash = youKnow.crypto.hash(data.connection[1], user.salt.buffer);
 				}
+				this.update.$push = {
+					connections: connection
+				};
+				this.value = sanitizeConnection(connection);
 			}
 			this.done();
 		});
@@ -25,7 +27,7 @@ if(isMe) {
 		this.value = {
 			error: "Your token is not in super mode."
 		};
-		this.status = 403;
+		this.status = 401;
 		this.done();
 	}
 } else {

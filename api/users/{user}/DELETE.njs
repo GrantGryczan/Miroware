@@ -29,7 +29,7 @@ if(isMe) {
 		this.value = {
 			error: "Your token is not in super mode."
 		};
-		this.status = 403;
+		this.status = 401;
 		this.done();
 	}
 } else {

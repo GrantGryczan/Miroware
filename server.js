@@ -158,6 +158,10 @@ const validateConnection = (context, data) => {
 		}
 	});
 };
+const sanitizeConnection = connection => ({
+	service: connection.service,
+	id: connection.id
+});
 const inputDate = date => {
 	let year = String(date.getFullYear());
 	if(year.length < 4) {
