@@ -120,9 +120,15 @@ const connect = (context, user) => {
 				const foundConnection = user.connections.find(foundConnection => foundConnection.service === "password" && foundConnection.hash.buffer.equals(hash));
 				if(foundConnection) {
 					if(foundConnection.once) {
-						this.update.$pull.connections = {
-							id: foundConnection.id
-						};
+						users.updateOne({
+							_id: user._id
+						}, {
+							$pull: {
+								connections: {
+									id: foundConnection.id
+								}
+							}
+						});
 					}
 					resolve({
 						connection,
