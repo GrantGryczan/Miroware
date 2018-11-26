@@ -38,124 +38,6 @@ const pipeFiles = item => item.type !== "/";
 const wait = delay => new Promise(resolve => {
 	setTimeout(resolve, delay);
 });
-const connect = (context, user) => {
-	let connection = context.req.body.connection;
-	return new Promise(resolve => {
-		if(typeof connection !== "string" || (connection = connection.split(" ")).length !== 2) {
-			context.value = {
-				error: 'The `connection` value is not in the format "<service> <code>".'
-			};
-			context.status = 400;
-			context.done();
-			return;
-		}
-		if(connection[0] === "Google") {
-			googleAuthClient.verifyIdToken({
-				idToken: connection[1],
-				audience: youKnow.google.id
-			}).then(ticket => {
-				const payload = ticket.getPayload();
-				resolve({
-					connection,
-					id: payload.sub,
-					name: payload.name,
-					email: payload.email,
-					verified: payload.email_verified
-				});
-			}).catch(err => {
-				context.value = {
-					error: err.message
-				};
-				context.status = 422;
-				context.done();
-			});
-		} else if(connection[0] === "Discord") {
-			let redirect_uri = context.req.get("Referrer") || "https://miroware.io/";
-			const pathIndex = redirect_uri.indexOf("/", redirect_uri.indexOf("//") + 2);
-			if(pathIndex !== -1) {
-				redirect_uri = `${redirect_uri.slice(0, pathIndex)}/login/discord/`;
-			}
-			const catchError = err => {
-				const error = JSON.parse(err.error);
-				context.value = {
-					error: error.error_description || error.error
-				};
-				context.status = 422;
-				context.done();
-			};
-			request.post("https://discordapp.com/api/oauth2/token", {
-				form: {
-					client_id: youKnow.discord.id,
-					client_secret: youKnow.discord.secret,
-					grant_type: "authorization_code",
-					code: connection[1],
-					redirect_uri
-				}
-			}).then(body => {
-				body = JSON.parse(body);
-				request.get("https://discordapp.com/api/users/@me", {
-					headers: {
-						"Authorization": `${body.token_type} ${body.access_token}`
-					}
-				}).then(body2 => {
-					body2 = JSON.parse(body2);
-					resolve({
-						connection,
-						id: body2.id,
-						name: body2.username,
-						email: body2.email,
-						verified: body2.verified
-					});
-				}).catch(catchError);
-			}).catch(catchError);
-		} else if(connection[0] === "password") {
-			if(connection[1].length < 8) {
-				context.value = {
-					error: "The password must be at least 8 characters long."
-				};
-				context.status = 422;
-				context.done();
-			} else if(user) {
-				const hash = youKnow.crypto.hash(connection[1], user.salt.buffer);
-				const foundConnection = user.connections.find(foundConnection => foundConnection.service === "password" && foundConnection.hash.buffer.equals(hash));
-				if(foundConnection) {
-					if(foundConnection.once) {
-						users.updateOne({
-							_id: user._id
-						}, {
-							$pull: {
-								connections: {
-									id: foundConnection.id
-								}
-							}
-						});
-					}
-					resolve({
-						connection,
-						id: foundConnection.id
-					});
-				} else {
-					context.value = {
-						error: "The password is incorrect."
-					};
-					context.status = 422;
-					context.done();
-				}
-			} else {
-				resolve({
-					connection,
-					id: String(ObjectID())
-				});
-			}
-		} else {
-			context.value = {
-				error: "The service of the `connection` value is invalid."
-			};
-			context.status = 400;
-			context.done();
-		}
-	});
-};
 const validateConnection = (context, data) => {
 	return new Promise(resolve => {
 		if(context.user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
@@ -338,6 +220,124 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					<i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i>
 				</p>
 			`
+		});
+	};
+	const connect = (context, user) => {
+		let connection = context.req.body.connection;
+		return new Promise(resolve => {
+			if(typeof connection !== "string" || (connection = connection.split(" ")).length !== 2) {
+				context.value = {
+					error: 'The `connection` value is not in the format "<service> <code>".'
+				};
+				context.status = 400;
+				context.done();
+				return;
+			}
+			if(connection[0] === "Google") {
+				googleAuthClient.verifyIdToken({
+					idToken: connection[1],
+					audience: youKnow.google.id
+				}).then(ticket => {
+					const payload = ticket.getPayload();
+					resolve({
+						connection,
+						id: payload.sub,
+						name: payload.name,
+						email: payload.email,
+						verified: payload.email_verified
+					});
+				}).catch(err => {
+					context.value = {
+						error: err.message
+					};
+					context.status = 422;
+					context.done();
+				});
+			} else if(connection[0] === "Discord") {
+				let redirect_uri = context.req.get("Referrer") || "https://miroware.io/";
+				const pathIndex = redirect_uri.indexOf("/", redirect_uri.indexOf("//") + 2);
+				if(pathIndex !== -1) {
+					redirect_uri = `${redirect_uri.slice(0, pathIndex)}/login/discord/`;
+				}
+				const catchError = err => {
+					const error = JSON.parse(err.error);
+					context.value = {
+						error: error.error_description || error.error
+					};
+					context.status = 422;
+					context.done();
+				};
+				request.post("https://discordapp.com/api/oauth2/token", {
+					form: {
+						client_id: youKnow.discord.id,
+						client_secret: youKnow.discord.secret,
+						grant_type: "authorization_code",
+						code: connection[1],
+						redirect_uri
+					}
+				}).then(body => {
+					body = JSON.parse(body);
+					request.get("https://discordapp.com/api/users/@me", {
+						headers: {
+							"Authorization": `${body.token_type} ${body.access_token}`
+						}
+					}).then(body2 => {
+						body2 = JSON.parse(body2);
+						resolve({
+							connection,
+							id: body2.id,
+							name: body2.username,
+							email: body2.email,
+							verified: body2.verified
+						});
+					}).catch(catchError);
+				}).catch(catchError);
+			} else if(connection[0] === "password") {
+				if(connection[1].length < 8) {
+					context.value = {
+						error: "The password must be at least 8 characters long."
+					};
+					context.status = 422;
+					context.done();
+				} else if(user) {
+					const hash = youKnow.crypto.hash(connection[1], user.salt.buffer);
+					const foundConnection = user.connections.find(foundConnection => foundConnection.service === "password" && foundConnection.hash.buffer.equals(hash));
+					if(foundConnection) {
+						if(foundConnection.once) {
+							users.updateOne({
+								_id: user._id
+							}, {
+								$pull: {
+									connections: {
+										id: foundConnection.id
+									}
+								}
+							});
+						}
+						resolve({
+							connection,
+							id: foundConnection.id
+						});
+					} else {
+						context.value = {
+							error: "The password is incorrect."
+						};
+						context.status = 422;
+						context.done();
+					}
+				} else {
+					resolve({
+						connection,
+						id: String(ObjectID())
+					});
+				}
+			} else {
+				context.value = {
+					error: "The service of the `connection` value is invalid."
+				};
+				context.status = 400;
+				context.done();
+			}
 		});
 	};
 	const sanitizeConcat = (context, put) => new Promise(resolve => {
