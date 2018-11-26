@@ -227,12 +227,13 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		return new Promise(resolve => {
 			if(typeof connection !== "string" || (connection = connection.split(" ")).length !== 2) {
 				context.value = {
-					error: 'The `connection` value is not in the format "<service> <code>".'
+					error: 'The `connection` value is not in the format "<service> <Base64-encoded code>".'
 				};
 				context.status = 400;
 				context.done();
 				return;
 			}
+			connection[1] = String(Buffer.from(connection[1], "base64"));
 			if(connection[0] === "Google") {
 				googleAuthClient.verifyIdToken({
 					idToken: connection[1],

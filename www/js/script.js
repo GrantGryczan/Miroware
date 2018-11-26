@@ -486,7 +486,7 @@ Miro.auth = function(title, message, send, dialogCallback, creation) {
 	});
 };
 const putToken = (service, code) => Miro.request("PUT", "/token", {}, {
-	connection: `${service} ${code}`
+	connection: `${service} ${btoa(code)}`
 });
 Miro.checkSuper = success => {
 	if(!(success instanceof Function)) {

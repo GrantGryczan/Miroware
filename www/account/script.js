@@ -69,7 +69,7 @@ const removeConnection = evt => {
 	});
 };
 const postConnection = (service, code) => Miro.request("POST", "/users/@me/connections", {}, {
-	connection: `${service} ${code}`
+	connection: `${service} ${btoa(code)}`
 });
 let connectionBody;
 const add = html`

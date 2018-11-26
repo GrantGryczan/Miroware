@@ -52,13 +52,13 @@ const executeCaptcha = resolve => {
 const signUp = async (service, code) => Miro.request("POST", "/users", {
 	"X-Captcha": await new Promise(executeCaptcha)
 }, {
-	connection: `${service} ${code}`,
+	connection: `${service} ${btoa(code)}`,
 	email: signupDialog.form.elements.email.value,
 	name: signupDialog.form.elements.name.value,
 	birth: signupDialog.form.elements.birth.valueAsNumber
 });
 const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
-	connection: `${service} ${code}`,
+	connection: `${service} ${btoa(code)}`,
 	email: loginForm.elements.email.value
 });
 const loggedIn = location.reload.bind(location, false);
