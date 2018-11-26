@@ -58,7 +58,7 @@ loginForm.addEventListener("submit", evt => {
 			type: "submit"
 		}, "Cancel"]).then(value => {
 			if(value === 0) {
-				Miro.auth("Sign up", "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback).then(loggedIn);
+				Miro.auth("Sign up", "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(loggedIn);
 			} else {
 				Miro.formState(loginForm, true);
 			}

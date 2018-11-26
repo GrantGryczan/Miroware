@@ -361,25 +361,23 @@ const closeAndResolveAuth = Miro.response(xhr => {
 	authDialog.close(-2);
 	resolveAuth(xhr);
 });
-const clickAuth = service => {
-	return () => {
-		const notPassword = service !== "password";
-		if(notPassword) {
-			Miro.block(true);
-		}
-		new Promise(auths[service]).then(code => {
-			try {
-				if(notPassword) {
-					Miro.block(false);
-				}
-				setTimeout(() => {
-					sendAuth(service, code).then(closeAndResolveAuth);
-				});
-			} catch(err) {
-				throw new MiroError("The `send` parameter must be a promise (of `Miro.request` or which resolves a `Miro.request`).");
+const clickAuth = service => function() {
+	const notPassword = service !== "password";
+	if(notPassword) {
+		Miro.block(true);
+	}
+	new Promise(auths[service].bind(this)).then(code => {
+		try {
+			if(notPassword) {
+				Miro.block(false);
 			}
-		}).catch(catchAuth);
-	};
+			setTimeout(() => {
+				sendAuth(service, code).then(closeAndResolveAuth);
+			});
+		} catch(err) {
+			throw new MiroError("The `send` parameter must be a promise (of `Miro.request` or which resolves a `Miro.request`).");
+		}
+	}).catch(catchAuth);
 };
 const auths = {
 	Google: (resolve, reject) => {
@@ -416,25 +414,31 @@ const auths = {
 		};
 		window.addEventListener("message", receive);
 	},
-	password: (resolve, reject) => {
-		const dialog = new Miro.Dialog("Password", html`
-			Enter a secure password.<br>
+	password: function(resolve, reject) => {
+		const creation = this === true;
+		const body = html`
 			<div class="mdc-text-field">
 				<input id="password" name="password" class="mdc-text-field__input" type="password" minlength="10" required>
 				<label class="mdc-floating-label" for="password">Password</label>
 				<div class="mdc-line-ripple"></div>
-			</div><br>
-			<div class="mdc-text-field">
-				<input id="confirmPassword" name="confirmPassword" class="mdc-text-field__input" type="password" minlength="10" required>
-				<label class="mdc-floating-label" for="confirmPassword">Confirm password</label>
-				<div class="mdc-line-ripple"></div>
 			</div>
-		`, [{
+		`;
+		if(creation) {
+			body.appendChild(html`
+				<br>
+				<div class="mdc-text-field">
+					<input id="confirmPassword" name="confirmPassword" class="mdc-text-field__input" type="password" minlength="10" required>
+					<label class="mdc-floating-label" for="confirmPassword">Confirm password</label>
+					<div class="mdc-line-ripple"></div>
+				</div>
+			`);
+		}
+		const dialog = new Miro.Dialog("Password", body, [{
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]).then(value => {
 			if(value === 0) {
-				if(dialog.form.elements.password.value === dialog.form.elements.confirmPassword.value) {
+				if(!creation || dialog.form.elements.password.value === dialog.form.elements.confirmPassword.value) {
 					resolve(dialog.form.elements.password.value);
 				} else {
 					reject("The passwords do not match.");
@@ -445,7 +449,7 @@ const auths = {
 		});
 	}
 };
-Miro.auth = (title, message, send, dialogCallback) => {
+Miro.auth = function(title, message, send, dialogCallback, creation) {
 	if(!(typeof message === "string")) {
 		throw new MiroError("The `message` parameter must be a string.");
 	}
@@ -465,7 +469,7 @@ Miro.auth = (title, message, send, dialogCallback) => {
 		button.classList.add("mdc-button--unelevated");
 		button.classList.add("spaced");
 		button.textContent = service;
-		button.addEventListener("click", clickAuth(service));
+		button.addEventListener("click", clickAuth(service).bind(creation));
 		body.appendChild(button);
 	}
 	authDialog = new Miro.Dialog(title || "Authenticate", body, ["Cancel"]);
