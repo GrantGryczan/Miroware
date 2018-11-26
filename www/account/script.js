@@ -60,7 +60,7 @@ const removeConnection = evt => {
 	new Miro.Dialog("Remove", `Are you sure you want to remove that ${evt.target.parentNode.parentNode.parentNode._connection.service} connection?`, ["Yes", "No"]).then(value => {
 		if(value === 0) {
 			Miro.checkSuper(() => {
-				Miro.request("DELETE", `/users/@me/connections/${encodeURIComponent(evt.target.parentNode.parentNode.parentNode._connection.service)}/${encodeURIComponent(evt.target.parentNode.parentNode.parentNode._connection.id)}`).then(Miro.response(() => {
+				Miro.request("DELETE", `/users/@me/connections/${encodeURIComponent(evt.target.parentNode.parentNode.parentNode._connection.id)}`).then(Miro.response(() => {
 					evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.parentNode.nextSibling);
 					evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.parentNode);
 				}));
