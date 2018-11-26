@@ -414,12 +414,12 @@ const auths = {
 		};
 		window.addEventListener("message", receive);
 	},
-	password: function(resolve, reject) {
+	password: async function(resolve, reject) {
 		const creation = this === true;
 		const body = html`
 			Enter ${creation ? "a secure" : "your"} password.<br>
 			<div class="mdc-text-field">
-				<input id="password" name="password" class="mdc-text-field__input" type="password" minlength="10" required>
+				<input id="password" name="password" class="mdc-text-field__input" type="password" minlength="10" autocomplete="${creation ? "new" : "current"}-password" required>
 				<label class="mdc-floating-label" for="password">Password</label>
 				<div class="mdc-line-ripple"></div>
 			</div>
@@ -428,11 +428,15 @@ const auths = {
 			body.appendChild(html`
 				<br>
 				<div class="mdc-text-field">
-					<input id="confirmPassword" name="confirmPassword" class="mdc-text-field__input" type="password" minlength="10" required>
+					<input id="confirmPassword" name="confirmPassword" class="mdc-text-field__input" type="password" minlength="10" autocomplete="current-password" required>
 					<label class="mdc-floating-label" for="confirmPassword">Confirm password</label>
 					<div class="mdc-line-ripple"></div>
 				</div>
 			`);
+		}
+		const email = container.querySelector("#email2, #email");
+		if(email) {
+			body.appendChild(html`<input name="email" type="hidden" value="$${email.value}" autocomplete="email">`);
 		}
 		const dialog = new Miro.Dialog("Password", body, [{
 			text: "Okay",
