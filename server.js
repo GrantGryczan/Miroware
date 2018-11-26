@@ -131,8 +131,7 @@ const connect = (context, user) => {
 				}
 			} else {
 				resolve({
-					connection,
-					id: youKnow.crypto.hash(connection[1], user.hash)
+					connection
 				});
 			}
 		} else {
