@@ -414,7 +414,7 @@ const auths = {
 		};
 		window.addEventListener("message", receive);
 	},
-	password: function(resolve, reject) => {
+	password: function(resolve, reject) {
 		const creation = this === true;
 		const body = html`
 			<div class="mdc-text-field">
