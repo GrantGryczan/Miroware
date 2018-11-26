@@ -363,10 +363,15 @@ const closeAndResolveAuth = Miro.response(xhr => {
 });
 const clickAuth = service => {
 	return () => {
-		Miro.block(true);
+		const notPassword = service !== "password";
+		if(notPassword) {
+			Miro.block(true);
+		}
 		new Promise(auths[service]).then(code => {
 			try {
-				Miro.block(false);
+				if(notPassword) {
+					Miro.block(false);
+				}
 				setTimeout(() => {
 					sendAuth(service, code).then(closeAndResolveAuth);
 				});
