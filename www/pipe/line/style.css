@@ -67,9 +67,6 @@ main {
 .iconData > i {
 	vertical-align: middle;
 }
-#shill {
-	opacity: 0.5;
-}
 .mdc-fab {
 	position: fixed;
 	background-color: #808080;

@@ -28,7 +28,7 @@ this.value += html`
 					</div>
 					<div id="items" class="tbody"></div>
 				</div>
-				<p id="shill">
+				<p id="shill" class="transparent">
 					<br>
 					Hosting can get expensive, so any donations to <a href="/patreon/" target="_blank">my Patreon</a> would be greatly appreciated!
 				</p>`;

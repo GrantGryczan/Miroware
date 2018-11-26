@@ -39,6 +39,9 @@ a {
 .hidden {
 	display: none;
 }
+.transparent {
+	opacity: 0.5;
+}
 .spaced + .spaced {
 	margin-left: 8px;
 }

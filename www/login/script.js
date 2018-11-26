@@ -10,17 +10,19 @@ const setSubmit = evt => {
 for(const input of submits) {
 	input.addEventListener("click", setSubmit);
 }
+const forgot = html`<a class="transparent" href="javascript:;">Forgot your login? Click here.</a>`;
+forgot.addEventListener("click", () => {
+	new Miro.Dialog("Forgot Login", "Not yet...");
+});
 const enableFormOnAuthCancel = value => {
 	if(value !== -2) {
 		Miro.formState(loginForm, true);
 	}
 };
 const dialogCallback = dialog => {
-	if(signup) {
-		dialog.body.appendChild(document.createElement("br"));
-		dialog.body.appendChild(document.createElement("br"));
-		dialog.body.appendChild(captchaElem);
-	}
+	dialog.body.appendChild(document.createElement("br"));
+	dialog.body.appendChild(document.createElement("br"));
+	dialog.body.appendChild(signup ? captchaElem : forgot);
 	dialog.then(enableFormOnAuthCancel);
 };
 let signupDialog;
@@ -53,12 +55,12 @@ loginForm.addEventListener("submit", evt => {
 	evt.preventDefault();
 	Miro.formState(loginForm, false);
 	if(signup) {
-		signupDialog = new Miro.Dialog("Sign up", signupForm, [{
+		signupDialog = new Miro.Dialog("Signup", signupForm, [{
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]).then(value => {
 			if(value === 0) {
-				Miro.auth("Sign up", "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(loggedIn);
+				Miro.auth("Signup", "Connect your Miroware account to an external login to secure your account.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(loggedIn);
 			} else {
 				Miro.formState(loginForm, true);
 			}
