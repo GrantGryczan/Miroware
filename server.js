@@ -116,7 +116,7 @@ const connect = (context, user) => {
 				context.status = 422;
 				context.done();
 			} else if(user) {
-				const hash = youKnow.crypto.hash(connection[1], user.salt.buffer);
+				const hash = youKnow.crypto.hash(connection[1], user.salt.buffer).toString("base64");
 				if(user.connections.some(connection => connection.service === "password" && connection.id === hash)) {
 					resolve({
 						connection,

@@ -72,7 +72,7 @@ if(testEmail(this.req.body.email)) {
 				}],
 				connections: [{
 					service: data.connection[0],
-					id: data.id || youKnow.crypto.hash(data.connection[1], salt)
+					id: data.id || youKnow.crypto.hash(data.connection[1], salt).toString("base64")
 				}],
 				created: this.now,
 				updated: this.now,
