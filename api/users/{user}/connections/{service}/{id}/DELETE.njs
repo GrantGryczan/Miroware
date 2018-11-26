@@ -1,7 +1,6 @@
 const {user, isMe} = await parseUser(this);
 if(isMe) {
 	if(this.now - this.token.super < 300000) {
-		this.params.id = decodeURIComponent(this.params.id);
 		if(this.user.connections.some(connection => connection.service === this.params.service && connection.id === this.params.id)) {
 			if(this.user.connections.length === 1) {
 				this.value = {

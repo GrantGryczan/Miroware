@@ -116,11 +116,12 @@ const connect = (context, user) => {
 				context.status = 422;
 				context.done();
 			} else if(user) {
-				const hash = youKnow.crypto.hash(connection[1], user.salt.buffer).toString("base64");
-				if(user.connections.some(connection => connection.service === "password" && connection.id === hash)) {
+				const hash = youKnow.crypto.hash(connection[1], user.salt.buffer);
+				const foundConnection = user.connections.find(foundConnection => foundConnection.service === "password" && foundConnection.hash === hash);
+				if(foundConnection) {
 					resolve({
 						connection,
-						id: hash
+						id: foundConnection.id
 					});
 				} else {
 					context.value = {
@@ -131,7 +132,8 @@ const connect = (context, user) => {
 				}
 			} else {
 				resolve({
-					connection
+					connection,
+					id: `pswd_${ObjectID()}`
 				});
 			}
 		} else {

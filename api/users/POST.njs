@@ -62,6 +62,13 @@ if(testEmail(this.req.body.email)) {
 			}
 			const token = youKnow.crypto.token();
 			const salt = youKnow.crypto.salt();
+			const connection = {
+				service: data.connection[0],
+				id: data.id
+			};
+			if(data.connection[0] === "password") {
+				connection.hash = youKnow.crypto.hash(data.connection[1], salt);
+			}
 			const insertData = {
 				salt,
 				pouch: [{
@@ -70,10 +77,7 @@ if(testEmail(this.req.body.email)) {
 					expire: this.now + cookieOptions.maxAge,
 					super: this.now
 				}],
-				connections: [{
-					service: data.connection[0],
-					id: data.id || youKnow.crypto.hash(data.connection[1], salt).toString("base64")
-				}],
+				connections: [connection],
 				created: this.now,
 				updated: this.now,
 				email: this.req.body.email,

@@ -12,9 +12,12 @@ if(isMe) {
 				this.update.$push = {
 					connections: (this.value = {
 						service: data.connection[0],
-						id: data.id || youKnow.crypto.hash(data.connection[1], user.salt.buffer).toString("base64")
+						id: data.id
 					})
 				};
+				if(data.connection[0] === "password") {
+					this.value.hash = youKnow.crypto.hash(data.connection[1], user.salt.buffer);
+				}
 			}
 			this.done();
 		});
