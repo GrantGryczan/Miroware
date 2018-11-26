@@ -38,7 +38,7 @@ const pipeFiles = item => item.type !== "/";
 const wait = delay => new Promise(resolve => {
 	setTimeout(resolve, delay);
 });
-const connect = context => {
+const connect = (context, user) => {
 	let connection = context.req.body.connection;
 	return new Promise(resolve => {
 		if(typeof connection !== "string" || (connection = connection.split(" ")).length !== 2) {
@@ -108,6 +108,33 @@ const connect = context => {
 					});
 				}).catch(catchError);
 			}).catch(catchError);
+		} else if(connection[0] === "password") {
+			if(connection[1].length < 8) {
+				context.value = {
+					error: "The password must be at least 8 characters long."
+				};
+				context.status = 422;
+				context.done();
+			} else if(user) {
+				const hash = youKnow.crypto.hash(connection[1], user.salt.buffer);
+				if(user.connections.some(connection => connection.service === "password" && connection.id === hash)) {
+					resolve({
+						connection,
+						id: hash
+					});
+				} else {
+					context.value = {
+						error: "The password is incorrect."
+					};
+					context.status = 422;
+					context.done();
+				}
+			} else {
+				resolve({
+					connection,
+					id: youKnow.crypto.hash(connection[1], user.hash)
+				});
+			}
 		} else {
 			context.value = {
 				error: "The service of the `connection` value is invalid."

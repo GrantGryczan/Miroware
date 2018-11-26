@@ -57,7 +57,7 @@ form.addEventListener("submit", evt => {
 	Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
 });
 const removeConnection = evt => {
-	new Miro.Dialog("Remove", `Are you sure you want to remove your account's connection with ${evt.target.parentNode.parentNode.parentNode._connection.service} user #${evt.target.parentNode.parentNode.parentNode._connection.id}?`, ["Yes", "No"]).then(value => {
+	new Miro.Dialog("Remove", `Are you sure you want to remove that ${evt.target.parentNode.parentNode.parentNode._connection.service} connection?`, ["Yes", "No"]).then(value => {
 		if(value === 0) {
 			Miro.checkSuper(() => {
 				Miro.request("DELETE", `/users/@me/connections/${evt.target.parentNode.parentNode.parentNode._connection.service}/${evt.target.parentNode.parentNode.parentNode._connection.id}`).then(Miro.response(() => {

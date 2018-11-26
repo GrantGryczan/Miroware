@@ -105,7 +105,7 @@ if(isMe) {
 	if(typeDir) {
 		this.update.$push = {
 			pipe: this.value = {
-				id: String(new ObjectID()),
+				id: String(ObjectID()),
 				date: Date.now(),
 				name: data.name,
 				type: "/"
@@ -121,7 +121,7 @@ if(isMe) {
 			this.done();
 			return;
 		}
-		const id = String(new ObjectID());
+		const id = String(ObjectID());
 		s3.putObject({
 			Bucket: "miroware-pipe",
 			Key: id,

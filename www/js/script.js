@@ -408,6 +408,34 @@ const auths = {
 			}
 		};
 		window.addEventListener("message", receive);
+	},
+	password: (resolve, reject) => {
+		const dialog = new Miro.Dialog("Password", html`
+			Enter a secure password.<br>
+			<div class="mdc-text-field">
+				<input id="password" name="password" class="mdc-text-field__input" type="password" minlength="10" required>
+				<label class="mdc-floating-label" for="password">Password</label>
+				<div class="mdc-line-ripple"></div>
+			</div><br>
+			<div class="mdc-text-field">
+				<input id="confirmPassword" name="confirmPassword" class="mdc-text-field__input" type="password" minlength="10" required>
+				<label class="mdc-floating-label" for="confirmPassword">Confirm password</label>
+				<div class="mdc-line-ripple"></div>
+			</div>
+		`, [{
+			text: "Okay",
+			type: "submit"
+		}, "Cancel"]).then(value => {
+			if(value === 0) {
+				if(dialog.form.elements.password.value === dialog.form.elements.confirmPassword.value) {
+					resolve(dialog.form.elements.password.value);
+				} else {
+					reject("The passwords do not match.");
+				}
+			} else {
+				reject();
+			}
+		});
 	}
 };
 Miro.auth = (title, message, send, dialogCallback) => {
