@@ -417,6 +417,7 @@ const auths = {
 	password: function(resolve, reject) {
 		const creation = this === true;
 		const body = html`
+			Enter ${creation ? "a secure" : "your"} password.<br>
 			<div class="mdc-text-field">
 				<input id="password" name="password" class="mdc-text-field__input" type="password" minlength="10" required>
 				<label class="mdc-floating-label" for="password">Password</label>
