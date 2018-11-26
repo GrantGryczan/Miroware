@@ -133,7 +133,7 @@ const connect = (context, user) => {
 			} else {
 				resolve({
 					connection,
-					id: `pswd_${ObjectID()}`
+					id: String(ObjectID())
 				});
 			}
 		} else {
