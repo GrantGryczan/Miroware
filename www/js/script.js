@@ -436,7 +436,7 @@ const auths = {
 		}
 		const email = container.querySelector("#email2, #email");
 		if(email) {
-			body.appendChild(html`<input name="email" type="hidden" value="$${email.value}" autocomplete="email">`);
+			body.appendChild(html`<input name="email" class="hidden" type="email" value="$${email.value}" autocomplete="email">`);
 		}
 		const dialog = new Miro.Dialog("Password", body, [{
 			text: "Okay",
