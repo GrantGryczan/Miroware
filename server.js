@@ -117,7 +117,7 @@ const connect = (context, user) => {
 				context.done();
 			} else if(user) {
 				const hash = youKnow.crypto.hash(connection[1], user.salt.buffer);
-				const foundConnection = user.connections.find(foundConnection => foundConnection.service === "password" && (foundConnection.hash.buffer === hash || console.log(foundConnection.hash.buffer, hash)));
+				const foundConnection = user.connections.find(foundConnection => foundConnection.service === "password" && foundConnection.hash.buffer.equals(hash));
 				if(foundConnection) {
 					resolve({
 						connection,
