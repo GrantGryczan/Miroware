@@ -12,7 +12,7 @@ if(isMe) {
 				this.update.$push = {
 					connections: (this.value = {
 						service: data.connection[0],
-						id: data.id || youKnow.crypto.hash(data.connection[1], user.salt)
+						id: data.id || youKnow.crypto.hash(data.connection[1], user.salt.buffer)
 					})
 				};
 			}
