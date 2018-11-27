@@ -14,7 +14,7 @@ const forgot = html`<a class="transparent" href="javascript:;">Forgot your login
 forgot.addEventListener("click", () => {
 	new Miro.Dialog("Forgot Login", html`
 		Are you sure you want to send a new password connection to <b>$${loginForm.elements.email.value}</b>?<br>
-		The new password will be automatically disconnected once you use it. No other connections will be removed or created, and you would have to update the connections in your account settings manually not to forget your login again.
+		The new password will be automatically disconnected once you use it. No other connections will be removed or created. You will have to update the connections in your account settings manually as not to forget your login again.
 	`, ["Yes", "No"]).then(value => {
 		if(value === 0) {
 			Miro.request("POST", "/forgotten_login", {}, {
