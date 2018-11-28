@@ -299,16 +299,18 @@ Miro.snackbar = (message, actionText, actionHandler) => {
 	}
 	snackbar.show(dataObj);
 };
-Miro.response = (success, failure) => async xhr => {
-	if(Math.floor(xhr.status / 100) === 2) {
-		if(success instanceof Function) {
-			success(xhr);
+Miro.response = (success, failure) => { // This is a code block because of weird errors in old browsers.
+	return async xhr => {
+		if(Math.floor(xhr.status / 100) === 2) {
+			if(success instanceof Function) {
+				success(xhr);
+			}
+		} else if(xhr.readyState) {
+			if(failure instanceof Function) {
+				failure(xhr);
+			}
+			await new Miro.Dialog("Error", (xhr.response && xhr.response.error && html`$${xhr.response.error}`) || xhr.statusText || "An unknown error occurred.");
 		}
-	} else if(xhr.readyState) {
-		if(failure instanceof Function) {
-			failure(xhr);
-		}
-		await new Miro.Dialog("Error", (xhr.response && xhr.response.error && html`$${xhr.response.error}`) || xhr.statusText || "An unknown error occurred.");
 	}
 };
 const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
