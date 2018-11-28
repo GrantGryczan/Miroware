@@ -89,7 +89,7 @@ Miro.value = input => {
 	if(!(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement)) {
 		throw new MiroError("The `input` parameter must be an HTML `input`, `textarea`, or `select` element.");
 	}
-	return input.type === "checkbox" ? input.checked : (input.type === "date" ? +new Date(input.value) : input.value);
+	return input.type === "checkbox" ? input.checked : (input.type === "date" ? input.valueAsNumber : input.value);
 };
 const mdcTypes = ["checkbox", "radio", "select", "slider", "text-field"];
 const checkmark = html`

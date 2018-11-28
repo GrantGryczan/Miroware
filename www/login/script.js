@@ -55,7 +55,7 @@ const signUp = async (service, code) => Miro.request("POST", "/users", {
 	connection: `${service} ${btoa(code)}`,
 	email: signupDialog.form.elements.email.value,
 	name: signupDialog.form.elements.name.value,
-	birth: +new Date(signupDialog.form.elements.birth.value)
+	birth: signupDialog.form.elements.birth.valueAsNumber
 });
 const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
 	connection: `${service} ${btoa(code)}`,
