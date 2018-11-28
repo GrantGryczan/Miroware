@@ -137,6 +137,7 @@ Miro.formState = (form, state) => {
 		}
 	}
 };
+Miro.reload = () => location.reload();
 const _dialog = Symbol("dialog");
 const _promise = Symbol("promise");
 const _close = Symbol("close");
@@ -501,7 +502,7 @@ Miro.checkSuper = success => {
 	}));
 };
 if(Miro.in = JSON.parse(document.head.querySelector("meta[name='in']").getAttribute("content"))) {
-	Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(location.reload.bind(location, false)));
+	Miro.logOut = () => Miro.request("DELETE", "/token").then(Miro.response(Miro.reload));
 	const checkLogout = value => {
 		if(value === 0) {
 			Miro.logOut();

@@ -31,12 +31,11 @@ const onInput = evt => {
 };
 form.addEventListener("input", onInput);
 form.addEventListener("change", onInput);
-const reload = location.reload.bind(location, false);
 const setForm = () => {
 	if(changed.includes(form.elements.email)) {
 		new Miro.Dialog("Account Verification", html`
 			A verification email has sent to <b>$${form.elements.email.value}</b>.
-		`).then(reload);
+		`).then(Miro.reload);
 	}
 	if(changed.includes(form.elements.name)) {
 		Miro.inputState(form.elements.name, false);
@@ -113,7 +112,7 @@ add.addEventListener("click", Miro.checkSuper.bind(null, () => {
 }));
 form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 window.onbeforeunload = () => !submit.disabled || undefined;
-const respondReload = Miro.response(reload);
+const respondReload = Miro.response(Miro.reload);
 const deleteAccount = Miro.checkSuper.bind(null, () => {
 	Miro.request("DELETE", "/users/@me").then(respondReload);
 });

@@ -824,7 +824,7 @@ const hashChange = () => {
 		return;
 	}
 	if(items.querySelector(".item.loading")) {
-		location.reload();
+		Miro.reload();
 		changeHash = true;
 		location.hash = `#${parent}`;
 		return;
