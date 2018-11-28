@@ -41,20 +41,20 @@ Miro.prepare = node => {
 		elem.type = "button";
 	}
 	for(const elem of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded)")) {
-		elem._mdc = new mdc.ripple.MDCRipple(elem);
+		elem._mdc = mdc.ripple.MDCRipple.attachTo(elem);
 	}
 	for(const elem of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
-		elem._mdc = new mdc.textField.MDCTextField(elem);
+		elem._mdc = mdc.textField.MDCTextField.attachTo(elem);
 	}
 	for(const elem of node.querySelectorAll(".mdc-select")) {
-		elem._mdc = new mdc.select.MDCSelect(elem);
+		elem._mdc = mdc.select.MDCSelect.attachTo(elem);
 	}
 	for(const elem of node.querySelectorAll(".mdc-checkbox:not(.mdc-checkbox--upgraded)")) {
 		elem.querySelector(".mdc-checkbox__background").appendChild(checkmark.cloneNode(true));
-		elem._mdc = new mdc.checkbox.MDCCheckbox(elem);
+		elem._mdc = mdc.checkbox.MDCCheckbox.attachTo(elem);
 	}
 	for(const elem of node.querySelectorAll(".mdc-form-field")) {
-		elem._mdc = new mdc.formField.MDCFormField(elem);
+		elem._mdc = mdc.formField.MDCFormField.attachTo(elem);
 	}
 };
 const htmlReplacements = [[/&/g, "&amp;"], [/</g, "&lt;"], [/>/g, "&gt;"], [/"/g, "&quot;"], [/'/g, "&#39;"], [/`/g, "&#96;"]];
@@ -206,7 +206,7 @@ class MiroDialog {
 		const backdropElem = document.createElement("div");
 		backdropElem.classList.add("mdc-dialog__backdrop");
 		dialogElem.appendChild(backdropElem);
-		const dialog = new mdc.dialog.MDCDialog(dialogElem);
+		const dialog = mdc.dialog.MDCDialog.attachTo(dialogElem);
 		container.appendChild(dialogElem);
 		this[_promise] = new Promise(resolve => {
 			let submitted = false;
@@ -279,17 +279,17 @@ class MiroDialog {
 	}
 }
 Miro.Dialog = MiroDialog;
-const drawer = new mdc.drawer.MDCTemporaryDrawer(container.querySelector("#drawer"));
+const drawer = mdc.drawer.MDCDrawer.attachTo(container.querySelector("#drawer"));
 container.querySelector("#menu").addEventListener("click", () => {
 	drawer.open = !drawer.open;
 });
-Miro.progress = new mdc.linearProgress.MDCLinearProgress(container.querySelector(".mdc-linear-progress"));
+Miro.progress = mdc.linearProgress.MDCLinearProgress.attachTo(container.querySelector(".mdc-linear-progress"));
 const closeProgress = () => {
 	Miro.progress.close();
 	window.removeEventListener("load", closeProgress);
 };
 window.addEventListener("load", closeProgress);
-const snackbar = new mdc.snackbar.MDCSnackbar(document.body.querySelector("#snackbar"));
+const snackbar = mdc.snackbar.MDCSnackbar.attachTo(document.body.querySelector("#snackbar"));
 Miro.snackbar = (message, actionText, actionHandler) => {
 	const dataObj = {
 		message
