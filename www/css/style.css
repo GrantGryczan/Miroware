@@ -48,14 +48,9 @@ a {
 #container {
 	position: absolute;
 	width: 100%;
-	height: calc(100% - 64px);
-	padding-top: 64px;
+	height: 100%;
 	overflow-x: hidden;
 	overflow-y: auto;
-	@media (max-width: 599px) {
-		height: calc(100% - 56px);
-		margin-top: 56px;
-	}
 }
 .mdc-top-app-bar {
 	background-color: #303030;
