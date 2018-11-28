@@ -49,7 +49,7 @@ a {
 	position: absolute;
 	width: 100%;
 	height: calc(100% - 64px);
-	margin-top: 64px;
+	padding-top: 64px;
 	overflow-x: hidden;
 	overflow-y: auto;
 	@media (max-width: 599px) {

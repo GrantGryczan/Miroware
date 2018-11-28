@@ -9,36 +9,36 @@ this.value = html`
 				<div class="mdc-drawer__content">
 					<nav class="mdc-list">
 						<a class="mdc-list-item${this.req.decodedPath === "/" ? " mdc-list-item--activated" : '" href="/'}">
-							<i class="mdc-list-item__graphic material-icons">home</i> Home
+							<i class="mdc-list-item__graphic material-icons">home</i> <span class="mdc-list-item__text">Home</span>
 						</a>`;
 if(this.user) {
 const myProfile = `/users/${this.user._id}/`;
 this.value += html`
 						<a class="mdc-list-item${this.req.decodedPath === "/account/" ? " mdc-list-item--activated" : '" href="/account/'}">
-							<i class="mdc-list-item__graphic material-icons">settings</i> Account
+							<i class="mdc-list-item__graphic material-icons">settings</i> <span class="mdc-list-item__text">Account</span>
 						</a>
 						<a class="mdc-list-item${this.req.decodedPath === myProfile ? " mdc-list-item--activated" : `" href="${myProfile}`}">
-							<i class="mdc-list-item__graphic material-icons">account_box</i> Profile
+							<i class="mdc-list-item__graphic material-icons">account_box</i> <span class="mdc-list-item__text">Profile</span>
 						</a>
 						<a id="logOut" class="mdc-list-item" href="javascript:;">
-							<i class="mdc-list-item__graphic material-icons">person</i> Log out
+							<i class="mdc-list-item__graphic material-icons">person</i> <span class="mdc-list-item__text">Log out</span>
 						</a>`;
 } else {
 this.value += html`
 						<a id="logIn" class="mdc-list-item${this.req.decodedPath === "/login/" ? " mdc-list-item--activated" : html`" href="/login/?dest=$${encodeURIComponent(this.req.url)}`}">
-							<i class="mdc-list-item__graphic material-icons">person</i> Log in
+							<i class="mdc-list-item__graphic material-icons">person</i> <span class="mdc-list-item__text">Log in</span>
 						</a>`;
 }
 this.value += html`
 						<hr class="mdc-list-divider">
 						<a class="mdc-list-item${this.req.decodedPath.startsWith("/pipe/") ? " mdc-list-item--activated" : '" href="/pipe/'}">
-							<i class="mdc-list-item__graphic material-icons">upload_file</i> Pipe
+							<i class="mdc-list-item__graphic material-icons">upload_file</i> <span class="mdc-list-item__text">Pipe</span>
 						</a>
 						<a class="mdc-list-item${this.req.decodedPath === "/concat/" ? " mdc-list-item--activated" : '" href="/concat/'}">
-							<i class="mdc-list-item__graphic material-icons">link</i> Concat
+							<i class="mdc-list-item__graphic material-icons">link</i> <span class="mdc-list-item__text">Concat</span>
 						</a>
 						<a class="mdc-list-item${this.req.decodedPath === "/mimic/" ? " mdc-list-item--activated" : '" href="/mimic/'}">
-							<i class="mdc-list-item__graphic material-icons">memory</i> Mimic
+							<i class="mdc-list-item__graphic material-icons">memory</i> <span class="mdc-list-item__text">Mimic</span>
 						</a>
 						<hr class="mdc-list-divider">
 					</nav>
