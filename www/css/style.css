@@ -152,6 +152,7 @@ a {
 	}
 }
 main {
+	display: block;
 	margin: 0 auto;
 	padding: 60px;
 	box-sizing: border-box;
