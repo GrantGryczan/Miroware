@@ -142,7 +142,7 @@ const _dialog = Symbol("dialog");
 const _promise = Symbol("promise");
 const _close = Symbol("close");
 class MiroDialog {
-	constructor(title, body, buttons) {
+	constructor(title, content, buttons) {
 		if(!(typeof title === "string")) {
 			throw new MiroError("The `title` parameter must be a string.");
 		}
@@ -151,74 +151,69 @@ class MiroDialog {
 		} else if(!(buttons instanceof Array)) {
 			throw new MiroError("The `buttons` parameter must be an array if it is defined.");
 		}
-		if(typeof body === "string") {
-			const lines = body.split("\n");
-			body = document.createElement("span");
+		if(typeof content === "string") {
+			const lines = content.split("\n");
+			content = document.createElement("span");
 			for(let i = 0; i < lines.length; i++) {
 				if(i !== 0) {
-					body.appendChild(document.createElement("br"));
+					content.appendChild(document.createElement("br"));
 				}
-				body.appendChild(document.createTextNode(lines[i]));
+				content.appendChild(document.createTextNode(lines[i]));
 			}
-		} else if(!(body instanceof Node)) {
-			throw new MiroError("The `body` parameter must be a string or a DOM node.");
+		} else if(!(content instanceof Node)) {
+			throw new MiroError("The `content` parameter must be a string or a DOM node.");
 		}
 		this.ready = false;
-		if(body instanceof HTMLElement) {
-			Miro.prepare(body);
+		if(content instanceof HTMLElement) {
+			Miro.prepare(content);
 		}
-		const dialogElem = document.createElement("aside");
+		const dialogElem = html`
+			<div class="mdc-dialog">
+				<div class="mdc-dialog__container">
+					<form class="mdc-dialog__surface">
+						<h2 class="mdc-dialog__title">$${title}</h2>
+						<div class="mdc-dialog__content"></div>
+						<div class="mdc-dialog__actions"></div>
+					</form>
+				</div>
+				<div class="mdc-dialog__scrim"></div>
+			</div>
+		`;
 		dialogElem[_dialog] = this;
-		dialogElem.classList.add("mdc-dialog");
-		const surfaceElem = this.form = document.createElement("form");
-		surfaceElem.classList.add("mdc-dialog__surface");
-		const headerElem = document.createElement("header");
-		headerElem.classList.add("mdc-dialog__header");
-		const titleElem = document.createElement("h2");
-		titleElem.classList.add("mdc-dialog__header__title");
-		titleElem.textContent = title;
-		headerElem.appendChild(titleElem);
-		surfaceElem.appendChild(headerElem);
-		const bodyElem = document.createElement("section");
-		bodyElem.classList.add("mdc-dialog__body");
-		bodyElem.appendChild(body);
-		surfaceElem.appendChild(bodyElem);
-		const footerElem = document.createElement("footer");
-		footerElem.classList.add("mdc-dialog__footer");
-		for(let i = 0; i < buttons.length; i++) {
-			const item = buttons[i];
-			buttons[i] = document.createElement("button");
-			if(typeof item === "string") {
-				buttons[i].type = "button";
-				buttons[i].textContent = item;
-			} else if(item instanceof Object) {
-				buttons[i].type = item.type;
-				buttons[i].textContent = item.text;
-			} else {
-				throw new MiroError("The `buttons` parameter's array must only include strings and objects.");
-			}
-			buttons[i].classList.add("mdc-button");
-			buttons[i].classList.add("mdc-dialog__footer__button");
-			footerElem.appendChild(buttons[i]);
+		const form = this.form = dialogElem.querySelector("form");
+		const buttonsElem = dialogElem.querySelector(".mdc-dialog__actions");
+		const contentElem = dialogElem.querySelector(".mdc-dialog__content");
+		if(buttons.length) {
+			(buttons = buttons.map(item => {
+				const button = document.createElement("button");
+				if(typeof item === "string") {
+					button.type = "button";
+					button.textContent = item;
+				} else if(item instanceof Object) {
+					button.type = item.type;
+					button.textContent = item.text;
+				} else {
+					throw new MiroError("The `buttons` parameter's array must only include strings and objects.");
+				}
+				button.classList.add("mdc-button");
+				button.classList.add("mdc-dialog__button");
+				buttonsElem.appendChild(button);
+				return button;
+			}))[0].classList.add("mdc-dialog__button--default");
 		}
-		surfaceElem.appendChild(footerElem);
-		dialogElem.appendChild(surfaceElem);
-		const backdropElem = document.createElement("div");
-		backdropElem.classList.add("mdc-dialog__backdrop");
-		dialogElem.appendChild(backdropElem);
-		const dialog = mdc.dialog.MDCDialog.attachTo(dialogElem);
 		container.appendChild(dialogElem);
+		const dialog = mdc.dialog.MDCDialog.attachTo(dialogElem);
 		this[_promise] = new Promise(resolve => {
 			let submitted = false;
 			let formState = true;
-			surfaceElem.addEventListener("submit", (submitted = !footerElem.querySelector("button[type='submit']")) ? evt => {
+			form.addEventListener("submit", (submitted = !buttonsElem.querySelector("button[type='submit']")) ? evt => {
 				evt.preventDefault();
 			} : evt => {
 				evt.preventDefault();
 				submitted = true;
 				setTimeout(() => {
-					formState = !surfaceElem._disabled;
-					Miro.formState(surfaceElem, false);
+					formState = !form._disabled;
+					Miro.formState(form, false);
 				});
 			});
 			this.value = null;
@@ -227,7 +222,7 @@ class MiroDialog {
 				this.value = value;
 				setTimeout(() => {
 					container.removeChild(dialogElem);
-					Miro.formState(surfaceElem, formState);
+					Miro.formState(form, formState);
 				}, 120);
 				resolve(value);
 			};
@@ -245,7 +240,7 @@ class MiroDialog {
 			for(const elem of buttons) {
 				elem.addEventListener("click", dialogButton);
 			}
-			dialog.listen("MDCDialog:cancel", () => {
+			dialog.listen("MDCDialog:closing", () => {
 				close(-1);
 			});
 			setTimeout(() => {
@@ -255,7 +250,7 @@ class MiroDialog {
 		});
 		this[_dialog] = dialog;
 		this.element = dialogElem;
-		this.body = bodyElem;
+		this.content = contentElem;
 		this.buttons = buttons;
 	}
 	then(onFulfilled) {
@@ -417,7 +412,7 @@ const auths = {
 	},
 	password: async function(resolve, reject) {
 		const creation = this === true;
-		const body = html`
+		const content = html`
 			Enter ${creation ? "a secure" : "your"} password.<br>
 			<div class="mdc-text-field">
 				<input id="password" name="password" class="mdc-text-field__input" type="password" minlength="10" autocomplete="${creation ? "new" : "current"}-password" required>
@@ -426,7 +421,7 @@ const auths = {
 			</div>
 		`;
 		if(creation) {
-			body.appendChild(html`
+			content.appendChild(html`
 				<br>
 				<div class="mdc-text-field">
 					<input id="confirmPassword" name="confirmPassword" class="mdc-text-field__input" type="password" minlength="10" autocomplete="current-password" required>
@@ -437,9 +432,9 @@ const auths = {
 		}
 		const email = container.querySelector("#email2, #email");
 		if(email) {
-			body.appendChild(html`<input name="email" class="hidden" type="email" value="$${email.value}" autocomplete="email">`);
+			content.appendChild(html`<input name="email" class="hidden" type="email" value="$${email.value}" autocomplete="email">`);
 		}
-		const dialog = new Miro.Dialog("Password", body, [{
+		const dialog = new Miro.Dialog("Password", content, [{
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]).then(value => {
@@ -463,12 +458,12 @@ Miro.auth = function(title, message, send, dialogCallback, creation) {
 		throw new MiroError("The `send` parameter must be a function.");
 	}
 	sendAuth = send;
-	const body = document.createElement("span");
+	const content = document.createElement("span");
 	for(const part of message.split("\n")) {
-		body.appendChild(document.createTextNode(part));
-		body.appendChild(document.createElement("br"));
+		content.appendChild(document.createTextNode(part));
+		content.appendChild(document.createElement("br"));
 	}
-	body.appendChild(document.createElement("br"));
+	content.appendChild(document.createElement("br"));
 	for(const service of Object.keys(auths)) {
 		const button = document.createElement("button");
 		button.classList.add("mdc-button");
@@ -476,9 +471,9 @@ Miro.auth = function(title, message, send, dialogCallback, creation) {
 		button.classList.add("spaced");
 		button.textContent = service;
 		button.addEventListener("click", clickAuth(service).bind(creation));
-		body.appendChild(button);
+		content.appendChild(button);
 	}
-	authDialog = new Miro.Dialog(title || "Authenticate", body, ["Cancel"]);
+	authDialog = new Miro.Dialog(title || "Authenticate", content, ["Cancel"]);
 	if(dialogCallback instanceof Function) {
 		dialogCallback(authDialog);
 	}
