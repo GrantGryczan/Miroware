@@ -230,15 +230,27 @@ main {
 		vertical-align: bottom;
 	}
 }
+@keyframes autofill {
+	to {
+		color: rgba(255, 255, 255, 0.87);
+		background-color: transparent;
+	}
+}
+input:-webkit-autofill {
+	animation-name: autofill;
+	animation-fill-mode: both;
+}
 .mdc-text-field .mdc-floating-label {
 	left: 0;
 	bottom: 8px;
-	&--float-above, &.alwaysFloat {
+	&--float-above, .mdc-text-field__input:-webkit-autofill + &, &.alwaysFloat {
 		transform: translateY(-100%) scale(0.75);
 	}
 }
-.mdc-text-field--textarea .mdc-floating-label.alwaysFloat {
-	transform: translateY(-50%) scale(0.923);
+.mdc-text-field--textarea .mdc-floating-label {
+	&--float-above, &.alwaysFloat {
+		transform: translateY(-50%) scale(0.923);
+	}
 }
 textarea {
 	resize: none;
