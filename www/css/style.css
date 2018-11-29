@@ -302,9 +302,6 @@ textarea {
 			}
 		}
 	}
-	&::before, &::after {
-		background-color: rgba(255, 255, 255, 0.87);
-	}
 }
 :not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth).mdc-text-field {
 	&:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) {
@@ -342,6 +339,9 @@ textarea {
 	}
 	&--upgraded {
 		margin-top: 8px;
+	}
+	&::before, &::after {
+		background-color: rgba(255, 255, 255, 0.87);
 	}
 }
 .mdc-text-field-helper-text {
