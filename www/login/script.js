@@ -31,9 +31,9 @@ const enableFormOnAuthCancel = value => {
 	}
 };
 const dialogCallback = dialog => {
-	dialog.body.appendChild(document.createElement("br"));
-	dialog.body.appendChild(document.createElement("br"));
-	dialog.body.appendChild(signup ? captchaElem : forgot);
+	dialog.content.appendChild(document.createElement("br"));
+	dialog.content.appendChild(document.createElement("br"));
+	dialog.content.appendChild(signup ? captchaElem : forgot);
 	dialog.then(enableFormOnAuthCancel);
 };
 let signupDialog;

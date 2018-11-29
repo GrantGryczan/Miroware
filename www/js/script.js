@@ -181,8 +181,9 @@ class MiroDialog {
 		`;
 		dialogElem[_dialog] = this;
 		const form = this.form = dialogElem.querySelector("form");
-		const buttonsElem = dialogElem.querySelector(".mdc-dialog__actions");
 		const contentElem = dialogElem.querySelector(".mdc-dialog__content");
+		contentElem.appendChild(content);
+		const buttonsElem = dialogElem.querySelector(".mdc-dialog__actions");
 		if(buttons.length) {
 			(buttons = buttons.map(item => {
 				const button = document.createElement("button");
@@ -216,35 +217,35 @@ class MiroDialog {
 					Miro.formState(form, false);
 				});
 			});
+			let closed = false;
 			this.value = null;
-			const close = value => {
-				this.closed = true;
-				this.value = value;
-				setTimeout(() => {
-					container.removeChild(dialogElem);
+			const close = this[_close] = value => {
+				if(!closed) {
+					closed = true;
+					this.value = value;
+					dialog.close();
 					Miro.formState(form, formState);
-				}, 120);
-				resolve(value);
+					resolve(value);
+				}
 			};
-			this[_close] = close;
-			const dialogButton = async evt => {
+			const click = async evt => {
 				if(!submitted && evt.target.type === "submit") {
 					await Miro.wait();
 					if(!submitted) {
 						return;
 					}
 				}
-				dialog.close();
 				close(buttons.indexOf(evt.target));
 			};
 			for(const elem of buttons) {
-				elem.addEventListener("click", dialogButton);
+				elem.addEventListener("click", click);
 			}
-			dialog.listen("MDCDialog:closing", () => {
-				close(-1);
+			dialog.listen("MDCDialog:closing", close.bind(this, -1));
+			dialog.listen("MDCDialog:closed", () => {
+				container.removeChild(dialogElem);
 			});
 			setTimeout(() => {
-				dialog.show();
+				dialog.open();
 				this.ready = true;
 			});
 		});
@@ -264,7 +265,6 @@ class MiroDialog {
 	close(value) {
 		setTimeout(() => {
 			if(this.ready) {
-				this[_dialog].close();
 				this[_close](typeof value === "number" ? value : -1);
 				return true;
 			} else {
