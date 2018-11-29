@@ -285,7 +285,6 @@ textarea {
 		}
 	}
 	&:not(&--textarea) {
-		display: inline-block;
 		overflow: initial;
 	}
 	&--textarea {
