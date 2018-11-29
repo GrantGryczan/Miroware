@@ -247,10 +247,10 @@ label {
 		pointer-events: initial;
 	}
 }
-.mdc-floating-label {
+.mdc-text-field .mdc-floating-label {
 	left: 0;
 	bottom: 8px;
-	.mdc-text-field &--float-above, &.alwaysFloat {
+	&--float-above, &.alwaysFloat {
 		transform: translateY(-100%) scale(0.75);
 	}
 }
