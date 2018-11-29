@@ -240,16 +240,21 @@ input:-webkit-autofill {
 	animation-name: autofill;
 	animation-fill-mode: both;
 }
-.mdc-text-field .mdc-floating-label {
-	left: 0;
-	bottom: 8px;
-	&--float-above, .mdc-text-field__input:-webkit-autofill + &, &.alwaysFloat {
-		transform: translateY(-100%) scale(0.75);
+.mdc-floating-label {
+	.mdc-text-field & {
+		left: 0;
+		bottom: 8px;
+		&--float-above, &.alwaysFloat {
+			transform: translateY(-100%) scale(0.75);
+		}
 	}
-}
-.mdc-text-field--textarea .mdc-floating-label {
-	&--float-above, &.alwaysFloat {
-		transform: translateY(-50%) scale(0.923);
+	.mdc-text-field--textarea & {
+		&--float-above, &.alwaysFloat {
+			transform: translateY(-50%) scale(0.923);
+		}
+	}
+	.mdc-text-field__input:-webkit-autofill + & {
+		transform: translateY(-100%) scale(0.75);
 	}
 }
 textarea {
