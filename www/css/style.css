@@ -92,19 +92,23 @@ a {
 	&__content {
 		display: flex;
 		flex-direction: column;
-		.mdc-list {
-			user-select: none;
-			-moz-user-select: -moz-none;
-			.mdc-list-item {
-				color: rgba(255, 255, 255, 0.87);
-				&__graphic {
-					color: rgba(255, 255, 255, 0.6);
-				}
-			}
+	}
+}
+.mdc-list {
+	user-select: none;
+	-moz-user-select: -moz-none;
+	.mdc-list-item {
+		color: rgba(255, 255, 255, 0.87);
+		&__graphic {
+			color: rgba(255, 255, 255, 0.6);
+		}
+	}
+	&:not(&--non-interactive) > .&-item:not(&-item--disabled) {
+		&::before, &::after {
+			background-color: #ffffff;
 		}
 	}
 }
-.mdc-list-item:not(.mdc-list--non-interactive) > .mdc-list-item:not(.mdc-list-item--disabled).mdc-list-item::before, :not(.mdc-list--non-interactive) > :not(.mdc-list-item--disabled).mdc-list-item::after
 #legal {
 	margin: 14px 16px;
 	opacity: 0.75;
