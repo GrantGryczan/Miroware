@@ -261,6 +261,7 @@ textarea {
 	resize: none;
 }
 .mdc-text-field {
+	display: inline-block;
 	.mdc-line-ripple {
 		background-color: #b54040;
 	}
