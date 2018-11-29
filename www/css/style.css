@@ -230,17 +230,6 @@ main {
 		vertical-align: bottom;
 	}
 }
-@-webkit-keyframes autofill {
-	to {
-		color: rgba(255, 255, 255, 0.87);
-		background-color: transparent;
-	}
-}
-
-input:-webkit-autofill {
-	-webkit-animation-name: autofill;
-	-webkit-animation-fill-mode: both;
-}
 .mdc-text-field .mdc-floating-label {
 	left: 0;
 	bottom: 8px;
