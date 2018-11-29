@@ -43,13 +43,13 @@ Miro.prepare = node => {
 	for(const elem of node.querySelectorAll(".mdc-ripple:not(.mdc-ripple-upgraded)")) {
 		elem._mdc = mdc.ripple.MDCRipple.attachTo(elem);
 	}
-	for(const elem of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field--upgraded)")) {
+	for(const elem of node.querySelectorAll(".mdc-text-field:not(.mdc-text-field-upgraded)")) {
 		elem._mdc = mdc.textField.MDCTextField.attachTo(elem);
 	}
 	for(const elem of node.querySelectorAll(".mdc-select")) {
 		elem._mdc = mdc.select.MDCSelect.attachTo(elem);
 	}
-	for(const elem of node.querySelectorAll(".mdc-checkbox:not(.mdc-checkbox--upgraded)")) {
+	for(const elem of node.querySelectorAll(".mdc-checkbox:not(.mdc-checkbox-upgraded)")) {
 		elem.querySelector(".mdc-checkbox__background").appendChild(checkmark.cloneNode(true));
 		elem._mdc = mdc.checkbox.MDCCheckbox.attachTo(elem);
 	}

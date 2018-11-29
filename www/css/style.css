@@ -247,11 +247,15 @@ label {
 		pointer-events: initial;
 	}
 }
-.alwaysFloat {
-	transform: translateY(-100%) scale(0.75);
-	.mdc-text-field--textarea & {
-		transform: translateY(-50%) scale(0.923);
+.mdc-floating-label {
+	left: 0;
+	bottom: 8px;
+	.mdc-text-field &--float-above, &.alwaysFloat {
+		transform: translateY(-100%) scale(0.75);
 	}
+}
+.mdc-text-field--textarea .mdc-floating-label.alwaysFloat {
+	transform: translateY(-50%) scale(0.923);
 }
 textarea {
 	resize: none;
@@ -302,6 +306,14 @@ textarea {
 			}
 		}
 	}
+	&__input {
+		height: 30px;
+		padding: 20px 0 1px;
+		box-sizing: initial;
+	}
+	&::before, &::after {
+		display: none;
+	}
 }
 :not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth).mdc-text-field {
 	&:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) {
@@ -337,11 +349,8 @@ textarea {
 	&:not(.mdc-text-field--disabled), &--disabled {
 		border-bottom-color: rgba(255, 255, 255, 0.12);
 	}
-	&--upgraded {
+	&-upgraded {
 		margin-top: 8px;
-	}
-	&::before, &::after {
-		background-color: rgba(255, 255, 255, 0.87);
 	}
 }
 .mdc-text-field-helper-text {
