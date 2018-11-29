@@ -92,6 +92,9 @@ a {
 			-moz-user-select: -moz-none;
 			.mdc-list-item {
 				color: rgba(255, 255, 255, 0.87);
+				&__graphic {
+					color: rgba(255, 255, 255, 0.6);
+				}
 			}
 		}
 	}
