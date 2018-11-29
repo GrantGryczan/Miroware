@@ -504,7 +504,7 @@ if(Miro.in = JSON.parse(document.head.querySelector("meta[name='in']").getAttrib
 		}
 	};
 	container.querySelector("#logOut").addEventListener("click", () => {
-		new Miro.Dialog("Log Out", "Are you sure you want to log out?", ["Yes", "No"]).then(checkLogout);
+		new Miro.Dialog("Logout", "Are you sure you want to log out?", ["Yes", "No"]).then(checkLogout);
 	});
 } else {
 	Miro.logIn = dest => {
