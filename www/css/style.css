@@ -78,10 +78,10 @@ a {
 .mdc-drawer {
 	border-color: rgba(255, 255, 255, 0.12);
 	background-color: #303030;
-	&__title {
+	& &__title {
 		color: rgba(255, 255, 255, 0.87);
 	}
-	&__subtitle {
+	& &__subtitle {
 		color: rgba(255, 255, 255, 0.87);
 	}
 	&__content {
