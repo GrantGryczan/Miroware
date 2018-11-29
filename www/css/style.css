@@ -286,6 +286,7 @@ textarea {
 	}
 	&:not(&--textarea) {
 		display: inline-block;
+		overflow: initial;
 	}
 	&--textarea {
 		&:not(.mdc-text-field--disabled) {
