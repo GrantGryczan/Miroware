@@ -261,6 +261,7 @@ textarea {
 		background-color: #b54040;
 	}
 	&:not(&--disabled) {
+		background-color: transparent;
 		.mdc-text-field__input {
 			color: rgba(255, 255, 255, 0.87);
 		}
@@ -300,6 +301,9 @@ textarea {
 				background-color: #282828;
 			}
 		}
+	}
+	&::before, &::after {
+		background-color: rgba(255, 255, 255, 0.87);
 	}
 }
 :not(.mdc-text-field--textarea):not(.mdc-text-field--fullwidth).mdc-text-field {
