@@ -261,7 +261,6 @@ textarea {
 	resize: none;
 }
 .mdc-text-field {
-	display: inline-block;
 	height: initial;
 	.mdc-line-ripple {
 		background-color: #b54040;
@@ -285,6 +284,9 @@ textarea {
 			}
 		}
 	}
+	&:not(&--textarea) {
+		display: inline-block;
+	}
 	&--textarea {
 		&:not(.mdc-text-field--disabled) {
 			&, & .mdc-text-field__input:focus {
@@ -295,17 +297,15 @@ textarea {
 			border-color: rgba(255, 255, 255, 0.12);
 			background-color: initial;
 		}
-	}
-	&--disabled {
-		.mdc-text-field__input, .mdc-floating-label {
-			color: rgba(255, 255, 255, 0.37);
-		}
-	}
-	&--textarea {
 		&, &.mdc-text-field--disabled {
 			.mdc-floating-label {
 				background-color: #282828;
 			}
+		}
+	}
+	&--disabled {
+		.mdc-text-field__input, .mdc-floating-label {
+			color: rgba(255, 255, 255, 0.37);
 		}
 	}
 	&__input {
