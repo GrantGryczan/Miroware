@@ -241,12 +241,6 @@ input:-webkit-autofill {
 	-webkit-animation-name: autofill;
 	-webkit-animation-fill-mode: both;
 }
-label {
-	pointer-events: none;
-	.mdc-form-field & {
-		pointer-events: initial;
-	}
-}
 .mdc-text-field .mdc-floating-label {
 	left: 0;
 	bottom: 8px;
@@ -262,6 +256,7 @@ textarea {
 }
 .mdc-text-field {
 	display: inline-block;
+	height: initial;
 	.mdc-line-ripple {
 		background-color: #b54040;
 	}
