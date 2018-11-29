@@ -4,7 +4,8 @@ this.value = html`
 		<div id="container">
 			<aside id="drawer" class="mdc-drawer mdc-drawer--modal">
 				<div class="mdc-drawer__header">
-					<div class="mdc-drawer__header-content"></div>
+					<h3 class="mdc-drawer__title">$${this.user.name}</h3>
+					<h6 class="mdc-drawer__subtitle">${this.user._id}</h6>
 				</div>
 				<div class="mdc-drawer__content">
 					<nav class="mdc-list">
@@ -12,8 +13,8 @@ this.value = html`
 							<i class="mdc-list-item__graphic material-icons">home</i> <span class="mdc-list-item__text">Home</span>
 						</a>`;
 if(this.user) {
-const myProfile = `/users/${this.user._id}/`;
-this.value += html`
+	const myProfile = `/users/${this.user._id}/`;
+	this.value += html`
 						<a class="mdc-list-item${this.req.decodedPath === "/account/" ? " mdc-list-item--activated" : '" href="/account/'}">
 							<i class="mdc-list-item__graphic material-icons">settings</i> <span class="mdc-list-item__text">Account</span>
 						</a>
@@ -24,7 +25,7 @@ this.value += html`
 							<i class="mdc-list-item__graphic material-icons">person</i> <span class="mdc-list-item__text">Log out</span>
 						</a>`;
 } else {
-this.value += html`
+	this.value += html`
 						<a id="logIn" class="mdc-list-item${this.req.decodedPath === "/login/" ? " mdc-list-item--activated" : html`" href="/login/?dest=$${encodeURIComponent(this.req.url)}`}">
 							<i class="mdc-list-item__graphic material-icons">person</i> <span class="mdc-list-item__text">Log in</span>
 						</a>`;

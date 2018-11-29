@@ -78,46 +78,12 @@ a {
 .mdc-drawer {
 	user-select: none;
 	-moz-user-select: -moz-none;
-	&--temporary {
-		color: rgba(255, 255, 255, 0.87);
-	}
-	&__header {
-		display: none;
-		&-content {
-			background-color: #202020;
-		}
-	}
+	border-color: rgba(255, 255, 255, 0.12);
+	background-color: #000000;
 	&__content {
 		display: flex;
 		flex-direction: column;
 		background-color: #303030;
-	}
-	.mdc-list {
-		color: inherit;
-		&:not(.mdc-list--non-interactive) > .mdc-list-item {
-			&:not(.mdc-list-item--disabled) {
-				&::before, &::after {
-					background-color: #ffffff;
-				}
-				&:hover::before {
-					opacity: 0.06;
-				}
-				&:focus::before {
-					opacity: 0.12;
-				}
-				&:active::before {
-					opacity: 0.18;
-				}
-			}
-			&--disabled {
-				opacity: 0.5;
-				pointer-events: none;
-			}
-		}
-		&, &-item__graphic {
-			padding: 8px 0;
-			color: inherit;
-		}
 	}
 }
 #legal {
