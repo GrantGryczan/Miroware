@@ -3,9 +3,9 @@ this.value = html`
 	<body class="mdc-typography">
 		<div id="container">
 			<aside id="drawer" class="mdc-drawer mdc-drawer--modal">
-				<header class="mdc-drawer__header">
+				<div class="mdc-drawer__header">
 					<div class="mdc-drawer__header-content"></div>
-				</header>
+				</div>
 				<div class="mdc-drawer__content">
 					<nav class="mdc-list">
 						<a class="mdc-list-item${this.req.decodedPath === "/" ? " mdc-list-item--activated" : '" href="/'}">
@@ -67,5 +67,6 @@ this.value += html`
 						<span class="mdc-linear-progress__bar-inner"></span>
 					</div>
 				</div>
-			</header>`;
+			</header>
+			<div class="mdc-top-app-bar--fixed-adjust"></div>`;
 this.done();
