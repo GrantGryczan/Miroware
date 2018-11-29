@@ -241,7 +241,7 @@ input:-webkit-autofill {
 	animation-fill-mode: both;
 }
 .mdc-floating-label {
-	.mdc-text-field & {
+	.mdc-text-field:not(.mdc-text-field--textarea) & {
 		left: 0;
 		bottom: 8px;
 		&--float-above, &.alwaysFloat {
