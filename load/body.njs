@@ -2,11 +2,11 @@ this.value = html`
 	</head>
 	<body class="mdc-typography">
 		<div id="container">
-			<aside id="drawer" class="mdc-drawer mdc-drawer--modal">
+			<aside id="drawer" class="mdc-drawer mdc-drawer--modal">${this.user ? html`
 				<div class="mdc-drawer__header">
 					<h3 class="mdc-drawer__title">$${this.user.name}</h3>
 					<h6 class="mdc-drawer__subtitle">${this.user._id}</h6>
-				</div>
+				</div>` : ""}
 				<div class="mdc-drawer__content">
 					<nav class="mdc-list">
 						<a class="mdc-list-item${this.req.decodedPath === "/" ? " mdc-list-item--activated" : '" href="/'}">
