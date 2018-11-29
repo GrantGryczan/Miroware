@@ -93,16 +93,16 @@ a {
 		display: flex;
 		flex-direction: column;
 	}
-}
-.mdc-list {
-	user-select: none;
-	-moz-user-select: -moz-none;
 	.mdc-list-item {
 		color: rgba(255, 255, 255, 0.87);
 		&__graphic {
 			color: rgba(255, 255, 255, 0.6);
 		}
 	}
+}
+.mdc-list {
+	user-select: none;
+	-moz-user-select: -moz-none;
 	&:not(&--non-interactive) > &-item:not(&-item--disabled) {
 		&::before, &::after {
 			background-color: #ffffff;
