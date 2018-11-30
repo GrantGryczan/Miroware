@@ -309,6 +309,7 @@ textarea {
 		}
 	}
 	&--disabled {
+		background-color: transparent;
 		.mdc-text-field__input, .mdc-floating-label {
 			color: rgba(255, 255, 255, 0.37);
 		}
