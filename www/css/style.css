@@ -55,9 +55,12 @@ a {
 #container {
 	position: absolute;
 	width: 100%;
-	height: 100%;
+	height: calc(100% - 64px);
 	overflow-x: hidden;
 	overflow-y: auto;
+	@media (max-width: 599px) {
+		height: calc(100% - 56px);
+	}
 }
 .mdc-top-app-bar {
 	top: 0;
