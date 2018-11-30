@@ -357,12 +357,6 @@ textarea {
 			color: rgba(255, 255, 255, 0.37);
 		}
 	}
-	&:not(.mdc-text-field--disabled), &--disabled {
-		border-bottom-color: rgba(255, 255, 255, 0.12);
-	}
-	&-upgraded {
-		margin-top: 8px;
-	}
 }
 .mdc-text-field-helper-text {
 	opacity: 0.5;
@@ -401,11 +395,10 @@ textarea {
 	&--disabled {
 		background-color: transparent;
 		.mdc-select__native-control {
-			border-bottom-color: rgba(255, 255, 255, 0.42);
-			color: rgba(255, 255, 255, 0.87);
-		}
-		.mdc-floating-label {
-			color: rgba(255, 255, 255, 0.37);
+			border-bottom: 1px dotted rgba(255, 255, 255, 0.12);
+			&, .mdc-floating-label {
+				color: rgba(255, 255, 255, 0.37);
+			}
 		}
 	}
 	&::before, &::after {
