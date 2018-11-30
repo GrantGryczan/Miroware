@@ -45,6 +45,13 @@ a {
 .spaced + .spaced {
 	margin-left: 8px;
 }
+.margined {
+	margin-top: 8px;
+}
+.marginedMore {
+	margin-top: 16px;
+	margin-bottom: 8px;
+}
 #container {
 	position: absolute;
 	width: 100%;
