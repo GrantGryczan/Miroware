@@ -245,6 +245,7 @@ input:-webkit-autofill {
 	animation-fill-mode: both;
 }
 .mdc-floating-label {
+	max-width: initial !important;
 	.mdc-text-field:not(.mdc-text-field--textarea) & {
 		left: 0;
 		bottom: 8px;
@@ -325,6 +326,9 @@ textarea {
 		height: 30px;
 		padding: 20px 0 1px;
 		box-sizing: initial;
+		.mdc-text-field--dense & {
+			padding: 12px 0 0 0;
+		}
 	}
 	&::before, &::after {
 		display: none;

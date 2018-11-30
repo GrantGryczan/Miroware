@@ -20,11 +20,11 @@ this.value += html`
 					<div class="mdc-line-ripple"></div>
 				</div>
 				<br>
-				<div class="mdc-text-field spaced">
+				<div class="mdc-text-field mdc-text-field--dense spaced">
 					<input id="depthInput" class="mdc-text-field__input" type="number" min="1" max="2000" value="3" required></input>
 					<label class="mdc-floating-label" for="depthInput">Depth</label>
 					<div class="mdc-line-ripple"></div>
-				</div><div class="mdc-text-field spaced">
+				</div><div class="mdc-text-field mdc-text-field--dense spaced">
 					<input id="splitInput" class="mdc-text-field__input" value="([^\\w])"></input>
 					<label class="mdc-floating-label" for="splitInput">Split</label>
 					<div class="mdc-line-ripple"></div>
