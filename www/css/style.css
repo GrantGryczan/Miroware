@@ -396,9 +396,9 @@ textarea {
 		background-color: transparent;
 		.mdc-select__native-control {
 			border-bottom: 1px dotted rgba(255, 255, 255, 0.12);
-			&, .mdc-floating-label {
-				color: rgba(255, 255, 255, 0.37);
-			}
+		}
+		.mdc-select__native-control, .mdc-floating-label {
+			color: rgba(255, 255, 255, 0.37);
 		}
 	}
 	&::before, &::after {
