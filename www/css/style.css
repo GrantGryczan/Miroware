@@ -212,9 +212,6 @@ main {
 	&::before, &::after {
 		background-color: #ffffff;
 	}
-	form > & {
-		margin: 8px 0;
-	}
 }
 .mdc-icon-button {
 	height: 40px;
