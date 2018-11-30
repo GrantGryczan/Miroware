@@ -60,6 +60,7 @@ a {
 	overflow-y: auto;
 }
 .mdc-top-app-bar {
+	top: 0;
 	background-color: #303030;
 }
 .mdc-linear-progress {
