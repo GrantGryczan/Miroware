@@ -72,13 +72,13 @@ const postConnection = (service, code) => Miro.request("POST", "/users/@me/conne
 });
 let connectionBody;
 const add = html`
-	<button class="mdc-button">
+	<button class="mdc-button margined">
 		<i class="mdc-button__icon material-icons">add</i>Add
 	</button>
 `;
 const appendCard = connection => {
 	const card = html`
-		<div class="mdc-card">
+		<div class="mdc-card margined">
 			<div class="mdc-card__area">
 				<h2 class="mdc-card__title mdc-typography--headline6">${connection.id}</h2>
 				<h3 class="mdc-card__subtitle mdc-typography--subtitle2">${connection.service}</h3>
@@ -93,7 +93,6 @@ const appendCard = connection => {
 	card._connection = connection;
 	card.querySelector("button").addEventListener("click", removeConnection);
 	connectionBody.insertBefore(card, add);
-	connectionBody.insertBefore(document.createElement("br"), add);
 };
 const newConnection = xhr => {
 	appendCard(xhr.response);
