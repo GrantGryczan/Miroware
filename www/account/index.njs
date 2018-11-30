@@ -31,13 +31,13 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div>
 					<p class="mdc-text-field-helper-text">You may only set your username once per day.</p>
-					<button id="manageConnections" class="mdc-button mdc-button--unelevated mdc-button--dense">Manage Connections</button><br>
+					<button id="manageConnections" class="mdc-button mdc-button--unelevated mdc-button--dense marginedMore">Manage Connections</button><br>
 					<div class="mdc-text-field">
 						<input id="birth" name="birth" class="mdc-text-field__input" type="date" value="${inputDate(new Date(this.user.birth))}" max="${inputDate(new Date())}" required>
 						<label class="mdc-floating-label alwaysFloat" for="birth">Birthday</label>
 						<div class="mdc-line-ripple"></div>
 					</div><br>
-					<div class="mdc-text-field mdc-text-field--textarea">
+					<div class="mdc-text-field mdc-text-field--textarea marginedMore">
 						<textarea id="desc" name="desc" class="mdc-text-field__input" rows="6" cols="48" maxlength="16384">$${this.user.desc}</textarea>
 						<label class="mdc-floating-label" for="desc">Description</label>
 						<div class="mdc-line-ripple"></div>

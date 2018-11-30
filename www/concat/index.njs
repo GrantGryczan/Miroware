@@ -48,7 +48,7 @@ this.value += html`
 					<div id="targets">
 						Target URL(s) <button id="help" class="mdc-icon-button inline material-icons">help</button><br>
 						<div id="entries"></div>
-						<button id="addEntry" class="mdc-button">
+						<button id="addEntry" class="mdc-button margined">
 							<i class="mdc-button__icon material-icons">add</i>Add
 						</button>
 					</div>
