@@ -485,6 +485,9 @@ textarea {
 	& &__content {
 		color: rgba(255, 255, 255, 0.6);
 	}
+	&.mdc-dialog--scrollable &__title, &.mdc-dialog--scrollable &__actions {
+		border-color: rgba(255, 255, 255, 0.12);
+	}
 }
 .mdc-snackbar {
 	z-index: 8;
