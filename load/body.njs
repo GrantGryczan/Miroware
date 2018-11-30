@@ -1,6 +1,7 @@
 this.value = html`
 	</head>
 	<body class="mdc-typography">
+		<div class="mdc-top-app-bar--fixed-adjust"></div>
 		<div id="container">
 			<aside id="drawer" class="mdc-drawer mdc-drawer--modal">${this.user ? html`
 				<div class="mdc-drawer__header">
@@ -68,6 +69,5 @@ this.value += html`
 						<span class="mdc-linear-progress__bar-inner"></span>
 					</div>
 				</div>
-			</header>
-			<div class="mdc-top-app-bar--fixed-adjust"></div>`;
+			</header>`;
 this.done();

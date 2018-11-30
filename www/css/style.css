@@ -83,6 +83,7 @@ a {
 	}
 }
 .mdc-drawer {
+	top: 0;
 	border-color: rgba(255, 255, 255, 0.12);
 	background-color: #303030;
 	& &__title {
