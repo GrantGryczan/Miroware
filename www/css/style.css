@@ -482,7 +482,7 @@ textarea {
 	}
 }
 .mdc-snackbar {
-	z-index: 6;
+	z-index: 8;
 	&__action-button {
 		color: #a1a1a1;
 	}
