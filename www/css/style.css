@@ -256,6 +256,11 @@ input:-webkit-autofill {
 	.mdc-text-field__input:-webkit-autofill + & {
 		transform: translateY(-100%) scale(0.75);
 	}
+	.mdc-select & {
+		&--float-above, &.alwaysFloat {
+			transform: translateY(-40%) scale(0.75);
+		}
+	}
 }
 textarea {
 	resize: none;
