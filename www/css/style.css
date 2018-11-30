@@ -325,9 +325,6 @@ textarea {
 		height: 30px;
 		padding: 20px 0 1px;
 		box-sizing: initial;
-		.mdc-text-field--dense & {
-			padding: 12px 0 0 0;
-		}
 	}
 	&::before, &::after {
 		display: none;
