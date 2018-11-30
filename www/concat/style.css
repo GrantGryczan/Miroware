@@ -3,42 +3,37 @@
 	& > * {
 		margin-bottom: 1em !important;
 	}
-	#url {
-		font-size: 2em;
-		* {
-			font-size: inherit !important;
-		}
-		#sub input {
-			text-align: right;
-		}
+}
+#url {
+	font-size: 2em;
+	* {
+		font-size: inherit !important;
 	}
-	#flags {
-		opacity: 0.75;
+}
+#sub input {
+	text-align: right;
+}
+#flags {
+	opacity: 0.75;
+}
+#targets {
+	margin: 0 auto;
+	text-align: left;
+	font-size: 1.25em;
+	@media (min-width: 571px) {
+		width: 450px;
 	}
-	#targets {
-		margin: 0 auto;
-		text-align: left;
-		font-size: 1.25em;
-		@media (min-width: 571px) {
-			width: 450px;
+}
+#details {
+	margin-top: 48px;
+	opacity: 0.4;
+}
+.entry {
+	display: flex;
+	.mdc-text-field {
+		flex-grow: 1;
+		input {
+			padding-top: 0;
 		}
-		#entries {
-			padding-top: 8px;
-			.entry {
-				display: flex;
-				.mdc-text-field {
-					flex-grow: 1;
-					height: initial !important;
-					margin-top: 0 !important;
-					input {
-						padding-top: 0;
-					}
-				}
-			}
-		}
-	}
-	#details {
-		margin-top: 48px;
-		opacity: 0.4;
 	}
 }
