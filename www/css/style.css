@@ -299,9 +299,6 @@ textarea {
 			}
 		}
 	}
-	&:not(&--textarea) {
-		overflow: initial;
-	}
 	&--textarea {
 		&:not(.mdc-text-field--disabled) {
 			&, & .mdc-text-field__input:focus {
@@ -310,7 +307,7 @@ textarea {
 		}
 		&.mdc-text-field--disabled {
 			border-color: rgba(255, 255, 255, 0.12);
-			background-color: initial;
+			background-color: transparent;
 			.mdc-floating-label {
 				color: rgba(255, 255, 255, 0.37);
 			}
@@ -331,7 +328,7 @@ textarea {
 	&__input {
 		height: 30px;
 		padding: 20px 0 1px;
-		box-sizing: initial;
+		box-sizing: content-box;
 		.mdc-text-field--dense & {
 			padding: 12px 0 0 0;
 		}
