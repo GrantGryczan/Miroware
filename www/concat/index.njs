@@ -15,7 +15,7 @@ this.value += html`
 						<select id="saves" class="mdc-select__native-control">
 							<option value="" selected>New</option>
 						</select>
-						<label class="mdc-floating-label alwaysFloat">Concat</label>
+						<label class="mdc-floating-label alwaysFloat" for="saves">Concat</label>
 						<div class="mdc-line-ripple"></div>
 					</div>` : "")}
 					<div id="url">
