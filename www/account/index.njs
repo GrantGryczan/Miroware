@@ -37,7 +37,6 @@ this.value += html`
 						<label class="mdc-floating-label alwaysFloat" for="birth">Birthdate</label>
 						<div class="mdc-line-ripple"></div>
 					</div><p class="mdc-text-field-helper-text"></p>
-					<br>
 					<div class="mdc-text-field mdc-text-field--textarea marginedMore">
 						<textarea id="desc" name="desc" class="mdc-text-field__input" rows="6" cols="48" maxlength="16384">$${this.user.desc}</textarea>
 						<label class="mdc-floating-label" for="desc">Description</label>

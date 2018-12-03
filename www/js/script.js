@@ -30,8 +30,8 @@ Miro.average = (...values) => Miro.sum(...values) / values.length;
 Miro.wait = delay => new Promise(resolve => {
 	setTimeout(resolve, delay);
 });
-const inputDate = evt => {
-	evt.target.parentNode.nextSibling.textContent = new Date(evt.target.value);
+const inputDate = function() {
+	this.parentNode.nextSibling.textContent = new Date(this.value);
 };
 Miro.prepare = node => {
 	if(!(node instanceof Element || node instanceof Document)) {
@@ -61,6 +61,7 @@ Miro.prepare = node => {
 	}
 	for(const elem of node.querySelectorAll("input[data-type='date']")) {
 		elem.addEventListener("input", inputDate);
+		inputDate.call(elem);
 	}
 };
 const htmlReplacements = [[/&/g, "&amp;"], [/</g, "&lt;"], [/>/g, "&gt;"], [/"/g, "&quot;"], [/'/g, "&#39;"], [/`/g, "&#96;"]];
