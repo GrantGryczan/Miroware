@@ -68,7 +68,7 @@ const inputDate = date => {
 	if(day.length < 2) {
 		day = `0${day}`;
 	}
-	return `${year}-${month}-${day}`;
+	return `${year}/${month}/${day}`;
 };
 const notLoggedIn = context => {
 	if(context.user) {
