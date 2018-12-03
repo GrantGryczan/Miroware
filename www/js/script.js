@@ -31,7 +31,7 @@ Miro.wait = delay => new Promise(resolve => {
 	setTimeout(resolve, delay);
 });
 const inputDate = function() {
-	this.parentNode.nextSibling.textContent = new Date(this.value);
+	this.parentNode.nextSibling.textContent = this.value ? new Date(this.value) : "";
 };
 Miro.prepare = node => {
 	if(!(node instanceof Element || node instanceof Document)) {
