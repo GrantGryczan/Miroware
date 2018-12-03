@@ -273,7 +273,7 @@ input:-webkit-autofill {
 	}
 }
 textarea {
-	resize: none;
+	resize: vertical;
 }
 .mdc-text-field {
 	height: initial;
