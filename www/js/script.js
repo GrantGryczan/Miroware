@@ -31,7 +31,6 @@ Miro.wait = delay => new Promise(resolve => {
 	setTimeout(resolve, delay);
 });
 const inputDate = function() {
-	let validity = "";
 	if(this.value) {
 		const date = new Date(this.value);
 		this.parentNode.nextSibling.textContent = date;
@@ -40,7 +39,6 @@ const inputDate = function() {
 		this.parentNode.nextSibling.textContent = "";
 		this.setCustomValidity("");
 	}
-	 ?  : "";
 };
 Miro.prepare = node => {
 	if(!(node instanceof Element || node instanceof Document)) {
