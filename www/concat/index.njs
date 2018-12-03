@@ -11,14 +11,12 @@ this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
 				<form id="form" autocomplete="off">${(this.user ? html`
-					<div>
-						<div class="mdc-select">
-							<select id="saves" class="mdc-select__native-control">
-								<option value="" selected>New</option>
-							</select>
-							<label class="mdc-floating-label alwaysFloat">Concat</label>
-							<div class="mdc-line-ripple"></div>
-						</div>
+					<div class="mdc-select">
+						<select id="saves" class="mdc-select__native-control">
+							<option value="" selected>New</option>
+						</select>
+						<label class="mdc-floating-label alwaysFloat">Concat</label>
+						<div class="mdc-line-ripple"></div>
 					</div>` : "")}
 					<div id="url">
 						<span id="sub"${this.req.query.sub ? "" : ' class="hidden"'}>
