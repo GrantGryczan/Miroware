@@ -33,10 +33,11 @@ this.value += html`
 					<p class="mdc-text-field-helper-text">You may only set your username once per day.</p>
 					<button id="manageConnections" class="mdc-button mdc-button--unelevated mdc-button--dense marginedMore">Manage Connections</button><br>
 					<div class="mdc-text-field">
-						<input id="birth" name="birth" class="mdc-text-field__input" type="date" value="${inputDate(new Date(this.user.birth))}" max="${inputDate(new Date())}" required>
-						<label class="mdc-floating-label alwaysFloat" for="birth">Birthday</label>
+						<input id="birth" name="birth" class="mdc-text-field__input" type="text" value="${inputDate(new Date(this.user.birth))}" required data-type="date">
+						<label class="mdc-floating-label alwaysFloat" for="birth">Birthdate</label>
 						<div class="mdc-line-ripple"></div>
-					</div><br>
+					</div><p class="mdc-text-field-helper-text"></p>
+					<br>
 					<div class="mdc-text-field mdc-text-field--textarea marginedMore">
 						<textarea id="desc" name="desc" class="mdc-text-field__input" rows="6" cols="48" maxlength="16384">$${this.user.desc}</textarea>
 						<label class="mdc-floating-label" for="desc">Description</label>

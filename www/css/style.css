@@ -380,6 +380,12 @@ textarea {
 		color: rgba(255, 255, 255, 0.6);
 	}
 }
+#year {
+	width: 4em;
+	& > div {
+		vertical-align: bottom;
+	}
+}
 .mdc-select {
 	&:not(.mdc-select--disabled) {
 		background-color: #303030;

@@ -34,10 +34,10 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<div class="mdc-text-field">
-						<input id="birth" name="birth" class="mdc-text-field__input" type="date" max="${inputDate(new Date())}" required>
-						<label class="mdc-floating-label alwaysFloat" for="birth">Birthday</label>
+						<input id="birth" name="birth" class="mdc-text-field__input" type="text" required>
+						<label class="mdc-floating-label alwaysFloat" for="birth">Birthdate</label>
 						<div class="mdc-line-ripple"></div>
-					</div>
+					</div><p class="mdc-text-field-helper-text"></p>
 				</span>
 				<div class="g-recaptcha" data-sitekey="${youKnow.captcha.site}" data-badge="inline" data-size="invisible" data-callback="captchaCallback"></div>
 			</span>`;

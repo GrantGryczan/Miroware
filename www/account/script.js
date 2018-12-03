@@ -52,6 +52,12 @@ form.addEventListener("submit", evt => {
 	for(const elem of changed) {
 		body[elem.name] = Miro.value(elem);
 	}
+	if(body.year || body.month || body.day) {
+		body.birth = +new Date(form.elements.year.value, form.elements.month.value, form.elements.day.value);
+		delete body.year;
+		delete body.month;
+		delete body.day;
+	}
 	Miro.formState(form, false);
 	Miro.request("PUT", "/users/@me", {}, body).then(putResponse).finally(enableForm);
 });
