@@ -312,7 +312,12 @@ textarea {
 			border-color: rgba(255, 255, 255, 0.12);
 			background-color: initial;
 			.mdc-floating-label {
-				background-color: rgba(255, 255, 255, 0.37);
+				color: rgba(255, 255, 255, 0.37);
+			}
+		}
+		&, &.mdc-text-field--disabled {
+			.mdc-floating-label {
+				background-color: #282828;
 			}
 		}
 	}
@@ -320,9 +325,7 @@ textarea {
 		background-color: transparent;
 		.mdc-text-field__input {
 			border-bottom: 1px dotted rgba(255, 255, 255, 0.12);
-			&, .mdc-floating-label {
-				color: rgba(255, 255, 255, 0.37);
-			}
+			color: rgba(255, 255, 255, 0.37);
 		}
 	}
 	&__input {
