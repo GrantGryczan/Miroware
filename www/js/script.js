@@ -34,7 +34,7 @@ const inputDate = function() {
 	if(this.value) {
 		const date = new Date(this.value);
 		this.parentNode.nextSibling.textContent = date;
-		this.setCustomValidity(isNaN(date) ? String(date) : "");
+		this.setCustomValidity(isNaN(date) ? date : "");
 	} else {
 		this.parentNode.nextSibling.textContent = "";
 		this.setCustomValidity("");
