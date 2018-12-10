@@ -138,12 +138,8 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		path: cookieOptions.path
 	};
 	const parseUser = context => new Promise(async resolve => {
-		const thisID = context.user && String(context.user._id);
-		if(context.user && context.params.user === "@me") {
-			context.params.user = thisID;
-		}
-		const isMe = context.params.user === thisID;
-		let user = context.user;
+		let {user} = context;
+		const isMe = user && context.params.user === String(user._id);
 		if(!isMe) {
 			let userID;
 			try {
@@ -532,6 +528,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						}
 					}
 					if(context.user) {
+						if(context.params.user === "@me") {
+							context.params.user = auth[0];
+						}
 						context.update = {
 							$pull: {
 								pouch: {

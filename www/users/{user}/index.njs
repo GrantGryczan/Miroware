@@ -1,12 +1,5 @@
-const thisID = this.user && String(this.user._id);
-if(this.user && this.params.user === "@me") {
-	this.redirect = `/users/${this.user._id}/`;
-	this.done();
-	return;
-}
-const isMe = this.params.user === thisID;
-let user = this.user;
-if(!isMe) {
+let {user} = this;
+if(this.params.user !== (user && String(user._id))) {
 	let userID;
 	try {
 		userID = ObjectID(this.params.user);
