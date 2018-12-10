@@ -528,7 +528,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						}
 					}
 					if(context.user) {
-						if(context.params.user === "@me") {
+						if(context.params && context.params.user === "@me") {
 							context.params.user = auth[0];
 						}
 						context.update = {
