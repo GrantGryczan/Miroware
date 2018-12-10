@@ -581,7 +581,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				}
 			}
 			if(context.user && context.params && context.params.user === "@me") {
-				context.params.user = context.user;
+				context.params.user = String(context.user._id);
 			}
 		}],
 		loadEnd: [async context => {
