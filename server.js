@@ -528,9 +528,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						}
 					}
 					if(context.user) {
-						if(context.params && context.params.user === "@me") {
-							context.params.user = auth[0];
-						}
 						context.update = {
 							$pull: {
 								pouch: {
@@ -581,6 +578,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							return false;
 						}
 					}
+				}
+				if(context.user && context.params && context.params.user === "@me") {
+					context.params.user = context.user;
 				}
 			}
 		}],
