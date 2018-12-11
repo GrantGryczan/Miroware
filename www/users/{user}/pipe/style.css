@@ -24,6 +24,7 @@
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
+	background-color: inherit;
 	.th {
 		font-weight: normal;
 	}
@@ -37,9 +38,13 @@
 		}
 	}
 }
-#heads > * {
-	position: sticky;
-	top: 0;
+#heads {
+	background-color: inherit;
+	& > * {
+		position: sticky;
+		top: 0;
+		background-color: inherit;
+	}
 }
 .head {
 	line-height: 24px;
