@@ -8,15 +8,15 @@
 	-moz-user-select: -moz-none;
 }
 .panel {
-	overflow-y: auto;
 	&.side {
+		overflow-y: auto;
 		min-width: 256px;
 		padding: 4px;
 	}
-}
-#centerPanel {
-	flex-grow: 1;
-	padding: 0 4px;
+	&.center {
+		flex-grow: 1;
+		padding: 0 4px;
+	}
 }
 #table {
 	width: 100%;
@@ -24,7 +24,6 @@
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	background-color: inherit;
 	.th {
 		font-weight: normal;
 	}
@@ -38,13 +37,9 @@
 		}
 	}
 }
-#heads {
-	background-color: inherit;
-	& > * {
-		position: sticky;
-		top: 0;
-		background-color: inherit;
-	}
+#heads > * {
+	position: sticky;
+	top: 0;
 }
 .head {
 	line-height: 24px;
