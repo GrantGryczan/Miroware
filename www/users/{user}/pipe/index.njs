@@ -11,7 +11,7 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
-				<div class="sidePanel">
+				<div id="leftPanel" class="sidePanel">
 					<button id="addButton" class="mdc-fab" title="Add files">
 						<i class="mdc-fab__icon material-icons">add</i>
 					</button>
@@ -31,7 +31,7 @@ this.value += html`
 						<i class="mdc-fab__icon material-icons">link</i>
 					</button>
 				</div>
-				<div class="centerPanel">
+				<div id="centerPanel">
 					<span id="path"></span>
 					<div id="table" class="table">
 						<div id="heads" class="thead">
@@ -44,7 +44,7 @@ this.value += html`
 						<div id="items" class="tbody"></div>
 					</div>
 				</div>
-				<div class="sidePanel">
+				<div id="rightPanel" class="sidePanel">
 					test
 				</div>
 			</div>`;

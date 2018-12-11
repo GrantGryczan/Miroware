@@ -1,9 +1,17 @@
 .mdc-linear-progress .mdc-linear-progress__bar-inner {
 	background-color: #b4783c;
 }
-main {
+#panels {
+	display: flex;
+	min-height: 100%;
 	user-select: none;
 	-moz-user-select: -moz-none;
+}
+.sidePanel {
+	min-width: 256px;
+}
+#centerPanel {
+	flex-grow: 1;
 }
 #table {
 	width: 100%;
@@ -11,7 +19,6 @@ main {
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	background-color: inherit;
 	.th {
 		font-weight: normal;
 	}
@@ -25,13 +32,9 @@ main {
 		}
 	}
 }
-#heads {
-	background-color: inherit;
-	& > * {
-		position: sticky;
-		top: 0;
-		background-color: inherit;
-	}
+#heads > * {
+	position: sticky;
+	top: 0;
 }
 .head {
 	line-height: 24px;
