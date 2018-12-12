@@ -37,7 +37,7 @@
 	line-height: 48px;
 	font-size: 16px;
 	padding: 0 0.25em;
-	& > .button {
+	& > button {
 		width: 32px;
 		height: 32px;
 	}
