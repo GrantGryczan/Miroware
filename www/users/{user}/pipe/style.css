@@ -32,6 +32,9 @@
 	display: flex;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 	cursor: default;
+	&:hover button.sort {
+		opacity: 1;
+	}
 }
 .head {
 	line-height: 48px;
@@ -41,6 +44,10 @@
 		width: 32px;
 		height: 32px;
 		transform: translateY(-1px);
+		&.sort {
+			opacity: 0;
+			transition: opacity 0.15s;
+		}
 	}
 }
 #nameHead {
