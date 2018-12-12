@@ -52,7 +52,7 @@
 	}
 	&.sort > button {
 		opacity: 0;
-		transition: opacity 0.15s;
+		transition: opacity 0.15s ease-out;
 		&.sorting {
 			opacity: 0.5;
 		}
