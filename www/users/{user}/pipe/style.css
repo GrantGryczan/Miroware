@@ -23,16 +23,13 @@
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
-	border-spacing: 0;
-	table-layout: fixed;
-	text-align: left;
 	white-space: nowrap;
 }
-#heads {
+#head {
 	display: flex;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 	cursor: default;
-	&:hover > .head.sort > button {
+	&:hover > .cell.sort > button {
 		&:not(.sorting) {
 			opacity: 0.5;
 		}
@@ -41,35 +38,31 @@
 		}
 	}
 }
-.head {
+.cell {
 	line-height: 48px;
 	font-size: 16px;
 	padding: 0 0.25em;
 	& > button {
 		width: 32px;
 		height: 32px;
-		transform: translateY(-1px);
+		margin-top: -1px;
 	}
 	&.sort > button {
 		opacity: 0;
 		transition: opacity 0.15s ease-out;
 		&.sorting {
 			opacity: 0.5;
+			&.reverse {
+				transform: scaleY(-1);
+			}
 		}
 	}
 }
-#nameHead {
+.name {
 	width: 55%;
 }
-#sizeHead, #typeHead, #dateHead {
+.size, .type, .date {
 	width: 15%;
-}
-#sortIcon {
-	padding-left: 0.5em;
-	vertical-align: middle;
-	&.reverse {
-		transform: scaleY(-1);
-	}
 }
 #items {
 	overflow-y: auto;
@@ -86,44 +79,6 @@
 	&.selected {
 		background-color: rgba(255, 128, 0, 0.5);
 	}
-}
-.iconData > i {
-	vertical-align: middle;
-}
-.mdc-fab {
-	position: fixed;
-	background-color: #808080;
-	&--exited {
-		pointer-events: none;
-	}
-}
-#addButton {
-	right: 23px;
-	bottom: 23px;
-	background-color: #df7f20;
-}
-#directoryButton {
-	right: 31px;
-	bottom: 95px;
-}
-#removeButton {
-	right: 95px;
-	bottom: 31px;
-}
-#infoButton {
-	right: 151px;
-	bottom: 31px;
-}
-#openButton {
-	right: 207px;
-	bottom: 31px;
-}
-#linkButton {
-	right: 263px;
-	bottom: 31px;
-}
-#download {
-	margin-top: 8px;
 }
 #targetIndicator {
 	position: absolute;
