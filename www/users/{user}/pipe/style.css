@@ -33,7 +33,12 @@
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 	cursor: default;
 	&:hover > .head.sort > button {
-		opacity: 1;
+		&:not(.sorting) {
+			opacity: 0.5;
+		}
+		&.sorting {
+			opacity: 1;
+		}
 	}
 }
 .head {
@@ -48,6 +53,9 @@
 	&.sort > button {
 		opacity: 0;
 		transition: opacity 0.15s;
+		&.sorting {
+			opacity: 0.5;
+		}
 	}
 }
 #nameHead {
