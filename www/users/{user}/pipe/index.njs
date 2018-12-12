@@ -35,7 +35,7 @@ this.value += html`
 					<span id="path"></span>
 					<div id="table">
 						<div id="heads">
-							<div id="viewHead" class="head material-icons">
+							<div id="viewHead" class="head">
 								<button class="mdc-icon-button material-icons" title="View mode">view_module</button>
 							</div>
 							<div id="nameHead" class="head sort" data-sort="name">
