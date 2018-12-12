@@ -65,6 +65,7 @@
 }
 #items {
 	overflow-y: auto;
+	flex-grow: 1;
 }
 .item {
 	text-decoration: none;
