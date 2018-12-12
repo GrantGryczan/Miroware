@@ -31,7 +31,7 @@
 #heads {
 	display: flex;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-	cursor: pointer;
+	cursor: default;
 }
 .head {
 	line-height: 48px;
