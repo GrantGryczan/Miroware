@@ -35,11 +35,21 @@ this.value += html`
 					<span id="path"></span>
 					<div id="table">
 						<div id="heads">
-							<div id="viewHead" class="head material-icons"></div>
-							<div id="nameHead" class="head sort" data-sort="name">Name</div>
-							<div id="sizeHead" class="head sort" data-sort="size">Size</div>
-							<div id="typeHead" class="head sort" data-sort="type">Type</div>
-							<div id="dateHead" class="head sort" data-sort="date">Date</div>
+							<div id="viewHead" class="head material-icons">
+								<button class="mdc-icon-button material-icons">view_module</button>
+							</div>
+							<div id="nameHead" class="head sort" data-sort="name">
+								<span class="label spaced">Name</span><button class="mdc-icon-button material-icons spaced">sort</button>
+							</div>
+							<div id="sizeHead" class="head sort" data-sort="size">
+								<span class="label spaced">Size</span><button class="mdc-icon-button material-icons spaced">sort</button>
+							</div>
+							<div id="typeHead" class="head sort" data-sort="type">
+								<span class="label spaced">Type</span><button class="mdc-icon-button material-icons spaced">sort</button>
+							</div>
+							<div id="dateHead" class="head sort" data-sort="date">
+								<span class="label spaced">Date</span><button class="mdc-icon-button material-icons spaced">sort</button>
+							</div>
 						</div>
 						<div id="items"></div>
 					</div>
