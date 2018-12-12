@@ -27,12 +27,7 @@
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	.th {
-		font-weight: normal;
-	}
-	.th, .td {
-		padding: 0.5em 0.25em;
-		border-bottom: 1px solid #373737;
+	.head {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		* {
@@ -42,10 +37,12 @@
 }
 #heads {
 	display: flex;
-	min-height: 40px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+	line-height: 32px;
+	font-size: 14px;
 }
-.head {
-	line-height: 24px;
+#viewHead {
+	font-size: 24px;
 }
 #iconHead {
 	width: calc(1em + 10px);

@@ -35,11 +35,11 @@ this.value += html`
 					<span id="path"></span>
 					<div id="table">
 						<div id="heads">
-							<div id="iconHead" class="th"></div>
-							<div id="nameHead" class="th head" data-sort="name">Name</div>
-							<div id="sizeHead" class="th head" data-sort="size">Size</div>
-							<div id="typeHead" class="th head" data-sort="type">Type</div>
-							<div id="dateHead" class="th head" data-sort="date">Date</div>
+							<div id="viewHead material-icons" class="head"></div>
+							<div id="nameHead" class="head sort" data-sort="name">Name</div>
+							<div id="sizeHead" class="head sort" data-sort="size">Size</div>
+							<div id="typeHead" class="head sort" data-sort="type">Type</div>
+							<div id="dateHead" class="head sort" data-sort="date">Date</div>
 						</div>
 						<div id="items"></div>
 					</div>
