@@ -27,21 +27,15 @@
 	table-layout: fixed;
 	text-align: left;
 	white-space: nowrap;
-	.head {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		* {
-			pointer-events: none;
-		}
-	}
 }
 #heads {
 	display: flex;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+	cursor: pointer;
 }
 .head {
 	line-height: 42px;
-	font-size: 14px;
+	font-size: 16px;
 	padding: 0 0.25em;
 }
 #viewHead {
