@@ -33,7 +33,7 @@ if(this.user) {
 }
 this.value += html`
 						<hr class="mdc-list-divider">
-						<a class="mdc-list-item${this.req.decodedPath.startsWith("/pipe/") ? " mdc-list-item--activated" : '" href="/pipe/'}">
+						<a class="mdc-list-item${this.req.decodedPath === "/pipe/" ? " mdc-list-item--activated" : '" href="/pipe/'}">
 							<i class="mdc-list-item__graphic material-icons">upload_file</i> <span class="mdc-list-item__text">Pipe</span>
 						</a>
 						<a class="mdc-list-item${this.req.decodedPath === "/concat/" ? " mdc-list-item--activated" : '" href="/concat/'}">
