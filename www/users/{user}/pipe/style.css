@@ -40,6 +40,7 @@
 	& > button {
 		width: 32px;
 		height: 32px;
+		transform: translateY(-1px);
 	}
 }
 #nameHead {
