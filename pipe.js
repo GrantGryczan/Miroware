@@ -22,7 +22,7 @@ const s3 = new AWS.S3({
 	app.get("*", async (req, res) => {
 		let path = req.path;
 		if(path === "/") {
-			res.redirect(/*308, */"https://miroware.io/pipe/");
+			res.redirect(308, "https://miroware.io/pipe/");
 		} else if(req.subdomains.join(".") === "piped") {
 			path = path.slice(1);
 			if(!userAgents.includes(req.get("User-Agent"))) {
@@ -56,7 +56,7 @@ const s3 = new AWS.S3({
 						if(err) {
 							res.status(err.statusCode).send(err.message);
 						} else {
-							res.set("Content-Type", item.type).set("Content-Length", data.Body.length).send(data.Body);
+							res.set("Content-Type", item.type).set("Content-Length", String(data.Body.length)).send(data.Body);
 							console.log(new Date(), req.url);
 						}
 					});
