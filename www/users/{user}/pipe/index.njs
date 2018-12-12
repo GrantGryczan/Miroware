@@ -36,19 +36,19 @@ this.value += html`
 					<div id="table">
 						<div id="heads">
 							<div id="viewHead" class="head">
-								<button class="mdc-icon-button material-icons" title="View mode">view_module</button>
+								<button id="viewMode" class="mdc-icon-button material-icons" title="Tile view">view_module</button>
 							</div>
-							<div id="nameHead" class="head sort" data-sort="name">
-								<span class="label spaced">Name</span><button class="mdc-icon-button material-icons spaced" title="Sort">sort</button>
+							<div id="nameHead" class="head sort">
+								<span class="label spaced">Name</span><button id="sortName" class="mdc-icon-button material-icons spaced" data-sort="name" title="Sort by name">sort</button>
 							</div>
-							<div id="sizeHead" class="head sort" data-sort="size">
-								<span class="label spaced">Size</span><button class="mdc-icon-button material-icons spaced" title="Sort">sort</button>
+							<div id="sizeHead" class="head sort">
+								<span class="label spaced">Size</span><button id="sortSize" class="mdc-icon-button material-icons spaced" data-sort="size" title="Sort by size">sort</button>
 							</div>
-							<div id="typeHead" class="head sort" data-sort="type">
-								<span class="label spaced">Type</span><button class="mdc-icon-button material-icons spaced" title="Sort">sort</button>
+							<div id="typeHead" class="head sort">
+								<span class="label spaced">Type</span><button id="sortType" class="mdc-icon-button material-icons spaced" data-sort="type" title="Sort by type">sort</button>
 							</div>
-							<div id="dateHead" class="head sort" data-sort="date">
-								<span class="label spaced">Date</span><button class="mdc-icon-button material-icons spaced" title="Sort">sort</button>
+							<div id="dateHead" class="head sort">
+								<span class="label spaced">Date</span><button id="sortDate" class="mdc-icon-button material-icons spaced" data-sort="date" title="Sort by date">sort</button>
 							</div>
 						</div>
 						<div id="items"></div>
