@@ -12,24 +12,9 @@ this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
 				<div class="panel side left">
-					<button id="addButton" class="mdc-fab" title="Add files">
-						<i class="mdc-fab__icon material-icons">add</i>
-					</button>
-					<button id="directoryButton" class="mdc-fab mdc-fab--mini mdc-fab--exited" title="Add directory">
-						<i class="mdc-fab__icon material-icons">folder</i>
-					</button>
-					<button id="removeButton" class="mdc-fab mdc-fab--mini mdc-fab--exited" title="Remove">
-						<i class="mdc-fab__icon material-icons">delete</i>
-					</button>
-					<button id="infoButton" class="mdc-fab mdc-fab--mini mdc-fab--exited" title="Info">
-						<i class="mdc-fab__icon material-icons">info</i>
-					</button>
-					<button id="openButton" class="mdc-fab mdc-fab--mini mdc-fab--exited" title="Open">
-						<i class="mdc-fab__icon material-icons">keyboard_return</i>
-					</button>
-					<button id="linkButton" class="mdc-fab mdc-fab--mini mdc-fab--exited" title="Copy URL to clipboard">
-						<i class="mdc-fab__icon material-icons">link</i>
-					</button>
+				<button id="add" class="mdc-button mdc-button--raised spaced mdc-ripple">
+					<i class="mdc-button__icon material-icons">add</i>Add
+				</button>
 				</div>
 				<div class="panel center">
 					<span id="path"></span>
