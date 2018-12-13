@@ -39,6 +39,8 @@
 	}
 	&.right {
 		overflow-y: auto;
+		word-break: break-word;
+		word-wrap: break-word;
 	}
 }
 .pane {
