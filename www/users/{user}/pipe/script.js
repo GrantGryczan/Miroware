@@ -45,7 +45,7 @@ class PipeLoadingItem {
 					<span class="title" title="$${this.file.name}">$${this.file.name}</span>
 					<span class="subtitle" title="0 / ${this.file.size}">0% (${getSize(0)} / ${getSize(this.file.size)})</span>
 				</div>
-				<div class="cancel material-icons">cancel</div>
+				<div class="cancel material-icons">close</div>
 			</div>
 		`)._item = this;
 		const sizeLabel = this.element.querySelector(".label > .subtitle");
