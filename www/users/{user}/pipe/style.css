@@ -93,7 +93,6 @@
 	flex-grow: 1;
 	overflow-x: hidden;
 	overflow-y: auto;
-	text-overflow: ellipsis;
 }
 .item {
 	text-decoration: none;
@@ -129,6 +128,18 @@
 	align-items: center;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 	height: 48px;
+	& > .label {
+		width: calc(100% - 32px);
+		& > * {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+	& > button {
+		width: 32px;
+		min-width: 32px;
+		height: 32px;
+	}
 }
 .subtitle {
 	opacity: 0.5;
