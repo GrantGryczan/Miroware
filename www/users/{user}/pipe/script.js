@@ -42,8 +42,8 @@ class PipeLoadingItem {
 		(this.element = html`
 			<div class="item loading">
 				<div class="label">
-					<span class="title" title="$${this.file.name}">$${this.file.name}</span>
-					<span class="subtitle" title="0 / ${this.file.size}">0% (${getSize(0)} / ${getSize(this.file.size)})</span>
+					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
+					<div class="subtitle" title="0 / ${this.file.size}">0% (${getSize(0)} / ${getSize(this.file.size)})</div>
 				</div>
 				<button class="cancel mdc-icon-button material-icons">close</button>
 			</div>
