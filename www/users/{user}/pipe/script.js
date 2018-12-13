@@ -42,8 +42,8 @@ class PipeLoadingItem {
 		(this.element = html`
 			<div class="item loading">
 				<div class="label">
-					<span class="title" title="$${file.name}">$${file.name}</span>
-					<span class="subtitle" title="0 / ${file.size}">0% (${getSize(0)} / ${getSize(file.size)})</span>
+					<span class="title" title="$${this.file.name}">$${this.file.name}</span>
+					<span class="subtitle" title="0 / ${this.file.size}">0% (${getSize(0)} / ${getSize(this.file.size)})</span>
 				</div>
 				<div class="cancel material-icons">cancel</div>
 			</div>
@@ -54,13 +54,13 @@ class PipeLoadingItem {
 			"X-Data": JSON.stringify({
 				name: name // TODO: apply parent
 			})
-		}, file, xhr => {
+		}, this.file, xhr => {
 			this.xhr = xhr;
 			this.xhr.upload.addEventListener("progress", evt => {
 				const percentage = 100 * evt.loaded / evt.total;
 				this.element.style.backgroundSize = `${percentage}%`;
 				sizeLabel.title = `${evt.loaded} / ${evt.total}`;
-				sizeLabel.textContent = `${Math.round(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${fileSize})`;
+				sizeLabel.textContent = `${Math.round(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${this.file.size})`;
 			});
 		}).then(Miro.response(xhr => {
 			
