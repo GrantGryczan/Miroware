@@ -33,6 +33,9 @@
 		width: 256px;
 		padding: 8px;
 	}
+	&.left {
+		padding-bottom: 0;
+	}
 	&.center {
 		flex-grow: 1;
 		padding: 0 8px;
@@ -107,6 +110,7 @@
 	}
 }
 #add {
+	flex-shrink: 0;
 	display: flex;
 	padding-bottom: 8px;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
