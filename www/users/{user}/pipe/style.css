@@ -29,11 +29,11 @@
 	-moz-user-select: -moz-none;
 }
 .panel {
-	padding: 0 8px;
 	&.side {
 		width: 256px;
 	}
 	&.center {
+		padding: 0 16px;
 		flex-grow: 1;
 	}
 	&.right {
