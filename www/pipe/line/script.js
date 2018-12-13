@@ -39,7 +39,7 @@ const getSize = size => {
 	size /= 1000;
 	return `${Math.round(10 * size) / 10} YB`;
 };
-const getDate = date => new Date(date).toString().split(" ").slice(1, 5).join(" ");
+const getDate = date => String(new Date(date)).split(" ").slice(1, 5).join(" ");
 const getURL = item => `https://pipe.miroware.io/${Miro.data.user}/${encodeURI(item.name)}`;
 const getItemElement = item => {
 	if(item.element) {
