@@ -90,6 +90,7 @@
 	width: 15%;
 }
 .items {
+	overflow-x: hidden;
 	overflow-y: auto;
 	flex-grow: 1;
 }
