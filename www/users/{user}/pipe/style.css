@@ -39,7 +39,7 @@
 		padding: 0 8px;
 	}
 }
-#table {
+.pane {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
