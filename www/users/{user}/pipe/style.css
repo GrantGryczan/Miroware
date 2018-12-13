@@ -108,5 +108,11 @@
 	flex-grow: 1;
 	height: 40px;
 	border-radius: 20px;
+	font-size: 15px;
 	background-color: #df7f20;
+	& > .mdc-button__icon {
+		width: 24px;
+		height: 24px;
+		font-size: 24px;
+	}
 }
