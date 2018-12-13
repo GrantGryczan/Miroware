@@ -32,9 +32,12 @@
 	&.side {
 		width: 256px;
 	}
+	&.left {
+		padding-right: 8px;
+	}
 	&.center {
-		padding: 0 16px;
 		flex-grow: 1;
+		padding: 0 8px;
 	}
 	&.right {
 		padding: 8px;
