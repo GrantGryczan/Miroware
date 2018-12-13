@@ -1,6 +1,27 @@
 .mdc-linear-progress .mdc-linear-progress__bar-inner {
 	background-color: #b4783c;
 }
+.mdc-text-field {
+	.mdc-line-ripple {
+		background-color: #b57a40;
+	}
+	&--focused:not(&--textarea):not(&--fullwidth):not(&--disabled):not(&--invalid) .mdc-floating-label {
+		color: #e9a663;
+	}
+}
+#targetIndicator {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	opacity: 0;
+	z-index: 5;
+	pointer-events: none;
+	background-color: #ff8000;
+	transition: opacity 0.15s ease-out;
+}
+#targetIndicator.visible {
+	opacity: 0.2;
+}
 #panels {
 	display: flex;
 	height: 100%;
@@ -25,7 +46,7 @@
 	height: 100%;
 	white-space: nowrap;
 }
-#head {
+#sort {
 	display: flex;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 	cursor: default;
@@ -80,24 +101,10 @@
 		background-color: rgba(255, 128, 0, 0.5);
 	}
 }
-#targetIndicator {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	opacity: 0;
-	z-index: 5;
-	pointer-events: none;
-	background-color: #ff8000;
-	transition: opacity 0.15s ease-out;
+#add {
+	display: flex;
 }
-#targetIndicator.visible {
-	opacity: 0.2;
-}
-.mdc-text-field {
-	.mdc-line-ripple {
-		background-color: #b57a40;
-	}
-	&--focused:not(&--textarea):not(&--fullwidth):not(&--disabled):not(&--invalid) .mdc-floating-label {
-		color: #e9a663;
-	}
+#addFiles {
+	flex-grow: 1;
+	background-color: #df7f20;
 }

@@ -12,14 +12,17 @@ this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
 				<div class="panel side left">
-				<button id="add" class="mdc-button mdc-button--raised spaced mdc-ripple">
-					<i class="mdc-button__icon material-icons">add</i>Add
-				</button>
+					<div id="add">
+						<button id="addFiles" class="mdc-button mdc-button--raised spaced mdc-ripple">
+							<i class="mdc-button__icon material-icons" title="Add file(s)">upload_files</i>Upload
+						</button>
+						<button id="addDirectory" class="mdc-button mdc-button--raised mdc-icon-button material-icons spaced mdc-ripple" title="Add folder">folder</button>
+					</div>
 				</div>
 				<div class="panel center">
 					<span id="path"></span>
 					<div id="table">
-						<div id="head">
+						<div id="sort">
 							<div class="cell view">
 								<button id="viewMode" class="mdc-icon-button material-icons" title="Tile view">view_module</button>
 							</div>
