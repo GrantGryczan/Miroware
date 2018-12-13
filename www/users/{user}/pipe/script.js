@@ -62,9 +62,10 @@ class PipeLoadingItem {
 				subtitle.title = `${evt.loaded} / ${evt.total}`;
 				subtitle.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${getSize(this.file.size)})`;
 			});
-		}, true).then(this.element.classList.remove.bind(this.element.classList, "loading")).then(Miro.response(xhr => {
-			
+		}, true).then(Miro.response(xhr => {
+			this.element.classList.remove("loading");
 		}, () => {
+			this.element.classList.remove("loading");
 			this.element.classList.add("error");
 			subtitle.textContent = "An error occurred. Click to retry.";
 		}));
