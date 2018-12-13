@@ -105,6 +105,10 @@
 		background-repeat: no-repeat;
 		background-size: 0;
 	}
+	&.error {
+		background-color: rgba(255, 0, 0, 0.5);
+		cursor: pointer;
+	}
 	&.selected {
 		background-color: rgba(255, 128, 0, 0.5);
 	}

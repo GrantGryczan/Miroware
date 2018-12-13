@@ -48,7 +48,7 @@ class PipeLoadingItem {
 				<button class="cancel mdc-icon-button material-icons">close</button>
 			</div>
 		`)._item = this;
-		const sizeLabel = this.element.querySelector(".label > .subtitle");
+		const subtitle = this.element.querySelector(".label > .subtitle");
 		Miro.request("POST", "/users/@me/pipe", {
 			"Content-Type": "application/octet-stream",
 			"X-Data": JSON.stringify({
@@ -59,14 +59,15 @@ class PipeLoadingItem {
 			this.xhr.upload.addEventListener("progress", evt => {
 				const percentage = 100 * evt.loaded / evt.total;
 				this.element.style.backgroundSize = `${percentage}%`;
-				sizeLabel.title = `${evt.loaded} / ${evt.total}`;
-				sizeLabel.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${getSize(this.file.size)})`;
+				subtitle.title = `${evt.loaded} / ${evt.total}`;
+				subtitle.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${getSize(this.file.size)})`;
 			});
-		}, true).then(Miro.response(xhr => {
+		}, true).then(this.element.classList.remove.bind(this.element.classList, "loading")).then(Miro.response(xhr => {
 			
 		}, () => {
-			
-		})).finally(this.element.parentNode.removeChild.bind(this.element.parentNode, this.element));
+			this.element.classList.add("error");
+			subtitle.textContent = "An error occurred. Click to retry.";
+		}));
 	}
 }
 const addFile = file => {
