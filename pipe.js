@@ -21,7 +21,6 @@ const s3 = new AWS.S3({
 	app.disable("X-Powered-By");
 	const userAgents = [];
 	app.get("*", async (req, res) => {
-		res.set("X-Powered-By", "Miroware");
 		let path = req.path;
 		if(path === "/") {
 			res.redirect(308, "https://miroware.io/pipe/");
@@ -71,6 +70,7 @@ const s3 = new AWS.S3({
 				return;
 			}
 		} else {
+			res.set("X-Powered-By", "Miroware");
 			const userAgent = `MirowarePipe (${Math.random()})`;
 			userAgents.push(userAgent);
 			if(path.endsWith("/")) {
