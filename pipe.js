@@ -18,8 +18,10 @@ const s3 = new AWS.S3({
 	})).db("web");
 	const users = db.collection("users");
 	const app = express();
+	app.disable("X-Powered-By");
 	const userAgents = [];
 	app.get("*", async (req, res) => {
+		res.set("X-Powered-By", "Miroware");
 		let path = req.path;
 		if(path === "/") {
 			res.redirect(308, "https://miroware.io/pipe/");
@@ -82,7 +84,10 @@ const s3 = new AWS.S3({
 				}
 			}, response => {
 				response.pipe(res);
-				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]).set("Content-Length", response.headers["content-length"]).set("Access-Control-Allow-Origin", "*");
+				if(response.headers["content-length"]) { // This is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
+					res.set("Content-Length", response.headers["content-length"]);
+				}
+				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]).set("Access-Control-Allow-Origin", "*");
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 		}
