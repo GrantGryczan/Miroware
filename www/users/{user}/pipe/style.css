@@ -130,6 +130,7 @@
 	height: 48px;
 	& > .label {
 		width: calc(100% - 32px);
+		padding-left: 4px;
 		& > * {
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -141,7 +142,10 @@
 		height: 32px;
 	}
 }
+.title {
+	font-size: 14px;
+}
 .subtitle {
 	opacity: 0.5;
-	font-size: 75%;
+	font-size: 11px;
 }
