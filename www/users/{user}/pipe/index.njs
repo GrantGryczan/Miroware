@@ -19,7 +19,7 @@ this.value += html`
 							</button>
 							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" title="Add folder">folder</button>
 						</div>
-						<div id="itemsLoading"></div>
+						<div id="itemsLoading" class="items"></div>
 					</div>
 				</div>
 				<div class="panel center">
@@ -42,7 +42,7 @@ this.value += html`
 								<span class="label spaced">Date</span><button id="sortDate" class="mdc-icon-button material-icons spaced" data-sort="date" title="Sort by date">sort</button>
 							</div>
 						</div>
-						<div id="items"></div>
+						<div id="items" class="items"></div>
 					</div>
 				</div>
 				<div class="panel side right"></div>
