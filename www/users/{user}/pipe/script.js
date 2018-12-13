@@ -62,7 +62,7 @@ class PipeLoadingItem {
 				sizeLabel.title = `${evt.loaded} / ${evt.total}`;
 				sizeLabel.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${getSize(this.file.size)})`;
 			});
-		}).then(Miro.response(xhr => {
+		}, true).then(Miro.response(xhr => {
 			
 		}, () => {
 			
