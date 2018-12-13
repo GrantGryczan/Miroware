@@ -19,6 +19,9 @@
 ::selection {
 	background-color: rgba(255, 255, 255, 0.25);
 }
+::-moz-focus-inner {
+	border: none;
+}
 * {
 	outline: none;
 	caret-color: currentColor !important;
