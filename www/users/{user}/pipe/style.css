@@ -29,15 +29,15 @@
 	-moz-user-select: -moz-none;
 }
 .panel {
+	padding: 0 8px;
 	&.side {
 		width: 256px;
-		padding: 8px;
 	}
 	&.center {
 		flex-grow: 1;
-		padding: 0 8px;
 	}
 	&.right {
+		padding: 8px;
 		overflow-y: auto;
 	}
 }
@@ -105,7 +105,7 @@
 }
 #add {
 	display: flex;
-	margin-bottom: 8px;
+	padding: 8px;
 }
 #addFiles {
 	flex-grow: 1;
