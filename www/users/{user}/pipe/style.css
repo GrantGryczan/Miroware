@@ -90,9 +90,10 @@
 	width: 15%;
 }
 .items {
+	flex-grow: 1;
 	overflow-x: hidden;
 	overflow-y: auto;
-	flex-grow: 1;
+	text-overflow: ellipsis;
 }
 .item {
 	text-decoration: none;
