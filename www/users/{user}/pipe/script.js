@@ -60,7 +60,7 @@ class PipeLoadingItem {
 				const percentage = 100 * evt.loaded / evt.total;
 				this.element.style.backgroundSize = `${percentage}%`;
 				sizeLabel.title = `${evt.loaded} / ${evt.total}`;
-				sizeLabel.textContent = `${Math.round(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${this.file.size})`;
+				sizeLabel.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${this.file.size})`;
 			});
 		}).then(Miro.response(xhr => {
 			
