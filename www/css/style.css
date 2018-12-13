@@ -170,9 +170,12 @@ main {
 		max-width: 1400px;
 	}
 }
-.mdc-ripple-surface {
-	user-select: none;
-	-moz-user-select: -moz-none;
+.mdc-ripple {
+	overflow: hidden;
+	&-surface {
+		user-select: none;
+		-moz-user-select: -moz-none;
+	}
 }
 .mdc-card {
 	background-color: #303030;
@@ -240,6 +243,10 @@ main {
 		height: 1em;
 		padding: 0;
 		vertical-align: bottom;
+	}
+	&.mdc-button--raised {
+		border-radius: 20px;
+		color: rgba(255, 255, 255, 0.625);
 	}
 }
 @keyframes autofill {

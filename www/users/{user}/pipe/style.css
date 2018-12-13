@@ -103,12 +103,10 @@
 }
 #add {
 	display: flex;
-	& > button {
-		height: 40px;
-		border-radius: 20px;
-	}
 }
 #addFiles {
 	flex-grow: 1;
+	height: 40px;
+	border-radius: 20px;
 	background-color: #df7f20;
 }
