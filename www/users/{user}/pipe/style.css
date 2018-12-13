@@ -31,16 +31,13 @@
 .panel {
 	&.side {
 		width: 256px;
-	}
-	&.left {
-		padding-right: 8px;
+		padding: 8px;
 	}
 	&.center {
 		flex-grow: 1;
 		padding: 0 8px;
 	}
 	&.right {
-		padding: 8px;
 		overflow-y: auto;
 	}
 }
@@ -108,7 +105,8 @@
 }
 #add {
 	display: flex;
-	padding: 8px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 #addFiles {
 	flex-grow: 1;
