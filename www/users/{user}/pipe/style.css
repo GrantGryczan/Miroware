@@ -124,3 +124,13 @@
 		font-size: 24px;
 	}
 }
+#loadingItems > .item {
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+	height: 48px;
+}
+.subtitle {
+	opacity: 0.5;
+	font-size: 75%;
+}

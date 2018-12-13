@@ -45,7 +45,7 @@ class PipeLoadingItem {
 					<span class="title" title="$${this.file.name}">$${this.file.name}</span>
 					<span class="subtitle" title="0 / ${this.file.size}">0% (${getSize(0)} / ${getSize(this.file.size)})</span>
 				</div>
-				<div class="cancel material-icons">close</div>
+				<button class="cancel mdc-icon-button material-icons">close</button>
 			</div>
 		`)._item = this;
 		const sizeLabel = this.element.querySelector(".label > .subtitle");
@@ -60,7 +60,7 @@ class PipeLoadingItem {
 				const percentage = 100 * evt.loaded / evt.total;
 				this.element.style.backgroundSize = `${percentage}%`;
 				sizeLabel.title = `${evt.loaded} / ${evt.total}`;
-				sizeLabel.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${this.file.size})`;
+				sizeLabel.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${getSize(this.file.size)})`;
 			});
 		}).then(Miro.response(xhr => {
 			
@@ -69,7 +69,7 @@ class PipeLoadingItem {
 		})).finally(this.element.parentNode.removeChild.bind(this.element.parentNode, this.element));
 	}
 }
-const addFile = async file => {
+const addFile = file => {
 	// TODO: check names
 	const item = new PipeLoadingItem(file);
 	loadingItems.insertBefore(item.element, loadingItems.firstChild);
