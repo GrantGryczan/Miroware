@@ -322,7 +322,8 @@ Miro.response = (success, failure) => async xhr => {
 	}
 };
 const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
-Miro.request = (method, url, headers, body, beforeOpen) => {
+let loadingRequests = 0;
+Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 	method = typeof method === "string" ? method.toUpperCase() : "GET";
 	const request = new Promise(resolve => {
 		if(typeof url === "string") {
@@ -330,7 +331,11 @@ Miro.request = (method, url, headers, body, beforeOpen) => {
 		} else {
 			throw new MiroError("The `url` parameter must be a string.");
 		}
-		Miro.progress.open();
+		const progress = !noProgress;
+		if(progress) {
+			loadingRequests++;
+			Miro.progress.open();
+		}
 		headers = headers instanceof Object ? headers : {};
 		if(body instanceof Object && !headers["Content-Type"]) {
 			headers["Content-Type"] = "application/json";
@@ -347,7 +352,9 @@ Miro.request = (method, url, headers, body, beforeOpen) => {
 		}
 		xhr.onreadystatechange = () => {
 			if(xhr.readyState === XMLHttpRequest.DONE) {
-				Miro.progress.close();
+				if(progress && !--loadingRequests) {
+					Miro.progress.close();
+				}
 				resolve(xhr);
 			}
 		};
