@@ -53,13 +53,12 @@ const updateQueue = () => {
 		total: 0
 	});
 	const done = loaded === total;
-	const progress = done ? 1 : loaded / total;
 	if(done) {
 		creation.classList.remove("loading");
 		queue.length = 0;
 	} else {
 		creation.classList.add("loading");
-		creation.style.backgroundSize = `${100 * progress}%`;
+		creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
 	}
 };
 class PipeQueuedItem {
