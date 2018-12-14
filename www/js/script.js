@@ -317,9 +317,12 @@ Miro.response = (success, failure) => async xhr => {
 	} else if(!xhr._aborted) {
 		const error = (xhr.response && xhr.response.error) || xhr.statusText || "An unknown error occurred.";
 		if(failure instanceof Function) {
+			console.log(1);
 			failure(xhr, error);
 		}
+		console.log(2);
 		await new Miro.Dialog("Error", error);
+		console.log(3);
 	}
 };
 const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
@@ -359,6 +362,7 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 				if(progress && !--loadingRequests) {
 					Miro.progress.close();
 				}
+				console.log(0);
 				resolve(xhr);
 			}
 		});

@@ -104,6 +104,7 @@ class PipeQueuedItem {
 				this.subtitleElement.title = `${this.loaded} / ${this.file.size}`;
 				this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${getSize(this.file.size)})`;
 				updateQueue();
+				console.log(5);
 			});
 			queue.push(this);
 			updateQueue();
@@ -111,6 +112,7 @@ class PipeQueuedItem {
 			this.element.classList.remove("loading");
 			this.closeElement.textContent = "done";
 		}, (xhr, error) => {
+			console.log(4);
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
 			this.subtitleElement.title = error;
