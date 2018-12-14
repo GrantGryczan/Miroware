@@ -109,7 +109,7 @@ class PipeQueuedItem {
 	close() {
 		this.xhr.abort();
 		this.element.parentNode.removeChild(this.element);
-		queue.splice(queue.indexOf(this), 1, item);
+		queue.splice(queue.indexOf(this), 1);
 		updateQueue();
 	}
 	retry(evt) {
