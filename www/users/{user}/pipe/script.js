@@ -36,7 +36,7 @@ const getSize = size => {
 };
 const getDate = date => String(new Date(date)).split(" ").slice(1, 5).join(" ");
 const queue = document.body.querySelector("#queue");
-class PipeLoadingItem {
+class PipeQueuedItem {
 	constructor(file) {
 		this.file = file;
 		((this.element = html`
@@ -78,13 +78,13 @@ class PipeLoadingItem {
 	}
 	retry(evt) {
 		if(!this.closeElement.contains(evt.target)) {
-			this.element.parentNode.replaceChild(new PipeLoadingItem(this.file).element, this.element);
+			this.element.parentNode.replaceChild(new PipeQueuedItem(this.file).element, this.element);
 		}
 	}
 }
 const addFile = file => {
 	// TODO: check names
-	queue.appendChild(new PipeLoadingItem(file).element);
+	queue.appendChild(new PipeQueuedItem(file).element);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
