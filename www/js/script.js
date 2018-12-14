@@ -314,7 +314,7 @@ Miro.response = (success, failure) => async xhr => {
 		if(success instanceof Function) {
 			success(xhr);
 		}
-	} else if(xhr.readyState) {
+	} else if(xhr.statusText === "abort") {
 		if(failure instanceof Function) {
 			failure(xhr);
 		}
