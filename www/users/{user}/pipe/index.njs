@@ -19,7 +19,7 @@ this.value += html`
 							</button>
 							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" title="Add folder">folder</button>
 						</div>
-						<div id="loadingItems" class="items"></div>
+						<div id="queue" class="items"></div>
 					</div>
 				</div>
 				<div class="panel center">

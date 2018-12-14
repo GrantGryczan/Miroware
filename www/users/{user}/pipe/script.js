@@ -35,11 +35,11 @@ const getSize = size => {
 	return `${Math.round(10 * size) / 10} YB`;
 };
 const getDate = date => String(new Date(date)).split(" ").slice(1, 5).join(" ");
-const loadingItems = document.body.querySelector("#loadingItems");
+const queue = document.body.querySelector("#queue");
 class PipeLoadingItem {
 	constructor(file) {
 		this.file = file;
-		loadingItems.appendChild(((this.element = html`
+		((this.element = html`
 			<div class="item loading">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
@@ -47,7 +47,7 @@ class PipeLoadingItem {
 				</div>
 				<button class="close mdc-icon-button material-icons">close</button>
 			</div>
-		`)._item = this).element);
+		`)._item = this;
 		(this.closeElement = this.element.querySelector(".close")).addEventListener("click", this.close.bind(this));
 		this.subtitleElement = this.element.querySelector(".subtitle");
 		Miro.request("POST", "/users/@me/pipe", {
@@ -78,13 +78,13 @@ class PipeLoadingItem {
 	}
 	retry(evt) {
 		if(!this.closeElement.contains(evt.target)) {
-			this.element.parentNode.replaceChild(this.element, new PipeLoadingItem(this.file).element);
+			this.element.parentNode.replaceChild(new PipeLoadingItem(this.file).element, this.element);
 		}
 	}
 }
 const addFile = file => {
 	// TODO: check names
-	new PipeLoadingItem(file);
+	queue.appendChild(new PipeLoadingItem(file).element);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
