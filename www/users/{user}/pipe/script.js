@@ -216,7 +216,7 @@ document.addEventListener("dragover", evt => {
 		}
 	}
 }, true);
-document.addEventListener("dragleave", evt => {
+document.addEventListener("dragleave", () => {
 	if(dragLeaveTimeout) {
 		clearTimeout(dragLeaveTimeout);
 	}
