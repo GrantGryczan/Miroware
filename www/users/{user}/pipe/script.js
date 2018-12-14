@@ -48,7 +48,7 @@ class PipeLoadingItem {
 				<button class="close mdc-icon-button material-icons">close</button>
 			</div>
 		`)._item = this).element);
-		this.element.querySelector(".close").addEventListener(this.close.bind(this));
+		this.element.querySelector(".close").addEventListener("click", this.close.bind(this));
 		const subtitle = this.element.querySelector(".subtitle");
 		Miro.request("POST", "/users/@me/pipe", {
 			"Content-Type": "application/octet-stream",
@@ -69,7 +69,7 @@ class PipeLoadingItem {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
 			subtitle.textContent = "An error occurred. Click to retry.";
-			this.element.addEventListener(this.close.bind(this));
+			this.element.addEventListener("click", this.close.bind(this));
 		}));
 	}
 	close() {
