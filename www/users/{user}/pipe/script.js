@@ -61,6 +61,7 @@ const updateQueue = () => {
 		creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
 	}
 };
+window.onbeforeunload = () => document.body.querySelector(".loading") || undefined;
 class PipeQueuedItem {
 	constructor(file) {
 		this.file = file;
@@ -175,4 +176,49 @@ document.addEventListener("paste", async evt => {
 	capture: true,
 	passive: true
 });
-window.onbeforeunload = () => document.body.querySelector(".loading") || undefined;
+let allowDrag = true;
+document.addEventListener("dragstart", () => {
+	allowDrag = false;
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("dragend", () => {
+	allowDrag = true;
+}, {
+	capture: true,
+	passive: true
+});
+let dragLeaveTimeout;
+document.addEventListener("dragover", evt => {
+	evt.preventDefault();
+	if(dragLeaveTimeout) {
+		clearTimeout(dragLeaveTimeout);
+		dragLeaveTimeout = null;
+	}
+	if(allowDrag && Miro.focused()) {
+		if(evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
+			//indicateTarget(page);
+		}
+	}
+}, true);
+document.addEventListener("dragleave", evt => {
+	if(dragLeaveTimeout) {
+		clearTimeout(dragLeaveTimeout);
+	}
+	dragLeaveTimeout = setTimeout(indicateTarget, 100);
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("drop", evt => {
+	evt.preventDefault();
+	if(allowDrag && Miro.focused()) {
+		if(evt.dataTransfer.files.length) {
+			Array.prototype.forEach.call(evt.dataTransfer.files, addFile);
+		}/* else if(evt.dataTransfer.types.includes("text/uri-list")) {
+			addURL(evt.dataTransfer.getData("text/uri-list"));
+		}*/
+		//indicateTarget();
+	}
+}, true);
