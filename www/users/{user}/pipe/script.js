@@ -69,7 +69,7 @@ class PipeLoadingItem {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
 			subtitle.textContent = "An error occurred. Click to retry.";
-			this.element.addEventListener("click", this.close.bind(this));
+			this.element.addEventListener("click", this.retry.bind(this));
 		}));
 	}
 	close() {
