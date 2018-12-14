@@ -48,7 +48,7 @@ class PipeLoadingItem {
 				<button class="close mdc-icon-button material-icons">close</button>
 			</div>
 		`)._item = this).element);
-		this.querySelector(".close").addEventListener(this.close.bind(this));
+		this.element.querySelector(".close").addEventListener(this.close.bind(this));
 		const subtitle = this.element.querySelector(".subtitle");
 		Miro.request("POST", "/users/@me/pipe", {
 			"Content-Type": "application/octet-stream",
