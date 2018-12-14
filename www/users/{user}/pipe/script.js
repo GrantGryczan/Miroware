@@ -54,11 +54,9 @@ const updateQueue = () => {
 	});
 	const done = loaded === total;
 	const progress = done ? 1 : loaded / total;
-	if(progress === 0 || done) {
+	if(done) {
 		creation.classList.remove("loading");
-		if(done) {
-			queue.length = 0;
-		}
+		queue.length = 0;
 	} else {
 		creation.classList.add("loading");
 		creation.style.backgroundSize = `${100 * progress}%`;
