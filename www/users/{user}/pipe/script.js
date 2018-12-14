@@ -39,7 +39,7 @@ const queue = document.body.querySelector("#queue");
 class PipeQueuedItem {
 	constructor(file) {
 		this.file = file;
-		((this.element = html`
+		(this.element = html`
 			<div class="item loading">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
