@@ -39,7 +39,7 @@ const loadingItems = document.body.querySelector("#loadingItems");
 class PipeLoadingItem {
 	constructor(file) {
 		this.file = file;
-		(this.element = html`
+		loadingItems.appendChild(((this.element = html`
 			<div class="item loading">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
@@ -47,7 +47,7 @@ class PipeLoadingItem {
 				</div>
 				<button class="close mdc-icon-button material-icons">close</button>
 			</div>
-		`)._item = this;
+		`)._item = this).element);
 		(this.closeElement = this.element.querySelector(".close")).addEventListener("click", this.close.bind(this));
 		this.subtitleElement = this.element.querySelector(".subtitle");
 		Miro.request("POST", "/users/@me/pipe", {
@@ -84,7 +84,7 @@ class PipeLoadingItem {
 }
 const addFile = file => {
 	// TODO: check names
-	loadingItems.appendChild(new PipeLoadingItem(file).element);
+	new PipeLoadingItem(file);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
