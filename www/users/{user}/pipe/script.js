@@ -175,4 +175,4 @@ document.addEventListener("paste", async evt => {
 	capture: true,
 	passive: true
 });
-window.onbeforeunload = () => queue.length || undefined;
+window.onbeforeunload = () => document.body.querySelector(".loading") || undefined;
