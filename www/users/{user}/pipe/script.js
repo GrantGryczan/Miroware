@@ -63,7 +63,7 @@ const updateQueue = () => {
 	}
 };
 window.onbeforeunload = () => container.querySelector(".loading") || undefined;
-const targetIndicator = container.querySelector("#targetIndicator");
+const targetIndicator = document.body.querySelector("#targetIndicator");
 let indicatedTarget;
 const indicateTarget = target => {
 	indicatedTarget = target;
