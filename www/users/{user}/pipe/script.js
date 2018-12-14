@@ -62,6 +62,19 @@ const updateQueue = () => {
 	}
 };
 window.onbeforeunload = () => document.body.querySelector(".loading") || undefined;
+const targetIndicator = document.body.querySelector("#targetIndicator");
+let indicatedTarget;
+const indicateTarget = target => {
+	indicatedTarget = target;
+	if(target) {
+		const rect = target.getBoundingClientRect();
+		targetIndicator.style.transform = `translate(${rect.left + rect.width / 2 - 0.5}px, ${rect.top + rect.height / 2 - 0.5}px) scale(${rect.width}, ${rect.height})`;
+		targetIndicator.classList.add("visible");
+	} else if(targetIndicator.classList.contains("visible")) {
+		targetIndicator.style.transform = "";
+		targetIndicator.classList.remove("visible");
+	}
+};
 class PipeQueuedItem {
 	constructor(file) {
 		this.file = file;
@@ -176,15 +189,15 @@ document.addEventListener("paste", async evt => {
 	capture: true,
 	passive: true
 });
-let allowDrag = true;
+let allowDrop = true;
 document.addEventListener("dragstart", () => {
-	allowDrag = false;
+	allowDrop = false;
 }, {
 	capture: true,
 	passive: true
 });
 document.addEventListener("dragend", () => {
-	allowDrag = true;
+	allowDrop = true;
 }, {
 	capture: true,
 	passive: true
@@ -196,9 +209,9 @@ document.addEventListener("dragover", evt => {
 		clearTimeout(dragLeaveTimeout);
 		dragLeaveTimeout = null;
 	}
-	if(allowDrag && Miro.focused()) {
+	if(allowDrop && Miro.focused()) {
 		if(evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
-			//indicateTarget(page);
+			indicateTarget(page);
 		}
 	}
 }, true);
@@ -213,12 +226,12 @@ document.addEventListener("dragleave", evt => {
 });
 document.addEventListener("drop", evt => {
 	evt.preventDefault();
-	if(allowDrag && Miro.focused()) {
+	if(allowDrop && Miro.focused()) {
 		if(evt.dataTransfer.files.length) {
 			Array.prototype.forEach.call(evt.dataTransfer.files, addFile);
 		}/* else if(evt.dataTransfer.types.includes("text/uri-list")) {
 			addURL(evt.dataTransfer.getData("text/uri-list"));
 		}*/
-		//indicateTarget();
+		indicateTarget();
 	}
 }, true);
