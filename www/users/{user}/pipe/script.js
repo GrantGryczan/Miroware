@@ -109,12 +109,13 @@ class PipeQueuedItem {
 	close() {
 		this.xhr.abort();
 		this.element.parentNode.removeChild(this.element);
+		queue.splice(queue.indexOf(this), 1, item);
+		updateQueue();
 	}
 	retry(evt) {
 		if(!this.closeElement.contains(evt.target)) {
 			const item = new PipeQueuedItem(this.file);
 			queue.splice(queue.indexOf(this), 1, item);
-			updateQueue();
 			this.element.parentNode.replaceChild(item.element, this.element);
 		}
 	}
