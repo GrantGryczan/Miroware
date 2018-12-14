@@ -50,6 +50,75 @@
 	height: 100%;
 	white-space: nowrap;
 }
+#creation {
+	flex-shrink: 0;
+	display: flex;
+	padding: 8px 0;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+#addFiles {
+	flex-grow: 1;
+	height: 40px;
+	border-radius: 20px;
+	font-size: 15px;
+	background-color: #df7f20;
+	& > .mdc-button__icon {
+		width: 24px;
+		height: 24px;
+		font-size: 24px;
+	}
+}
+.items {
+	flex-grow: 1;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.item {
+	&.error {
+		background-color: rgba(255, 0, 0, 0.5);
+		cursor: pointer;
+	}
+	&.selected {
+		background-color: rgba(255, 128, 0, 0.5);
+	}
+	#queuedItems > & {
+		display: flex;
+		align-items: center;
+		height: 48px;
+		padding: 0 4px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+		& > .label {
+			width: calc(100% - 32px);
+			& > * {
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+		& > button {
+			width: 32px;
+			min-width: 32px;
+			height: 32px;
+		}
+	}
+	#items > & {
+		text-decoration: none;
+		&.loading {
+			opacity: 0.7;
+		}
+	}
+}
+.loading {
+	background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
+	background-repeat: no-repeat;
+	background-size: 0;
+}
+.title {
+	font-size: 14px;
+}
+.subtitle {
+	opacity: 0.5;
+	font-size: 11px;
+}
 #sort {
 	display: flex;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -88,71 +157,4 @@
 }
 .size, .type, .date {
 	width: 15%;
-}
-.items {
-	flex-grow: 1;
-	overflow-x: hidden;
-	overflow-y: auto;
-}
-.item {
-	text-decoration: none;
-	&.loading {
-		opacity: 0.7;
-	}
-	&.error {
-		background-color: rgba(255, 0, 0, 0.5);
-		cursor: pointer;
-	}
-	&.selected {
-		background-color: rgba(255, 128, 0, 0.5);
-	}
-}
-.loading {
-	background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
-	background-repeat: no-repeat;
-	background-size: 0;
-}
-#creation {
-	flex-shrink: 0;
-	display: flex;
-	padding: 8px 0;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-#addFiles {
-	flex-grow: 1;
-	height: 40px;
-	border-radius: 20px;
-	font-size: 15px;
-	background-color: #df7f20;
-	& > .mdc-button__icon {
-		width: 24px;
-		height: 24px;
-		font-size: 24px;
-	}
-}
-#queuedItems > .item {
-	display: flex;
-	align-items: center;
-	height: 48px;
-	padding: 0 4px;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-	& > .label {
-		width: calc(100% - 32px);
-		& > * {
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-	}
-	& > button {
-		width: 32px;
-		min-width: 32px;
-		height: 32px;
-	}
-}
-.title {
-	font-size: 14px;
-}
-.subtitle {
-	opacity: 0.5;
-	font-size: 11px;
 }
