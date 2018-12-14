@@ -98,7 +98,7 @@ class PipeQueuedItem {
 			this.element.classList.add("error");
 			this.subtitleElement.textContent = "An error occurred. Click to retry.";
 			this.element.addEventListener("click", this.retry.bind(this));
-			this.loaded = 0;
+			queue.splice(queue.indexOf(this), 1);
 			updateQueue();
 		}));
 	}
