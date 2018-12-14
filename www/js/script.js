@@ -314,7 +314,7 @@ Miro.response = (success, failure) => async xhr => {
 		if(success instanceof Function) {
 			success(xhr);
 		}
-	} else if(xhr.statusText !== "abort") {
+	} else if(!xhr._aborted) {
 		if(failure instanceof Function) {
 			failure(xhr);
 		}
@@ -350,14 +350,17 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 		for(const header of Object.keys(headers)) {
 			xhr.setRequestHeader(header, headers[header]);
 		}
-		xhr.onreadystatechange = () => {
+		xhr.addEventListener("abort", () => {
+			xhr._aborted = true;
+		});
+		xhr.addEventListener("readystatechange", () => {
 			if(xhr.readyState === XMLHttpRequest.DONE) {
 				if(progress && !--loadingRequests) {
 					Miro.progress.close();
 				}
 				resolve(xhr);
 			}
-		};
+		});
 		xhr.send((body && (headers["Content-Type"] === "application/json" ? JSON.stringify(body) : body)) || undefined);
 	});
 	return request;
