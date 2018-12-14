@@ -44,7 +44,7 @@ const queueReducer = (progress, item) => {
 	return progress;
 };
 const updateQueue = () => {
-	if(queue.length < 2) {
+	if(!queue.length) {
 		creation.classList.remove("loading");
 		return;
 	}
