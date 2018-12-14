@@ -35,7 +35,30 @@ const getSize = size => {
 	return `${Math.round(10 * size) / 10} YB`;
 };
 const getDate = date => String(new Date(date)).split(" ").slice(1, 5).join(" ");
-const queue = document.body.querySelector("#queue");
+const creation = document.body.querySelector("#creation");
+const queuedItems = document.body.querySelector("#queuedItems");
+const queue = [];
+const queueReducer = (progress, item) => {
+	progress.loaded += item.loaded;
+	progress.total += item.file.size;
+};
+const updateQueue = () => {
+	const {loaded, total} = queue.reduce(queueReducer, {
+		loaded: 0,
+		total: 0
+	});
+	const progress = loaded / total;
+	const done = progress === 1;
+	if(progress === 0 || done) {
+		creation.classList.remove("loading");
+		if(done) {
+			queue.length = 0;
+		}
+	} else {
+		creation.classList.add("loading");
+		creation.style.backgroundSize = `${100 * progress}%`;
+	}
+};
 class PipeQueuedItem {
 	constructor(file) {
 		this.file = file;
@@ -57,12 +80,16 @@ class PipeQueuedItem {
 			})
 		}, this.file, xhr => {
 			this.xhr = xhr;
+			this.loaded = 0;
 			this.xhr.upload.addEventListener("progress", evt => {
-				const percentage = 100 * evt.loaded / evt.total;
+				const percentage = 100 * (this.loaded = evt.loaded) / this.file.size;
 				this.element.style.backgroundSize = `${percentage}%`;
-				this.subtitleElement.title = `${evt.loaded} / ${evt.total}`;
-				this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${getSize(this.file.size)})`;
+				this.subtitleElement.title = `${this.loaded} / ${this.file.size}`;
+				this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${getSize(this.file.size)})`;
+				updateQueue();
 			});
+			queue.push(this);
+			updateQueue();
 		}, true).then(Miro.response(xhr => {
 			this.element.classList.remove("loading");
 		}, () => {
@@ -70,6 +97,8 @@ class PipeQueuedItem {
 			this.element.classList.add("error");
 			this.subtitleElement.textContent = "An error occurred. Click to retry.";
 			this.element.addEventListener("click", this.retry.bind(this));
+			this.loaded = 0;
+			updateQueue();
 		}));
 	}
 	close() {
@@ -93,5 +122,5 @@ fileInput.addEventListener("change", () => {
 	Array.prototype.forEach.call(fileInput.files, addFile);
 	fileInput.value = null;
 });
-const addFiles = document.body.querySelector("#addFiles");
+const addFiles = creation.querySelector("#addFiles");
 addFiles.addEventListener("click", fileInput.click.bind(fileInput));

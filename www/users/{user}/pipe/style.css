@@ -29,18 +29,15 @@
 	-moz-user-select: -moz-none;
 }
 .panel {
+	padding: 0 8px;
 	&.side {
 		width: 256px;
-		padding: 8px;
-	}
-	&.left {
-		padding-bottom: 0;
 	}
 	&.center {
 		flex-grow: 1;
-		padding: 0 8px;
 	}
 	&.right {
+		padding: 8px;
 		overflow-y: auto;
 		word-break: break-word;
 		word-wrap: break-word;
@@ -101,9 +98,6 @@
 	text-decoration: none;
 	&.loading {
 		opacity: 0.7;
-		background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
-		background-repeat: no-repeat;
-		background-size: 0;
 	}
 	&.error {
 		background-color: rgba(255, 0, 0, 0.5);
@@ -113,10 +107,15 @@
 		background-color: rgba(255, 128, 0, 0.5);
 	}
 }
-#add {
+.loading {
+	background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
+	background-repeat: no-repeat;
+	background-size: 0;
+}
+#creation {
 	flex-shrink: 0;
 	display: flex;
-	padding-bottom: 8px;
+	padding: 8px 0;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 #addFiles {
@@ -131,7 +130,7 @@
 		font-size: 24px;
 	}
 }
-#queue > .item {
+#queuedItems > .item {
 	display: flex;
 	align-items: center;
 	height: 48px;

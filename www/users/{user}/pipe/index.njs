@@ -13,13 +13,13 @@ this.value += html`
 			<div id="panels">
 				<div class="panel side left">
 					<div class="pane">
-						<div id="add">
+						<div id="creation">
 							<button id="addFiles" class="mdc-button mdc-button--raised spaced mdc-ripple" title="Add file(s)">
 								<i class="mdc-button__icon material-icons">file_upload</i>Upload
 							</button>
 							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" title="Add folder">folder</button>
 						</div>
-						<div id="queue" class="items"></div>
+						<div id="queuedItems" class="items"></div>
 					</div>
 				</div>
 				<div class="panel center">
