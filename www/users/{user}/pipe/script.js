@@ -110,9 +110,10 @@ class PipeQueuedItem {
 		}, true).then(Miro.response(xhr => {
 			this.element.classList.remove("loading");
 			this.closeElement.textContent = "done";
-		}, () => {
+		}, (xhr, error) => {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
+			this.subtitleElement.title = error;
 			this.subtitleElement.textContent = "An error occurred. Click to retry.";
 			this.element.addEventListener("click", this.retry.bind(this));
 			if(this.dequeue()) {

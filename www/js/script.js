@@ -315,10 +315,11 @@ Miro.response = (success, failure) => async xhr => {
 			success(xhr);
 		}
 	} else if(!xhr._aborted) {
+		const error = (xhr.response && xhr.response.error) || xhr.statusText || "An unknown error occurred.";
 		if(failure instanceof Function) {
-			failure(xhr);
+			failure(xhr, error);
 		}
-		await new Miro.Dialog("Error", (xhr.response && xhr.response.error) || xhr.statusText || "An unknown error occurred.");
+		await new Miro.Dialog("Error", error);
 	}
 };
 const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
