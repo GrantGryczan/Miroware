@@ -120,10 +120,12 @@ class PipeQueuedItem {
 		`, ["Yes", "No"]) !== 0) {
 			return;
 		}
-		this.xhr.abort();
-		this.element.parentNode.removeChild(this.element);
-		if(this.dequeue()) {
-			updateQueue();
+		if(this.element.parentNode) {
+			this.xhr.abort();
+			this.element.parentNode.removeChild(this.element);
+			if(this.dequeue()) {
+				updateQueue();
+			}
 		}
 	}
 	retry(evt) {
