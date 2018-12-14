@@ -102,21 +102,31 @@ class PipeQueuedItem {
 			this.element.classList.add("error");
 			this.subtitleElement.textContent = "An error occurred. Click to retry.";
 			this.element.addEventListener("click", this.retry.bind(this));
-			queue.splice(queue.indexOf(this), 1);
-			updateQueue();
+			if(this.dequeue()) {
+				updateQueue();
+			}
 		}));
+	}
+	dequeue() {
+		const queueIndex = queue.indexOf(this);
+		if(queueIndex === -1) {
+			return false;
+		} else {
+			queue.splice(queueIndex, 1);
+			return true;
+		}
 	}
 	close() {
 		this.xhr.abort();
 		this.element.parentNode.removeChild(this.element);
-		queue.splice(queue.indexOf(this), 1);
-		updateQueue();
+		if(this.dequeue()) {
+			updateQueue();
+		}
 	}
 	retry(evt) {
 		if(!this.closeElement.contains(evt.target)) {
-			const item = new PipeQueuedItem(this.file);
-			queue.splice(queue.indexOf(this), 1, item);
-			this.element.parentNode.replaceChild(item.element, this.element);
+			this.element.parentNode.replaceChild(new PipeQueuedItem(this.file).element, this.element);
+			this.dequeue();
 		}
 	}
 }
