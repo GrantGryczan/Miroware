@@ -99,7 +99,7 @@ class PipeQueuedItem {
 			this.xhr = xhr;
 			this.loaded = 0;
 			this.xhr.upload.addEventListener("progress", evt => {
-				const percentage = 100 * (this.loaded = evt.loaded) / this.file.size;
+				const percentage = 100 * (this.loaded = evt.loaded) / this.file.size || 0;
 				this.element.style.backgroundSize = `${percentage}%`;
 				this.subtitleElement.title = `${this.loaded} / ${this.file.size}`;
 				this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${getSize(this.file.size)})`;
