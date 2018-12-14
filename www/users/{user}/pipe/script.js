@@ -39,16 +39,17 @@ const loadingItems = document.body.querySelector("#loadingItems");
 class PipeLoadingItem {
 	constructor(file) {
 		this.file = file;
-		(this.element = html`
+		loadingItems.appendChild(((this.element = html`
 			<div class="item loading">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
 					<div class="subtitle" title="0 / ${this.file.size}">0% (${getSize(0)} / ${getSize(this.file.size)})</div>
 				</div>
-				<button class="cancel mdc-icon-button material-icons">close</button>
+				<button class="close mdc-icon-button material-icons">close</button>
 			</div>
-		`)._item = this;
-		const subtitle = this.element.querySelector(".label > .subtitle");
+		`)._item = this).element);
+		this.querySelector(".close").addEventListener(this.close.bind(this));
+		const subtitle = this.element.querySelector(".subtitle");
 		Miro.request("POST", "/users/@me/pipe", {
 			"Content-Type": "application/octet-stream",
 			"X-Data": JSON.stringify({
@@ -68,13 +69,26 @@ class PipeLoadingItem {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
 			subtitle.textContent = "An error occurred. Click to retry.";
+			this.element.addEventListener(this.close.bind(this));
 		}));
+	}
+	close() {
+		if(!this.closed) {
+			this.xhr.abort();
+			this.element.parentNode.removeChild(this.element);
+			this.closed = true;
+		}
+	}
+	retry() {
+		if(!this.closed) {
+			this.close();
+			new PipeLoadingItem(this.file);
+		}
 	}
 }
 const addFile = file => {
 	// TODO: check names
-	const item = new PipeLoadingItem(file);
-	loadingItems.insertBefore(item.element, loadingItems.firstChild);
+	new PipeLoadingItem(file);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
