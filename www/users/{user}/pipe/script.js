@@ -146,3 +146,32 @@ fileInput.addEventListener("change", () => {
 });
 const addFiles = creation.querySelector("#addFiles");
 addFiles.addEventListener("click", fileInput.click.bind(fileInput));
+const htmlFilenameTest = /\/([^\/]+?)"/;
+document.addEventListener("paste", async evt => {
+	if(Miro.focused() && !Miro.typing() && evt.clipboardData.items.length) {
+		let file;
+		let string;
+		for(const dataTransferItem of evt.clipboardData.items) {
+			if(dataTransferItem.kind === "file") {
+				file = dataTransferItem;
+			} else if(dataTransferItem.kind === "string") {
+				string = dataTransferItem;
+			}
+		}
+		if(file) {
+			file = file.getAsFile();
+			if(string) {
+				const htmlFilename = (await new Promise(string.getAsString.bind(string))).match(htmlFilenameTest);
+				console.log(file.name, file);
+				Object.defineProperty(file, "name", {
+					value: htmlFilename ? htmlFilename[1] : "file"
+				});
+			}
+			addFile(file);
+		}
+	}
+}, {
+	capture: true,
+	passive: true
+});
+window.onbeforeunload = () => queue.length || undefined;
