@@ -97,6 +97,7 @@ class PipeQueuedItem {
 			updateQueue();
 		}, true).then(Miro.response(xhr => {
 			this.element.classList.remove("loading");
+			this.closeElement.textContent = "done";
 		}, () => {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
