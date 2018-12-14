@@ -41,6 +41,7 @@ const queue = [];
 const queueReducer = (progress, item) => {
 	progress.loaded += item.loaded;
 	progress.total += item.file.size;
+	return progress;
 };
 const updateQueue = () => {
 	const {loaded, total} = queue.reduce(queueReducer, {
