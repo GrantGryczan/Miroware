@@ -114,7 +114,7 @@ class PipeQueuedItem {
 }
 const addFile = file => {
 	// TODO: check names
-	queue.appendChild(new PipeQueuedItem(file).element);
+	queuedItems.appendChild(new PipeQueuedItem(file).element);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
