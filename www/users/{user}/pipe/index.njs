@@ -17,7 +17,7 @@ this.value += html`
 							<button id="addFiles" class="mdc-button mdc-button--raised spaced mdc-ripple" title="Add file(s)">
 								<i class="mdc-button__icon material-icons">file_upload</i>Upload
 							</button>
-							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" title="Add folder">folder</button>
+							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" title="Add folder">create_new_folder</button>
 						</div>
 						<div id="queuedItems" class="items"></div>
 					</div>
