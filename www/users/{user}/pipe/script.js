@@ -35,8 +35,9 @@ const getSize = size => {
 	return `${Math.round(10 * size) / 10} YB`;
 };
 const getDate = date => String(new Date(date)).split(" ").slice(1, 5).join(" ");
-const creation = document.body.querySelector("#creation");
-const queuedItems = document.body.querySelector("#queuedItems");
+const container = document.body.querySelector("#container");
+const creation = container.querySelector("#creation");
+const queuedItems = container.querySelector("#queuedItems");
 const queue = [];
 const queueReducer = (progress, item) => {
 	progress.loaded += item.loaded;
@@ -61,8 +62,8 @@ const updateQueue = () => {
 		creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
 	}
 };
-window.onbeforeunload = () => document.body.querySelector(".loading") || undefined;
-const targetIndicator = document.body.querySelector("#targetIndicator");
+window.onbeforeunload = () => container.querySelector(".loading") || undefined;
+const targetIndicator = container.querySelector("#targetIndicator");
 let indicatedTarget;
 const indicateTarget = target => {
 	indicatedTarget = target;
@@ -211,7 +212,7 @@ document.addEventListener("dragover", evt => {
 	}
 	if(allowDrop && Miro.focused()) {
 		if(evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
-			indicateTarget(page);
+			indicateTarget(container);
 		}
 	}
 }, true);
