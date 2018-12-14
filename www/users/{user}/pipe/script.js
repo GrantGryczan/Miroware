@@ -44,12 +44,16 @@ const queueReducer = (progress, item) => {
 	return progress;
 };
 const updateQueue = () => {
+	if(queue.length < 2) {
+		creation.classList.remove("loading");
+		return;
+	}
 	const {loaded, total} = queue.reduce(queueReducer, {
 		loaded: 0,
 		total: 0
 	});
-	const progress = loaded / total;
-	const done = progress === 1;
+	const done = loaded === total;
+	const progress = done ? 1 : loaded / total;
 	if(progress === 0 || done) {
 		creation.classList.remove("loading");
 		if(done) {
@@ -108,7 +112,10 @@ class PipeQueuedItem {
 	}
 	retry(evt) {
 		if(!this.closeElement.contains(evt.target)) {
-			this.element.parentNode.replaceChild(new PipeQueuedItem(this.file).element, this.element);
+			const item = new PipeQueuedItem(this.file);
+			queue.splice(queue.indexOf(this), 1, item);
+			updateQueue();
+			this.element.parentNode.replaceChild(item.element, this.element);
 		}
 	}
 }
