@@ -39,7 +39,7 @@ const loadingItems = document.body.querySelector("#loadingItems");
 class PipeLoadingItem {
 	constructor(file) {
 		this.file = file;
-		loadingItems.appendChild(((this.element = html`
+		(this.element = html`
 			<div class="item loading">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
@@ -47,9 +47,9 @@ class PipeLoadingItem {
 				</div>
 				<button class="close mdc-icon-button material-icons">close</button>
 			</div>
-		`)._item = this).element);
-		this.element.querySelector(".close").addEventListener("click", this.close.bind(this));
-		const subtitle = this.element.querySelector(".subtitle");
+		`)._item = this;
+		(this.closeElement = this.element.querySelector(".close")).addEventListener("click", this.close.bind(this));
+		this.subtitleElement = this.element.querySelector(".subtitle");
 		Miro.request("POST", "/users/@me/pipe", {
 			"Content-Type": "application/octet-stream",
 			"X-Data": JSON.stringify({
@@ -60,35 +60,31 @@ class PipeLoadingItem {
 			this.xhr.upload.addEventListener("progress", evt => {
 				const percentage = 100 * evt.loaded / evt.total;
 				this.element.style.backgroundSize = `${percentage}%`;
-				subtitle.title = `${evt.loaded} / ${evt.total}`;
-				subtitle.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${getSize(this.file.size)})`;
+				this.subtitleElement.title = `${evt.loaded} / ${evt.total}`;
+				this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(evt.loaded)} / ${getSize(this.file.size)})`;
 			});
 		}, true).then(Miro.response(xhr => {
 			this.element.classList.remove("loading");
 		}, () => {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
-			subtitle.textContent = "An error occurred. Click to retry.";
+			this.subtitleElement.textContent = "An error occurred. Click to retry.";
 			this.element.addEventListener("click", this.retry.bind(this));
 		}));
 	}
 	close() {
-		if(!this.closed) {
-			this.xhr.abort();
-			this.element.parentNode.removeChild(this.element);
-			this.closed = true;
-		}
+		this.xhr.abort();
+		this.element.parentNode.removeChild(this.element);
 	}
-	retry() {
-		if(!this.closed) {
-			this.close();
-			new PipeLoadingItem(this.file);
+	retry(evt) {
+		if(!this.closeElement.contains(evt.target)) {
+			this.element.parentNode.replaceChild(this.element, new PipeLoadingItem(this.file).element);
 		}
 	}
 }
 const addFile = file => {
 	// TODO: check names
-	new PipeLoadingItem(file);
+	loadingItems.appendChild(new PipeLoadingItem(file).element);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
