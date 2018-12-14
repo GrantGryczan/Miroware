@@ -162,7 +162,6 @@ document.addEventListener("paste", async evt => {
 			file = file.getAsFile();
 			if(string) {
 				const htmlFilename = (await new Promise(string.getAsString.bind(string))).match(htmlFilenameTest);
-				console.log(file.name, file);
 				Object.defineProperty(file, "name", {
 					value: htmlFilename ? htmlFilename[1] : "file"
 				});
