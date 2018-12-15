@@ -36,6 +36,20 @@ const getSize = size => {
 };
 const getDate = date => String(new Date(date)).split(" ").slice(1, 5).join(" ");
 const container = document.body.querySelector("#container");
+
+const targetIndicator = document.body.querySelector("#targetIndicator");
+let indicatedTarget;
+const indicateTarget = target => {
+	indicatedTarget = target;
+	if(target) {
+		const rect = target.getBoundingClientRect();
+		targetIndicator.style.transform = `translate(${rect.left + rect.width / 2 - 0.5}px, ${rect.top + rect.height / 2 - 0.5}px) scale(${rect.width}, ${rect.height})`;
+		targetIndicator.classList.add("visible");
+	} else if(targetIndicator.classList.contains("visible")) {
+		targetIndicator.style.transform = "";
+		targetIndicator.classList.remove("visible");
+	}
+};
 const creation = container.querySelector("#creation");
 const queuedItems = container.querySelector("#queuedItems");
 const queue = [];
@@ -63,30 +77,17 @@ const updateQueue = () => {
 	}
 };
 window.onbeforeunload = () => container.querySelector(".loading") || undefined;
-const targetIndicator = document.body.querySelector("#targetIndicator");
-let indicatedTarget;
-const indicateTarget = target => {
-	indicatedTarget = target;
-	if(target) {
-		const rect = target.getBoundingClientRect();
-		targetIndicator.style.transform = `translate(${rect.left + rect.width / 2 - 0.5}px, ${rect.top + rect.height / 2 - 0.5}px) scale(${rect.width}, ${rect.height})`;
-		targetIndicator.classList.add("visible");
-	} else if(targetIndicator.classList.contains("visible")) {
-		targetIndicator.style.transform = "";
-		targetIndicator.classList.remove("visible");
-	}
-};
 class PipeQueuedItem {
 	constructor(file) {
 		this.file = file;
 		(this.element = html`
-			<div class="item loading">
+			<a class="item loading" draggable="false" ondragstart="return false;">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
 					<div class="subtitle" title="0 / ${this.file.size}">0% (${getSize(0)} / ${getSize(this.file.size)})</div>
 				</div>
 				<button class="close mdc-icon-button material-icons">close</button>
-			</div>
+			</a>
 		`)._item = this;
 		(this.closeElement = this.element.querySelector(".close")).addEventListener("click", this.close.bind(this));
 		this.subtitleElement = this.element.querySelector(".subtitle");
