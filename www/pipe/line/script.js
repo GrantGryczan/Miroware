@@ -76,12 +76,8 @@ const path = page.querySelector("#path");
 document.body.querySelector(".mdc-top-app-bar__title").appendChild(path);
 const itemsToRender = item => (!parent && !item.name.includes("/")) || (item.name.startsWith(parent) && item.name.slice(parent.length).lastIndexOf("/") === 0);
 const sort = {
-	name: (a, b) => {
-		const stringA = a.name.toLowerCase();
-		const stringB = b.name.toLowerCase();
-		return stringA < stringB ? 1 : -1;
-	},
-	size: (a, b) => ((a.size || Infinity) - (b.size || Infinity)) || a.date - b.date,
+	name: (a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,
+	size: (a, b) => (a.size || Infinity) - (b.size || Infinity) || a.date - b.date,
 	type: (a, b) => a.type < b.type ? 1 : (a.type > b.type ? -1 : a.date - b.date),
 	date: (a, b) => a.date - b.date
 };

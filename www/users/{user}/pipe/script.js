@@ -36,7 +36,6 @@ const getSize = size => {
 };
 const getDate = date => String(new Date(date)).split(" ").slice(1, 5).join(" ");
 const container = document.body.querySelector("#container");
-
 const targetIndicator = document.body.querySelector("#targetIndicator");
 let indicatedTarget;
 const indicateTarget = target => {
@@ -50,6 +49,18 @@ const indicateTarget = target => {
 		targetIndicator.classList.remove("visible");
 	}
 };
+class PipeItem {
+	constructor(item) {
+		this.name = item.name; // TODO: apply parent
+		this.size = item.size;
+		(this.element = html`
+			<a class="item" draggable="false" ondragstart="return false;">
+				<div class="title" title="$${this.name}">$${this.name}</div>
+				<div class="subtitle" title="${this.size}">getSize(this.file.size)})</div>
+			</a>
+		`)._item = this;
+	}
+}
 const creation = container.querySelector("#creation");
 const queuedItems = container.querySelector("#queuedItems");
 const queue = [];
