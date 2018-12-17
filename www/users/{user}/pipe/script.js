@@ -293,3 +293,13 @@ document.addEventListener("drop", evt => {
 		indicateTarget();
 	}
 }, true);
+const hashChange = () => {
+	const target = decodeURI(location.hash.slice(1));
+	// TODO
+	render();
+};
+if(!location.hash) {
+	location.hash = "#";
+}
+hashChange();
+window.addEventListener("hashchange", hashChange);

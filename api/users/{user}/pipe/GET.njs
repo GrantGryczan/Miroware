@@ -1,6 +1,13 @@
 const {user, isMe} = await parseUser(this);
 if(isMe) {
-	this.value = user.pipe;
+	if(this.req.query.path) {
+		this.value = [];
+		const fileItems = [];
+		const prefix = `${this.req.query.path}/`;
+		this.value = user.pipe.filter(item => item.name.startsWith(prefix) && !item.name.includes("/", prefix.length));
+	} else {
+		this.value = user.pipe;
+	}
 } else {
 	this.value = {
 		error: "You do not have permission to access that user's pipe."
