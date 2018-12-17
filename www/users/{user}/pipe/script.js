@@ -1,4 +1,5 @@
 "use strict";
+const getDate = date => String(date).split(" ").slice(1, 5).join(" ");
 const getSize = size => {
 	if(size < 1000) {
 		return `${size} B`;
@@ -34,7 +35,6 @@ const getSize = size => {
 	size /= 1000;
 	return `${Math.round(10 * size) / 10} YB`;
 };
-const getDate = date => String(new Date(date)).split(" ").slice(1, 5).join(" ");
 const container = document.body.querySelector("#container");
 const targetIndicator = document.body.querySelector("#targetIndicator");
 let indicatedTarget;
@@ -49,16 +49,58 @@ const indicateTarget = target => {
 		targetIndicator.classList.remove("visible");
 	}
 };
+const _name = Symbol("name");
+const _size = Symbol("size");
+const _type = Symbol("type");
+const _date = Symbol("date");
 class PipeItem {
 	constructor(item) {
-		this.name = item.name; // TODO: apply parent
-		this.size = item.size;
+		this.id = item.id;
 		(this.element = html`
 			<a class="item" draggable="false" ondragstart="return false;">
-				<div class="title" title="$${this.name}">$${this.name}</div>
-				<div class="subtitle" title="${this.size}">getSize(this.file.size)})</div>
+				<div class="cell icon">
+					<i class="material-icons"></i>
+				</div>
+				<div class="cell name"></div>
+				<div class="cell size"></div>
+				<div class="cell type"></div>
+				<div class="cell date"></div>
 			</a>
 		`)._item = this;
+		this.iconElement = this.element.querySelector(".icon > i");
+		this.nameElement = this.element.querySelector(".name");
+		this.sizeElement = this.element.querySelector(".size");
+		this.typeElement = this.element.querySelector(".type");
+		this.dateElement = this.element.querySelector(".date");
+		this.name = item.name;
+		this.size = item.size;
+		this.type = item.type;
+		this.date = new Date(item.date);
+	}
+	get name() {
+		return this[_name];
+	}
+	set name(value) {
+		this.nameElement.textContent = this.nameElement.title = this[_name] = value;
+	}
+	get size() {
+		return this[_size];
+	}
+	set size(value) {
+		this.sizeElement.textContent = getSize(this.sizeElement.title = this[_size] = value);
+	}
+	get type() {
+		return this[_type];
+	}
+	set type(value) {
+		this.typeElement.textContent = this.typeElement.title = this[_type] = value;
+		this.iconElement.textContent = value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file"));
+	}
+	get date() {
+		return this[_date];
+	}
+	set date(value) {
+		this.dateElement.textContent = getDate(this.dateElement.title = this[_date] = value);
 	}
 }
 const creation = container.querySelector("#creation");
