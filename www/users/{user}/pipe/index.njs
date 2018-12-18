@@ -1,10 +1,13 @@
 if(notLoggedIn(this)) {
 	return;
 }
-this.title = "Pipe";
+this.title = `Pipe / ${this.user.name}`;
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
-this.data = this.user._id;
+this.data = {
+	id: this.user._id,
+	name: this.user.name
+};
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;

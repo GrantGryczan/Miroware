@@ -84,7 +84,7 @@ class PipeItem {
 	set name(value) {
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
-		this.element.href = this.type === "/" ? `#${value}` : `https://pipe.miroware.io/${Miro.data}/${value}`;
+		this.element.href = this.type === "/" ? `#${value}` : `https://pipe.miroware.io/${Miro.data.id}/${value}`;
 	}
 	get size() {
 		return this[_size];
@@ -314,7 +314,7 @@ const render = () => {
 	}
 	ancestors.appendChild(html`
 		<span>
-			/ <a class="ancestor" href="#">${Miro.data.user}</a>
+			/ <a class="ancestor" href="#">${Miro.data.name}</a>
 		</span>
 	`);
 	if(parent) {
