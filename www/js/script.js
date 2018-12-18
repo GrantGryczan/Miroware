@@ -347,7 +347,7 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 			beforeOpen(xhr);
 		}
 		xhr.open(method, url, true);
-		xhr.responseType = "json";
+		xhr.responseType = "text";
 		for(const header of Object.keys(headers)) {
 			xhr.setRequestHeader(header, headers[header]);
 		}
@@ -359,6 +359,9 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 				if(progress && !--loadingRequests) {
 					Miro.progress.close();
 				}
+				Object.defineProperty(xhr, "response", {
+					value: JSON.parse(xhr.response)
+				});
 				resolve(xhr);
 			}
 		});
