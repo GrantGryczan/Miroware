@@ -318,7 +318,7 @@ const render = () => {
 			/ <a class="ancestor" href="#">${Miro.data.name}</a>
 		</span>
 	`);
-	if(parent) {
+	if(path) {
 		let ancestry = "";
 		const names = path.split("/");
 		for(const name of names) {
