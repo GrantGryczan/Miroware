@@ -311,10 +311,10 @@ const cachedPaths = [];
 const itemCache = {};
 const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
 const sort = {
-	name: (a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,
-	size: (a, b) => (a.size || Infinity) - (b.size || Infinity) || a.date - b.date,
-	type: (a, b) => a.type < b.type ? 1 : (a.type > b.type ? -1 : a.date - b.date),
-	date: (a, b) => a.date - b.date
+	name: (a, b) => b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1,
+	size: (a, b) => (b.size || Infinity) - (s.size || Infinity) || b.date - a.date,
+	type: (a, b) => b.type < a.type ? 1 : (b.type > a.type ? -1 : b.date - a.date),
+	date: (a, b) => b.date - a.date
 };
 const render = () => {
 	while(ancestors.lastChild) {
