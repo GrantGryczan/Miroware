@@ -1,7 +1,7 @@
 const {user, isMe} = await parseUser(this);
 if(isMe) {
 	if(this.req.query.path !== undefined) {
-		if(!this.user.pipe.some(item => item.type === "/" && item.name === this.req.query.path)) {
+		if(this.req.query.path && !this.user.pipe.some(item => item.type === "/" && item.name === this.req.query.path)) {
 			this.value = {
 				error: "The parent directory does not exist."
 			};
