@@ -11,8 +11,19 @@ if(isMe) {
 		}
 		this.value = [];
 		const fileItems = [];
-		const prefix = this.req.query.path && `${this.req.query.path}/`;
-		this.value = user.pipe.filter(item => item.name.startsWith(prefix) && !item.name.includes("/", prefix.length));
+		const path = this.req.query.path && `${this.req.query.path}/`;
+		this.value = user.pipe.filter(item => item.name.startsWith(path) && !item.name.includes("/", path.length));
+		for(const item of this.value) {
+			if(item.type === "/") {
+				const itemPath = `${item.name}/`;
+				item.size = user.pipe.reduce((item2, size) => {
+					if(item2.type !== "/" && item2.name.startsWith(itemPath)) {
+						size += item2.size;
+					}
+					return size;
+				}, 0);
+			}
+		}
 	} else {
 		this.value = user.pipe;
 	}
