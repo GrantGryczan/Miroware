@@ -73,9 +73,9 @@ class PipeItem {
 		this.sizeElement = this.element.querySelector(".size");
 		this.typeElement = this.element.querySelector(".type");
 		this.dateElement = this.element.querySelector(".date");
+		this.type = item.type;
 		this.name = item.name;
 		this.size = item.size;
-		this.type = item.type;
 		this.date = new Date(item.date);
 	}
 	get name() {
@@ -96,7 +96,7 @@ class PipeItem {
 	}
 	set type(value) {
 		this.typeElement.textContent = this.typeElement.title = this[_type] = value;
-		this.iconElement.textContent = value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file"));
+		this.iconElement.textContent = value === "/" ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
 	}
 	get date() {
 		return this[_date];
