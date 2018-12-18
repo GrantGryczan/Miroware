@@ -103,11 +103,6 @@
 	#items > & {
 		text-decoration: none;
 	}
-	& > button {
-		width: 32px;
-		min-width: 32px;
-		height: 32px;
-	}
 }
 .loading {
 	background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
