@@ -49,6 +49,7 @@ const indicateTarget = target => {
 		targetIndicator.classList.remove("visible");
 	}
 };
+const items = container.querySelector("#items");
 const _name = Symbol("name");
 const _size = Symbol("size");
 const _type = Symbol("type");
@@ -293,10 +294,28 @@ document.addEventListener("drop", evt => {
 		indicateTarget();
 	}
 }, true);
+const sort = {
+	name: (a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,
+	size: (a, b) => (a.size || Infinity) - (b.size || Infinity) || a.date - b.date,
+	type: (a, b) => a.type < b.type ? 1 : (a.type > b.type ? -1 : a.date - b.date),
+	date: (a, b) => a.date - b.date
+};
+const pipe = {};
 const hashChange = () => {
 	const target = decodeURI(location.hash.slice(1));
-	// TODO
-	render();
+	Miro.request("GET", `/users/@me/pipe?path=${encodeURIComponent(target)}`).then(Miro.response(xhr => {
+		while(items.lastChild) {
+			items.removeChild(items.lastChild);
+		}
+		if(!(localStorage.pipe_sortItems in sort)) {
+			localStorage.pipe_sortItems = "type";
+		}
+		for(const itemData of xhr.response.sort(sort[localStorage.pipe_sortItems])) {
+			const item = new PipeItem(itemData);
+			pipe[item.id] = item;
+			items.appendChild(item.element);
+		}
+	}));
 };
 if(!location.hash) {
 	location.hash = "#";
