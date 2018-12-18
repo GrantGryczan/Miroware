@@ -82,7 +82,8 @@ class PipeItem {
 		return this[_name];
 	}
 	set name(value) {
-		this.nameElement.textContent = this.nameElement.title = this[_name] = value;
+		const slashIndex = (this.element.href = `#${this[_name] = value}`).lastIndexOf("/");
+		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex);
 	}
 	get size() {
 		return this[_size];
