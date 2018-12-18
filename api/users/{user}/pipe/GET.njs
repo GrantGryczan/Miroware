@@ -16,7 +16,7 @@ if(isMe) {
 		for(const item of this.value) {
 			if(item.type === "/") {
 				const itemPath = `${item.name}/`;
-				item.size = user.pipe.reduce((item2, size) => {
+				item.size = user.pipe.reduce((size, item2) => {
 					if(item2.type !== "/" && item2.name.startsWith(itemPath)) {
 						size += item2.size;
 					}
