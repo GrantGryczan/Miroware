@@ -300,7 +300,11 @@ document.addEventListener("drop", evt => {
 }, true);
 let path = "";
 const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
-titleBar.appendChild(html` / <a class="ancestor" href="#">${Miro.data.name}</a>`);
+titleBar.appendChild(html`
+	<span>
+		/ <a class="ancestor" href="#">${Miro.data.name}</a>
+	</span>
+`);
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
 const sort = {
@@ -320,7 +324,11 @@ const render = () => {
 		let ancestry = "";
 		const names = path.split("/");
 		for(const name of names) {
-			ancestors.appendChild(html` / <a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>`);
+			ancestors.appendChild(html`
+				<span>
+					/ <a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>
+				</span>
+			`);
 		}
 	}
 	while(items.lastChild) {
