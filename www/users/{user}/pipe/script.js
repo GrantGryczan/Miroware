@@ -60,7 +60,7 @@ class PipeItem {
 		(this.element = html`
 			<a class="item" draggable="false" ondragstart="return false;">
 				<div class="cell icon">
-					<i class="material-icons"></i>
+					<button class="mdc-icon-button material-icons"></button>
 				</div>
 				<div class="cell name"></div>
 				<div class="cell size"></div>
@@ -68,7 +68,7 @@ class PipeItem {
 				<div class="cell date"></div>
 			</a>
 		`)._item = this;
-		this.iconElement = this.element.querySelector(".icon > i");
+		this.iconElement = this.element.querySelector(".icon > button");
 		this.nameElement = this.element.querySelector(".name");
 		this.sizeElement = this.element.querySelector(".size");
 		this.typeElement = this.element.querySelector(".type");
