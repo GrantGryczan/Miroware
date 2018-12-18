@@ -370,6 +370,7 @@ const clickSort = evt => {
 		}
 	}
 	evt.target.classList[localStorage.pipe_reverseItems ? "add" : "remove"]("reverse");
+	render();
 };
 for(const sortButton of sortButtons) {
 	sortButton._sort = sortButton.getAttribute("sort");
