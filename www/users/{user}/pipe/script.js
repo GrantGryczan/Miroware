@@ -1,4 +1,5 @@
 "use strict";
+document.title += ` / ${Miro.data.name}`;
 const getDate = date => String(date).split(" ").slice(1, 5).join(" ");
 const getSize = size => {
 	if(size < 1000) {
