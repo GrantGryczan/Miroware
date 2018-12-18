@@ -373,6 +373,6 @@ const clickSort = evt => {
 	render();
 };
 for(const sortButton of sortButtons) {
-	sortButton._sort = sortButton.getAttribute("sort");
+	sortButton._sort = sortButton.getAttribute("data-sort");
 	sortButton.addEventListener("click", clickSort);
 }
