@@ -95,8 +95,9 @@ class PipeItem {
 		return this[_type];
 	}
 	set type(value) {
-		this.typeElement.textContent = this.typeElement.title = this[_type] = value;
-		this.iconElement.textContent = value === "/" ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
+		const typeDirectory = value === "/";
+		this.typeElement.textContent = this.typeElement.title = typeDirectory ? "" : this[_type] = value;
+		this.iconElement.textContent = typeDirectory ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
 	}
 	get date() {
 		return this[_date];
