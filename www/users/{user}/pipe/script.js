@@ -96,8 +96,8 @@ class PipeItem {
 		return this[_type];
 	}
 	set type(value) {
-		const typeDirectory = value === "/";
-		this.typeElement.textContent = this.typeElement.title = typeDirectory ? "" : this[_type] = value;
+		const typeDirectory = (this[_type] = value) === "/";
+		this.typeElement.textContent = this.typeElement.title = typeDirectory ? "" : value;
 		this.iconElement.textContent = typeDirectory ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
 	}
 	get date() {
