@@ -345,8 +345,8 @@ const render = () => {
 const hashChange = () => {
 	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
 		Miro.request("GET", `/users/@me/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
-			for(const itemData of +localStorage.pipe_reverseItems ? itemArray.reverse() : xhr.response) {
-				itemCache[itemData.id] = new PipeItem(itemData);
+			for(const item of xhr.response) {
+				itemCache[item.id] = new PipeItem(item);
 			}
 			cachedPaths.push(path);
 			render();
@@ -373,6 +373,11 @@ const clickSort = evt => {
 	render();
 };
 for(const sortButton of sortButtons) {
-	sortButton._sort = sortButton.getAttribute("data-sort");
+	if(localStorage.pipe_sortItems === (sortButton._sort = sortButton.getAttribute("data-sort")) {
+		sortButton.classList.add("sorting");
+		if(+localStorage.pipe_reverseItems) {
+			sortButton.classList.add("reverse");
+		}
+	}
 	sortButton.addEventListener("click", clickSort);
 }
