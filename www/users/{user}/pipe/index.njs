@@ -33,16 +33,16 @@ this.value += html`
 								<button id="viewMode" class="mdc-icon-button material-icons" title="Tile view">view_module</button>
 							</div>
 							<div class="cell sort name">
-								<span class="label spaced">Name</span><button id="sortName" class="mdc-icon-button material-icons spaced" data-sort="name" title="Sort by name">sort</button>
+								<span class="label spaced">Name</span><button class="mdc-icon-button material-icons spaced" data-sort="name" title="Sort by name">sort</button>
 							</div>
 							<div class="cell sort size">
-								<span class="label spaced">Size</span><button id="sortSize" class="mdc-icon-button material-icons spaced" data-sort="size" title="Sort by size">sort</button>
+								<span class="label spaced">Size</span><button class="mdc-icon-button material-icons spaced" data-sort="size" title="Sort by size">sort</button>
 							</div>
 							<div class="cell sort type">
-								<span class="label spaced">Type</span><button id="sortType" class="mdc-icon-button material-icons spaced" data-sort="type" title="Sort by type">sort</button>
+								<span class="label spaced">Type</span><button class="mdc-icon-button material-icons spaced" data-sort="type" title="Sort by type">sort</button>
 							</div>
 							<div class="cell sort date">
-								<span class="label spaced">Date</span><button id="sortDate" class="mdc-icon-button material-icons spaced" data-sort="date" title="Sort by date">sort</button>
+								<span class="label spaced">Date</span><button class="mdc-icon-button material-icons spaced" data-sort="date" title="Sort by date">sort</button>
 							</div>
 						</div>
 						<div id="items" class="items"></div>

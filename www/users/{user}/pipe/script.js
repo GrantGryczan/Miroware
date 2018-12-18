@@ -298,7 +298,6 @@ document.addEventListener("drop", evt => {
 		indicateTarget();
 	}
 }, true);
-let path = "";
 const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
 titleBar.appendChild(html`
 	<span>
@@ -307,15 +306,16 @@ titleBar.appendChild(html`
 `);
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
+let path = "";
+const cachedPaths = [];
+const itemCache = {};
+const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
 const sort = {
 	name: (a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,
 	size: (a, b) => (a.size || Infinity) - (b.size || Infinity) || a.date - b.date,
 	type: (a, b) => a.type < b.type ? 1 : (a.type > b.type ? -1 : a.date - b.date),
 	date: (a, b) => a.date - b.date
 };
-const cachedPaths = [];
-const itemCache = {};
-const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
 const render = () => {
 	while(ancestors.lastChild) {
 		ancestors.removeChild(ancestors.lastChild);
@@ -357,3 +357,21 @@ const hashChange = () => {
 };
 hashChange();
 window.addEventListener("hashchange", hashChange);
+const sortButtons = document.body.querySelectorAll(".cell.sort > button");
+const clickSort = evt => {
+	if(localStorage.pipe_sortItems === evt.target._sort) {
+		localStorage.pipe_reverseItems = +!+localStorage.pipe_reverseItems;
+	} else {
+		localStorage.pipe_sortItems = evt.target._sort;
+		for(const sortButton of sortButtons) {
+			const target = sortButton === evt.target;
+			sortButton.classList[target ? "add" : "remove"]("sorting");
+			sortButton.textContent = target ? "arrow_downward" : "sort";
+		}
+	}
+	evt.target.classList[localStorage.pipe_reverseItems ? "add" : "remove"]("reverse");
+};
+for(const sortButton of sortButtons) {
+	sortButton._sort = sortButton.getAttribute("sort");
+	sortButton.addEventListener("click", clickSort);
+}
