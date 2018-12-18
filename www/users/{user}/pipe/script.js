@@ -307,6 +307,7 @@ const sort = {
 	date: (a, b) => a.date - b.date
 };
 const itemCache = {};
+const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
 const render = () => {
 	while(ancestors.lastChild) {
 		ancestors.removeChild(ancestors.lastChild);
@@ -327,15 +328,13 @@ const render = () => {
 			`);
 		}
 	}
-	const pathLinks = ancestors.querySelectorAll(".ancestor");
-	pathLinks[pathLinks.length - 1].removeAttribute("href");
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
 	if(!(localStorage.pipe_sortItems in sort)) {
 		localStorage.pipe_sortItems = "type";
 	}
-	const itemArray = Object.values(itemCache).sort(sort[localStorage.pipe_sortItems]);
+	const itemArray = Object.values(itemCache).filter(currentItems).sort(sort[localStorage.pipe_sortItems]);
 	for(const item of +localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
 		items.appendChild(item.element);
 	}
@@ -343,7 +342,7 @@ const render = () => {
 const hashChange = () => {
 	path = decodeURI(location.hash.slice(1));
 	Miro.request("GET", `/users/@me/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
-		for(const itemData of +localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
+		for(const itemData of +localStorage.pipe_reverseItems ? itemArray.reverse() : xhr.response) {
 			itemCache[item.id] = new PipeItem(itemData);
 		}
 		render();
