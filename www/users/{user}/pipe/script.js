@@ -375,6 +375,7 @@ const clickSort = evt => {
 for(const sortButton of sortButtons) {
 	if(localStorage.pipe_sortItems === (sortButton._sort = sortButton.getAttribute("data-sort"))) {
 		sortButton.classList.add("sorting");
+		sortButton.textContent = "arrow_downward";
 		if(+localStorage.pipe_reverseItems) {
 			sortButton.classList.add("reverse");
 		}
