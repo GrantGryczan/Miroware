@@ -298,7 +298,7 @@ document.addEventListener("drop", evt => {
 	}
 }, true);
 let path = "";
-const ancestors = page.querySelector("#ancestors");
+const ancestors = document.body.querySelector("#ancestors");
 document.body.querySelector(".mdc-top-app-bar__title").appendChild(ancestors);
 const sort = {
 	name: (a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,
