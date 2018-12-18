@@ -297,32 +297,57 @@ document.addEventListener("drop", evt => {
 		indicateTarget();
 	}
 }, true);
+let path = "";
+const ancestors = page.querySelector("#ancestors");
+document.body.querySelector(".mdc-top-app-bar__title").appendChild(ancestors);
 const sort = {
 	name: (a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,
 	size: (a, b) => (a.size || Infinity) - (b.size || Infinity) || a.date - b.date,
 	type: (a, b) => a.type < b.type ? 1 : (a.type > b.type ? -1 : a.date - b.date),
 	date: (a, b) => a.date - b.date
 };
-const pipe = {};
+const itemCache = {};
+const render = () => {
+	while(ancestors.lastChild) {
+		ancestors.removeChild(ancestors.lastChild);
+	}
+	ancestors.appendChild(html`
+		<span>
+			/ <a class="ancestor" href="#">${Miro.data.user}</a>
+		</span>
+	`);
+	if(parent) {
+		let ancestry = "";
+		const names = path.split("/");
+		for(const name of names) {
+			ancestors.appendChild(html`
+				<span>
+					/ <a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>
+				</span>
+			`);
+		}
+	}
+	const pathLinks = ancestors.querySelectorAll(".ancestor");
+	pathLinks[pathLinks.length - 1].removeAttribute("href");
+	while(items.lastChild) {
+		items.removeChild(items.lastChild);
+	}
+	if(!(localStorage.pipe_sortItems in sort)) {
+		localStorage.pipe_sortItems = "type";
+	}
+	const itemArray = Object.values(itemCache).sort(sort[localStorage.pipe_sortItems]);
+	for(const item of +localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
+		items.appendChild(item.element);
+	}
+};
 const hashChange = () => {
-	const target = decodeURI(location.hash.slice(1));
-	Miro.request("GET", `/users/@me/pipe?path=${encodeURIComponent(target)}`).then(Miro.response(xhr => {
-		while(items.lastChild) {
-			items.removeChild(items.lastChild);
-		}
-		if(!(localStorage.pipe_sortItems in sort)) {
-			localStorage.pipe_sortItems = "type";
-		}
-		const itemArray = xhr.response.sort(sort[localStorage.pipe_sortItems]);
+	path = decodeURI(location.hash.slice(1));
+	Miro.request("GET", `/users/@me/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
 		for(const itemData of +localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
-			const item = new PipeItem(itemData);
-			pipe[item.id] = item;
-			items.appendChild(item.element);
+			itemCache[item.id] = new PipeItem(itemData);
 		}
+		render();
 	}));
 };
-if(!location.hash) {
-	location.hash = "#";
-}
 hashChange();
 window.addEventListener("hashchange", hashChange);

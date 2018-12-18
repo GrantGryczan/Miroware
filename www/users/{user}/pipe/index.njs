@@ -23,7 +23,7 @@ this.value += html`
 					</div>
 				</div>
 				<div class="panel center">
-					<span id="path"></span>
+					<span id="ancestors"></span>
 					<div class="pane">
 						<div id="sort">
 							<div class="cell view">
