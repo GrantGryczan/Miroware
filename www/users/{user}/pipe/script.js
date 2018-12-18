@@ -313,7 +313,8 @@ const hashChange = () => {
 		if(!(localStorage.pipe_sortItems in sort)) {
 			localStorage.pipe_sortItems = "type";
 		}
-		for(const itemData of xhr.response.sort(sort[localStorage.pipe_sortItems])) {
+		const itemArray = xhr.response.sort(sort[localStorage.pipe_sortItems]);
+		for(const itemData of +localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
 			const item = new PipeItem(itemData);
 			pipe[item.id] = item;
 			items.appendChild(item.element);
