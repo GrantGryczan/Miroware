@@ -82,8 +82,9 @@ class PipeItem {
 		return this[_name];
 	}
 	set name(value) {
-		const slashIndex = (this.element.href = `#${this[_name] = value}`).lastIndexOf("/");
-		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex);
+		const slashIndex = (this[_name] = value).lastIndexOf("/");
+		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
+		this.element.href = this.type === "/" ? `#${value}` : `https://pipe.miroware.io/${Miro.data}/${value}`;
 	}
 	get size() {
 		return this[_size];
