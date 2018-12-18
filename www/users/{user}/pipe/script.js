@@ -299,8 +299,10 @@ document.addEventListener("drop", evt => {
 	}
 }, true);
 let path = "";
+const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
+titleBar.appendChild(html` / <a class="ancestor" href="#">${Miro.data.name}</a>`);
 const ancestors = document.body.querySelector("#ancestors");
-document.body.querySelector(".mdc-top-app-bar__title").appendChild(ancestors);
+titleBar.appendChild(ancestors);
 const sort = {
 	name: (a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,
 	size: (a, b) => (a.size || Infinity) - (b.size || Infinity) || a.date - b.date,
@@ -314,20 +316,11 @@ const render = () => {
 	while(ancestors.lastChild) {
 		ancestors.removeChild(ancestors.lastChild);
 	}
-	ancestors.appendChild(html`
-		<span>
-			/ <a class="ancestor" href="#">${Miro.data.name}</a>
-		</span>
-	`);
 	if(path) {
 		let ancestry = "";
 		const names = path.split("/");
 		for(const name of names) {
-			ancestors.appendChild(html`
-				<span>
-					/ <a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>
-				</span>
-			`);
+			ancestors.appendChild(html` / <a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>`);
 		}
 	}
 	while(items.lastChild) {
