@@ -37,6 +37,10 @@
 	}
 	&.center {
 		flex-grow: 1;
+		& > .pane {
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
 	}
 	&.right {
 		padding: 8px;
@@ -72,8 +76,6 @@
 }
 .items {
 	flex-grow: 1;
-	overflow-x: hidden;
-	overflow-y: auto;
 }
 .item {
 	display: flex;
@@ -119,6 +121,8 @@
 #sort {
 	flex-shrink: 0;
 	display: flex;
+	position: sticky;
+	top: 0;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 	cursor: default;
 	&:hover > .cell.sort > button {
