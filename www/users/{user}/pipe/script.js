@@ -343,6 +343,8 @@ const hashChange = () => {
 			cachedPaths.push(path);
 			render();
 		}));
+	} else {
+		render();
 	}
 };
 hashChange();
