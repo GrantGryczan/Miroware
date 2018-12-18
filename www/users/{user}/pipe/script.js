@@ -312,7 +312,7 @@ const itemCache = {};
 const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
 const sort = {
 	name: (a, b) => b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1,
-	size: (a, b) => (b.size || Infinity) - (a.size || Infinity) || b.date - a.date,
+	size: (a, b) => b.size - a.size,
 	type: (a, b) => b.type < a.type ? 1 : (b.type > a.type ? -1 : b.date - a.date),
 	date: (a, b) => b.date - a.date
 };
