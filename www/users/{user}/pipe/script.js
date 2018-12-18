@@ -307,6 +307,7 @@ const sort = {
 	type: (a, b) => a.type < b.type ? 1 : (a.type > b.type ? -1 : a.date - b.date),
 	date: (a, b) => a.date - b.date
 };
+const cachedPaths = [];
 const itemCache = {};
 const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
 const render = () => {
@@ -341,13 +342,15 @@ const render = () => {
 	}
 };
 const hashChange = () => {
-	path = decodeURI(location.hash.slice(1));
-	Miro.request("GET", `/users/@me/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
-		for(const itemData of +localStorage.pipe_reverseItems ? itemArray.reverse() : xhr.response) {
-			itemCache[itemData.id] = new PipeItem(itemData);
-		}
-		render();
-	}));
+	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
+		Miro.request("GET", `/users/@me/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
+			for(const itemData of +localStorage.pipe_reverseItems ? itemArray.reverse() : xhr.response) {
+				itemCache[itemData.id] = new PipeItem(itemData);
+			}
+			cachedPaths.push(path);
+			render();
+		}));
+	}
 };
 hashChange();
 window.addEventListener("hashchange", hashChange);
