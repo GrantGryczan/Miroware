@@ -359,9 +359,11 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 				if(progress && !--loadingRequests) {
 					Miro.progress.close();
 				}
+				console.log(xhr.response);
 				Object.defineProperty(xhr, "response", {
 					value: JSON.parse(xhr.response)
 				});
+				console.log(xhr.response);
 				resolve(xhr);
 			}
 		});
