@@ -343,7 +343,7 @@ const hashChange = () => {
 	path = decodeURI(location.hash.slice(1));
 	Miro.request("GET", `/users/@me/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
 		for(const itemData of +localStorage.pipe_reverseItems ? itemArray.reverse() : xhr.response) {
-			itemCache[item.id] = new PipeItem(itemData);
+			itemCache[itemData.id] = new PipeItem(itemData);
 		}
 		render();
 	}));
