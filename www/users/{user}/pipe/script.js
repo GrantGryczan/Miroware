@@ -369,7 +369,7 @@ const clickSort = evt => {
 			sortButton.textContent = target ? "arrow_downward" : "sort";
 		}
 	}
-	evt.target.classList[localStorage.pipe_reverseItems ? "add" : "remove"]("reverse");
+	evt.target.classList[+localStorage.pipe_reverseItems ? "add" : "remove"]("reverse");
 	render();
 };
 for(const sortButton of sortButtons) {
