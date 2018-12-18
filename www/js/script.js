@@ -360,11 +360,9 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 					Miro.progress.close();
 				}
 				const response = JSON.parse(xhr.response);
-				console.log(xhr.response);
 				Object.defineProperty(xhr, "response", {
 					get: () => response
 				});
-				console.log(xhr.response);
 				resolve(xhr);
 			}
 		});
