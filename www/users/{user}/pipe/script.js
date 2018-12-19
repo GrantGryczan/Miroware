@@ -335,7 +335,7 @@ const clickSort = evt => {
 			sortButton.textContent = target ? "arrow_downward" : "sort";
 		}
 	}
-	localStorage.pipe_sortItems = sortValue;
+	localStorage.pipe_sortItems = sortValue = evt.target._sort;
 	evt.target.classList[(localStorage.pipe_reverseItems = reverseValue) ? "add" : "remove"]("reverse");
 	render();
 };
@@ -368,7 +368,7 @@ const render = () => {
 		items.removeChild(items.lastChild);
 	}
 	if(!(sortValue in sort)) {
-		localStorage.pipe_sortItems = sortValue = "type";
+		sortValue = "type";
 	}
 	const itemArray = Object.values(itemCache).filter(currentItems).sort(sort[sortValue]);
 	for(const item of reverseValue ? itemArray.reverse() : itemArray) {
