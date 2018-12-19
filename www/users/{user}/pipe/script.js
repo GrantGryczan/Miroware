@@ -350,7 +350,7 @@ const render = () => {
 };
 const hashChange = () => {
 	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
-		Miro.request("GET", `/users//pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
+		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
 			for(const item of xhr.response) {
 				itemCache[item.id] = new PipeItem(item);
 			}
