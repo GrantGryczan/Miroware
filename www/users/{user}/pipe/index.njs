@@ -12,6 +12,8 @@ if(!isMe) {
 		user = await users.findOne({
 			_id: userID
 		});
+	} else {
+		user = null;
 	}
 }
 if(user) {
