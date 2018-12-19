@@ -2,11 +2,11 @@ this.title = "Pipe";
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
 let {user} = this;
-const isMe = user && context.params.user === String(user._id);
+const isMe = user && this.params.user === String(user._id);
 if(!isMe) {
 	let userID;
 	try {
-		userID = ObjectID(context.params.user);
+		userID = ObjectID(this.params.user);
 	} catch(err) {}
 	if(userID) {
 		user = await users.findOne({
