@@ -171,8 +171,9 @@ class PipeQueuedItem {
 			updateQueue();
 		}, true).then(Miro.response(xhr => {
 			this.element.classList.remove("loading");
-			this.closeElement.textContent = "done";
 			this.element.href = `#${this.path}`;
+			this.subtitleElement.textContent = `/${this.path}`;
+			this.closeElement.textContent = "done";
 		}, (xhr, error) => {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
