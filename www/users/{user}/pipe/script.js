@@ -153,7 +153,7 @@ class PipeQueuedItem {
 		Miro.request("POST", "/users/@me/pipe", {
 			"Content-Type": "application/octet-stream",
 			"X-Data": JSON.stringify({
-				name: (path ? `${path}/` : "") + this.file.name
+				name: ((this.path = path) ? `${path}/` : "") + this.file.name
 			})
 		}, this.file, xhr => {
 			this.xhr = xhr;
@@ -172,6 +172,7 @@ class PipeQueuedItem {
 		}, true).then(Miro.response(xhr => {
 			this.element.classList.remove("loading");
 			this.closeElement.textContent = "done";
+			this.element.href = `#${this.path}`;
 		}, (xhr, error) => {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
