@@ -17,7 +17,7 @@ const emailTest = /^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
 const urlTest = /^https?:\/\/./;
 const subdomainTest = /^(?:[0-9a-z](?:[-_0-9a-z]*[0-9a-z])?)?$/;
-const mimeTest = /^[^\x00-\x20()<>@,;:\\"/[\]?.=]+\/[^\x00-\x20()<>@,;:\\"/[\]?.=]+$/;
+const mimeTest = /^[^\x00-\x20()<>@,;:\\"/[\]?.=]+\/[^\x00-\x20()<>@,;:\\"/[\]?=]+$/;
 const transporter = nodemailer.createTransport({
 	sendmail: true,
 	newline: "unix",

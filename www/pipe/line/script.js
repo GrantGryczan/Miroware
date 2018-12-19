@@ -593,7 +593,7 @@ const itemInfo = itemElement => {
 				<div class="mdc-line-ripple"></div>
 			</div><br>
 			<div class="mdc-text-field">
-				<input id="type" name="type" class="mdc-text-field__input" type="text" value="$${itemElement._item.type}" maxlength="255" size="24" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+$" spellcheck="false" required>
+				<input id="type" name="type" class="mdc-text-field__input" type="text" value="$${itemElement._item.type}" maxlength="255" size="24" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?=]+$" spellcheck="false" required>
 				<label class="mdc-floating-label" for="type">Type</label>
 				<div class="mdc-line-ripple"></div>
 			</div><br>
