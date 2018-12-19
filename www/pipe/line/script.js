@@ -164,7 +164,7 @@ const addFile = async file => {
 	const typeData = itemElement.querySelector(".typeData");
 	const dateData = itemElement.querySelector(".dateData");
 	items.insertBefore(itemElement, items.firstChild);
-	Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
+	Miro.request("POST", "/users/@me/pipe", {
 		"Content-Type": "application/octet-stream",
 		"X-Data": JSON.stringify({
 			name: applyParent(name)
@@ -389,7 +389,7 @@ document.addEventListener("mouseup", evt => {
 							itemElement.classList.add("loading");
 							const targetParent = decodeURI(indicatedTarget.href ? indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1) : indicatedTarget._item.name);
 							const name = getName(itemElement._item.name);
-							Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
+							Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
 								name: targetParent ? `${targetParent}/${name}` : name
 							}).then(Miro.response(xhr => {
 								if(itemElement._item.type === "/") {
@@ -511,7 +511,7 @@ const removeItem = itemElement => {
 		itemElement._xhr.abort();
 		removeItemElement();
 	} else {
-		Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`).then(Miro.response(removeItemElement, () => {
+		Miro.request("DELETE", `/users/@me/pipe/${itemElement._item.id}`).then(Miro.response(removeItemElement, () => {
 			itemElement.classList.remove("loading");
 		}));
 	}
@@ -560,7 +560,7 @@ const itemInfo = itemElement => {
 			if(value === 0 && name !== dialog.form.elements.name.value && (dialog.form.elements.name.value = (await checkName(dialog.form.elements.name.value)))) {
 				itemElement.classList.add("loading");
 				updateSelection();
-				Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
+				Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
 					name: applyParent(dialog.form.elements.name.value)
 				}).then(Miro.response(xhr => {
 					const prefix = `${itemElement._item.name}/`;
@@ -623,7 +623,7 @@ const itemInfo = itemElement => {
 					if(changedType) {
 						data.type = dialog.form.elements.type.value;
 					}
-					Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
 						const nameData = itemElement.querySelector(".nameData");
 						nameData.textContent = nameData.title = getName(itemElement._item.name = xhr.response.name);
 						itemElement.href = getURL(itemElement._item);
@@ -753,7 +753,7 @@ const addDirectory = async name => {
 	`;
 	const dateData = itemElement.querySelector(".dateData");
 	items.insertBefore(itemElement, items.firstChild);
-	Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
+	Miro.request("POST", "/users/@me/pipe", {
 		"X-Data": JSON.stringify({
 			name: applyParent(name),
 			type: "/"

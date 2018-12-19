@@ -150,7 +150,7 @@ class PipeQueuedItem {
 		`)._item = this;
 		(this.closeElement = this.element.querySelector(".close")).addEventListener("click", this.close.bind(this));
 		this.subtitleElement = this.element.querySelector(".subtitle");
-		Miro.request("POST", "/users/@me/pipe", {
+		Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 			"Content-Type": "application/octet-stream",
 			"X-Data": JSON.stringify({
 				name: ((this.path = path) ? `${path}/` : "") + this.file.name
@@ -350,7 +350,7 @@ const render = () => {
 };
 const hashChange = () => {
 	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
-		Miro.request("GET", `/users/@me/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
+		Miro.request("GET", `/users//pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
 			for(const item of xhr.response) {
 				itemCache[item.id] = new PipeItem(item);
 			}
