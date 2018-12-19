@@ -223,8 +223,17 @@ class PipeQueuedItem {
 		}
 	}
 }
-const addFile = file => {
-	// TODO: check names
+const addFile = async file => {
+	const takenItem = itemCache.find(({name}) => name === file.name);
+	if(takenItem) {
+		await new Miro.Dialog("Rename", html`
+			The file name <b>${file.name}</b> is already taken.
+		`, ["Replace", "Rename", "Cancel"]).then(async value => {
+			if(value === 0) {
+				Miro.response(await Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${takenItem.id}`));
+			}
+		});
+	}
 	queuedItems.appendChild(new PipeQueuedItem(file).element);
 };
 const fileInput = document.createElement("input");
