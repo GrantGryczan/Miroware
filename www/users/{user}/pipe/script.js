@@ -365,16 +365,16 @@ hashChange();
 window.addEventListener("hashchange", hashChange);
 const sortButtons = document.body.querySelectorAll(".cell.sort > button");
 const clickSort = evt => {
-	if(localStorage.pipe_sortItems === evt.target._sort) {
+	if(evt.target.classList.contains("sorting")) {
 		localStorage.pipe_reverseItems = +!+localStorage.pipe_reverseItems;
 	} else {
-		localStorage.pipe_sortItems = evt.target._sort;
 		for(const sortButton of sortButtons) {
 			const target = sortButton === evt.target;
 			sortButton.classList[target ? "add" : "remove"]("sorting");
 			sortButton.textContent = target ? "arrow_downward" : "sort";
 		}
 	}
+	localStorage.pipe_sortItems = evt.target._sort;
 	evt.target.classList[+localStorage.pipe_reverseItems ? "add" : "remove"]("reverse");
 	render();
 };
