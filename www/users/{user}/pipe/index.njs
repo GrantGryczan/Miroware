@@ -4,10 +4,7 @@ if(notLoggedIn(this)) {
 this.title = "Pipe";
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
-this.data = {
-	id: this.user._id,
-	name: this.user.name
-};
+this.data = parseUser(this);
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;

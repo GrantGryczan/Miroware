@@ -1,5 +1,5 @@
 "use strict";
-document.title += ` / ${Miro.data.name}`;
+document.title += ` / ${Miro.data.user.name}`;
 const getDate = date => String(date).split(" ").slice(1, 5).join(" ");
 const getSize = size => {
 	if(size < 1000) {
@@ -85,7 +85,7 @@ class PipeItem {
 	set name(value) {
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
-		this.element.href = this.type === "/" ? `#${value}` : `https://pipe.miroware.io/${Miro.data.id}/${value}`;
+		this.element.href = this.type === "/" ? `#${value}` : `https://pipe.miroware.io/${Miro.data.user.id}/${value}`;
 	}
 	get size() {
 		return this[_size];
@@ -307,7 +307,7 @@ document.addEventListener("drop", evt => {
 const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
 titleBar.appendChild(html`
 	<span>
-		/ <a class="ancestor" href="#">${Miro.data.name}</a>
+		/ <a class="ancestor" href="#">${Miro.data.user.name}</a>
 	</span>
 `);
 const ancestors = document.body.querySelector("#ancestors");
