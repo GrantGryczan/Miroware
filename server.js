@@ -126,7 +126,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	const users = db.collection("users");
 	const domain = production ? "miroware.io" : "localhost:8081";
 	const cookieOptions = {
-		domain: `.${production ? domain : "localhost"}`,
+		domain: `d.${production ? domain : "localhost"}`,
 		path: "/",
 		maxAge: 2592000000,
 		secure: production,
