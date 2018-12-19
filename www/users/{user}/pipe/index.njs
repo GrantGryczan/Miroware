@@ -4,7 +4,19 @@ if(notLoggedIn(this)) {
 this.title = "Pipe";
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
-this.data = parseUser(this);
+const user = await parseUser(this);
+if(user) {
+	this.data = {
+		user: {
+			id: user._id
+			name: user.name,
+		}
+	}
+} else {
+	Object.assign(this, await load("error/404", this));
+	this.done();
+	return;
+}
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;
