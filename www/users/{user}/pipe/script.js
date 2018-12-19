@@ -91,7 +91,8 @@ class PipeItem {
 		return this[_size];
 	}
 	set size(value) {
-		this.sizeElement.textContent = getSize(this.sizeElement.title = this[_size] = value);
+		this.sizeElement.textContent = getSize(this[_size] = value);
+		this.sizeElement.title = `${value} B`;
 	}
 	get type() {
 		return this[_type];
@@ -142,7 +143,7 @@ class PipeQueuedItem {
 			<a class="item loading" draggable="false" ondragstart="return false;">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
-					<div class="subtitle" title="0 / ${this.file.size}">0% (${getSize(0)} / ${getSize(this.file.size)})</div>
+					<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${getSize(this.file.size)})</div>
 				</div>
 				<button class="close mdc-icon-button material-icons">close</button>
 			</a>
@@ -161,7 +162,7 @@ class PipeQueuedItem {
 				if(this.xhr.readyState !== XMLHttpRequest.DONE) {
 					const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
 					this.element.style.backgroundSize = `${percentage}%`;
-					this.subtitleElement.title = `${this.loaded} / ${this.file.size}`;
+					this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
 					this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${getSize(this.file.size)})`;
 					updateQueue();
 				}
