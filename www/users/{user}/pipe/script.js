@@ -176,7 +176,9 @@ class PipeQueuedItem {
 			this.subtitleElement.textContent = this.size;
 			this.closeElement.textContent = "done";
 			itemCache[xhr.response.id] = new PipeItem(xhr.response);
-			render();
+			if(path === this.path) {
+				render();
+			}
 		}, (xhr, error) => {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
