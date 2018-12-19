@@ -199,7 +199,10 @@ class PipeQueuedItem {
 			return true;
 		}
 	}
-	async close() {
+	async close(evt) {
+		if(evt instanceof Event) {
+			evt.preventDefault();
+		}
 		if(this.element.classList.contains("loading") && await new Miro.Dialog("Cancel", html`
 			Are you sure you want to cancel uploading <b>$${this.file.name}</b>?
 		`, ["Yes", "No"]) !== 0) {
