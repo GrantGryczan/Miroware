@@ -153,7 +153,7 @@ class PipeQueuedItem {
 		Miro.request("POST", "/users/@me/pipe", {
 			"Content-Type": "application/octet-stream",
 			"X-Data": JSON.stringify({
-				name: name // TODO: apply parent
+				name: (path ? `${path}/` : "") + this.file.name
 			})
 		}, this.file, xhr => {
 			this.xhr = xhr;
