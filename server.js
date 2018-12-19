@@ -133,6 +133,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		httpOnly: true,
 		signed: true
 	};
+	const cookieOptions2 = {
+		domain: `d.${production ? domain : "localhost"}`,
+		path: "/",
+		maxAge: 2592000000,
+		secure: production,
+		httpOnly: true,
+		signed: true
+	};
 	const clearCookieOptions = {
 		domain: cookieOptions.domain,
 		path: cookieOptions.path
@@ -555,6 +563,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							};
 							if(context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {
 								context.res.cookie("auth", context.req.signedCookies.auth, cookieOptions);
+								context.res.cookie("auth", context.req.signedCookies.auth, cookieOptions2);
 							}
 						} else {
 							if(context.req.signedCookies.auth) {

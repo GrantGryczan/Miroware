@@ -102,7 +102,9 @@ if(testEmail(this.req.body.email)) {
 				id,
 				token
 			};
-			this.res.cookie("auth", Buffer.from(`${id}:${token}`).toString("base64"), cookieOptions);
+			const cookie = Buffer.from(`${id}:${token}`).toString("base64");
+			this.res.cookie("auth", cookie, cookieOptions);
+			this.res.cookie("auth", cookie, cookieOptions2);
 			this.done();
 		});
 	}
