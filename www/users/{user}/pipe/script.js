@@ -322,6 +322,33 @@ const sort = {
 	type: (a, b) => b.type < a.type ? 1 : (b.type > a.type ? -1 : b.date - a.date),
 	date: (a, b) => b.date - a.date
 };
+let sortValue = localStorage.pipe_sortItems in sort ? localStorage.pipe_sortItems : "type";
+let reverseValue = +localStorage.pipe_reverseItems;
+const sortButtons = document.body.querySelectorAll(".cell.sort > button");
+const clickSort = evt => {
+	if(evt.target.classList.contains("sorting")) {
+		reverseValue = +!reverseValue;
+	} else {
+		for(const sortButton of sortButtons) {
+			const target = sortButton === evt.target;
+			sortButton.classList[target ? "add" : "remove"]("sorting");
+			sortButton.textContent = target ? "arrow_downward" : "sort";
+		}
+	}
+	localStorage.pipe_sortItems = sortValue;
+	evt.target.classList[(localStorage.pipe_reverseItems = reverseValue) ? "add" : "remove"]("reverse");
+	render();
+};
+for(const sortButton of sortButtons) {
+	if(sortValue === (sortButton._sort = sortButton.getAttribute("data-sort"))) {
+		sortButton.classList.add("sorting");
+		sortButton.textContent = "arrow_downward";
+		if(reverseValue) {
+			sortButton.classList.add("reverse");
+		}
+	}
+	sortButton.addEventListener("click", clickSort);
+}
 const render = () => {
 	while(ancestors.lastChild) {
 		ancestors.removeChild(ancestors.lastChild);
@@ -340,11 +367,11 @@ const render = () => {
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
-	if(!(localStorage.pipe_sortItems in sort)) {
-		localStorage.pipe_sortItems = "type";
+	if(!(sortValue in sort)) {
+		localStorage.pipe_sortItems = sortValue = "type";
 	}
-	const itemArray = Object.values(itemCache).filter(currentItems).sort(sort[localStorage.pipe_sortItems]);
-	for(const item of +localStorage.pipe_reverseItems ? itemArray.reverse() : itemArray) {
+	const itemArray = Object.values(itemCache).filter(currentItems).sort(sort[sortValue]);
+	for(const item of reverseValue ? itemArray.reverse() : itemArray) {
 		items.appendChild(item.element);
 	}
 };
@@ -363,31 +390,3 @@ const hashChange = () => {
 };
 hashChange();
 window.addEventListener("hashchange", hashChange);
-const sortButtons = document.body.querySelectorAll(".cell.sort > button");
-const clickSort = evt => {
-	if(evt.target.classList.contains("sorting")) {
-		localStorage.pipe_reverseItems = +!+localStorage.pipe_reverseItems;
-	} else {
-		for(const sortButton of sortButtons) {
-			const target = sortButton === evt.target;
-			sortButton.classList[target ? "add" : "remove"]("sorting");
-			sortButton.textContent = target ? "arrow_downward" : "sort";
-		}
-	}
-	localStorage.pipe_sortItems = evt.target._sort;
-	evt.target.classList[+localStorage.pipe_reverseItems ? "add" : "remove"]("reverse");
-	render();
-};
-if(!(localStorage.pipe_sortItems in sort)) {
-	localStorage.pipe_sortItems = "type";
-}
-for(const sortButton of sortButtons) {
-	if(localStorage.pipe_sortItems === (sortButton._sort = sortButton.getAttribute("data-sort"))) {
-		sortButton.classList.add("sorting");
-		sortButton.textContent = "arrow_downward";
-		if(+localStorage.pipe_reverseItems) {
-			sortButton.classList.add("reverse");
-		}
-	}
-	sortButton.addEventListener("click", clickSort);
-}
