@@ -143,7 +143,7 @@ class PipeQueuedItem {
 			<a class="item loading" draggable="false" ondragstart="return false;">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
-					<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${getSize(this.file.size)})</div>
+					<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${this.size = getSize(this.file.size)})</div>
 				</div>
 				<button class="close mdc-icon-button material-icons">close</button>
 			</a>
@@ -163,7 +163,7 @@ class PipeQueuedItem {
 					const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
 					this.element.style.backgroundSize = `${percentage}%`;
 					this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
-					this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${getSize(this.file.size)})`;
+					this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${this.size})`;
 					updateQueue();
 				}
 			});
@@ -172,7 +172,8 @@ class PipeQueuedItem {
 		}, true).then(Miro.response(xhr => {
 			this.element.classList.remove("loading");
 			this.element.href = `#${this.path}`;
-			this.subtitleElement.textContent = `/${this.path}`;
+			this.subtitleElement.title = `${this.file.size} B`;
+			this.subtitleElement.textContent = this.size;
 			this.closeElement.textContent = "done";
 		}, (xhr, error) => {
 			this.element.classList.remove("loading");
