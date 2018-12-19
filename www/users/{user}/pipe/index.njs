@@ -1,16 +1,26 @@
-if(notLoggedIn(this)) {
-	return;
-}
 this.title = "Pipe";
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
-const user = await parseUser(this);
+let {user} = this;
+const isMe = user && context.params.user === String(user._id);
+if(!isMe) {
+	let userID;
+	try {
+		userID = ObjectID(context.params.user);
+	} catch(err) {}
+	if(userID) {
+		user = await users.findOne({
+			_id: userID
+		});
+	}
+}
 if(user) {
 	this.data = {
 		user: {
-			id: user._id
-			name: user.name,
-		}
+			id: user._id,
+			name: user.name
+		},
+		isMe
 	}
 } else {
 	Object.assign(this, await load("error/404", this));
