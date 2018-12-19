@@ -175,6 +175,8 @@ class PipeQueuedItem {
 			this.subtitleElement.title = `${this.file.size} B`;
 			this.subtitleElement.textContent = this.size;
 			this.closeElement.textContent = "done";
+			itemCache[xhr.response.id] = new PipeItem(xhr.response);
+			render();
 		}, (xhr, error) => {
 			this.element.classList.remove("loading");
 			this.element.classList.add("error");
