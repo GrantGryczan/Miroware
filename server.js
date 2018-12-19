@@ -126,15 +126,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	const users = db.collection("users");
 	const domain = production ? "miroware.io" : "localhost:8081";
 	const cookieOptions = {
-		domain: `api.${production ? domain : "localhost"}`,
-		path: "/",
-		maxAge: 2592000000,
-		secure: production,
-		httpOnly: true,
-		signed: true
-	};
-	const cookieOptions2 = {
-		domain: `d.${production ? domain : "localhost"}`,
+		domain: `.${production ? domain : "localhost"}`,
 		path: "/",
 		maxAge: 2592000000,
 		secure: production,
@@ -563,7 +555,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							};
 							if(context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {
 								context.res.cookie("auth", context.req.signedCookies.auth, cookieOptions);
-								context.res.cookie("auth", context.req.signedCookies.auth, cookieOptions2);
 							}
 						} else {
 							if(context.req.signedCookies.auth) {

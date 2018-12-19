@@ -104,7 +104,6 @@ if(testEmail(this.req.body.email)) {
 			};
 			const cookie = Buffer.from(`${id}:${token}`).toString("base64");
 			this.res.cookie("auth", cookie, cookieOptions);
-			this.res.cookie("auth", cookie, cookieOptions2);
 			this.done();
 		});
 	}
