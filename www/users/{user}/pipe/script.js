@@ -244,10 +244,12 @@ const addFile = async file => {
 				type: "submit"
 			}, "Cancel"]);
 			if(await dialog === 0) {
+				if(!name) {
+					Object.defineProperty(file, "name", {
+						get: () => name
+					});
+				}
 				name = dialog.form.elements.name.value;
-				Object.defineProperty(file, "name", {
-					get: () => name
-				});
 			}
 		} else {
 			return;
