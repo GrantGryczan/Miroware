@@ -247,6 +247,10 @@ const addFile = async file => {
 				text: "Okay",
 				type: "submit"
 			}, "Cancel"]);
+			const extensionIndex = file.name.lastIndexOf(".");
+			if(extensionIndex > 0) {
+				dialog.form.elements.name.selectionEnd = extensionIndex;
+			}
 			if(await dialog === 0) {
 				if(!name) {
 					Object.defineProperty(file, "name", {
