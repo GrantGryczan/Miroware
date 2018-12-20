@@ -225,7 +225,7 @@ class PipeQueuedItem {
 }
 const addFile = async file => {
 	let takenItem;
-	while(takenItem = itemCache.find(({name}) => name === file.name)) {
+	while(takenItem = Object.values(itemCache).find(({name}) => name === file.name)) {
 		const value = await new Miro.Dialog("Error", html`
 			<b>$${file.name}</b> is already taken.
 		`, ["Replace", "Rename", "Cancel"]);
