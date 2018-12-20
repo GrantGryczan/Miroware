@@ -224,6 +224,7 @@ class PipeQueuedItem {
 	}
 }
 const addFile = async file => {
+	let name;
 	let takenItem;
 	while(takenItem = Object.values(itemCache).find(({name}) => name === file.name)) {
 		const value = await new Miro.Dialog("Error", html`
@@ -243,8 +244,9 @@ const addFile = async file => {
 				type: "submit"
 			}, "Cancel"]);
 			if(await dialog === 0) {
+				name = dialog.form.elements.name.value;
 				Object.defineProperty(file, "name", {
-					get: () => dialog.form.elements.name.value
+					get: () => name
 				});
 			}
 		} else {
