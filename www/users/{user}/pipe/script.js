@@ -231,7 +231,11 @@ const addFile = async file => {
 			<b>$${file.name}</b> already exists.
 		`, ["Replace", "Rename", "Cancel"]);
 		if(value === 0) {
-			// TODO: delete itemTaken
+			if(await new Miro.Dialog("Replace", html`
+				Are you sure you want to replace <b>$${file.name}</b>?
+			`, ["Yes", "No"]) === 0) {
+				// TODO: delete itemTaken
+			}
 		} else if(value === 1) {
 			const dialog = new Miro.Dialog("Rename", html`
 				Enter a new name for <b>$${file.name}</b>.<br>
