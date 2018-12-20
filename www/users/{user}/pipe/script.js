@@ -247,11 +247,9 @@ const addFile = async file => {
 				text: "Okay",
 				type: "submit"
 			}, "Cancel"]);
-			await Miro.wait();
-			const extensionIndex = file.name.lastIndexOf(".");
-			if(extensionIndex > 0) {
-				dialog.form.elements.name.selectionEnd = extensionIndex;
-			}
+			dialog.form.elements.name.focus();
+			const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
+			dialog.form.elements.name.setSelectionRange(extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
 			if(await dialog === 0) {
 				if(!name) {
 					Object.defineProperty(file, "name", {
