@@ -224,15 +224,32 @@ class PipeQueuedItem {
 	}
 }
 const addFile = async file => {
-	const takenItem = itemCache.find(({name}) => name === file.name);
-	if(takenItem) {
-		await new Miro.Dialog("Rename", html`
-			The file name <b>${file.name}</b> is already taken.
-		`, ["Replace", "Rename", "Cancel"]).then(async value => {
-			if(value === 0) {
-				Miro.response(await Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${takenItem.id}`));
+	let takenItem;
+	while(takenItem = itemCache.find(({name}) => name === file.name)) {
+		const value = await new Miro.Dialog("Error", html`
+			<b>$${file.name}</b> is already taken.
+		`, ["Replace", "Rename", "Cancel"]);
+		if(value === 0) {
+			// TODO: delete itemTaken
+		} else if(value === 1) {
+			const dialog = new Miro.Dialog("Rename", html`
+				Enter a new name for <b>$${file.name}</b>.<br>
+				<div class="mdc-text-field">
+					<input name="name" class="mdc-text-field__input" type="text" value="$${file.name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+					<div class="mdc-line-ripple"></div>
+				</div>
+			`, [{
+				text: "Okay",
+				type: "submit"
+			}, "Cancel"]);
+			if(await dialog === 0) {
+				Object.defineProperty(file, "name", {
+					get: () => dialog.form.elements.name.value
+				});
 			}
-		});
+		} else {
+			return;
+		}
 	}
 	queuedItems.appendChild(new PipeQueuedItem(file).element);
 };

@@ -145,7 +145,6 @@
 	& > button {
 		width: 32px;
 		height: 32px;
-		margin-top: -1px;
 	}
 	&.sort > button {
 		opacity: 0;
