@@ -247,6 +247,7 @@ const addFile = async file => {
 				text: "Okay",
 				type: "submit"
 			}, "Cancel"]);
+			await Miro.wait();
 			const extensionIndex = file.name.lastIndexOf(".");
 			if(extensionIndex > 0) {
 				dialog.form.elements.name.selectionEnd = extensionIndex;
