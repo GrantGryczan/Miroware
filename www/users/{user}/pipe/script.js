@@ -249,7 +249,7 @@ const addFile = async file => {
 			}, "Cancel"]);
 			dialog.form.elements.name.focus();
 			const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
-			dialog.form.elements.name.setSelectionRange(extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
+			dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
 			if(await dialog === 0) {
 				if(!name) {
 					Object.defineProperty(file, "name", {
