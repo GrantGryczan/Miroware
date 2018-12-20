@@ -228,7 +228,7 @@ const addFile = async file => {
 	let takenItem;
 	while(takenItem = Object.values(itemCache).find(({name}) => name === file.name)) {
 		const value = await new Miro.Dialog("Error", html`
-			<b>$${file.name}</b> is already taken.
+			<b>$${file.name}</b> already exists.
 		`, ["Replace", "Rename", "Cancel"]);
 		if(value === 0) {
 			// TODO: delete itemTaken
