@@ -277,6 +277,7 @@ class MiroDialog {
 		return this;
 	}
 	close(value) {
+		console.trace(value);
 		setTimeout(() => {
 			if(this.ready) {
 				this[_close](typeof value === "number" ? value : -1);
