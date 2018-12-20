@@ -175,7 +175,7 @@ class PipeQueuedItem {
 			this.subtitleElement.title = `${this.file.size} B`;
 			this.subtitleElement.textContent = this.size;
 			this.closeElement.textContent = "done";
-			itemCache[xhr.response.id] = new PipeItem(xhr.response);
+			setItem(new PipeItem(xhr.response));
 			if(path === this.path) {
 				render();
 			}
@@ -226,7 +226,7 @@ class PipeQueuedItem {
 const addFile = async file => {
 	let name;
 	let takenItem;
-	while(takenItem = Object.values(itemCache).find(({name}) => name === file.name)) {
+	while(takenItem = pipe.find(({name}) => name === file.name)) {
 		const value = await new Miro.Dialog("Error", html`
 			<b>$${file.name}</b> already exists.
 		`, ["Replace", "Rename", "Cancel"]);
@@ -356,8 +356,17 @@ titleBar.appendChild(html`
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
 let path = "";
+const pipe = [];
 const cachedPaths = [];
-const itemCache = {};
+const setItem = item => {
+	const itemIndex = pipe.findIndex(({id}) => id === item.id);
+	if(itemIndex === -1) {
+		pipe.push(item);
+	} else {
+		pipe.splice(itemIndex, 1, item);
+	}
+	return item;
+};
 const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
 const sort = {
 	name: (a, b) => b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1,
@@ -413,7 +422,7 @@ const render = () => {
 	if(!(sortValue in sort)) {
 		sortValue = "type";
 	}
-	const itemArray = Object.values(itemCache).filter(currentItems).sort(sort[sortValue]);
+	const itemArray = pipe.filter(currentItems).sort(sort[sortValue]);
 	for(const item of reverseValue ? itemArray.reverse() : itemArray) {
 		items.appendChild(item.element);
 	}
@@ -422,7 +431,7 @@ const hashChange = () => {
 	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
 		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
 			for(const item of xhr.response) {
-				itemCache[item.id] = new PipeItem(item);
+				setItem(new PipeItem(item));
 			}
 			cachedPaths.push(path);
 			render();
