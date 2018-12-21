@@ -199,7 +199,7 @@ class MiroDialog {
 		contentElem.appendChild(content);
 		const buttonsElem = dialogElem.querySelector(".mdc-dialog__actions");
 		if(buttons.length) {
-			(buttons = buttons.map(item => {
+			buttons = buttons.map(item => {
 				const button = document.createElement("button");
 				if(typeof item === "string") {
 					button.type = "button";
@@ -214,7 +214,7 @@ class MiroDialog {
 				button.classList.add("mdc-dialog__button");
 				buttonsElem.appendChild(button);
 				return button;
-			}))[0].classList.add("mdc-dialog__button--default");
+			});
 		}
 		container.appendChild(dialogElem);
 		const dialog = mdc.dialog.MDCDialog.attachTo(dialogElem);
@@ -231,11 +231,11 @@ class MiroDialog {
 					Miro.formState(form, false);
 				});
 			});
-			let closed = false;
+			let canClose = true;
 			this.value = null;
 			const close = this[_close] = value => {
-				if(!closed) {
-					closed = true;
+				if(canClose) {
+					canClose = false;
 					this.value = value;
 					dialog.close();
 					Miro.formState(form, formState);
