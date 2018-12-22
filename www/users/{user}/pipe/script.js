@@ -52,7 +52,8 @@ const indicateTarget = target => {
 };
 const checkName = async name => {
 	let takenItem;
-	while(takenItem = pipe.find(item => item.name === name)) {
+	let fullName = applyParent(name);
+	while(takenItem = pipe.find(item => item.name === fullName)) {
 		const value = await new Miro.Dialog("Error", html`
 			<b>$${name}</b> already exists.
 		`, ["Replace", "Rename", "Cancel"]);
@@ -83,6 +84,7 @@ const checkName = async name => {
 		} else {
 			return false;
 		}
+		fullName = applyParent(name);
 	}
 	return name;
 };
@@ -174,6 +176,7 @@ const updateQueue = () => {
 window.onbeforeunload = () => container.querySelector(".loading") || undefined;
 class PipeQueuedItem {
 	constructor(file) {
+		this.path = path;
 		this.file = file;
 		(this.element = html`
 			<a class="item loading" draggable="false" ondragstart="return false;">
@@ -189,7 +192,7 @@ class PipeQueuedItem {
 		Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 			"Content-Type": "application/octet-stream",
 			"X-Data": JSON.stringify({
-				name: ((this.path = path) ? `${path}/` : "") + this.file.name
+				name: applyParent(this.file.name)
 			})
 		}, this.file, xhr => {
 			this.xhr = xhr;
@@ -361,6 +364,7 @@ titleBar.appendChild(html`
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
 let path = "";
+const applyParent = name => (path ? `${path}/` : "") + name;
 const pipe = [];
 const cachedPaths = [];
 const setItem = item => {
