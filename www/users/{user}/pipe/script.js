@@ -52,7 +52,7 @@ const indicateTarget = target => {
 };
 const checkName = async name => {
 	let takenItem;
-	while(takenItem = pipe.find(({itemName}) => itemName === name)) {
+	while(takenItem = pipe.find(item => item.name === name)) {
 		const value = await new Miro.Dialog("Error", html`
 			<b>$${name}</b> already exists.
 		`, ["Replace", "Rename", "Cancel"]);
