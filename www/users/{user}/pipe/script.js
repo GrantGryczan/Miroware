@@ -50,6 +50,42 @@ const indicateTarget = target => {
 		targetIndicator.classList.remove("visible");
 	}
 };
+const checkName = async name => {
+	let takenItem;
+	while(takenItem = pipe.find(({itemName}) => itemName === name)) {
+		const value = await new Miro.Dialog("Error", html`
+			<b>$${name}</b> already exists.
+		`, ["Replace", "Rename", "Cancel"]);
+		if(value === 0) {
+			if(await new Miro.Dialog("Replace", html`
+				Are you sure you want to replace <b>$${name}</b>?
+			`, ["Yes", "No"]) === 0) {
+				// TODO: delete takenItem
+			}
+		} else if(value === 1) {
+			const dialog = new Miro.Dialog("Rename", html`
+				Enter a new name for <b>$${name}</b>.<br>
+				<div class="mdc-text-field">
+					<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+					<div class="mdc-line-ripple"></div>
+				</div>
+			`, [{
+				text: "Okay",
+				type: "submit"
+			}, "Cancel"]);
+			await Miro.wait();
+			dialog.form.elements.name.focus();
+			const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
+			dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
+			if(await dialog === 0) {
+				name = dialog.form.elements.name.value;
+			}
+		} else {
+			return false;
+		}
+	}
+	return name;
+};
 const items = container.querySelector("#items");
 const _name = Symbol("name");
 const _size = Symbol("size");
@@ -224,44 +260,13 @@ class PipeQueuedItem {
 	}
 }
 const addFile = async file => {
-	let name;
-	let takenItem;
-	while(takenItem = pipe.find(({name}) => name === file.name)) {
-		const value = await new Miro.Dialog("Error", html`
-			<b>$${file.name}</b> already exists.
-		`, ["Replace", "Rename", "Cancel"]);
-		if(value === 0) {
-			if(await new Miro.Dialog("Replace", html`
-				Are you sure you want to replace <b>$${file.name}</b>?
-			`, ["Yes", "No"]) === 0) {
-				// TODO: delete itemTaken
-			}
-		} else if(value === 1) {
-			const dialog = new Miro.Dialog("Rename", html`
-				Enter a new name for <b>$${file.name}</b>.<br>
-				<div class="mdc-text-field">
-					<input name="name" class="mdc-text-field__input" type="text" value="$${file.name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
-					<div class="mdc-line-ripple"></div>
-				</div>
-			`, [{
-				text: "Okay",
-				type: "submit"
-			}, "Cancel"]);
-			await Miro.wait();
-			dialog.form.elements.name.focus();
-			const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
-			dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
-			if(await dialog === 0) {
-				if(!name) {
-					Object.defineProperty(file, "name", {
-						get: () => name
-					});
-				}
-				name = dialog.form.elements.name.value;
-			}
-		} else {
-			return;
-		}
+	const name = await checkName(file.name);
+	if(!name) {
+		return;
+	} else if(name !== file.name) {
+		Object.defineProperty(file, "name", {
+			get: () => name
+		});
 	}
 	queuedItems.appendChild(new PipeQueuedItem(file).element);
 };
