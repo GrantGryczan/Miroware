@@ -379,7 +379,8 @@ const sort = {
 	type: (a, b) => b.type < a.type ? 1 : (b.type > a.type ? -1 : b.date - a.date),
 	date: (a, b) => b.date - a.date
 };
-let sortValue = localStorage.pipe_sortItems in sort ? localStorage.pipe_sortItems : "type";
+const SORT_DEFAULT = "date";
+let sortValue = localStorage.pipe_sortItems in sort ? localStorage.pipe_sortItems : SORT_DEFAULT;
 let reverseValue = +localStorage.pipe_reverseItems;
 const sortButtons = document.body.querySelectorAll(".cell.sort > button");
 const clickSort = evt => {
@@ -425,7 +426,7 @@ const render = () => {
 		items.removeChild(items.lastChild);
 	}
 	if(!(sortValue in sort)) {
-		sortValue = "type";
+		sortValue = SORT_DEFAULT;
 	}
 	const itemArray = pipe.filter(currentItems).sort(sort[sortValue]);
 	for(const item of reverseValue ? itemArray.reverse() : itemArray) {
