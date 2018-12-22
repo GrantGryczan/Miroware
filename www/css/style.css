@@ -266,7 +266,6 @@ input:-webkit-autofill {
 	max-width: initial !important;
 	.mdc-text-field:not(.mdc-text-field--textarea) & {
 		left: 0;
-		top: auto;
 		bottom: 8px;
 		&--float-above, &.alwaysFloat {
 			transform: translateY(-100%) scale(0.75);
