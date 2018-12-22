@@ -40,7 +40,6 @@ this.value += html`
 					<div class="mdc-text-field mdc-text-field--textarea marginedMore">
 						<textarea id="desc" name="desc" class="mdc-text-field__input" rows="6" cols="48" maxlength="16384">$${this.user.desc}</textarea>
 						<label class="mdc-floating-label" for="desc">Description</label>
-						<div class="mdc-line-ripple"></div>
 					</div><br>
 					<br>
 					<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" disabled>Save</button><button id="download" class="mdc-button spaced mdc-ripple">Download</button><button id="delete" class="mdc-button spaced mdc-ripple">Delete</button>
