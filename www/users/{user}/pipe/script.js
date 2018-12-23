@@ -299,12 +299,25 @@ class PipeDirectory {
 		}));
 	}
 }
-creation.querySelector("#addDirectory").addEventListener("click", async () => {
-	const name = await checkName(file.name);
-	if(!name) {
-		return;
-	}
-	new PipeDirectory(name);
+creation.querySelector("#addDirectory").addEventListener("click", () => {
+	const dialog = new Miro.Dialog("Directory", html`
+		Enter a directory name.<br>
+		<div class="mdc-text-field">
+			<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+			<div class="mdc-line-ripple"></div>
+		</div>
+	`, [{
+		text: "Okay",
+		type: "submit"
+	}, "Cancel"]).then(async value => {
+		if(value === 0) {
+			const name = await checkName(dialog.form.elements.name.value);
+			if(!name) {
+				return;
+			}
+			new PipeDirectory(name);
+		}
+	});
 });
 const htmlFilenameTest = /\/([^\/]+?)"/;
 document.addEventListener("paste", async evt => {
