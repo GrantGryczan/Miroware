@@ -174,7 +174,7 @@ const updateQueue = () => {
 	}
 };
 window.onbeforeunload = () => container.querySelector(".loading") || undefined;
-class PipeQueuedItem {
+class PipeFile {
 	constructor(file) {
 		this.path = path;
 		this.file = file;
@@ -257,7 +257,7 @@ class PipeQueuedItem {
 	}
 	retry(evt) {
 		if(!this.closeElement.contains(evt.target)) {
-			this.element.parentNode.replaceChild(new PipeQueuedItem(this.file).element, this.element);
+			this.element.parentNode.replaceChild(new PipeFile(this.file).element, this.element);
 			this.dequeue();
 		}
 	}
@@ -271,7 +271,7 @@ const addFile = async file => {
 			get: () => name
 		});
 	}
-	queuedItems.appendChild(new PipeQueuedItem(file).element);
+	queuedItems.appendChild(new PipeFile(file).element);
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
@@ -282,6 +282,30 @@ fileInput.addEventListener("change", () => {
 });
 const addFiles = creation.querySelector("#addFiles");
 addFiles.addEventListener("click", fileInput.click.bind(fileInput));
+class PipeDirectory {
+	constructor(name) {
+		this.path = path;
+		this.name = name;
+		Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
+			"X-Data": JSON.stringify({
+				name: applyParent(this.name),
+				type: "/"
+			})
+		}).then(Miro.response(xhr => {
+			setItem(new PipeItem(xhr.response));
+			if(path === this.path) {
+				render();
+			}
+		}));
+	}
+}
+creation.querySelector("#addDirectory").addEventListener("click", () => {
+	const name = await checkName(file.name);
+	if(!name) {
+		return;
+	}
+	new PipeDirectory(name);
+});
 const htmlFilenameTest = /\/([^\/]+?)"/;
 document.addEventListener("paste", async evt => {
 	if(Miro.focused() && !Miro.typing() && evt.clipboardData.items.length) {
