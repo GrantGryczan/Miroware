@@ -124,22 +124,31 @@ if(isMe) {
 			...item
 		};
 		const urls = [`https://pipe.miroware.io/${user._id}/${encodeURI(found.name)}`, `https://piped.miroware.io/${user._id}/${encodeURI(found.name)}`, `https://pipe.miroware.io/${user._id}/${encodeURI(this.value.name)}`, `https://piped.miroware.io/${user._id}/${encodeURI(this.value.name)}`];
-		if(found.type === "/" && item.name) {
-			const prefix = `${found.name}/`;
-			for(const child of user.pipe) {
-				if(child.name.startsWith(prefix)) {
-					const name = item.name + child.name.slice(found.name.length);
-					users.updateOne({
-						...this.userFilter,
-						"pipe.id": child.id
-					}, {
-						$set: {
-							"pipe.$.name": name
-						}
-					});
-					const encodedChildName = encodeURI(child.name);
-					const encodedName = encodeURI(name);
-					urls.push(`https://pipe.miroware.io/${user._id}/${encodedChildName}`, `https://piped.miroware.io/${user._id}/${encodedChildName}`, `https://pipe.miroware.io/${user._id}/${encodedName}`, `https://piped.miroware.io/${user._id}/${encodedName}`);
+		if(found.type === "/") {
+			const itemPath = `${found.name}/`;
+			this.value.size = user.pipe.reduce((size, item2) => {
+				if(item2.type !== "/" && item2.name.startsWith(itemPath)) {
+					size += item2.size;
+				}
+				return size;
+			}, 0);
+			if(item.name) {
+				const prefix = `${found.name}/`;
+				for(const child of user.pipe) {
+					if(child.name.startsWith(prefix)) {
+						const name = item.name + child.name.slice(found.name.length);
+						users.updateOne({
+							...this.userFilter,
+							"pipe.id": child.id
+						}, {
+							$set: {
+								"pipe.$.name": name
+							}
+						});
+						const encodedChildName = encodeURI(child.name);
+						const encodedName = encodeURI(name);
+						urls.push(`https://pipe.miroware.io/${user._id}/${encodedChildName}`, `https://piped.miroware.io/${user._id}/${encodedChildName}`, `https://pipe.miroware.io/${user._id}/${encodedName}`, `https://piped.miroware.io/${user._id}/${encodedName}`);
+					}
 				}
 			}
 		}

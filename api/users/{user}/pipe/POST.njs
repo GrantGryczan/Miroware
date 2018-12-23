@@ -111,6 +111,10 @@ if(isMe) {
 				type: "/"
 			}
 		};
+		this.value = {
+			...this.value,
+			size: 0
+		}
 		this.done();
 	} else {
 		if(this.req.get("Content-Type") !== "application/octet-stream") {
