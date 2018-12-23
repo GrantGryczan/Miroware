@@ -299,7 +299,7 @@ class PipeDirectory {
 		}));
 	}
 }
-creation.querySelector("#addDirectory").addEventListener("click", () => {
+creation.querySelector("#addDirectory").addEventListener("click", async () => {
 	const name = await checkName(file.name);
 	if(!name) {
 		return;
