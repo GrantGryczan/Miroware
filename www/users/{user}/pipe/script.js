@@ -293,6 +293,7 @@ class PipeDirectory {
 			})
 		}).then(Miro.response(xhr => {
 			setItem(new PipeItem(xhr.response));
+			cachedPaths.push(xhr.response.name);
 			if(path === this.path) {
 				render();
 			}
