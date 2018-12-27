@@ -203,12 +203,18 @@ class PipeItem {
 			let ancestry = "";
 			let names = oldName.split("/");
 			for(const name of names) {
-				getItem(ancestry += (ancestry && "/") + name).size -= this.size;
+				const item = getItem(ancestry += (ancestry && "/") + name);
+				if(item) {
+					item.size -= this.size;
+				}
 			}
 			ancestry = "";
 			names = this.name.split("/");
 			for(const name of names) {
-				getItem(ancestry += (ancestry && "/") + name).size += this.size;
+				const item = getItem(ancestry += (ancestry && "/") + name);
+				if(item) {
+					item.size += this.size;
+				}
 			}
 		}
 	}
