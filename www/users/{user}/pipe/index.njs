@@ -86,7 +86,7 @@ this.value += html`
 					</div>
 					<div class="property hidden" data-key="url">
 						<div class="mdc-text-field spaced">
-							<input id="url" name="url" class="mdc-text-field__input" type="url" value="$${url}" size="24" readonly>
+							<input id="url" name="url" class="mdc-text-field__input" type="url" size="24" readonly>
 							<label class="mdc-floating-label" for="url">URL</label>
 							<div class="mdc-line-ripple"></div>
 						</div><button id="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
