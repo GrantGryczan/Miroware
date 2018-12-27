@@ -201,7 +201,7 @@ class PipeItem {
 				}
 			}
 			let ancestry = "";
-			let names = oldName.split("/");
+			let names = oldName.split("/").slice(0, -1);
 			for(const name of names) {
 				const item = getItem(ancestry += (ancestry && "/") + name);
 				if(item) {
@@ -209,7 +209,7 @@ class PipeItem {
 				}
 			}
 			ancestry = "";
-			names = this.name.split("/");
+			names = this.name.split("/").slice(0, -1);
 			for(const name of names) {
 				const item = getItem(ancestry += (ancestry && "/") + name);
 				if(item) {
