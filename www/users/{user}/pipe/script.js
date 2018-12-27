@@ -178,7 +178,7 @@ class PipeFile {
 	constructor(file) {
 		this.path = path;
 		this.file = file;
-		(this.element = html`
+		this.element = html`
 			<a class="item loading" draggable="false" ondragstart="return false;">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
@@ -186,7 +186,7 @@ class PipeFile {
 				</div>
 				<button class="close mdc-icon-button material-icons">close</button>
 			</a>
-		`)._item = this;
+		`;
 		(this.closeElement = this.element.querySelector(".close")).addEventListener("click", this.close.bind(this));
 		this.subtitleElement = this.element.querySelector(".subtitle");
 		Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
@@ -547,3 +547,53 @@ const selectItem = (target, evt, button) => {
 	}
 	updateSelection();
 };
+let mouseX = 0;
+let mouseY = 0;
+let mouseTarget;
+let mouseDown = -1;
+let mouseMoved = false;
+document.addEventListener("mousedown", evt => {
+	mouseMoved = false;
+	mouseX = evt.clientX;
+	mouseY = evt.clientY;
+	if(evt.button !== 0 && evt.button !== 2) {
+		return;
+	}
+	mouseTarget = evt.target;
+	mouseDown = evt.button;
+	if(evt.target.parentNode._item) {
+		focusedItem = evt.target.parentNode;
+	}
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("mouseup", evt => {
+	if(mouseDown !== -1 && page.contains(mouseTarget)) {
+		if(mouseTarget.parentNode._item) {
+			if(!mouseMoved) {
+				selectItem(mouseTarget.parentNode, evt, evt.button);
+			}
+		} else if(!mouseMoved) {
+			for(const item of items.querySelectorAll(".item.selected")) {
+				item.classList.remove("selected");
+			}
+			selectedItem = focusedItem = null;
+			updateSelection();
+		}
+	}
+	mouseTarget = null;
+	mouseDown = -1;
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("dblclick", evt => {
+	if(!mouseMoved && evt.target.parentNode._item) {
+		selectItem(evt.target.parentNode, evt, 2);
+		// TODO: open item
+	}
+}, {
+	capture: true,
+	passive: true
+});
