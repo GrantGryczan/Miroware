@@ -69,7 +69,30 @@ this.value += html`
 						<div id="items" class="items"></div>
 					</div>
 				</div>
-				<div class="panel side right"></div>
+				<form class="panel side right">
+					<div class="property hidden" data-key="name">
+						<div class="mdc-text-field">
+							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+							<label class="mdc-floating-label" for="name">Name</label>
+							<div class="mdc-line-ripple"></div>
+						</div><br>
+					</div>
+					<div class="property hidden" data-key="type">
+						<div class="mdc-text-field">
+							<input id="type" name="type" class="mdc-text-field__input" type="text" maxlength="255" size="24" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?=]+$" spellcheck="false" required>
+							<label class="mdc-floating-label" for="type">Type</label>
+							<div class="mdc-line-ripple"></div>
+						</div><br>
+					</div>
+					<div class="property hidden" data-key="url">
+						<div class="mdc-text-field spaced">
+							<input id="url" name="url" class="mdc-text-field__input" type="url" value="$${url}" size="24" readonly>
+							<label class="mdc-floating-label" for="url">URL</label>
+							<div class="mdc-line-ripple"></div>
+						</div><button id="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
+						<a href="$${url}" target="_blank">Preview link</a>
+					</div>
+				</form>
 			</div>`;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
