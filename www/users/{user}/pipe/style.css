@@ -86,6 +86,9 @@
 	text-decoration: none;
 	&.loading {
 		opacity: 0.7;
+		#items > & {
+			pointer-events: none;
+		}
 	}
 	&.error {
 		background-color: rgba(255, 0, 0, 0.5);
