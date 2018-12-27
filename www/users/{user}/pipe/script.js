@@ -140,7 +140,7 @@ class PipeItem {
 			}
 		}
 		let ancestry = "";
-		let names = oldPath.split("/");
+		let names = oldName.split("/");
 		for(const name of names) {
 			getItem(ancestry += (ancestry && "/") + name).size -= this.size;
 		}
