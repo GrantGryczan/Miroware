@@ -64,7 +64,7 @@ const applyPath = name => (path ? `${path}/` : "") + name;
 const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeURI(item.name)}`;
 const pipe = [];
 const cachedPaths = [];
-const getItem = pipe.find(item => item.name === name);
+const getItem = name => pipe.find(item => item.name === name);
 const setItem = item => {
 	const itemIndex = pipe.findIndex(({id}) => id === item.id);
 	if(itemIndex === -1) {
