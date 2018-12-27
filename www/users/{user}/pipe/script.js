@@ -625,7 +625,7 @@ document.addEventListener("mouseup", evt => {
 			} else {
 				selectItem(mouseTarget.parentNode, evt, evt.button);
 			}
-		} else if(!mouseMoved && !header.contains(mouseTarget)) {
+		} else if(!mouseMoved) {
 			for(const item of items.querySelectorAll(".item.selected")) {
 				item.classList.remove("selected");
 			}
