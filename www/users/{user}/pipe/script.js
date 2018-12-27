@@ -569,18 +569,8 @@ document.addEventListener("mousedown", evt => {
 	passive: true
 });
 document.addEventListener("mouseup", evt => {
-	if(mouseDown !== -1 && page.contains(mouseTarget)) {
-		if(mouseTarget.parentNode._item) {
-			if(!mouseMoved) {
-				selectItem(mouseTarget.parentNode, evt, evt.button);
-			}
-		} else if(!mouseMoved) {
-			for(const item of items.querySelectorAll(".item.selected")) {
-				item.classList.remove("selected");
-			}
-			selectedItem = focusedItem = null;
-			updateSelection();
-		}
+	if(mouseDown !== -1 && mouseTarget.parentNode._item && !mouseMoved) {
+		selectItem(mouseTarget.parentNode, evt, evt.button);
 	}
 	mouseTarget = null;
 	mouseDown = -1;
