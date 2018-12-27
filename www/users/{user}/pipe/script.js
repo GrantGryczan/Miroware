@@ -53,7 +53,7 @@ const indicateTarget = target => {
 const checkName = async name => {
 	let takenItem;
 	let fullName = applyPath(name);
-	while(takenItem = pipe.find(item => item.name === fullName)) {
+	while(takenItem = getItem(fullName)) {
 		const value = await new Miro.Dialog("Error", html`
 			<b>$${name}</b> already exists.
 		`, ["Replace", "Rename", "Cancel"]);
@@ -122,7 +122,7 @@ class PipeItem {
 		return this[_name];
 	}
 	set name(value) {
-		const oldName = this[_name];
+		const oldName = this.name;
 		const typeDirectory = this.type === "/";
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
@@ -132,6 +132,22 @@ class PipeItem {
 			if(pathIndex !== -1) {
 				cachedPaths.splice(pathIndex, 1, value);
 			}
+			const prefix = `${this.name}/`;
+			for(const item of pipe) {
+				if(item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
+					item.name = value + item.name.slice(oldName.length);
+				}
+			}
+		}
+		let ancestry = "";
+		let names = oldPath.split("/");
+		for(const name of names) {
+			getItem(ancestry += (ancestry && "/") + name).size -= this.size;
+		}
+		ancestry = "";
+		names = this.name.split("/");
+		for(const name of names) {
+			getItem(ancestry += (ancestry && "/") + name).size += this.size;
 		}
 	}
 	get size() {
@@ -419,6 +435,7 @@ const applyPath = name => (path ? `${path}/` : "") + name;
 const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeURI(item.name)}`;
 const pipe = [];
 const cachedPaths = [];
+const getItem = pipe.find(item => item.name === name);
 const setItem = item => {
 	const itemIndex = pipe.findIndex(({id}) => id === item.id);
 	if(itemIndex === -1) {
@@ -597,15 +614,6 @@ document.addEventListener("mouseup", evt => {
 						Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
 							name: targetName ? `${targetName}/${name}` : name
 						}).then(Miro.response(xhr => {
-							if(itemElement._item.type === "/") {
-								const prefix = `${itemElement._item.name}/`;
-								for(const item of pipe) {
-									if(item.name.startsWith(prefix)) {
-										const oldName = item.name;
-										item.name = xhr.response.name + item.name.slice(itemElement._item.name.length);
-									}
-								}
-							}
 							itemElement._item.name = xhr.response.name;
 							itemElement.classList.remove("loading");
 							if(sourcePath === path) {
@@ -620,7 +628,6 @@ document.addEventListener("mouseup", evt => {
 						indicatedTarget.classList.add("selected");
 					}
 					indicateTarget();
-					updateSelection();
 				}
 			} else {
 				selectItem(mouseTarget.parentNode, evt, evt.button);

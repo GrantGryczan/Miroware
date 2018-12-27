@@ -109,9 +109,6 @@
 			}
 		}
 	}
-	& > .cell.icon > button {
-		pointer-events: none;
-	}
 }
 .loading {
 	background-image: linear-gradient(rgba(255, 128, 0, 0.5), rgba(255, 128, 0, 0.5));
