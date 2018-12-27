@@ -116,6 +116,7 @@ class PipeItem {
 		this.name = item.name;
 		this.size = item.size;
 		this.date = new Date(item.date);
+		this.element.addEventListener("click", this.click.bind(this));
 	}
 	get name() {
 		return this[_name];
@@ -145,6 +146,9 @@ class PipeItem {
 	}
 	set date(value) {
 		this.dateElement.textContent = getDate(this.dateElement.title = this[_date] = value);
+	}
+	click(evt) {
+		evt.preventDefault();
 	}
 }
 const creation = container.querySelector("#creation");
