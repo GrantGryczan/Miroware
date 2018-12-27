@@ -127,27 +127,29 @@ class PipeItem {
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
 		this.element.href = typeDirectory ? `#${value}` : getURL(this);
-		if(typeDirectory) {
-			const pathIndex = cachedPaths.indexOf(oldName);
-			if(pathIndex !== -1) {
-				cachedPaths.splice(pathIndex, 1, value);
-			}
-			const prefix = `${this.name}/`;
-			for(const item of pipe) {
-				if(item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
-					item.name = value + item.name.slice(oldName.length);
+		if(oldName) {
+			if(typeDirectory) {
+				const pathIndex = cachedPaths.indexOf(oldName);
+				if(pathIndex !== -1) {
+					cachedPaths.splice(pathIndex, 1, value);
+				}
+				const prefix = `${this.name}/`;
+				for(const item of pipe) {
+					if(item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
+						item.name = value + item.name.slice(oldName.length);
+					}
 				}
 			}
-		}
-		let ancestry = "";
-		let names = oldName.split("/");
-		for(const name of names) {
-			getItem(ancestry += (ancestry && "/") + name).size -= this.size;
-		}
-		ancestry = "";
-		names = this.name.split("/");
-		for(const name of names) {
-			getItem(ancestry += (ancestry && "/") + name).size += this.size;
+			let ancestry = "";
+			let names = oldName.split("/");
+			for(const name of names) {
+				getItem(ancestry += (ancestry && "/") + name).size -= this.size;
+			}
+			ancestry = "";
+			names = this.name.split("/");
+			for(const name of names) {
+				getItem(ancestry += (ancestry && "/") + name).size += this.size;
+			}
 		}
 	}
 	get size() {
