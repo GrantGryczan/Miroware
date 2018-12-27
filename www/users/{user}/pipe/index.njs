@@ -49,7 +49,7 @@ this.value += html`
 				<div class="panel center">
 					<span id="ancestors"></span>
 					<div class="pane">
-						<div id="sort">
+						<div id="header">
 							<div class="cell view">
 								<button id="viewMode" class="mdc-icon-button material-icons" title="Tile view">view_module</button>
 							</div>

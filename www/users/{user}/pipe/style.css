@@ -78,6 +78,7 @@
 }
 .items {
 	flex-grow: 1;
+	padding-bottom: 42px;
 }
 .item {
 	display: flex;
@@ -121,7 +122,7 @@
 	opacity: 0.5;
 	font-size: 11px;
 }
-#sort {
+#header {
 	flex-shrink: 0;
 	display: flex;
 	position: sticky;

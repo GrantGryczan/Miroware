@@ -124,7 +124,7 @@ class PipeItem {
 	set name(value) {
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
-		this.element.href = this.type === "/" ? `#${value}` : `https://pipe.miroware.io/${Miro.data.user.id}/${value}`;
+		this.element.href = this.type === "/" ? `#${value}` : getURL(this);
 	}
 	get size() {
 		return this[_size];
@@ -430,7 +430,8 @@ const sort = {
 const SORT_DEFAULT = "date";
 let sortValue = localStorage.pipe_sortItems in sort ? localStorage.pipe_sortItems : SORT_DEFAULT;
 let reverseValue = +localStorage.pipe_reverseItems;
-const sortButtons = document.body.querySelectorAll(".cell.sort > button");
+const header = document.body.querySelector("#header");
+const sortButtons = header.querySelectorAll(".cell.sort > button");
 const clickSort = evt => {
 	if(evt.target.classList.contains("sorting")) {
 		reverseValue = +!reverseValue;
@@ -575,44 +576,52 @@ document.addEventListener("mousedown", evt => {
 	passive: true
 });
 document.addEventListener("mouseup", evt => {
-	if(mouseDown !== -1 && mouseTarget.parentNode._item) {
-		if(mouseMoved) {
-			if(indicatedTarget) {
-				const sourcePath = path;
-				for(const itemElement of items.querySelectorAll(".item.selected")) {
-					itemElement.classList.remove("selected");
-					itemElement.classList.add("loading");
-					const targetName = indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
-					const name = getName(itemElement._item.name);
-					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
-						name: targetName ? `${targetName}/${name}` : name
-					}).then(Miro.response(xhr => {
-						if(itemElement._item.type === "/") {
-							const prefix = `${itemElement._item.name}/`;
-							for(const item of pipe) {
-								if(item.name.startsWith(prefix)) {
-									item.name = xhr.response.name + item.name.slice(itemElement._item.name.length);
+	if(mouseDown !== -1 && items.contains(mouseTarget)) {
+		if(mouseTarget.parentNode._item) {
+			if(mouseMoved) {
+				if(indicatedTarget) {
+					const sourcePath = path;
+					for(const itemElement of items.querySelectorAll(".item.selected")) {
+						itemElement.classList.remove("selected");
+						itemElement.classList.add("loading");
+						const targetName = indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
+						const name = getName(itemElement._item.name);
+						Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
+							name: targetName ? `${targetName}/${name}` : name
+						}).then(Miro.response(xhr => {
+							if(itemElement._item.type === "/") {
+								const prefix = `${itemElement._item.name}/`;
+								for(const item of pipe) {
+									if(item.name.startsWith(prefix)) {
+										item.name = xhr.response.name + item.name.slice(itemElement._item.name.length);
+									}
 								}
 							}
-						}
-						itemElement._item.name = xhr.response.name;
-						itemElement.classList.remove("loading");
-						if(sourcePath === path) {
-							render();
-						}
-					}, () => {
-						itemElement.classList.remove("loading");
-						updateSelection();
-					}));
+							itemElement._item.name = xhr.response.name;
+							itemElement.classList.remove("loading");
+							if(sourcePath === path) {
+								render();
+							}
+						}, () => {
+							itemElement.classList.remove("loading");
+							updateSelection();
+						}));
+					}
+					if(!indicatedTarget.href) {
+						indicatedTarget.classList.add("selected");
+					}
+					indicateTarget();
+					updateSelection();
 				}
-				if(!indicatedTarget.href) {
-					indicatedTarget.classList.add("selected");
-				}
-				indicateTarget();
-				updateSelection();
+			} else {
+				selectItem(mouseTarget.parentNode, evt, evt.button);
 			}
-		} else {
-			selectItem(mouseTarget.parentNode, evt, evt.button);
+		} else if(!mouseMoved && !header.contains(mouseTarget)) {
+			for(const item of items.querySelectorAll(".item.selected")) {
+				item.classList.remove("selected");
+			}
+			selectedItem = focusedItem = null;
+			updateSelection();
 		}
 	}
 	mouseTarget = null;
