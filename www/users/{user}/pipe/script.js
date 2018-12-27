@@ -50,6 +50,66 @@ const indicateTarget = target => {
 		targetIndicator.classList.remove("visible");
 	}
 };
+const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
+titleBar.appendChild(html`
+	<span>
+		/ <a class="ancestor" href="#">${Miro.data.user.name}</a>
+	</span>
+`);
+const ancestors = document.body.querySelector("#ancestors");
+titleBar.appendChild(ancestors);
+let path = "";
+const getName = name => path ? name.slice(path.length + 1) : name;
+const applyPath = name => (path ? `${path}/` : "") + name;
+const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeURI(item.name)}`;
+const pipe = [];
+const cachedPaths = [];
+const getItem = pipe.find(item => item.name === name);
+const setItem = item => {
+	const itemIndex = pipe.findIndex(({id}) => id === item.id);
+	if(itemIndex === -1) {
+		pipe.push(item);
+	} else {
+		pipe.splice(itemIndex, 1, item);
+	}
+	return item;
+};
+const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
+const sort = {
+	name: (a, b) => b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1,
+	size: (a, b) => b.size - a.size || b.date - a.date,
+	type: (a, b) => b.type < a.type ? 1 : (b.type > a.type ? -1 : b.date - a.date),
+	date: (a, b) => b.date - a.date
+};
+const SORT_DEFAULT = "date";
+let sortValue = localStorage.pipe_sortItems in sort ? localStorage.pipe_sortItems : SORT_DEFAULT;
+let reverseValue = +localStorage.pipe_reverseItems;
+const header = document.body.querySelector("#header");
+const sortButtons = header.querySelectorAll(".cell.sort > button");
+const clickSort = evt => {
+	if(evt.target.classList.contains("sorting")) {
+		reverseValue = +!reverseValue;
+	} else {
+		for(const sortButton of sortButtons) {
+			const target = sortButton === evt.target;
+			sortButton.classList[target ? "add" : "remove"]("sorting");
+			sortButton.textContent = target ? "arrow_downward" : "sort";
+		}
+	}
+	localStorage.pipe_sortItems = sortValue = evt.target._sort;
+	evt.target.classList[(localStorage.pipe_reverseItems = reverseValue) ? "add" : "remove"]("reverse");
+	render();
+};
+for(const sortButton of sortButtons) {
+	if(sortValue === (sortButton._sort = sortButton.getAttribute("data-sort"))) {
+		sortButton.classList.add("sorting");
+		sortButton.textContent = "arrow_downward";
+		if(reverseValue) {
+			sortButton.classList.add("reverse");
+		}
+	}
+	sortButton.addEventListener("click", clickSort);
+}
 const checkName = async name => {
 	let takenItem;
 	let fullName = applyPath(name);
@@ -423,66 +483,6 @@ document.addEventListener("drop", evt => {
 		indicateTarget();
 	}
 }, true);
-const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
-titleBar.appendChild(html`
-	<span>
-		/ <a class="ancestor" href="#">${Miro.data.user.name}</a>
-	</span>
-`);
-const ancestors = document.body.querySelector("#ancestors");
-titleBar.appendChild(ancestors);
-let path = "";
-const getName = name => path ? name.slice(path.length + 1) : name;
-const applyPath = name => (path ? `${path}/` : "") + name;
-const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeURI(item.name)}`;
-const pipe = [];
-const cachedPaths = [];
-const getItem = pipe.find(item => item.name === name);
-const setItem = item => {
-	const itemIndex = pipe.findIndex(({id}) => id === item.id);
-	if(itemIndex === -1) {
-		pipe.push(item);
-	} else {
-		pipe.splice(itemIndex, 1, item);
-	}
-	return item;
-};
-const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
-const sort = {
-	name: (a, b) => b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1,
-	size: (a, b) => b.size - a.size || b.date - a.date,
-	type: (a, b) => b.type < a.type ? 1 : (b.type > a.type ? -1 : b.date - a.date),
-	date: (a, b) => b.date - a.date
-};
-const SORT_DEFAULT = "date";
-let sortValue = localStorage.pipe_sortItems in sort ? localStorage.pipe_sortItems : SORT_DEFAULT;
-let reverseValue = +localStorage.pipe_reverseItems;
-const header = document.body.querySelector("#header");
-const sortButtons = header.querySelectorAll(".cell.sort > button");
-const clickSort = evt => {
-	if(evt.target.classList.contains("sorting")) {
-		reverseValue = +!reverseValue;
-	} else {
-		for(const sortButton of sortButtons) {
-			const target = sortButton === evt.target;
-			sortButton.classList[target ? "add" : "remove"]("sorting");
-			sortButton.textContent = target ? "arrow_downward" : "sort";
-		}
-	}
-	localStorage.pipe_sortItems = sortValue = evt.target._sort;
-	evt.target.classList[(localStorage.pipe_reverseItems = reverseValue) ? "add" : "remove"]("reverse");
-	render();
-};
-for(const sortButton of sortButtons) {
-	if(sortValue === (sortButton._sort = sortButton.getAttribute("data-sort"))) {
-		sortButton.classList.add("sorting");
-		sortButton.textContent = "arrow_downward";
-		if(reverseValue) {
-			sortButton.classList.add("reverse");
-		}
-	}
-	sortButton.addEventListener("click", clickSort);
-}
 const render = () => {
 	while(ancestors.lastChild) {
 		ancestors.removeChild(ancestors.lastChild);
