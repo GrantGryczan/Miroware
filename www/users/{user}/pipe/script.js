@@ -490,3 +490,60 @@ const hashChange = () => {
 };
 hashChange();
 window.addEventListener("hashchange", hashChange);
+const updateSelection = () => {
+	const itemElements = items.querySelectorAll(".item.selected");
+	
+};
+let selectedItem = null;
+let focusedItem = null;
+const selectItem = (target, evt, button) => {
+	const superKey = evt.ctrlKey || evt.metaKey;
+	if(button === 2 && !(superKey || evt.shiftKey)) {
+		if(!target.classList.contains("selected")) {
+			for(const item of items.querySelectorAll(".item.selected")) {
+				item.classList.remove("selected");
+			}
+			target.classList.add("selected");
+			selectedItem = focusedItem = target;
+		}
+	} else if(evt.shiftKey) {
+		let selecting = !selectedItem;
+		const classListMethod = superKey && selectedItem && !selectedItem.classList.contains("selected") ? "remove" : "add";
+		for(const itemElement of items.querySelectorAll(".item")) {
+			if(itemElement === selectedItem || itemElement === target) {
+				if(selecting) {
+					itemElement.classList[classListMethod]("selected");
+					selecting = false;
+					continue;
+				} else {
+					itemElement.classList[classListMethod]("selected");
+					if(selectedItem !== target) {
+						selecting = true;
+					}
+				}
+			} else if(selecting) {
+				itemElement.classList[classListMethod]("selected");
+			} else if(!superKey) {
+				itemElement.classList.remove("selected");
+			}
+		}
+	} else {
+		selectedItem = target;
+		focusedItem = target;
+		if(superKey) {
+			target.classList.toggle("selected");
+		} else {
+			let othersSelected = false;
+			for(const itemElement of items.querySelectorAll(".item.selected")) {
+				if(itemElement !== target) {
+					othersSelected = true;
+					itemElement.classList.remove("selected");
+				}
+			}
+			if(target.classList[othersSelected ? "add" : "toggle"]("selected") === false) {
+				selectedItem = null;
+			}
+		}
+	}
+	updateSelection();
+};
