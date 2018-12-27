@@ -52,7 +52,7 @@ const indicateTarget = target => {
 };
 const checkName = async name => {
 	let takenItem;
-	let fullName = applyParent(name);
+	let fullName = applyPath(name);
 	while(takenItem = pipe.find(item => item.name === fullName)) {
 		const value = await new Miro.Dialog("Error", html`
 			<b>$${name}</b> already exists.
@@ -84,7 +84,7 @@ const checkName = async name => {
 		} else {
 			return false;
 		}
-		fullName = applyParent(name);
+		fullName = applyPath(name);
 	}
 	return name;
 };
@@ -196,7 +196,7 @@ class PipeFile {
 		Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 			"Content-Type": "application/octet-stream",
 			"X-Data": JSON.stringify({
-				name: applyParent(this.file.name)
+				name: applyPath(this.file.name)
 			})
 		}, this.file, xhr => {
 			this.xhr = xhr;
@@ -292,7 +292,7 @@ class PipeDirectory {
 		this.name = name;
 		Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 			"X-Data": JSON.stringify({
-				name: applyParent(this.name),
+				name: applyPath(this.name),
 				type: "/"
 			})
 		}).then(Miro.response(xhr => {
@@ -406,7 +406,9 @@ titleBar.appendChild(html`
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
 let path = "";
-const applyParent = name => (path ? `${path}/` : "") + name;
+const getName = name => path ? name.slice(path.length + 1) : name;
+const applyPath = name => (path ? `${path}/` : "") + name;
+const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeURI(item.name)}`;
 const pipe = [];
 const cachedPaths = [];
 const setItem = item => {
@@ -573,8 +575,45 @@ document.addEventListener("mousedown", evt => {
 	passive: true
 });
 document.addEventListener("mouseup", evt => {
-	if(mouseDown !== -1 && mouseTarget.parentNode._item && !mouseMoved) {
-		selectItem(mouseTarget.parentNode, evt, evt.button);
+	if(mouseDown !== -1 && mouseTarget.parentNode._item) {
+		if(mouseMoved) {
+			if(indicatedTarget) {
+				const sourcePath = path;
+				for(const itemElement of items.querySelectorAll(".item.selected")) {
+					itemElement.classList.remove("selected");
+					itemElement.classList.add("loading");
+					const targetName = indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
+					const name = getName(itemElement._item.name);
+					Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
+						name: targetName ? `${targetName}/${name}` : name
+					}).then(Miro.response(xhr => {
+						if(itemElement._item.type === "/") {
+							const prefix = `${itemElement._item.name}/`;
+							for(const item of pipe) {
+								if(item.name.startsWith(prefix)) {
+									item.name = xhr.response.name + item.name.slice(itemElement._item.name.length);
+								}
+							}
+						}
+						itemElement._item.name = xhr.response.name;
+						itemElement.classList.remove("loading");
+						if(sourcePath === path) {
+							render();
+						}
+					}, () => {
+						itemElement.classList.remove("loading");
+						updateSelection();
+					}));
+				}
+				if(!indicatedTarget.href) {
+					indicatedTarget.classList.add("selected");
+				}
+				indicateTarget();
+				updateSelection();
+			}
+		} else {
+			selectItem(mouseTarget.parentNode, evt, evt.button);
+		}
 	}
 	mouseTarget = null;
 	mouseDown = -1;
@@ -587,6 +626,23 @@ document.addEventListener("dblclick", evt => {
 		selectItem(evt.target.parentNode, evt, 2);
 		// TODO: open item
 	}
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("mousemove", evt => {
+	if(evt.clientX === mouseX && evt.clientY === mouseY) {
+		return;
+	}
+	mouseX = evt.clientX;
+	mouseY = evt.clientY;
+	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode._item) {
+		if(!mouseMoved) {
+			selectItem(mouseTarget.parentNode, evt, 2);
+		}
+		indicateTarget(evt.target.classList.contains("ancestor") ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
+	}
+	mouseMoved = true;
 }, {
 	capture: true,
 	passive: true
