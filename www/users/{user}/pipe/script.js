@@ -122,9 +122,17 @@ class PipeItem {
 		return this[_name];
 	}
 	set name(value) {
+		const oldName = this[_name];
+		const typeDirectory = this.type === "/";
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
-		this.element.href = this.type === "/" ? `#${value}` : getURL(this);
+		this.element.href = typeDirectory ? `#${value}` : getURL(this);
+		if(typeDirectory) {
+			const pathIndex = cachedPaths.indexOf(oldName);
+			if(pathIndex !== -1) {
+				cachedPaths.splice(pathIndex, 1, value);
+			}
+		}
 	}
 	get size() {
 		return this[_size];
@@ -593,6 +601,7 @@ document.addEventListener("mouseup", evt => {
 								const prefix = `${itemElement._item.name}/`;
 								for(const item of pipe) {
 									if(item.name.startsWith(prefix)) {
+										const oldName = item.name;
 										item.name = xhr.response.name + item.name.slice(itemElement._item.name.length);
 									}
 								}
