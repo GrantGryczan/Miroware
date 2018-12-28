@@ -809,7 +809,7 @@ const onInput = evt => {
 };
 properties.addEventListener("input", onInput);
 properties.addEventListener("change", onInput);
-properties.addEventListener("submit", evt => {
+properties.addEventListener("submit", async evt => {
 	evt.preventDefault();
 	const changedName = changed.includes(properties.elements.name);
 	if(changedName) {
