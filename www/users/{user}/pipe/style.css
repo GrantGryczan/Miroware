@@ -174,9 +174,9 @@
 .property {
 	margin-bottom: 8px;
 	& > .mdc-text-field {
-		width: calc(100% - 16px);
+		width: 100%;
 	}
 }
 .property[data-key="url"] > .mdc-text-field {
-	width: calc(100% - 64px);
+	width: calc(100% - 48px);
 }
