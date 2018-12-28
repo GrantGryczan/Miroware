@@ -730,6 +730,7 @@ const updateProperties = () => {
 				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = getURL(item);
 				property.url.classList.remove("hidden");
 			}
+			save.disabled = true;
 		}
 	} else {
 		selectionSize.textContent = "0 B";
