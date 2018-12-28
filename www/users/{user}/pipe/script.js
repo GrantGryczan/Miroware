@@ -690,16 +690,16 @@ const updateProperties = () => {
 	}
 	const selected = items.querySelectorAll(".item.selected");
 	if(selectionLength.textContent = selected.length) {
+		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
 		if(selected.length === 1) {
 			const item = selected[0]._item;
 			properties.elements.name.value = item.name;
-			properties.elements.name.classList.remove("hidden");
+			property.name.classList.remove("hidden");
 			properties.elements.type.value = item.type;
-			properties.elements.type.classList.remove("hidden");
+			property.type.classList.remove("hidden");
 			properties.elements.url.value = item.value;
-			properties.elements.url.classList.remove("hidden");
+			property.url.classList.remove("hidden");
 		}
-		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
 	} else {
 		selectionSize.textContent = "0 B";
 	}
