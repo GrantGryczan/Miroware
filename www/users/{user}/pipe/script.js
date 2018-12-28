@@ -250,7 +250,7 @@ class PipeItem {
 		if(this.type === "/") {
 			const pathIndex = cachedPaths.indexOf(this.name);
 			if(pathIndex !== -1) {
-				cachedPaths.splice(pathIndex, 1, value);
+				cachedPaths.splice(pathIndex, 1, this.name);
 			}
 			const prefix = `${this.name}/`;
 			for(const item of pipe) {
