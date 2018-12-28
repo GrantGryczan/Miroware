@@ -692,6 +692,7 @@ const updateProperties = () => {
 	}
 	const selected = items.querySelectorAll(".item.selected");
 	if(selectionLength.textContent = selected.length) {
+		property.actions.classList.remove("hidden");
 		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
 		if(selected.length === 1) {
 			const item = selected[0]._item;
