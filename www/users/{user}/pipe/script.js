@@ -682,9 +682,10 @@ const property = {};
 for(const propertyElement of properties.querySelectorAll("[data-key]")) {
 	property[propertyElement.getAttribute("data-key")] = propertyElement;
 }
+const linkPreview = property.url.querySelector("#linkPreview");
+const save = property.actions.querySelector("#save");
 const selectionLength = properties.querySelector("#selectionLength");
 const selectionSize = properties.querySelector("#selectionSize");
-const linkPreview = properties.querySelector("#linkPreview");
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
 const updateProperties = () => {
 	for(const propertyElement of Object.values(property)) {
@@ -713,5 +714,14 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	properties.elements.url.select();
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
+});
+save.addEventListener("click", () => {
+	
+});
+property.actions.querySelector("#download").addEventListener("click", () => {
+	
+});
+property.actions.querySelector("#delete").addEventListener("click", () => {
+	
 });
 updateProperties();
