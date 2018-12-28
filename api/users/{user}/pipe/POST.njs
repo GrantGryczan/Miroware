@@ -54,7 +54,7 @@ if(isMe) {
 				const parent = data.name.slice(0, slashIndex);
 				if(!this.user.pipe.some(item => item.type === "/" && item.name === parent)) {
 					this.value = {
-						error: "The parent directory does not exist."
+						error: "That path does not exist."
 					};
 					this.status = 422;
 					this.done();

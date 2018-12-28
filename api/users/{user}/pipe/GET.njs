@@ -3,7 +3,7 @@ if(isMe) {
 	if(this.req.query.path !== undefined) {
 		if(this.req.query.path && !this.user.pipe.some(item => item.type === "/" && item.name === this.req.query.path)) {
 			this.value = {
-				error: "The parent directory does not exist."
+				error: "That path does not exist."
 			};
 			this.status = 422;
 			this.done();
