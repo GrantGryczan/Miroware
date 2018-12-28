@@ -722,12 +722,12 @@ const updateProperties = () => {
 		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
 		if(selected.length === 1) {
 			const item = selected[0]._item;
-			properties.elements.name.value = getName(item.name);
+			properties.elements.name._prev = properties.elements.name.value = getName(item.name);
 			property.name.classList.remove("hidden");
 			if(item.type !== "/") {
-				properties.elements.type.value = item.type;
+				properties.elements.type._prev = properties.elements.type.value = item.type;
 				property.type.classList.remove("hidden");
-				properties.elements.url.value = linkPreview.href = getURL(item);
+				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = getURL(item);
 				property.url.classList.remove("hidden");
 			}
 		}
@@ -739,9 +739,6 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	properties.elements.url.select();
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
-});
-save.addEventListener("click", () => {
-	
 });
 property.actions.querySelector("#download").addEventListener("click", () => {
 	
@@ -785,5 +782,30 @@ const confirmRemoveItems = itemElements => {
 };
 property.actions.querySelector("#delete").addEventListener("click", () => {
 	confirmRemoveItems(items.querySelectorAll(".item.selected"));
+});
+for(const input of properties.elements) {
+	input._input = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
+}
+const changed = [];
+const onInput = evt => {
+	changed.length = 0;
+	for(const input of properties.elements) {
+		if(input._input && !input.classList.contains("hidden")) {
+			if(input.checkValidity()) {
+				if(input._prev !== Miro.value(input)) {
+					changed.push(input);
+				}
+			} else {
+				changed.length = 0;
+				break;
+			}
+		}
+	}
+	save.disabled = !changed.length;
+};
+properties.addEventListener("input", onInput);
+properties.addEventListener("change", onInput);
+properties.addEventListener("submit", () => {
+	
 });
 updateProperties();
