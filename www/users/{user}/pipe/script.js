@@ -708,7 +708,7 @@ const updateProperties = () => {
 	}
 };
 property.url.querySelector("#copyURL").addEventListener("click", () => {
-	properties.elements.name.select();
+	properties.elements.url.select();
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
 });
