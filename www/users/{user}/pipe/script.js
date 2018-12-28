@@ -559,6 +559,12 @@ window.addEventListener("hashchange", hashChange);
 let selectedItem = null;
 let focusedItem = null;
 const selectItem = (target, evt, button) => {
+	const apparentTop = target.offsetTop - header.offsetHeight;
+	if(apparentTop < items.parentNode.scrollTop) {
+		items.parentNode.scrollTop = apparentTop;
+	} else if(target.offsetTop + target.offsetHeight > items.parentNode.scrollTop + items.parentNode.offsetHeight) {
+		items.parentNode.scrollTop = target.offsetTop + target.offsetHeight - items.parentNode.offsetHeight;
+	}
 	const superKey = evt.ctrlKey || evt.metaKey;
 	if(button === 2 && !(superKey || evt.shiftKey)) {
 		if(!target.classList.contains("selected")) {
