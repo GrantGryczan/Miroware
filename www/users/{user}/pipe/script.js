@@ -514,6 +514,7 @@ const render = () => {
 	for(const item of reverseValue ? itemArray.reverse() : itemArray) {
 		items.appendChild(item.element);
 	}
+	updateProperties();
 };
 const hashChange = () => {
 	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
