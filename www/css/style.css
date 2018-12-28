@@ -231,6 +231,7 @@ main {
 	height: 40px;
 	width: 40px;
 	padding: 0;
+	border-radius: 20px;
 	vertical-align: middle;
 	&:not(:disabled) {
 		color: rgba(255, 255, 255, 0.38);
@@ -248,7 +249,6 @@ main {
 		vertical-align: bottom;
 	}
 	&.mdc-button--raised {
-		border-radius: 20px;
 		color: rgba(255, 255, 255, 0.625);
 	}
 }
