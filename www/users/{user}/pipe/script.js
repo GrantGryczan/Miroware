@@ -680,3 +680,36 @@ document.addEventListener("mousemove", evt => {
 	capture: true,
 	passive: true
 });
+const properties = document.body.querySelector("#properties");
+const property = {};
+for(const propertyElement of properties.querySelectorAll("[data-key]")) {
+	property[propertyElement.getAttribute("data-key")] = propertyElement;
+}
+const selectionLength = document.body.querySelector("#selectionLength");
+const selectionSize = document.body.querySelector("#selectionSize");
+const sizeReducer = (size, itemElement) => size + itemElement._item.size;
+const updateProperties = () => {
+	for(const property of Object.keys(property)) {
+		property.classList.add("hidden");
+	}
+	const selected = items.querySelectorAll(".item.selected");
+	if(selectionLength.textContent = selected.length) {
+		if(selected.length === 1) {
+			const item = selected[0]._item;
+			properties.elmeents.name.value = item.name;
+			properties.elmeents.name.classList.remove("hidden");
+			properties.elmeents.type.value = item.type;
+			properties.elmeents.type.classList.remove("hidden");
+			properties.elmeents.url.value = item.value;
+			properties.elmeents.url.classList.remove("hidden");
+		}
+		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
+	} else {
+		selectionSize.textContent = "0 B";
+	}
+};
+property.url.querySelector("#copyURL").addEventListener("click", () => {
+	properties.elemnets.name.select();
+	document.execCommand("copy");
+	Miro.snackbar("URL copied to clipboard");
+});

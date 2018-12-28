@@ -69,7 +69,7 @@ this.value += html`
 						<div id="items" class="items"></div>
 					</div>
 				</div>
-				<form class="panel side right">
+				<form id="properties" class="panel side right">
 					<div class="property hidden" data-key="name">
 						<div class="mdc-text-field">
 							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
@@ -90,8 +90,9 @@ this.value += html`
 							<label class="mdc-floating-label" for="url">URL</label>
 							<div class="mdc-line-ripple"></div>
 						</div><button id="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
-						<a target="_blank">Preview link</a>
+						<a target="_blank">Preview link</a><br>
 					</div>
+					Selected items: <b id="selectionLength"></b> (<b id="selectionSize"></b>)<br>
 				</form>
 			</div>`;
 this.value += (await load("load/belt", this)).value;
