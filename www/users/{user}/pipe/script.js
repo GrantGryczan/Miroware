@@ -838,10 +838,14 @@ properties.addEventListener("submit", async evt => {
 		if(changedType) {
 			itemElement._item.type = xhr.response.type;
 		}
+		Miro.formState(properties, true);
+		save.disabled = true;
 		render();
+	}, () => {
+		Miro.formState(properties, true);
+		save.disabled = false;
 	})).finally(() => {
 		itemElement.classList.remove("loading");
-		Miro.formState(properties, true);
 	});
 });
 updateProperties();
