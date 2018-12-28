@@ -2,11 +2,11 @@
 const form = document.body.querySelector("#form");
 const submit = form.querySelector("#save");
 for(const input of form.elements) {
-	input._element = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
+	input._input = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
 }
 const savePrevs = () => {
 	for(const input of form.elements) {
-		if(input._element) {
+		if(input._input) {
 			input._prev = Miro.value(input);
 		}
 	}
@@ -16,7 +16,7 @@ const changed = [];
 const onInput = evt => {
 	changed.length = 0;
 	for(const input of form.elements) {
-		if(input._element) {
+		if(input._input) {
 			if(input.checkValidity()) {
 				if(input._prev !== Miro.value(input)) {
 					changed.push(input);
