@@ -609,6 +609,13 @@ const selectItem = (target, evt, button) => {
 	}
 	updateProperties();
 };
+const deselectItems = () => {
+	for(const item of items.querySelectorAll(".item.selected")) {
+		item.classList.remove("selected");
+	}
+	selectedItem = focusedItem = null;
+	updateProperties();
+};
 let mouseX = 0;
 let mouseY = 0;
 let mouseTarget;
@@ -663,11 +670,7 @@ document.addEventListener("mouseup", evt => {
 				selectItem(mouseTarget.parentNode, evt, evt.button);
 			}
 		} else if(!mouseMoved) {
-			for(const item of items.querySelectorAll(".item.selected")) {
-				item.classList.remove("selected");
-			}
-			selectedItem = focusedItem = null;
-			updateProperties();
+			deselectItems();
 		}
 	}
 	mouseTarget = null;
@@ -756,22 +759,21 @@ const removeItem = itemElement => {
 		itemElement.classList.remove("loading");
 	}));
 };
-const confirmRemoveItem = itemElement => {
-	new Miro.Dialog("Remove Item", html`
-		Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>
-		Items inside directories will also be removed.<br>
-		This cannot be undone.
-	`, ["Yes", "No"]).then(value => {
-		if(value === 0) {
-			removeItem(itemElement);
-		}
-	});
-};
-const confirmRemoveItems = itemElements => {
+const removeItems = () => {
+	const itemElements = items.querySelectorAll(".item.selected");
 	if(itemElements.length) {
 		if(itemElements.length === 1) {
-			confirmRemoveItem(itemElements[0]);
-		} else if(itemElements.length !== 1) {
+			const itemElement = itemElements[0];
+			new Miro.Dialog("Remove Item", html`
+				Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>
+				Items inside directories will also be removed.<br>
+				This cannot be undone.
+			`, ["Yes", "No"]).then(value => {
+				if(value === 0) {
+					removeItem(itemElement);
+				}
+			});
+		} else {
 			new Miro.Dialog("Remove Items", html`
 				Are you sure you want to remove all those items?<br>
 				Items inside directories will also be removed.<br>
@@ -784,9 +786,7 @@ const confirmRemoveItems = itemElements => {
 		}
 	}
 };
-property.actions.querySelector("#delete").addEventListener("click", () => {
-	confirmRemoveItems(items.querySelectorAll(".item.selected"));
-});
+property.actions.querySelector("#delete").addEventListener("click", removeItems);
 for(const input of properties.elements) {
 	input._input = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
 }
@@ -849,3 +849,39 @@ properties.addEventListener("submit", async evt => {
 	});
 });
 updateProperties();
+document.addEventListener("keydown", evt => {
+	if(!Miro.typing() && Miro.focused()) {
+		const superKey = evt.ctrlKey || evt.metaKey;
+		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
+			removeItems();
+		} else if(evt.keyCode === 13) { // `enter`
+			// TODO: open
+		} else if(evt.keyCode === 27) { // `esc`
+			deselectItems();
+		} else if(evt.keyCode === 38) { // `up`
+			evt.preventDefault();
+			const item = focusedItem ? focusedItem.previousElementSibling || items.lastElementChild : items.firstElementChild;
+			if(item) {
+				focusedItem = item;
+				if(evt.shiftKey || !superKey) {
+					selectItem(item, evt);
+				}
+			}
+		} else if(evt.keyCode === 40) { // `down`
+			evt.preventDefault();
+			const item = focusedItem ? focusedItem.nextElementSibling || items.firstElementChild : items.firstElementChild;
+			if(item) {
+				focusedItem = item;
+				if(evt.shiftKey || !superKey) {
+					selectItem(item, evt);
+				}
+			}
+		} else if(evt.keyCode === 65) { // ^`A`
+			evt.preventDefault();
+			for(const item of items.querySelectorAll(".item:not(.selected)")) {
+				item.classList.add("selected");
+			}
+			updateProperties();
+		}
+	}
+}, true);
