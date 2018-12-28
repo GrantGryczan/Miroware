@@ -689,7 +689,7 @@ const selectionLength = document.body.querySelector("#selectionLength");
 const selectionSize = document.body.querySelector("#selectionSize");
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
 const updateProperties = () => {
-	for(const propertyElement of Object.keys(property)) {
+	for(const propertyElement of Object.values(property)) {
 		propertyElement.classList.add("hidden");
 	}
 	const selected = items.querySelectorAll(".item.selected");
