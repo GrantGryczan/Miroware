@@ -695,10 +695,12 @@ const updateProperties = () => {
 			const item = selected[0]._item;
 			properties.elements.name.value = item.name;
 			property.name.classList.remove("hidden");
-			properties.elements.type.value = item.type;
-			property.type.classList.remove("hidden");
-			properties.elements.url.value = item.value;
-			property.url.classList.remove("hidden");
+			if(item.type !== "/") {
+				properties.elements.type.value = item.type;
+				property.type.classList.remove("hidden");
+				properties.elements.url.value = item.value;
+				property.url.classList.remove("hidden");
+			}
 		}
 	} else {
 		selectionSize.textContent = "0 B";

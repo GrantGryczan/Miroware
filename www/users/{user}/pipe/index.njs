@@ -90,7 +90,7 @@ this.value += html`
 							<label class="mdc-floating-label" for="url">URL</label>
 							<div class="mdc-line-ripple"></div>
 						</div><button id="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
-						<a target="_blank">Preview link</a><br>
+						<a id="linkPreview" target="_blank">Preview link</a><br>
 					</div>
 					Selected items: <b id="selectionLength"></b> (<b id="selectionSize"></b>)<br>
 				</form>
