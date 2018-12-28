@@ -253,7 +253,7 @@ class PipeItem {
 		if(this.type === "/") {
 			const pathIndex = cachedPaths.indexOf(this.name);
 			if(pathIndex !== -1) {
-				cachedPaths.splice(pathIndex, 1, this.name);
+				cachedPaths.splice(pathIndex, 1);
 			}
 			const prefix = `${this.name}/`;
 			for(const item of pipe) {
@@ -262,6 +262,7 @@ class PipeItem {
 				}
 			}
 		}
+		console.log(pipe);
 		let ancestry = "";
 		for(const name of this.name.split("/").slice(0, -1)) {
 			const item = getItem(ancestry += (ancestry && "/") + name);
