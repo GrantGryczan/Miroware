@@ -32,6 +32,7 @@
 }
 .panel {
 	padding: 0 8px;
+	box-sizing: border-box;
 	&.side {
 		flex-shrink: 0;
 		width: 256px;
