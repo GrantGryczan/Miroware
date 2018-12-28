@@ -811,10 +811,12 @@ properties.addEventListener("input", onInput);
 properties.addEventListener("change", onInput);
 properties.addEventListener("submit", async evt => {
 	evt.preventDefault();
+	Miro.formState(properties, false);
 	const changedName = changed.includes(properties.elements.name);
 	if(changedName) {
 		let name = await checkName(properties.elements.name.value);
 		if(!name) {
+			Miro.formState(properties, true);
 			return;
 		}
 		properties.elements.name.value = name;
@@ -839,6 +841,7 @@ properties.addEventListener("submit", async evt => {
 		render();
 	})).finally(() => {
 		itemElement.classList.remove("loading");
+		Miro.formState(properties, true);
 	});
 });
 updateProperties();
