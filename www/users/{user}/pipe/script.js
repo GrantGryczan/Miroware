@@ -530,10 +530,6 @@ const hashChange = () => {
 };
 hashChange();
 window.addEventListener("hashchange", hashChange);
-const updateSelection = () => {
-	const itemElements = items.querySelectorAll(".item.selected");
-	
-};
 let selectedItem = null;
 let focusedItem = null;
 const selectItem = (target, evt, button) => {
@@ -585,7 +581,7 @@ const selectItem = (target, evt, button) => {
 			}
 		}
 	}
-	updateSelection();
+	updateProperties();
 };
 let mouseX = 0;
 let mouseY = 0;
@@ -629,7 +625,7 @@ document.addEventListener("mouseup", evt => {
 							}
 						}, () => {
 							itemElement.classList.remove("loading");
-							updateSelection();
+							updateProperties();
 						}));
 					}
 					if(!indicatedTarget.href) {
@@ -645,7 +641,7 @@ document.addEventListener("mouseup", evt => {
 				item.classList.remove("selected");
 			}
 			selectedItem = focusedItem = null;
-			updateSelection();
+			updateProperties();
 		}
 	}
 	mouseTarget = null;
