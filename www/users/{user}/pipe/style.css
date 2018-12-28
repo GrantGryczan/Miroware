@@ -167,3 +167,9 @@
 .size, .type, .date {
 	width: 15%;
 }
+.property > .mdc-text-field {
+	width: calc(100% - 16px);
+	[data-key="url"]& {
+		width: calc(100% - 64px);
+	}
+}

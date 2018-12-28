@@ -681,8 +681,9 @@ const property = {};
 for(const propertyElement of properties.querySelectorAll("[data-key]")) {
 	property[propertyElement.getAttribute("data-key")] = propertyElement;
 }
-const selectionLength = document.body.querySelector("#selectionLength");
-const selectionSize = document.body.querySelector("#selectionSize");
+const selectionLength = properties.querySelector("#selectionLength");
+const selectionSize = properties.querySelector("#selectionSize");
+const linkPreview = properties.querySelector("#linkPreview");
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
 const updateProperties = () => {
 	for(const propertyElement of Object.values(property)) {
@@ -698,7 +699,7 @@ const updateProperties = () => {
 			if(item.type !== "/") {
 				properties.elements.type.value = item.type;
 				property.type.classList.remove("hidden");
-				properties.elements.url.value = getURL(item);
+				properties.elements.url.value = linkPreview.href = getURL(item);
 				property.url.classList.remove("hidden");
 			}
 		}

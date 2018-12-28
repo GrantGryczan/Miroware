@@ -72,21 +72,21 @@ this.value += html`
 				<form id="properties" class="panel side right">
 					<div class="property hidden" data-key="name">
 						<div class="mdc-text-field">
-							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
 							<label class="mdc-floating-label" for="name">Name</label>
 							<div class="mdc-line-ripple"></div>
 						</div><br>
 					</div>
 					<div class="property hidden" data-key="type">
 						<div class="mdc-text-field">
-							<input id="type" name="type" class="mdc-text-field__input" type="text" maxlength="255" size="24" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?=]+$" spellcheck="false" required>
+							<input id="type" name="type" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?=]+$" spellcheck="false" required>
 							<label class="mdc-floating-label" for="type">Type</label>
 							<div class="mdc-line-ripple"></div>
 						</div><br>
 					</div>
 					<div class="property hidden" data-key="url">
 						<div class="mdc-text-field spaced">
-							<input id="url" name="url" class="mdc-text-field__input" type="url" size="24" readonly>
+							<input id="url" name="url" class="mdc-text-field__input" type="url" readonly>
 							<label class="mdc-floating-label" for="url">URL</label>
 							<div class="mdc-line-ripple"></div>
 						</div><button id="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
