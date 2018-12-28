@@ -169,7 +169,7 @@
 }
 .property > .mdc-text-field {
 	width: calc(100% - 16px);
-	[data-key="url"]& {
-		width: calc(100% - 64px);
-	}
+}
+.property[data-key="url"] > .mdc-text-field {
+	width: calc(100% - 64px);
 }
