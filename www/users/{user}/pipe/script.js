@@ -809,7 +809,36 @@ const onInput = evt => {
 };
 properties.addEventListener("input", onInput);
 properties.addEventListener("change", onInput);
-properties.addEventListener("submit", () => {
-	
+properties.addEventListener("submit", evt => {
+	evt.preventDefault();
+	const changedName = changed.includes(properties.elements.name);
+	if(changedName) {
+		let name = await checkName(properties.elements.name.value);
+		if(!name) {
+			return;
+		}
+		properties.elements.name.value = name;
+	}
+	const itemElement = items.querySelector(".item.selected");
+	itemElement.classList.add("loading");
+	const data = {};
+	if(changedName) {
+		data.name = applyPath(properties.elements.name.value);
+	}
+	const changedType = changed.includes(properties.elements.type);
+	if(changedType) {
+		data.type = properties.elements.type.value;
+	}
+	Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+		if(changedName) {
+			itemElement._item.name = xhr.response.name;
+		}
+		if(changedType) {
+			itemElement._item.type = xhr.response.type;
+		}
+		render();
+	})).finally(() => {
+		itemElement.classList.remove("loading");
+	});
 });
 updateProperties();
