@@ -201,16 +201,14 @@ class PipeItem {
 				}
 			}
 			let ancestry = "";
-			let names = oldName.split("/").slice(0, -1);
-			for(const name of names) {
+			for(const name of oldName.split("/").slice(0, -1)) {
 				const item = getItem(ancestry += (ancestry && "/") + name);
 				if(item) {
 					item.size -= this.size;
 				}
 			}
 			ancestry = "";
-			names = this.name.split("/").slice(0, -1);
-			for(const name of names) {
+			for(const name of this.name.split("/").slice(0, -1)) {
 				const item = getItem(ancestry += (ancestry && "/") + name);
 				if(item) {
 					item.size += this.size;
@@ -241,6 +239,34 @@ class PipeItem {
 	}
 	click(evt) {
 		evt.preventDefault();
+	}
+	delete() {
+		if(selectedItem === this.element) {
+			selectedItem = null;
+		}
+		if(focusedItem === this.element) {
+			focusedItem = null;
+		}
+		if(this.type === "/") {
+			const pathIndex = cachedPaths.indexOf(this.name);
+			if(pathIndex !== -1) {
+				cachedPaths.splice(pathIndex, 1, value);
+			}
+			const prefix = `${this.name}/`;
+			for(const item of pipe) {
+				if(item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
+					item.delete();
+				}
+			}
+		}
+		let ancestry = "";
+		for(const name of this.name.split("/").slice(0, -1)) {
+			const item = getItem(ancestry += (ancestry && "/") + name);
+			if(item) {
+				item.size -= this.size;
+			}
+		}
+		pipe.splice(pipe.indexOf(this), 1);
 	}
 }
 const creation = container.querySelector("#creation");
@@ -495,8 +521,7 @@ const render = () => {
 	}
 	if(path) {
 		let ancestry = "";
-		const names = path.split("/");
-		for(const name of names) {
+		for(const name of path.split("/")) {
 			ancestors.appendChild(html`
 				<span>
 					/ <a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>
@@ -721,7 +746,44 @@ save.addEventListener("click", () => {
 property.actions.querySelector("#download").addEventListener("click", () => {
 	
 });
+const removeItem = itemElement => {
+	itemElement.classList.add("loading");
+	Miro.request("DELETE", `/users/@me/pipe/${itemElement._item.id}`).then(Miro.response(() => {
+		itemElement._item.delete();
+		render();
+	}, () => {
+		itemElement.classList.remove("loading");
+	}));
+};
+const confirmRemoveItem = itemElement => {
+	new Miro.Dialog("Remove Item", html`
+		Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>
+		Items inside directories will also be removed.<br>
+		This cannot be undone.
+	`, ["Yes", "No"]).then(value => {
+		if(value === 0) {
+			removeItem(itemElement);
+		}
+	});
+};
+const confirmRemoveItems = itemElements => {
+	if(itemElements.length) {
+		if(itemElements.length === 1) {
+			confirmRemoveItem(itemElements[0]);
+		} else if(itemElements.length !== 1) {
+			new Miro.Dialog("Remove Items", html`
+				Are you sure you want to remove all those items?<br>
+				Items inside directories will also be removed.<br>
+				This cannot be undone.
+			`, ["Yes", "No"]).then(value => {
+				if(value === 0) {
+					itemElements.forEach(removeItem);
+				}
+			});
+		}
+	}
+};
 property.actions.querySelector("#delete").addEventListener("click", () => {
-	
+	confirmRemoveItems(items.querySelectorAll(".item.selected"));
 });
 updateProperties();
