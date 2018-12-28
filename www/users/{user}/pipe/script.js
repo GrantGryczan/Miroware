@@ -724,14 +724,14 @@ const updateProperties = () => {
 			const item = selected[0]._item;
 			properties.elements.name._prev = properties.elements.name.value = getName(item.name);
 			property.name.classList.remove("hidden");
-			property.name.parentNode.classList.remove("mdc-text-field--invalid");
+			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			if(item.type !== "/") {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				property.type.classList.remove("hidden");
-				property.type.parentNode.classList.remove("mdc-text-field--invalid");
+				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
 				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = getURL(item);
 				property.url.classList.remove("hidden");
-				property.url.parentNode.classList.remove("mdc-text-field--invalid");
+				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 			}
 			save.disabled = true;
 		}
