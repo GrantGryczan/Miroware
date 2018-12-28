@@ -694,7 +694,7 @@ const updateProperties = () => {
 		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
 		if(selected.length === 1) {
 			const item = selected[0]._item;
-			properties.elements.name.value = item.name;
+			properties.elements.name.value = getName(item.name);
 			property.name.classList.remove("hidden");
 			if(item.type !== "/") {
 				properties.elements.type.value = item.type;
