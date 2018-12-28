@@ -93,7 +93,7 @@ this.value += html`
 						<a id="linkPreview" target="_blank">Preview link</a><br>
 					</div>
 					<div class="marginedMore">
-						<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" disabled>Save</button><button id="download" class="mdc-button spaced mdc-ripple">Download</button><button id="delete" class="mdc-button spaced mdc-ripple">Delete</button><br>
+						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><button id="download" class="mdc-icon-button material-icons spaced mdc-ripple" title="Download">download</button><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple" title="Delete">delete</button><br>
 						<br>
 						Selected items: <b id="selectionLength"></b> (<b id="selectionSize"></b>)
 					</div>
