@@ -271,6 +271,13 @@ class PipeItem {
 		}
 		pipe.splice(pipe.indexOf(this), 1);
 	}
+	open() {
+		if(this.type === "/") {
+			location.href = this.element.href;
+		} else {
+			open(this.element.href);
+		}
+	}
 }
 const creation = container.querySelector("#creation");
 const queuedItems = container.querySelector("#queuedItems");
@@ -691,7 +698,7 @@ document.addEventListener("mouseup", evt => {
 document.addEventListener("dblclick", evt => {
 	if(!mouseMoved && evt.target.parentNode._item) {
 		selectItem(evt.target.parentNode, evt, 2);
-		// TODO: open item
+		evt.target.parentNode._item.open();
 	}
 }, {
 	capture: true,
@@ -864,7 +871,10 @@ document.addEventListener("keydown", evt => {
 		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
 			removeItems();
 		} else if(evt.keyCode === 13) { // `enter`
-			// TODO: open
+			const itemElement = items.querySelector(".item.selected");
+			if(itemElement) {
+				itemElement._item.open();
+			}
 		} else if(evt.keyCode === 27) { // `esc`
 			deselectItems();
 		} else if(evt.keyCode === 38) { // `up`
