@@ -698,7 +698,7 @@ const updateProperties = () => {
 			if(item.type !== "/") {
 				properties.elements.type.value = item.type;
 				property.type.classList.remove("hidden");
-				properties.elements.url.value = item.value;
+				properties.elements.url.value = getURL(item);
 				property.url.classList.remove("hidden");
 			}
 		}
