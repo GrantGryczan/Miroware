@@ -871,6 +871,7 @@ document.addEventListener("keydown", evt => {
 		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
 			removeItems();
 		} else if(evt.keyCode === 13) { // `enter`
+			evt.preventDefault();
 			const itemElement = items.querySelector(".item.selected");
 			if(itemElement) {
 				itemElement._item.open();
