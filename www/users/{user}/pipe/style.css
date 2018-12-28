@@ -167,6 +167,9 @@
 .size, .type, .date {
 	width: 15%;
 }
+#properties {
+	color: rgba(255, 255, 255, 0.6);
+}
 .property {
 	margin-bottom: 8px;
 	& > .mdc-text-field {

@@ -92,7 +92,9 @@ this.value += html`
 						</div><button id="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
 						<a id="linkPreview" target="_blank">Preview link</a><br>
 					</div>
-					Selected items: <b id="selectionLength"></b> (<b id="selectionSize"></b>)
+					<div class="marginedMore">
+						Selected items: <b id="selectionLength"></b> (<b id="selectionSize"></b>)
+					</div>
 				</form>
 			</div>`;
 this.value += (await load("load/belt", this)).value;
