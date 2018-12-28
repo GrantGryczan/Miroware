@@ -262,7 +262,6 @@ class PipeItem {
 				}
 			}
 		}
-		console.log(pipe);
 		let ancestry = "";
 		for(const name of this.name.split("/").slice(0, -1)) {
 			const item = getItem(ancestry += (ancestry && "/") + name);
