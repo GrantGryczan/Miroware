@@ -121,7 +121,7 @@ const checkName = async name => {
 			if(await new Miro.Dialog("Replace", html`
 				Are you sure you want to replace <b>$${name}</b>?
 			`, ["Yes", "No"]) === 0) {
-				// TODO: delete takenItem
+				Miro.response(render)(await Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${takenItem.id}`));
 			}
 		} else if(value === 1) {
 			const dialog = new Miro.Dialog("Rename", html`
