@@ -713,3 +713,4 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
 });
+updateProperties();
