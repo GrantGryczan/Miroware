@@ -692,12 +692,12 @@ const updateProperties = () => {
 	if(selectionLength.textContent = selected.length) {
 		if(selected.length === 1) {
 			const item = selected[0]._item;
-			properties.elmeents.name.value = item.name;
-			properties.elmeents.name.classList.remove("hidden");
-			properties.elmeents.type.value = item.type;
-			properties.elmeents.type.classList.remove("hidden");
-			properties.elmeents.url.value = item.value;
-			properties.elmeents.url.classList.remove("hidden");
+			properties.elements.name.value = item.name;
+			properties.elements.name.classList.remove("hidden");
+			properties.elements.type.value = item.type;
+			properties.elements.type.classList.remove("hidden");
+			properties.elements.url.value = item.value;
+			properties.elements.url.classList.remove("hidden");
 		}
 		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
 	} else {
