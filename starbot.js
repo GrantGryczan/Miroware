@@ -64,7 +64,7 @@ const sendHelp = (msg, perm) => {
 	if(noGuild || data.guilds[msg.guild.id][0]) {
 		let help = noGuild ? "" : `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURI(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if(perm || noGuild) {
-			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID> [<source channel tag> [target channel tag]]\`\nStar a message manually. If you are entering the command in a channel other than the one the desired message is not in, the second parameter should be that channel. The other channel tag makes it post the star embed to that channel instead of the default starboard.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
+			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID> [<source channel tag> [target channel tag]]\`\nStar a message manually. If you are entering the command in a channel other than the one the desired message is not in, the second parameter should be that channel. The other channel tag makes it post the star embed to that channel instead of the default starboard.\n\n\`>⭐selfstar\`\nToggle whether users can star their own messages. This is enabled by default.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
 		}
 		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
 		msg.channel.send(help).catch(errSendMessages(msg));
@@ -154,9 +154,16 @@ const star = (msg, callback, channel) => {
 		noStarboard(msg.guild);
 	}
 };
-client.on("messageReactionAdd", reaction => {
-	if(!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1] && reaction.count >= data.guilds[reaction.message.guild.id][2]) {
-		star(reaction.message);
+client.on("messageReactionAdd", async reaction => {
+	if(!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1]) {
+		let {count} = reaction;
+		if(reaction.users.has(reaction.message.author.id)) {
+			count--;
+			reaction.message.channel.send(`${reaction.message.author} Trying to star your own message, eh? Well that star doesn't count on this server.`);
+		}
+		if(count >= data.guilds[reaction.message.guild.id][2]) {
+			star(reaction.message);
+		}
 	}
 });
 client.on("message", async msg => {
@@ -172,54 +179,63 @@ client.on("message", async msg => {
 				content = content.replace(prefix, "");
 				if(content) {
 					content = content.replace(spaces, " ");
-					const old1 = data.guilds[msg.guild.id][1];
-					data.guilds[msg.guild.id][1] = null;
-					msg.react(content).then(reaction => {
-						reaction.users.remove(client.user).then(() => {
-							data.guilds[msg.guild.id][1] = reaction.emoji.identifier;
-							save();
-							msg.channel.send(`${msg.author} Members now have to react with the ${content} emoji to get a message starred.`).catch(errSendMessages(msg));
-						});
-					}).catch(err => {
-						data.guilds[msg.guild.id][1] = old1;
+					if(content === "selfstar") {
+						if(data.guilds[msg.guild.id][4]) {
+							data.guilds[msg.guild.id].splice(4, 1);
+						} else {
+							data.guilds[msg.guild.id][4] = 1;
+						}
 						save();
-						const contentArray = content.split(" ");
-						((contentArray[1] && channelTest.test(contentArray[1]) ? msg.guild.channels.get(contentArray[1].replace(channelTest, "$1")) : false) || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
-							star(msg2, () => {
-								msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
-							}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
-						}).catch(() => {
-							if(channelTest.test(content)) {
-								const starboard = content.replace(channelTest, "$1");
-								if(msg.guild.channels.get(starboard)) {
-									data.guilds[msg.guild.id][0] = starboard;
-									save();
-									msg.channel.send(`${msg.author} The starboard channel has been set to ${content}.`).catch(errSendMessages(msg));
+					} else {
+						const old1 = data.guilds[msg.guild.id][1];
+						data.guilds[msg.guild.id][1] = null;
+						msg.react(content).then(reaction => {
+							reaction.users.remove(client.user).then(() => {
+								data.guilds[msg.guild.id][1] = reaction.emoji.identifier;
+								save();
+								msg.channel.send(`${msg.author} Members now have to react with the ${content} emoji to get a message starred.`).catch(errSendMessages(msg));
+							});
+						}).catch(err => {
+							data.guilds[msg.guild.id][1] = old1;
+							save();
+							const contentArray = content.split(" ");
+							((contentArray[1] && channelTest.test(contentArray[1]) ? msg.guild.channels.get(contentArray[1].replace(channelTest, "$1")) : false) || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
+								star(msg2, () => {
+									msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
+								}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
+							}).catch(() => {
+								if(channelTest.test(content)) {
+									const starboard = content.replace(channelTest, "$1");
+									if(msg.guild.channels.get(starboard)) {
+										data.guilds[msg.guild.id][0] = starboard;
+										save();
+										msg.channel.send(`${msg.author} The starboard channel has been set to ${content}.`).catch(errSendMessages(msg));
+									} else {
+										msg.channel.send(`${msg.author} That channel does not exist, or I do not have permission to read messages in it.`).catch(errSendMessages(msg));
+									}
 								} else {
-									msg.channel.send(`${msg.author} That channel does not exist, or I do not have permission to read messages in it.`).catch(errSendMessages(msg));
+									const reactionCount = parseInt(content);
+									if(reactionCount) {
+										data.guilds[msg.guild.id][2] = Math.abs(reactionCount);
+										save();
+										msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to get a message starred.`).catch(errSendMessages(msg));
+									} else if(colorTest.test(content)) {
+										const code = content.replace(colorTest, "$1$1$2$2$3$3$4");
+										data.guilds[msg.guild.id][3] = parseInt(code, 16);
+										save();
+										msg.channel.send(`The starred embed color has been changed to \`#${code}\`.\n(The default starred embed color is \`#ffac33\`.)`, {
+											embed: {
+												title: `#${code}`,
+												color: data.guilds[msg.guild.id][3]
+											}
+										}).catch(errEmbedLinks(msg));
+									} else {
+										sendHelp(msg, perm);
+									}
 								}
-							} else {
-								const reactionCount = parseInt(content);
-								if(reactionCount) {
-									data.guilds[msg.guild.id][2] = Math.abs(reactionCount);
-									save();
-									msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to get a message starred.`).catch(errSendMessages(msg));
-								} else if(colorTest.test(content)) {
-									const code = content.replace(colorTest, "$1$1$2$2$3$3$4");
-									data.guilds[msg.guild.id][3] = parseInt(code, 16);
-									save();
-									msg.channel.send(`The starred embed color has been changed to \`#${code}\`.\n(The default starred embed color is \`#ffac33\`.)`, {
-										embed: {
-											title: `#${code}`,
-											color: data.guilds[msg.guild.id][3]
-										}
-									}).catch(errEmbedLinks(msg));
-								} else {
-									sendHelp(msg, perm);
-								}
-							}
+							});
 						});
-					});
+					}
 				} else {
 					sendHelp(msg, perm);
 				}
