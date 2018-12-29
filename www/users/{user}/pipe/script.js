@@ -487,7 +487,9 @@ document.addEventListener("paste", async evt => {
 			dialog.form.elements.name.focus();
 			const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
 			dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
-			if(await dialog !== 0) {
+			if(await dialog === 0) {
+				name = dialog.form.elements.name.value;
+			} else {
 				return;
 			}
 			Object.defineProperty(file, "name", {
