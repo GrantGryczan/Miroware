@@ -308,7 +308,7 @@ const updateQueue = () => {
 		creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
 	}
 };
-window.onbeforeunload = () => container.querySelector(".loading") || undefined;
+window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
 class PipeFile {
 	constructor(file) {
 		this.path = path;
@@ -693,9 +693,6 @@ document.addEventListener("mouseup", evt => {
 							updateProperties();
 						}));
 					}
-					if(!indicatedTarget.href) {
-						indicatedTarget.classList.add("selected");
-					}
 					indicateTarget();
 				}
 			} else {
@@ -789,6 +786,7 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	Miro.snackbar("URL copied to clipboard");
 });
 const removeItem = itemElement => {
+	itemElement.classList.remove("selected");
 	itemElement.classList.add("loading");
 	Miro.request("DELETE", `/users/@me/pipe/${itemElement._item.id}`).then(Miro.response(() => {
 		itemElement._item.delete();
@@ -860,6 +858,7 @@ properties.addEventListener("submit", async evt => {
 		properties.elements.name.value = name;
 	}
 	const itemElement = items.querySelector(".item.selected");
+	itemElement.classList.remove("selected");
 	itemElement.classList.add("loading");
 	const data = {};
 	if(changedName) {
