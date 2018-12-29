@@ -182,7 +182,7 @@ class PipeItem {
 		this.size = item.size;
 		this.date = new Date(item.date);
 		this.element.addEventListener("click", this.click.bind(this));
-		this.iconElement.addEventListener("click", this.clickButton.bind(this));
+		this.iconElement.addEventListener("click", this.clickButton.bind(this), true);
 	}
 	get name() {
 		return this[_name];
