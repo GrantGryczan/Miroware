@@ -157,7 +157,7 @@ const star = (msg, callback, channel) => {
 client.on("messageReactionAdd", async reaction => {
 	if(!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1]) {
 		let {count} = reaction;
-		if(reaction.users.has(reaction.message.author.id)) {
+		if(data.guilds[reaction.message.guild.id][4] && reaction.users.has(reaction.message.author.id)) {
 			count--;
 			reaction.message.channel.send(`${reaction.message.author} Trying to star your own message, eh? Well that star doesn't count on this server.`);
 		}
@@ -182,8 +182,10 @@ client.on("message", async msg => {
 					if(content === "selfstar") {
 						if(data.guilds[msg.guild.id][4]) {
 							data.guilds[msg.guild.id].splice(4, 1);
+							msg.channel.send(`${msg.author} Self-starring is now disallowed.`).catch(errSendMessages(msg));
 						} else {
 							data.guilds[msg.guild.id][4] = 1;
+							msg.channel.send(`${msg.author} Self-starring is now allowed.`).catch(errSendMessages(msg));
 						}
 						save();
 					} else {
