@@ -61,7 +61,7 @@ titleBar.appendChild(ancestors);
 let path = "";
 const getName = name => path ? name.slice(path.length + 1) : name;
 const applyPath = name => (path ? `${path}/` : "") + name;
-const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeURI(item.name)}`;
+const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeURIComponent(item.name)}`;
 const pipe = [];
 const cachedPaths = [];
 const getItem = name => pipe.find(item => item.name === name);
@@ -130,7 +130,7 @@ const checkName = async name => {
 			const dialog = new Miro.Dialog("Rename", html`
 				Enter a new name for <b>$${name}</b>.<br>
 				<div class="mdc-text-field">
-					<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/#?]+$" autocomplete="off" spellcheck="false" required>
+					<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
 					<div class="mdc-line-ripple"></div>
 				</div>
 			`, [{
@@ -437,7 +437,7 @@ creation.querySelector("#addDirectory").addEventListener("click", () => {
 	const dialog = new Miro.Dialog("Directory", html`
 		Enter a directory name.<br>
 		<div class="mdc-text-field">
-			<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/#?]+$" autocomplete="off" spellcheck="false" required>
+			<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
 			<div class="mdc-line-ripple"></div>
 		</div>
 	`, [{
