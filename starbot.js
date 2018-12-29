@@ -7,6 +7,7 @@ const spaces = / +/g;
 const underscores = /_/g;
 const channelTest = /^<#(\d+)>$/;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
+const doNothing = () => {};
 const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
 const byTextChannels = channel => channel.type === "text";
 let data;
@@ -162,7 +163,7 @@ client.on("messageReactionAdd", async reaction => {
 		let {count} = reaction;
 		if(data.guilds[reaction.message.guild.id][4] && reaction.users.has(reaction.message.author.id)) {
 			count--;
-			reaction.message.author.send(`Trying to star your own message? That star doesn't count on ${italicize(reaction.message.guild.name)}.`).catch(errSendMessages(reaction.message));
+			reaction.message.author.send(`Trying to star your own message? That star doesn't count on ${italicize(reaction.message.guild.name)}.`).catch(doNothing);
 			reaction.users.remove(reaction.message.author).catch(errManageMessages(reaction.message));
 		}
 		if(count >= data.guilds[reaction.message.guild.id][2]) {
