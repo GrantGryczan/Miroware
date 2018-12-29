@@ -42,11 +42,11 @@ const inform = (guild, str1, str2) => {
 };
 const permWarn = (guild, perms) => {
 	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
-	inform(guild, `An error occured on ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
+	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 };
 const noStarboard = guild => {
-	const warning = ', as there is nowhere for starred messages to be placed. No starboard channel has been set!\nWith administrative permission, you can set the starboard channel by entering ">⭐" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.';
-	inform(guild, `An error occured on ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
+	const warning = ', as there is nowhere for starred messages to be placed. No starboard channel has been set!\nWith admin permissions, you can set the starboard channel by entering ">⭐" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.';
+	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 }
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild}`);
@@ -64,7 +64,7 @@ const sendHelp = (msg, perm) => {
 	if(noGuild || data.guilds[msg.guild.id][0]) {
 		let help = noGuild ? "" : `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURI(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if(perm || noGuild) {
-			help += `${noGuild ? "" : "\n"}With administrative permission, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID> [<source channel tag> [target channel tag]]\`\nStar a message manually. If you are entering the command in a channel other than the one the desired message is not in, the second parameter should be that channel. The other channel tag makes it post the star embed to that channel instead of the default starboard.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
+			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID> [<source channel tag> [target channel tag]]\`\nStar a message manually. If you are entering the command in a channel other than the one the desired message is not in, the second parameter should be that channel. The other channel tag makes it post the star embed to that channel instead of the default starboard.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
 		}
 		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
 		msg.channel.send(help).catch(errSendMessages(msg));
@@ -155,7 +155,7 @@ const star = (msg, callback, channel) => {
 	}
 };
 client.on("messageReactionAdd", reaction => {
-	if(!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1] && reaction.count >= data.guilds[reaction.message.guild.id][2]) {
+	if(!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1] && reaction.count >= data.guilds[reaction.message.guild.id][2]) {
 		star(reaction.message);
 	}
 });
