@@ -70,6 +70,9 @@ this.value += html`
 					</div>
 				</div>
 				<form id="properties" class="panel side right">
+					<div class="margined">
+						Selected items: <b id="selectionLength"></b> (<b id="selectionSize"></b>)
+					</div>
 					<div class="property hidden" data-key="name">
 						<div class="mdc-text-field">
 							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
@@ -94,9 +97,6 @@ this.value += html`
 					</div>
 					<div class="property hidden" data-key="actions">
 						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><button id="download" class="mdc-icon-button material-icons spaced mdc-ripple" title="Download">file_download</button><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple" title="Delete">delete</button>
-					</div>
-					<div class="margined">
-						Selected items: <b id="selectionLength"></b> (<b id="selectionSize"></b>)
 					</div>
 				</form>
 			</div>`;

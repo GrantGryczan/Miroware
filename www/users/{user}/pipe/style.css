@@ -172,7 +172,7 @@
 	color: rgba(255, 255, 255, 0.6);
 }
 .property {
-	margin-bottom: 8px;
+	margin: 8px 0;
 	& > .mdc-text-field {
 		width: 100%;
 	}
