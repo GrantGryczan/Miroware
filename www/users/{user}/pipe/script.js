@@ -775,6 +775,7 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 download.addEventListener("click", () => {
 	const itemElement = items.querySelector(".item.selected");
 	const link = itemElement.cloneNode(false);
+	link.target = "_blank";
 	link.download = itemElement._item.name;
 	link.click();
 });
