@@ -397,8 +397,8 @@ class PipeFile {
 		}
 	}
 }
-const addFile = async file => {
-	const name = await checkName(file.name);
+const addFile = async (file, name) => {
+	const name = await checkName(typeof name === "string" ? name : file.name);
 	if(!name) {
 		return;
 	} else if(name !== file.name) {
@@ -492,10 +492,7 @@ document.addEventListener("paste", async evt => {
 			} else {
 				return;
 			}
-			Object.defineProperty(file, "name", {
-				value: name
-			});
-			addFile(file);
+			addFile(file, name);
 		}
 	}
 }, {
