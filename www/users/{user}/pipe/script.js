@@ -61,7 +61,9 @@ titleBar.appendChild(ancestors);
 let path = "";
 const getName = name => path ? name.slice(path.length + 1) : name;
 const applyPath = name => (path ? `${path}/` : "") + name;
-const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeURIComponent(item.name)}`;
+const encodedSlashes = /%2F/g;
+const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
+const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.name)}`;
 const pipe = [];
 const cachedPaths = [];
 const getItem = name => pipe.find(item => item.name === name);
@@ -554,7 +556,7 @@ const render = () => {
 };
 const hashChange = () => {
 	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
-		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?path=${encodeURIComponent(path)}`).then(Miro.response(xhr => {
+		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?path=${encodeForPipe(path)}`).then(Miro.response(xhr => {
 			for(const item of xhr.response) {
 				setItem(new PipeItem(item));
 			}
