@@ -182,10 +182,10 @@ client.on("message", async msg => {
 					if(content === "selfstar") {
 						if(data.guilds[msg.guild.id][4]) {
 							data.guilds[msg.guild.id].splice(4, 1);
-							msg.channel.send(`${msg.author} Self-starring is now disallowed.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} Self-starring is now allowed.`).catch(errSendMessages(msg));
 						} else {
 							data.guilds[msg.guild.id][4] = 1;
-							msg.channel.send(`${msg.author} Self-starring is now allowed.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} Self-starring is now disallowed.`).catch(errSendMessages(msg));
 						}
 						save();
 					} else {
