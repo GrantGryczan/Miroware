@@ -137,6 +137,8 @@
 	cursor: default;
 	background-color: #202020;
 	&:hover > .cell.sort > button {
+		width: 32px;
+		height: 32px;
 		&:not(.sorting) {
 			opacity: 0.5;
 		}
