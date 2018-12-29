@@ -7,4 +7,3 @@ screen -d -m ./forever.sh ./concat.js
 screen -d -m ./forever.sh ./mirobot.js
 screen -d -m ./forever.sh ./starbot.js
 screen -d -m ./forever.sh ./colorbot.js
-screen -d -m ./forever.sh ./nohmyt.js
