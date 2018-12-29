@@ -8,7 +8,7 @@ this.value = (await load("load/head", this)).value;
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				Miroware Pipe has moved! <a href="/pipe/">Go back.</a><br>
+				<a href="/pipe/">Miroware Pipe has moved!</a><br>
 				<br>
 				Be sure to update any links or bookmarks to the new location!`;
 this.value += (await load("load/pagefoot", this)).value;
