@@ -48,7 +48,7 @@ a {
 .transparent {
 	opacity: 0.5;
 }
-.spaced:not(.hidden) + .spaced {
+.spaced:not(.hidden) ~ .spaced {
 	margin-left: 8px;
 }
 .margined {
