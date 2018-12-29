@@ -59,6 +59,9 @@ const errSendMessages = msg => () => {
 const errEmbedLinks = msg => () => {
 	permWarn(msg.guild, `send messages or embed links, in the ${msg.channel} channel or otherwise`);
 };
+const errManageMessages = msg => () => {
+	permWarn(msg.guild, `manage messages, in the ${msg.channel} channel or otherwise`);
+};
 const sendHelp = (msg, perm) => {
 	const noGuild = !msg.guild;
 	if(noGuild || data.guilds[msg.guild.id][0]) {
@@ -160,6 +163,7 @@ client.on("messageReactionAdd", async reaction => {
 		if(data.guilds[reaction.message.guild.id][4] && reaction.users.has(reaction.message.author.id)) {
 			count--;
 			reaction.message.channel.send(`${reaction.message.author} Trying to star your own message, eh? Well that star doesn't count on this server.`);
+			reaction.remove(reaction.message.author).catch(errManageMessages(reaction.message));
 		}
 		if(count >= data.guilds[reaction.message.guild.id][2]) {
 			star(reaction.message);
