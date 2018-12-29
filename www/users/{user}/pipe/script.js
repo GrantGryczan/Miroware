@@ -182,7 +182,6 @@ class PipeItem {
 		this.size = item.size;
 		this.date = new Date(item.date);
 		this.element.addEventListener("click", this.click.bind(this));
-		this.iconElement.addEventListener("click", this.clickButton.bind(this), true);
 	}
 	get name() {
 		return this[_name];
@@ -281,11 +280,6 @@ class PipeItem {
 		} else {
 			open(this.element.href);
 		}
-	}
-	clickButton() {
-		selectItem(this.element, {
-			ctrlKey: true
-		});
 	}
 }
 const creation = container.querySelector("#creation");
@@ -709,7 +703,13 @@ document.addEventListener("mouseup", evt => {
 				selectItem(mouseTarget.parentNode, evt, evt.button);
 			}
 		} else if(!mouseMoved) {
-			deselectItems();
+			if(mouseTarget.parentNode.parentNode._item) {
+				selectItem(mouseTarget.parentNode.parentNode, {
+					ctrlKey: true
+				});
+			} else {
+				deselectItems();
+			}
 		}
 	}
 	mouseTarget = null;
