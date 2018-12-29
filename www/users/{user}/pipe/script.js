@@ -468,26 +468,31 @@ document.addEventListener("paste", async evt => {
 			}
 		}
 		if(file) {
-			file = file.getAsFile();
+			let name = (file = file.getAsFile()).name;
 			if(string) {
 				const htmlFilename = (await new Promise(string.getAsString.bind(string))).match(htmlFilenameTest);
-				const dialog = new Miro.Dialog("Paste", html`
-					Enter a file name.<br>
-					<div class="mdc-text-field">
-						<input name="name" class="mdc-text-field__input" type="text" value="$${htmlFilename ? htmlFilename[1] : "file"}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
-						<div class="mdc-line-ripple"></div>
-					</div>
-				`, [{
-					text: "Okay",
-					type: "submit"
-				}, "Cancel"]);
-				if(await dialog !== 0) {
-					return;
-				}
-				Object.defineProperty(file, "name", {
-					value: dialog.form.elements.name
-				});
+				name = htmlFilename ? htmlFilename[1] : "file";
 			}
+			const dialog = new Miro.Dialog("Paste", html`
+				Enter a file name.<br>
+				<div class="mdc-text-field">
+					<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+					<div class="mdc-line-ripple"></div>
+				</div>
+			`, [{
+				text: "Okay",
+				type: "submit"
+			}, "Cancel"]);
+			await Miro.wait();
+			dialog.form.elements.name.focus();
+			const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
+			dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
+			if(await dialog !== 0) {
+				return;
+			}
+			Object.defineProperty(file, "name", {
+				value: name
+			});
 			addFile(file);
 		}
 	}
