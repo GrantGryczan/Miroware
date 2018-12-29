@@ -668,6 +668,8 @@ document.addEventListener("mousedown", evt => {
 	mouseDown = evt.button;
 	if(evt.target.parentNode._item) {
 		focusedItem = evt.target.parentNode;
+	} else if(evt.target._item) {
+		focusedItem = evt.target;
 	}
 }, {
 	capture: true,
@@ -675,7 +677,7 @@ document.addEventListener("mousedown", evt => {
 });
 document.addEventListener("mouseup", evt => {
 	if(mouseDown !== -1 && items.contains(mouseTarget)) {
-		if(mouseTarget.parentNode._item) {
+		if(mouseTarget.parentNode._item || mouseTarget._item) {
 			if(mouseMoved) {
 				if(indicatedTarget) {
 					const sourcePath = path;
@@ -700,16 +702,14 @@ document.addEventListener("mouseup", evt => {
 					indicateTarget();
 				}
 			} else {
-				selectItem(mouseTarget.parentNode, evt, evt.button);
+				selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, evt.button);
 			}
+		} else if(mouseTarget.parentNode.parentNode._item) {
+			selectItem(mouseTarget.parentNode.parentNode, {
+				ctrlKey: true
+			});
 		} else if(!mouseMoved) {
-			if(mouseTarget.parentNode.parentNode._item) {
-				selectItem(mouseTarget.parentNode.parentNode, {
-					ctrlKey: true
-				});
-			} else {
-				deselectItems();
-			}
+			deselectItems();
 		}
 	}
 	mouseTarget = null;
@@ -733,9 +733,9 @@ document.addEventListener("mousemove", evt => {
 	}
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
-	if(mouseDown !== -1 && mouseTarget && mouseTarget.parentNode._item) {
+	if(mouseDown !== -1 && mouseTarget && (mouseTarget.parentNode._item || mouseTarget._item)) {
 		if(!mouseMoved) {
-			selectItem(mouseTarget.parentNode, evt, 2);
+			selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, 2);
 		}
 		indicateTarget(evt.target.classList.contains("ancestor") ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
 	}
