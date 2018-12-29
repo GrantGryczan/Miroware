@@ -737,6 +737,7 @@ const updateProperties = () => {
 	for(const propertyElement of Object.values(property)) {
 		propertyElement.classList.add("hidden");
 	}
+	save.classList.add("hidden");
 	download.classList.add("hidden");
 	const selected = items.querySelectorAll(".item.selected");
 	if(selectionLength.textContent = selected.length) {
@@ -757,6 +758,7 @@ const updateProperties = () => {
 				download.classList.remove("hidden");
 			}
 			save.disabled = true;
+			save.classList.remove("hidden");
 		}
 	} else {
 		selectionSize.textContent = "0 B";
