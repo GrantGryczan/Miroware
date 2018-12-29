@@ -285,7 +285,7 @@ class PipeItem {
 	clickButton() {
 		selectItem(this.element, {
 			ctrlKey: true
-		}, 2);
+		});
 	}
 }
 const creation = container.querySelector("#creation");
