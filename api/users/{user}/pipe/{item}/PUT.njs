@@ -34,6 +34,20 @@ if(isMe) {
 					this.status = 400;
 					this.done();
 					return;
+				} else if(this.req.body.name.includes("#")) {
+					this.value = {
+						error: "The `name` value cannot contain hashes."
+					};
+					this.status = 400;
+					this.done();
+					return;
+				} else if(this.req.body.name.includes("?")) {
+					this.value = {
+						error: "The `name` value cannot contain question marks."
+					};
+					this.status = 400;
+					this.done();
+					return;
 				} else if(this.user.pipe.some(item => item.name === this.req.body.name)) {
 					this.value = {
 						error: "That name is already taken."

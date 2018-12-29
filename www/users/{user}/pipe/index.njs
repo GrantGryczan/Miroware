@@ -75,7 +75,7 @@ this.value += html`
 					</div>
 					<div class="property hidden" data-key="name">
 						<div class="mdc-text-field">
-							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^/#?]+$" autocomplete="off" spellcheck="false" required>
 							<label class="mdc-floating-label" for="name">Name</label>
 							<div class="mdc-line-ripple"></div>
 						</div><br>
