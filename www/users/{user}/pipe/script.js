@@ -398,7 +398,7 @@ class PipeFile {
 	}
 }
 const addFile = async (file, name) => {
-	const name = await checkName(typeof name === "string" ? name : file.name);
+	name = await checkName(typeof name === "string" ? name : file.name);
 	if(!name) {
 		return;
 	} else if(name !== file.name) {
