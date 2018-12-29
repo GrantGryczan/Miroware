@@ -87,7 +87,7 @@ const s3 = new AWS.S3({
 				if(response.headers["content-length"]) { // This is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
 					res.set("Content-Length", response.headers["content-length"]);
 				}
-				res.status(response.statusCode).set("Content-Type", response.headers["content-type"]).set("Access-Control-Allow-Origin", "*");
+				res.status(response.statusCode).set("Content-Type", req.query.download === undefined ? response.headers["content-type"] : "application/octet-stream").set("Access-Control-Allow-Origin", "*");
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 		}
