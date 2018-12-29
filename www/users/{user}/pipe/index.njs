@@ -31,7 +31,7 @@ if(user) {
 }
 this.value = (await load("load/head", this)).value;
 this.value += html`
-		<link rel="stylesheet" href="style.css">`;
+		<link rel="stylesheet" href="/users/{user}/pipe/style.css">`;
 this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
@@ -103,6 +103,6 @@ this.value += html`
 this.value += (await load("load/belt", this)).value;
 this.value += html`
 		<div id="targetIndicator"></div>
-		<script src="script.js"></script>`;
+		<script src="/users/{user}/pipe/script.js"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
