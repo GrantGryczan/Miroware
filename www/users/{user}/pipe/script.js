@@ -729,7 +729,6 @@ for(const propertyElement of properties.querySelectorAll("[data-key]")) {
 }
 const linkPreview = property.url.querySelector("#linkPreview");
 const save = property.actions.querySelector("#save");
-const download = property.actions.querySelector("#download");
 const selectionLength = properties.querySelector("#selectionLength");
 const selectionSize = properties.querySelector("#selectionSize");
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
@@ -738,7 +737,6 @@ const updateProperties = () => {
 		propertyElement.classList.add("hidden");
 	}
 	save.classList.add("hidden");
-	download.classList.add("hidden");
 	const selected = items.querySelectorAll(".item.selected");
 	if(selectionLength.textContent = selected.length) {
 		property.actions.classList.remove("hidden");
@@ -758,7 +756,6 @@ const updateProperties = () => {
 				property.url.classList.remove("hidden");
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 				property.url._label.classList.add("mdc-floating-label--float-above");
-				download.classList.remove("hidden");
 			}
 			save.disabled = true;
 			save.classList.remove("hidden");
@@ -771,13 +768,6 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	properties.elements.url.select();
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
-});
-download.addEventListener("click", () => {
-	const itemElement = items.querySelector(".item.selected");
-	const link = itemElement.cloneNode(false);
-	link.target = "_blank";
-	link.download = itemElement._item.name;
-	link.click();
 });
 const removeItem = itemElement => {
 	itemElement.classList.add("loading");
