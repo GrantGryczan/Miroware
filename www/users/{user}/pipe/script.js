@@ -725,7 +725,7 @@ document.addEventListener("mousemove", evt => {
 const properties = document.body.querySelector("#properties");
 const property = {};
 for(const propertyElement of properties.querySelectorAll("[data-key]")) {
-	property[propertyElement.getAttribute("data-key")] = propertyElement;
+	(property[propertyElement.getAttribute("data-key")] = propertyElement)._label = propertyElement.querySelector("label");
 }
 const linkPreview = property.url.querySelector("#linkPreview");
 const save = property.actions.querySelector("#save");
@@ -748,13 +748,16 @@ const updateProperties = () => {
 			properties.elements.name._prev = properties.elements.name.value = getName(item.name);
 			property.name.classList.remove("hidden");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
+			property.name._label.classList.add("mdc-floating-label--float-above");
 			if(item.type !== "/") {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				property.type.classList.remove("hidden");
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
+				property.type._label.classList.add("mdc-floating-label--float-above");
 				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = getURL(item);
 				property.url.classList.remove("hidden");
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
+				property.url._label.classList.add("mdc-floating-label--float-above");
 				download.classList.remove("hidden");
 			}
 			save.disabled = true;
