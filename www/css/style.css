@@ -252,6 +252,10 @@ main {
 		color: rgba(255, 255, 255, 0.625);
 	}
 }
+a.mdc-icon-button {
+	text-align: center;
+	line-height: 40px;
+}
 @keyframes autofill {
 	to {
 		color: rgba(255, 255, 255, 0.87);
