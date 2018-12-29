@@ -31,7 +31,7 @@ const s3 = new AWS.S3({
 				return;
 			}
 			try {
-				path = decodeURI(path);
+				path = decodeURIComponent(path);
 			} catch(err) {
 				res.status(400).send(err.message);
 				return;
