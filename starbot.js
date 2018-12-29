@@ -162,8 +162,8 @@ client.on("messageReactionAdd", async reaction => {
 		let {count} = reaction;
 		if(data.guilds[reaction.message.guild.id][4] && reaction.users.has(reaction.message.author.id)) {
 			count--;
-			reaction.message.channel.send(`${reaction.message.author} Trying to star your own message, eh? Well that star doesn't count on this server.`);
-			reaction.remove(reaction.message.author).catch(errManageMessages(reaction.message));
+			reaction.message.channel.send(`${reaction.message.author} Trying to star your own message, eh? Well that star doesn't count on this server.`).catch(errSendMessages(msg));
+			reaction.users.remove(reaction.message.author).catch(errManageMessages(reaction.message));
 		}
 		if(count >= data.guilds[reaction.message.guild.id][2]) {
 			star(reaction.message);
