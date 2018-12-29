@@ -150,7 +150,7 @@ if(isMe) {
 						size: this.req.body.length
 					}
 				};
-				const encodedName = encodeURI(data.name);
+				const encodedName = encodeForPipe(data.name);
 				purgeCache(`https://pipe.miroware.io/${user._id}/${encodedName}`, `https://piped.miroware.io/${user._id}/${encodedName}`);
 			}
 			this.done();

@@ -35,6 +35,8 @@ const byDBQueryObject = item => ({
 	id: item.id
 });
 const pipeFiles = item => item.type !== "/";
+const encodedSlashes = /%2F/g;
+const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
 const wait = delay => new Promise(resolve => {
 	setTimeout(resolve, delay);
 });

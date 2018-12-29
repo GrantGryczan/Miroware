@@ -123,7 +123,7 @@ if(isMe) {
 			...found,
 			...item
 		};
-		const urls = [`https://pipe.miroware.io/${user._id}/${encodeURI(found.name)}`, `https://piped.miroware.io/${user._id}/${encodeURI(found.name)}`, `https://pipe.miroware.io/${user._id}/${encodeURI(this.value.name)}`, `https://piped.miroware.io/${user._id}/${encodeURI(this.value.name)}`];
+		const urls = [`https://pipe.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://pipe.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`];
 		if(found.type === "/") {
 			const itemPath = `${found.name}/`;
 			this.value.size = user.pipe.reduce((size, item2) => {
@@ -145,8 +145,8 @@ if(isMe) {
 								"pipe.$.name": name
 							}
 						});
-						const encodedChildName = encodeURI(child.name);
-						const encodedName = encodeURI(name);
+						const encodedChildName = encodeForPipe(child.name);
+						const encodedName = encodeForPipe(name);
 						urls.push(`https://pipe.miroware.io/${user._id}/${encodedChildName}`, `https://piped.miroware.io/${user._id}/${encodedChildName}`, `https://pipe.miroware.io/${user._id}/${encodedName}`, `https://piped.miroware.io/${user._id}/${encodedName}`);
 					}
 				}
