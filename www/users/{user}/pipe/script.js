@@ -471,8 +471,21 @@ document.addEventListener("paste", async evt => {
 			file = file.getAsFile();
 			if(string) {
 				const htmlFilename = (await new Promise(string.getAsString.bind(string))).match(htmlFilenameTest);
+				const dialog = new Miro.Dialog("Paste", html`
+					Enter a file name.<br>
+					<div class="mdc-text-field">
+						<input name="name" class="mdc-text-field__input" type="text" value="$${htmlFilename ? htmlFilename[1] : "file"}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+						<div class="mdc-line-ripple"></div>
+					</div>
+				`, [{
+					text: "Okay",
+					type: "submit"
+				}, "Cancel"]);
+				if(await dialog !== 0) {
+					return;
+				}
 				Object.defineProperty(file, "name", {
-					value: htmlFilename ? htmlFilename[1] : "file"
+					value: dialog.form.elements.name
 				});
 			}
 			addFile(file);
