@@ -182,6 +182,7 @@ class PipeItem {
 		this.size = item.size;
 		this.date = new Date(item.date);
 		this.element.addEventListener("click", this.click.bind(this));
+		this.iconElement.addEventListener("click", this.clickButton.bind(this));
 	}
 	get name() {
 		return this[_name];
@@ -280,6 +281,11 @@ class PipeItem {
 		} else {
 			open(this.element.href);
 		}
+	}
+	clickButton() {
+		selectItem(this.element, {
+			ctrlKey: true
+		}, 2);
 	}
 }
 const creation = container.querySelector("#creation");
