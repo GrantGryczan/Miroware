@@ -256,7 +256,9 @@ class PipeItem {
 				cachedPaths.splice(pathIndex, 1);
 			}
 			const prefix = `${this.name}/`;
+			console.log(prefix);
 			for(const item of pipe) {
+				console.log(item.name.startsWith(prefix), !item.name.includes("/", prefix.length), item.name);
 				if(item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
 					item.delete();
 				}
