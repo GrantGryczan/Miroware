@@ -886,14 +886,16 @@ properties.addEventListener("submit", async evt => {
 			itemElement._item.type = xhr.response.type;
 		}
 		Miro.formState(properties, true);
+		itemElement.classList.remove("loading");
+		itemElement.classList.add("selected");
 		save.disabled = true;
 		render();
 	}, () => {
 		Miro.formState(properties, true);
-		save.disabled = false;
-	})).finally(() => {
 		itemElement.classList.remove("loading");
-	});
+		itemElement.classList.add("selected");
+		save.disabled = false;
+	}));
 });
 updateProperties();
 document.addEventListener("keydown", evt => {
