@@ -579,8 +579,8 @@ const render = () => {
 	if(!(sortValue in sort)) {
 		sortValue = SORT_DEFAULT;
 	}
-	const itemArray = pipe.filter(currentItems).sort(sort[sortValue]);
-	for(const item of reverseValue ? itemArray.reverse() : itemArray) {
+	const sortedItems = pipe.filter(currentItems).sort(sort[sortValue]);
+	for(const item of reverseValue ? sortedItems.reverse() : sortedItems) {
 		items.appendChild(item.element);
 	}
 	updateProperties();
