@@ -174,7 +174,7 @@ class PipeItem {
 				<div class="cell date"></div>
 			</a>
 		`)._item = this;
-		this.thumbnailElement = this.element.querySelector(".cell.thumbnail");
+		this.element.removeChild(this.thumbnailElement = this.element.querySelector(".cell.thumbnail"));
 		this.iconElement = this.element.querySelector(".cell.icon > button");
 		this.nameElement = this.element.querySelector(".cell.name");
 		this.sizeElement = this.element.querySelector(".cell.size");
@@ -576,6 +576,7 @@ const render = () => {
 		items.appendChild(item.element);
 	}
 	updateProperties();
+	scroll();
 };
 const hashChange = () => {
 	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
@@ -962,3 +963,11 @@ viewMode.addEventListener("click", () => {
 	updateViewMode();
 });
 updateViewMode();
+const scroll = () => {
+	for(const itemElement of items.querySelectorAll(".item")) {
+		if(itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
+			itemElement.insertBefore(itemElement._item.thumbnailElement, itemElement.firstChild);
+		}
+	}
+};
+items.parentNode.addEventListener("scroll", scroll);
