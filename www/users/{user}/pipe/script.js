@@ -58,7 +58,6 @@ const getName = name => path ? name.slice(path.length + 1) : name;
 const applyPath = name => (path ? `${path}/` : "") + name;
 const encodedSlashes = /%2F/g;
 const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
-const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.name)}`;
 const closingParentheses = /\)/g;
 const pipe = [];
 const cachedPaths = [];
@@ -190,7 +189,7 @@ class PipeItem {
 		const typeDirectory = this.type === "/";
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
-		this.element.href = typeDirectory ? `#${value}` : getURL(this);
+		this.element.href = typeDirectory ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(this.name)}`);
 		if(this.type.startsWith("image/")) {
 			this.thumbnailElement.style.backgroundImage = `url(${this.element.href.replace(closingParentheses, "%29")})`;
 		}
@@ -769,6 +768,9 @@ const save = property.actions.querySelector("#save");
 const download = property.actions.querySelector("#download");
 const selectionLength = properties.querySelector("#selectionLength");
 const selectionSize = properties.querySelector("#selectionSize");
+const previewImage = properties.querySelector("#previewImage");
+const previewAudio = properties.querySelector("#previewAudio");
+const previewVideo = properties.querySelector("#previewVideo");
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
 const updateProperties = () => {
 	for(const propertyElement of Object.values(property)) {
@@ -791,12 +793,28 @@ const updateProperties = () => {
 				property.type.classList.remove("hidden");
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
 				property.type._label.classList.add("mdc-floating-label--float-above");
-				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = getURL(item);
+				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = item.url;
 				property.url.classList.remove("hidden");
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 				property.url._label.classList.add("mdc-floating-label--float-above");
-				download.href = `${getURL(item)}?download`;
+				download.href = `${item.url}?download`;
 				download.classList.remove("hidden");
+				if(item.type.startsWith("image/")) {
+					previewImage.src = item.url;
+					previewImage.classList.remove("hidden");
+					previewAudio.classList.add("hidden");
+					previewVideo.classList.add("hidden");
+				} else if(item.type.startsWith("audio/")) {
+					previewAudio.src = item.url;
+					previewImage.classList.add("hidden");
+					previewAudio.classList.remove("hidden");
+					previewVideo.classList.add("hidden");
+				} else if(item.type.startsWith("video/")) {
+					previewVideo.src = item.url;
+					previewImage.classList.add("hidden");
+					previewAudio.classList.add("hidden");
+					previewVideo.classList.remove("hidden");
+				}
 			}
 			save.disabled = true;
 			save.classList.remove("hidden");

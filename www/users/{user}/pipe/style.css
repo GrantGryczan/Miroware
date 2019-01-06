@@ -204,6 +204,9 @@
 		}
 	}
 }
+#ancestors .separator {
+	opacity: 0.5;
+}
 #properties {
 	color: rgba(255, 255, 255, 0.6);
 }
@@ -216,6 +219,6 @@
 .property[data-key="url"] > .mdc-text-field {
 	width: calc(100% - 48px);
 }
-#ancestors .separator {
-	opacity: 0.5;
+.previewMedia {
+	max-width: 100%;
 }
