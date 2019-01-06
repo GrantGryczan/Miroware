@@ -163,7 +163,7 @@ class PipeItem {
 	constructor(item) {
 		this.id = item.id;
 		(this.element = html`
-			<a class="item">
+			<a class="item" draggable="false">
 				<div class="cell thumbnail"></div>
 				<div class="cell icon">
 					<button class="mdc-icon-button material-icons"></button>
@@ -321,7 +321,7 @@ class PipeFile {
 		this.path = path;
 		this.file = file;
 		this.element = html`
-			<a class="item loading">
+			<a class="item loading" draggable="false">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
 					<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${this.size = getSize(this.file.size)})</div>
