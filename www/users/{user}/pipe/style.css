@@ -65,6 +65,9 @@
 	padding: 8px 0;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
+#queuedItems {
+	overflow-y: auto;
+}
 #addFiles {
 	flex-grow: 1;
 	height: 40px;
