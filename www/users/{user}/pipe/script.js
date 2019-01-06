@@ -175,6 +175,7 @@ class PipeItem {
 			</a>
 		`)._item = this;
 		this.element.removeChild(this.thumbnailElement = this.element.querySelector(".cell.thumbnail"));
+		this.thumbnailInvisible = true;
 		this.iconElement = this.element.querySelector(".cell.icon > button");
 		this.nameElement = this.element.querySelector(".cell.name");
 		this.sizeElement = this.element.querySelector(".cell.size");
@@ -965,8 +966,9 @@ viewMode.addEventListener("click", () => {
 updateViewMode();
 const scroll = () => {
 	for(const itemElement of items.querySelectorAll(".item")) {
-		if(itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
+		if(itemElement._item.thumbnailInvisible && itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
 			itemElement.insertBefore(itemElement._item.thumbnailElement, itemElement.firstChild);
+			itemElement._item.thumbnailInvisible = false;
 		}
 	}
 };
