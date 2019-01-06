@@ -556,7 +556,8 @@ const render = () => {
 	}
 	ancestors.appendChild(html`
 		<span>
-			/ <a class="ancestor" href="#">${Miro.data.user.name}</a>
+			<span class="separator">/</span>
+			<a class="ancestor" href="#">${Miro.data.user.name}</a>
 		</span>
 	`);
 	if(path) {
@@ -564,7 +565,8 @@ const render = () => {
 		for(const name of path.split("/")) {
 			ancestors.appendChild(html`
 				<span>
-					/ <a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>
+					<span class="separator">/</span>
+					<a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>
 				</span>
 			`);
 		}

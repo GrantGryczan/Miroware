@@ -216,3 +216,6 @@
 .property[data-key="url"] > .mdc-text-field {
 	width: calc(100% - 48px);
 }
+#ancestors .separator {
+	opacity: 0.5;
+}
