@@ -117,7 +117,7 @@
 		height: 200px;
 		margin: 8px 4px 0 4px;
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		border-radius: 4px;
+		border-radius: 8px;
 	}
 }
 .item button, #header button {
