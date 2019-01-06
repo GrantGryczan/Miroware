@@ -163,7 +163,7 @@ class PipeItem {
 	constructor(item) {
 		this.id = item.id;
 		(this.element = html`
-			<a class="item" draggable="false" ondragstart="return false;">
+			<a class="item">
 				<div class="cell thumbnail"></div>
 				<div class="cell icon">
 					<button class="mdc-icon-button material-icons"></button>
@@ -321,7 +321,7 @@ class PipeFile {
 		this.path = path;
 		this.file = file;
 		this.element = html`
-			<a class="item loading" draggable="false" ondragstart="return false;">
+			<a class="item loading">
 				<div class="label">
 					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
 					<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${this.size = getSize(this.file.size)})</div>
@@ -507,7 +507,10 @@ document.addEventListener("paste", async evt => {
 	passive: true
 });
 let allowDrop = true;
-document.addEventListener("dragstart", () => {
+document.addEventListener("dragstart", evt => {
+	if(evt.target.classList.contains("item")) {
+		evt.preventDefault();
+	}
 	allowDrop = false;
 }, {
 	capture: true,
