@@ -266,9 +266,6 @@ input:-webkit-autofill {
 	animation-name: autofill;
 	animation-fill-mode: both;
 }
-.alwaysFloat {
-	transform: translateY(-100%) scale(0.75);
-}
 .mdc-floating-label {
 	max-width: initial !important;
 	.mdc-text-field:not(.mdc-text-field--textarea) & {
@@ -291,6 +288,15 @@ input:-webkit-autofill {
 			transform: translateY(-40%) scale(0.75);
 		}
 	}
+}
+span.alwaysFloat {
+	display: inline-block;
+	font-size: 1rem;
+	line-height: 1.15rem;
+	letter-spacing: 0.009375em;
+	transform-origin: left top;
+	transform: scale(0.75);
+	will-change: transform;
 }
 textarea {
 	resize: vertical;
