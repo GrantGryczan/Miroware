@@ -958,19 +958,22 @@ const updateViewMode = () => {
 		viewMode.title = "Tile view";
 		viewMode.textContent = "view_module";
 	}
+	updateThumbnails();
 };
 viewMode.addEventListener("click", () => {
 	localStorage.pipe_viewMode = viewValue = (viewValue + 1) % 2;
 	updateViewMode();
 });
-updateViewMode();
 const updateThumbnails = () => {
-	for(const itemElement of items.querySelectorAll(".item")) {
-		if(itemElement._item.thumbnailInvisible && itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
-			itemElement.insertBefore(itemElement._item.thumbnailElement, itemElement.firstChild);
-			itemElement._item.thumbnailInvisible = false;
+	if(viewValue) {
+		for(const itemElement of items.querySelectorAll(".item")) {
+			if(itemElement._item.thumbnailInvisible && itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
+				itemElement.insertBefore(itemElement._item.thumbnailElement, itemElement.firstChild);
+				itemElement._item.thumbnailInvisible = false;
+			}
 		}
 	}
 };
 items.parentNode.addEventListener("scroll", updateThumbnails);
 window.addEventListener("resize", updateThumbnails);
+updateViewMode();
