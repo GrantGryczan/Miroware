@@ -186,7 +186,7 @@
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: contain;
-		animation: show 0.15s ease;
+		animation: show 0.5s ease;
 		.items.tiles > .item > & {
 			display: block;
 		}
