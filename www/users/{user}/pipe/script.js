@@ -944,13 +944,13 @@ document.addEventListener("keydown", evt => {
 		}
 	}
 }, true);
-let viewValue = +localStorage.pipe_viewMode || 0;
 const viewMode = header.querySelector("#viewMode");
+let viewValue = +localStorage.pipe_viewMode || 0;
 const updateViewMode = () => {
-	items.classList[viewMode ? "add" : "remove"]("tiles");
+	items.classList[viewValue ? "add" : "remove"]("tiles");
 };
 viewMode.addEventListener("click", () => {
-	localStorage.pipe_viewMode = viewMode = (viewMode + 1) % 2;
+	localStorage.pipe_viewMode = viewValue = (viewValue + 1) % 2;
 	updateViewMode();
 });
 updateViewMode();
