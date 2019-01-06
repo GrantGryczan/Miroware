@@ -1,40 +1,41 @@
 "use strict";
 document.title += ` / ${Miro.data.user.name}`;
 const getDate = date => String(date).split(" ").slice(1, 5).join(" ");
+const BYTE_SCALE = 1024;
 const getSize = size => {
-	if(size < 1000) {
+	if(size < BYTE_SCALE) {
 		return `${size} B`;
 	}
-	size /= 1000;
-	if(size < 1000) {
-		return `${Math.round(10 * size) / 10} kB`;
+	size /= BYTE_SCALE;
+	if(size < BYTE_SCALE) {
+		return `${Math.round(10 * size) / 10} KiB`;
 	}
-	size /= 1000;
-	if(size < 1000) {
-		return `${Math.round(10 * size) / 10} MB`;
+	size /= BYTE_SCALE;
+	if(size < BYTE_SCALE) {
+		return `${Math.round(10 * size) / 10} MiB`;
 	}
-	size /= 1000;
-	if(size < 1000) {
-		return `${Math.round(10 * size) / 10} GB`;
+	size /= BYTE_SCALE;
+	if(size < BYTE_SCALE) {
+		return `${Math.round(10 * size) / 10} GiB`;
 	}
-	size /= 1000;
-	if(size < 1000) {
-		return `${Math.round(10 * size) / 10} TB`;
+	size /= BYTE_SCALE;
+	if(size < BYTE_SCALE) {
+		return `${Math.round(10 * size) / 10} TiB`;
 	}
-	size /= 1000;
-	if(size < 1000) {
-		return `${Math.round(10 * size) / 10} PB`;
+	size /= BYTE_SCALE;
+	if(size < BYTE_SCALE) {
+		return `${Math.round(10 * size) / 10} PiB`;
 	}
-	size /= 1000;
-	if(size < 1000) {
-		return `${Math.round(10 * size) / 10} EB`;
+	size /= BYTE_SCALE;
+	if(size < BYTE_SCALE) {
+		return `${Math.round(10 * size) / 10} EiB`;
 	}
-	size /= 1000;
-	if(size < 1000) {
-		return `${Math.round(10 * size) / 10} ZB`;
+	size /= BYTE_SCALE;
+	if(size < BYTE_SCALE) {
+		return `${Math.round(10 * size) / 10} ZiB`;
 	}
-	size /= 1000;
-	return `${Math.round(10 * size) / 10} YB`;
+	size /= BYTE_SCALE;
+	return `${Math.round(10 * size) / 10} YiB`;
 };
 const container = document.body.querySelector("#container");
 const targetIndicator = document.body.querySelector("#targetIndicator");
