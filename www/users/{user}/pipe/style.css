@@ -207,7 +207,3 @@
 .property[data-key="url"] > .mdc-text-field {
 	width: calc(100% - 48px);
 }
-#viewMode {
-	opacity: 0;
-	pointer-events: none;
-}
