@@ -577,7 +577,7 @@ const render = () => {
 		items.appendChild(item.element);
 	}
 	updateProperties();
-	scroll();
+	updateThumbnails();
 };
 const hashChange = () => {
 	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
@@ -964,7 +964,7 @@ viewMode.addEventListener("click", () => {
 	updateViewMode();
 });
 updateViewMode();
-const scroll = () => {
+const updateThumbnails = () => {
 	for(const itemElement of items.querySelectorAll(".item")) {
 		if(itemElement._item.thumbnailInvisible && itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
 			itemElement.insertBefore(itemElement._item.thumbnailElement, itemElement.firstChild);
@@ -972,4 +972,5 @@ const scroll = () => {
 		}
 	}
 };
-items.parentNode.addEventListener("scroll", scroll);
+items.parentNode.addEventListener("scroll", updateThumbnails);
+window.addEventListener("resize", updateThumbnails);
