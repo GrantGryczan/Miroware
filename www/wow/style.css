@@ -2,7 +2,7 @@
 	text-align: center;
 }
 #magical {
-	position: absolute;
-	left: 50%;
+	display: inline-block;
 	font-family: cursive;
+	transform-origin: center;
 }

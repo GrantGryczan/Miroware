@@ -6,7 +6,7 @@ setInterval(() => {
 	while(hex.length < 6) {
 		hex = `0${hex}`;
 	}
-	magical.style.color = randColor();
-	magical.style.transform = `translateX(-50%) rotate(${(loops * 8) % 360}deg)`;
+	magical.style.color = `#${hex}`;
 	magical.style.fontSize = (Math.sin(loops / 2) * 10 + 20) + "px";
+	magical.style.transform = `rotate(${(loops * 8) % 360}deg)`;
 }, 50);

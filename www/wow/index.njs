@@ -18,7 +18,7 @@ this.value += html`
 			Wow!<br>
 			<br>
 			<br>
-			<div id="magical">Magical!</div>
+			<span id="magical">Magical!</span>
 		</div>`;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
