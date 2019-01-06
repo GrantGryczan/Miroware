@@ -51,11 +51,6 @@ const indicateTarget = target => {
 	}
 };
 const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
-titleBar.appendChild(html`
-	<span>
-		/ <a class="ancestor" href="#">${Miro.data.user.name}</a>
-	</span>
-`);
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
 let path = "";
@@ -559,6 +554,11 @@ const render = () => {
 	while(ancestors.lastChild) {
 		ancestors.removeChild(ancestors.lastChild);
 	}
+	ancestors.appendChild(html`
+		<span>
+			/ <a class="ancestor" href="#">${Miro.data.user.name}</a>
+		</span>
+	`);
 	if(path) {
 		let ancestry = "";
 		for(const name of path.split("/")) {
@@ -569,6 +569,8 @@ const render = () => {
 			`);
 		}
 	}
+	const ancestorLinks = ancestors.querySelectorAll(".ancestor");
+	ancestorLinks[ancestorLinks.length - 1].href = "";
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
