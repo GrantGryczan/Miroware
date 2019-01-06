@@ -64,6 +64,7 @@ const applyPath = name => (path ? `${path}/` : "") + name;
 const encodedSlashes = /%2F/g;
 const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
 const getURL = item => `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.name)}`;
+const closingParentheses = /\)/g;
 const pipe = [];
 const cachedPaths = [];
 const getItem = name => pipe.find(item => item.name === name);
@@ -163,6 +164,7 @@ class PipeItem {
 		this.id = item.id;
 		(this.element = html`
 			<a class="item" draggable="false" ondragstart="return false;">
+				<div class="cell thumbnail"></div>
 				<div class="cell icon">
 					<button class="mdc-icon-button material-icons"></button>
 				</div>
@@ -172,11 +174,12 @@ class PipeItem {
 				<div class="cell date"></div>
 			</a>
 		`)._item = this;
-		this.iconElement = this.element.querySelector(".icon > button");
-		this.nameElement = this.element.querySelector(".name");
-		this.sizeElement = this.element.querySelector(".size");
-		this.typeElement = this.element.querySelector(".type");
-		this.dateElement = this.element.querySelector(".date");
+		this.thumbnailElement = this.element.querySelector(".cell.thumbnail");
+		this.iconElement = this.element.querySelector(".cell.icon > button");
+		this.nameElement = this.element.querySelector(".cell.name");
+		this.sizeElement = this.element.querySelector(".cell.size");
+		this.typeElement = this.element.querySelector(".cell.type");
+		this.dateElement = this.element.querySelector(".cell.date");
 		this.type = item.type;
 		this.name = item.name;
 		this.size = item.size;
@@ -192,6 +195,9 @@ class PipeItem {
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
 		this.element.href = typeDirectory ? `#${value}` : getURL(this);
+		if(this.type.startsWith("image/")) {
+			this.thumbnailElement.style.backgroundImage = `url(${this.element.href.replace(closingParentheses, "%29")})`;
+		}
 		if(oldName) {
 			if(typeDirectory) {
 				const pathIndex = cachedPaths.indexOf(oldName);
