@@ -577,7 +577,7 @@ const render = () => {
 		items.appendChild(item.element);
 	}
 	updateProperties();
-	updateThumbnails();
+	resize();
 };
 const hashChange = () => {
 	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
@@ -958,13 +958,14 @@ const updateViewMode = () => {
 		viewMode.title = "Tile view";
 		viewMode.textContent = "view_module";
 	}
-	updateThumbnails();
+	resize();
 };
 viewMode.addEventListener("click", () => {
 	localStorage.pipe_viewMode = viewValue = (viewValue + 1) % 2;
 	updateViewMode();
 });
-const updateThumbnails = () => {
+const resize = () => {
+	indicateTarget();
 	if(viewValue) {
 		for(const itemElement of items.querySelectorAll(".item")) {
 			if(itemElement._item.thumbnailInvisible && itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
@@ -974,6 +975,6 @@ const updateThumbnails = () => {
 		}
 	}
 };
-items.parentNode.addEventListener("scroll", updateThumbnails);
-window.addEventListener("resize", updateThumbnails);
+items.parentNode.addEventListener("scroll", resize);
+window.addEventListener("resize", resize);
 updateViewMode();
