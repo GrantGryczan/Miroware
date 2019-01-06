@@ -157,14 +157,6 @@
 		}
 	}
 }
-@keyframes show {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
 .cell {
 	line-height: 42px;
 	font-size: 14px;
@@ -193,7 +185,6 @@
 		line-height: 158px;
 		font-size: 118.5px;
 		color: rgba(255, 255, 255, 0.38);
-		animation: show 0.25s ease;
 		.items.tiles > .item > & {
 			display: block;
 		}
