@@ -1,6 +1,6 @@
 if(testEmail(this.req.body.email)) {
 	const user = await users.findOne({
-		email: this.req.body.email
+		email: this.req.body.email.trim().toLowerCase()
 	});
 	if(user) {
 		connect(this, user).then(data => {

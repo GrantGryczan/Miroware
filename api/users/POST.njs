@@ -1,7 +1,6 @@
 if(testEmail(this.req.body.email)) {
-	this.req.body.email = this.req.body.email.trim().toLowerCase();
 	if(await users.findOne({
-		email: this.req.body.email
+		email: this.req.body.email = this.req.body.email.trim().toLowerCase()
 	})) {
 		this.value = {
 			error: "That email is already taken."

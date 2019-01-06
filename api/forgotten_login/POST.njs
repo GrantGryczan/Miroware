@@ -1,6 +1,6 @@
 if(testEmail(this.req.body.email)) {
 	const user = await users.findOne({
-		email: this.req.body.email
+		email: this.req.body.email.trim().toLowerCase()
 	});
 	if(user) {
 		const password = crypto.randomBytes(24).toString("base64");
