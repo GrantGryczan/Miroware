@@ -944,3 +944,17 @@ document.addEventListener("keydown", evt => {
 		}
 	}
 }, true);
+let viewValue = +localStorage.pipe_viewMode || 0;
+const viewMode = header.querySelector("#viewMode");
+const updateViewMode = () => {
+	if(viewMode) {
+		items.classList.add("tiles");
+	} else {
+		items.classList.remove("tiles");
+	}
+};
+viewMode.addEventListener("click", () => {
+	localStorage.pipe_viewMode = viewMode = (viewMode + 1) % 2;
+	updateViewMode();
+});
+updateViewMode();
