@@ -99,7 +99,7 @@ this.value += html`
 						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><a id="download" class="mdc-icon-button material-icons spaced mdc-ripple" title="Download" target="_blank" draggable="false" ondragstart="return false;">file_download</a><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple" title="Delete">delete</button>
 					</div>
 					<div class="property hidden" data-key="preview">
-						<span class="mdc-floating-label alwaysFloat">Preview</span>
+						<span class="alwaysFloat">Preview</span>
 					</div>
 				</form>
 			</div>`;
