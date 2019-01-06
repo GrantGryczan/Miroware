@@ -570,7 +570,7 @@ const render = () => {
 		}
 	}
 	const ancestorLinks = ancestors.querySelectorAll(".ancestor");
-	ancestorLinks[ancestorLinks.length - 1].href = "";
+	ancestorLinks[ancestorLinks.length - 1].removeAttribute("href");
 	while(items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
