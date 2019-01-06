@@ -266,6 +266,9 @@ input:-webkit-autofill {
 	animation-name: autofill;
 	animation-fill-mode: both;
 }
+.alwaysFloat {
+	transform: translateY(-100%) scale(0.75);
+}
 .mdc-floating-label {
 	max-width: initial !important;
 	.mdc-text-field:not(.mdc-text-field--textarea) & {
