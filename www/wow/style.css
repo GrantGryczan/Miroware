@@ -1,8 +1,9 @@
 main {
+	height: 100%;
 	text-align: center;
 }
 #wow {
-	margin: 8em 0 3em 0;
+	margin: 4em 0 3em 0;
 }
 #magical {
 	display: inline-block;
