@@ -186,6 +186,10 @@
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: contain;
+		text-align: center;
+		line-height: 158px;
+		font-size: 118.5px;
+		color: rgba(255, 255, 255, 0.38);
 		animation: show 0.25s ease;
 		.items.tiles > .item > & {
 			display: block;

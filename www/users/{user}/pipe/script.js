@@ -159,7 +159,7 @@ class PipeItem {
 		this.id = item.id;
 		(this.element = html`
 			<a class="item" draggable="false">
-				<div class="cell thumbnail"></div>
+				<div class="cell thumbnail material-icons"></div>
 				<div class="cell icon">
 					<button class="mdc-icon-button material-icons"></button>
 				</div>
@@ -182,6 +182,14 @@ class PipeItem {
 		this.date = new Date(item.date);
 		this.element.addEventListener("click", this.click.bind(this));
 	}
+	updateThumbnail() {
+		if(this.type.startsWith("image/")) {
+			this.thumbnailElement.style.backgroundImage = `url(${this.url.replace(closingParentheses, "%29")})`;
+		} else {
+			this.thumbnailElement.style.backgroundImage = "";
+			this.thumbnailElement.textContent = this.iconElement.textContent;
+		}
+	}
 	get name() {
 		return this[_name];
 	}
@@ -191,9 +199,7 @@ class PipeItem {
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
 		this.element.href = typeDirectory ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(this.name)}`);
-		if(this.type.startsWith("image/")) {
-			this.thumbnailElement.style.backgroundImage = `url(${this.element.href.replace(closingParentheses, "%29")})`;
-		}
+		this.updateThumbnail();
 		if(oldName) {
 			if(typeDirectory) {
 				const pathIndex = cachedPaths.indexOf(oldName);
