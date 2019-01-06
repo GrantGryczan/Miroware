@@ -804,16 +804,19 @@ const updateProperties = () => {
 					previewImage.classList.remove("hidden");
 					previewAudio.classList.add("hidden");
 					previewVideo.classList.add("hidden");
+					property.preview.classList.remove("hidden");
 				} else if(item.type.startsWith("audio/")) {
 					previewAudio.src = item.url;
 					previewImage.classList.add("hidden");
 					previewAudio.classList.remove("hidden");
 					previewVideo.classList.add("hidden");
+					property.preview.classList.remove("hidden");
 				} else if(item.type.startsWith("video/")) {
 					previewVideo.src = item.url;
 					previewImage.classList.add("hidden");
 					previewAudio.classList.add("hidden");
 					previewVideo.classList.remove("hidden");
+					property.preview.classList.remove("hidden");
 				}
 			}
 			save.disabled = true;
