@@ -557,7 +557,7 @@ const render = () => {
 	ancestors.appendChild(html`
 		<span>
 			<span class="separator">/</span>
-			<a class="ancestor" href="#">${Miro.data.user.name}</a>
+			<a class="ancestor" href="#">$${Miro.data.user.name}</a>
 		</span>
 	`);
 	if(path) {
