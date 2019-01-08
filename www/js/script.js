@@ -315,7 +315,7 @@ Miro.response = (success, failure) => async xhr => {
 			success(xhr);
 		}
 	} else if(!xhr._aborted) {
-		const error = (xhr.response && xhr.response.error) || xhr.statusText || "An unknown error occurred.";
+		const error = (xhr.response && xhr.response.error && html`${xhr.response.error}`) || xhr.statusText || "An unknown error occurred.";
 		if(failure instanceof Function) {
 			failure(xhr, error);
 		}
