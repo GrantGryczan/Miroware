@@ -95,6 +95,17 @@ this.value += html`
 						</div><button id="copyURL" class="mdc-icon-button material-icons spaced" type="button" title="Copy URL to clipboard">link</button><br>
 						<a id="linkPreview" target="_blank">Preview link</a><br>
 					</div>
+					<div class="property hidden" data-key="privacy">
+						<div class="mdc-select">
+							<select id="privacy" name="privacy" class="mdc-select__native-control" required>
+								<option value="0">Public</option>
+								<option value="1">Unlisted</option>
+								<option value="2">Private</option>
+							</select>
+							<label class="mdc-floating-label alwaysFloat" for="privacy">Privacy</label>
+							<div class="mdc-line-ripple"></div>
+						</div><br>
+					</div>
 					<div class="property hidden" data-key="actions">
 						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><a id="download" class="mdc-icon-button material-icons spaced mdc-ripple" title="Download" target="_blank" draggable="false" ondragstart="return false;">file_download</a><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple" title="Delete">delete</button>
 					</div>
