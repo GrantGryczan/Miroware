@@ -267,8 +267,8 @@ input:-webkit-autofill {
 	animation-fill-mode: both;
 }
 .mdc-floating-label {
-	left: 0;
-	bottom: 8px;
+	left: 0 !important;
+	bottom: 8px !important;
 	max-width: initial !important;
 	.mdc-text-field:not(.mdc-text-field--textarea) & {
 		&--float-above, &.alwaysFloat {
