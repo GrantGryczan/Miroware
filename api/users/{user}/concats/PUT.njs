@@ -3,8 +3,17 @@ if(isMe) {
 	const found = this.user.concats.find(item => item.sub === this.req.query.sub && item.val === this.req.query.val);
 	if(found) {
 		const concat = await sanitizeConcat(this, true);
+		this.value = {
+			...concat,
+			url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
+		};
+		const keys = Object.keys(concat);
+		if(!keys.length) {
+			this.done();
+			return;
+		}
 		const set = {};
-		for(const key of Object.keys(concat)) {
+		for(const key of keys) {
 			set[`concats.$.${key}`] = concat[key];
 		}
 		users.updateOne({
@@ -14,10 +23,6 @@ if(isMe) {
 		}, {
 			$set: set
 		});
-		this.value = {
-			...concat,
-			url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
-		};
 	} else {
 		this.value = {
 			error: "You do not own that concat."

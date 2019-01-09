@@ -109,8 +109,17 @@ if(isMe) {
 				return;
 			}
 		}
+		this.value = {
+			...found,
+			...item
+		};
+		const keys = Object.keys(item);
+		if(!keys.length) {
+			this.done();
+			return;
+		}
 		const set = {};
-		for(const key of Object.keys(item)) {
+		for(const key of keys) {
 			set[`pipe.$.${key}`] = item[key];
 		}
 		users.updateOne({
@@ -119,10 +128,6 @@ if(isMe) {
 		}, {
 			$set: set
 		});
-		this.value = {
-			...found,
-			...item
-		};
 		const urls = [`https://pipe.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://pipe.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`];
 		if(found.type === "/") {
 			const itemPath = `${found.name}/`;
