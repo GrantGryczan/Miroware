@@ -9,6 +9,14 @@
 		color: #e9a663;
 	}
 }
+.mdc-select:not(.mdc-select--disabled) .mdc-select__native-control:focus {
+	& ~ .mdc-floating-label {
+		color: #e9a663;
+	}
+	& ~ .mdc-line-ripple {
+		background-color: #b57a40;
+	}
+}
 #targetIndicator {
 	position: absolute;
 	top: 0;
@@ -210,7 +218,7 @@
 }
 .property {
 	margin: 8px 0;
-	& > .mdc-text-field {
+	& > .mdc-text-field, & > .mdc-select {
 		width: 100%;
 	}
 }
