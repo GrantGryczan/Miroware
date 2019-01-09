@@ -267,10 +267,10 @@ input:-webkit-autofill {
 	animation-fill-mode: both;
 }
 .mdc-floating-label {
+	left: 0;
+	bottom: 8px;
 	max-width: initial !important;
 	.mdc-text-field:not(.mdc-text-field--textarea) & {
-		left: 0;
-		bottom: 8px;
 		&--float-above, &.alwaysFloat {
 			transform: translateY(-100%) scale(0.75);
 		}
@@ -411,6 +411,7 @@ textarea {
 	}
 }
 .mdc-select {
+	height: auto;
 	&:not(.mdc-select--disabled) {
 		background-color: #303030;
 		.mdc-floating-label {
@@ -446,6 +447,10 @@ textarea {
 	}
 	&::before, &::after {
 		background-color: rgba(255, 255, 255, 0.87);
+	}
+	&__native-control {
+		height: auto;
+		padding: 20px 26px 0 0;
 	}
 }
 .mdc-checkbox {
