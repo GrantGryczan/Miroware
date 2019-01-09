@@ -413,7 +413,7 @@ textarea {
 .mdc-select {
 	height: auto;
 	&:not(.mdc-select--disabled) {
-		background-color: #303030;
+		background-color: transparent;
 		.mdc-floating-label {
 			color: rgba(255, 255, 255, 0.6);
 		}
