@@ -452,6 +452,20 @@ textarea {
 		height: auto;
 		padding: 20px 26px 0 0;
 	}
+	& > .arrow {
+		pointer-events: none;
+		&::before {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			width: 26px;
+			height: 28px;
+			text-align: center;
+			font-size: 8px;
+			line-height: 28px;
+			content: "▼";
+		}
+	}
 }
 .mdc-checkbox {
 	&--disabled ~ label {

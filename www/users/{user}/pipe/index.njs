@@ -102,6 +102,7 @@ this.value += html`
 								<option value="1">Unlisted</option>
 								<option value="2">Private</option>
 							</select>
+							<div class="arrow"></div>
 							<label class="mdc-floating-label alwaysFloat" for="privacy">Privacy</label>
 							<div class="mdc-line-ripple"></div>
 						</div><br>
