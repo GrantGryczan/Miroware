@@ -179,6 +179,7 @@ class PipeItem {
 		this.type = item.type;
 		this.name = item.name;
 		this.size = item.size;
+		this.privacy = item.privacy;
 		this.date = new Date(item.date);
 		this.element.addEventListener("click", this.click.bind(this));
 	}
@@ -770,11 +771,12 @@ const property = {};
 for(const propertyElement of properties.querySelectorAll("[data-key]")) {
 	(property[propertyElement.getAttribute("data-key")] = propertyElement)._label = propertyElement.querySelector("label");
 }
-const linkPreview = property.url.querySelector("#linkPreview");
-const save = property.actions.querySelector("#save");
-const download = property.actions.querySelector("#download");
 const selectionLength = properties.querySelector("#selectionLength");
 const selectionSize = properties.querySelector("#selectionSize");
+const linkPreview = property.url.querySelector("#linkPreview");
+const privateOption = properties.elements.privacy.options[2];
+const save = property.actions.querySelector("#save");
+const download = property.actions.querySelector("#download");
 const previewImage = properties.querySelector("#previewImage");
 const previewAudio = properties.querySelector("#previewAudio");
 const previewVideo = properties.querySelector("#previewVideo");
@@ -795,7 +797,11 @@ const updateProperties = () => {
 			property.name.classList.remove("hidden");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
-			if(item.type !== "/") {
+			properties.elements.privacy._prev = properties.elements.privacy.value = String(item.privacy);
+			property.privacy.classList.remove("hidden");
+			if(item.type === "/") {
+				privateOption.disabled = privateOption.hidden = true;
+			} else {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				property.type.classList.remove("hidden");
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
@@ -804,6 +810,7 @@ const updateProperties = () => {
 				property.url.classList.remove("hidden");
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 				property.url._label.classList.add("mdc-floating-label--float-above");
+				privateOption.disabled = privateOption.hidden = false;
 				download.href = `${item.url}?download`;
 				download.classList.remove("hidden");
 				if(item.type.startsWith("image/")) {
@@ -921,12 +928,19 @@ properties.addEventListener("submit", async evt => {
 	if(changedType) {
 		data.type = properties.elements.type.value;
 	}
+	const changedPrivacy = changed.includes(properties.elements.privacy);
+	if(changedPrivacy) {
+		data.privacy = +properties.elements.privacy.value;
+	}
 	Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
 		if(changedName) {
 			itemElement._item.name = xhr.response.name;
 		}
 		if(changedType) {
 			itemElement._item.type = xhr.response.type;
+		}
+		if(changedPrivacy) {
+			itemElement._item.privacy = xhr.response.privacy;
 		}
 		Miro.formState(properties, true);
 		itemElement.classList.remove("loading");

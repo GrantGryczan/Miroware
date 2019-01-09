@@ -102,13 +102,33 @@ if(isMe) {
 			return;
 		}
 	}
+	if(data.privacy === undefined) {
+		data.privacy = 1;
+	} else if(typeof data.privacy === "number") {
+		if(!(data.privacy === 0 || data.privacy === 1 || (typeDir && data.privacy === 2))) {
+			this.value = {
+				error: `The \`privacy\` value must be 0 (public)${typeDir ? ", 1 (unlisted), or 2 (private)" : " or 1 (unlisted)"}.`
+			};
+			this.status = 400;
+			this.done();
+			return;
+		}
+	} else {
+		this.value = {
+			error: "The `privacy` value must be a number."
+		};
+		this.status = 400;
+		this.done();
+		return;
+	}
 	if(typeDir) {
 		this.update.$push = {
 			pipe: this.value = {
 				id: String(ObjectID()),
 				date: Date.now(),
 				name: data.name,
-				type: "/"
+				type: "/",
+				privacy: data.privacy
 			}
 		};
 		this.value = {
@@ -147,7 +167,8 @@ if(isMe) {
 						date: Date.now(),
 						name: data.name,
 						type: data.type || mime.getType(data.name) || "application/octet-stream",
-						size: this.req.body.length
+						size: this.req.body.length,
+						privacy: data.privacy
 					}
 				};
 				const encodedName = encodeForPipe(data.name);

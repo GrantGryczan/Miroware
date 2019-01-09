@@ -109,6 +109,27 @@ if(isMe) {
 				return;
 			}
 		}
+		if(this.req.body.privacy !== undefined) {
+			if(typeof this.req.body.privacy === "number") {
+				if(this.req.body.privacy === 0 || this.req.body.privacy === 1 || (typeDir && this.req.body.privacy === 2)) {
+					item.privacy = this.req.body.privacy;
+				} else {
+					this.value = {
+						error: `The \`privacy\` value must be 0 (public)${typeDir ? ", 1 (unlisted), or 2 (private)" : " or 1 (unlisted)"}.`
+					};
+					this.status = 400;
+					this.done();
+					return;
+				}
+			} else {
+				this.value = {
+					error: "The `privacy` value must be a number."
+				};
+				this.status = 400;
+				this.done();
+				return;
+			}
+		}
 		this.value = {
 			...found,
 			...item

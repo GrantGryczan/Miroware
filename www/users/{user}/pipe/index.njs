@@ -98,9 +98,9 @@ this.value += html`
 					<div class="property hidden" data-key="privacy">
 						<div class="mdc-select">
 							<select id="privacy" name="privacy" class="mdc-select__native-control" required>
-								<option value="0">Public</option>
-								<option value="1">Unlisted</option>
-								<option value="2">Private</option>
+								<option value="0" title="Visible in your Pipe to everyone">Public</option>
+								<option value="1" title="Only visible in your Pipe to you but accessible by URL to anyone">Unlisted</option>
+								<option value="2" title="Only accessible to you">Private</option>
 							</select>
 							<div class="arrow"></div>
 							<label class="mdc-floating-label alwaysFloat" for="privacy">Privacy</label>
