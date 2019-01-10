@@ -244,6 +244,7 @@ class PipeItem {
 		const typeDir = (this[_type] = value) === "/";
 		this.typeElement.textContent = this.typeElement.title = typeDir ? "" : value;
 		this.iconElement.textContent = typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
+		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
 	}
 	get date() {
 		return this[_date];
@@ -861,8 +862,8 @@ const removeItems = () => {
 		if(itemElements.length === 1) {
 			const itemElement = itemElements[0];
 			new Miro.Dialog("Remove Item", html`
-				Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>
-				Items inside directories will also be removed.<br>
+				Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>${itemElement._item.type === "/" ? `
+				Items inside directories will also be removed.<br>` : ""}
 				This cannot be undone.
 			`, ["Yes", "No"]).then(value => {
 				if(value === 0) {
@@ -871,8 +872,8 @@ const removeItems = () => {
 			});
 		} else {
 			new Miro.Dialog("Remove Items", html`
-				Are you sure you want to remove all those items?<br>${items.`
-				Items inside directories will also be removed.<br>`}
+				Are you sure you want to remove all those items?<br>${items.querySelector(".item.typeDir.selected") ? `
+				Items inside directories will also be removed.<br>` : ""}
 				This cannot be undone.
 			`, ["Yes", "No"]).then(value => {
 				if(value === 0) {
