@@ -863,7 +863,7 @@ const removeItems = () => {
 			const itemElement = itemElements[0];
 			new Miro.Dialog("Remove Item", html`
 				Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>${itemElement._item.type === "/" ? `
-				Items inside directories will also be removed.<br>` : ""}
+				Items inside the directory will also be removed.<br>` : ""}
 				This cannot be undone.
 			`, ["Yes", "No"]).then(value => {
 				if(value === 0) {
@@ -871,9 +871,10 @@ const removeItems = () => {
 				}
 			});
 		} else {
+			const selectedDirs = items.querySelectorAll(".item.typeDir.selected").length;
 			new Miro.Dialog("Remove Items", html`
-				Are you sure you want to remove all those items?<br>${items.querySelector(".item.typeDir.selected") ? `
-				Items inside directories will also be removed.<br>` : ""}
+				Are you sure you want to remove all those items?<br>${selectedDirs ? `
+				Items inside the ${selectedDirs === 1 ? "directory" : "directories"} will also be removed.<br>` : ""}
 				This cannot be undone.
 			`, ["Yes", "No"]).then(value => {
 				if(value === 0) {
