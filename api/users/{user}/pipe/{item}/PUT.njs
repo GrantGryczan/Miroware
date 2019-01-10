@@ -2,6 +2,7 @@ const {user, isMe} = await parseUser(this);
 if(isMe) {
 	const found = this.user.pipe.find(item => item.id === this.params.item);
 	if(found) {
+		const typeDir = found.type === "/";
 		const item = {};
 		if(this.req.body.name !== undefined) {
 			if(typeof this.req.body.name === "string") {
@@ -41,7 +42,7 @@ if(isMe) {
 					this.status = 422;
 					this.done();
 					return;
-				} else if(found.type === "/" && this.req.body.name.startsWith(`${found.name}/`)) {
+				} else if(typeDir && this.req.body.name.startsWith(`${found.name}/`)) {
 					this.value = {
 						error: "Directories cannot be moved into themselves."
 					};
@@ -73,7 +74,7 @@ if(isMe) {
 			}
 		}
 		if(this.req.body.type !== undefined) {
-			if(found.type === "/") {
+			if(typeDir) {
 				this.value = {
 					error: "The `type` value cannot be changed for a directory."
 				};
@@ -150,7 +151,7 @@ if(isMe) {
 			$set: set
 		});
 		const urls = [`https://pipe.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://pipe.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`];
-		if(found.type === "/") {
+		if(typeDir) {
 			const itemPath = `${found.name}/`;
 			this.value.size = user.pipe.reduce((size, item2) => {
 				if(item2.type !== "/" && item2.name.startsWith(itemPath)) {

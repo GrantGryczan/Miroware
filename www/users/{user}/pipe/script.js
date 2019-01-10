@@ -196,13 +196,13 @@ class PipeItem {
 	}
 	set name(value) {
 		const oldName = this.name;
-		const typeDirectory = this.type === "/";
+		const typeDir = this.type === "/";
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
-		this.element.href = typeDirectory ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(this.name)}`);
+		this.element.href = typeDir ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(this.name)}`);
 		this.updateThumbnail();
 		if(oldName) {
-			if(typeDirectory) {
+			if(typeDir) {
 				const pathIndex = cachedPaths.indexOf(oldName);
 				if(pathIndex !== -1) {
 					cachedPaths.splice(pathIndex, 1, value);
@@ -241,9 +241,9 @@ class PipeItem {
 		return this[_type];
 	}
 	set type(value) {
-		const typeDirectory = (this[_type] = value) === "/";
-		this.typeElement.textContent = this.typeElement.title = typeDirectory ? "" : value;
-		this.iconElement.textContent = typeDirectory ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
+		const typeDir = (this[_type] = value) === "/";
+		this.typeElement.textContent = this.typeElement.title = typeDir ? "" : value;
+		this.iconElement.textContent = typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
 	}
 	get date() {
 		return this[_date];
@@ -871,8 +871,8 @@ const removeItems = () => {
 			});
 		} else {
 			new Miro.Dialog("Remove Items", html`
-				Are you sure you want to remove all those items?<br>
-				Items inside directories will also be removed.<br>
+				Are you sure you want to remove all those items?<br>${items.`
+				Items inside directories will also be removed.<br>`}
 				This cannot be undone.
 			`, ["Yes", "No"]).then(value => {
 				if(value === 0) {
