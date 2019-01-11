@@ -1,5 +1,5 @@
 const {user, isMe} = await parseUser(this);
-if(this.req.query.path && !this.user.pipe.some(item => item.type === "/" && item.name === this.req.query.path)) {
+if(this.req.query.path && !this.user.pipe.some(item => item.type === "/" && item.name === this.req.query.path && (isMe || item.privacy < 2))) {
 	this.value = {
 		error: "That path does not exist."
 	};
