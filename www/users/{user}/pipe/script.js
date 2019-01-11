@@ -993,9 +993,25 @@ document.addEventListener("keydown", evt => {
 			}
 		} else if(evt.keyCode === 27) { // `esc`
 			deselectItems();
+		} else if(evt.keyCode === 35) { // `end`
+			evt.preventDefault();
+			if(items.lastChild) {
+				focusedItem = items.lastChild;
+				if(evt.shiftKey || !superKey) {
+					selectItem(items.lastChild, evt);
+				}
+			}
+		} else if(evt.keyCode === 36) { // `home`
+			evt.preventDefault();
+			if(items.firstChild) {
+				focusedItem = items.firstChild;
+				if(evt.shiftKey || !superKey) {
+					selectItem(items.firstChild, evt);
+				}
+			}
 		} else if(evt.keyCode === 37 || evt.keyCode === 38) { // `left` || `up`
 			evt.preventDefault();
-			const item = focusedItem ? focusedItem.previousElementSibling || items.lastElementChild : items.firstElementChild;
+			const item = focusedItem ? focusedItem.previousSibling || items.lastChild : items.firstChild;
 			if(item) {
 				focusedItem = item;
 				if(evt.shiftKey || !superKey) {
@@ -1004,7 +1020,7 @@ document.addEventListener("keydown", evt => {
 			}
 		} else if(evt.keyCode === 39 || evt.keyCode === 40) { // `right` || `down`
 			evt.preventDefault();
-			const item = focusedItem ? focusedItem.nextElementSibling || items.firstElementChild : items.firstElementChild;
+			const item = focusedItem ? focusedItem.nextSibling || items.firstChild : items.firstChild;
 			if(item) {
 				focusedItem = item;
 				if(evt.shiftKey || !superKey) {
