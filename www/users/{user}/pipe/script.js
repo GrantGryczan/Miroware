@@ -290,8 +290,299 @@ const removeItems = () => {
 		}
 	}
 };
+const render = () => {
+	while(ancestors.lastChild) {
+		ancestors.removeChild(ancestors.lastChild);
+	}
+	ancestors.appendChild(html`
+		<span>
+			<span class="separator">/</span>
+			<a class="ancestor" href="#">$${Miro.data.user.name}</a>
+		</span>
+	`);
+	if(path) {
+		let ancestry = "";
+		for(const name of path.split("/")) {
+			ancestors.appendChild(html`
+				<span>
+					<span class="separator">/</span>
+					<a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>
+				</span>
+			`);
+		}
+	}
+	const ancestorLinks = ancestors.querySelectorAll(".ancestor");
+	ancestorLinks[ancestorLinks.length - 1].removeAttribute("href");
+	while(items.lastChild) {
+		items.removeChild(items.lastChild);
+	}
+	if(!(sortValue in sort)) {
+		sortValue = SORT_DEFAULT;
+	}
+	const sortedItems = pipe.filter(currentItems).sort(sort[sortValue]);
+	for(const item of reverseValue ? sortedItems.reverse() : sortedItems) {
+		items.appendChild(item.element);
+	}
+	updateProperties();
+	resize();
+};
+const hashChange = () => {
+	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
+		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?path=${encodeForPipe(path)}`).then(Miro.response(xhr => {
+			for(const item of xhr.response) {
+				setItem(new PipeItem(item));
+			}
+			cachedPaths.push(path);
+			render();
+		}));
+	} else {
+		render();
+	}
+};
+hashChange();
+window.addEventListener("hashchange", hashChange);
+let selectedItem = null;
+let focusedItem = null;
+const selectItem = (target, evt, button) => {
+	const apparentTop = target.offsetTop - header.offsetHeight;
+	if(apparentTop < items.parentNode.scrollTop) {
+		items.parentNode.scrollTop = apparentTop;
+	} else if(target.offsetTop + target.offsetHeight > items.parentNode.scrollTop + items.parentNode.offsetHeight) {
+		items.parentNode.scrollTop = target.offsetTop + target.offsetHeight - items.parentNode.offsetHeight;
+	}
+	const superKey = evt.ctrlKey || evt.metaKey;
+	if(button === 2 && !(superKey || evt.shiftKey)) {
+		if(!target.classList.contains("selected")) {
+			for(const item of items.querySelectorAll(".item.selected")) {
+				item.classList.remove("selected");
+			}
+			target.classList.add("selected");
+			selectedItem = focusedItem = target;
+		}
+	} else if(evt.shiftKey) {
+		let selecting = !selectedItem;
+		const classListMethod = superKey && selectedItem && !selectedItem.classList.contains("selected") ? "remove" : "add";
+		for(const itemElement of items.querySelectorAll(".item")) {
+			if(itemElement === selectedItem || itemElement === target) {
+				if(selecting) {
+					itemElement.classList[classListMethod]("selected");
+					selecting = false;
+					continue;
+				} else {
+					itemElement.classList[classListMethod]("selected");
+					if(selectedItem !== target) {
+						selecting = true;
+					}
+				}
+			} else if(selecting) {
+				itemElement.classList[classListMethod]("selected");
+			} else if(!superKey) {
+				itemElement.classList.remove("selected");
+			}
+		}
+	} else {
+		selectedItem = target;
+		focusedItem = target;
+		if(superKey) {
+			target.classList.toggle("selected");
+		} else {
+			let othersSelected = false;
+			for(const itemElement of items.querySelectorAll(".item.selected")) {
+				if(itemElement !== target) {
+					othersSelected = true;
+					itemElement.classList.remove("selected");
+				}
+			}
+			if(target.classList[othersSelected ? "add" : "toggle"]("selected") === false) {
+				selectedItem = null;
+			}
+		}
+	}
+	updateProperties();
+};
+const deselectItems = () => {
+	for(const item of items.querySelectorAll(".item.selected")) {
+		item.classList.remove("selected");
+	}
+	selectedItem = focusedItem = null;
+	updateProperties();
+};
+let mouseX = 0;
+let mouseY = 0;
+let mouseTarget;
+let mouseDown = -1;
+let mouseMoved = false;
+document.addEventListener("mousedown", evt => {
+	mouseMoved = false;
+	mouseX = evt.clientX;
+	mouseY = evt.clientY;
+	if(evt.button !== 0 && evt.button !== 2) {
+		return;
+	}
+	mouseTarget = evt.target;
+	mouseDown = evt.button;
+	if(evt.target.parentNode._item) {
+		focusedItem = evt.target.parentNode;
+	} else if(evt.target._item) {
+		focusedItem = evt.target;
+	}
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("mouseup", evt => {
+	if(mouseDown !== -1 && items.contains(mouseTarget)) {
+		if(mouseTarget.parentNode._item || mouseTarget._item) {
+			if(mouseMoved) {
+				if(indicatedTarget) {
+					const sourcePath = path;
+					for(const itemElement of items.querySelectorAll(".item.selected")) {
+						itemElement.classList.remove("selected");
+						itemElement.classList.add("loading");
+						const targetName = indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
+						const name = getName(itemElement._item.name);
+						Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
+							name: targetName ? `${targetName}/${name}` : name
+						}).then(Miro.response(xhr => {
+							itemElement._item.name = xhr.response.name;
+							itemElement.classList.remove("loading");
+							if(sourcePath === path) {
+								render();
+							}
+						}, () => {
+							itemElement.classList.remove("loading");
+							updateProperties();
+						}));
+					}
+					indicateTarget();
+				}
+			} else {
+				selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, evt.button);
+			}
+		} else if(mouseTarget.parentNode.parentNode._item) {
+			selectItem(mouseTarget.parentNode.parentNode, {
+				ctrlKey: true
+			});
+		} else if(!mouseMoved) {
+			deselectItems();
+		}
+	}
+	mouseTarget = null;
+	mouseDown = -1;
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("dblclick", evt => {
+	if(!mouseMoved && evt.target.parentNode._item) {
+		selectItem(evt.target.parentNode, evt, 2);
+		evt.target.parentNode._item.open();
+	}
+}, {
+	capture: true,
+	passive: true
+});
+document.addEventListener("mousemove", evt => {
+	if(evt.clientX === mouseX && evt.clientY === mouseY) {
+		return;
+	}
+	mouseX = evt.clientX;
+	mouseY = evt.clientY;
+	if(mouseDown !== -1 && mouseTarget && (mouseTarget.parentNode._item || mouseTarget._item) && Miro.data.isMe) {
+		if(!mouseMoved) {
+			selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, 2);
+		}
+		indicateTarget(evt.target.classList.contains("ancestor") ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
+	}
+	mouseMoved = true;
+}, {
+	capture: true,
+	passive: true
+});
+const properties = document.body.querySelector("#properties");
+const property = {};
+for(const propertyElement of properties.querySelectorAll("[data-key]")) {
+	(property[propertyElement.getAttribute("data-key")] = propertyElement)._label = propertyElement.querySelector("label");
+}
+const selectionLength = properties.querySelector("#selectionLength");
+const selectionSize = properties.querySelector("#selectionSize");
+const linkPreview = property.url.querySelector("#linkPreview");
+const privateOption = properties.elements.privacy.options[2];
+const save = property.actions.querySelector("#save");
+const download = property.actions.querySelector("#download");
+const previewImage = properties.querySelector("#previewImage");
+const previewAudio = properties.querySelector("#previewAudio");
+const previewVideo = properties.querySelector("#previewVideo");
+const sizeReducer = (size, itemElement) => size + itemElement._item.size;
+const updateProperties = () => {
+	for(const propertyElement of Object.values(property)) {
+		propertyElement.classList.add("hidden");
+	}
+	save.classList.add("hidden");
+	download.classList.add("hidden");
+	const selected = items.querySelectorAll(".item.selected");
+	if(selectionLength.textContent = selected.length) {
+		property.actions.classList.remove("hidden");
+		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
+		if(selected.length === 1) {
+			const item = selected[0]._item;
+			properties.elements.name._prev = properties.elements.name.value = getName(item.name);
+			property.name.classList.remove("hidden");
+			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
+			property.name._label.classList.add("mdc-floating-label--float-above");
+			if(item.type !== "/") {
+				properties.elements.type._prev = properties.elements.type.value = item.type;
+				property.type.classList.remove("hidden");
+				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
+				property.type._label.classList.add("mdc-floating-label--float-above");
+				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = item.url;
+				property.url.classList.remove("hidden");
+				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
+				property.url._label.classList.add("mdc-floating-label--float-above");
+				download.href = `${item.url}?download`;
+				download.classList.remove("hidden");
+				if(item.type.startsWith("image/")) {
+					previewImage.src = item.url;
+					previewImage.classList.remove("hidden");
+					previewAudio.classList.add("hidden");
+					previewVideo.classList.add("hidden");
+					property.preview.classList.remove("hidden");
+				} else if(item.type.startsWith("audio/")) {
+					previewAudio.src = item.url;
+					previewImage.classList.add("hidden");
+					previewAudio.classList.remove("hidden");
+					previewVideo.classList.add("hidden");
+					property.preview.classList.remove("hidden");
+				} else if(item.type.startsWith("video/")) {
+					previewVideo.src = item.url;
+					previewImage.classList.add("hidden");
+					previewAudio.classList.add("hidden");
+					previewVideo.classList.remove("hidden");
+					property.preview.classList.remove("hidden");
+				}
+			}
+		}
+		if(Miro.data.isMe) {
+			let samePrivacy = true;
+			const privacy = selected[0]._item.privacy;
+			properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
+			privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
+			property.privacy.classList.remove("hidden");
+			save.disabled = true;
+			save.classList.remove("hidden");
+		}
+	} else {
+		selectionSize.textContent = "0 B";
+	}
+};
+property.url.querySelector("#copyURL").addEventListener("click", () => {
+	properties.elements.url.select();
+	document.execCommand("copy");
+	Miro.snackbar("URL copied to clipboard");
+});
+updateProperties();
 if(Miro.data.isMe) {
-const checkName = async name => {
+	const checkName = async name => {
 		let takenItem;
 		let fullName = applyPath(name);
 		while(takenItem = getItem(fullName)) {
@@ -685,297 +976,6 @@ const checkName = async name => {
 		}
 	});
 }
-const render = () => {
-	while(ancestors.lastChild) {
-		ancestors.removeChild(ancestors.lastChild);
-	}
-	ancestors.appendChild(html`
-		<span>
-			<span class="separator">/</span>
-			<a class="ancestor" href="#">$${Miro.data.user.name}</a>
-		</span>
-	`);
-	if(path) {
-		let ancestry = "";
-		for(const name of path.split("/")) {
-			ancestors.appendChild(html`
-				<span>
-					<span class="separator">/</span>
-					<a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>
-				</span>
-			`);
-		}
-	}
-	const ancestorLinks = ancestors.querySelectorAll(".ancestor");
-	ancestorLinks[ancestorLinks.length - 1].removeAttribute("href");
-	while(items.lastChild) {
-		items.removeChild(items.lastChild);
-	}
-	if(!(sortValue in sort)) {
-		sortValue = SORT_DEFAULT;
-	}
-	const sortedItems = pipe.filter(currentItems).sort(sort[sortValue]);
-	for(const item of reverseValue ? sortedItems.reverse() : sortedItems) {
-		items.appendChild(item.element);
-	}
-	updateProperties();
-	resize();
-};
-const hashChange = () => {
-	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
-		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?path=${encodeForPipe(path)}`).then(Miro.response(xhr => {
-			for(const item of xhr.response) {
-				setItem(new PipeItem(item));
-			}
-			cachedPaths.push(path);
-			render();
-		}));
-	} else {
-		render();
-	}
-};
-hashChange();
-window.addEventListener("hashchange", hashChange);
-let selectedItem = null;
-let focusedItem = null;
-const selectItem = (target, evt, button) => {
-	const apparentTop = target.offsetTop - header.offsetHeight;
-	if(apparentTop < items.parentNode.scrollTop) {
-		items.parentNode.scrollTop = apparentTop;
-	} else if(target.offsetTop + target.offsetHeight > items.parentNode.scrollTop + items.parentNode.offsetHeight) {
-		items.parentNode.scrollTop = target.offsetTop + target.offsetHeight - items.parentNode.offsetHeight;
-	}
-	const superKey = evt.ctrlKey || evt.metaKey;
-	if(button === 2 && !(superKey || evt.shiftKey)) {
-		if(!target.classList.contains("selected")) {
-			for(const item of items.querySelectorAll(".item.selected")) {
-				item.classList.remove("selected");
-			}
-			target.classList.add("selected");
-			selectedItem = focusedItem = target;
-		}
-	} else if(evt.shiftKey) {
-		let selecting = !selectedItem;
-		const classListMethod = superKey && selectedItem && !selectedItem.classList.contains("selected") ? "remove" : "add";
-		for(const itemElement of items.querySelectorAll(".item")) {
-			if(itemElement === selectedItem || itemElement === target) {
-				if(selecting) {
-					itemElement.classList[classListMethod]("selected");
-					selecting = false;
-					continue;
-				} else {
-					itemElement.classList[classListMethod]("selected");
-					if(selectedItem !== target) {
-						selecting = true;
-					}
-				}
-			} else if(selecting) {
-				itemElement.classList[classListMethod]("selected");
-			} else if(!superKey) {
-				itemElement.classList.remove("selected");
-			}
-		}
-	} else {
-		selectedItem = target;
-		focusedItem = target;
-		if(superKey) {
-			target.classList.toggle("selected");
-		} else {
-			let othersSelected = false;
-			for(const itemElement of items.querySelectorAll(".item.selected")) {
-				if(itemElement !== target) {
-					othersSelected = true;
-					itemElement.classList.remove("selected");
-				}
-			}
-			if(target.classList[othersSelected ? "add" : "toggle"]("selected") === false) {
-				selectedItem = null;
-			}
-		}
-	}
-	updateProperties();
-};
-const deselectItems = () => {
-	for(const item of items.querySelectorAll(".item.selected")) {
-		item.classList.remove("selected");
-	}
-	selectedItem = focusedItem = null;
-	updateProperties();
-};
-let mouseX = 0;
-let mouseY = 0;
-let mouseTarget;
-let mouseDown = -1;
-let mouseMoved = false;
-document.addEventListener("mousedown", evt => {
-	mouseMoved = false;
-	mouseX = evt.clientX;
-	mouseY = evt.clientY;
-	if(evt.button !== 0 && evt.button !== 2) {
-		return;
-	}
-	mouseTarget = evt.target;
-	mouseDown = evt.button;
-	if(evt.target.parentNode._item) {
-		focusedItem = evt.target.parentNode;
-	} else if(evt.target._item) {
-		focusedItem = evt.target;
-	}
-}, {
-	capture: true,
-	passive: true
-});
-document.addEventListener("mouseup", evt => {
-	if(mouseDown !== -1 && items.contains(mouseTarget)) {
-		if(mouseTarget.parentNode._item || mouseTarget._item) {
-			if(mouseMoved) {
-				if(indicatedTarget) {
-					const sourcePath = path;
-					for(const itemElement of items.querySelectorAll(".item.selected")) {
-						itemElement.classList.remove("selected");
-						itemElement.classList.add("loading");
-						const targetName = indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
-						const name = getName(itemElement._item.name);
-						Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
-							name: targetName ? `${targetName}/${name}` : name
-						}).then(Miro.response(xhr => {
-							itemElement._item.name = xhr.response.name;
-							itemElement.classList.remove("loading");
-							if(sourcePath === path) {
-								render();
-							}
-						}, () => {
-							itemElement.classList.remove("loading");
-							updateProperties();
-						}));
-					}
-					indicateTarget();
-				}
-			} else {
-				selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, evt.button);
-			}
-		} else if(mouseTarget.parentNode.parentNode._item) {
-			selectItem(mouseTarget.parentNode.parentNode, {
-				ctrlKey: true
-			});
-		} else if(!mouseMoved) {
-			deselectItems();
-		}
-	}
-	mouseTarget = null;
-	mouseDown = -1;
-}, {
-	capture: true,
-	passive: true
-});
-document.addEventListener("dblclick", evt => {
-	if(!mouseMoved && evt.target.parentNode._item) {
-		selectItem(evt.target.parentNode, evt, 2);
-		evt.target.parentNode._item.open();
-	}
-}, {
-	capture: true,
-	passive: true
-});
-document.addEventListener("mousemove", evt => {
-	if(evt.clientX === mouseX && evt.clientY === mouseY) {
-		return;
-	}
-	mouseX = evt.clientX;
-	mouseY = evt.clientY;
-	if(mouseDown !== -1 && mouseTarget && (mouseTarget.parentNode._item || mouseTarget._item) && Miro.data.isMe) {
-		if(!mouseMoved) {
-			selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, 2);
-		}
-		indicateTarget(evt.target.classList.contains("ancestor") ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
-	}
-	mouseMoved = true;
-}, {
-	capture: true,
-	passive: true
-});
-const properties = document.body.querySelector("#properties");
-const property = {};
-for(const propertyElement of properties.querySelectorAll("[data-key]")) {
-	(property[propertyElement.getAttribute("data-key")] = propertyElement)._label = propertyElement.querySelector("label");
-}
-const selectionLength = properties.querySelector("#selectionLength");
-const selectionSize = properties.querySelector("#selectionSize");
-const linkPreview = property.url.querySelector("#linkPreview");
-const privateOption = properties.elements.privacy.options[2];
-const save = property.actions.querySelector("#save");
-const download = property.actions.querySelector("#download");
-const previewImage = properties.querySelector("#previewImage");
-const previewAudio = properties.querySelector("#previewAudio");
-const previewVideo = properties.querySelector("#previewVideo");
-const sizeReducer = (size, itemElement) => size + itemElement._item.size;
-const updateProperties = () => {
-	for(const propertyElement of Object.values(property)) {
-		propertyElement.classList.add("hidden");
-	}
-	save.classList.add("hidden");
-	download.classList.add("hidden");
-	const selected = items.querySelectorAll(".item.selected");
-	if(selectionLength.textContent = selected.length) {
-		property.actions.classList.remove("hidden");
-		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
-		if(selected.length === 1) {
-			const item = selected[0]._item;
-			properties.elements.name._prev = properties.elements.name.value = getName(item.name);
-			property.name.classList.remove("hidden");
-			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
-			property.name._label.classList.add("mdc-floating-label--float-above");
-			if(item.type !== "/") {
-				properties.elements.type._prev = properties.elements.type.value = item.type;
-				property.type.classList.remove("hidden");
-				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
-				property.type._label.classList.add("mdc-floating-label--float-above");
-				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = item.url;
-				property.url.classList.remove("hidden");
-				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
-				property.url._label.classList.add("mdc-floating-label--float-above");
-				download.href = `${item.url}?download`;
-				download.classList.remove("hidden");
-				if(item.type.startsWith("image/")) {
-					previewImage.src = item.url;
-					previewImage.classList.remove("hidden");
-					previewAudio.classList.add("hidden");
-					previewVideo.classList.add("hidden");
-					property.preview.classList.remove("hidden");
-				} else if(item.type.startsWith("audio/")) {
-					previewAudio.src = item.url;
-					previewImage.classList.add("hidden");
-					previewAudio.classList.remove("hidden");
-					previewVideo.classList.add("hidden");
-					property.preview.classList.remove("hidden");
-				} else if(item.type.startsWith("video/")) {
-					previewVideo.src = item.url;
-					previewImage.classList.add("hidden");
-					previewAudio.classList.add("hidden");
-					previewVideo.classList.remove("hidden");
-					property.preview.classList.remove("hidden");
-				}
-			}
-		}
-		if(Miro.data.isMe) {
-			let samePrivacy = true;
-			const privacy = selected[0]._item.privacy;
-			properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
-			privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
-			property.privacy.classList.remove("hidden");
-			save.disabled = true;
-			save.classList.remove("hidden");
-		}
-	} else {
-		selectionSize.textContent = "0 B";
-	}
-};
-property.url.querySelector("#copyURL").addEventListener("click", () => {
-	properties.elements.url.select();
-	document.execCommand("copy");
-	Miro.snackbar("URL copied to clipboard");
-});
-updateProperties();
 document.addEventListener("keydown", evt => {
 	if(!Miro.typing() && Miro.focused()) {
 		const superKey = evt.ctrlKey || evt.metaKey;
