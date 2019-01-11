@@ -1,4 +1,5 @@
 "use strict";
+document.title += ` / ${Miro.data.user.name}`;
 const getDate = date => String(date).split(" ").slice(1, 5).join(" ");
 const BYTE_SCALE = 1024;
 const getSize = size => {

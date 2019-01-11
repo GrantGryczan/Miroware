@@ -1,5 +1,4 @@
 this.title = "Pipe";
-this.description = "Host your files with decency.";
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
 let {user} = this;
@@ -25,7 +24,7 @@ if(user) {
 		},
 		isMe
 	}
-	this.title += ` / ${user.name}`;
+	this.description = `View ${user.name}'s Pipe.`;
 } else {
 	Object.assign(this, await load("error/404", this));
 	this.done();
