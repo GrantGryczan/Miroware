@@ -488,11 +488,13 @@ document.addEventListener("mousemove", evt => {
 	}
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
-	if(mouseDown !== -1 && mouseTarget && (mouseTarget.parentNode._item || mouseTarget._item) && Miro.data.isMe) {
+	if(mouseDown !== -1 && mouseTarget && (mouseTarget.parentNode._item || mouseTarget._item)) {
 		if(!mouseMoved) {
 			selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, 2);
 		}
-		indicateTarget(evt.target.classList.contains("ancestor") ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
+		if(Miro.data.isMe) {
+			indicateTarget(evt.target.classList.contains("ancestor") ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
+		}
 	}
 	mouseMoved = true;
 }, {
