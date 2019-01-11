@@ -709,7 +709,7 @@ document.addEventListener("mouseup", evt => {
 						itemElement.classList.add("loading");
 						const targetName = indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
 						const name = getName(itemElement._item.name);
-						Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, {
+						Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
 							name: targetName ? `${targetName}/${name}` : name
 						}).then(Miro.response(xhr => {
 							itemElement._item.name = xhr.response.name;
@@ -849,7 +849,7 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 const removeItem = itemElement => {
 	itemElement.classList.remove("selected");
 	itemElement.classList.add("loading");
-	Miro.request("DELETE", `/users/@me/pipe/${itemElement._item.id}`).then(Miro.response(() => {
+	Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`).then(Miro.response(() => {
 		itemElement._item.delete();
 		render();
 	}, () => {
@@ -934,7 +934,7 @@ properties.addEventListener("submit", async evt => {
 	if(changedPrivacy) {
 		data.privacy = +properties.elements.privacy.value;
 	}
-	Miro.request("PUT", `/users/@me/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+	Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
 		if(changedName) {
 			itemElement._item.name = xhr.response.name;
 		}
