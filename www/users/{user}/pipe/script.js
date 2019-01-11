@@ -493,7 +493,7 @@ document.addEventListener("mousemove", evt => {
 			selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, 2);
 		}
 		if(Miro.data.isMe) {
-			indicateTarget(evt.target.classList.contains("ancestor") ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
+			indicateTarget(evt.target.classList.contains("ancestor") && evt.target.href ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
 		}
 	}
 	mouseMoved = true;
