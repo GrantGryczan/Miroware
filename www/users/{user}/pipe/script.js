@@ -692,11 +692,10 @@ if(Miro.data.isMe) {
 				this.subtitleElement.title = `${this.file.size} B`;
 				this.subtitleElement.textContent = this.size;
 				this.closeElement.textContent = "done";
-				const item = setItem(new PipeItem(xhr.response));
+				selectItem(setItem(new PipeItem(xhr.response)).element, {
+					ctrlKey: true
+				});
 				if(path === this.path) {
-					selectItem(item.element, {
-						ctrlKey: true
-					});
 					render();
 				}
 			}, (xhr, error) => {
@@ -772,12 +771,11 @@ if(Miro.data.isMe) {
 					type: "/"
 				})
 			}).then(Miro.response(xhr => {
-				const item = setItem(new PipeItem(xhr.response));
+				selectItem(setItem(new PipeItem(xhr.response)).element, {
+					ctrlKey: true
+				});
 				cachedPaths.push(xhr.response.name);
 				if(path === this.path) {
-					selectItem(item.element, {
-						ctrlKey: true
-					});
 					render();
 				}
 			}));
