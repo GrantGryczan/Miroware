@@ -108,47 +108,6 @@ for(const sortButton of sortButtons) {
 	}
 	sortButton.addEventListener("click", clickSort);
 }
-const checkName = async name => {
-	let takenItem;
-	let fullName = applyPath(name);
-	while(takenItem = getItem(fullName)) {
-		const value = await new Miro.Dialog("Error", html`
-			<b>$${name}</b> already exists.
-		`, ["Replace", "Rename", "Cancel"]);
-		if(value === 0) {
-			if(await new Miro.Dialog("Replace", html`
-				Are you sure you want to replace <b>$${name}</b>?
-			`, ["Yes", "No"]) === 0) {
-				Miro.response(() => {
-					takenItem.delete();
-					render();
-				})(await Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${takenItem.id}`));
-			}
-		} else if(value === 1) {
-			const dialog = new Miro.Dialog("Rename", html`
-				Enter a new name for <b>$${name}</b>.<br>
-				<div class="mdc-text-field">
-					<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
-					<div class="mdc-line-ripple"></div>
-				</div>
-			`, [{
-				text: "Okay",
-				type: "submit"
-			}, "Cancel"]);
-			await Miro.wait();
-			dialog.form.elements.name.focus();
-			const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
-			dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
-			if(await dialog === 0) {
-				name = dialog.form.elements.name.value;
-			}
-		} else {
-			return false;
-		}
-		fullName = applyPath(name);
-	}
-	return name;
-};
 const items = container.querySelector("#items");
 const _name = Symbol("name");
 const _size = Symbol("size");
@@ -170,7 +129,7 @@ class PipeItem {
 			</a>
 		`)._item = this;
 		this.element.removeChild(this.thumbnailElement = this.element.querySelector(".cell.thumbnail"));
-		this.thumbnailInvisible = true;
+		this.thumbnailHidden = true;
 		this.iconElement = this.element.querySelector(".cell.icon > button");
 		this.nameElement = this.element.querySelector(".cell.name");
 		this.sizeElement = this.element.querySelector(".cell.size");
@@ -293,272 +252,439 @@ class PipeItem {
 		}
 	}
 }
-const creation = container.querySelector("#creation");
-const queuedItems = container.querySelector("#queuedItems");
-const queue = [];
-const queueReducer = (progress, item) => {
-	progress.loaded += item.loaded;
-	progress.total += item.file.size;
-	return progress;
+const removeItem = itemElement => {
+	itemElement.classList.remove("selected");
+	itemElement.classList.add("loading");
+	Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`).then(Miro.response(() => {
+		itemElement._item.delete();
+		render();
+	}, () => {
+		itemElement.classList.remove("loading");
+	}));
 };
-const updateQueue = () => {
-	if(!queue.length) {
-		creation.classList.remove("loading");
-		return;
-	}
-	const {loaded, total} = queue.reduce(queueReducer, {
-		loaded: 0,
-		total: 0
-	});
-	const done = loaded === total;
-	if(done) {
-		creation.classList.remove("loading");
-		queue.length = 0;
-	} else {
-		creation.classList.add("loading");
-		creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
-	}
-};
-window.onbeforeunload = () => (Miro.data.isMe && (container.querySelector(".loading") || !save.disabled)) || undefined;
-class PipeFile {
-	constructor(file) {
-		this.path = path;
-		this.file = file;
-		this.element = html`
-			<a class="item loading" draggable="false">
-				<div class="label">
-					<div class="title" title="$${this.file.name}">$${this.file.name}</div>
-					<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${this.size = getSize(this.file.size)})</div>
-				</div>
-				<button class="close mdc-icon-button material-icons">close</button>
-			</a>
-		`;
-		(this.closeElement = this.element.querySelector(".close")).addEventListener("click", this.close.bind(this));
-		this.subtitleElement = this.element.querySelector(".subtitle");
-		Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
-			"Content-Type": "application/octet-stream",
-			"X-Data": JSON.stringify({
-				name: applyPath(this.file.name)
-			})
-		}, this.file, xhr => {
-			this.xhr = xhr;
-			this.loaded = 0;
-			this.xhr.upload.addEventListener("progress", evt => {
-				if(this.xhr.readyState !== XMLHttpRequest.DONE) {
-					const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
-					this.element.style.backgroundSize = `${percentage}%`;
-					this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
-					this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${this.size})`;
-					updateQueue();
+const removeItems = () => {
+	const itemElements = items.querySelectorAll(".item.selected");
+	if(itemElements.length) {
+		if(itemElements.length === 1) {
+			const itemElement = itemElements[0];
+			new Miro.Dialog("Remove Item", html`
+				Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>${itemElement._item.type === "/" ? `
+				Items inside the directory will also be removed.<br>` : ""}
+				This cannot be undone.
+			`, ["Yes", "No"]).then(value => {
+				if(value === 0) {
+					removeItem(itemElement);
 				}
 			});
-			queue.push(this);
-			updateQueue();
-		}, true).then(Miro.response(xhr => {
-			this.element.classList.remove("loading");
-			this.element.href = `#${this.path}`;
-			this.subtitleElement.title = `${this.file.size} B`;
-			this.subtitleElement.textContent = this.size;
-			this.closeElement.textContent = "done";
-			setItem(new PipeItem(xhr.response));
-			if(path === this.path) {
-				render();
-			}
-		}, (xhr, error) => {
-			this.element.classList.remove("loading");
-			this.element.classList.add("error");
-			this.subtitleElement.title = error;
-			this.subtitleElement.textContent = "An error occurred. Click to retry.";
-			this.element.addEventListener("click", this.retry.bind(this));
-			if(this.dequeue()) {
-				updateQueue();
-			}
-		}));
-	}
-	dequeue() {
-		const queueIndex = queue.indexOf(this);
-		if(queueIndex === -1) {
-			return false;
 		} else {
-			queue.splice(queueIndex, 1);
-			return true;
+			const selectedDirs = items.querySelectorAll(".item.typeDir.selected").length;
+			new Miro.Dialog("Remove Items", html`
+				Are you sure you want to remove all those items?<br>${selectedDirs ? `
+				Items inside the ${selectedDirs === 1 ? "directory" : "directories"} will also be removed.<br>` : ""}
+				This cannot be undone.
+			`, ["Yes", "No"]).then(value => {
+				if(value === 0) {
+					itemElements.forEach(removeItem);
+				}
+			});
 		}
 	}
-	async close(evt) {
-		if(evt instanceof Event) {
-			evt.preventDefault();
+};
+if(Miro.data.isMe) {
+const checkName = async name => {
+		let takenItem;
+		let fullName = applyPath(name);
+		while(takenItem = getItem(fullName)) {
+			const value = await new Miro.Dialog("Error", html`
+				<b>$${name}</b> already exists.
+			`, ["Replace", "Rename", "Cancel"]);
+			if(value === 0) {
+				if(await new Miro.Dialog("Replace", html`
+					Are you sure you want to replace <b>$${name}</b>?
+				`, ["Yes", "No"]) === 0) {
+					Miro.response(() => {
+						takenItem.delete();
+						render();
+					})(await Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${takenItem.id}`));
+				}
+			} else if(value === 1) {
+				const dialog = new Miro.Dialog("Rename", html`
+					Enter a new name for <b>$${name}</b>.<br>
+					<div class="mdc-text-field">
+						<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+						<div class="mdc-line-ripple"></div>
+					</div>
+				`, [{
+					text: "Okay",
+					type: "submit"
+				}, "Cancel"]);
+				await Miro.wait();
+				dialog.form.elements.name.focus();
+				const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
+				dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
+				if(await dialog === 0) {
+					name = dialog.form.elements.name.value;
+				}
+			} else {
+				return false;
+			}
+			fullName = applyPath(name);
 		}
-		if(this.element.classList.contains("loading") && await new Miro.Dialog("Cancel", html`
-			Are you sure you want to cancel uploading <b>$${this.file.name}</b>?
-		`, ["Yes", "No"]) !== 0) {
+		return name;
+	};
+	const creation = container.querySelector("#creation");
+	const queuedItems = container.querySelector("#queuedItems");
+	const queue = [];
+	const queueReducer = (progress, item) => {
+		progress.loaded += item.loaded;
+		progress.total += item.file.size;
+		return progress;
+	};
+	const updateQueue = () => {
+		if(!queue.length) {
+			creation.classList.remove("loading");
 			return;
 		}
-		if(this.element.parentNode) {
-			this.xhr.abort();
-			this.element.parentNode.removeChild(this.element);
-			if(this.dequeue()) {
-				updateQueue();
-			}
-		}
-	}
-	retry(evt) {
-		if(!this.closeElement.contains(evt.target)) {
-			this.element.parentNode.replaceChild(new PipeFile(this.file).element, this.element);
-			this.dequeue();
-		}
-	}
-}
-const addFile = async (file, name) => {
-	name = await checkName(typeof name === "string" ? name : file.name);
-	if(!name) {
-		return;
-	} else if(name !== file.name) {
-		Object.defineProperty(file, "name", {
-			get: () => name
+		const {loaded, total} = queue.reduce(queueReducer, {
+			loaded: 0,
+			total: 0
 		});
-	}
-	queuedItems.appendChild(new PipeFile(file).element);
-};
-const fileInput = document.createElement("input");
-fileInput.type = "file";
-fileInput.multiple = true;
-fileInput.addEventListener("change", () => {
-	Array.prototype.forEach.call(fileInput.files, addFile);
-	fileInput.value = null;
-});
-const addFiles = creation.querySelector("#addFiles");
-addFiles.addEventListener("click", fileInput.click.bind(fileInput));
-class PipeDirectory {
-	constructor(name) {
-		this.path = path;
-		this.name = name;
-		Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
-			"X-Data": JSON.stringify({
-				name: applyPath(this.name),
-				type: "/"
-			})
-		}).then(Miro.response(xhr => {
-			setItem(new PipeItem(xhr.response));
-			cachedPaths.push(xhr.response.name);
-			if(path === this.path) {
-				render();
+		const done = loaded === total;
+		if(done) {
+			creation.classList.remove("loading");
+			queue.length = 0;
+		} else {
+			creation.classList.add("loading");
+			creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
+		}
+	};
+	window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
+	class PipeFile {
+		constructor(file) {
+			this.path = path;
+			this.file = file;
+			this.element = html`
+				<a class="item loading" draggable="false">
+					<div class="label">
+						<div class="title" title="$${this.file.name}">$${this.file.name}</div>
+						<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${this.size = getSize(this.file.size)})</div>
+					</div>
+					<button class="close mdc-icon-button material-icons">close</button>
+				</a>
+			`;
+			(this.closeElement = this.element.querySelector(".close")).addEventListener("click", this.close.bind(this));
+			this.subtitleElement = this.element.querySelector(".subtitle");
+			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
+				"Content-Type": "application/octet-stream",
+				"X-Data": JSON.stringify({
+					name: applyPath(this.file.name)
+				})
+			}, this.file, xhr => {
+				this.xhr = xhr;
+				this.loaded = 0;
+				this.xhr.upload.addEventListener("progress", evt => {
+					if(this.xhr.readyState !== XMLHttpRequest.DONE) {
+						const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
+						this.element.style.backgroundSize = `${percentage}%`;
+						this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
+						this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${this.size})`;
+						updateQueue();
+					}
+				});
+				queue.push(this);
+				updateQueue();
+			}, true).then(Miro.response(xhr => {
+				this.element.classList.remove("loading");
+				this.element.href = `#${this.path}`;
+				this.subtitleElement.title = `${this.file.size} B`;
+				this.subtitleElement.textContent = this.size;
+				this.closeElement.textContent = "done";
+				setItem(new PipeItem(xhr.response));
+				if(path === this.path) {
+					render();
+				}
+			}, (xhr, error) => {
+				this.element.classList.remove("loading");
+				this.element.classList.add("error");
+				this.subtitleElement.title = error;
+				this.subtitleElement.textContent = "An error occurred. Click to retry.";
+				this.element.addEventListener("click", this.retry.bind(this));
+				if(this.dequeue()) {
+					updateQueue();
+				}
+			}));
+		}
+		dequeue() {
+			const queueIndex = queue.indexOf(this);
+			if(queueIndex === -1) {
+				return false;
+			} else {
+				queue.splice(queueIndex, 1);
+				return true;
 			}
-		}));
-	}
-}
-creation.querySelector("#addDirectory").addEventListener("click", () => {
-	const dialog = new Miro.Dialog("Directory", html`
-		Enter a directory name.<br>
-		<div class="mdc-text-field">
-			<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
-			<div class="mdc-line-ripple"></div>
-		</div>
-	`, [{
-		text: "Okay",
-		type: "submit"
-	}, "Cancel"]).then(async value => {
-		if(value === 0) {
-			const name = await checkName(dialog.form.elements.name.value);
-			if(!name) {
+		}
+		async close(evt) {
+			if(evt instanceof Event) {
+				evt.preventDefault();
+			}
+			if(this.element.classList.contains("loading") && await new Miro.Dialog("Cancel", html`
+				Are you sure you want to cancel uploading <b>$${this.file.name}</b>?
+			`, ["Yes", "No"]) !== 0) {
 				return;
 			}
-			new PipeDirectory(name);
+			if(this.element.parentNode) {
+				this.xhr.abort();
+				this.element.parentNode.removeChild(this.element);
+				if(this.dequeue()) {
+					updateQueue();
+				}
+			}
+		}
+		retry(evt) {
+			if(!this.closeElement.contains(evt.target)) {
+				this.element.parentNode.replaceChild(new PipeFile(this.file).element, this.element);
+				this.dequeue();
+			}
+		}
+	}
+	const addFile = async (file, name) => {
+		name = await checkName(typeof name === "string" ? name : file.name);
+		if(!name) {
+			return;
+		} else if(name !== file.name) {
+			Object.defineProperty(file, "name", {
+				get: () => name
+			});
+		}
+		queuedItems.appendChild(new PipeFile(file).element);
+	};
+	const fileInput = document.createElement("input");
+	fileInput.type = "file";
+	fileInput.multiple = true;
+	fileInput.addEventListener("change", () => {
+		Array.prototype.forEach.call(fileInput.files, addFile);
+		fileInput.value = null;
+	});
+	creation.querySelector("#addFiles").addEventListener("click", fileInput.click.bind(fileInput));
+	class PipeDirectory {
+		constructor(name) {
+			this.path = path;
+			this.name = name;
+			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
+				"X-Data": JSON.stringify({
+					name: applyPath(this.name),
+					type: "/"
+				})
+			}).then(Miro.response(xhr => {
+				setItem(new PipeItem(xhr.response));
+				cachedPaths.push(xhr.response.name);
+				if(path === this.path) {
+					render();
+				}
+			}));
+		}
+	}
+	creation.querySelector("#addDirectory").addEventListener("click", () => {
+		const dialog = new Miro.Dialog("Directory", html`
+			Enter a directory name.<br>
+			<div class="mdc-text-field">
+				<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+				<div class="mdc-line-ripple"></div>
+			</div>
+		`, [{
+			text: "Okay",
+			type: "submit"
+		}, "Cancel"]).then(async value => {
+			if(value === 0) {
+				const name = await checkName(dialog.form.elements.name.value);
+				if(!name) {
+					return;
+				}
+				new PipeDirectory(name);
+			}
+		});
+	});
+	const htmlFilenameTest = /\/([^\/]+?)"/;
+	document.addEventListener("paste", async evt => {
+		if(Miro.focused() && !Miro.typing() && evt.clipboardData.items.length) {
+			let file;
+			let string;
+			for(const dataTransferItem of evt.clipboardData.items) {
+				if(dataTransferItem.kind === "file") {
+					file = dataTransferItem;
+				} else if(dataTransferItem.kind === "string") {
+					string = dataTransferItem;
+				}
+			}
+			if(file) {
+				let name = (file = file.getAsFile()).name;
+				if(string) {
+					const htmlFilename = (await new Promise(string.getAsString.bind(string))).match(htmlFilenameTest);
+					name = htmlFilename ? htmlFilename[1] : "file";
+				}
+				const dialog = new Miro.Dialog("Paste", html`
+					Enter a file name.<br>
+					<div class="mdc-text-field">
+						<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+						<div class="mdc-line-ripple"></div>
+					</div>
+				`, [{
+					text: "Okay",
+					type: "submit"
+				}, "Cancel"]);
+				await Miro.wait();
+				dialog.form.elements.name.focus();
+				const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
+				dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
+				if(await dialog === 0) {
+					name = dialog.form.elements.name.value;
+				} else {
+					return;
+				}
+				addFile(file, name);
+			}
+		}
+	}, {
+		capture: true,
+		passive: true
+	});
+	let allowDrop = true;
+	document.addEventListener("dragstart", evt => {
+		if(evt.target.classList.contains("item")) {
+			evt.preventDefault();
+		}
+		allowDrop = false;
+	}, {
+		capture: true,
+		passive: true
+	});
+	document.addEventListener("dragend", () => {
+		allowDrop = true;
+	}, {
+		capture: true,
+		passive: true
+	});
+	let dragLeaveTimeout;
+	document.addEventListener("dragover", evt => {
+		evt.preventDefault();
+		if(dragLeaveTimeout) {
+			clearTimeout(dragLeaveTimeout);
+			dragLeaveTimeout = null;
+		}
+		if(allowDrop && Miro.focused()) {
+			if(evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
+				indicateTarget(container);
+			}
+		}
+	}, true);
+	document.addEventListener("dragleave", () => {
+		if(dragLeaveTimeout) {
+			clearTimeout(dragLeaveTimeout);
+		}
+		dragLeaveTimeout = setTimeout(indicateTarget, 100);
+	}, {
+		capture: true,
+		passive: true
+	});
+	document.addEventListener("drop", evt => {
+		evt.preventDefault();
+		if(allowDrop && Miro.focused()) {
+			if(evt.dataTransfer.files.length) {
+				Array.prototype.forEach.call(evt.dataTransfer.files, addFile);
+			}/* else if(evt.dataTransfer.types.includes("text/uri-list")) {
+				addURL(evt.dataTransfer.getData("text/uri-list"));
+			}*/
+			indicateTarget();
+		}
+	}, true);
+	property.actions.querySelector("#delete").addEventListener("click", removeItems);
+	for(const input of properties.elements) {
+		input._input = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
+	}
+	const changed = [];
+	const onInput = evt => {
+		changed.length = 0;
+		for(const input of properties.elements) {
+			if(input._input && !input.classList.contains("hidden")) {
+				if(input.checkValidity()) {
+					if(input._prev !== Miro.value(input)) {
+						changed.push(input);
+					}
+				} else {
+					changed.length = 0;
+					break;
+				}
+			}
+		}
+		save.disabled = !changed.length;
+	};
+	properties.addEventListener("input", onInput);
+	properties.addEventListener("change", onInput);
+	properties.addEventListener("submit", async evt => {
+		evt.preventDefault();
+		Miro.formState(properties, false);
+		const changedName = changed.includes(properties.elements.name);
+		if(changedName) {
+			let name = await checkName(properties.elements.name.value);
+			if(!name) {
+				Miro.formState(properties, true);
+				return;
+			}
+			properties.elements.name.value = name;
+		}
+		const changedType = changed.includes(properties.elements.type);
+		const changedPrivacy = changed.includes(properties.elements.privacy);
+		const selected = items.querySelectorAll(".item.selected");
+		let responses = 0;
+		const countResponse = () => {
+			if(++responses === selected.length) {
+				Miro.formState(properties, true);
+			}
+		};
+		let noFailure = true;
+		for(const itemElement of selected) {
+			itemElement.classList.remove("selected");
+			itemElement.classList.add("loading");
+			const data = {};
+			if(changedName) {
+				data.name = applyPath(properties.elements.name.value);
+			}
+			if(changedType) {
+				data.type = properties.elements.type.value;
+			}
+			if(changedPrivacy) {
+				data.privacy = +properties.elements.privacy.value;
+			}
+			Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+				if(changedName) {
+					itemElement._item.name = xhr.response.name;
+				}
+				if(changedType) {
+					itemElement._item.type = xhr.response.type;
+				}
+				if(changedPrivacy) {
+					itemElement._item.privacy = xhr.response.privacy;
+				}
+				if(noFailure) {
+					save.disabled = true;
+				}
+				itemElement.classList.remove("loading");
+				itemElement.classList.add("selected");
+				if(path === itemElement._item.path) {
+					render();
+				}
+			}, () => {
+				noFailure = false;
+				save.disabled = false;
+				itemElement.classList.remove("loading");
+				itemElement.classList.add("selected");
+				if(path === itemElement._item.path) {
+					render();
+				}
+			})).then(countResponse);
 		}
 	});
-});
-const htmlFilenameTest = /\/([^\/]+?)"/;
-document.addEventListener("paste", async evt => {
-	if(Miro.focused() && !Miro.typing() && evt.clipboardData.items.length) {
-		let file;
-		let string;
-		for(const dataTransferItem of evt.clipboardData.items) {
-			if(dataTransferItem.kind === "file") {
-				file = dataTransferItem;
-			} else if(dataTransferItem.kind === "string") {
-				string = dataTransferItem;
-			}
-		}
-		if(file) {
-			let name = (file = file.getAsFile()).name;
-			if(string) {
-				const htmlFilename = (await new Promise(string.getAsString.bind(string))).match(htmlFilenameTest);
-				name = htmlFilename ? htmlFilename[1] : "file";
-			}
-			const dialog = new Miro.Dialog("Paste", html`
-				Enter a file name.<br>
-				<div class="mdc-text-field">
-					<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
-					<div class="mdc-line-ripple"></div>
-				</div>
-			`, [{
-				text: "Okay",
-				type: "submit"
-			}, "Cancel"]);
-			await Miro.wait();
-			dialog.form.elements.name.focus();
-			const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
-			dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
-			if(await dialog === 0) {
-				name = dialog.form.elements.name.value;
-			} else {
-				return;
-			}
-			addFile(file, name);
-		}
-	}
-}, {
-	capture: true,
-	passive: true
-});
-let allowDrop = true;
-document.addEventListener("dragstart", evt => {
-	if(evt.target.classList.contains("item")) {
-		evt.preventDefault();
-	}
-	allowDrop = false;
-}, {
-	capture: true,
-	passive: true
-});
-document.addEventListener("dragend", () => {
-	allowDrop = true;
-}, {
-	capture: true,
-	passive: true
-});
-let dragLeaveTimeout;
-document.addEventListener("dragover", evt => {
-	evt.preventDefault();
-	if(dragLeaveTimeout) {
-		clearTimeout(dragLeaveTimeout);
-		dragLeaveTimeout = null;
-	}
-	if(allowDrop && Miro.focused()) {
-		if(evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
-			indicateTarget(container);
-		}
-	}
-}, true);
-document.addEventListener("dragleave", () => {
-	if(dragLeaveTimeout) {
-		clearTimeout(dragLeaveTimeout);
-	}
-	dragLeaveTimeout = setTimeout(indicateTarget, 100);
-}, {
-	capture: true,
-	passive: true
-});
-document.addEventListener("drop", evt => {
-	evt.preventDefault();
-	if(allowDrop && Miro.focused()) {
-		if(evt.dataTransfer.files.length) {
-			Array.prototype.forEach.call(evt.dataTransfer.files, addFile);
-		}/* else if(evt.dataTransfer.types.includes("text/uri-list")) {
-			addURL(evt.dataTransfer.getData("text/uri-list"));
-		}*/
-		indicateTarget();
-	}
-}, true);
+}
 const render = () => {
 	while(ancestors.lastChild) {
 		ancestors.removeChild(ancestors.lastChild);
@@ -757,7 +883,7 @@ document.addEventListener("mousemove", evt => {
 	}
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
-	if(mouseDown !== -1 && mouseTarget && (mouseTarget.parentNode._item || mouseTarget._item)) {
+	if(mouseDown !== -1 && mouseTarget && (mouseTarget.parentNode._item || mouseTarget._item) && Miro.data.isMe) {
 		if(!mouseMoved) {
 			selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, 2);
 		}
@@ -849,137 +975,14 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
 });
-const removeItem = itemElement => {
-	itemElement.classList.remove("selected");
-	itemElement.classList.add("loading");
-	Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`).then(Miro.response(() => {
-		itemElement._item.delete();
-		render();
-	}, () => {
-		itemElement.classList.remove("loading");
-	}));
-};
-const removeItems = () => {
-	const itemElements = items.querySelectorAll(".item.selected");
-	if(itemElements.length) {
-		if(itemElements.length === 1) {
-			const itemElement = itemElements[0];
-			new Miro.Dialog("Remove Item", html`
-				Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>${itemElement._item.type === "/" ? `
-				Items inside the directory will also be removed.<br>` : ""}
-				This cannot be undone.
-			`, ["Yes", "No"]).then(value => {
-				if(value === 0) {
-					removeItem(itemElement);
-				}
-			});
-		} else {
-			const selectedDirs = items.querySelectorAll(".item.typeDir.selected").length;
-			new Miro.Dialog("Remove Items", html`
-				Are you sure you want to remove all those items?<br>${selectedDirs ? `
-				Items inside the ${selectedDirs === 1 ? "directory" : "directories"} will also be removed.<br>` : ""}
-				This cannot be undone.
-			`, ["Yes", "No"]).then(value => {
-				if(value === 0) {
-					itemElements.forEach(removeItem);
-				}
-			});
-		}
-	}
-};
-property.actions.querySelector("#delete").addEventListener("click", removeItems);
-for(const input of properties.elements) {
-	input._input = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
-}
-const changed = [];
-const onInput = evt => {
-	changed.length = 0;
-	for(const input of properties.elements) {
-		if(input._input && !input.classList.contains("hidden")) {
-			if(input.checkValidity()) {
-				if(input._prev !== Miro.value(input)) {
-					changed.push(input);
-				}
-			} else {
-				changed.length = 0;
-				break;
-			}
-		}
-	}
-	save.disabled = !changed.length;
-};
-properties.addEventListener("input", onInput);
-properties.addEventListener("change", onInput);
-properties.addEventListener("submit", async evt => {
-	evt.preventDefault();
-	Miro.formState(properties, false);
-	const changedName = changed.includes(properties.elements.name);
-	if(changedName) {
-		let name = await checkName(properties.elements.name.value);
-		if(!name) {
-			Miro.formState(properties, true);
-			return;
-		}
-		properties.elements.name.value = name;
-	}
-	const changedType = changed.includes(properties.elements.type);
-	const changedPrivacy = changed.includes(properties.elements.privacy);
-	const selected = items.querySelectorAll(".item.selected");
-	let responses = 0;
-	const countResponse = () => {
-		if(++responses === selected.length) {
-			Miro.formState(properties, true);
-		}
-	};
-	let noFailure = true;
-	for(const itemElement of selected) {
-		itemElement.classList.remove("selected");
-		itemElement.classList.add("loading");
-		const data = {};
-		if(changedName) {
-			data.name = applyPath(properties.elements.name.value);
-		}
-		if(changedType) {
-			data.type = properties.elements.type.value;
-		}
-		if(changedPrivacy) {
-			data.privacy = +properties.elements.privacy.value;
-		}
-		Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
-			if(changedName) {
-				itemElement._item.name = xhr.response.name;
-			}
-			if(changedType) {
-				itemElement._item.type = xhr.response.type;
-			}
-			if(changedPrivacy) {
-				itemElement._item.privacy = xhr.response.privacy;
-			}
-			if(noFailure) {
-				save.disabled = true;
-			}
-			itemElement.classList.remove("loading");
-			itemElement.classList.add("selected");
-			if(path === itemElement._item.path) {
-				render();
-			}
-		}, () => {
-			noFailure = false;
-			save.disabled = false;
-			itemElement.classList.remove("loading");
-			itemElement.classList.add("selected");
-			if(path === itemElement._item.path) {
-				render();
-			}
-		})).then(countResponse);
-	}
-});
 updateProperties();
 document.addEventListener("keydown", evt => {
 	if(!Miro.typing() && Miro.focused()) {
 		const superKey = evt.ctrlKey || evt.metaKey;
 		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
-			removeItems();
+			if(Miro.data.isMe) {
+				removeItems();
+			}
 		} else if(evt.keyCode === 13) { // `enter`
 			evt.preventDefault();
 			const itemElement = items.querySelector(".item.selected");
@@ -1037,9 +1040,9 @@ const resize = () => {
 	indicateTarget();
 	if(viewValue) {
 		for(const itemElement of items.querySelectorAll(".item")) {
-			if(itemElement._item.thumbnailInvisible && itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
+			if(itemElement._item.thumbnailHidden && itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
 				itemElement.insertBefore(itemElement._item.thumbnailElement, itemElement.firstChild);
-				itemElement._item.thumbnailInvisible = false;
+				itemElement._item.thumbnailHidden = false;
 			}
 		}
 	}
