@@ -245,6 +245,7 @@ class PipeItem {
 		this.typeElement.textContent = this.typeElement.title = typeDir ? "" : value;
 		this.iconElement.textContent = typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
 		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
+		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
 	}
 	get date() {
 		return this[_date];
@@ -798,13 +799,7 @@ const updateProperties = () => {
 			property.name.classList.remove("hidden");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
-			properties.elements.privacy._prev = properties.elements.privacy.value = String(item.privacy);
-			if(Miro.data.isMe) {
-				property.privacy.classList.remove("hidden");
-			}
-			if(item.type === "/") {
-				privateOption.disabled = privateOption.hidden = false;
-			} else {
+			if(item.type !== "/") {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				property.type.classList.remove("hidden");
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
@@ -813,7 +808,6 @@ const updateProperties = () => {
 				property.url.classList.remove("hidden");
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 				property.url._label.classList.add("mdc-floating-label--float-above");
-				privateOption.disabled = privateOption.hidden = true;
 				download.href = `${item.url}?download`;
 				download.classList.remove("hidden");
 				if(item.type.startsWith("image/")) {
@@ -836,10 +830,15 @@ const updateProperties = () => {
 					property.preview.classList.remove("hidden");
 				}
 			}
-			if(Miro.data.isMe) {
-				save.disabled = true;
-				save.classList.remove("hidden");
-			}
+		}
+		if(Miro.data.isMe) {
+			let samePrivacy = true;
+			const privacy = selected[0]._item.privacy;
+			properties.elements.privacy._prev = properties.elements.privacy.value = selected.every(itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
+			privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
+			property.privacy.classList.remove("hidden");
+			save.disabled = true;
+			save.classList.remove("hidden");
 		}
 	} else {
 		selectionSize.textContent = "0 B";
@@ -923,42 +922,57 @@ properties.addEventListener("submit", async evt => {
 		}
 		properties.elements.name.value = name;
 	}
-	const itemElement = items.querySelector(".item.selected");
-	itemElement.classList.remove("selected");
-	itemElement.classList.add("loading");
-	const data = {};
-	if(changedName) {
-		data.name = applyPath(properties.elements.name.value);
-	}
 	const changedType = changed.includes(properties.elements.type);
-	if(changedType) {
-		data.type = properties.elements.type.value;
-	}
 	const changedPrivacy = changed.includes(properties.elements.privacy);
-	if(changedPrivacy) {
-		data.privacy = +properties.elements.privacy.value;
-	}
-	Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+	const selected = items.querySelectorAll(".item.selected");
+	let responses = 0;
+	const countResponse = () => {
+		if(++responses === selected.length) {
+			Miro.formState(properties, true);
+		}
+	};
+	let noFailure = true;
+	for(const itemElement of selected) {
+		itemElement.classList.remove("selected");
+		itemElement.classList.add("loading");
+		const data = {};
 		if(changedName) {
-			itemElement._item.name = xhr.response.name;
+			data.name = applyPath(properties.elements.name.value);
 		}
 		if(changedType) {
-			itemElement._item.type = xhr.response.type;
+			data.type = properties.elements.type.value;
 		}
 		if(changedPrivacy) {
-			itemElement._item.privacy = xhr.response.privacy;
+			data.privacy = +properties.elements.privacy.value;
 		}
-		Miro.formState(properties, true);
-		itemElement.classList.remove("loading");
-		itemElement.classList.add("selected");
-		save.disabled = true;
-		render();
-	}, () => {
-		Miro.formState(properties, true);
-		itemElement.classList.remove("loading");
-		itemElement.classList.add("selected");
-		save.disabled = false;
-	}));
+		Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+			if(changedName) {
+				itemElement._item.name = xhr.response.name;
+			}
+			if(changedType) {
+				itemElement._item.type = xhr.response.type;
+			}
+			if(changedPrivacy) {
+				itemElement._item.privacy = xhr.response.privacy;
+			}
+			if(noFailure) {
+				save.disabled = true;
+			}
+			itemElement.classList.remove("loading");
+			itemElement.classList.add("selected");
+			if(path === itemElement._item.path) {
+				render();
+			}
+		}, () => {
+			noFailure = false;
+			save.disabled = false;
+			itemElement.classList.remove("loading");
+			itemElement.classList.add("selected");
+			if(path === itemElement._item.path) {
+				render();
+			}
+		})).then(countResponse);
+	}
 });
 updateProperties();
 document.addEventListener("keydown", evt => {
