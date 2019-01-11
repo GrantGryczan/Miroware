@@ -834,7 +834,7 @@ const updateProperties = () => {
 		if(Miro.data.isMe) {
 			let samePrivacy = true;
 			const privacy = selected[0]._item.privacy;
-			properties.elements.privacy._prev = properties.elements.privacy.value = selected.every(itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
+			properties.elements.privacy._prev = properties.elements.privacy.value = selected.some(itemElement => privacy !== itemElement._item.privacy) ? String(privacy) : "";
 			privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
 			property.privacy.classList.remove("hidden");
 			save.disabled = true;
