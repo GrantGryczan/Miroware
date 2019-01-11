@@ -318,7 +318,7 @@ const updateQueue = () => {
 		creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
 	}
 };
-window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
+window.onbeforeunload = () => (Miro.data.isMe && (container.querySelector(".loading") || !save.disabled)) || undefined;
 class PipeFile {
 	constructor(file) {
 		this.path = path;
@@ -799,7 +799,9 @@ const updateProperties = () => {
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
 			properties.elements.privacy._prev = properties.elements.privacy.value = String(item.privacy);
-			property.privacy.classList.remove("hidden");
+			if(Miro.data.isMe) {
+				property.privacy.classList.remove("hidden");
+			}
 			if(item.type === "/") {
 				privateOption.disabled = privateOption.hidden = true;
 			} else {
@@ -834,8 +836,10 @@ const updateProperties = () => {
 					property.preview.classList.remove("hidden");
 				}
 			}
-			save.disabled = true;
-			save.classList.remove("hidden");
+			if(Miro.data.isMe) {
+				save.disabled = true;
+				save.classList.remove("hidden");
+			}
 		}
 	} else {
 		selectionSize.textContent = "0 B";

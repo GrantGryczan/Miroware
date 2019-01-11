@@ -36,7 +36,7 @@ this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
 				<div class="panel side left">
-					<div class="pane">
+					<div class="pane${isMe ? "" : " hidden"}">
 						<div id="creation">
 							<button id="addFiles" class="mdc-button mdc-button--raised spaced mdc-ripple" title="Upload file(s)">
 								<i class="mdc-button__icon material-icons">file_upload</i>Upload
@@ -75,14 +75,14 @@ this.value += html`
 					</div>
 					<div class="property hidden" data-key="name">
 						<div class="mdc-text-field">
-							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^/]+$" autocomplete="off" spellcheck="false" ${isMe ? "required" : "readonly"}>
 							<label class="mdc-floating-label" for="name">Name</label>
 							<div class="mdc-line-ripple"></div>
 						</div><br>
 					</div>
 					<div class="property hidden" data-key="type">
 						<div class="mdc-text-field">
-							<input id="type" name="type" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?=]+$" spellcheck="false" required>
+							<input id="type" name="type" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?=]+$" spellcheck="false" ${isMe ? "required" : "readonly"}>
 							<label class="mdc-floating-label" for="type">Type</label>
 							<div class="mdc-line-ripple"></div>
 						</div><br>
@@ -97,7 +97,7 @@ this.value += html`
 					</div>
 					<div class="property hidden" data-key="privacy">
 						<div class="mdc-select">
-							<select id="privacy" name="privacy" class="mdc-select__native-control" required>
+							<select id="privacy" name="privacy" class="mdc-select__native-control" ${isMe ? "required" : "disabled"}>
 								<option value="0" title="Visible in your Pipe to everyone">Public</option>
 								<option value="1" title="Only visible in your Pipe to you but accessible by URL to anyone">Unlisted</option>
 								<option value="2" title="Only accessible to you">Private</option>
@@ -108,7 +108,7 @@ this.value += html`
 						</div><br>
 					</div>
 					<div class="property hidden" data-key="actions">
-						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><a id="download" class="mdc-icon-button material-icons spaced mdc-ripple" title="Download" target="_blank" draggable="false" ondragstart="return false;">file_download</a><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple" title="Delete">delete</button>
+						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><a id="download" class="mdc-icon-button material-icons spaced mdc-ripple" title="Download" target="_blank" draggable="false" ondragstart="return false;">file_download</a><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple${isMe ? "" : " hidden"}" title="Delete">delete</button>
 					</div>
 					<div class="property hidden" data-key="preview">
 						<span class="alwaysFloat">Preview</span><br>
