@@ -803,7 +803,7 @@ const updateProperties = () => {
 				property.privacy.classList.remove("hidden");
 			}
 			if(item.type === "/") {
-				privateOption.disabled = privateOption.hidden = true;
+				privateOption.disabled = privateOption.hidden = false;
 			} else {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				property.type.classList.remove("hidden");
@@ -813,7 +813,7 @@ const updateProperties = () => {
 				property.url.classList.remove("hidden");
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 				property.url._label.classList.add("mdc-floating-label--float-above");
-				privateOption.disabled = privateOption.hidden = false;
+				privateOption.disabled = privateOption.hidden = true;
 				download.href = `${item.url}?download`;
 				download.classList.remove("hidden");
 				if(item.type.startsWith("image/")) {
