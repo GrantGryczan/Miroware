@@ -97,7 +97,7 @@ this.value += html`
 					</div>
 					<div class="property hidden" data-key="privacy">
 						<div class="mdc-select">
-							<select id="privacy" name="privacy" class="mdc-select__native-control" ${isMe ? "required" : "disabled"}>
+							<select id="privacy" name="privacy" class="mdc-select__native-control" required>
 								<option value="0" title="Visible in your Pipe to everyone">Public</option>
 								<option value="1" title="Only visible in your Pipe to you but accessible by URL to anyone">Unlisted</option>
 								<option value="2" title="Only accessible to you">Private</option>
