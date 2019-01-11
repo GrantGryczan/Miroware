@@ -993,7 +993,7 @@ document.addEventListener("keydown", evt => {
 			}
 		} else if(evt.keyCode === 27) { // `esc`
 			deselectItems();
-		} else if(evt.keyCode === 38 || evt.keyCode === 39) { // `up` || `left`
+		} else if(evt.keyCode === 37 || evt.keyCode === 38) { // `left` || `up`
 			evt.preventDefault();
 			const item = focusedItem ? focusedItem.previousElementSibling || items.lastElementChild : items.firstElementChild;
 			if(item) {
@@ -1002,7 +1002,7 @@ document.addEventListener("keydown", evt => {
 					selectItem(item, evt);
 				}
 			}
-		} else if(evt.keyCode === 40 || evt.keyCode === 41) { // `down` || `right`
+		} else if(evt.keyCode === 39 || evt.keyCode === 40) { // `right` || `down`
 			evt.preventDefault();
 			const item = focusedItem ? focusedItem.nextElementSibling || items.firstElementChild : items.firstElementChild;
 			if(item) {
