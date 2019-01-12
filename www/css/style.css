@@ -267,11 +267,11 @@ input:-webkit-autofill {
 	animation-fill-mode: both;
 }
 .mdc-floating-label {
-	left: 0 !important;
-	:not(.mdc-text-field--textarea) & {
-		bottom: 8px !important;
+	.mdc-text-field:not(.mdc-text-field--textarea) &, .mdc-select {
+		left: 0;
+		bottom: 8px;
+		max-width: initial !important;
 	}
-	max-width: initial !important;
 	.mdc-text-field:not(.mdc-text-field--textarea) & {
 		&--float-above, &.alwaysFloat {
 			transform: translateY(-100%) scale(0.75);
