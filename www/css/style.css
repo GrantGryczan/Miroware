@@ -268,7 +268,9 @@ input:-webkit-autofill {
 }
 .mdc-floating-label {
 	left: 0 !important;
-	bottom: 8px !important;
+	:not(.mdc-text-field--textarea) & {
+		bottom: 8px !important;
+	}
 	max-width: initial !important;
 	.mdc-text-field:not(.mdc-text-field--textarea) & {
 		&--float-above, &.alwaysFloat {
