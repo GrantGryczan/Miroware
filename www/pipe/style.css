@@ -2,9 +2,8 @@
 	background-color: #b4783c;
 }
 main {
-	padding-bottom: 512px;
-	background-image: url(/pipe/images/icon/cube.gif);
-	background-position: center bottom;
-	background-repeat: no-repeat;
 	text-align: center;
+}
+#details {
+	opacity: 0.4;
 }
