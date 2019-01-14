@@ -1062,7 +1062,7 @@ const resize = () => {
 	indicateTarget();
 	if(viewValue) {
 		for(const itemElement of items.querySelectorAll(".item")) {
-			if(itemElement._item.thumbnailHidden && itemElement.offsetTop + itemElement.offsetHeight > header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
+			if(itemElement._item.thumbnailHidden && itemElement.offsetTop + itemElement.offsetHeight > items.parentNode.scrollTop + header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
 				itemElement.insertBefore(itemElement._item.thumbnailElement, itemElement.firstChild);
 				itemElement._item.thumbnailHidden = false;
 			}
