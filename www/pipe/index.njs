@@ -13,7 +13,7 @@ this.value += html`
 				<div>
 					<a class="mdc-button mdc-button--raised mdc-ripple" href="${this.user ? `/users/${this.user._id}/pipe/#` : "/login/?dest=%2Fpipe%2F"}">Go to your Pipe</a>
 				</div>
-				<img src="images/icon/cube.gif">
+				<div id="cube"></div>
 				<p id="details">
 					<b>${(await users.aggregate([{
 						$project: {

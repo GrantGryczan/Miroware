@@ -4,6 +4,12 @@
 main {
 	text-align: center;
 }
+#cube {
+	height: 512px;
+	background-image: url(/pipe/images/icon/cube.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+}
 #details {
 	opacity: 0.4;
 }
