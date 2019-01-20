@@ -326,15 +326,25 @@ const render = () => {
 	updateProperties();
 	resize();
 };
+const goHome = () => {
+	location.hash = "#";
+};
 const hashChange = () => {
-	if(!cachedPaths.includes(path = decodeURI(location.hash.slice(1)))) {
+	try {
+		path = decodeURI(location.hash.slice(1));
+	} catch(err) {
+		new Miro.Dialog("Error", "The path is malformed.");
+		goHome();
+		return;
+	}
+	if(!cachedPaths.includes(path)) {
 		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?path=${encodeForPipe(path)}`).then(Miro.response(xhr => {
 			for(const item of xhr.response) {
 				setItem(new PipeItem(item));
 			}
 			cachedPaths.push(path);
 			render();
-		}));
+		}, goHome));
 	} else {
 		render();
 	}
