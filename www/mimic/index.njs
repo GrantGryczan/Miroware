@@ -1,6 +1,7 @@
 this.title = "Mimic";
 this.description = "Teach an AI how to speak, sort of.";
-this.tags = ["ai", "artificial", "intelligence", "bot", "learn", "learning", "write", "writing", "language", "speech", "speak", "talk", "talking", "mimic", "imitate", "imitation"];
+this.tags = ["ai", "artificial", "intelligence", "bot", "machine", "learn", "learning", "write", "writing", "language", "speech", "speak", "talk", "talking", "mimic", "imitate", "imitation"];
+this.showAds = true;
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;

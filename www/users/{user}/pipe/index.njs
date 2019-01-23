@@ -1,6 +1,7 @@
 this.title = "Pipe";
 this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
+this.showAds = true;
 let {user} = this;
 const isMe = user && this.params.user === String(user._id);
 if(!isMe) {
