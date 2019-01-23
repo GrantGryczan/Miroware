@@ -1,2 +1,2 @@
 # Miroware
-It's [my website](https://miroware.io/).
+https://miroware.io/

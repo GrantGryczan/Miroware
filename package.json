@@ -1,5 +1,5 @@
 {
-	"name": "web",
+	"name": "miroware",
 	"version": "1.0.0",
 	"description": "Miroware",
 	"main": "server.js",
@@ -8,7 +8,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GrantGryczan/web.git"
+		"url": "git+https://github.com/GrantGryczan/Miroware.git"
 	},
 	"author": {
 		"name": "Grant Gryczan",
@@ -16,7 +16,7 @@
 	},
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/GrantGryczan/web/issues"
+		"url": "https://github.com/GrantGryczan/Miroware/issues"
 	},
 	"homepage": "https://miroware.io/",
 	"dependencies": {
