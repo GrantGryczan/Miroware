@@ -1,3 +1,4 @@
+"use strict";
 const magical = document.body.querySelector("#magical");
 let loops = 0;
 setInterval(() => {

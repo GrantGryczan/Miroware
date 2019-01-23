@@ -1,3 +1,4 @@
+"use strict";
 const Miro = window.Miro = {};
 Miro.magic = {};
 Miro.magic.magic = Miro.magic;
