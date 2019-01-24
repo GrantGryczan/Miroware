@@ -20,8 +20,8 @@ fileInput.addEventListener("change", () => {
 	});
 	reader.readAsArrayBuffer(file);
 });
-corruption.addEventListener("submit", evt => {
-	evt.preventDefault();
+const load = () => {
+	output.src = "";
 	Miro.formState(corruption, false);
 	const corrupted = new Uint8Array(array);
 	for(let i = Math.max(1, factor.value); i >= 0; i--) {
@@ -30,12 +30,30 @@ corruption.addEventListener("submit", evt => {
 	const reader = new FileReader();
 	reader.addEventListener("loadend", () => {
 		output.src = reader.result;
-		Miro.formState(corruption, true);
 	});
 	reader.readAsDataURL(new Blob([corrupted], {
 		type: file.type
 	}));
+};
+output.addEventListener("error", load);
+const finish = () => {
+	Miro.formState(corruption, true);
+	Miro.progress.close();
+};
+output.addEventListener("load", () => {
 	download.disabled = false;
+});
+const timeOut = () => {
+	output.src = "";
+	new Miro.Dialog("Error", "The corruption took too long to load. Try again, perhaps with a lower corruption factor.");
+	finish();
+};
+corruption.addEventListener("submit", evt => {
+	evt.preventDefault();
+	Miro.progress.open();
+	download.disabled = true;
+	load();
+	setTimeout(timeOut, 5000);
 });
 download.addEventListener("click", () => {
 	html`<a href="$${output.src}" download="$${file.name}"></a>`.click();
