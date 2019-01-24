@@ -22,11 +22,17 @@ fileInput.addEventListener("change", () => {
 });
 corruption.addEventListener("submit", evt => {
 	evt.preventDefault();
+	Miro.formState(corruption, false);
 	const corrupted = new Uint8Array(array);
 	for(let i = Math.max(1, factor.value); i >= 0; i--) {
 		corrupted[Math.floor(Math.random() * corrupted.length)] = Math.floor(Math.random() * 256);
 	}
-	output.src = URL.createObjectURL(new Blob([corrupted], {
+	const reader = new FileReader();
+	reader.addEventListener("loadend", () => {
+		output.src = reader.result;
+		Miro.formState(corruption, true);
+	});
+	reader.readAsDataURL(new Blob([corrupted], {
 		type: file.type
 	}));
 	download.disabled = false;
