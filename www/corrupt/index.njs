@@ -15,7 +15,7 @@ this.value += html`
 			<div id="panel" class="mdc-elevation--z3">
 				<div id="input">
 					<div class="head">
-						<div class="mdc-text-field spaced">
+						<div class="mdc-text-field mdc-text-field--dense spaced">
 							<input id="factor" class="mdc-text-field__input" type="number" min="0" max="10000" value="3" required>
 							<label class="mdc-floating-label" for="factor">Factor</label>
 							<div class="mdc-line-ripple"></div>
