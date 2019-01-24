@@ -8,16 +8,12 @@
 	align-items: center;
 }
 #head {
+	justify-content: space-between;
+	align-items: center;
 	margin-bottom: 12px;
-	& > .output {
-		text-align: right;
-	}
 	.spaced {
 		vertical-align: middle;
 	}
-}
-.input, .output {
-	width: 50%;
 }
 #content {
 	text-align: center;
