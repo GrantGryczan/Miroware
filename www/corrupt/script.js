@@ -26,7 +26,7 @@ corruption.addEventListener("submit", evt => {
 	for(let i = Math.max(1, factor.value); i >= 0; i--) {
 		array[Math.floor(Math.random() * array.length)] = Math.floor(Math.random() * 256);
 	}
-	output.src = URL.createObjectURL(new Blob([array], {
+	output.src = URL.createObjectURL(new Blob([new ArrayBuffer(array)], {
 		type: file.type
 	}));
 	download.disabled = false;
