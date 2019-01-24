@@ -32,7 +32,7 @@ this.value += html`
 						<img>
 					</div>
 					<div id="output">
-						<img>
+						<img class="hidden">
 					</div>
 				</div>
 			</div>`;
