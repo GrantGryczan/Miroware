@@ -3,9 +3,11 @@
 	border-radius: 6px;
 	background-color: #303030;
 }
-#head {
+#head, #content {
 	display: flex;
 	align-items: center;
+}
+#head {
 	margin-bottom: 12px;
 	& > .output {
 		text-align: right;
@@ -17,9 +19,6 @@
 .input, .output {
 	width: 50%;
 }
-#content {
-	text-align: right;
-	img {
-		max-width: 100%;
-	}
+#content img {
+	max-width: 100%;
 }
