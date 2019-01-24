@@ -14,7 +14,7 @@ this.value += html`
 			</p>
 			<div id="panel" class="mdc-elevation--z3">
 				<div id="head">
-					<button id="upload" class="mdc-button mdc-button--raised spaced" title="Upload image">
+					<button id="upload" class="mdc-button spaced mdc-ripple" title="Upload image">
 						<i class="mdc-button__icon material-icons">file_upload</i>Upload
 					</button>
 					<div>
@@ -22,9 +22,9 @@ this.value += html`
 							<input id="factor" class="mdc-text-field__input" type="number" min="0" max="10000" value="3" required>
 							<label class="mdc-floating-label" for="factor">Factor</label>
 							<div class="mdc-line-ripple"></div>
-						</div><button id="corrupt" class="mdc-button mdc-button--raised spaced mdc-ripple">Corrupt</button>
+						</div><button id="corrupt" class="mdc-button mdc-button--raised spaced mdc-ripple" disabled>Corrupt</button>
 					</div>
-					<button id="download" class="mdc-button spaced" disabled>Download</button>
+					<button id="download" class="mdc-button spaced mdc-ripple" disabled>Download</button>
 				</div>
 				<div id="content">
 					<div id="input">
