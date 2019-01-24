@@ -18,13 +18,13 @@
 #content {
 	text-align: center;
 	font-size: 0;
-	img {
-		max-width: 100%;
-	}
 }
 #input, #output {
 	width: 50%;
 }
 #input {
 	margin-right: 8px;
+}
+.media {
+	max-width: 100%;
 }

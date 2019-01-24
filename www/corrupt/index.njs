@@ -30,10 +30,10 @@ this.value += html`
 				</div>
 				<div id="content">
 					<div id="input">
-						<img>
+						<img class="media">
 					</div>
 					<div id="output">
-						<img class="hidden">
+						<img class="media hidden">
 					</div>
 				</div>
 			</div>`;
