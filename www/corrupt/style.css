@@ -25,3 +25,6 @@
 #input, #output {
 	width: 50%;
 }
+#input {
+	margin-right: 8px;
+}
