@@ -287,6 +287,12 @@ input:-webkit-autofill {
 	.mdc-text-field__input:-webkit-autofill + & {
 		transform: translateY(-100%) scale(0.75);
 	}
+	.mdc-text-field--dense & {
+		font-size: 0.813rem;
+		&--float-above, &.alwaysFloat {
+			transform: translateY(-70%) scale(0.923);
+		}
+	}
 	.mdc-select & {
 		&--float-above, &.alwaysFloat {
 			transform: translateY(-40%) scale(0.75);
