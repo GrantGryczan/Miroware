@@ -1,8 +1,18 @@
 "use strict";
-const upload = document.body.querySelector("#upload");
 const factor = document.body.querySelector("#factor");
-const corrupt = document.body.querySelector("#corrupt");
-const download = document.body.querySelector("#download");
+const input = document.body.querySelector("#input > img");
+const output = document.body.querySelector("#output > img");
+let data;
+const fileInput = document.createElement("input");
+fileInput.type = "file";
+fileInput.accept = "image/*";
+fileInput.addEventListener("change", () => {
+	console.log(fileInput.files[0]);
+	fileInput.value = null;
+});
+document.body.querySelector("#upload").addEventListener("click", fileInput.click.bind(fileInput));
+document.body.querySelector("#corrupt");
+document.body.querySelector("#download");
 
 (() => {
 	var corruptFactor = document.querySelector("#corruptFactor");
