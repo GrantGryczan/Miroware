@@ -22,12 +22,11 @@ fileInput.addEventListener("change", () => {
 });
 corruption.addEventListener("submit", evt => {
 	evt.preventDefault();
-	const array = new Uint8Array(array);
+	const corrupted = new Uint8Array(array);
 	for(let i = Math.max(1, factor.value); i >= 0; i--) {
-		array[Math.floor(Math.random() * array.length)] = Math.floor(Math.random() * 256);
+		corrupted[Math.floor(Math.random() * corrupted.length)] = Math.floor(Math.random() * 256);
 	}
-	console.log(array);
-	output.src = URL.createObjectURL(new Blob([new ArrayBuffer(array)], {
+	output.src = URL.createObjectURL(new Blob([new ArrayBuffer(corrupted)], {
 		type: file.type
 	}));
 	download.disabled = false;
