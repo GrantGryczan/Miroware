@@ -36,7 +36,9 @@ const load = () => {
 	}));
 };
 output.addEventListener("error", load);
+let timeout;
 const finish = () => {
+	clearTimeout(timeout);
 	Miro.formState(corruption, true);
 	Miro.progress.close();
 };
@@ -54,7 +56,7 @@ corruption.addEventListener("submit", evt => {
 	Miro.progress.open();
 	download.disabled = true;
 	load();
-	setTimeout(timeOut, 5000);
+	timeout = setTimeout(timeOut, 5000);
 });
 download.addEventListener("click", () => {
 	html`<a href="$${output.src}" download="$${file.name}"></a>`.click();
