@@ -6,7 +6,7 @@ const download = document.body.querySelector("#download");
 const input = document.body.querySelector("#input > img");
 const output = document.body.querySelector("#output > img");
 let file;
-let buffer;
+let array;
 const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.accept = "image/*";
@@ -15,15 +15,14 @@ fileInput.addEventListener("change", () => {
 	fileInput.value = null;
 	const reader = new FileReader();
 	reader.addEventListener("loadend", () => {
-		buffer = reader.result;
+		array = new Uint8Array(reader.result);
 		corrupt.disabled = false;
 	});
 	reader.readAsArrayBuffer(file);
 });
 corruption.addEventListener("submit", evt => {
 	evt.preventDefault();
-	const array = new Uint8Array(buffer);
-	console.log(buffer, array);
+	const array = new Uint8Array(array);
 	for(let i = Math.max(1, factor.value); i >= 0; i--) {
 		array[Math.floor(Math.random() * array.length)] = Math.floor(Math.random() * 256);
 	}
