@@ -11,7 +11,8 @@ this.value += html`
 			<p>
 				Miroware Corrupt corrupts images through actual corruption. It doesn't use fake corruption effects as other image corruptors might.<br>
 				This tool best works with compressed image formats such as JPEG and GIF.<br>
-				Corruption is randomized, so you can press the corrupt button multiple times and get different results.
+				Corruption is randomized, so you can press the corrupt button multiple times and get different results.<br>
+				The corruption factor is how many bytes to corrupt from the original. (A higher factor does not always mean it will look cooler!)
 			</p>
 			<div id="panel" class="mdc-elevation--z3">
 				<div id="head">
