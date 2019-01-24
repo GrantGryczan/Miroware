@@ -23,6 +23,7 @@ fileInput.addEventListener("change", () => {
 let timedOut = false;
 const load = () => {
 	if(timedOut) {
+		output.src = "";
 		return;
 	}
 	output.classList.add("hidden");
