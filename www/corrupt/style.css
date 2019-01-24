@@ -1,0 +1,12 @@
+#panel {
+	display: flex;
+	padding: 12px;
+	border-radius: 6px;
+	background-color: #303030;
+}
+.head {
+	margin-bottom: 12px;
+	#output & {
+		text-align: right;
+	}
+}

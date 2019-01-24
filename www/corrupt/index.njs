@@ -12,7 +12,24 @@ this.value += html`
 				Miroware Corrupt corrupts images through actual corruption. It doesn't use fake corruption effects as other image corruptors might.<br>
 				This tool best works with compressed image formats such as JPEG and GIF.
 			</p>
-			<div id="panel" class="mdc-elevation--z3"></div>`;
+			<div id="panel" class="mdc-elevation--z3">
+				<div id="input">
+					<div class="head">
+						<div class="mdc-text-field spaced">
+							<input id="factor" class="mdc-text-field__input" type="number" min="0" max="10000" value="3" required>
+							<label class="mdc-floating-label" for="factor">Factor</label>
+							<div class="mdc-line-ripple"></div>
+						</div>
+					</div>
+					<div class="content"></div>
+				</div>
+				<div id="output">
+					<div class="head">
+						<button class="mdc-button spaced">Refresh</button><button class="mdc-button spaced">Download</button>
+					</div>
+					<div class="content"></div>
+				</div>
+			</div>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
