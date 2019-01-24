@@ -20,7 +20,11 @@ fileInput.addEventListener("change", () => {
 	});
 	reader.readAsArrayBuffer(file);
 });
+let timedOut = false;
 const load = () => {
+	if(timedOut) {
+		return;
+	}
 	output.classList.add("hidden");
 	Miro.formState(corruption, false);
 	const corrupted = new Uint8Array(array);
@@ -48,7 +52,7 @@ output.addEventListener("load", () => {
 	finish();
 });
 const timeOut = () => {
-	output.src = "";
+	timedOut = true;
 	new Miro.Dialog("Error", "The corruption took too long to load. Try again, perhaps with a lower corruption factor.");
 	finish();
 };
@@ -56,6 +60,7 @@ corruption.addEventListener("submit", evt => {
 	evt.preventDefault();
 	Miro.progress.open();
 	download.disabled = true;
+	timedOut = false;
 	load();
 	timeout = setTimeout(timeOut, 5000);
 });
