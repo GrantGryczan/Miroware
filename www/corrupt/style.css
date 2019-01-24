@@ -19,6 +19,10 @@
 .input, .output {
 	width: 50%;
 }
-#content img {
-	max-width: 100%;
+#content {
+	text-align: center;
+	font-size: 0;
+	img {
+		max-width: 100%;
+	}
 }
