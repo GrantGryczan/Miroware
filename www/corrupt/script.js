@@ -23,6 +23,7 @@ fileInput.addEventListener("change", () => {
 corruption.addEventListener("submit", evt => {
 	evt.preventDefault();
 	const array = new Uint8Array(buffer);
+	console.log(buffer, array);
 	for(let i = Math.max(1, factor.value); i >= 0; i--) {
 		array[Math.floor(Math.random() * array.length)] = Math.floor(Math.random() * 256);
 	}
