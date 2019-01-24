@@ -20,7 +20,7 @@ this.value += html`
 					</button>
 					<form id="corruption">
 						<div class="mdc-text-field mdc-text-field--dense spaced">
-							<input id="factor" class="mdc-text-field__input" type="number" min="0" max="10000" value="3" title="Corruption factor" required>
+							<input id="factor" class="mdc-text-field__input" type="number" min="0" max="10000" value="8" title="Corruption factor" required>
 							<label class="mdc-floating-label" for="factor">Factor</label>
 							<div class="mdc-line-ripple"></div>
 						</div><button id="corrupt" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" title="Corrupt image" disabled>Corrupt</button>
