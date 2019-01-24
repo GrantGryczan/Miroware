@@ -21,7 +21,7 @@ fileInput.addEventListener("change", () => {
 	reader.readAsArrayBuffer(file);
 });
 const load = () => {
-	output.src = "";
+	output.classList.add("hidden");
 	Miro.formState(corruption, false);
 	const corrupted = new Uint8Array(array);
 	for(let i = Math.max(1, factor.value); i >= 0; i--) {
@@ -44,10 +44,10 @@ const finish = () => {
 };
 output.addEventListener("load", () => {
 	download.disabled = false;
+	output.classList.remove("hidden");
 	finish();
 });
 const timeOut = () => {
-	output.src = "";
 	new Miro.Dialog("Error", "The corruption took too long to load. Try again, perhaps with a lower corruption factor.");
 	finish();
 };
