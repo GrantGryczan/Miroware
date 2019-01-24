@@ -159,6 +159,7 @@ main {
 	display: block;
 	margin: 0 auto;
 	padding: 60px;
+	border-radius: 0 0 8px 8px;
 	box-sizing: border-box;
 	background-color: #282828;
 	word-break: break-word;
