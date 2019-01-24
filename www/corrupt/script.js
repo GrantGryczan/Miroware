@@ -42,6 +42,7 @@ const finish = () => {
 };
 output.addEventListener("load", () => {
 	download.disabled = false;
+	finish();
 });
 const timeOut = () => {
 	output.src = "";
