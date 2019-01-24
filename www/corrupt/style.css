@@ -1,12 +1,14 @@
 #panel {
-	display: flex;
 	padding: 12px;
 	border-radius: 6px;
 	background-color: #303030;
 }
-.head {
+#head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	margin-bottom: 12px;
-	#output & {
+	& > .output {
 		text-align: right;
 	}
 }
