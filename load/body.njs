@@ -39,6 +39,9 @@ this.value += html`
 						<a class="mdc-list-item${this.req.decodedPath === "/concat/" ? " mdc-list-item--activated" : '" href="/concat/'}">
 							<i class="mdc-list-item__graphic material-icons">link</i> <span class="mdc-list-item__text">Concat</span>
 						</a>
+						<a class="mdc-list-item${this.req.decodedPath === "/corrupt/" ? " mdc-list-item--activated" : '" href="/corrupt/'}">
+							<i class="mdc-list-item__graphic material-icons">broken_image</i> <span class="mdc-list-item__text">Corrupt</span>
+						</a>
 						<a class="mdc-list-item${this.req.decodedPath === "/mimic/" ? " mdc-list-item--activated" : '" href="/mimic/'}">
 							<i class="mdc-list-item__graphic material-icons">memory</i> <span class="mdc-list-item__text">Mimic</span>
 						</a>
