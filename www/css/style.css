@@ -269,12 +269,12 @@ input:-webkit-autofill {
 	animation-fill-mode: both;
 }
 .mdc-floating-label {
-	.mdc-text-field:not(.mdc-text-field--textarea) &, .mdc-select & {
+	.mdc-text-field:not(.mdc-text-field--textarea):not(.mdc-text-field--dense) &, .mdc-select & {
 		left: 0;
 		bottom: 8px;
 		max-width: initial !important;
 	}
-	.mdc-text-field:not(.mdc-text-field--textarea) & {
+	.mdc-text-field:not(.mdc-text-field--textarea):not(.mdc-text-field--dense) & {
 		&--float-above, &.alwaysFloat {
 			transform: translateY(-100%) scale(0.75);
 		}
