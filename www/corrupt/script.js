@@ -48,6 +48,7 @@ output.addEventListener("load", () => {
 	finish();
 });
 const timeOut = () => {
+	output.src = "";
 	new Miro.Dialog("Error", "The corruption took too long to load. Try again, perhaps with a lower corruption factor.");
 	finish();
 };
