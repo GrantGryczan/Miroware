@@ -2,12 +2,20 @@
 const factor = document.body.querySelector("#factor");
 const input = document.body.querySelector("#input > img");
 const output = document.body.querySelector("#output > img");
-let data;
+let buffer;
+const readFile = file => {
+	input.src = URL.createObjectURL(file);
+	const reader = new FileReader();
+	reader.addEventListener("loadend", () => {
+		console.log(buffer = reader.result);
+	});
+	reader.readAsArrayBuffer(file);
+};
 const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.accept = "image/*";
 fileInput.addEventListener("change", () => {
-	console.log(fileInput.files[0]);
+	readFile(fileInput.files[0]);
 	fileInput.value = null;
 });
 document.body.querySelector("#upload").addEventListener("click", fileInput.click.bind(fileInput));
