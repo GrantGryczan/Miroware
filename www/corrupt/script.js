@@ -32,11 +32,7 @@ const load = () => {
 	for(let i = Math.max(1, factor.value); i >= 0; i--) {
 		corrupted[Math.floor(Math.random() * corrupted.length)] = Math.floor(Math.random() * 256);
 	}
-	const reader = new FileReader();
-	reader.addEventListener("loadend", () => {
-		output.src = reader.result;
-	});
-	reader.readAsDataURL(new Blob([corrupted], {
+	output.src = URL.createObjectURL(new Blob([corrupted], {
 		type: file.type
 	}));
 };
