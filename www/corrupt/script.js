@@ -11,6 +11,9 @@ const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.accept = "image/*";
 fileInput.addEventListener("change", () => {
+	if(input.src) {
+		URL.revokeObjectURL(input.src);
+	}
 	input.src = URL.createObjectURL(file = fileInput.files[0]);
 	fileInput.value = null;
 	const reader = new FileReader();
@@ -22,8 +25,10 @@ fileInput.addEventListener("change", () => {
 });
 let timedOut = false;
 const load = () => {
+	if(output.src) {
+		URL.revokeObjectURL(output.src);
+	}
 	if(timedOut) {
-		output.src = "";
 		return;
 	}
 	output.classList.add("hidden");
