@@ -5,10 +5,21 @@
 }
 #head {
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 12px;
 	& > .output {
 		text-align: right;
+	}
+	.spaced {
+		vertical-align: middle;
+	}
+}
+.input, .output {
+	width: 50%;
+}
+#content {
+	text-align: right;
+	img {
+		max-width: 100%;
 	}
 }

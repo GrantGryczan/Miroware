@@ -15,7 +15,9 @@ this.value += html`
 			<div id="panel" class="mdc-elevation--z3">
 				<div id="head">
 					<div class="input">
-						<div class="mdc-text-field mdc-text-field--dense spaced">
+						<button id="upload" class="mdc-button mdc-button--raised spaced mdc-ripple" title="Upload image">
+							<i class="mdc-button__icon material-icons">file_upload</i>Upload
+						</button><div class="mdc-text-field mdc-text-field--dense spaced">
 							<input id="factor" class="mdc-text-field__input" type="number" min="0" max="10000" value="3" required>
 							<label class="mdc-floating-label" for="factor">Factor</label>
 							<div class="mdc-line-ripple"></div>
@@ -23,6 +25,14 @@ this.value += html`
 					</div>
 					<div class="output">
 						<button class="mdc-button spaced">Refresh</button><button class="mdc-button spaced">Download</button>
+					</div>
+				</div>
+				<div id="content">
+					<div class="input">
+						<img>
+					</div>
+					<div class="output">
+						<img>
 					</div>
 				</div>
 			</div>`;
