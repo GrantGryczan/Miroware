@@ -113,12 +113,16 @@ a {
 		flex-direction: column;
 	}
 	.mdc-list-item {
+		margin: 4px 8px;
 		color: rgba(255, 255, 255, 0.87);
 		&, &--activated {
 			.mdc-list-item__graphic {
 				color: rgba(255, 255, 255, 0.6);
 			}
 		}
+	}
+	.mdc-list-divider {
+		margin: 8px 0;
 	}
 }
 .mdc-list {
