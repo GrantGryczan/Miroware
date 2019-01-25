@@ -1,15 +1,15 @@
 const {user, isMe} = await parseUser(this);
-if(isMe) {
+if (isMe) {
 	const found = user.pipe.find(item => item.id === this.params.item);
-	if(found) {
-		if(found.type === "/") {
+	if (found) {
+		if (found.type === "/") {
 			const items = [found];
 			const fileItems = [];
 			const prefix = `${found.name}/`;
-			for(const item of user.pipe) {
-				if(item.name.startsWith(prefix)) {
+			for (const item of user.pipe) {
+				if (item.name.startsWith(prefix)) {
 					items.push(item);
-					if(item.type !== "/") {
+					if (item.type !== "/") {
 						fileItems.push(item);
 					}
 				}
@@ -17,14 +17,14 @@ if(isMe) {
 			this.update.$pull.pipe = {
 				$or: items.map(byDBQueryObject)
 			};
-			if(fileItems.length) {
+			if (fileItems.length) {
 				s3.deleteObjects({
 					Bucket: "miroware-pipe",
 					Delete: {
 						Objects: fileItems.map(byS3Object)
 					}
 				}, err => {
-					if(err) {
+					if (err) {
 						this.value = {
 							error: err.message
 						};
@@ -43,7 +43,7 @@ if(isMe) {
 				Bucket: "miroware-pipe",
 				Key: found.id
 			}, err => {
-				if(err) {
+				if (err) {
 					this.value = {
 						error: err.message
 					};

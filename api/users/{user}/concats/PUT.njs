@@ -1,19 +1,19 @@
 const {user, isMe} = await parseUser(this);
-if(isMe) {
+if (isMe) {
 	const found = this.user.concats.find(item => item.sub === this.req.query.sub && item.val === this.req.query.val);
-	if(found) {
+	if (found) {
 		const concat = await sanitizeConcat(this, true);
 		this.value = {
 			...concat,
 			url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
 		};
 		const keys = Object.keys(concat);
-		if(!keys.length) {
+		if (!keys.length) {
 			this.done();
 			return;
 		}
 		const set = {};
-		for(const key of keys) {
+		for (const key of keys) {
 			set[`concats.$.${key}`] = concat[key];
 		}
 		users.updateOne({

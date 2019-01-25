@@ -1,10 +1,10 @@
-if(testEmail(this.req.body.email)) {
+if (testEmail(this.req.body.email)) {
 	const user = await users.findOne({
 		email: this.req.body.email.trim().toLowerCase()
 	});
-	if(user) {
+	if (user) {
 		connect(this, user).then(data => {
-			if(user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
+			if (user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
 				const token = youKnow.crypto.token();
 				users.updateOne({
 					_id: user._id

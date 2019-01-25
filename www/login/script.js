@@ -7,7 +7,7 @@ let signup = false;
 const setSubmit = evt => {
 	signup = evt.target.name === "signup";
 };
-for(const input of submits) {
+for (const input of submits) {
 	input.addEventListener("click", setSubmit);
 }
 const forgot = html`<a class="transparent" href="javascript:;">Forgot your login? Click here.</a>`;
@@ -16,7 +16,7 @@ forgot.addEventListener("click", () => {
 		Are you sure you want to send a new password connection to <b>$${loginForm.elements.email.value}</b>?<br>
 		The new password will be automatically disconnected once you use it. No other connections will be removed or created. You will have to update the connections in your account settings manually as not to forget your login again.
 	`, ["Yes", "No"]).then(value => {
-		if(value === 0) {
+		if (value === 0) {
 			Miro.request("POST", "/forgotten_login", {}, {
 				email: loginForm.elements.email.value
 			}).then(Miro.response(() => {
@@ -26,7 +26,7 @@ forgot.addEventListener("click", () => {
 	});
 });
 const enableFormOnAuthCancel = value => {
-	if(value !== -2) {
+	if (value !== -2) {
 		Miro.formState(loginForm, true);
 	}
 };
@@ -41,7 +41,7 @@ const captchaCallbacks = [];
 window.captchaCallback = response => {
 	captchaCallbacks.shift()(response);
 	grecaptcha.reset();
-	if(captchaCallbacks.length) {
+	if (captchaCallbacks.length) {
 		grecaptcha.execute();
 	}
 };
@@ -64,12 +64,12 @@ const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
 loginForm.addEventListener("submit", evt => {
 	evt.preventDefault();
 	Miro.formState(loginForm, false);
-	if(signup) {
+	if (signup) {
 		signupDialog = new Miro.Dialog("Signup", signupForm, [{
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]).then(value => {
-			if(value === 0) {
+			if (value === 0) {
 				Miro.auth("Signup", "Secure your Miroware account by connecting it to a login method.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(Miro.reload);
 			} else {
 				Miro.formState(loginForm, true);

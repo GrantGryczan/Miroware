@@ -27,13 +27,13 @@ process.once("unhandledRejection", exitOnError);
 client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
 const inform = (guild, str1, str2) => {
-	if(guild.available) {
+	if (guild.available) {
 		guild.owner.send(str1).catch(() => {
 			const channels = guild.channels.filter(byTextChannels);
 			let i = -1;
 			const testChannel = () => {
 				i++;
-				if(channels[i]) {
+				if (channels[i]) {
 					channels[i].send(str2).catch(testChannel);
 				}
 			};
@@ -65,9 +65,9 @@ const errManageMessages = msg => () => {
 };
 const sendHelp = (msg, perm) => {
 	const noGuild = !msg.guild;
-	if(noGuild || data.guilds[msg.guild.id][0]) {
+	if (noGuild || data.guilds[msg.guild.id][0]) {
 		let help = noGuild ? "" : `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURI(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
-		if(perm || noGuild) {
+		if (perm || noGuild) {
 			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID> [<source channel tag> [target channel tag]]\`\nStar a message manually. If you are entering the command in a channel other than the one the desired message is not in, the second parameter should be that channel. The other channel tag makes it post the star embed to that channel instead of the default starboard.\n\n\`>⭐selfstar\`\nToggle whether users can star their own messages. Self-starring is allowed by default.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
 		}
 		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
@@ -83,9 +83,9 @@ const present = () => {
 	client.user.setActivity('Enter ">⭐" for info.');
 };
 client.once("ready", () => {
-	for(const [id, guild] of client.guilds) {
-		if(data.guilds[id]) {
-			if(data.guilds[id][0] && !guild.channels.get(data.guilds[id][0])) {
+	for (const [id, guild] of client.guilds) {
+		if (data.guilds[id]) {
+			if (data.guilds[id][0] && !guild.channels.get(data.guilds[id][0])) {
 				data.guilds[id][0] = null;
 			}
 		} else {
@@ -97,13 +97,13 @@ client.once("ready", () => {
 	present();
 });
 client.on("guildCreate", guild => {
-	if(!data.guilds[guild.id]) {
+	if (!data.guilds[guild.id]) {
 		guildCreate(guild.id);
 		save();
 	}
 });
 client.on("channelDelete", channel => {
-	if(channel.id === data.guilds[channel.guild.id][0]) {
+	if (channel.id === data.guilds[channel.guild.id][0]) {
 		data.guilds[channel.guild.id][0] = null;
 		save();
 	}
@@ -111,9 +111,9 @@ client.on("channelDelete", channel => {
 const starred = [];
 const star = (msg, callback, channel) => {
 	channel = channel || data.guilds[msg.guild.id][0];
-	if(channel) {
+	if (channel) {
 		console.log(`star ${msg.guild.id} ${msg.channel.id} ${msg.id}`);
-		if(!starred.includes(msg.id)) {
+		if (!starred.includes(msg.id)) {
 			starred.push(msg.id);
 		}
 		const embed = {
@@ -137,7 +137,7 @@ const star = (msg, callback, channel) => {
 				}]
 			}
 		};
-		if(embed.embed.fields[2].value.length > 1024) {
+		if (embed.embed.fields[2].value.length > 1024) {
 			embed.embed.fields[2].value = msg.content.slice(0, 1024);
 			embed.embed.fields.push({
 				name: "Continued",
@@ -145,7 +145,7 @@ const star = (msg, callback, channel) => {
 			});
 		}
 		const attachment = msg.attachments.first();
-		if(attachment) {
+		if (attachment) {
 			embed.embed.image = {
 				url: attachment.url
 			};
@@ -159,33 +159,33 @@ const star = (msg, callback, channel) => {
 	}
 };
 client.on("messageReactionAdd", async reaction => {
-	if(!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1]) {
+	if (!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1]) {
 		let {count} = reaction;
-		if(data.guilds[reaction.message.guild.id][4] && reaction.users.has(reaction.message.author.id)) {
+		if (data.guilds[reaction.message.guild.id][4] && reaction.users.has(reaction.message.author.id)) {
 			count--;
 			reaction.message.author.send(`Trying to star your own message? That star doesn't count on ${italicize(reaction.message.guild.name)}.`).catch(doNothing);
 			reaction.users.remove(reaction.message.author).catch(errManageMessages(reaction.message));
 		}
-		if(count >= data.guilds[reaction.message.guild.id][2]) {
+		if (count >= data.guilds[reaction.message.guild.id][2]) {
 			star(reaction.message);
 		}
 	}
 });
 client.on("message", async msg => {
-	if(msg.system) {
+	if (msg.system) {
 		return;
 	}
-	if(msg.channel.type === "text") {
+	if (msg.channel.type === "text") {
 		let content = msg.content;
-		if(prefix.test(content)) {
+		if (prefix.test(content)) {
 			const member = msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author);
 			const perm = member.hasPermission(8) || member.id === "152282430915608578";
-			if(perm) {
+			if (perm) {
 				content = content.replace(prefix, "");
-				if(content) {
+				if (content) {
 					content = content.replace(spaces, " ");
-					if(content === "selfstar") {
-						if(data.guilds[msg.guild.id][4]) {
+					if (content === "selfstar") {
+						if (data.guilds[msg.guild.id][4]) {
 							data.guilds[msg.guild.id].splice(4, 1);
 							msg.channel.send(`${msg.author} Self-starring is now allowed.`).catch(errSendMessages(msg));
 						} else {
@@ -211,9 +211,9 @@ client.on("message", async msg => {
 									msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
 								}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
 							}).catch(() => {
-								if(channelTest.test(content)) {
+								if (channelTest.test(content)) {
 									const starboard = content.replace(channelTest, "$1");
-									if(msg.guild.channels.get(starboard)) {
+									if (msg.guild.channels.get(starboard)) {
 										data.guilds[msg.guild.id][0] = starboard;
 										save();
 										msg.channel.send(`${msg.author} The starboard channel has been set to ${content}.`).catch(errSendMessages(msg));
@@ -222,11 +222,11 @@ client.on("message", async msg => {
 									}
 								} else {
 									const reactionCount = parseInt(content);
-									if(reactionCount) {
+									if (reactionCount) {
 										data.guilds[msg.guild.id][2] = Math.abs(reactionCount);
 										save();
 										msg.channel.send(`${msg.author} Members now have to add ${data.guilds[msg.guild.id][2]} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to get a message starred.`).catch(errSendMessages(msg));
-									} else if(colorTest.test(content)) {
+									} else if (colorTest.test(content)) {
 										const code = content.replace(colorTest, "$1$1$2$2$3$3$4");
 										data.guilds[msg.guild.id][3] = parseInt(code, 16);
 										save();
@@ -250,7 +250,7 @@ client.on("message", async msg => {
 				sendHelp(msg, perm);
 			}
 		}
-	} else if(prefix.test(msg.content)) {
+	} else if (prefix.test(msg.content)) {
 		sendHelp(msg, true);
 	}
 });

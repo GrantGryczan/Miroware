@@ -20,12 +20,12 @@ const proxy = httpProxy.createProxyServer();
 const pipeTest = /^piped?\./;
 const listener = (req, res) => {
 	let target = "http://localhost:8081";
-	if(req.headers.host) {
-		if(req.headers.host.endsWith(".gold")) {
+	if (req.headers.host) {
+		if (req.headers.host.endsWith(".gold")) {
 			target = "http://localhost:8180";
-		} else if(req.headers.host.endsWith(".gg")) {
+		} else if (req.headers.host.endsWith(".gg")) {
 			target = "http://localhost:8083";
-		} else if(pipeTest.test(req.headers.host)) {
+		} else if (pipeTest.test(req.headers.host)) {
 			target = "http://localhost:8082";
 		}
 	}

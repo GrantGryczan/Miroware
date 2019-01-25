@@ -1,5 +1,5 @@
 const {user, isMe} = await parseUser(this);
-if(isMe) {
+if (isMe) {
 	this.update.$pull.concats = {
 		sub: this.req.query.sub,
 		val: this.req.query.val

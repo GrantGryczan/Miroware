@@ -11,7 +11,7 @@ const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.accept = "image/*";
 fileInput.addEventListener("change", () => {
-	if(input.src) {
+	if (input.src) {
 		URL.revokeObjectURL(input.src);
 	}
 	input.src = URL.createObjectURL(file = fileInput.files[0]);
@@ -25,16 +25,16 @@ fileInput.addEventListener("change", () => {
 });
 let timedOut = false;
 const load = () => {
-	if(output.src) {
+	if (output.src) {
 		URL.revokeObjectURL(output.src);
 	}
-	if(timedOut) {
+	if (timedOut) {
 		return;
 	}
 	output.classList.add("hidden");
 	Miro.formState(corruption, false);
 	const corrupted = new Uint8Array(array);
-	for(let i = Math.max(1, factor.value); i >= 0; i--) {
+	for (let i = Math.max(1, factor.value); i >= 0; i--) {
 		corrupted[Math.floor(Math.random() * corrupted.length)] = Math.floor(Math.random() * 256);
 	}
 	output.src = URL.createObjectURL(new Blob([corrupted], {

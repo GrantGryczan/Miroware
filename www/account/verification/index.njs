@@ -1,8 +1,8 @@
 const user = typeof this.req.query.code === "string" && await users.findOne({
 	emailCode: this.req.query.code
 });
-if(user) {
-	if(await users.findOne({
+if (user) {
+	if (await users.findOne({
 		email: user.unverified,
 		_id: {
 			$ne: user._id

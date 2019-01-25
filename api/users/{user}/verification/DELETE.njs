@@ -1,6 +1,6 @@
 const {user, isMe} = await parseUser(this);
-if(isMe) {
-	if(user.verified) {
+if (isMe) {
+	if (user.verified) {
 		this.update.$set.unverified = this.update.$set.emailCode = null;
 	} else {
 		this.value = {

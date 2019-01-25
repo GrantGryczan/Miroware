@@ -1,4 +1,4 @@
-if(notLoggedIn(this)) {
+if (notLoggedIn(this)) {
 	return;
 }
 this.title = "Pipe";

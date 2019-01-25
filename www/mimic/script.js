@@ -17,39 +17,39 @@ const start = () => {
 	let splitTest;
 	try {
 		splitTest = new RegExp(splitInput.value);
-	} catch(err) {
+	} catch (err) {
 		new Miro.Dialog("Error", "The split expression must be a valid JavaScript regular expression.");
 		return;
 	}
 	const depth = depthInput.value >= 1 ? parseInt(depthInput.value) : 1;
 	const items = input.value.split(splitTest).filter(truthy);
-	if(!items.length) {
+	if (!items.length) {
 		output.value = "";
 		return;
 	}
-	if(items[0] !== "\n") {
+	if (items[0] !== "\n") {
 		items.unshift("\n");
 	}
-	if(items[items.length - 1] !== "\n") {
+	if (items[items.length - 1] !== "\n") {
 		items.push("\n");
 	}
-	for(let i = 0; i < depth; i++) {
+	for (let i = 0; i < depth; i++) {
 		items.unshift("");
 		items.push("");
 	}
 	const dictionary = {};
-	for(let i = 0; i < items.length; i++) {
+	for (let i = 0; i < items.length; i++) {
 		const item = items[i];
 		let entry = dictionary[item];
-		if(!entry) {
+		if (!entry) {
 			entry = dictionary[item] = {
 				[_phrases]: []
 			};
 		}
-		for(let j = 1; j <= depth; j++) {
+		for (let j = 1; j <= depth; j++) {
 			const phrase = items[i + j] || "";
 			entry[_phrases].push(phrase);
-			if(!entry[phrase]) {
+			if (!entry[phrase]) {
 				entry[phrase] = {
 					[_phrases]: [],
 					[_value]: 0
@@ -59,16 +59,16 @@ const start = () => {
 		}
 	}
 	let string = "";
-	while(!string) {
+	while (!string) {
 		let phrase = "\n";
-		loop: while(true) {
+		loop: while (true) {
 			let chance = 1;
 			let entry = dictionary[phrase];
-			for(let i = 1; i <= depth && Math.random() < chance; i++) {
+			for (let i = 1; i <= depth && Math.random() < chance; i++) {
 				const prevPhrase = phrase;
 				const entryPhrases = entry[_phrases];
 				phrase = entryPhrases[Math.floor(Math.random() * entryPhrases.length)];
-				if(phrase) {
+				if (phrase) {
 					string += phrase;
 					const dictionaryPhrase = dictionary[prevPhrase]
 					chance = dictionaryPhrase[phrase][_value] / dictionaryPhrase[_phrases].length;

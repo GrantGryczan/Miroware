@@ -1,16 +1,16 @@
 const {user, isMe} = await parseUser(this);
-if(isMe) {
-	if(this.now - this.token.super < 300000) {
+if (isMe) {
+	if (this.now - this.token.super < 300000) {
 		this.update = false;
 		const fileItems = user.pipe.filter(pipeFiles);
-		if(fileItems.length) {
+		if (fileItems.length) {
 			s3.deleteObjects({
 				Bucket: "miroware-pipe",
 				Delete: {
 					Objects: fileItems.map(byS3Object)
 				}
 			}, err => {
-				if(err) {
+				if (err) {
 					this.value = {
 						error: err.message
 					};

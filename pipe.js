@@ -22,39 +22,39 @@ const s3 = new AWS.S3({
 	const userAgents = [];
 	app.get("*", async (req, res) => {
 		let path = req.path;
-		if(path === "/") {
+		if (path === "/") {
 			res.redirect(308, "https://miroware.io/pipe/");
-		} else if(req.subdomains.join(".") === "piped") {
+		} else if (req.subdomains.join(".") === "piped") {
 			path = path.slice(1);
-			if(!userAgents.includes(req.get("User-Agent"))) {
+			if (!userAgents.includes(req.get("User-Agent"))) {
 				res.redirect(307, `https://pipe.miroware.io/${path}`);
 				return;
 			}
 			try {
 				path = decodeURIComponent(path);
-			} catch(err) {
+			} catch (err) {
 				res.status(400).send(err.message);
 				return;
 			}
 			let userID = (path = path.split("/")).shift();
 			try {
 				userID = ObjectID(userID);
-			} catch(err) {
+			} catch (err) {
 				res.sendStatus(404);
 				return;
 			}
 			const user = await users.findOne({
 				_id: userID
 			});
-			if(user) {
+			if (user) {
 				path = path.join("/");
 				const item = user.pipe.find(item => item.type !== "/" && item.name === path);
-				if(item) {
+				if (item) {
 					s3.getObject({
 						Bucket: "miroware-pipe",
 						Key: item.id
 					}, (err, data) => {
-						if(err) {
+						if (err) {
 							res.status(err.statusCode).send(err.message);
 						} else {
 							res.set("Content-Type", item.type).set("Content-Length", String(data.Body.length)).send(data.Body);
@@ -73,7 +73,7 @@ const s3 = new AWS.S3({
 			res.set("X-Powered-By", "Miroware");
 			const userAgent = `MirowarePipe (${Math.random()})`;
 			userAgents.push(userAgent);
-			if(path.endsWith("/")) {
+			if (path.endsWith("/")) {
 				path += "index.html";
 			}
 			https.get({
@@ -84,7 +84,7 @@ const s3 = new AWS.S3({
 				}
 			}, response => {
 				response.pipe(res);
-				if(response.headers["content-length"]) { // This is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
+				if (response.headers["content-length"]) { // This is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
 					res.set("Content-Length", response.headers["content-length"]);
 				}
 				res.status(response.statusCode).set("Content-Type", req.query.download === undefined ? response.headers["content-type"] : "application/octet-stream").set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src pipe.miroware.io miro.gg 'unsafe-inline' 'unsafe-eval'");

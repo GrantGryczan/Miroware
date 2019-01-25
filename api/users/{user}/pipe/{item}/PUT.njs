@@ -1,48 +1,48 @@
 const {user, isMe} = await parseUser(this);
-if(isMe) {
+if (isMe) {
 	const found = this.user.pipe.find(item => item.id === this.params.item);
-	if(found) {
+	if (found) {
 		const typeDir = found.type === "/";
 		const item = {};
-		if(this.req.body.name !== undefined) {
-			if(typeof this.req.body.name === "string") {
+		if (this.req.body.name !== undefined) {
+			if (typeof this.req.body.name === "string") {
 				this.req.body.name = this.req.body.name.trim();
-				if(this.req.body.name.length < 1) {
+				if (this.req.body.name.length < 1) {
 					this.value = {
 						error: "The `name` value must be at least 1 character long."
 					};
 					this.status = 400;
 					this.done();
 					return;
-				} else if(this.req.body.name.length > 255) {
+				} else if (this.req.body.name.length > 255) {
 					this.value = {
 						error: "The `name` value must be at most 255 characters long."
 					};
 					this.status = 400;
 					this.done();
 					return;
-				} else if(this.req.body.name.startsWith("/") || this.req.body.name.endsWith("/")) {
+				} else if (this.req.body.name.startsWith("/") || this.req.body.name.endsWith("/")) {
 					this.value = {
 						error: "The `name` value cannot start or end with a slash."
 					};
 					this.status = 400;
 					this.done();
 					return;
-				} else if(this.req.body.name.includes("//")) {
+				} else if (this.req.body.name.includes("//")) {
 					this.value = {
 						error: "The `name` value cannot contain multiple consecutive slashes."
 					};
 					this.status = 400;
 					this.done();
 					return;
-				} else if(this.user.pipe.some(item => item.name === this.req.body.name)) {
+				} else if (this.user.pipe.some(item => item.name === this.req.body.name)) {
 					this.value = {
 						error: "That name is already taken."
 					};
 					this.status = 422;
 					this.done();
 					return;
-				} else if(typeDir && this.req.body.name.startsWith(`${found.name}/`)) {
+				} else if (typeDir && this.req.body.name.startsWith(`${found.name}/`)) {
 					this.value = {
 						error: "Directories cannot be moved into themselves."
 					};
@@ -51,9 +51,9 @@ if(isMe) {
 					return;
 				} else {
 					const slashIndex = this.req.body.name.lastIndexOf("/");
-					if(slashIndex !== -1) {
+					if (slashIndex !== -1) {
 						const parent = this.req.body.name.slice(0, slashIndex);
-						if(!this.user.pipe.some(item => item.type === "/" && item.name === parent)) {
+						if (!this.user.pipe.some(item => item.type === "/" && item.name === parent)) {
 							this.value = {
 								error: "That path does not exist."
 							};
@@ -73,8 +73,8 @@ if(isMe) {
 				return;
 			}
 		}
-		if(this.req.body.type !== undefined) {
-			if(typeDir) {
+		if (this.req.body.type !== undefined) {
+			if (typeDir) {
 				this.value = {
 					error: "The `type` value cannot be changed for a directory."
 				};
@@ -82,16 +82,16 @@ if(isMe) {
 				this.done();
 				return;
 			}
-			if(typeof this.req.body.type === "string") {
+			if (typeof this.req.body.type === "string") {
 				this.req.body.type = this.req.body.type.trim();
-				if(this.req.body.type.length > 255) {
+				if (this.req.body.type.length > 255) {
 					this.value = {
 						error: "The `type` value must be at most 255 characters long."
 					};
 					this.status = 400;
 					this.done();
 					return;
-				} else if(!mimeTest.test(this.req.body.type)) {
+				} else if (!mimeTest.test(this.req.body.type)) {
 					this.value = {
 						error: "The `type` value must be a valid MIME type."
 					};
@@ -110,9 +110,9 @@ if(isMe) {
 				return;
 			}
 		}
-		if(this.req.body.privacy !== undefined) {
-			if(typeof this.req.body.privacy === "number") {
-				if(this.req.body.privacy === 0 || this.req.body.privacy === 1 || (typeDir && this.req.body.privacy === 2)) {
+		if (this.req.body.privacy !== undefined) {
+			if (typeof this.req.body.privacy === "number") {
+				if (this.req.body.privacy === 0 || this.req.body.privacy === 1 || (typeDir && this.req.body.privacy === 2)) {
 					item.privacy = this.req.body.privacy;
 				} else {
 					this.value = {
@@ -136,12 +136,12 @@ if(isMe) {
 			...item
 		};
 		const keys = Object.keys(item);
-		if(!keys.length) {
+		if (!keys.length) {
 			this.done();
 			return;
 		}
 		const set = {};
-		for(const key of keys) {
+		for (const key of keys) {
 			set[`pipe.$.${key}`] = item[key];
 		}
 		users.updateOne({
@@ -151,18 +151,18 @@ if(isMe) {
 			$set: set
 		});
 		const urls = [`https://pipe.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://pipe.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`];
-		if(typeDir) {
+		if (typeDir) {
 			const itemPath = `${found.name}/`;
 			this.value.size = user.pipe.reduce((size, item2) => {
-				if(item2.type !== "/" && item2.name.startsWith(itemPath)) {
+				if (item2.type !== "/" && item2.name.startsWith(itemPath)) {
 					size += item2.size;
 				}
 				return size;
 			}, 0);
-			if(item.name) {
+			if (item.name) {
 				const prefix = `${found.name}/`;
-				for(const child of user.pipe) {
-					if(child.name.startsWith(prefix)) {
+				for (const child of user.pipe) {
+					if (child.name.startsWith(prefix)) {
 						const name = item.name + child.name.slice(found.name.length);
 						users.updateOne({
 							...this.userFilter,

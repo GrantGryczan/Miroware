@@ -4,12 +4,12 @@ this.icon = "/pipe/images/icon/cover.png";
 this.showAds = true;
 let {user} = this;
 const isMe = user && this.params.user === String(user._id);
-if(!isMe) {
+if (!isMe) {
 	let userID;
 	try {
 		userID = ObjectID(this.params.user);
-	} catch(err) {}
-	if(userID) {
+	} catch (err) {}
+	if (userID) {
 		user = await users.findOne({
 			_id: userID
 		});
@@ -17,7 +17,7 @@ if(!isMe) {
 		user = null;
 	}
 }
-if(user) {
+if (user) {
 	this.data = {
 		user: {
 			id: user._id,

@@ -33,46 +33,46 @@ client.once("ready", () => {
 });
 const prefix = /^> ?/;
 client.on("message", async msg => {
-	if(msg.author.bot) {
+	if (msg.author.bot) {
 		return;
 	}
 	const isPublic = msg.channel.type === "text";
 	let content = msg.content;
-	if(isPublic) {
+	if (isPublic) {
 		const member = msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author);
 		const perm = member.hasPermission(8);
-		if(prefix.test(content)) {
+		if (prefix.test(content)) {
 			content = content.replace(prefix, "");
 			const contentSpaceIndex = content.indexOf(" ");
 			const contentLineIndex = content.indexOf("\n");
 			const contentIndex = Math.min((contentSpaceIndex !== -1) ? contentSpaceIndex : Infinity, (contentLineIndex !== -1) ? contentLineIndex : Infinity);
-			if(contentIndex !== Infinity) {
+			if (contentIndex !== Infinity) {
 				content = [content.slice(0, contentIndex), content.slice(contentIndex + 1)];
 			} else {
 				content = [content];
 			}
 			content[0] = content[0].toLowerCase();
-			if(perm) {
-				if(content[0] === "say") {
+			if (perm) {
+				if (content[0] === "say") {
 				   msg.delete().then(() => {
 					   msg.channel.send(content[1]).catch(doNothing);
 				   });
-			   } else if(content[0] === "delete") {
+			   } else if (content[0] === "delete") {
 				   msg.delete().then(() => {
 					   const messages = parseInt(content[1]);
-					   if(!isNaN(content[1])) {
+					   if (!isNaN(content[1])) {
 						   msg.channel.bulkDelete(parseInt(content[1])).catch(doNothing);
 					   }
 				   });
-			   } else if(content[0] === "react") {
+			   } else if (content[0] === "react") {
 					const emojis = content[1].split(" ");
 					msg.channel.messages.fetch({
 						limit: 1,
 						before: msg.id
 					}).then(msgs => {
 						const msg2 = msgs.first();
-						for(const emoji of emojis) {
-							if(emoji) {
+						for (const emoji of emojis) {
+							if (emoji) {
 								msg2.react(emoji).catch(doNothing);
 							}
 						}

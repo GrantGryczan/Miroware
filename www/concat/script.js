@@ -13,7 +13,7 @@ form.querySelector("#help").addEventListener("click", () => {
 	`);
 });
 const addEntry = (noFocus, url) => {
-	if(entries.childNodes.length > 1023) {
+	if (entries.childNodes.length > 1023) {
 		new Miro.Dialog("Error", "You can stop now.");
 	} else {
 		const entry = html`
@@ -26,29 +26,29 @@ const addEntry = (noFocus, url) => {
 		`;
 		entries.appendChild(entry);
 		const input = entry.querySelector("input");
-		if(url) {
+		if (url) {
 			input.value = url;
 		}
-		if(noFocus !== true) {
+		if (noFocus !== true) {
 			input.select();
 		}
 	}
 };
 const addEachEntry = addEntry.bind(null, true);
-if(Miro.query.urls) {
+if (Miro.query.urls) {
 	Miro.query.urls.split(",").forEach(addEachEntry);
 } else {
 	addEntry(!Miro.query.val);
 }
 form.querySelector("#addEntry").addEventListener("click", addEntry);
 entries.addEventListener("click", evt => {
-	if(evt.target instanceof HTMLButtonElement) {
+	if (evt.target instanceof HTMLButtonElement) {
 		evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
 	}
 });
 const changeEnableSub = () => {
 	sub.classList[form.elements.enableSub.checked ? "remove" : "add"]("hidden");
-	if(form.elements.enableSub.checked) {
+	if (form.elements.enableSub.checked) {
 		form.elements.sub.select();
 	} else {
 		form.elements.sub.value = "";
@@ -58,7 +58,7 @@ const changeEnableSub = () => {
 form.elements.enableSub.addEventListener("change", changeEnableSub);
 let appendConcat;
 let changeSave;
-if(Miro.in) {
+if (Miro.in) {
 	const saves = form.querySelector("#saves");
 	appendConcat = concat => {
 		const option = html`<option>$${concat.sub ? `${concat.sub}.` : ""}miro.gg/$${concat.val}</option>`;
@@ -77,10 +77,10 @@ if(Miro.in) {
 		form.elements.anon.checked = selected && selected.anon;
 		form.elements.sub.value = selected ? selected.sub : "";
 		form.elements.val.value = selected ? decodeURI(selected.val) : "";
-		while(entries.childNodes.length) {
+		while (entries.childNodes.length) {
 			entries.removeChild(entries.lastChild);
 		}
-		if(selected) {
+		if (selected) {
 			selected.urls.forEach(addEachEntry);
 		} else {
 			addEntry(true);
@@ -95,7 +95,7 @@ if(Miro.in) {
 		changeSave();
 	};
 	const confirmDeleteConcat = value => {
-		if(value === 0) {
+		if (value === 0) {
 			Miro.formState(form, false);
 			Miro.request("DELETE", `/users/@me/concats?sub=${encodeURIComponent(selected.sub)}&val=${encodeURIComponent(selected.val)}`).then(doneDeleting);
 		}
@@ -106,7 +106,7 @@ if(Miro.in) {
 }
 form.elements.val.addEventListener("change", () => {
 	const encoded = encodeURI(form.elements.val.value);
-	if(form.elements.val.value !== encoded) {
+	if (form.elements.val.value !== encoded) {
 		new Miro.Dialog("Warning", html`
 			"$${form.elements.val.value}" has not yet been encoded.<br>
 			After you save this concat, "$${encoded}" will be used instead.
@@ -128,7 +128,7 @@ const response = Miro.response(xhr => {
 		document.execCommand("copy");
 		Miro.snackbar("URL copied to clipboard");
 	});
-	if(selected) {
+	if (selected) {
 		const selectedOption = saves.options[saves.selectedIndex];
 		const option = appendConcat(selected = xhr.response);
 		option.selected = true;
@@ -139,14 +139,14 @@ const response = Miro.response(xhr => {
 		changeSave();
 	}
 });
-if(!location.href.endsWith(location.pathname)) {
+if (!location.href.endsWith(location.pathname)) {
 	history.replaceState(0, "", location.pathname);
 }
 form.addEventListener("submit", evt => {
 	evt.preventDefault();
 	const urls = Array.prototype.map.call(entries.querySelectorAll("input"), byValue);
-	if(Miro.in) {
-		if(urls.length) {
+	if (Miro.in) {
+		if (urls.length) {
 			Miro.formState(form, false);
 			Miro.request(selected ? "PUT" : "POST", `/users/@me/concats${selected ? `?sub=${encodeURIComponent(selected.sub)}&val=${encodeURIComponent(selected.val)}` : ""}`, {}, {
 				anon: form.elements.anon.checked,
@@ -159,7 +159,7 @@ form.addEventListener("submit", evt => {
 		}
 	} else {
 		new Miro.Dialog("Error", "You must be logged in to create concats.", ["Log in", "Cancel"]).then(value => {
-			if(value === 0) {
+			if (value === 0) {
 				history.replaceState(0, "", `${location.pathname}?anon=${form.elements.anon.checked}&sub=${encodeURIComponent(form.elements.sub.value)}&val=${encodeURIComponent(form.elements.val.value)}&urls=${encodeURIComponent(urls.join(","))}`);
 				Miro.logIn();
 			}

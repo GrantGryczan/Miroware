@@ -1,12 +1,12 @@
 "use strict";
 const form = document.body.querySelector("#form");
 const submit = form.querySelector("#save");
-for(const input of form.elements) {
+for (const input of form.elements) {
 	input._input = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
 }
 const savePrevs = () => {
-	for(const input of form.elements) {
-		if(input._input) {
+	for (const input of form.elements) {
+		if (input._input) {
 			input._prev = Miro.value(input);
 		}
 	}
@@ -15,10 +15,10 @@ savePrevs();
 const changed = [];
 const onInput = evt => {
 	changed.length = 0;
-	for(const input of form.elements) {
-		if(input._input) {
-			if(input.checkValidity()) {
-				if(input._prev !== Miro.value(input)) {
+	for (const input of form.elements) {
+		if (input._input) {
+			if (input.checkValidity()) {
+				if (input._prev !== Miro.value(input)) {
 					changed.push(input);
 				}
 			} else {
@@ -32,12 +32,12 @@ const onInput = evt => {
 form.addEventListener("input", onInput);
 form.addEventListener("change", onInput);
 const setForm = () => {
-	if(changed.includes(form.elements.email)) {
+	if (changed.includes(form.elements.email)) {
 		new Miro.Dialog("Account Verification", html`
 			A verification email has sent to <b>$${form.elements.email.value}</b>.
 		`).then(Miro.reload);
 	}
-	if(changed.includes(form.elements.name)) {
+	if (changed.includes(form.elements.name)) {
 		Miro.inputState(form.elements.name, false);
 	}
 	changed.length = 0;
@@ -49,7 +49,7 @@ const enableForm = Miro.formState.bind(null, form, true);
 form.addEventListener("submit", evt => {
 	evt.preventDefault();
 	const body = {};
-	for(const elem of changed) {
+	for (const elem of changed) {
 		body[elem.name] = Miro.value(elem);
 	}
 	Miro.formState(form, false);
@@ -57,7 +57,7 @@ form.addEventListener("submit", evt => {
 });
 const removeConnection = evt => {
 	new Miro.Dialog("Remove", `Are you sure you want to remove that ${evt.target.parentNode.parentNode.parentNode._connection.service} connection?`, ["Yes", "No"]).then(value => {
-		if(value === 0) {
+		if (value === 0) {
 			Miro.checkSuper(() => {
 				Miro.request("DELETE", `/users/@me/connections/${encodeURIComponent(evt.target.parentNode.parentNode.parentNode._connection.id)}`).then(Miro.response(() => {
 					evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.parentNode.nextSibling);
@@ -116,12 +116,12 @@ const deleteAccount = Miro.checkSuper.bind(null, () => {
 	Miro.request("DELETE", "/users/@me").then(respondReload);
 });
 const checkDeleteAccount = value => {
-	if(value === 0) {
+	if (value === 0) {
 		deleteAccount();
 	}
 };
 const confirmDeleteAccount = value => {
-	if(value === 0) {
+	if (value === 0) {
 		new Miro.Dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(checkDeleteAccount);
 	}
 };
@@ -129,7 +129,7 @@ form.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(nul
 	new Miro.Dialog("Delete", "Are you sure you want to delete your account?", ["Yes", "No"]).then(confirmDeleteAccount);
 }));
 const confirmDownload = value => {
-	if(value === 0) {
+	if (value === 0) {
 		html`<a href="/account/data.json" download="user.json"></a>`.click();
 	}
 };
@@ -137,9 +137,9 @@ form.querySelector("#download").addEventListener("click", () => {
 	new Miro.Dialog("Download", "Would you like a copy of your user data?", ["Yes", "No"]).then(confirmDownload);
 });
 const verifyEmail = form.querySelector("#verifyEmail");
-if(verifyEmail) {
+if (verifyEmail) {
 	const confirmVerifyEmail = value => {
-		if(value === 0) {
+		if (value === 0) {
 			Miro.request("POST", "/users/@me/verification", {}, {}).then(respondReload);
 		}
 	};
@@ -147,9 +147,9 @@ if(verifyEmail) {
 		new Miro.Dialog("Account Verification", "Are you sure you want to resend the verification email?", ["Yes", "No"]).then(confirmVerifyEmail);
 	});
 	const cancelVerify = form.querySelector("#cancelVerify");
-	if(cancelVerify) {
+	if (cancelVerify) {
 		const confirmCancelVerify = value => {
-			if(value === 0) {
+			if (value === 0) {
 				Miro.request("DELETE", "/users/@me/verification").then(respondReload);
 			}
 		};

@@ -4,7 +4,7 @@ let loops = 0;
 setInterval(() => {
 	loops++;
 	let hex = Math.floor(Math.random() * 0x1000000).toString(16);
-	while(hex.length < 6) {
+	while (hex.length < 6) {
 		hex = `0${hex}`;
 	}
 	magical.style.color = `#${hex}`;

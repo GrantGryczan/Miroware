@@ -1,5 +1,5 @@
 const {user, isMe} = await parseUser(this);
-if(isMe) {
+if (isMe) {
 	const concat = await sanitizeConcat(this);
 	this.update.$push = {
 		concats: concat

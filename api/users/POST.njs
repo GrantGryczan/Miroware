@@ -1,5 +1,5 @@
-if(testEmail(this.req.body.email)) {
-	if(await users.findOne({
+if (testEmail(this.req.body.email)) {
+	if (await users.findOne({
 		email: this.req.body.email = this.req.body.email.trim().toLowerCase()
 	})) {
 		this.value = {
@@ -10,16 +10,16 @@ if(testEmail(this.req.body.email)) {
 	} else {
 		connect(this).then(async data => {
 			await verifyCaptcha(this);
-			if(typeof this.req.body.name === "string") {
+			if (typeof this.req.body.name === "string") {
 				this.req.body.name = this.req.body.name.trim();
-				if(this.req.body.name.length < 1) {
+				if (this.req.body.name.length < 1) {
 					this.value = {
 						error: "The `name` value must be at least 1 character long."
 					};
 					this.status = 400;
 					this.done();
 					return;
-				} else if(this.req.body.name.length > 32) {
+				} else if (this.req.body.name.length > 32) {
 					this.value = {
 						error: "The `name` value must be at most 32 characters long."
 					};
@@ -35,15 +35,15 @@ if(testEmail(this.req.body.email)) {
 				this.done();
 				return;
 			}
-			if(typeof this.req.body.birth === "number") {
-				if(this.req.body.birth < -8640000000000000) {
+			if (typeof this.req.body.birth === "number") {
+				if (this.req.body.birth < -8640000000000000) {
 					this.value = {
 						error: "Nobody is that old."
 					};
 					this.status = 400;
 					this.done();
 					return;
-				} else if(this.req.body.birth - this.now > -409968000000) {
+				} else if (this.req.body.birth - this.now > -409968000000) {
 					this.value = {
 						error: "You must be at least 13 years of age to sign up."
 					};
@@ -65,7 +65,7 @@ if(testEmail(this.req.body.email)) {
 				service: data.connection[0],
 				id: data.id
 			};
-			if(data.connection[0] === "password") {
+			if (data.connection[0] === "password") {
 				connection.hash = youKnow.crypto.hash(data.connection[1], salt);
 			}
 			const insertData = {
@@ -92,7 +92,7 @@ if(testEmail(this.req.body.email)) {
 				concats: [],
 				pipe: []
 			};
-			if(!insertData.verified) {
+			if (!insertData.verified) {
 				insertData.unverified = this.req.body.email;
 				verifyEmail(insertData);
 			}

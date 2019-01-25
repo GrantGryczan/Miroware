@@ -9,10 +9,10 @@ this.value = {
 	desc: user.desc,
 	icon: user.icon
 };
-if(isMe || user.publicEmail) {
+if (isMe || user.publicEmail) {
 	this.value.email = user.email;
 }
-if(isMe) {
+if (isMe) {
 	Object.assign(this.value, {
 		unverified: user.unverified,
 		nameCooldown: user.nameCooldown,

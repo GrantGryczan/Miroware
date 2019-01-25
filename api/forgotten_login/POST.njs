@@ -1,8 +1,8 @@
-if(testEmail(this.req.body.email)) {
+if (testEmail(this.req.body.email)) {
 	const user = await users.findOne({
 		email: this.req.body.email.trim().toLowerCase()
 	});
-	if(user) {
+	if (user) {
 		const password = crypto.randomBytes(24).toString("base64");
 		transporter.sendMail({
 			from: "Miroware <info@miroware.io>",

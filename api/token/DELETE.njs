@@ -1,5 +1,5 @@
-if(this.token) {
-	if(this.req.signedCookies.auth) {
+if (this.token) {
+	if (this.req.signedCookies.auth) {
 		this.res.clearCookie("auth", clearCookieOptions);
 	}
 	this.update.$pull.pouch = {

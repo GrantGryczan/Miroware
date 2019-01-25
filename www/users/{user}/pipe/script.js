@@ -3,35 +3,35 @@ document.title += ` / ${Miro.data.user.name}`;
 const getDate = date => String(date).split(" ").slice(1, 5).join(" ");
 const BYTE_SCALE = 1024;
 const getSize = size => {
-	if(size < BYTE_SCALE) {
+	if (size < BYTE_SCALE) {
 		return `${size} B`;
 	}
 	size /= BYTE_SCALE;
-	if(size < BYTE_SCALE) {
+	if (size < BYTE_SCALE) {
 		return `${Math.round(10 * size) / 10} KiB`;
 	}
 	size /= BYTE_SCALE;
-	if(size < BYTE_SCALE) {
+	if (size < BYTE_SCALE) {
 		return `${Math.round(10 * size) / 10} MiB`;
 	}
 	size /= BYTE_SCALE;
-	if(size < BYTE_SCALE) {
+	if (size < BYTE_SCALE) {
 		return `${Math.round(10 * size) / 10} GiB`;
 	}
 	size /= BYTE_SCALE;
-	if(size < BYTE_SCALE) {
+	if (size < BYTE_SCALE) {
 		return `${Math.round(10 * size) / 10} TiB`;
 	}
 	size /= BYTE_SCALE;
-	if(size < BYTE_SCALE) {
+	if (size < BYTE_SCALE) {
 		return `${Math.round(10 * size) / 10} PiB`;
 	}
 	size /= BYTE_SCALE;
-	if(size < BYTE_SCALE) {
+	if (size < BYTE_SCALE) {
 		return `${Math.round(10 * size) / 10} EiB`;
 	}
 	size /= BYTE_SCALE;
-	if(size < BYTE_SCALE) {
+	if (size < BYTE_SCALE) {
 		return `${Math.round(10 * size) / 10} ZiB`;
 	}
 	size /= BYTE_SCALE;
@@ -42,11 +42,11 @@ const targetIndicator = document.body.querySelector("#targetIndicator");
 let indicatedTarget;
 const indicateTarget = target => {
 	indicatedTarget = target;
-	if(target) {
+	if (target) {
 		const rect = target.getBoundingClientRect();
 		targetIndicator.style.transform = `translate(${rect.left + rect.width / 2 - 0.5}px, ${rect.top + rect.height / 2 - 0.5}px) scale(${rect.width}, ${rect.height})`;
 		targetIndicator.classList.add("visible");
-	} else if(targetIndicator.classList.contains("visible")) {
+	} else if (targetIndicator.classList.contains("visible")) {
 		targetIndicator.style.transform = "";
 		targetIndicator.classList.remove("visible");
 	}
@@ -65,7 +65,7 @@ const cachedPaths = [];
 const getItem = name => pipe.find(item => item.name === name);
 const setItem = item => {
 	const itemIndex = pipe.findIndex(({id}) => id === item.id);
-	if(itemIndex === -1) {
+	if (itemIndex === -1) {
 		pipe.push(item);
 	} else {
 		pipe.splice(itemIndex, 1, item);
@@ -85,10 +85,10 @@ let reverseValue = +localStorage.pipe_reverseItems;
 const header = document.body.querySelector("#header");
 const sortButtons = header.querySelectorAll(".cell.sort > button");
 const clickSort = evt => {
-	if(evt.target.classList.contains("sorting")) {
+	if (evt.target.classList.contains("sorting")) {
 		reverseValue = +!reverseValue;
 	} else {
-		for(const sortButton of sortButtons) {
+		for (const sortButton of sortButtons) {
 			const target = sortButton === evt.target;
 			sortButton.classList[target ? "add" : "remove"]("sorting");
 			sortButton.textContent = target ? "arrow_downward" : "sort";
@@ -98,11 +98,11 @@ const clickSort = evt => {
 	evt.target.classList[(localStorage.pipe_reverseItems = reverseValue) ? "add" : "remove"]("reverse");
 	render();
 };
-for(const sortButton of sortButtons) {
-	if(sortValue === (sortButton._sort = sortButton.getAttribute("data-sort"))) {
+for (const sortButton of sortButtons) {
+	if (sortValue === (sortButton._sort = sortButton.getAttribute("data-sort"))) {
 		sortButton.classList.add("sorting");
 		sortButton.textContent = "arrow_downward";
-		if(reverseValue) {
+		if (reverseValue) {
 			sortButton.classList.add("reverse");
 		}
 	}
@@ -143,7 +143,7 @@ class PipeItem {
 		this.element.addEventListener("click", this.click.bind(this));
 	}
 	updateThumbnail() {
-		if(this.type.startsWith("image/")) {
+		if (this.type.startsWith("image/")) {
 			this.thumbnailElement.style.backgroundImage = `url(${this.url.replace(closingParentheses, "%29")})`;
 		} else {
 			this.thumbnailElement.style.backgroundImage = "";
@@ -160,30 +160,30 @@ class PipeItem {
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
 		this.element.href = typeDir ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(this.name)}`);
 		this.updateThumbnail();
-		if(oldName) {
-			if(typeDir) {
+		if (oldName) {
+			if (typeDir) {
 				const pathIndex = cachedPaths.indexOf(oldName);
-				if(pathIndex !== -1) {
+				if (pathIndex !== -1) {
 					cachedPaths.splice(pathIndex, 1, value);
 				}
 				const prefix = `${this.name}/`;
-				for(const item of pipe) {
-					if(item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
+				for (const item of pipe) {
+					if (item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
 						item.name = value + item.name.slice(oldName.length);
 					}
 				}
 			}
 			let ancestry = "";
-			for(const name of oldName.split("/").slice(0, -1)) {
+			for (const name of oldName.split("/").slice(0, -1)) {
 				const item = getItem(ancestry += (ancestry && "/") + name);
-				if(item) {
+				if (item) {
 					item.size -= this.size;
 				}
 			}
 			ancestry = "";
-			for(const name of this.name.split("/").slice(0, -1)) {
+			for (const name of this.name.split("/").slice(0, -1)) {
 				const item = getItem(ancestry += (ancestry && "/") + name);
-				if(item) {
+				if (item) {
 					item.size += this.size;
 				}
 			}
@@ -216,36 +216,36 @@ class PipeItem {
 		evt.preventDefault();
 	}
 	delete() {
-		if(selectedItem === this.element) {
+		if (selectedItem === this.element) {
 			selectedItem = null;
 		}
-		if(focusedItem === this.element) {
+		if (focusedItem === this.element) {
 			focusedItem = null;
 		}
-		if(this.type === "/") {
+		if (this.type === "/") {
 			const pathIndex = cachedPaths.indexOf(this.name);
-			if(pathIndex !== -1) {
+			if (pathIndex !== -1) {
 				cachedPaths.splice(pathIndex, 1);
 			}
 			const prefix = `${this.name}/`;
-			for(let i = pipe.length - 1; i >= 0; i--) {
+			for (let i = pipe.length - 1; i >= 0; i--) {
 				const item = pipe[i];
-				if(item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
+				if (item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
 					item.delete();
 				}
 			}
 		}
 		let ancestry = "";
-		for(const name of this.name.split("/").slice(0, -1)) {
+		for (const name of this.name.split("/").slice(0, -1)) {
 			const item = getItem(ancestry += (ancestry && "/") + name);
-			if(item) {
+			if (item) {
 				item.size -= this.size;
 			}
 		}
 		pipe.splice(pipe.indexOf(this), 1);
 	}
 	open() {
-		if(this.type === "/") {
+		if (this.type === "/") {
 			location.href = this.element.href;
 		} else {
 			open(this.element.href);
@@ -264,15 +264,15 @@ const removeItem = itemElement => {
 };
 const removeItems = () => {
 	const itemElements = items.querySelectorAll(".item.selected");
-	if(itemElements.length) {
-		if(itemElements.length === 1) {
+	if (itemElements.length) {
+		if (itemElements.length === 1) {
 			const itemElement = itemElements[0];
 			new Miro.Dialog("Remove Item", html`
 				Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>${itemElement._item.type === "/" ? `
 				Items inside the directory will also be removed.<br>` : ""}
 				This cannot be undone.
 			`, ["Yes", "No"]).then(value => {
-				if(value === 0) {
+				if (value === 0) {
 					removeItem(itemElement);
 				}
 			});
@@ -283,7 +283,7 @@ const removeItems = () => {
 				Items inside the ${selectedDirs === 1 ? "directory" : "directories"} will also be removed.<br>` : ""}
 				This cannot be undone.
 			`, ["Yes", "No"]).then(value => {
-				if(value === 0) {
+				if (value === 0) {
 					itemElements.forEach(removeItem);
 				}
 			});
@@ -291,7 +291,7 @@ const removeItems = () => {
 	}
 };
 const render = () => {
-	while(ancestors.lastChild) {
+	while (ancestors.lastChild) {
 		ancestors.removeChild(ancestors.lastChild);
 	}
 	ancestors.appendChild(html`
@@ -300,9 +300,9 @@ const render = () => {
 			<a class="ancestor" href="#">$${Miro.data.user.name}</a>
 		</span>
 	`);
-	if(path) {
+	if (path) {
 		let ancestry = "";
-		for(const name of path.split("/")) {
+		for (const name of path.split("/")) {
 			ancestors.appendChild(html`
 				<span>
 					<span class="separator">/</span>
@@ -313,14 +313,14 @@ const render = () => {
 	}
 	const ancestorLinks = ancestors.querySelectorAll(".ancestor");
 	ancestorLinks[ancestorLinks.length - 1].removeAttribute("href");
-	while(items.lastChild) {
+	while (items.lastChild) {
 		items.removeChild(items.lastChild);
 	}
-	if(!(sortValue in sort)) {
+	if (!(sortValue in sort)) {
 		sortValue = SORT_DEFAULT;
 	}
 	const sortedItems = pipe.filter(currentItems).sort(sort[sortValue]);
-	for(const item of reverseValue ? sortedItems.reverse() : sortedItems) {
+	for (const item of reverseValue ? sortedItems.reverse() : sortedItems) {
 		items.appendChild(item.element);
 	}
 	updateProperties();
@@ -332,14 +332,14 @@ const goHome = () => {
 const hashChange = () => {
 	try {
 		path = decodeURI(location.hash.slice(1));
-	} catch(err) {
+	} catch (err) {
 		new Miro.Dialog("Error", "The path is malformed.");
 		goHome();
 		return;
 	}
-	if(!cachedPaths.includes(path)) {
+	if (!cachedPaths.includes(path)) {
 		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?path=${encodeForPipe(path)}`).then(Miro.response(xhr => {
-			for(const item of xhr.response) {
+			for (const item of xhr.response) {
 				setItem(new PipeItem(item));
 			}
 			cachedPaths.push(path);
@@ -355,55 +355,55 @@ let selectedItem = null;
 let focusedItem = null;
 const selectItem = (target, evt, button) => {
 	const apparentTop = target.offsetTop - header.offsetHeight;
-	if(apparentTop < items.parentNode.scrollTop) {
+	if (apparentTop < items.parentNode.scrollTop) {
 		items.parentNode.scrollTop = apparentTop;
-	} else if(target.offsetTop + target.offsetHeight > items.parentNode.scrollTop + items.parentNode.offsetHeight) {
+	} else if (target.offsetTop + target.offsetHeight > items.parentNode.scrollTop + items.parentNode.offsetHeight) {
 		items.parentNode.scrollTop = target.offsetTop + target.offsetHeight - items.parentNode.offsetHeight;
 	}
 	const superKey = evt.ctrlKey || evt.metaKey;
-	if(button === 2 && !(superKey || evt.shiftKey)) {
-		if(!target.classList.contains("selected")) {
-			for(const item of items.querySelectorAll(".item.selected")) {
+	if (button === 2 && !(superKey || evt.shiftKey)) {
+		if (!target.classList.contains("selected")) {
+			for (const item of items.querySelectorAll(".item.selected")) {
 				item.classList.remove("selected");
 			}
 			target.classList.add("selected");
 			selectedItem = focusedItem = target;
 		}
-	} else if(evt.shiftKey) {
+	} else if (evt.shiftKey) {
 		let selecting = !selectedItem;
 		const classListMethod = superKey && selectedItem && !selectedItem.classList.contains("selected") ? "remove" : "add";
-		for(const itemElement of items.querySelectorAll(".item")) {
-			if(itemElement === selectedItem || itemElement === target) {
-				if(selecting) {
+		for (const itemElement of items.querySelectorAll(".item")) {
+			if (itemElement === selectedItem || itemElement === target) {
+				if (selecting) {
 					itemElement.classList[classListMethod]("selected");
 					selecting = false;
 					continue;
 				} else {
 					itemElement.classList[classListMethod]("selected");
-					if(selectedItem !== target) {
+					if (selectedItem !== target) {
 						selecting = true;
 					}
 				}
-			} else if(selecting) {
+			} else if (selecting) {
 				itemElement.classList[classListMethod]("selected");
-			} else if(!superKey) {
+			} else if (!superKey) {
 				itemElement.classList.remove("selected");
 			}
 		}
 	} else {
 		selectedItem = target;
 		focusedItem = target;
-		if(superKey) {
+		if (superKey) {
 			target.classList.toggle("selected");
 		} else {
 			let othersSelected = false;
-			for(const itemElement of items.querySelectorAll(".item.selected")) {
-				if(itemElement !== target) {
+			for (const itemElement of items.querySelectorAll(".item.selected")) {
+				if (itemElement !== target) {
 					othersSelected = true;
 					itemElement.classList.remove("selected");
 				}
 			}
-			if(target.classList[othersSelected ? "add" : "toggle"]("selected") === false) {
+			if (target.classList[othersSelected ? "add" : "toggle"]("selected") === false) {
 				selectedItem = null;
 			}
 		}
@@ -411,7 +411,7 @@ const selectItem = (target, evt, button) => {
 	updateProperties();
 };
 const deselectItems = () => {
-	for(const item of items.querySelectorAll(".item.selected")) {
+	for (const item of items.querySelectorAll(".item.selected")) {
 		item.classList.remove("selected");
 	}
 	selectedItem = focusedItem = null;
@@ -426,14 +426,14 @@ document.addEventListener("mousedown", evt => {
 	mouseMoved = false;
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
-	if(evt.button !== 0 && evt.button !== 2) {
+	if (evt.button !== 0 && evt.button !== 2) {
 		return;
 	}
 	mouseTarget = evt.target;
 	mouseDown = evt.button;
-	if(evt.target.parentNode._item) {
+	if (evt.target.parentNode._item) {
 		focusedItem = evt.target.parentNode;
-	} else if(evt.target._item) {
+	} else if (evt.target._item) {
 		focusedItem = evt.target;
 	}
 }, {
@@ -441,12 +441,12 @@ document.addEventListener("mousedown", evt => {
 	passive: true
 });
 document.addEventListener("mouseup", evt => {
-	if(mouseDown !== -1 && items.contains(mouseTarget)) {
-		if(mouseTarget.parentNode._item || mouseTarget._item) {
-			if(mouseMoved) {
-				if(indicatedTarget) {
+	if (mouseDown !== -1 && items.contains(mouseTarget)) {
+		if (mouseTarget.parentNode._item || mouseTarget._item) {
+			if (mouseMoved) {
+				if (indicatedTarget) {
 					const sourcePath = path;
-					for(const itemElement of items.querySelectorAll(".item.selected")) {
+					for (const itemElement of items.querySelectorAll(".item.selected")) {
 						itemElement.classList.remove("selected");
 						itemElement.classList.add("loading");
 						const targetName = indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
@@ -456,7 +456,7 @@ document.addEventListener("mouseup", evt => {
 						}).then(Miro.response(xhr => {
 							itemElement._item.name = xhr.response.name;
 							itemElement.classList.remove("loading");
-							if(sourcePath === path) {
+							if (sourcePath === path) {
 								render();
 							}
 						}, () => {
@@ -469,11 +469,11 @@ document.addEventListener("mouseup", evt => {
 			} else {
 				selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, evt.button);
 			}
-		} else if(mouseTarget.parentNode.parentNode._item) {
+		} else if (mouseTarget.parentNode.parentNode._item) {
 			selectItem(mouseTarget.parentNode.parentNode, {
 				ctrlKey: true
 			});
-		} else if(!mouseMoved) {
+		} else if (!mouseMoved) {
 			deselectItems();
 		}
 	}
@@ -484,7 +484,7 @@ document.addEventListener("mouseup", evt => {
 	passive: true
 });
 document.addEventListener("dblclick", evt => {
-	if(!mouseMoved && evt.target.parentNode._item) {
+	if (!mouseMoved && evt.target.parentNode._item) {
 		selectItem(evt.target.parentNode, evt, 2);
 		evt.target.parentNode._item.open();
 	}
@@ -493,16 +493,16 @@ document.addEventListener("dblclick", evt => {
 	passive: true
 });
 document.addEventListener("mousemove", evt => {
-	if(evt.clientX === mouseX && evt.clientY === mouseY) {
+	if (evt.clientX === mouseX && evt.clientY === mouseY) {
 		return;
 	}
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
-	if(mouseDown !== -1 && mouseTarget && (mouseTarget.parentNode._item || mouseTarget._item)) {
-		if(!mouseMoved) {
+	if (mouseDown !== -1 && mouseTarget && (mouseTarget.parentNode._item || mouseTarget._item)) {
+		if (!mouseMoved) {
 			selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, 2);
 		}
-		if(Miro.data.isMe) {
+		if (Miro.data.isMe) {
 			indicateTarget(evt.target.classList.contains("ancestor") && evt.target.href ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
 		}
 	}
@@ -513,7 +513,7 @@ document.addEventListener("mousemove", evt => {
 });
 const properties = document.body.querySelector("#properties");
 const property = {};
-for(const propertyElement of properties.querySelectorAll("[data-key]")) {
+for (const propertyElement of properties.querySelectorAll("[data-key]")) {
 	(property[propertyElement.getAttribute("data-key")] = propertyElement)._label = propertyElement.querySelector("label");
 }
 const selectionLength = properties.querySelector("#selectionLength");
@@ -527,22 +527,22 @@ const previewAudio = properties.querySelector("#previewAudio");
 const previewVideo = properties.querySelector("#previewVideo");
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
 const updateProperties = () => {
-	for(const propertyElement of Object.values(property)) {
+	for (const propertyElement of Object.values(property)) {
 		propertyElement.classList.add("hidden");
 	}
 	save.classList.add("hidden");
 	download.classList.add("hidden");
 	const selected = items.querySelectorAll(".item.selected");
-	if(selectionLength.textContent = selected.length) {
+	if (selectionLength.textContent = selected.length) {
 		property.actions.classList.remove("hidden");
 		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
-		if(selected.length === 1) {
+		if (selected.length === 1) {
 			const item = selected[0]._item;
 			properties.elements.name._prev = properties.elements.name.value = getName(item.name);
 			property.name.classList.remove("hidden");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
-			if(item.type !== "/") {
+			if (item.type !== "/") {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				property.type.classList.remove("hidden");
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
@@ -553,19 +553,19 @@ const updateProperties = () => {
 				property.url._label.classList.add("mdc-floating-label--float-above");
 				download.href = `${item.url}?download`;
 				download.classList.remove("hidden");
-				if(item.type.startsWith("image/")) {
+				if (item.type.startsWith("image/")) {
 					previewImage.src = item.url;
 					previewImage.classList.remove("hidden");
 					previewAudio.classList.add("hidden");
 					previewVideo.classList.add("hidden");
 					property.preview.classList.remove("hidden");
-				} else if(item.type.startsWith("audio/")) {
+				} else if (item.type.startsWith("audio/")) {
 					previewAudio.src = item.url;
 					previewImage.classList.add("hidden");
 					previewAudio.classList.remove("hidden");
 					previewVideo.classList.add("hidden");
 					property.preview.classList.remove("hidden");
-				} else if(item.type.startsWith("video/")) {
+				} else if (item.type.startsWith("video/")) {
 					previewVideo.src = item.url;
 					previewImage.classList.add("hidden");
 					previewAudio.classList.add("hidden");
@@ -574,7 +574,7 @@ const updateProperties = () => {
 				}
 			}
 		}
-		if(Miro.data.isMe) {
+		if (Miro.data.isMe) {
 			let samePrivacy = true;
 			const privacy = selected[0]._item.privacy;
 			properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
@@ -593,16 +593,16 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	Miro.snackbar("URL copied to clipboard");
 });
 updateProperties();
-if(Miro.data.isMe) {
+if (Miro.data.isMe) {
 	const checkName = async name => {
 		let takenItem;
 		let fullName = applyPath(name);
-		while(takenItem = getItem(fullName)) {
+		while (takenItem = getItem(fullName)) {
 			const value = await new Miro.Dialog("Error", html`
 				<b>$${name}</b> already exists.
 			`, ["Replace", "Rename", "Cancel"]);
-			if(value === 0) {
-				if(await new Miro.Dialog("Replace", html`
+			if (value === 0) {
+				if (await new Miro.Dialog("Replace", html`
 					Are you sure you want to replace <b>$${name}</b>?
 				`, ["Yes", "No"]) === 0) {
 					Miro.response(() => {
@@ -610,7 +610,7 @@ if(Miro.data.isMe) {
 						render();
 					})(await Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${takenItem.id}`));
 				}
-			} else if(value === 1) {
+			} else if (value === 1) {
 				const dialog = new Miro.Dialog("Rename", html`
 					Enter a new name for <b>$${name}</b>.<br>
 					<div class="mdc-text-field">
@@ -625,7 +625,7 @@ if(Miro.data.isMe) {
 				dialog.form.elements.name.focus();
 				const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
 				dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
-				if(await dialog === 0) {
+				if (await dialog === 0) {
 					name = dialog.form.elements.name.value;
 				}
 			} else {
@@ -644,7 +644,7 @@ if(Miro.data.isMe) {
 		return progress;
 	};
 	const updateQueue = () => {
-		if(!queue.length) {
+		if (!queue.length) {
 			creation.classList.remove("loading");
 			return;
 		}
@@ -653,7 +653,7 @@ if(Miro.data.isMe) {
 			total: 0
 		});
 		const done = loaded === total;
-		if(done) {
+		if (done) {
 			creation.classList.remove("loading");
 			queue.length = 0;
 		} else {
@@ -686,7 +686,7 @@ if(Miro.data.isMe) {
 				this.xhr = xhr;
 				this.loaded = 0;
 				this.xhr.upload.addEventListener("progress", evt => {
-					if(this.xhr.readyState !== XMLHttpRequest.DONE) {
+					if (this.xhr.readyState !== XMLHttpRequest.DONE) {
 						const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
 						this.element.style.backgroundSize = `${percentage}%`;
 						this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
@@ -705,7 +705,7 @@ if(Miro.data.isMe) {
 				selectItem(setItem(new PipeItem(xhr.response)).element, {
 					ctrlKey: true
 				});
-				if(path === this.path) {
+				if (path === this.path) {
 					render();
 				}
 			}, (xhr, error) => {
@@ -714,14 +714,14 @@ if(Miro.data.isMe) {
 				this.subtitleElement.title = error;
 				this.subtitleElement.textContent = "An error occurred. Click to retry.";
 				this.element.addEventListener("click", this.retry.bind(this));
-				if(this.dequeue()) {
+				if (this.dequeue()) {
 					updateQueue();
 				}
 			}));
 		}
 		dequeue() {
 			const queueIndex = queue.indexOf(this);
-			if(queueIndex === -1) {
+			if (queueIndex === -1) {
 				return false;
 			} else {
 				queue.splice(queueIndex, 1);
@@ -729,24 +729,24 @@ if(Miro.data.isMe) {
 			}
 		}
 		async close(evt) {
-			if(evt instanceof Event) {
+			if (evt instanceof Event) {
 				evt.preventDefault();
 			}
-			if(this.element.classList.contains("loading") && await new Miro.Dialog("Cancel", html`
+			if (this.element.classList.contains("loading") && await new Miro.Dialog("Cancel", html`
 				Are you sure you want to cancel uploading <b>$${this.file.name}</b>?
 			`, ["Yes", "No"]) !== 0) {
 				return;
 			}
-			if(this.element.parentNode) {
+			if (this.element.parentNode) {
 				this.xhr.abort();
 				this.element.parentNode.removeChild(this.element);
-				if(this.dequeue()) {
+				if (this.dequeue()) {
 					updateQueue();
 				}
 			}
 		}
 		retry(evt) {
-			if(!this.closeElement.contains(evt.target)) {
+			if (!this.closeElement.contains(evt.target)) {
 				this.element.parentNode.replaceChild(new PipeFile(this.file).element, this.element);
 				this.dequeue();
 			}
@@ -754,9 +754,9 @@ if(Miro.data.isMe) {
 	}
 	const addFile = async (file, name) => {
 		name = await checkName(typeof name === "string" ? name : file.name);
-		if(!name) {
+		if (!name) {
 			return;
-		} else if(name !== file.name) {
+		} else if (name !== file.name) {
 			Object.defineProperty(file, "name", {
 				get: () => name
 			});
@@ -785,7 +785,7 @@ if(Miro.data.isMe) {
 					ctrlKey: true
 				});
 				cachedPaths.push(xhr.response.name);
-				if(path === this.path) {
+				if (path === this.path) {
 					render();
 				}
 			}));
@@ -802,9 +802,9 @@ if(Miro.data.isMe) {
 			text: "Okay",
 			type: "submit"
 		}, "Cancel"]).then(async value => {
-			if(value === 0) {
+			if (value === 0) {
 				const name = await checkName(dialog.form.elements.name.value);
-				if(!name) {
+				if (!name) {
 					return;
 				}
 				new PipeDirectory(name);
@@ -813,19 +813,19 @@ if(Miro.data.isMe) {
 	});
 	const htmlFilenameTest = /\/([^\/]+?)"/;
 	document.addEventListener("paste", async evt => {
-		if(Miro.focused() && !Miro.typing() && evt.clipboardData.items.length) {
+		if (Miro.focused() && !Miro.typing() && evt.clipboardData.items.length) {
 			let file;
 			let string;
-			for(const dataTransferItem of evt.clipboardData.items) {
-				if(dataTransferItem.kind === "file") {
+			for (const dataTransferItem of evt.clipboardData.items) {
+				if (dataTransferItem.kind === "file") {
 					file = dataTransferItem;
-				} else if(dataTransferItem.kind === "string") {
+				} else if (dataTransferItem.kind === "string") {
 					string = dataTransferItem;
 				}
 			}
-			if(file) {
+			if (file) {
 				let name = (file = file.getAsFile()).name;
-				if(string) {
+				if (string) {
 					const htmlFilename = (await new Promise(string.getAsString.bind(string))).match(htmlFilenameTest);
 					name = htmlFilename ? htmlFilename[1] : "file";
 				}
@@ -843,7 +843,7 @@ if(Miro.data.isMe) {
 				dialog.form.elements.name.focus();
 				const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
 				dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
-				if(await dialog === 0) {
+				if (await dialog === 0) {
 					name = dialog.form.elements.name.value;
 				} else {
 					return;
@@ -857,7 +857,7 @@ if(Miro.data.isMe) {
 	});
 	let allowDrop = true;
 	document.addEventListener("dragstart", evt => {
-		if(evt.target.classList.contains("item")) {
+		if (evt.target.classList.contains("item")) {
 			evt.preventDefault();
 		}
 		allowDrop = false;
@@ -874,18 +874,18 @@ if(Miro.data.isMe) {
 	let dragLeaveTimeout;
 	document.addEventListener("dragover", evt => {
 		evt.preventDefault();
-		if(dragLeaveTimeout) {
+		if (dragLeaveTimeout) {
 			clearTimeout(dragLeaveTimeout);
 			dragLeaveTimeout = null;
 		}
-		if(allowDrop && Miro.focused()) {
-			if(evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
+		if (allowDrop && Miro.focused()) {
+			if (evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
 				indicateTarget(container);
 			}
 		}
 	}, true);
 	document.addEventListener("dragleave", () => {
-		if(dragLeaveTimeout) {
+		if (dragLeaveTimeout) {
 			clearTimeout(dragLeaveTimeout);
 		}
 		dragLeaveTimeout = setTimeout(indicateTarget, 100);
@@ -895,26 +895,26 @@ if(Miro.data.isMe) {
 	});
 	document.addEventListener("drop", evt => {
 		evt.preventDefault();
-		if(allowDrop && Miro.focused()) {
-			if(evt.dataTransfer.files.length) {
+		if (allowDrop && Miro.focused()) {
+			if (evt.dataTransfer.files.length) {
 				Array.prototype.forEach.call(evt.dataTransfer.files, addFile);
-			}/* else if(evt.dataTransfer.types.includes("text/uri-list")) {
+			}/* else if (evt.dataTransfer.types.includes("text/uri-list")) {
 				addURL(evt.dataTransfer.getData("text/uri-list"));
 			}*/
 			indicateTarget();
 		}
 	}, true);
 	property.actions.querySelector("#delete").addEventListener("click", removeItems);
-	for(const input of properties.elements) {
+	for (const input of properties.elements) {
 		input._input = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
 	}
 	const changed = [];
 	const onInput = evt => {
 		changed.length = 0;
-		for(const input of properties.elements) {
-			if(input._input && !input.classList.contains("hidden")) {
-				if(input.checkValidity()) {
-					if(input._prev !== Miro.value(input)) {
+		for (const input of properties.elements) {
+			if (input._input && !input.classList.contains("hidden")) {
+				if (input.checkValidity()) {
+					if (input._prev !== Miro.value(input)) {
 						changed.push(input);
 					}
 				} else {
@@ -931,9 +931,9 @@ if(Miro.data.isMe) {
 		evt.preventDefault();
 		Miro.formState(properties, false);
 		const changedName = changed.includes(properties.elements.name);
-		if(changedName) {
+		if (changedName) {
 			let name = await checkName(properties.elements.name.value);
-			if(!name) {
+			if (!name) {
 				Miro.formState(properties, true);
 				return;
 			}
@@ -944,40 +944,40 @@ if(Miro.data.isMe) {
 		const selected = items.querySelectorAll(".item.selected");
 		let responses = 0;
 		const countResponse = () => {
-			if(++responses === selected.length) {
+			if (++responses === selected.length) {
 				Miro.formState(properties, true);
 			}
 		};
 		let noFailure = true;
-		for(const itemElement of selected) {
+		for (const itemElement of selected) {
 			itemElement.classList.remove("selected");
 			itemElement.classList.add("loading");
 			const data = {};
-			if(changedName) {
+			if (changedName) {
 				data.name = applyPath(properties.elements.name.value);
 			}
-			if(changedType) {
+			if (changedType) {
 				data.type = properties.elements.type.value;
 			}
-			if(changedPrivacy) {
+			if (changedPrivacy) {
 				data.privacy = +properties.elements.privacy.value;
 			}
 			Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
-				if(changedName) {
+				if (changedName) {
 					itemElement._item.name = xhr.response.name;
 				}
-				if(changedType) {
+				if (changedType) {
 					itemElement._item.type = xhr.response.type;
 				}
-				if(changedPrivacy) {
+				if (changedPrivacy) {
 					itemElement._item.privacy = xhr.response.privacy;
 				}
-				if(noFailure) {
+				if (noFailure) {
 					save.disabled = true;
 				}
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				if(path === itemElement._item.path) {
+				if (path === itemElement._item.path) {
 					render();
 				}
 			}, () => {
@@ -985,7 +985,7 @@ if(Miro.data.isMe) {
 				save.disabled = false;
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				if(path === itemElement._item.path) {
+				if (path === itemElement._item.path) {
 					render();
 				}
 			})).then(countResponse);
@@ -993,57 +993,57 @@ if(Miro.data.isMe) {
 	});
 }
 document.addEventListener("keydown", evt => {
-	if(!Miro.typing() && Miro.focused()) {
+	if (!Miro.typing() && Miro.focused()) {
 		const superKey = evt.ctrlKey || evt.metaKey;
-		if(evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
-			if(Miro.data.isMe) {
+		if (evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
+			if (Miro.data.isMe) {
 				removeItems();
 			}
-		} else if(evt.keyCode === 13) { // `enter`
+		} else if (evt.keyCode === 13) { // `enter`
 			evt.preventDefault();
 			const itemElement = items.querySelector(".item.selected");
-			if(itemElement) {
+			if (itemElement) {
 				itemElement._item.open();
 			}
-		} else if(evt.keyCode === 27) { // `esc`
+		} else if (evt.keyCode === 27) { // `esc`
 			deselectItems();
-		} else if(evt.keyCode === 35) { // `end`
+		} else if (evt.keyCode === 35) { // `end`
 			evt.preventDefault();
-			if(items.lastChild) {
+			if (items.lastChild) {
 				focusedItem = items.lastChild;
-				if(evt.shiftKey || !superKey) {
+				if (evt.shiftKey || !superKey) {
 					selectItem(items.lastChild, evt);
 				}
 			}
-		} else if(evt.keyCode === 36) { // `home`
+		} else if (evt.keyCode === 36) { // `home`
 			evt.preventDefault();
-			if(items.firstChild) {
+			if (items.firstChild) {
 				focusedItem = items.firstChild;
-				if(evt.shiftKey || !superKey) {
+				if (evt.shiftKey || !superKey) {
 					selectItem(items.firstChild, evt);
 				}
 			}
-		} else if(evt.keyCode === 37 || evt.keyCode === 38) { // `left` || `up`
+		} else if (evt.keyCode === 37 || evt.keyCode === 38) { // `left` || `up`
 			evt.preventDefault();
 			const item = focusedItem ? focusedItem.previousSibling || items.lastChild : items.firstChild;
-			if(item) {
+			if (item) {
 				focusedItem = item;
-				if(evt.shiftKey || !superKey) {
+				if (evt.shiftKey || !superKey) {
 					selectItem(item, evt);
 				}
 			}
-		} else if(evt.keyCode === 39 || evt.keyCode === 40) { // `right` || `down`
+		} else if (evt.keyCode === 39 || evt.keyCode === 40) { // `right` || `down`
 			evt.preventDefault();
 			const item = focusedItem ? focusedItem.nextSibling || items.firstChild : items.firstChild;
-			if(item) {
+			if (item) {
 				focusedItem = item;
-				if(evt.shiftKey || !superKey) {
+				if (evt.shiftKey || !superKey) {
 					selectItem(item, evt);
 				}
 			}
-		} else if(evt.keyCode === 65) { // ^`A`
+		} else if (evt.keyCode === 65) { // ^`A`
 			evt.preventDefault();
-			for(const item of items.querySelectorAll(".item:not(.selected)")) {
+			for (const item of items.querySelectorAll(".item:not(.selected)")) {
 				item.classList.add("selected");
 			}
 			updateProperties();
@@ -1053,7 +1053,7 @@ document.addEventListener("keydown", evt => {
 const viewMode = header.querySelector("#viewMode");
 let viewValue = +localStorage.pipe_viewMode || 0;
 const updateViewMode = () => {
-	if(viewValue) {
+	if (viewValue) {
 		items.classList.add("tiles");
 		viewMode.title = "List view";
 		viewMode.textContent = "view_list";
@@ -1070,9 +1070,9 @@ viewMode.addEventListener("click", () => {
 });
 const resize = () => {
 	indicateTarget();
-	if(viewValue) {
-		for(const itemElement of items.querySelectorAll(".item")) {
-			if(itemElement._item.thumbnailHidden && itemElement.offsetTop + itemElement.offsetHeight > items.parentNode.scrollTop + header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
+	if (viewValue) {
+		for (const itemElement of items.querySelectorAll(".item")) {
+			if (itemElement._item.thumbnailHidden && itemElement.offsetTop + itemElement.offsetHeight > items.parentNode.scrollTop + header.offsetHeight && itemElement.offsetTop - items.parentNode.scrollTop < items.parentNode.offsetHeight) {
 				itemElement.insertBefore(itemElement._item.thumbnailElement, itemElement.firstChild);
 				itemElement._item.thumbnailHidden = false;
 			}

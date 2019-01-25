@@ -1,9 +1,9 @@
 let {user} = this;
-if(this.params.user !== (user && String(user._id))) {
+if (this.params.user !== (user && String(user._id))) {
 	let userID;
 	try {
 		userID = ObjectID(this.params.user);
-	} catch(err) {
+	} catch (err) {
 		Object.assign(this, await load("error/400", this));
 		this.done();
 		return;
@@ -12,7 +12,7 @@ if(this.params.user !== (user && String(user._id))) {
 		_id: userID
 	});
 }
-if(user) {
+if (user) {
 	this.title = user.name;
 	this.description = user.desc;
 	this.tags = ["account", "user", "profile"];

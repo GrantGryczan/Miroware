@@ -43,7 +43,7 @@ window.animate = () => {
 window.download = async max => {
 	max = typeof max === "number" ? max : 64;
 	const link = document.createElement("a");
-	for(let i = 0; i < max; i++) {
+	for (let i = 0; i < max; i++) {
 		render(i);
 		link.href = renderer.domElement.toDataURL();
 		link.download = `cube${i}`;

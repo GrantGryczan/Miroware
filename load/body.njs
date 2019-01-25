@@ -13,7 +13,7 @@ this.value = html`
 						<a class="mdc-list-item${this.req.decodedPath === "/" ? " mdc-list-item--activated" : '" href="/'}">
 							<i class="mdc-list-item__graphic material-icons">home</i> <span class="mdc-list-item__text">Home</span>
 						</a>`;
-if(this.user) {
+if (this.user) {
 	const myProfile = `/users/${this.user._id}/`;
 	this.value += html`
 						<a class="mdc-list-item${this.req.decodedPath === "/account/" ? " mdc-list-item--activated" : '" href="/account/'}">

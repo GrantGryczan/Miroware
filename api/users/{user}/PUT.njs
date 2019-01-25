@@ -1,16 +1,16 @@
 const {user, isMe} = await parseUser(this);
-if(isMe) {
-	if(this.req.body.name !== undefined) {
-		if(typeof this.req.body.name === "string") {
+if (isMe) {
+	if (this.req.body.name !== undefined) {
+		if (typeof this.req.body.name === "string") {
 			this.req.body.name = this.req.body.name.trim();
-			if(this.req.body.name.length < 1) {
+			if (this.req.body.name.length < 1) {
 				this.value = {
 					error: "The `name` value must be at least 1 character long."
 				};
 				this.status = 400;
 				this.done();
 				return;
-			} else if(this.req.body.name.length > 32) {
+			} else if (this.req.body.name.length > 32) {
 				this.value = {
 					error: "The `name` value must be at most 32 characters long."
 				};
@@ -19,7 +19,7 @@ if(isMe) {
 				return;
 			} else {
 				const cooldown = 86400000 + user.nameCooldown - this.now;
-				if(cooldown > 0) {
+				if (cooldown > 0) {
 					this.value = {
 						error: "The `name` value may only be set once per day."
 					};
@@ -41,16 +41,16 @@ if(isMe) {
 			return;
 		}
 	}
-	if(this.req.body.birth !== undefined) {
-		if(typeof this.req.body.birth === "number") {
-			if(this.req.body.birth < -8640000000000000) {
+	if (this.req.body.birth !== undefined) {
+		if (typeof this.req.body.birth === "number") {
+			if (this.req.body.birth < -8640000000000000) {
 				this.value = {
 					error: "Nobody is that old."
 				};
 				this.status = 400;
 				this.done();
 				return;
-			} else if(this.req.body.birth - this.now > -409968000000) {
+			} else if (this.req.body.birth - this.now > -409968000000) {
 				this.value = {
 					error: "You must be at least 13 years of age to sign up."
 				};
@@ -69,11 +69,11 @@ if(isMe) {
 			return;
 		}
 	}
-	if(this.req.body.email !== undefined) {
-		if(typeof this.req.body.email === "string") {
-			if(testEmail(this.req.body.email)) {
+	if (this.req.body.email !== undefined) {
+		if (typeof this.req.body.email === "string") {
+			if (testEmail(this.req.body.email)) {
 				this.req.body.email = this.req.body.email.trim().toLowerCase();
-				if(await users.findOne({
+				if (await users.findOne({
 					email: this.req.body.email
 				})) {
 					this.value = {
@@ -84,7 +84,7 @@ if(isMe) {
 					return;
 				} else {
 					this.update.$set.unverified = this.req.body.email;
-					if(!user.verified) {
+					if (!user.verified) {
 						this.update.$set.email = this.req.body.email;
 					}
 					verifyEmail(user, this.update.$set);
@@ -106,8 +106,8 @@ if(isMe) {
 			return;
 		}
 	}
-	if(this.req.body.publicEmail !== undefined) {
-		if(typeof this.req.body.publicEmail === "boolean") {
+	if (this.req.body.publicEmail !== undefined) {
+		if (typeof this.req.body.publicEmail === "boolean") {
 			this.update.$set.publicEmail = this.req.body.publicEmail;
 		} else {
 			this.value = {
@@ -118,10 +118,10 @@ if(isMe) {
 			return;
 		}
 	}
-	if(this.req.body.desc !== undefined) {
-		if(typeof this.req.body.desc === "string") {
+	if (this.req.body.desc !== undefined) {
+		if (typeof this.req.body.desc === "string") {
 			this.req.body.desc = this.req.body.desc.trim();
-			if(this.req.body.desc.length > 16384) {
+			if (this.req.body.desc.length > 16384) {
 				this.value = {
 					error: "The `desc` value must be at most 16 KB large."
 				};

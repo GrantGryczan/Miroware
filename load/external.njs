@@ -1,4 +1,4 @@
-if(this.socialicons) {
+if (this.socialicons) {
 	this.value = "";
 	this.done();
 } else {
@@ -12,7 +12,7 @@ if(this.socialicons) {
 	const testSizes = (sizes, size) => {
 		const smallSizes = [];
 		const largeSizes = [];
-		for(const size of sizes) {
+		for (const size of sizes) {
 			(size < 24 ? smallSizes : largeSizes).push(size);
 		}
 		const bestOfSizes = Math[largeSizes.length ? "min" : "max"](...(largeSizes.length ? largeSizes : smallSizes));
@@ -21,7 +21,7 @@ if(this.socialicons) {
 	this.value = html`
 					<div id="externalContainer">
 						<div id="externals">`;
-	for(const service of ["discord", "patreon", "youtube", "twitter", "github", "twitch"]) {
+	for (const service of ["discord", "patreon", "youtube", "twitter", "github", "twitch"]) {
 		const context = await load(`www/${service}/`, {
 			...this,
 			socialicons: true
@@ -30,24 +30,24 @@ if(this.socialicons) {
 		let body;
 		try {
 			body = await request.get(context.redir);
-		} catch(err) {
+		} catch (err) {
 			body = err.error;
 		}
-		if(typeof body === "string") {
+		if (typeof body === "string") {
 			const matches = body.match(htmlIconsTest);
 			let icon = "/favicon.ico";
-			if(matches) {
+			if (matches) {
 				let size = Infinity;
 				let index = 0;
-				for(let i = 0; i < matches.length; i++) {
+				for (let i = 0; i < matches.length; i++) {
 					const sizes = matches[i].match(iconSizeTest);
-					if(sizes) {
-						if(sizes[2] === "any") {
+					if (sizes) {
+						if (sizes[2] === "any") {
 							index = i;
 							break;
 						} else {
 							const bestSize = testSizes(sizes[2].split(" ").map(parseInt).filter(isFinite).sort(numerically), size);
-							if(bestSize) {
+							if (bestSize) {
 								size = bestSize;
 								index = i;
 							}

@@ -42,7 +42,7 @@ const wait = delay => new Promise(resolve => {
 });
 const validateConnection = (context, data) => {
 	return new Promise(resolve => {
-		if(context.user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
+		if (context.user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
 			resolve(true);
 		} else {
 			context.value = {
@@ -59,21 +59,21 @@ const sanitizeConnection = connection => ({
 });
 const inputDate = date => {
 	let year = String(date.getFullYear());
-	if(year.length < 4) {
+	if (year.length < 4) {
 		year = `0${year}`;
 	}
 	let month = String(date.getMonth() + 1);
-	if(month.length < 2) {
+	if (month.length < 2) {
 		month = `0${month}`;
 	}
 	let day = String(date.getDate());
-	if(day.length < 2) {
+	if (day.length < 2) {
 		day = `0${day}`;
 	}
 	return `${year}/${month}/${day}`;
 };
 const notLoggedIn = context => {
-	if(context.user) {
+	if (context.user) {
 		return false;
 	} else {
 		context.redirect = `/login/?dest=${encodeURIComponent(context.req.url)}`;
@@ -82,12 +82,12 @@ const notLoggedIn = context => {
 	}
 };
 const purgeCache = async (...files) => {
-	for(let i = 0; i < files.length; i += 30) {
+	for (let i = 0; i < files.length; i += 30) {
 		const slicedFiles = files.slice(i, i + 30);
-		for(const file of slicedFiles) {
-			if(file.endsWith("/index.html")) {
+		for (const file of slicedFiles) {
+			if (file.endsWith("/index.html")) {
 				const altFile = file.slice(0, -10);
-				if(slicedFiles.length < 30) {
+				if (slicedFiles.length < 30) {
 					slicedFiles.push(altFile);
 				}
 				files.push(altFile);
@@ -107,15 +107,15 @@ const purgeCache = async (...files) => {
 						files: slicedFiles
 					})
 				});
-			} catch(err) {
-				if(++errors < 60) {
+			} catch (err) {
+				if (++errors < 60) {
 					continue;
 				} else {
 					throw err;
 				}
 			}
 			break;
-		} while(true);
+		} while (true);
 	}
 };
 const bodyMethods = ["POST", "PUT", "PATCH"];
@@ -142,11 +142,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	const parseUser = context => new Promise(async resolve => {
 		let {user} = context;
 		const isMe = user && context.params.user === String(user._id);
-		if(!isMe) {
+		if (!isMe) {
 			let userID;
 			try {
 				userID = ObjectID(context.params.user);
-			} catch(err) {
+			} catch (err) {
 				context.value = {
 					error: "That is not a valid user ID."
 				};
@@ -158,7 +158,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				_id: userID
 			});
 		}
-		if(user) {
+		if (user) {
 			resolve({
 				user,
 				isMe
@@ -173,7 +173,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	});
 	const verifyCaptcha = context => new Promise(async resolve => {
 		const captcha = context.req.get("X-Captcha");
-		if(typeof captcha === "string") {
+		if (typeof captcha === "string") {
 			let success = false;
 			try {
 				({success} = JSON.parse(await request.post("https://www.google.com/recaptcha/api/siteverify", {
@@ -183,8 +183,8 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						remoteip: context.req.get("CF-Connecting-IP") || context.req.ip
 					}
 				})));
-			} catch(err) {}
-			if(success) {
+			} catch (err) {}
+			if (success) {
 				resolve();
 			} else {
 				context.value = {
@@ -202,7 +202,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}
 	});
 	const verifyEmail = (user, set) => {
-		if(!set) {
+		if (!set) {
 			set = user;
 		}
 		const verifyLink = `https://miroware.io/account/verification/?code=${encodeURIComponent(set.emailCode = crypto.randomBytes(50).toString("base64"))}`;
@@ -223,7 +223,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	const connect = (context, user) => {
 		let connection = context.req.body.connection;
 		return new Promise(resolve => {
-			if(typeof connection !== "string" || (connection = connection.split(" ")).length !== 2) {
+			if (typeof connection !== "string" || (connection = connection.split(" ")).length !== 2) {
 				context.value = {
 					error: 'The `connection` value is not in the format "<service> <Base64-encoded code>".'
 				};
@@ -232,7 +232,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				return;
 			}
 			connection[1] = String(Buffer.from(connection[1], "base64"));
-			if(connection[0] === "Google") {
+			if (connection[0] === "Google") {
 				googleAuthClient.verifyIdToken({
 					idToken: connection[1],
 					audience: youKnow.google.id
@@ -252,10 +252,10 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					context.status = 422;
 					context.done();
 				});
-			} else if(connection[0] === "Discord") {
+			} else if (connection[0] === "Discord") {
 				let redirect_uri = context.req.get("Referrer") || "https://miroware.io/";
 				const pathIndex = redirect_uri.indexOf("/", redirect_uri.indexOf("//") + 2);
-				if(pathIndex !== -1) {
+				if (pathIndex !== -1) {
 					redirect_uri = `${redirect_uri.slice(0, pathIndex)}/login/discord/`;
 				}
 				const catchError = err => {
@@ -291,18 +291,18 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						});
 					}).catch(catchError);
 				}).catch(catchError);
-			} else if(connection[0] === "password") {
-				if(connection[1].length < 8) {
+			} else if (connection[0] === "password") {
+				if (connection[1].length < 8) {
 					context.value = {
 						error: "The password must be at least 8 characters long."
 					};
 					context.status = 422;
 					context.done();
-				} else if(user) {
+				} else if (user) {
 					const hash = youKnow.crypto.hash(connection[1], user.salt.buffer);
 					const foundConnection = user.connections.find(foundConnection => foundConnection.service === "password" && foundConnection.hash.buffer.equals(hash));
-					if(foundConnection) {
-						if(foundConnection.once) {
+					if (foundConnection) {
+						if (foundConnection.once) {
 							users.updateOne({
 								_id: user._id
 							}, {
@@ -346,15 +346,15 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			val: encodeURI(context.req.body.val),
 			urls: context.req.body.urls
 		};
-		if(typeof concat.sub === "string") {
-			if(concat.sub.length > 63) {
+		if (typeof concat.sub === "string") {
+			if (concat.sub.length > 63) {
 				context.value = {
 					error: "The `sub` value must be at most 63 characters long."
 				};
 				context.status = 400;
 				context.done();
 				return;
-			} else if(!subdomainTest.test(concat.sub)) {
+			} else if (!subdomainTest.test(concat.sub)) {
 				context.value = {
 					error: "The `sub` value may only contain alphanumeric characters, and hyphens and underscores if not on the ends."
 				};
@@ -370,8 +370,8 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.done();
 			return;
 		}
-		if(typeof concat.val === "string") {
-			if(concat.val.length > 255) {
+		if (typeof concat.val === "string") {
+			if (concat.val.length > 255) {
 				context.value = {
 					error: "The encoded `val` value must be at most 255 characters long."
 				};
@@ -387,15 +387,15 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.done();
 			return;
 		}
-		if(concat.urls instanceof Array) {
-			if(concat.urls.length < 1) {
+		if (concat.urls instanceof Array) {
+			if (concat.urls.length < 1) {
 				context.value = {
 					error: "The `urls` value must have at least 1 item."
 				};
 				context.status = 400;
 				context.done();
 				return;
-			} else if(concat.urls.length > 1023) {
+			} else if (concat.urls.length > 1023) {
 				context.value = {
 					error: "The `urls` value must have at most 1023 items."
 				};
@@ -403,16 +403,16 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				context.done();
 				return;
 			} else {
-				for(const url of concat.urls) {
-					if(typeof url === "string") {
-						if(url.length > 511) {
+				for (const url of concat.urls) {
+					if (typeof url === "string") {
+						if (url.length > 511) {
 							context.value = {
 								error: "Items of the `urls` value must be at most 511 characters long."
 							};
 							context.status = 400;
 							context.done();
 							return;
-						} else if(!urlTest.test(url)) {
+						} else if (!urlTest.test(url)) {
 							context.value = {
 								error: "Items of the `urls` value must be valid URLs."
 							};
@@ -446,7 +446,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				}
 			}
 		}).then(keeper => {
-			if(keeper && (!put || context.req.query.sub !== concat.sub || context.req.query.val !== concat.val)) {
+			if (keeper && (!put || context.req.query.sub !== concat.sub || context.req.query.val !== concat.val)) {
 				const found = keeper.concats.find(item => item.sub === concat.sub && item.val === concat.val);
 				context.value = {
 					error: `That concat is already taken${found.anon ? "" : html` by <a href="/users/${keeper._id}/" target="_blank">$${keeper.name}</a>`}.`,
@@ -475,10 +475,10 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		githubToken: youKnow.github.token,
 		middleware: [(req, res) => {
 			let auth = req.get("Authorization");
-			if(auth) {
-				if((auth = auth.split(" ")).length === 2) {
-					if(auth[0] === "Basic") {
-						if((auth = String(Buffer.from(auth[1], "base64")).split(":")).length === 2) {
+			if (auth) {
+				if ((auth = auth.split(" ")).length === 2) {
+					if (auth[0] === "Basic") {
+						if ((auth = String(Buffer.from(auth[1], "base64")).split(":")).length === 2) {
 							req.auth = auth;
 						} else {
 							res.status(400).send({
@@ -494,12 +494,12 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					return;
 				}
 			}
-			if(req.dir === "api" && bodyMethods.includes(req.method)) {
+			if (req.dir === "api" && bodyMethods.includes(req.method)) {
 				res.set("Content-Type", "application/json");
-				if(req.get("Content-Type") === "application/json") {
+				if (req.get("Content-Type") === "application/json") {
 					try {
 						req.body = JSON.parse(req.body);
-					} catch(err) {
+					} catch (err) {
 						res.status(400).send({
 							error: err.message
 						});
@@ -510,16 +510,16 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			req.next();
 		}, cookieParser(youKnow.cookie)],
 		loadStart: [async context => {
-			if(context.depth === 1) {
+			if (context.depth === 1) {
 				context.now = Date.now();
 				const auth = context.req.auth || (context.req.signedCookies && context.req.signedCookies.auth && String(Buffer.from(context.req.signedCookies.auth, "base64")).split(":"));
-				if(auth) {
+				if (auth) {
 					try {
 						context.user = await users.findOne(context.userFilter = {
 							_id: ObjectID(auth[0])
 						});
-					} catch(err) {
-						if(context.req.signedCookies.auth) {
+					} catch (err) {
+						if (context.req.signedCookies.auth) {
 							context.res.clearCookie("auth", clearCookieOptions);
 						} else {
 							context.value = {
@@ -529,7 +529,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							return false;
 						}
 					}
-					if(context.user) {
+					if (context.user) {
 						context.update = {
 							$pull: {
 								pouch: {
@@ -541,7 +541,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						};
 						const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
 						const token = context.user.pouch.find(token => token.value.buffer.equals(hash));
-						if(token && context.now < token.expire) {
+						if (token && context.now < token.expire) {
 							context.token = token;
 							context.update.$set = {
 								updated: context.now,
@@ -555,11 +555,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 									"pouch.$.expire": context.now + cookieOptions.maxAge
 								}
 							};
-							if(context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {
+							if (context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {
 								context.res.cookie("auth", context.req.signedCookies.auth, cookieOptions);
 							}
 						} else {
-							if(context.req.signedCookies.auth) {
+							if (context.req.signedCookies.auth) {
 								context.res.clearCookie("auth", clearCookieOptions);
 							} else {
 								context.value = {
@@ -570,7 +570,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							}
 						}
 					} else {
-						if(context.req.signedCookies.auth) {
+						if (context.req.signedCookies.auth) {
 							context.res.clearCookie("auth", clearCookieOptions);
 						} else {
 							context.value = {
@@ -582,14 +582,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					}
 				}
 			}
-			if(context.user && context.params && context.params.user === "@me") {
+			if (context.user && context.params && context.params.user === "@me") {
 				context.params.user = String(context.user._id);
 			}
 		}],
 		loadEnd: [async context => {
-			if(context.depth === 1 && context.update) {
+			if (context.depth === 1 && context.update) {
 				users.updateOne(context.userFilter, context.update);
-				if(context.updatePouch) {
+				if (context.updatePouch) {
 					users.updateOne(context.pouchFilter, context.updatePouch);
 				}
 			}
