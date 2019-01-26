@@ -15,6 +15,12 @@ const youKnow = require("./secret/youknow.js");
 	app.use((req, res) => {
 		req.sub = req.subdomains.join(".");
 		req.val = req.url.startsWith("/") ? req.url.slice(1) : req.url;
+		try {
+			decodeURI(req.val);
+		} catch (err) {
+			res.sendStatus(400);
+			return;
+		}
 		req.next();
 	});
 	app.get("*", async (req, res) => {
