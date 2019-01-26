@@ -113,7 +113,7 @@ const _name = Symbol("name");
 const _size = Symbol("size");
 const _type = Symbol("type");
 const _date = Symbol("date");
-class PipeItem {
+const PipeItem = class PipeItem {
 	constructor(item) {
 		this.id = item.id;
 		(this.element = html`
@@ -662,7 +662,7 @@ if (Miro.data.isMe) {
 		}
 	};
 	window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
-	class PipeFile {
+	const PipeFile = class PipeFile {
 		constructor(file) {
 			this.path = path;
 			this.file = file;
@@ -771,7 +771,7 @@ if (Miro.data.isMe) {
 		fileInput.value = null;
 	});
 	creation.querySelector("#addFiles").addEventListener("click", fileInput.click.bind(fileInput));
-	class PipeDirectory {
+	const PipeDirectory = class PipeDirectory {
 		constructor(name) {
 			this.path = path;
 			this.name = name;

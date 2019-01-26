@@ -3,7 +3,7 @@ const Miro = window.Miro = {};
 Miro.magic = {};
 Miro.magic.magic = Miro.magic;
 console.log(Miro.magic);
-class MiroError extends Error {
+const MiroError = class MiroError extends Error {
 	constructor() {
 		const err = super(...arguments);
 		err.name = "MiroError";
@@ -156,7 +156,7 @@ Miro.reload = () => location.reload();
 const _dialog = Symbol("dialog");
 const _promise = Symbol("promise");
 const _close = Symbol("close");
-class MiroDialog {
+Miro.Dialog = class MiroDialog {
 	constructor(title, content, buttons) {
 		if (!(typeof title === "string")) {
 			throw new MiroError("The `title` parameter must be a string.");
@@ -288,7 +288,6 @@ class MiroDialog {
 		});
 	}
 }
-Miro.Dialog = MiroDialog;
 const drawer = mdc.drawer.MDCDrawer.attachTo(container.querySelector("#drawer"));
 container.querySelector("#menu").addEventListener("click", () => {
 	drawer.open = !drawer.open;
