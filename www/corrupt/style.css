@@ -14,23 +14,25 @@
 		vertical-align: middle;
 	}
 }
+#content {
+	text-align: center;
+	font-size: 0;
+}
 @media (max-width: 599px) {
-	#head {
+	#head, #content {
 		flex-direction: column;
 	}
 	#corruption {
 		margin: 8px 0;
 	}
 }
-#content {
-	text-align: center;
-	font-size: 0;
-}
-#input, #output {
-	width: 50%;
-}
-#input {
-	margin-right: 8px;
+@media (min-width: 600px) {
+	#input, #output {
+		width: 50%;
+	}
+	#input {
+		margin-right: 8px;
+	}
 }
 .media {
 	max-width: 100%;
