@@ -16,6 +16,7 @@ fileInput.addEventListener("change", () => {
 		if (output.src) {
 			URL.revokeObjectURL(output.src);
 			output.classList.add("hidden");
+			output.parentNode.style.height = "";
 		}
 	}
 	input.src = URL.createObjectURL(file = fileInput.files[0]);
@@ -29,12 +30,13 @@ fileInput.addEventListener("change", () => {
 });
 head.querySelector("#upload").addEventListener("click", fileInput.click.bind(fileInput));
 const resize = () => {
-	if(input.offsetHeight) {
-		output.parentNode.style.height = `${input.offsetHeight}px`;
-	}
+	output.parentNode.style.height = `${input.offsetHeight}px`;
 };
-input.addEventListener("load", resize);
-window.addEventListener("resize", resize);
+window.addEventListener("resize", () => {
+	if(output.parentNode.style.height) {
+		resize();
+	}
+});
 let timedOut = false;
 const load = () => {
 	if (output.src) {
@@ -49,6 +51,7 @@ const load = () => {
 	for (let i = Math.max(1, factor.value); i >= 0; i--) {
 		corrupted[Math.floor(Math.random() * corrupted.length)] = Math.floor(Math.random() * 256);
 	}
+	resize();
 	output.src = URL.createObjectURL(new Blob([corrupted], {
 		type: file.type
 	}));

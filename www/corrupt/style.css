@@ -19,14 +19,17 @@
 	font-size: 0;
 }
 @media (max-width: 599px) {
-	#head, #content {
+	#head {
 		flex-direction: column;
 	}
 	#corruption {
 		margin: 8px 0;
 	}
+	#content {
+		flex-direction: column-reverse;
+	}
 	#input {
-		margin-bottom: 8px;
+		margin-top: 8px;
 	}
 }
 @media (min-width: 600px) {
