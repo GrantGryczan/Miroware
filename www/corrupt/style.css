@@ -9,10 +9,17 @@
 }
 #head {
 	justify-content: space-between;
-	align-items: center;
 	margin-bottom: 12px;
 	.spaced {
 		vertical-align: middle;
+	}
+}
+@media (max-width: 599px) {
+	#head {
+		flex-direction: column;
+	}
+	#corruption {
+		margin: 8px 0;
 	}
 }
 #content {

@@ -16,7 +16,7 @@ this.value += html`
 			</p>
 			<div id="panel" class="mdc-elevation--z3">
 				<div id="head">
-					<button id="upload" class="mdc-button spaced mdc-ripple" title="Upload image">
+					<button id="upload" class="mdc-button mdc-ripple" title="Upload image">
 						<i class="mdc-button__icon material-icons">file_upload</i>Upload
 					</button>
 					<form id="corruption">
@@ -26,7 +26,7 @@ this.value += html`
 							<div class="mdc-line-ripple"></div>
 						</div><button id="corrupt" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" title="Corrupt image" disabled>Corrupt</button>
 					</form>
-					<button id="download" class="mdc-button spaced mdc-ripple" title="Download image" disabled>Download</button>
+					<button id="download" class="mdc-button mdc-ripple" title="Download image" disabled>Download</button>
 				</div>
 				<div id="content">
 					<div id="input">
