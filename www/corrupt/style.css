@@ -25,6 +25,9 @@
 	#corruption {
 		margin: 8px 0;
 	}
+	#input {
+		margin-bottom: 8px;
+	}
 }
 @media (min-width: 600px) {
 	#input, #output {
