@@ -15,19 +15,19 @@ this.value += html`
 				The corruption factor is how many bytes to corrupt from the original. (A higher factor does not always mean it will look cooler!)
 			</p>
 			<div id="panel" class="mdc-elevation--z3">
-				<div id="head">
+				<form id="head">
 					<button id="upload" class="mdc-button mdc-ripple" title="Upload image">
 						<i class="mdc-button__icon material-icons">file_upload</i>Upload
 					</button>
-					<form id="corruption">
+					<div id="corruption">
 						<div class="mdc-text-field mdc-text-field--dense spaced">
 							<input id="factor" class="mdc-text-field__input" type="number" min="0" max="10000" value="8" title="Corruption factor" required>
 							<label class="mdc-floating-label" for="factor">Factor</label>
 							<div class="mdc-line-ripple"></div>
 						</div><button id="corrupt" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" title="Corrupt image" disabled>Corrupt</button>
-					</form>
+					</div>
 					<button id="download" class="mdc-button mdc-ripple" title="Download image" disabled>Download</button>
-				</div>
+				</form>
 				<div id="content">
 					<div id="input">
 						<img class="media">

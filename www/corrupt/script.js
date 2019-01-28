@@ -1,8 +1,8 @@
 "use strict";
-const factor = document.body.querySelector("#factor");
-const corruption = document.body.querySelector("#corruption");
-const corrupt = corruption.querySelector("#corrupt");
-const download = document.body.querySelector("#download");
+const head = document.body.querySelector("#head");
+const factor = head.querySelector("#factor");
+const corrupt = head.querySelector("#corrupt");
+const download = head.querySelector("#download");
 const input = document.body.querySelector("#input > .media");
 const output = document.body.querySelector("#output > .media");
 let file;
@@ -13,6 +13,10 @@ fileInput.accept = "image/*";
 fileInput.addEventListener("change", () => {
 	if (input.src) {
 		URL.revokeObjectURL(input.src);
+		if (output.src) {
+			URL.revokeObjectURL(output.src);
+			output.classList.add("hidden");
+		}
 	}
 	input.src = URL.createObjectURL(file = fileInput.files[0]);
 	fileInput.value = null;
@@ -23,6 +27,14 @@ fileInput.addEventListener("change", () => {
 	});
 	reader.readAsArrayBuffer(file);
 });
+head.querySelector("#upload").addEventListener("click", fileInput.click.bind(fileInput));
+const resize = () => {
+	if(input.offsetHeight) {
+		output.parentNode.style.height = `${input.offsetHeight}px`;
+	}
+};
+input.addEventListener("load", resize);
+window.addEventListener("resize", resize);
 let timedOut = false;
 const load = () => {
 	if (output.src) {
@@ -32,7 +44,7 @@ const load = () => {
 		return;
 	}
 	output.classList.add("hidden");
-	Miro.formState(corruption, false);
+	Miro.formState(head, false);
 	const corrupted = new Uint8Array(array);
 	for (let i = Math.max(1, factor.value); i >= 0; i--) {
 		corrupted[Math.floor(Math.random() * corrupted.length)] = Math.floor(Math.random() * 256);
@@ -45,7 +57,7 @@ output.addEventListener("error", load);
 let timeout;
 const finish = () => {
 	clearTimeout(timeout);
-	Miro.formState(corruption, true);
+	Miro.formState(head, true);
 	Miro.progress.close();
 };
 output.addEventListener("load", () => {
@@ -58,7 +70,7 @@ const timeOut = () => {
 	new Miro.Dialog("Error", "The corruption took too long to load. Try again, perhaps with a lower corruption factor.");
 	finish();
 };
-corruption.addEventListener("submit", evt => {
+head.addEventListener("submit", evt => {
 	evt.preventDefault();
 	Miro.progress.open();
 	download.disabled = true;
@@ -69,4 +81,3 @@ corruption.addEventListener("submit", evt => {
 download.addEventListener("click", () => {
 	html`<a href="$${output.src}" download="$${file.name}"></a>`.click();
 });
-document.body.querySelector("#upload").addEventListener("click", fileInput.click.bind(fileInput));
