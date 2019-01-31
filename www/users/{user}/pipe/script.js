@@ -564,7 +564,7 @@ const updateProperties = () => {
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
 				property.type._label.classList.add("mdc-floating-label--float-above");
 				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = item.url;
-				showProperty(property.url);
+				property.url.classList.remove("hidden");
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 				property.url._label.classList.add("mdc-floating-label--float-above");
 				download.href = `${item.url}?download`;
@@ -930,13 +930,17 @@ if (Miro.data.isMe) {
 	}, true);
 	property.actions.querySelector("#delete").addEventListener("click", removeItems);
 	for (const input of properties.elements) {
-		input._type = (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) && input.type;
+		const instanceInput = input instanceof HTMLInputElement;
+		input._input = instanceInput || input instanceof HTMLSelectElement;
+		if(instanceInput && !input.readOnly) {
+			input._type = input.type;
+		}
 	}
 	const changed = [];
 	const onInput = evt => {
 		changed.length = 0;
 		for (const input of properties.elements) {
-			if (input._type && input.type !== "hidden") {
+			if (input._input && input.type !== "hidden") {
 				if (input.checkValidity()) {
 					if (input._prev !== Miro.value(input)) {
 						changed.push(input);
