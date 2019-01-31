@@ -661,13 +661,6 @@ embed.addEventListener("click", () => {
 					</div><br>
 					<div class="mdc-form-field">
 						<div class="mdc-checkbox">
-							<input id="nofullscreen" class="mdc-checkbox__native-control" type="checkbox">
-							<div class="mdc-checkbox__background"></div>
-						</div>
-						<label for="nofullscreen">Disable fullscreen</label>
-					</div><br>
-					<div class="mdc-form-field">
-						<div class="mdc-checkbox">
 							<input id="noremoteplayback" class="mdc-checkbox__native-control" type="checkbox">
 							<div class="mdc-checkbox__background"></div>
 						</div>
@@ -714,9 +707,9 @@ embed.addEventListener("click", () => {
 					embed.removeAttribute("controlslist");
 				}*/
 			};
-			embedProperties.querySelector("#nodownload").addEventListener("input", input);
-			embedProperties.querySelector("#nofullscreen").addEventListener("input", input);
-			embedProperties.querySelector("#noremoteplayback").addEventListener("input", input);
+			embedProperties.querySelector("#nodownload").addEventListener("input", inputControls);
+			embedProperties.querySelector("#nofullscreen").addEventListener("input", inputControls);
+			embedProperties.querySelector("#noremoteplayback").addEventListener("input", inputControls);
 			if(typeAudio) {
 				embed = document.createElement("audio");
 			}
@@ -748,6 +741,15 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#height").addEventListener("input", input);
 			if(typeVideo) {
 				embed = document.createElement("video");
+				embedProperties.querySelector("#controlsList").appendChild(html`
+					<div class="mdc-form-field">
+						<div class="mdc-checkbox">
+							<input id="nofullscreen" class="mdc-checkbox__native-control" type="checkbox">
+							<div class="mdc-checkbox__background"></div>
+						</div>
+						<label for="nofullscreen">Disable fullscreen</label>
+					</div><br>
+				`);
 			} else if(item.type.startsWith("image/")) {
 				embed = document.createElement("img");
 			} else if(item.type === "text/html") {
