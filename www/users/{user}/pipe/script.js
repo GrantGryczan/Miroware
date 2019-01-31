@@ -631,41 +631,41 @@ embed.addEventListener("click", () => {
 		Miro.snackbar("Copied code to clipboard");
 	});
 	const embedPreview = html`<div id="embedPreview"></div>`;
-	let embedProperties;
+	const embedProperties = document.createElement("div");
 	if(item.type === "application/x-shockwave-flash") {
 		embedPreview.appendChild(html`Previews are not available for Flash embeds due to security concerns.`);
-		embedProperties = html`
-			<div>
-				[ Soon... ]
-			</div>
-		`;
+		embedProperties.appendChild(html`
+			Flash shit
+		`);
 	} else {
 		let embed;
-		if(item.type.startsWith("audio/")) {
-			embed = html`<audio></audio>`;
-			embedProperties = html`
-				<div>
-					controls
-					autoplay
-					loop
-					muted
+		const typeAudio = item.type.startsWith("audio/");
+		const typeVideo = item.type.startsWith("video/");
+		if(typeAudio || typeVideo) {
+			embedProperties.appendChild(html`
+				<br>
+				controls
+				autoplay
+				loop
+				muted
+			`);
+			if(typeAudio) {
+				embed = html`<audio></audio>`;
+			}
+		}
+		if(!typeAudio) {
+			embedProperties.insertBefore(html`
+				<div class="mdc-text-field">
+					<input id="width" class="mdc-text-field__input" type="number" min="0">
+					<label class="mdc-floating-label" for="width">Width</label>
+					<div class="mdc-line-ripple"></div>
+				</div><br>
+				<div class="mdc-text-field">
+					<input id="height" class="mdc-text-field__input" type="number" min="0">
+					<label class="mdc-floating-label" for="height">Height</label>
+					<div class="mdc-line-ripple"></div>
 				</div>
-			`;
-		} else {
-			embedProperties = html`
-				<div>
-					<div class="mdc-text-field">
-						<input id="width" class="mdc-text-field__input" type="number" min="0">
-						<label class="mdc-floating-label" for="width">Width</label>
-						<div class="mdc-line-ripple"></div>
-					</div><br>
-					<div class="mdc-text-field">
-						<input id="height" class="mdc-text-field__input" type="number" min="0">
-						<label class="mdc-floating-label" for="height">Height</label>
-						<div class="mdc-line-ripple"></div>
-					</div>
-				</div>
-			`;
+			`, embedProperties.firstChild);
 			embedProperties.querySelector("#width").addEventListener("input", evt => {
 				if(evt.target.checkValidity()) {
 					if(evt.target.value) {
@@ -686,17 +686,14 @@ embed.addEventListener("click", () => {
 					updateCode();
 				}
 			});
-			if(item.type.startsWith("image/")) {
-				embed = html`<img>`;
-			} else if(item.type.startsWith("video/")) {
+			if(typeVideo) {
 				embed = html`<video></video>`;
 				embedProperties.appendChild(html`
-					controls
-					autoplay
-					loop
-					muted
+					<br>
 					poster
 				`);
+			} else if(item.type.startsWith("image/")) {
+				embed = html`<img>`;
 			} else if(item.type === "text/html") {
 				embed = html`<iframe style="border: 0;"></iframe>`;
 			}
