@@ -354,7 +354,7 @@ textarea {
 		}
 		&, &.mdc-text-field--disabled {
 			.mdc-floating-label {
-				background-color: #282828;
+				background-color: transparent;
 			}
 		}
 	}
