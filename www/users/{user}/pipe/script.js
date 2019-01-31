@@ -641,7 +641,8 @@ embed.addEventListener("click", () => {
 		let embed;
 		const typeAudio = item.type.startsWith("audio/");
 		const typeVideo = item.type.startsWith("video/");
-		if(typeAudio || typeVideo) {
+		const typeMedia = typeAudio || typeVideo;
+		if(typeMedia) {
 			embedProperties.appendChild(html`
 				<div class="mdc-form-field margined">
 					<div class="mdc-checkbox">
@@ -725,7 +726,7 @@ embed.addEventListener("click", () => {
 			}
 		}
 		embed.src = item.url;
-		if(typeAudio) {
+		if(typeMedia) {
 			embed.controls = true;
 		}
 		const updateCode = () => {
