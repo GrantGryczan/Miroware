@@ -630,16 +630,16 @@ embed.addEventListener("click", () => {
 		document.execCommand("copy");
 		Miro.snackbar("Copied code to clipboard");
 	});
+	const embedPreview = html`<div id="embedPreview"></div>`;
 	let embedProperties;
 	if(item.type === "application/x-shockwave-flash") {
+		embedPreview.appendChild(html`Previews are not available for Flash embeds due to security issues.`);
 		embedProperties = html`
 			<div>
 				[ Soon... ]
 			</div>
 		`;
-		dialog = new Miro.Dialog("Embed", embedProperties);
 	} else {
-		const embedPreview = html`<div id="embedPreview"></div>`;
 		let embed;
 		if(item.type.startsWith("audio/")) {
 			embed = html`<audio></audio>`;
@@ -697,9 +697,9 @@ embed.addEventListener("click", () => {
 		};
 		updateCode();
 		embedPreview.appendChild(embed);
-		dialog = new Miro.Dialog("Embed", embedPreview);
-		embedPreview.parentNode.appendChild(embedProperties);
 	}
+	dialog = new Miro.Dialog("Embed", embedPreview);
+	embedPreview.parentNode.appendChild(embedProperties);
 	embedProperties.insertBefore(codeField, embedProperties.firstChild);
 	dialog.element.classList.add("embedDialog");
 });
