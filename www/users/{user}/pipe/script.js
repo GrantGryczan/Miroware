@@ -706,7 +706,15 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#controls").addEventListener("input", evt => {
 				if(evt.target.checked) {
 					controlsList.classList.add("hidden");
-					embed.
+					if(noDownload.checked) {
+						embed.controlsList.add("nodownload");
+					}
+					if(noRemotePlayback.checked) {
+						embed.controlsList.add("noremoteplayback");
+					}
+					if(noFullscreen && noFullscreen.checked) {
+						embed.controlsList.add("nofullscreen");
+					}
 				} else {
 					controlsList.classList.remove("hidden");
 					embed.removeAttribute("controlslist");
@@ -719,15 +727,6 @@ embed.addEventListener("click", () => {
 			inputControls = evt => {
 				if(evt.target.checked) {
 					embed.controlsList.add(evt.target.id);
-					if(noDownload.checked) {
-						embed.controlsList.add("nodownload");
-					}
-					if(noRemotePlayback.checked) {
-						embed.controlsList.add("noremoteplayback");
-					}
-					if(noFullscreen && noFullscreen.checked) {
-						embed.controlsList.add("nofullscreen");
-					}
 				} else {
 					embed.controlsList.remove(evt.target.id);
 					if(!embed.controlsList.length) {
