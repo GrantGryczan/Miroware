@@ -696,7 +696,7 @@ embed.addEventListener("click", () => {
 		};
 		updateCode();
 		embedPreview.appendChild(embed);
-		dialog = new Miro.Dialog("Embed", body);
+		dialog = new Miro.Dialog("Embed", embedPreview);
 		embedPreview.parentNode.appendChild(embedProperties);
 	}
 	dialog.element.classList.add("embedDialog");
