@@ -616,20 +616,90 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	Miro.snackbar("URL copied to clipboard");
 });
 embed.addEventListener("click", () => {
-	const {type} = items.querySelector(".item.selected")._item;
-	let body;
-	if(type.startsWith("image/")) {
-		body = html`image`;
-	} else if(type.startsWith("audio/")) {
-		body = html`audio`;
-	} else if(type.startsWith("video/")) {
-		body = html`video`;
-	} else if(type === "text/html") {
-		body = html`html`;
-	} else if(type === "application/x-shockwave-flash") {
-		body = html`flash`;
+	const item = items.querySelector(".item.selected")._item;
+	let dialog;
+	if(item.type === "application/x-shockwave-flash") {
+		const body = html`
+			[ Soon... ]
+		`;
+		dialog = new Miro.Dialog("Embed", body);
+	} else {
+		const embedPreview = html`<div id="embedPreview"></div>`;
+		let embed;
+		let embedProperties;
+		if(item.type.startsWith("audio/")) {
+			embed = html`<audio></audio>`;
+			embedProperties = html`
+				<div>
+					
+				</div>
+			`;
+		} else {
+			embedProperties = html`
+				<div>
+					<div class="mdc-text-field">
+						<input id="width" class="mdc-text-field__input" type="number" min="0">
+						<label class="mdc-floating-label" for="width">Width</label>
+						<div class="mdc-line-ripple"></div>
+					</div>
+					<div class="mdc-text-field">
+						<input id="height" class="mdc-text-field__input" type="number" min="0">
+						<label class="mdc-floating-label" for="height">Height</label>
+						<div class="mdc-line-ripple"></div>
+					</div>
+				</div>
+			`;
+			embedProperties.querySelector("#width").addEventListener("input", evt => {
+				if(evt.target.checkValidity()) {
+					if(evt.target.value) {
+						embed.width = evt.target.value;
+					} else {
+						embed.removeAttribute("width");
+					}
+					updateCode();
+				}
+			});
+			embedProperties.querySelector("#height").addEventListener("input", evt => {
+				if(evt.target.checkValidity()) {
+					if(evt.target.value) {
+						embed.width = evt.target.value;
+					} else {
+						embed.removeAttribute("width");
+					}
+					updateCode();
+				}
+			});
+			if(item.type.startsWith("image/")) {
+				embed = html`<img>`;
+			} else if(item.type.startsWith("video/")) {
+				embed = html`<video></video>`;
+			} else if(item.type === "text/html") {
+				embed = html`<iframe></iframe>`;
+			}
+		}
+		embed.src = item.url;
+		const codeField = html`
+			<div class="mdc-text-field mdc-text-field--textarea">
+				<textarea id="code" class="mdc-text-field__input" title="Click to copy" readonly></textarea>
+				<label class="mdc-floating-label" for="code">HTML Code</label>
+			</div>
+		`;
+		const code = codeField.querySelector("#code");
+		code.addEventListener("click", () => {
+			code.select();
+			document.execCommand("copy");
+			Miro.snackbar("Copied code to clipboard");
+		});
+		embedProperties.insertBefore(codeField, embedProperties.firstChild);
+		const updateCode = () => {
+			code.value = embed.outerHTML;
+		};
+		updateCode();
+		embedPreview.appendChild(embed);
+		dialog = new Miro.Dialog("Embed", body);
+		embedPreview.parentNode.appendChild(embedProperties);
 	}
-	new Miro.Dialog("Embed", body);
+	dialog.element.classList.add("embedDialog");
 });
 updateProperties();
 if (Miro.data.isMe) {
