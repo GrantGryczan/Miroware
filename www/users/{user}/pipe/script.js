@@ -684,7 +684,6 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#loop").addEventListener("input", input);
 			embedProperties.querySelector("#autoplay").addEventListener("input", input);
 			embedProperties.querySelector("#muted").addEventListener("input", input);
-			controls.checked = true;
 			if(typeAudio) {
 				embed = html`<audio></audio>`;
 			}
