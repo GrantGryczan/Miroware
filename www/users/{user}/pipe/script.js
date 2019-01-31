@@ -705,6 +705,13 @@ if (Miro.data.isMe) {
 				selectItem(setItem(new PipeItem(xhr.response)).element, {
 					ctrlKey: true
 				});
+				let ancestry = "";
+				for (const name of this.path.split("/")) {
+					const item = getItem(ancestry += (ancestry && "/") + name);
+					if (item) {
+						item.size += this.size;
+					}
+				}
 				if (path === this.path) {
 					render();
 				}
