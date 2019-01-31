@@ -642,6 +642,12 @@ embed.addEventListener("click", () => {
 		const typeAudio = item.type.startsWith("audio/");
 		const typeVideo = item.type.startsWith("video/");
 		const typeMedia = typeAudio || typeVideo;
+		const inputControls = evt => {
+			embed.controlsList[evt.target.checked ? "add" : "remove"](evt.target.id);
+			/*if(!embed.controlsList.length) {
+				embed.removeAttribute("controlslist");
+			}*/
+		};
 		if(typeMedia) {
 			embedProperties.appendChild(html`
 				<div class="mdc-form-field margined">
@@ -701,14 +707,7 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#loop").addEventListener("input", input);
 			embedProperties.querySelector("#autoplay").addEventListener("input", input);
 			embedProperties.querySelector("#muted").addEventListener("input", input);
-			const inputControls = evt => {
-				embed.controlsList[evt.target.checked ? "add" : "remove"](evt.target.id);
-				/*if(!embed.controlsList.length) {
-					embed.removeAttribute("controlslist");
-				}*/
-			};
 			embedProperties.querySelector("#nodownload").addEventListener("input", inputControls);
-			embedProperties.querySelector("#nofullscreen").addEventListener("input", inputControls);
 			embedProperties.querySelector("#noremoteplayback").addEventListener("input", inputControls);
 			if(typeAudio) {
 				embed = document.createElement("audio");
@@ -750,6 +749,7 @@ embed.addEventListener("click", () => {
 						<label for="nofullscreen">Disable fullscreen</label>
 					</div><br>
 				`);
+				embedProperties.querySelector("#nofullscreen").addEventListener("input", inputControls);
 			} else if(item.type.startsWith("image/")) {
 				embed = document.createElement("img");
 			} else if(item.type === "text/html") {
