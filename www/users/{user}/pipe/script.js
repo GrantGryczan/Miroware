@@ -926,7 +926,7 @@ if (Miro.data.isMe) {
 	const onInput = evt => {
 		changed.length = 0;
 		for (const input of properties.elements) {
-			if (input._input && !input.classList.contains("hidden")) {
+			if (input._input && !input.parentNode.parentNode.classList.contains("hidden")) {
 				if (input.checkValidity()) {
 					if (input._prev !== Miro.value(input)) {
 						changed.push(input);
