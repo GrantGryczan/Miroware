@@ -658,7 +658,7 @@ embed.addEventListener("click", () => {
 					</div>
 					<label for="loop">Loop</label>
 				</div><br>
-				<div class="mdc-form-field margined" title="Some browsers may not autoplay media unless it is also muted">
+				<div class="mdc-form-field margined" title="Some browsers may not autoplay media unless it is also muted.">
 					<div class="mdc-checkbox">
 						<input id="autoplay" class="mdc-checkbox__native-control" type="checkbox">
 						<div class="mdc-checkbox__background"></div>
