@@ -680,7 +680,10 @@ embed.addEventListener("click", () => {
 				}
 				updateCode();
 			};
-			embedProperties.querySelector("#width").addEventListener("input", );
+			embedProperties.querySelector("#controls").addEventListener("input", input);
+			embedProperties.querySelector("#loop").addEventListener("input", input);
+			embedProperties.querySelector("#autoplay").addEventListener("input", input);
+			embedProperties.querySelector("#muted").addEventListener("input", input);
 			if(typeAudio) {
 				embed = html`<audio></audio>`;
 			}
