@@ -673,8 +673,11 @@ embed.addEventListener("click", () => {
 				</div><br>
 			`);
 			const input = evt => {
-				embed[evt.target.id] = evt.target.checked;
-				embed[evt.target.checked ? "setAttribute" : "removeAttribute"](evt.target.id);
+				if(embed[evt.target.id] = evt.target.checked) {
+					embed.setAttribute(evt.target.id, "");
+				} else {
+					embed.removeAttribute(evt.target.id);
+				}
 				updateCode();
 			};
 			embedProperties.querySelector("#controls").addEventListener("input", input);
