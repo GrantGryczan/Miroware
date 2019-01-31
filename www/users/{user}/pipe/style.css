@@ -17,6 +17,14 @@
 		background-color: #b57a40;
 	}
 }
+.mdc-text-field--textarea.mdc-text-field--focused {
+	&:not(.mdc-text-field--disabled), .mdc-text-field__input:focus {
+		border-color: #b57a40;
+	}
+	&:not(.mdc-text-field--invalid) .mdc-floating-label {
+		color: #e9a663;
+	}
+}
 #targetIndicator {
 	position: absolute;
 	top: 0;

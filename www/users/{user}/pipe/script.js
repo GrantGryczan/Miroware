@@ -633,7 +633,7 @@ embed.addEventListener("click", () => {
 	const embedPreview = html`<div id="embedPreview"></div>`;
 	let embedProperties;
 	if(item.type === "application/x-shockwave-flash") {
-		embedPreview.appendChild(html`Previews are not available for Flash embeds due to security issues.`);
+		embedPreview.appendChild(html`Previews are not available for Flash embeds due to security concerns.`);
 		embedProperties = html`
 			<div>
 				[ Soon... ]
