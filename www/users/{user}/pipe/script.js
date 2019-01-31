@@ -674,7 +674,7 @@ embed.addEventListener("click", () => {
 			`);
 			const input = evt => {
 				embed[evt.target.id] = evt.target.checked;
-				embed[evt.target.checked ? "addAttribute" : "removeAttribute"](evt.target.id);
+				embed[evt.target.checked ? "setAttribute" : "removeAttribute"](evt.target.id);
 				updateCode();
 			};
 			embedProperties.querySelector("#controls").addEventListener("input", input);
