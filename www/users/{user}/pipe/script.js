@@ -702,14 +702,15 @@ if (Miro.data.isMe) {
 				this.subtitleElement.title = `${this.file.size} B`;
 				this.subtitleElement.textContent = this.size;
 				this.closeElement.textContent = "done";
-				selectItem(setItem(new PipeItem(xhr.response)).element, {
+				const item = setItem(new PipeItem(xhr.response));
+				selectItem(item.element, {
 					ctrlKey: true
 				});
 				let ancestry = "";
 				for (const name of this.path.split("/")) {
-					const item = getItem(ancestry += (ancestry && "/") + name);
-					if (item) {
-						item.size += this.size;
+					const ancestorItem = getItem(ancestry += (ancestry && "/") + name);
+					if (ancestorItem) {
+						ancestorItem.size += item.size;
 					}
 				}
 				if (path === this.path) {
