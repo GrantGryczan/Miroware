@@ -643,12 +643,44 @@ embed.addEventListener("click", () => {
 		const typeVideo = item.type.startsWith("video/");
 		if(typeAudio || typeVideo) {
 			embedProperties.appendChild(html`
-				<br>
-				controls
-				autoplay
-				loop
-				muted
+				<div class="mdc-form-field">
+					<div class="mdc-checkbox">
+						<input id="controls" class="mdc-checkbox__native-control" type="checkbox">
+						<div class="mdc-checkbox__background"></div>
+					</div>
+					<label for="controls">Controls</label>
+				</div><br>
+				<div class="mdc-form-field">
+					<div class="mdc-checkbox">
+						<input id="loop" class="mdc-checkbox__native-control" type="checkbox">
+						<div class="mdc-checkbox__background"></div>
+					</div>
+					<label for="loop">Loop</label>
+				</div><br>
+				<div class="mdc-form-field">
+					<div class="mdc-checkbox">
+						<input id="autoplay" class="mdc-checkbox__native-control" type="checkbox">
+						<div class="mdc-checkbox__background"></div>
+					</div>
+					<label for="autoplay">Autoplay</label>
+				</div><br>
+				<div class="mdc-form-field">
+					<div class="mdc-checkbox">
+						<input id="muted" class="mdc-checkbox__native-control" type="checkbox">
+						<div class="mdc-checkbox__background"></div>
+					</div>
+					<label for="muted">Muted</label>
+				</div><br>
 			`);
+			const input = evt => {
+				if(evt.target.value) {
+					embed[evt.target.id] = true;
+				} else {
+					embed.removeAttribute(evt.target.id);
+				}
+				updateCode();
+			};
+			embedProperties.querySelector("#width").addEventListener("input", );
 			if(typeAudio) {
 				embed = html`<audio></audio>`;
 			}
@@ -664,33 +696,24 @@ embed.addEventListener("click", () => {
 					<input id="height" class="mdc-text-field__input" type="number" min="0">
 					<label class="mdc-floating-label" for="height">Height</label>
 					<div class="mdc-line-ripple"></div>
-				</div>
+				</div><br>
 			`, embedProperties.firstChild);
-			embedProperties.querySelector("#width").addEventListener("input", evt => {
+			const input = evt => {
 				if(evt.target.checkValidity()) {
 					if(evt.target.value) {
-						embed.width = evt.target.value;
+						embed[evt.target.id] = evt.target.value;
 					} else {
-						embed.removeAttribute("width");
+						embed.removeAttribute(evt.target.id);
 					}
 					updateCode();
 				}
-			});
-			embedProperties.querySelector("#height").addEventListener("input", evt => {
-				if(evt.target.checkValidity()) {
-					if(evt.target.value) {
-						embed.height = evt.target.value;
-					} else {
-						embed.removeAttribute("height");
-					}
-					updateCode();
-				}
-			});
+			};
+			embedProperties.querySelector("#width").addEventListener("input", input);
+			embedProperties.querySelector("#height").addEventListener("input", input);
 			if(typeVideo) {
 				embed = html`<video></video>`;
 				embedProperties.appendChild(html`
-					<br>
-					poster
+					poster<br>
 				`);
 			} else if(item.type.startsWith("image/")) {
 				embed = html`<img>`;
