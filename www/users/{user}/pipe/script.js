@@ -630,15 +630,15 @@ embed.addEventListener("click", () => {
 		document.execCommand("copy");
 		Miro.snackbar("Copied code to clipboard");
 	});
+	let embedProperties;
 	if(item.type === "application/x-shockwave-flash") {
-		const body = html`
+		embedProperties = html`
 			[ Soon... ]
 		`;
-		dialog = new Miro.Dialog("Embed", body);
+		dialog = new Miro.Dialog("Embed", embedProperties);
 	} else {
 		const embedPreview = html`<div id="embedPreview"></div>`;
 		let embed;
-		let embedProperties;
 		if(item.type.startsWith("audio/")) {
 			embed = html`<audio></audio>`;
 			embedProperties = html`
