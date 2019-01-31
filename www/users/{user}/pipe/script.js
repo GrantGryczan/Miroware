@@ -528,6 +528,7 @@ const linkPreview = property.url.querySelector("#linkPreview");
 const privateOption = properties.elements.privacy.options[2];
 const save = property.actions.querySelector("#save");
 const download = property.actions.querySelector("#download");
+const embed = property.actions.querySelector("#embed");
 const previewImage = properties.querySelector("#previewImage");
 const previewAudio = properties.querySelector("#previewAudio");
 const previewVideo = properties.querySelector("#previewVideo");
@@ -548,6 +549,7 @@ window.updateProperties = () => {
 	}
 	save.classList.add("hidden");
 	download.classList.add("hidden");
+	embed.classList.add("hidden");
 	const selected = items.querySelectorAll(".item.selected");
 	if (selectionLength.textContent = selected.length) {
 		property.actions.classList.remove("hidden");
@@ -569,6 +571,7 @@ window.updateProperties = () => {
 				property.url._label.classList.add("mdc-floating-label--float-above");
 				download.href = `${item.url}?download`;
 				download.classList.remove("hidden");
+				let showEmbedAction = true;
 				if (item.type.startsWith("image/")) {
 					previewImage.src = item.url;
 					previewImage.classList.remove("hidden");
@@ -587,6 +590,11 @@ window.updateProperties = () => {
 					previewAudio.classList.add("hidden");
 					previewVideo.classList.remove("hidden");
 					property.preview.classList.remove("hidden");
+				} else if(item.type !== "text/html" && item.type !== "application/x-shockwave-flash") {
+					showEmbedAction = false;
+				}
+				if (showEmbedAction) {
+					embed.classList.remove("hidden");
 				}
 			}
 		}
@@ -931,7 +939,7 @@ if (Miro.data.isMe) {
 	for (const input of properties.elements) {
 		const instanceInput = input instanceof HTMLInputElement;
 		input._input = instanceInput || input instanceof HTMLSelectElement;
-		if(instanceInput && !input.readOnly) {
+		if (instanceInput && !input.readOnly) {
 			input._type = input.type;
 		}
 	}
