@@ -555,12 +555,12 @@ const updateProperties = () => {
 		if (selected.length === 1) {
 			const item = selected[0]._item;
 			properties.elements.name._prev = properties.elements.name.value = getName(item.name);
-			showProperty(property.name);
+			showProperty("name");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
 			if (item.type !== "/") {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
-				showProperty(property.type);
+				showProperty("type");
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
 				property.type._label.classList.add("mdc-floating-label--float-above");
 				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = item.url;
@@ -595,7 +595,7 @@ const updateProperties = () => {
 			const privacy = selected[0]._item.privacy;
 			properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
 			privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
-			showProperty(property.privacy);
+			property.privacy.classList.remove("hidden");
 			save.disabled = true;
 			save.classList.remove("hidden");
 		}
