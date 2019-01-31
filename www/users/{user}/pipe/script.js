@@ -618,6 +618,18 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 embed.addEventListener("click", () => {
 	const item = items.querySelector(".item.selected")._item;
 	let dialog;
+	const codeField = html`
+		<div id="codeField" class="mdc-text-field mdc-text-field--textarea">
+			<textarea id="code" class="mdc-text-field__input" title="Click to copy" rows="4" readonly></textarea>
+			<label class="mdc-floating-label" for="code">HTML Code</label>
+		</div>
+	`;
+	const code = codeField.querySelector("#code");
+	code.addEventListener("click", () => {
+		code.select();
+		document.execCommand("copy");
+		Miro.snackbar("Copied code to clipboard");
+	});
 	if(item.type === "application/x-shockwave-flash") {
 		const body = html`
 			[ Soon... ]
@@ -641,7 +653,7 @@ embed.addEventListener("click", () => {
 						<input id="width" class="mdc-text-field__input" type="number" min="0">
 						<label class="mdc-floating-label" for="width">Width</label>
 						<div class="mdc-line-ripple"></div>
-					</div>
+					</div><br>
 					<div class="mdc-text-field">
 						<input id="height" class="mdc-text-field__input" type="number" min="0">
 						<label class="mdc-floating-label" for="height">Height</label>
@@ -662,9 +674,9 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#height").addEventListener("input", evt => {
 				if(evt.target.checkValidity()) {
 					if(evt.target.value) {
-						embed.width = evt.target.value;
+						embed.height = evt.target.value;
 					} else {
-						embed.removeAttribute("width");
+						embed.removeAttribute("height");
 					}
 					updateCode();
 				}
@@ -678,19 +690,6 @@ embed.addEventListener("click", () => {
 			}
 		}
 		embed.src = item.url;
-		const codeField = html`
-			<div class="mdc-text-field mdc-text-field--textarea">
-				<textarea id="code" class="mdc-text-field__input" title="Click to copy" readonly></textarea>
-				<label class="mdc-floating-label" for="code">HTML Code</label>
-			</div>
-		`;
-		const code = codeField.querySelector("#code");
-		code.addEventListener("click", () => {
-			code.select();
-			document.execCommand("copy");
-			Miro.snackbar("Copied code to clipboard");
-		});
-		embedProperties.insertBefore(codeField, embedProperties.firstChild);
 		const updateCode = () => {
 			code.value = embed.outerHTML;
 		};
@@ -699,6 +698,7 @@ embed.addEventListener("click", () => {
 		dialog = new Miro.Dialog("Embed", embedPreview);
 		embedPreview.parentNode.appendChild(embedProperties);
 	}
+	embedProperties.insertBefore(codeField, embedProperties.firstChild);
 	dialog.element.classList.add("embedDialog");
 });
 updateProperties();
