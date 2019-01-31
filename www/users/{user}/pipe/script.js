@@ -619,8 +619,8 @@ embed.addEventListener("click", () => {
 	const item = items.querySelector(".item.selected")._item;
 	let dialog;
 	const codeField = html`
-		<div class="mdc-text-field mdc-text-field--textarea">
-			<textarea id="code" class="mdc-text-field__input" title="Click to copy" rows="4" readonly></textarea>
+		<div id="codeField" class="mdc-text-field mdc-text-field--textarea">
+			<textarea id="code" class="mdc-text-field__input" title="Click to copy" rows="4" cols="64" readonly></textarea>
 			<label class="mdc-floating-label" for="code">HTML Code</label>
 		</div>
 	`;
@@ -645,7 +645,10 @@ embed.addEventListener("click", () => {
 			embed = html`<audio></audio>`;
 			embedProperties = html`
 				<div>
-					
+					controls
+					autoplay
+					loop
+					muted
 				</div>
 			`;
 		} else {
@@ -687,8 +690,15 @@ embed.addEventListener("click", () => {
 				embed = html`<img>`;
 			} else if(item.type.startsWith("video/")) {
 				embed = html`<video></video>`;
+				embedProperties.appendChild(html`
+					controls
+					autoplay
+					loop
+					muted
+					poster
+				`);
 			} else if(item.type === "text/html") {
-				embed = html`<iframe></iframe>`;
+				embed = html`<iframe style="border: 0;"></iframe>`;
 			}
 		}
 		embed.src = item.url;

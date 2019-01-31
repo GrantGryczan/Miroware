@@ -250,8 +250,11 @@
 	}
 }
 #embedPreview {
-	margin-right: 12px;
+	margin-right: 20px;
 	overflow: auto;
+}
+#codeField {
+	margin-bottom: 8px;
 }
 #code {
 	cursor: pointer;
