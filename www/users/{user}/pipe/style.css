@@ -246,12 +246,12 @@
 		display: flex;
 		& > div {
 			width: 50%;
+			overflow: auto;
 		}
 	}
 }
 #embedPreview {
 	margin-right: 20px;
-	overflow: auto;
 }
 #code {
 	cursor: pointer;

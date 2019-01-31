@@ -642,14 +642,9 @@ embed.addEventListener("click", () => {
 		const typeAudio = item.type.startsWith("audio/");
 		const typeVideo = item.type.startsWith("video/");
 		const typeMedia = typeAudio || typeVideo;
-		const inputControls = evt => {
-			embed.controlsList[evt.target.checked ? "add" : "remove"](evt.target.id);
-			if(!embed.controlsList.length) {
-				embed.removeAttribute("controlslist");
-			}
-			updateCode();
-		};
+		let inputControls;
 		let controlsList;
+		let noFullscreen;
 		if(typeMedia) {
 			embedProperties.appendChild(html`
 				<div class="mdc-form-field margined">
@@ -697,6 +692,9 @@ embed.addEventListener("click", () => {
 					<label for="muted">Muted</label>
 				</div><br>
 			`);
+			controlsList = embedProperties.querySelector("#controlsList");
+			const noDownload = controlsList.querySelector("#nodownload");
+			const noRemotePlayback = controlsList.querySelector("#noremoteplayback");
 			const input = evt => {
 				if(embed[evt.target.id] = evt.target.checked) {
 					embed.setAttribute(evt.target.id, "");
@@ -705,10 +703,12 @@ embed.addEventListener("click", () => {
 				}
 				updateCode();
 			};
-			controlsList = embedProperties.querySelector("#controlsList");
 			embedProperties.querySelector("#controls").addEventListener("input", evt => {
-				controlsList.classList[evt.target.checked ? "add" : "remove"]("hidden");
-				if(!evt.target.checked) {
+				if(evt.target.checked) {
+					controlsList.classList.add("hidden");
+					embed.
+				} else {
+					controlsList.classList.remove("hidden");
 					embed.removeAttribute("controlslist");
 				}
 				input(evt);
@@ -716,8 +716,28 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#loop").addEventListener("input", input);
 			embedProperties.querySelector("#autoplay").addEventListener("input", input);
 			embedProperties.querySelector("#muted").addEventListener("input", input);
-			embedProperties.querySelector("#nodownload").addEventListener("input", inputControls);
-			embedProperties.querySelector("#noremoteplayback").addEventListener("input", inputControls);
+			inputControls = evt => {
+				if(evt.target.checked) {
+					embed.controlsList.add(evt.target.id);
+					if(noDownload.checked) {
+						embed.controlsList.add("nodownload");
+					}
+					if(noRemotePlayback.checked) {
+						embed.controlsList.add("noremoteplayback");
+					}
+					if(noFullscreen && noFullscreen.checked) {
+						embed.controlsList.add("nofullscreen");
+					}
+				} else {
+					embed.controlsList.remove(evt.target.id);
+					if(!embed.controlsList.length) {
+						embed.removeAttribute("controlslist");
+					}
+				}
+				updateCode();
+			};
+			noDownload.addEventListener("input", inputControls);
+			noRemotePlayback.addEventListener("input", inputControls);
 			if(typeAudio) {
 				embed = document.createElement("audio");
 			}
@@ -758,7 +778,7 @@ embed.addEventListener("click", () => {
 						<label for="nofullscreen">Disable fullscreen</label>
 					</div><br>
 				`);
-				embedProperties.querySelector("#nofullscreen").addEventListener("input", inputControls);
+				(noFullscreen = controlsList.querySelector("#nofullscreen")).addEventListener("input", inputControls);
 			} else if(item.type.startsWith("image/")) {
 				embed = document.createElement("img");
 			} else if(item.type === "text/html") {
