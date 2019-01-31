@@ -619,7 +619,7 @@ embed.addEventListener("click", () => {
 	const item = items.querySelector(".item.selected")._item;
 	let dialog;
 	const codeField = html`
-		<div id="codeField" class="mdc-text-field mdc-text-field--textarea">
+		<div class="mdc-text-field mdc-text-field--textarea">
 			<textarea id="code" class="mdc-text-field__input" title="Click to copy" rows="4" cols="64" readonly></textarea>
 			<label class="mdc-floating-label" for="code">HTML Code</label>
 		</div>
@@ -643,28 +643,28 @@ embed.addEventListener("click", () => {
 		const typeVideo = item.type.startsWith("video/");
 		if(typeAudio || typeVideo) {
 			embedProperties.appendChild(html`
-				<div class="mdc-form-field">
+				<div class="mdc-form-field margined">
 					<div class="mdc-checkbox">
 						<input id="controls" class="mdc-checkbox__native-control" type="checkbox">
 						<div class="mdc-checkbox__background"></div>
 					</div>
 					<label for="controls">Controls</label>
 				</div><br>
-				<div class="mdc-form-field">
+				<div class="mdc-form-field margined">
 					<div class="mdc-checkbox">
 						<input id="loop" class="mdc-checkbox__native-control" type="checkbox">
 						<div class="mdc-checkbox__background"></div>
 					</div>
 					<label for="loop">Loop</label>
 				</div><br>
-				<div class="mdc-form-field">
+				<div class="mdc-form-field margined">
 					<div class="mdc-checkbox">
 						<input id="autoplay" class="mdc-checkbox__native-control" type="checkbox">
 						<div class="mdc-checkbox__background"></div>
 					</div>
 					<label for="autoplay">Autoplay</label>
 				</div><br>
-				<div class="mdc-form-field">
+				<div class="mdc-form-field margined">
 					<div class="mdc-checkbox">
 						<input id="muted" class="mdc-checkbox__native-control" type="checkbox">
 						<div class="mdc-checkbox__background"></div>
@@ -673,11 +673,7 @@ embed.addEventListener("click", () => {
 				</div><br>
 			`);
 			const input = evt => {
-				if(evt.target.value) {
-					embed[evt.target.id] = true;
-				} else {
-					embed.removeAttribute(evt.target.id);
-				}
+				embed[evt.target.id] = evt.target.checked;
 				updateCode();
 			};
 			embedProperties.querySelector("#controls").addEventListener("input", input);
@@ -690,12 +686,12 @@ embed.addEventListener("click", () => {
 		}
 		if(!typeAudio) {
 			embedProperties.insertBefore(html`
-				<div class="mdc-text-field">
+				<div class="mdc-text-field margined">
 					<input id="width" class="mdc-text-field__input" type="number" min="0">
 					<label class="mdc-floating-label" for="width">Width</label>
 					<div class="mdc-line-ripple"></div>
 				</div><br>
-				<div class="mdc-text-field">
+				<div class="mdc-text-field margined">
 					<input id="height" class="mdc-text-field__input" type="number" min="0">
 					<label class="mdc-floating-label" for="height">Height</label>
 					<div class="mdc-line-ripple"></div>
@@ -726,7 +722,7 @@ embed.addEventListener("click", () => {
 		}
 		embed.src = item.url;
 		const updateCode = () => {
-			code.value = embed.outerHTML;
+			code.value = embed.outerHTML.replace(/=""/g, "");
 		};
 		updateCode();
 		embedPreview.appendChild(embed);
