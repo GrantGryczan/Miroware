@@ -195,6 +195,9 @@ const PipeItem = class PipeItem {
 	set size(value) {
 		this.sizeElement.textContent = getSize(this[_size] = value);
 		this.sizeElement.title = `${value} B`;
+		if (this.element.classList.contains("selected")) {
+			updateProperties();
+		}
 	}
 	get type() {
 		return this[_type];
