@@ -672,7 +672,7 @@ embed.addEventListener("click", () => {
 					<label for="muted">Muted</label>
 				</div><br>
 			`);
-			const input = evt => {
+			const change = evt => {
 				if(embed[evt.target.id] = evt.target.checked) {
 					embed.setAttribute(evt.target.id, "");
 				} else {
@@ -680,10 +680,12 @@ embed.addEventListener("click", () => {
 				}
 				updateCode();
 			};
-			embedProperties.querySelector("#controls").addEventListener("input", input);
-			embedProperties.querySelector("#loop").addEventListener("input", input);
-			embedProperties.querySelector("#autoplay").addEventListener("input", input);
-			embedProperties.querySelector("#muted").addEventListener("input", input);
+			const controls = embedProperties.querySelector("#controls");
+			controls.addEventListener("change", change);
+			embedProperties.querySelector("#loop").addEventListener("change", change);
+			embedProperties.querySelector("#autoplay").addEventListener("change", change);
+			embedProperties.querySelector("#muted").addEventListener("change", change);
+			controls.checked = true;
 			if(typeAudio) {
 				embed = html`<audio></audio>`;
 			}
