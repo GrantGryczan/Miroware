@@ -531,10 +531,20 @@ const download = property.actions.querySelector("#download");
 const previewImage = properties.querySelector("#previewImage");
 const previewAudio = properties.querySelector("#previewAudio");
 const previewVideo = properties.querySelector("#previewVideo");
+const showProperty = key => {
+	property[key].classList.remove("hidden");
+	const input = properties.elements[key];
+	input.type = input._type;
+};
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
 const updateProperties = () => {
 	for (const propertyElement of Object.values(property)) {
 		propertyElement.classList.add("hidden");
+	}
+	for (const input of properties.elements) {
+		if (input._type) {
+			input.type = "hidden";
+		}
 	}
 	save.classList.add("hidden");
 	download.classList.add("hidden");
@@ -545,16 +555,16 @@ const updateProperties = () => {
 		if (selected.length === 1) {
 			const item = selected[0]._item;
 			properties.elements.name._prev = properties.elements.name.value = getName(item.name);
-			property.name.classList.remove("hidden");
+			showProperty(property.name);
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
 			if (item.type !== "/") {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
-				property.type.classList.remove("hidden");
+				showProperty(property.type);
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
 				property.type._label.classList.add("mdc-floating-label--float-above");
 				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = item.url;
-				property.url.classList.remove("hidden");
+				showProperty(property.url);
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 				property.url._label.classList.add("mdc-floating-label--float-above");
 				download.href = `${item.url}?download`;
@@ -585,7 +595,7 @@ const updateProperties = () => {
 			const privacy = selected[0]._item.privacy;
 			properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
 			privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
-			property.privacy.classList.remove("hidden");
+			showProperty(property.privacy);
 			save.disabled = true;
 			save.classList.remove("hidden");
 		}
@@ -920,13 +930,13 @@ if (Miro.data.isMe) {
 	}, true);
 	property.actions.querySelector("#delete").addEventListener("click", removeItems);
 	for (const input of properties.elements) {
-		input._input = input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement || input instanceof HTMLSelectElement;
+		input._type = (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) && input.type;
 	}
 	const changed = [];
 	const onInput = evt => {
 		changed.length = 0;
 		for (const input of properties.elements) {
-			if (input._input && !input.parentNode.parentNode.classList.contains("hidden")) {
+			if (input._type && input.type !== "hidden") {
 				if (input.checkValidity()) {
 					if (input._prev !== Miro.value(input)) {
 						changed.push(input);
