@@ -989,7 +989,7 @@ if (Miro.data.isMe) {
 			if (changedPrivacy) {
 				data.privacy = +properties.elements.privacy.value;
 			}
-			Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(xhr => {
+			Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, data).then(Miro.response(async xhr => {
 				if (changedName) {
 					itemElement._item.name = xhr.response.name;
 				}
@@ -1004,6 +1004,7 @@ if (Miro.data.isMe) {
 				}
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
+				await wait();
 				if (itemElement._item.testPath(path ? `${path}/` : "")) {
 					render();
 				}
