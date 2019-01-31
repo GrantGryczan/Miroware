@@ -644,9 +644,10 @@ embed.addEventListener("click", () => {
 		const typeMedia = typeAudio || typeVideo;
 		const inputControls = evt => {
 			embed.controlsList[evt.target.checked ? "add" : "remove"](evt.target.id);
-			/*if(!embed.controlsList.length) {
+			if(!embed.controlsList.length) {
 				embed.removeAttribute("controlslist");
-			}*/
+			}
+			updateCode();
 		};
 		if(typeMedia) {
 			embedProperties.appendChild(html`
