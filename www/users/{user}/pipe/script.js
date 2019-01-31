@@ -168,7 +168,7 @@ const PipeItem = class PipeItem {
 				}
 				const prefix = `${this.name}/`;
 				for (const item of pipe) {
-					if (item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
+					if (item.testPath(prefix)) {
 						item.name = value + item.name.slice(oldName.length);
 					}
 				}
@@ -233,7 +233,7 @@ const PipeItem = class PipeItem {
 			const prefix = `${this.name}/`;
 			for (let i = pipe.length - 1; i >= 0; i--) {
 				const item = pipe[i];
-				if (item.name.startsWith(prefix) && !item.name.includes("/", prefix.length)) {
+				if (item.testPath(prefix)) {
 					item.delete();
 				}
 			}
@@ -253,6 +253,9 @@ const PipeItem = class PipeItem {
 		} else {
 			open(this.element.href);
 		}
+	}
+	testPath(prefix) {
+		return this.name.startsWith(prefix) && !this.name.includes("/", prefix.length);
 	}
 }
 const removeItem = itemElement => {
@@ -988,7 +991,7 @@ if (Miro.data.isMe) {
 				}
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				if (path === itemElement._item.path) {
+				if (itemElement._item.testPath(`${path}/`)) {
 					render();
 				}
 			}, () => {
@@ -996,8 +999,8 @@ if (Miro.data.isMe) {
 				save.disabled = false;
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				if (path === itemElement._item.path) {
-					render();
+				if (itemElement._item.testPath(`${path}/`)) {
+					updateProperties();
 				}
 			})).then(countResponse);
 		}
