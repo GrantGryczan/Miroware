@@ -1005,7 +1005,7 @@ if (Miro.data.isMe) {
 				}
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				if (itemElement._item.testPath(`${path}/`)) {
+				if (itemElement._item.testPath(path ? `${path}/` : "")) {
 					render();
 				}
 			}, () => {
@@ -1013,7 +1013,7 @@ if (Miro.data.isMe) {
 				save.disabled = false;
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				if (itemElement._item.testPath(`${path}/`)) {
+				if (itemElement._item.testPath(path ? `${path}/` : "")) {
 					updateProperties();
 				}
 			})).then(countResponse);
