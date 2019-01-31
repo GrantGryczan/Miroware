@@ -1004,7 +1004,7 @@ if (Miro.data.isMe) {
 				}
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				await wait();
+				await Miro.wait();
 				if (itemElement._item.testPath(path ? `${path}/` : "")) {
 					render();
 				}
