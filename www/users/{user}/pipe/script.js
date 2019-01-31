@@ -537,7 +537,7 @@ const showProperty = key => {
 	input.type = input._type;
 };
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
-const updateProperties = () => {
+window.updateProperties = () => {
 	for (const propertyElement of Object.values(property)) {
 		propertyElement.classList.add("hidden");
 	}
@@ -591,7 +591,6 @@ const updateProperties = () => {
 			}
 		}
 		if (Miro.data.isMe) {
-			let samePrivacy = true;
 			const privacy = selected[0]._item.privacy;
 			properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
 			privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
