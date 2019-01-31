@@ -660,7 +660,7 @@ embed.addEventListener("click", () => {
 				</div><br>
 				<div class="mdc-form-field margined">
 					<div class="mdc-checkbox">
-						<input id="autoplay" class="mdc-checkbox__native-control" type="checkbox">
+						<input id="autoplay" class="mdc-checkbox__native-control" type="checkbox" title="Some browsers may not autoplay media unless it is also muted">
 						<div class="mdc-checkbox__background"></div>
 					</div>
 					<label for="autoplay">Autoplay</label>
@@ -716,9 +716,6 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#height").addEventListener("input", input);
 			if(typeVideo) {
 				embed = html`<video></video>`;
-				embedProperties.appendChild(html`
-					poster<br>
-				`);
 			} else if(item.type.startsWith("image/")) {
 				embed = html`<img>`;
 			} else if(item.type === "text/html") {
