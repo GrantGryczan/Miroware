@@ -633,7 +633,7 @@ embed.addEventListener("click", () => {
 	const embedPreview = html`<div id="embedPreview"></div>`;
 	const embedProperties = document.createElement("div");
 	if(item.type === "application/x-shockwave-flash") {
-		embedPreview.appendChild(html`Previews are not available for Flash embeds due to security concerns.`);
+		embedPreview.appendChild(document.createTextNode("Previews are not available for Flash embeds due to security concerns."));
 		embedProperties.appendChild(html`
 			Flash shit
 		`);
@@ -651,21 +651,44 @@ embed.addEventListener("click", () => {
 					</div>
 					<label for="controls">Controls</label>
 				</div><br>
-				<div class="mdc-form-field margined">
+				<div id="controlsList">
+					<div class="mdc-form-field margined">
+						<div class="mdc-checkbox">
+							<input id="nodownload" class="mdc-checkbox__native-control" type="checkbox" checked>
+							<div class="mdc-checkbox__background"></div>
+						</div>
+						<label for="nodownload">Disable download</label>
+					</div><br>
+					<div class="mdc-form-field">
+						<div class="mdc-checkbox">
+							<input id="nofullscreen" class="mdc-checkbox__native-control" type="checkbox">
+							<div class="mdc-checkbox__background"></div>
+						</div>
+						<label for="nofullscreen">Disable fullscreen</label>
+					</div><br>
+					<div class="mdc-form-field">
+						<div class="mdc-checkbox">
+							<input id="noremoteplayback" class="mdc-checkbox__native-control" type="checkbox">
+							<div class="mdc-checkbox__background"></div>
+						</div>
+						<label for="noremoteplayback">Disable remote playback</label>
+					</div><br>
+				</div>
+				<div class="mdc-form-field">
 					<div class="mdc-checkbox">
 						<input id="loop" class="mdc-checkbox__native-control" type="checkbox">
 						<div class="mdc-checkbox__background"></div>
 					</div>
 					<label for="loop">Loop</label>
 				</div><br>
-				<div class="mdc-form-field margined" title="Some browsers may not autoplay media unless it is also muted.">
+				<div class="mdc-form-field" title="Some browsers may not autoplay media unless it is also muted.">
 					<div class="mdc-checkbox">
 						<input id="autoplay" class="mdc-checkbox__native-control" type="checkbox">
 						<div class="mdc-checkbox__background"></div>
 					</div>
 					<label for="autoplay">Autoplay</label>
 				</div><br>
-				<div class="mdc-form-field margined">
+				<div class="mdc-form-field">
 					<div class="mdc-checkbox">
 						<input id="muted" class="mdc-checkbox__native-control" type="checkbox">
 						<div class="mdc-checkbox__background"></div>
@@ -685,8 +708,17 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#loop").addEventListener("input", input);
 			embedProperties.querySelector("#autoplay").addEventListener("input", input);
 			embedProperties.querySelector("#muted").addEventListener("input", input);
+			const inputControls = evt => {
+				embed.controlsList[evt.target.checked ? "add" : "remove"](evt.target.id);
+				/*if(!embed.controlsList.length) {
+					embed.removeAttribute("controlslist");
+				}*/
+			};
+			embedProperties.querySelector("#nodownload").addEventListener("input", input);
+			embedProperties.querySelector("#nofullscreen").addEventListener("input", input);
+			embedProperties.querySelector("#noremoteplayback").addEventListener("input", input);
 			if(typeAudio) {
-				embed = html`<audio></audio>`;
+				embed = document.createElement("audio");
 			}
 		}
 		if(!typeAudio) {
@@ -696,7 +728,7 @@ embed.addEventListener("click", () => {
 					<label class="mdc-floating-label" for="width">Width</label>
 					<div class="mdc-line-ripple"></div>
 				</div><br>
-				<div class="mdc-text-field margined">
+				<div class="mdc-text-field">
 					<input id="height" class="mdc-text-field__input" type="number" min="0">
 					<label class="mdc-floating-label" for="height">Height</label>
 					<div class="mdc-line-ripple"></div>
@@ -715,9 +747,9 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#width").addEventListener("input", input);
 			embedProperties.querySelector("#height").addEventListener("input", input);
 			if(typeVideo) {
-				embed = html`<video></video>`;
+				embed = document.createElement("video");
 			} else if(item.type.startsWith("image/")) {
-				embed = html`<img>`;
+				embed = document.createElement("img");
 			} else if(item.type === "text/html") {
 				embed = html`<iframe style="border: 0;"></iframe>`;
 			}
@@ -725,9 +757,11 @@ embed.addEventListener("click", () => {
 		embed.src = item.url;
 		if(typeMedia) {
 			embed.controls = true;
+			embed.controlsList.add("nodownload");
 		}
+		const emptyValues = /=""/g;
 		const updateCode = () => {
-			code.value = embed.outerHTML.replace(/=""/g, "");
+			code.value = embed.outerHTML.replace(emptyValues, "");
 		};
 		updateCode();
 		embedPreview.appendChild(embed);

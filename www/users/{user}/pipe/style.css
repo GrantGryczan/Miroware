@@ -256,3 +256,6 @@
 #code {
 	cursor: pointer;
 }
+#controlsList {
+	padding-left: 30px;
+}
