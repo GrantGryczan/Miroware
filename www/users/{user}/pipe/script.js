@@ -652,7 +652,7 @@ embed.addEventListener("click", () => {
 					<label for="controls">Controls</label>
 				</div><br>
 				<div id="controlsList">
-					<div class="mdc-form-field margined">
+					<div class="mdc-form-field">
 						<div class="mdc-checkbox">
 							<input id="nodownload" class="mdc-checkbox__native-control" type="checkbox" checked>
 							<div class="mdc-checkbox__background"></div>
