@@ -705,7 +705,7 @@ embed.addEventListener("click", () => {
 			};
 			embedProperties.querySelector("#controls").addEventListener("input", evt => {
 				if(evt.target.checked) {
-					controlsList.classList.add("hidden");
+					controlsList.classList.remove("hidden");
 					if(noDownload.checked) {
 						embed.controlsList.add("nodownload");
 					}
@@ -716,7 +716,7 @@ embed.addEventListener("click", () => {
 						embed.controlsList.add("nofullscreen");
 					}
 				} else {
-					controlsList.classList.remove("hidden");
+					controlsList.classList.add("hidden");
 					embed.removeAttribute("controlslist");
 				}
 				input(evt);
