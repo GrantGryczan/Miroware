@@ -619,7 +619,7 @@ embed.addEventListener("click", () => {
 	const item = items.querySelector(".item.selected")._item;
 	let dialog;
 	const codeField = html`
-		<div id="codeField" class="mdc-text-field mdc-text-field--textarea">
+		<div class="mdc-text-field mdc-text-field--textarea">
 			<textarea id="code" class="mdc-text-field__input" title="Click to copy" rows="4" readonly></textarea>
 			<label class="mdc-floating-label" for="code">HTML Code</label>
 		</div>
@@ -633,7 +633,9 @@ embed.addEventListener("click", () => {
 	let embedProperties;
 	if(item.type === "application/x-shockwave-flash") {
 		embedProperties = html`
-			[ Soon... ]
+			<div>
+				[ Soon... ]
+			</div>
 		`;
 		dialog = new Miro.Dialog("Embed", embedProperties);
 	} else {

@@ -243,9 +243,6 @@
 	margin-right: 12px;
 	overflow: auto;
 }
-#codeField {
-	margin-bottom: 8px;
-}
 #code {
 	cursor: pointer;
 }
