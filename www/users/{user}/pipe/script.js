@@ -645,7 +645,7 @@ embed.addEventListener("click", () => {
 			embedProperties.appendChild(html`
 				<div class="mdc-form-field margined">
 					<div class="mdc-checkbox">
-						<input id="controls" class="mdc-checkbox__native-control" type="checkbox">
+						<input id="controls" class="mdc-checkbox__native-control" type="checkbox" checked>
 						<div class="mdc-checkbox__background"></div>
 					</div>
 					<label for="controls">Controls</label>
@@ -672,7 +672,7 @@ embed.addEventListener("click", () => {
 					<label for="muted">Muted</label>
 				</div><br>
 			`);
-			const change = evt => {
+			const input = evt => {
 				if(embed[evt.target.id] = evt.target.checked) {
 					embed.setAttribute(evt.target.id, "");
 				} else {
@@ -680,11 +680,10 @@ embed.addEventListener("click", () => {
 				}
 				updateCode();
 			};
-			const controls = embedProperties.querySelector("#controls");
-			controls.addEventListener("change", change);
-			embedProperties.querySelector("#loop").addEventListener("change", change);
-			embedProperties.querySelector("#autoplay").addEventListener("change", change);
-			embedProperties.querySelector("#muted").addEventListener("change", change);
+			embedProperties.querySelector("#controls").addEventListener("input", input);
+			embedProperties.querySelector("#loop").addEventListener("input", input);
+			embedProperties.querySelector("#autoplay").addEventListener("input", input);
+			embedProperties.querySelector("#muted").addEventListener("input", input);
 			controls.checked = true;
 			if(typeAudio) {
 				embed = html`<audio></audio>`;
@@ -727,6 +726,9 @@ embed.addEventListener("click", () => {
 			}
 		}
 		embed.src = item.url;
+		if(typeAudio) {
+			embed.controls = true;
+		}
 		const updateCode = () => {
 			code.value = embed.outerHTML.replace(/=""/g, "");
 		};
