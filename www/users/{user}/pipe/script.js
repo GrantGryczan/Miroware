@@ -538,7 +538,7 @@ const showProperty = key => {
 	input.type = input._type;
 };
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
-window.updateProperties = () => {
+const updateProperties = () => {
 	for (const propertyElement of Object.values(property)) {
 		propertyElement.classList.add("hidden");
 	}
@@ -614,6 +614,22 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	properties.elements.url.select();
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
+});
+embed.addEventListener("click", () => {
+	const {type} = items.querySelector(".item.selected")._item;
+	let body;
+	if(type.startsWith("image/")) {
+		body = html`image`;
+	} else if(type.startsWith("audio/")) {
+		body = html`audio`;
+	} else if(type.startsWith("video/")) {
+		body = html`video`;
+	} else if(type === "text/html") {
+		body = html`html`;
+	} else if(type === "application/x-shockwave-flash") {
+		body = html`flash`;
+	}
+	new Miro.Dialog("Embed", body);
 });
 updateProperties();
 if (Miro.data.isMe) {
