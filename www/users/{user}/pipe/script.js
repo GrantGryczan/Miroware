@@ -649,6 +649,7 @@ embed.addEventListener("click", () => {
 			}
 			updateCode();
 		};
+		let controlsList;
 		if(typeMedia) {
 			embedProperties.appendChild(html`
 				<div class="mdc-form-field margined">
@@ -704,7 +705,14 @@ embed.addEventListener("click", () => {
 				}
 				updateCode();
 			};
-			embedProperties.querySelector("#controls").addEventListener("input", input);
+			controlsList = embedProperties.querySelector("#controlsList");
+			embedProperties.querySelector("#controls").addEventListener("input", evt => {
+				controlsList.classList[evt.target.checked ? "add" : "remove"]("hidden");
+				if(!evt.target.checked) {
+					embed.removeAttribute("controlslist");
+				}
+				input(evt);
+			});
 			embedProperties.querySelector("#loop").addEventListener("input", input);
 			embedProperties.querySelector("#autoplay").addEventListener("input", input);
 			embedProperties.querySelector("#muted").addEventListener("input", input);
@@ -741,7 +749,7 @@ embed.addEventListener("click", () => {
 			embedProperties.querySelector("#height").addEventListener("input", input);
 			if(typeVideo) {
 				embed = document.createElement("video");
-				embedProperties.querySelector("#controlsList").appendChild(html`
+				controlsList.appendChild(html`
 					<div class="mdc-form-field">
 						<div class="mdc-checkbox">
 							<input id="nofullscreen" class="mdc-checkbox__native-control" type="checkbox">
