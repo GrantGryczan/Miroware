@@ -8,14 +8,14 @@ if (this.token) {
 		});
 	} else {
 		this.value = {
-			error: "The scope of the specified token does not suffice this action."
+			error: "The scope of the provided token does not suffice this action."
 		};
 		this.status = 403;
 		this.done();
 	}
 } else {
 	this.value = {
-		error: "No authorization credentials were specified."
+		error: "No authorization credentials were provided."
 	};
 	this.status = 401;
 	this.done();

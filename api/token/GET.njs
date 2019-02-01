@@ -7,7 +7,7 @@ if (this.token) {
 	}
 } else {
 	this.value = {
-		error: "No authorization credentials were specified."
+		error: "No authorization credentials were provided."
 	};
 	this.status = 401;
 }

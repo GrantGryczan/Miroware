@@ -230,7 +230,7 @@ client.on("message", async msg => {
 								msg.channel.send(`${msg.author} That's not a valid hex color code! If you don't know how hex color codes work, Google has a color picker built into the search page if you search "color picker".`).catch(errSendMessages(msg));
 							}
 						} else {
-							msg.channel.send(`${msg.author} No color code was specified.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} No color code was provided.`).catch(errSendMessages(msg));
 						}
 					} else if (content[0] === "reset") {
 						removeColor(member).then(() => {
@@ -296,7 +296,7 @@ client.on("message", async msg => {
 							msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
 						}
 					} else {
-						msg.channel.send(`${msg.author} No role name was specified.`).catch(errSendMessages(msg));
+						msg.channel.send(`${msg.author} No role name was provided.`).catch(errSendMessages(msg));
 					}
 				} else if (content[0] === "remove") {
 					if (content[1]) {
@@ -324,7 +324,7 @@ client.on("message", async msg => {
 							msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
 						}
 					} else {
-						msg.channel.send(`${msg.author} No role name was specified.`).catch(errSendMessages(msg));
+						msg.channel.send(`${msg.author} No role name was provided.`).catch(errSendMessages(msg));
 					}
 				} else if (perm) {
 					if (content[0] === "open") {
@@ -342,13 +342,13 @@ client.on("message", async msg => {
 								save();
 							}
 						} else {
-							msg.channel.send(`${msg.author} No group name was specified.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} No group name was provided.`).catch(errSendMessages(msg));
 						}
 					} else if (content[0] === "group") {
 						if (content[1]) {
 							const spaceIndex2 = content[1].indexOf(" ");
 							if (spaceIndex2 === -1) {
-								msg.channel.send(`${msg.author} No role name was specified.`).catch(errSendMessages(msg));
+								msg.channel.send(`${msg.author} No role name was provided.`).catch(errSendMessages(msg));
 							} else {
 								const group = data.guilds[msg.guild.id][1][content[1].slice(0, spaceIndex2)];
 								if (group) {
@@ -371,7 +371,7 @@ client.on("message", async msg => {
 								}
 							}
 						} else {
-							msg.channel.send(`${msg.author} No group name was specified.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} No group name was provided.`).catch(errSendMessages(msg));
 						}
 					} else if (content[0] === "ungroup") {
 						if (content[1]) {
@@ -387,12 +387,12 @@ client.on("message", async msg => {
 								msg.channel.send(`${msg.author} No role was found by that name.`).catch(errSendMessages(msg));
 							}
 						} else {
-							msg.channel.send(`${msg.author} No role was specified.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} No role was provided.`).catch(errSendMessages(msg));
 						}
 					} else if (content[0] === "limit") {
 						content[1] = content[1].split(" ", 2);
 						if (content[1].length < 2) {
-							msg.channel.send(`${msg.author} No ${content[1][0] ? "limit" : "group"} was specified.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} No ${content[1][0] ? "limit" : "group"} was provided.`).catch(errSendMessages(msg));
 						} else if (isNaN(content[1][1])) {
 							msg.channel.send(`${msg.author} That is not a valid number.`).catch(errSendMessages(msg));
 						} else if (data.guilds[msg.guild.id][1][content[1][0]]) {
@@ -405,7 +405,7 @@ client.on("message", async msg => {
 					} else if (content[0] === "rename") {
 						content[1] = content[1].split(" ");
 						if (content[1].length < 2) {
-							msg.channel.send(`${msg.author} No group name was specified.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} No group name was provided.`).catch(errSendMessages(msg));
 						} else if (content[1].length > 2) {
 							msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(errSendMessages(msg));
 						} else if (data.guilds[msg.guild.id][1][content[1][1]]) {
@@ -428,7 +428,7 @@ client.on("message", async msg => {
 								msg.channel.send(`${msg.author} No group was found by that name.`).catch(errSendMessages(msg));
 							}
 						} else {
-							msg.channel.send(`${msg.author} No group was specified.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} No group was provided.`).catch(errSendMessages(msg));
 						}
 					} else {
 						sendHelp(msg, perm);
