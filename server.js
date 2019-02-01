@@ -537,14 +537,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							$pull: {
 								pouch: {
 									date: {
-										$gt: expiry
+										$lte: expiry
 									}
 								}
 							}
 						};
 						const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
 						const token = context.user.pouch.find(token => token.value.buffer.equals(hash));
-						if (token && token.date < expiry) {
+						if (token && token.date > expiry) {
 							context.token = token;
 							context.update.$set = {
 								updated: context.now,
