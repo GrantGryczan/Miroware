@@ -58,7 +58,6 @@ const s3 = new AWS.S3({
 							res.status(err.statusCode).send(err.message);
 						} else {
 							res.set("Content-Type", item.type).set("Content-Length", String(data.Body.length)).send(data.Body);
-							console.log(new Date(), req.url);
 						}
 					});
 				} else {
@@ -90,7 +89,10 @@ const s3 = new AWS.S3({
 				res.status(response.statusCode).set("Content-Type", req.query.download === undefined ? response.headers["content-type"] : "application/octet-stream").set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src pipe.miroware.io miro.gg 'unsafe-inline' 'unsafe-eval'");
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
-			console.log(new Date(), `Referrer: ${req.get("Referrer")}`);
+			const referrer = req.get("Referrer");
+			if(referrer && !referrer.startsWith("https://miroware.io/") && !referrer.startsWith("https://pipe.miroware.io/") && !referrer.startsWith("https://mspfa.com/")) {
+				console.log(referrer);
+			}
 		}
 	});
 	http.createServer(app).listen(8082);
