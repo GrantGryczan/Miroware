@@ -212,13 +212,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			to: `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`,
 			subject: "Miroware / Account Verification",
 			text: "Verify your Miroware account.",
-			html: html`
-				Click the following link to verify your Miroware account.<br>
-				<a href="${verifyLink}">${verifyLink}</a>
-				<p>
-					<i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i>
-				</p>
-			`
+			html: html` Click the following link to verify your Miroware account.<br> <a href="${verifyLink}">${verifyLink}</a> <p> <i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i> </p> `
 		});
 	};
 	const connect = (context, user) => {
@@ -523,6 +517,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					} catch (err) {
 						if (context.req.signedCookies.auth) {
 							context.res.clearCookie("auth", clearCookieOptions);
+							context.user = null;
 						} else {
 							context.value = {
 								error: err.message
@@ -564,6 +559,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						} else {
 							if (context.req.signedCookies.auth) {
 								context.res.clearCookie("auth", clearCookieOptions);
+								context.user = null;
 							} else {
 								context.value = {
 									error: "Authentication failed."
@@ -575,6 +571,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					} else {
 						if (context.req.signedCookies.auth) {
 							context.res.clearCookie("auth", clearCookieOptions);
+							context.user = null;
 						} else {
 							context.value = {
 								error: "Authentication failed."
@@ -590,7 +587,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		}],
 		loadEnd: [async context => {
-			if (context.depth === 1 && context.update) {
+			if (context.depth === 1 && context.user && context.update) {
 				users.updateOne(context.userFilter, context.update);
 				if (context.updatePouch) {
 					users.updateOne(context.pouchFilter, context.updatePouch);
