@@ -4,6 +4,7 @@ if(!this.user || this.user.role !== 0) {
 	};
 	this.status = 403;
 	this.done();
+	return;
 }
 const {user} = await parseUser(this);
 addToken(this, user);
