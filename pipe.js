@@ -90,6 +90,7 @@ const s3 = new AWS.S3({
 				res.status(response.statusCode).set("Content-Type", req.query.download === undefined ? response.headers["content-type"] : "application/octet-stream").set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src pipe.miroware.io miro.gg 'unsafe-inline' 'unsafe-eval'");
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
+			console.log(new Date(), `Referrer: ${req.get("Referrer")}`);
 		}
 	});
 	http.createServer(app).listen(8082);
