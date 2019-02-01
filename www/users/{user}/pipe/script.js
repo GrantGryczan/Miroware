@@ -59,6 +59,8 @@ const getName = name => path ? name.slice(path.length + 1) : name;
 const applyPath = name => (path ? `${path}/` : "") + name;
 const encodedSlashes = /%2F/g;
 const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
+const quotationMarks = /\"/g;
+const apostrophes = /\'/g;
 const openingParentheses = /\(/g;
 const closingParentheses = /\)/g;
 const pipe = [];
@@ -145,7 +147,7 @@ const PipeItem = class PipeItem {
 	}
 	updateThumbnail() {
 		if (this.type.startsWith("image/")) {
-			this.thumbnailElement.style.backgroundImage = `url(${this.url.replace(openingParentheses, "%28").replace(closingParentheses, "%29")})`;
+			this.thumbnailElement.style.backgroundImage = `url(${this.url.replace(quotationMarks, "%22").replace(apostrophes, "%27").replace(openingParentheses, "%28").replace(closingParentheses, "%29")})`;
 		} else {
 			this.thumbnailElement.style.backgroundImage = "";
 			this.thumbnailElement.textContent = this.iconElement.textContent;
