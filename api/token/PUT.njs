@@ -1,5 +1,5 @@
 if (this.token) {
-	if (this.token.scope <= 0) {
+	if (this.token.scope === 0) {
 		connect(this, this.user).then(data => {
 			validateConnection(this, data).then(() => {
 				this.updatePouch.$set["pouch.$.super"] = this.now;
