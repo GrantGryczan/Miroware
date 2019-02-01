@@ -1,6 +1,6 @@
 const {user, isMe} = await parseUser(this);
 if (isMe) {
-	if (this.now - this.token.super < 300000) {
+	if (this.now - this.token.super < TOKEN_SUPER_COOLDOWN) {
 		if (this.user.connections.some(connection => connection.id === this.params.id)) {
 			if (this.user.connections.length === 1) {
 				this.value = {

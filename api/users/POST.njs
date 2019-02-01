@@ -72,9 +72,10 @@ if (testEmail(this.req.body.email)) {
 				salt,
 				pouch: [{
 					value: youKnow.crypto.hash(token, salt),
-					scope: 0,
-					expire: this.now + cookieOptions.maxAge,
-					super: this.now
+					date: this.now,
+					role: 0,
+					super: this.now,
+					ip: this.req.realIP
 				}],
 				connections: [connection],
 				created: this.now,

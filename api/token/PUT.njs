@@ -1,5 +1,5 @@
 if (this.token) {
-	if (this.token.scope === 0) {
+	if (this.token.role === 0) {
 		connect(this, this.user).then(data => {
 			validateConnection(this, data).then(() => {
 				this.updatePouch.$set["pouch.$.super"] = this.now;
@@ -8,7 +8,7 @@ if (this.token) {
 		});
 	} else {
 		this.value = {
-			error: "The scope of the provided token does not suffice this action."
+			error: "The role of the provided token does not suffice this action."
 		};
 		this.status = 403;
 		this.done();

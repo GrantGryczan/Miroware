@@ -1,6 +1,6 @@
 const {user, isMe} = await parseUser(this);
 if (isMe) {
-	if (this.now - this.token.super < 300000) {
+	if (this.now - this.token.super < TOKEN_SUPER_COOLDOWN) {
 		this.value = user.connections.map(sanitizeConnection);
 	} else {
 		this.value = {

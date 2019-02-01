@@ -1,9 +1,10 @@
 if (this.token) {
 	this.value = {
-		scope: this.token.scope
+		role: this.token.role,
+		ip: this.token.ip
 	};
-	if (this.token.scope === 0) {
-		this.value.super = this.now - this.token.super < 300000;
+	if (this.token.role === 0) {
+		this.value.super = this.now - this.token.super < TOKEN_SUPER_COOLDOWN;
 	}
 } else {
 	this.value = {

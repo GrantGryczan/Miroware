@@ -1,6 +1,6 @@
 const {user, isMe} = await parseUser(this);
 if (isMe) {
-	if (this.now - this.token.super < 300000) {
+	if (this.now - this.token.super < TOKEN_SUPER_COOLDOWN) {
 		this.update = false;
 		const fileItems = user.pipe.filter(pipeFiles);
 		if (fileItems.length) {

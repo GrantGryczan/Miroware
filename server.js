@@ -127,6 +127,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	})).db("web");
 	const users = db.collection("users");
 	const domain = production ? "miroware.io" : "localhost:8081";
+	const TOKEN_SUPER_COOLDOWN = 300000;
 	const cookieOptions = {
 		domain: `.${production ? domain : "localhost"}`,
 		path: "/",
@@ -507,6 +508,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					}
 				}
 			}
+			req.realIP = req.get("CF-Connecting-IP");
 			req.next();
 		}, cookieParser(youKnow.cookie)],
 		loadStart: [async context => {
@@ -530,18 +532,19 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						}
 					}
 					if (context.user) {
+						const expiry = context.now - cookieOptions.maxAge;
 						context.update = {
 							$pull: {
 								pouch: {
-									expire: {
-										$lte: context.now
+									date: {
+										$gt: expiry
 									}
 								}
 							}
 						};
 						const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
 						const token = context.user.pouch.find(token => token.value.buffer.equals(hash));
-						if (token && context.now < token.expire) {
+						if (token && token.date < expiry) {
 							context.token = token;
 							context.update.$set = {
 								updated: context.now,
@@ -552,7 +555,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							};
 							context.updatePouch = {
 								$set: {
-									"pouch.$.expire": context.now + cookieOptions.maxAge
+									"pouch.$.date": context.now
 								}
 							};
 							if (context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {
