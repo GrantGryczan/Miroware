@@ -590,7 +590,7 @@ const updateProperties = () => {
 					previewAudio.classList.add("hidden");
 					previewVideo.classList.remove("hidden");
 					property.preview.classList.remove("hidden");
-				} else if(item.type !== "text/html" && item.type !== "application/x-shockwave-flash") {
+				} else if(item.type !== "text/html") {
 					showEmbedAction = false;
 				}
 				if (showEmbedAction) {
@@ -617,7 +617,155 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 });
 embed.addEventListener("click", () => {
 	const item = items.querySelector(".item.selected")._item;
-	let dialog;
+	const embedPreview = html`<div id="embedPreview"></div>`;
+	const embedProperties = document.createElement("div");
+	let embed;
+	const typeAudio = item.type.startsWith("audio/");
+	const typeVideo = item.type.startsWith("video/");
+	const typeMedia = typeAudio || typeVideo;
+	if(typeMedia) {
+		embedProperties.appendChild(html`
+			<div class="mdc-form-field margined">
+				<div class="mdc-checkbox">
+					<input id="controls" class="mdc-checkbox__native-control" type="checkbox" checked>
+					<div class="mdc-checkbox__background"></div>
+				</div>
+				<label for="controls">Controls</label>
+			</div><br>
+			<div id="controlsList">
+				<div class="mdc-form-field">
+					<div class="mdc-checkbox">
+						<input id="nodownload" class="mdc-checkbox__native-control" type="checkbox" checked>
+						<div class="mdc-checkbox__background"></div>
+					</div>
+					<label for="nodownload">Disable download</label>
+				</div><br>
+				<div class="mdc-form-field">
+					<div class="mdc-checkbox">
+						<input id="noremoteplayback" class="mdc-checkbox__native-control" type="checkbox">
+						<div class="mdc-checkbox__background"></div>
+					</div>
+					<label for="noremoteplayback">Disable remote playback</label>
+				</div><br>
+			</div>
+			<div class="mdc-form-field">
+				<div class="mdc-checkbox">
+					<input id="loop" class="mdc-checkbox__native-control" type="checkbox">
+					<div class="mdc-checkbox__background"></div>
+				</div>
+				<label for="loop">Loop</label>
+			</div><br>
+			<div class="mdc-form-field" title="Some browsers may not autoplay media unless it is also muted.">
+				<div class="mdc-checkbox">
+					<input id="autoplay" class="mdc-checkbox__native-control" type="checkbox">
+					<div class="mdc-checkbox__background"></div>
+				</div>
+				<label for="autoplay">Autoplay</label>
+			</div><br>
+			<div class="mdc-form-field">
+				<div class="mdc-checkbox">
+					<input id="muted" class="mdc-checkbox__native-control" type="checkbox">
+					<div class="mdc-checkbox__background"></div>
+				</div>
+				<label for="muted">Muted</label>
+			</div><br>
+		`);
+		const controlsList = embedProperties.querySelector("#controlsList");
+		const noDownload = controlsList.querySelector("#nodownload");
+		const noRemotePlayback = controlsList.querySelector("#noremoteplayback");
+		const input = evt => {
+			if(embed[evt.target.id] = evt.target.checked) {
+				embed.setAttribute(evt.target.id, "");
+			} else {
+				embed.removeAttribute(evt.target.id);
+			}
+			updateCode();
+		};
+		embedProperties.querySelector("#controls").addEventListener("input", evt => {
+			if(evt.target.checked) {
+				controlsList.classList.remove("hidden");
+				if(noDownload.checked) {
+					embed.controlsList.add("nodownload");
+				}
+				if(noRemotePlayback.checked) {
+					embed.controlsList.add("noremoteplayback");
+				}
+				if(noFullscreen && noFullscreen.checked) {
+					embed.controlsList.add("nofullscreen");
+				}
+			} else {
+				controlsList.classList.add("hidden");
+				embed.removeAttribute("controlslist");
+			}
+			input(evt);
+		});
+		embedProperties.querySelector("#loop").addEventListener("input", input);
+		embedProperties.querySelector("#autoplay").addEventListener("input", input);
+		embedProperties.querySelector("#muted").addEventListener("input", input);
+		const inputControls = evt => {
+			if(evt.target.checked) {
+				embed.controlsList.add(evt.target.id);
+			} else {
+				embed.controlsList.remove(evt.target.id);
+				if(!embed.controlsList.length) {
+					embed.removeAttribute("controlslist");
+				}
+			}
+			updateCode();
+		};
+		noDownload.addEventListener("input", inputControls);
+		noRemotePlayback.addEventListener("input", inputControls);
+		let noFullscreen;
+		if(typeAudio) {
+			embed = document.createElement("audio");
+		} else {
+			embed = document.createElement("video");
+			controlsList.appendChild(html`
+				<div class="mdc-form-field">
+					<div class="mdc-checkbox">
+						<input id="nofullscreen" class="mdc-checkbox__native-control" type="checkbox">
+						<div class="mdc-checkbox__background"></div>
+					</div>
+					<label for="nofullscreen">Disable fullscreen</label>
+				</div><br>
+			`);
+			(noFullscreen = controlsList.querySelector("#nofullscreen")).addEventListener("input", inputControls);
+		}
+		embed.controls = true;
+		embed.controlsList.add("nodownload");
+	}
+	if(!typeAudio) {
+		embedProperties.insertBefore(html`
+			<div class="mdc-text-field margined">
+				<input id="width" class="mdc-text-field__input" type="number" min="0">
+				<label class="mdc-floating-label" for="width">Width</label>
+				<div class="mdc-line-ripple"></div>
+			</div><br>
+			<div class="mdc-text-field">
+				<input id="height" class="mdc-text-field__input" type="number" min="0">
+				<label class="mdc-floating-label" for="height">Height</label>
+				<div class="mdc-line-ripple"></div>
+			</div><br>
+		`, embedProperties.firstChild);
+		const input = evt => {
+			if(evt.target.checkValidity()) {
+				if(evt.target.value) {
+					embed[evt.target.id] = evt.target.value;
+				} else {
+					embed.removeAttribute(evt.target.id);
+				}
+				updateCode();
+			}
+		};
+		embedProperties.querySelector("#width").addEventListener("input", input);
+		embedProperties.querySelector("#height").addEventListener("input", input);
+		if(item.type.startsWith("image/")) {
+			embed = document.createElement("img");
+		} else if(item.type === "text/html") {
+			embed = html`<iframe style="border: 0;"></iframe>`;
+		}
+	}
+	embed.src = item.url;
 	const codeField = html`
 		<div class="mdc-text-field mdc-text-field--textarea">
 			<textarea id="code" class="mdc-text-field__input" title="Click to copy" rows="4" cols="64" readonly></textarea>
@@ -630,176 +778,15 @@ embed.addEventListener("click", () => {
 		document.execCommand("copy");
 		Miro.snackbar("Copied code to clipboard");
 	});
-	const embedPreview = html`<div id="embedPreview"></div>`;
-	const embedProperties = document.createElement("div");
-	if(item.type === "application/x-shockwave-flash") {
-		embedPreview.appendChild(document.createTextNode("Previews are not available for Flash embeds due to security concerns."));
-		embedProperties.appendChild(html`
-			Flash shit
-		`);
-	} else {
-		let embed;
-		const typeAudio = item.type.startsWith("audio/");
-		const typeVideo = item.type.startsWith("video/");
-		const typeMedia = typeAudio || typeVideo;
-		let inputControls;
-		let controlsList;
-		let noFullscreen;
-		if(typeMedia) {
-			embedProperties.appendChild(html`
-				<div class="mdc-form-field margined">
-					<div class="mdc-checkbox">
-						<input id="controls" class="mdc-checkbox__native-control" type="checkbox" checked>
-						<div class="mdc-checkbox__background"></div>
-					</div>
-					<label for="controls">Controls</label>
-				</div><br>
-				<div id="controlsList">
-					<div class="mdc-form-field">
-						<div class="mdc-checkbox">
-							<input id="nodownload" class="mdc-checkbox__native-control" type="checkbox" checked>
-							<div class="mdc-checkbox__background"></div>
-						</div>
-						<label for="nodownload">Disable download</label>
-					</div><br>
-					<div class="mdc-form-field">
-						<div class="mdc-checkbox">
-							<input id="noremoteplayback" class="mdc-checkbox__native-control" type="checkbox">
-							<div class="mdc-checkbox__background"></div>
-						</div>
-						<label for="noremoteplayback">Disable remote playback</label>
-					</div><br>
-				</div>
-				<div class="mdc-form-field">
-					<div class="mdc-checkbox">
-						<input id="loop" class="mdc-checkbox__native-control" type="checkbox">
-						<div class="mdc-checkbox__background"></div>
-					</div>
-					<label for="loop">Loop</label>
-				</div><br>
-				<div class="mdc-form-field" title="Some browsers may not autoplay media unless it is also muted.">
-					<div class="mdc-checkbox">
-						<input id="autoplay" class="mdc-checkbox__native-control" type="checkbox">
-						<div class="mdc-checkbox__background"></div>
-					</div>
-					<label for="autoplay">Autoplay</label>
-				</div><br>
-				<div class="mdc-form-field">
-					<div class="mdc-checkbox">
-						<input id="muted" class="mdc-checkbox__native-control" type="checkbox">
-						<div class="mdc-checkbox__background"></div>
-					</div>
-					<label for="muted">Muted</label>
-				</div><br>
-			`);
-			controlsList = embedProperties.querySelector("#controlsList");
-			const noDownload = controlsList.querySelector("#nodownload");
-			const noRemotePlayback = controlsList.querySelector("#noremoteplayback");
-			const input = evt => {
-				if(embed[evt.target.id] = evt.target.checked) {
-					embed.setAttribute(evt.target.id, "");
-				} else {
-					embed.removeAttribute(evt.target.id);
-				}
-				updateCode();
-			};
-			embedProperties.querySelector("#controls").addEventListener("input", evt => {
-				if(evt.target.checked) {
-					controlsList.classList.remove("hidden");
-					if(noDownload.checked) {
-						embed.controlsList.add("nodownload");
-					}
-					if(noRemotePlayback.checked) {
-						embed.controlsList.add("noremoteplayback");
-					}
-					if(noFullscreen && noFullscreen.checked) {
-						embed.controlsList.add("nofullscreen");
-					}
-				} else {
-					controlsList.classList.add("hidden");
-					embed.removeAttribute("controlslist");
-				}
-				input(evt);
-			});
-			embedProperties.querySelector("#loop").addEventListener("input", input);
-			embedProperties.querySelector("#autoplay").addEventListener("input", input);
-			embedProperties.querySelector("#muted").addEventListener("input", input);
-			inputControls = evt => {
-				if(evt.target.checked) {
-					embed.controlsList.add(evt.target.id);
-				} else {
-					embed.controlsList.remove(evt.target.id);
-					if(!embed.controlsList.length) {
-						embed.removeAttribute("controlslist");
-					}
-				}
-				updateCode();
-			};
-			noDownload.addEventListener("input", inputControls);
-			noRemotePlayback.addEventListener("input", inputControls);
-			if(typeAudio) {
-				embed = document.createElement("audio");
-			}
-		}
-		if(!typeAudio) {
-			embedProperties.insertBefore(html`
-				<div class="mdc-text-field margined">
-					<input id="width" class="mdc-text-field__input" type="number" min="0">
-					<label class="mdc-floating-label" for="width">Width</label>
-					<div class="mdc-line-ripple"></div>
-				</div><br>
-				<div class="mdc-text-field">
-					<input id="height" class="mdc-text-field__input" type="number" min="0">
-					<label class="mdc-floating-label" for="height">Height</label>
-					<div class="mdc-line-ripple"></div>
-				</div><br>
-			`, embedProperties.firstChild);
-			const input = evt => {
-				if(evt.target.checkValidity()) {
-					if(evt.target.value) {
-						embed[evt.target.id] = evt.target.value;
-					} else {
-						embed.removeAttribute(evt.target.id);
-					}
-					updateCode();
-				}
-			};
-			embedProperties.querySelector("#width").addEventListener("input", input);
-			embedProperties.querySelector("#height").addEventListener("input", input);
-			if(typeVideo) {
-				embed = document.createElement("video");
-				controlsList.appendChild(html`
-					<div class="mdc-form-field">
-						<div class="mdc-checkbox">
-							<input id="nofullscreen" class="mdc-checkbox__native-control" type="checkbox">
-							<div class="mdc-checkbox__background"></div>
-						</div>
-						<label for="nofullscreen">Disable fullscreen</label>
-					</div><br>
-				`);
-				(noFullscreen = controlsList.querySelector("#nofullscreen")).addEventListener("input", inputControls);
-			} else if(item.type.startsWith("image/")) {
-				embed = document.createElement("img");
-			} else if(item.type === "text/html") {
-				embed = html`<iframe style="border: 0;"></iframe>`;
-			}
-		}
-		embed.src = item.url;
-		if(typeMedia) {
-			embed.controls = true;
-			embed.controlsList.add("nodownload");
-		}
-		const emptyValues = /=""/g;
-		const updateCode = () => {
-			code.value = embed.outerHTML.replace(emptyValues, "");
-		};
-		updateCode();
-		embedPreview.appendChild(embed);
-	}
-	dialog = new Miro.Dialog("Embed", embedPreview);
+	const emptyValues = /=""/g;
+	const updateCode = () => {
+		code.value = embed.outerHTML.replace(emptyValues, "");
+	};
+	updateCode();
+	embedPreview.appendChild(embed);
+	new Miro.Dialog("Embed", embedPreview).element.classList.add("embedDialog");
 	embedPreview.parentNode.appendChild(embedProperties);
 	embedProperties.insertBefore(codeField, embedProperties.firstChild);
-	dialog.element.classList.add("embedDialog");
 });
 updateProperties();
 if (Miro.data.isMe) {
