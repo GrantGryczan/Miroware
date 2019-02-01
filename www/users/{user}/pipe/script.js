@@ -618,7 +618,7 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 embed.addEventListener("click", () => {
 	const item = items.querySelector(".item.selected")._item;
 	const embedPreview = html`<div id="embedPreview"></div>`;
-	const embedProperties = document.createElement("div");
+	const embedProperties = html`<div id="embedProperties"></div>`;
 	let embed;
 	const typeAudio = item.type.startsWith("audio/");
 	const typeVideo = item.type.startsWith("video/");
@@ -670,9 +670,6 @@ embed.addEventListener("click", () => {
 				<label for="muted">Muted</label>
 			</div><br>
 		`);
-		const controlsList = embedProperties.querySelector("#controlsList");
-		const noDownload = controlsList.querySelector("#nodownload");
-		const noRemotePlayback = controlsList.querySelector("#noremoteplayback");
 		const input = evt => {
 			if(embed[evt.target.id] = evt.target.checked) {
 				embed.setAttribute(evt.target.id, "");
@@ -681,6 +678,10 @@ embed.addEventListener("click", () => {
 			}
 			updateCode();
 		};
+		const controlsList = embedProperties.querySelector("#controlsList");
+		const noDownload = controlsList.querySelector("#nodownload");
+		const noRemotePlayback = controlsList.querySelector("#noremoteplayback");
+		let noFullscreen;
 		embedProperties.querySelector("#controls").addEventListener("input", evt => {
 			if(evt.target.checked) {
 				controlsList.classList.remove("hidden");
@@ -715,7 +716,6 @@ embed.addEventListener("click", () => {
 		};
 		noDownload.addEventListener("input", inputControls);
 		noRemotePlayback.addEventListener("input", inputControls);
-		let noFullscreen;
 		if(typeAudio) {
 			embed = document.createElement("audio");
 		} else {
