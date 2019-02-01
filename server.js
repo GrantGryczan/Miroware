@@ -301,7 +301,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					context.done();
 				} else if (user) {
 					const hash = youKnow.crypto.hash(connection[1], user.salt.buffer);
-					const foundConnection = user.connections.find(foundConnection => foundConnection.service === "password" && foundConnection.hash.buffer.equals(hash));
+					const foundConnection = user.connections.find(connection2 => connection2.service === "password" && connection2.hash.buffer.equals(hash));
 					if (foundConnection) {
 						if (foundConnection.once) {
 							users.updateOne({
@@ -314,6 +314,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 								}
 							});
 						}
+						console.log(foundConnection);
 						resolve({
 							connection,
 							id: foundConnection.id,
