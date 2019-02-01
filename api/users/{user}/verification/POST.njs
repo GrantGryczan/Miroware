@@ -1,5 +1,5 @@
-const {user, isMe} = await parseUser(this);
-if (isMe) {
+const {user, permitted} = await parseUser(this);
+if (permitted) {
 	if (user.emailCode) {
 		verifyEmail(user, this.update.$set);
 	} else {

@@ -1,5 +1,5 @@
-const {user, isMe} = await parseUser(this);
-if (isMe) {
+const {user, permitted} = await parseUser(this);
+if (permitted) {
 	if (this.now - this.token.super < 300000) {
 		connect(this).then(data => {
 			if (this.user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {

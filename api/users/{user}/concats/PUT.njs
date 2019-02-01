@@ -1,5 +1,5 @@
-const {user, isMe} = await parseUser(this);
-if (isMe) {
+const {user, permitted} = await parseUser(this);
+if (permitted) {
 	const found = this.user.concats.find(item => item.sub === this.req.query.sub && item.val === this.req.query.val);
 	if (found) {
 		const concat = await sanitizeConcat(this, true);

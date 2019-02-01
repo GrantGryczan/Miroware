@@ -1,5 +1,5 @@
-const {user, isMe} = await parseUser(this);
-if (isMe) {
+const {user, permitted} = await parseUser(this);
+if (permitted) {
 	if (this.now - this.token.super < 300000) {
 		this.update = false;
 		const fileItems = user.pipe.filter(pipeFiles);

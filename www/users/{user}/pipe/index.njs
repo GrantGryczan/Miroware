@@ -3,8 +3,8 @@ this.image = "/pipe/images/icon/full.png";
 this.icon = "/pipe/images/icon/cover.png";
 this.showAds = true;
 let {user} = this;
-const isMe = user && this.params.user === String(user._id);
-if (!isMe) {
+const permitted = user && this.params.user === String(user._id);
+if (!permitted) {
 	let userID;
 	try {
 		userID = ObjectID(this.params.user);
@@ -23,7 +23,7 @@ if (user) {
 			id: user._id,
 			name: user.name
 		},
-		isMe
+		permitted
 	}
 	this.description = `View ${user.name}'s Pipe.`;
 } else {
@@ -38,7 +38,7 @@ this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
 				<div class="panel side left">
-					<div class="pane${isMe ? "" : " hidden"}">
+					<div class="pane${permitted ? "" : " hidden"}">
 						<div id="creation">
 							<button id="addFiles" class="mdc-button mdc-button--raised spaced mdc-ripple" title="Upload file(s)">
 								<i class="mdc-button__icon material-icons">file_upload</i>Upload
@@ -77,14 +77,14 @@ this.value += html`
 					</div>
 					<div class="property hidden" data-key="name">
 						<div class="mdc-text-field">
-							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^/]+$" autocomplete="off" spellcheck="false" ${isMe ? "required" : "readonly"}>
+							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^/]+$" autocomplete="off" spellcheck="false" ${permitted ? "required" : "readonly"}>
 							<label class="mdc-floating-label" for="name">Name</label>
 							<div class="mdc-line-ripple"></div>
 						</div><br>
 					</div>
 					<div class="property hidden" data-key="type">
 						<div class="mdc-text-field">
-							<input id="type" name="type" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?=]+$" spellcheck="false" ${isMe ? "required" : "readonly"}>
+							<input id="type" name="type" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?.=]+/[^\\x00-\\x20()<>@,;:\\\\&quot;/[\\]?=]+$" spellcheck="false" ${permitted ? "required" : "readonly"}>
 							<label class="mdc-floating-label" for="type">Type</label>
 							<div class="mdc-line-ripple"></div>
 						</div><br>
@@ -110,7 +110,7 @@ this.value += html`
 						</div><br>
 					</div>
 					<div class="property hidden" data-key="actions">
-						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><a id="download" class="mdc-icon-button material-icons spaced mdc-ripple" title="Download" target="_blank" draggable="false" ondragstart="return false;">file_download</a><button id="embed" class="mdc-icon-button material-icons spaced mdc-ripple" title="Embed">code</button><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple${isMe ? "" : " hidden"}" title="Delete">delete</button>
+						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><a id="download" class="mdc-icon-button material-icons spaced mdc-ripple" title="Download" target="_blank" draggable="false" ondragstart="return false;">file_download</a><button id="embed" class="mdc-icon-button material-icons spaced mdc-ripple" title="Embed">code</button><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple${permitted ? "" : " hidden"}" title="Delete">delete</button>
 					</div>
 					<div class="property hidden" data-key="preview">
 						<span class="alwaysFloat">Preview</span><br>

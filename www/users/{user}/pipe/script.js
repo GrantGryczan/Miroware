@@ -508,7 +508,7 @@ document.addEventListener("mousemove", evt => {
 		if (!mouseMoved) {
 			selectItem(mouseTarget.parentNode._item ? mouseTarget.parentNode : mouseTarget, evt, 2);
 		}
-		if (Miro.data.isMe) {
+		if (Miro.data.permitted) {
 			indicateTarget(evt.target.classList.contains("ancestor") && evt.target.href ? evt.target : evt.target.parentNode._item && evt.target.parentNode._item.type === "/" && !evt.target.parentNode.classList.contains("selected") && !evt.target.parentNode.classList.contains("loading") && evt.target.parentNode);
 		}
 	}
@@ -598,7 +598,7 @@ const updateProperties = () => {
 				}
 			}
 		}
-		if (Miro.data.isMe) {
+		if (Miro.data.permitted) {
 			const privacy = selected[0]._item.privacy;
 			properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
 			privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
@@ -789,7 +789,7 @@ embed.addEventListener("click", () => {
 	embedProperties.insertBefore(codeField, embedProperties.firstChild);
 });
 updateProperties();
-if (Miro.data.isMe) {
+if (Miro.data.permitted) {
 	const checkName = async name => {
 		let takenItem;
 		let fullName = applyPath(name);
@@ -1205,7 +1205,7 @@ document.addEventListener("keydown", evt => {
 	if (!Miro.typing() && Miro.focused()) {
 		const superKey = evt.ctrlKey || evt.metaKey;
 		if (evt.keyCode === 8 || evt.keyCode === 46) { // `backspace` || `delete`
-			if (Miro.data.isMe) {
+			if (Miro.data.permitted) {
 				removeItems();
 			}
 		} else if (evt.keyCode === 13) { // `enter`

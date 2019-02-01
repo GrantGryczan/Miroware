@@ -1,5 +1,5 @@
-const {user, isMe} = await parseUser(this);
-if (isMe) {
+const {user, permitted} = await parseUser(this);
+if (permitted) {
 	if (this.req.body.name !== undefined) {
 		if (typeof this.req.body.name === "string") {
 			this.req.body.name = this.req.body.name.trim();

@@ -1,5 +1,5 @@
-const {user, isMe} = await parseUser(this);
-if (isMe) {
+const {user, permitted} = await parseUser(this);
+if (permitted) {
 	let data;
 	try {
 		data = JSON.parse(this.req.get("X-Data"));

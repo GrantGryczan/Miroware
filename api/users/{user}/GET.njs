@@ -1,4 +1,4 @@
-const {user, isMe} = await parseUser(this);
+const {user, permitted} = await parseUser(this);
 this.value = {
 	id: user._id,
 	created: user.created,
@@ -9,10 +9,10 @@ this.value = {
 	desc: user.desc,
 	icon: user.icon
 };
-if (isMe || user.publicEmail) {
+if (permitted || user.publicEmail) {
 	this.value.email = user.email;
 }
-if (isMe) {
+if (permitted) {
 	Object.assign(this.value, {
 		unverified: user.unverified,
 		nameCooldown: user.nameCooldown,

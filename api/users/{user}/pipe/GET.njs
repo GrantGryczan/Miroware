@@ -1,5 +1,5 @@
-const {user, isMe} = await parseUser(this);
-if (this.req.query.path && !user.pipe.some(item => item.type === "/" && item.name === this.req.query.path && (isMe || item.privacy < 2))) {
+const {user, permitted} = await parseUser(this);
+if (this.req.query.path && !user.pipe.some(item => item.type === "/" && item.name === this.req.query.path && (permitted || item.privacy < 2))) {
 	this.value = {
 		error: "That path does not exist."
 	};
@@ -9,7 +9,7 @@ if (this.req.query.path && !user.pipe.some(item => item.type === "/" && item.nam
 }
 const fileItems = [];
 const path = (this.req.query.path && `${this.req.query.path}/`) || "";
-this.value = user.pipe.filter(item => item.name.startsWith(path) && !item.name.includes("/", path.length) && (isMe || item.privacy === 0));
+this.value = user.pipe.filter(item => item.name.startsWith(path) && !item.name.includes("/", path.length) && (permitted || item.privacy === 0));
 for (const item of this.value) {
 	if (item.type === "/") {
 		const itemPath = `${item.name}/`;
