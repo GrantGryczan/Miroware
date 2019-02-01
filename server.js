@@ -334,6 +334,29 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		});
 	};
+	const addToken = (context, user) => {
+		const token = youKnow.crypto.token();
+		users.updateOne({
+			_id: user._id
+		}, {
+			$push: {
+				pouch: {
+					value: youKnow.crypto.hash(token, user.salt.buffer),
+					used: context.now,
+					role: 0,
+					super: context.now,
+					ip: context.req.realIP
+				}
+			}
+		});
+		const id = String(user._id);
+		context.value = {
+			id,
+			token
+		};
+		context.res.cookie("auth", Buffer.from(`${id}:${token}`).toString("base64"), cookieOptions);
+		context.done();
+	};
 	const sanitizeConcat = (context, put) => new Promise(resolve => {
 		const concat = {
 			anon: !!context.req.body.anon,
@@ -550,7 +573,8 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							};
 							context.updatePouch = {
 								$set: {
-									"pouch.$.used": context.now
+									"pouch.$.used": context.now,
+									"pouch.$.ip": context.req.realIP
 								}
 							};
 							if (context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {

@@ -5,27 +5,7 @@ if (testEmail(this.req.body.email)) {
 	if (user) {
 		connect(this, user).then(data => {
 			if (user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
-				const token = youKnow.crypto.token();
-				users.updateOne({
-					_id: user._id
-				}, {
-					$push: {
-						pouch: {
-							value: youKnow.crypto.hash(token, user.salt.buffer),
-							used: this.now,
-							role: 0,
-							super: this.now,
-							ip: this.req.realIP
-						}
-					}
-				});
-				const id = String(user._id);
-				this.value = {
-					id,
-					token
-				};
-				this.res.cookie("auth", Buffer.from(`${id}:${token}`).toString("base64"), cookieOptions);
-				this.done();
+				addToken(this, user);
 			} else {
 				this.value = {
 					error: "Authentication failed."
