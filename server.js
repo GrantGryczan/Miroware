@@ -314,11 +314,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 								}
 							});
 						}
-						console.log(foundConnection);
 						resolve({
 							connection,
-							id: foundConnection.id,
-							hash: foundConnection.hash
+							id: foundConnection.id
 						});
 					} else {
 						context.value = {

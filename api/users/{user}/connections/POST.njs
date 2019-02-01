@@ -3,7 +3,11 @@ if (isMe) {
 	if (this.now - this.token.super < TOKEN_SUPER_COOLDOWN) {
 		connect(this).then(data => {
 			const servicePassword = data.connection[0] === "password";
-			if (this.user.connections.some(connection => connection.service === data.connection[0] && (connection.id === data.id || (servicePassword && connection.hash.buffer.equals(data.hash.buffer))))) {
+			let hashBuffer;
+			if(servicePassword) {
+				hashBuffer = youKnow.crypto.hash(data.connection[1], user.salt.buffer);
+			}
+			if (this.user.connections.some(connection => connection.service === data.connection[0] && (servicePassword ? connection.hash.buffer.equals(hashBuffer) : connection.id === data.id))) {
 				this.value = {
 					error: "Those credentials are already connected to your account."
 				};
@@ -14,8 +18,8 @@ if (isMe) {
 					service: data.connection[0],
 					id: data.id
 				};
-				if (servicePassword) {
-					connection.hash = youKnow.crypto.hash(data.connection[1], user.salt.buffer);
+				if (hashBuffer) {
+					connection.hash = hashBuffer;
 				}
 				this.update.$push = {
 					connections: connection
