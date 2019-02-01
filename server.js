@@ -316,7 +316,8 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						}
 						resolve({
 							connection,
-							id: foundConnection.id
+							id: foundConnection.id,
+							hash: foundConnection.hash
 						});
 					} else {
 						context.value = {
