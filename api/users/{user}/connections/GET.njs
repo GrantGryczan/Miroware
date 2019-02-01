@@ -1,5 +1,5 @@
-const {user, permitted} = await parseUser(this);
-if (permitted) {
+const {user, isMe} = await parseUser(this);
+if (isMe) {
 	if (this.now - this.token.super < 300000) {
 		this.value = user.connections.map(sanitizeConnection);
 	} else {

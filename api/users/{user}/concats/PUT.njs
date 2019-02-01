@@ -1,6 +1,6 @@
-const {user, permitted} = await parseUser(this);
-if (permitted) {
-	const found = this.user.concats.find(item => item.sub === this.req.query.sub && item.val === this.req.query.val);
+const {user, isMe} = await parseUser(this);
+if (isMe) {
+	const found = user.concats.find(item => item.sub === this.req.query.sub && item.val === this.req.query.val);
 	if (found) {
 		const concat = await sanitizeConcat(this, true);
 		this.value = {
@@ -17,7 +17,7 @@ if (permitted) {
 			set[`concats.$.${key}`] = concat[key];
 		}
 		users.updateOne({
-			...this.userFilter,
+			_id: user._id,
 			"concats.sub": found.sub,
 			"concats.val": found.val
 		}, {

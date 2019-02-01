@@ -1,5 +1,5 @@
-const {user, permitted} = await parseUser(this);
-if (permitted) {
+const {user, isMe} = await parseUser(this);
+if (isMe) {
 	const found = user.pipe.find(item => item.id === this.params.item);
 	if (found) {
 		if (found.type === "/") {

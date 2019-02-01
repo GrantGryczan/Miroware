@@ -141,8 +141,8 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	};
 	const parseUser = context => new Promise(async resolve => {
 		let {user} = context;
-		const permitted = user && (user.role === 1 || context.params.user === String(user._id));
-		if (!permitted) {
+		const isMe = user && context.params.user === String(user._id);
+		if (!isMe) {
 			let userID;
 			try {
 				userID = ObjectID(context.params.user);
@@ -161,7 +161,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		if (user) {
 			resolve({
 				user,
-				permitted
+				isMe
 			});
 		} else {
 			context.value = {

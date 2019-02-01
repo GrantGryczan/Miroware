@@ -1,5 +1,5 @@
-const {user, permitted} = await parseUser(this);
-if (permitted) {
+const {user, isMe} = await parseUser(this);
+if (isMe) {
 	let data;
 	try {
 		data = JSON.parse(this.req.get("X-Data"));
@@ -41,7 +41,7 @@ if (permitted) {
 			this.status = 400;
 			this.done();
 			return;
-		} else if (this.user.pipe.some(item => item.name === data.name)) {
+		} else if (user.pipe.some(item => item.name === data.name)) {
 			this.value = {
 				error: "That name is already taken."
 			};
@@ -52,7 +52,7 @@ if (permitted) {
 			const slashIndex = data.name.lastIndexOf("/");
 			if (slashIndex !== -1) {
 				const parent = data.name.slice(0, slashIndex);
-				if (!this.user.pipe.some(item => item.type === "/" && item.name === parent)) {
+				if (!user.pipe.some(item => item.type === "/" && item.name === parent)) {
 					this.value = {
 						error: "That path does not exist."
 					};

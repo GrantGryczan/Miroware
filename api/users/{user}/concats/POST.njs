@@ -1,5 +1,5 @@
-const {user, permitted} = await parseUser(this);
-if (permitted) {
+const {user, isMe} = await parseUser(this);
+if (isMe) {
 	const concat = await sanitizeConcat(this);
 	this.update.$push = {
 		concats: concat

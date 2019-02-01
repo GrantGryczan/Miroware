@@ -1,5 +1,5 @@
-const {user, permitted} = await parseUser(this);
-if (permitted) {
+const {user, isMe} = await parseUser(this);
+if (isMe) {
 	if (this.req.body.name !== undefined) {
 		if (typeof this.req.body.name === "string") {
 			this.req.body.name = this.req.body.name.trim();
@@ -142,7 +142,7 @@ if (permitted) {
 	}
 } else {
 	this.value = {
-		error: "You do not have permission to edit that user."
+		error: "You do not have permission to access that user."
 	};
 	this.status = 403;
 }

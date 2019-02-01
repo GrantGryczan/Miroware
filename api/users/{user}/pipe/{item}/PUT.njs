@@ -1,5 +1,5 @@
-const {user, permitted} = await parseUser(this);
-if (permitted) {
+const {user, isMe} = await parseUser(this);
+if (isMe) {
 	const found = this.user.pipe.find(item => item.id === this.params.item);
 	if (found) {
 		const typeDir = found.type === "/";
@@ -145,7 +145,7 @@ if (permitted) {
 			set[`pipe.$.${key}`] = item[key];
 		}
 		users.updateOne({
-			...this.userFilter,
+			_id: user._id,
 			"pipe.id": found.id
 		}, {
 			$set: set
@@ -165,7 +165,7 @@ if (permitted) {
 					if (child.name.startsWith(prefix)) {
 						const name = item.name + child.name.slice(found.name.length);
 						users.updateOne({
-							...this.userFilter,
+							_id: user._id,
 							"pipe.id": child.id
 						}, {
 							$set: {

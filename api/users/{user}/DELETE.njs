@@ -1,5 +1,5 @@
-const {user, permitted} = await parseUser(this);
-if (permitted) {
+const {user, isMe} = await parseUser(this);
+if (isMe) {
 	if (this.now - this.token.super < 300000) {
 		this.update = false;
 		const fileItems = user.pipe.filter(pipeFiles);
@@ -34,7 +34,7 @@ if (permitted) {
 	}
 } else {
 	this.value = {
-		error: "You do not have permission to edit that user."
+		error: "You do not have permission to access that user."
 	};
 	this.status = 403;
 	this.done();
