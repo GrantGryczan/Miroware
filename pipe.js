@@ -91,7 +91,7 @@ const s3 = new AWS.S3({
 			});
 			const referrer = req.get("Referrer");
 			if(referrer && !referrer.startsWith("https://mspfa.com/") && !referrer.startsWith("https://miroware.io/") && !referrer.startsWith("https://pipe.miroware.io/")) {
-				console.log(referrer);
+				console.log(new Date(), referrer);
 			}
 		}
 	});
