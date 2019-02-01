@@ -72,7 +72,7 @@ if (testEmail(this.req.body.email)) {
 				salt,
 				pouch: [{
 					value: youKnow.crypto.hash(token, salt),
-					date: this.now,
+					used: this.now,
 					role: 0,
 					super: this.now,
 					ip: this.req.realIP

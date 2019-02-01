@@ -531,7 +531,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						context.update = {
 							$pull: {
 								pouch: {
-									date: {
+									used: {
 										$lte: expiry
 									}
 								}
@@ -539,7 +539,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						};
 						const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
 						const token = context.user.pouch.find(token => token.value.buffer.equals(hash));
-						if (token && token.date > expiry) {
+						if (token && token.used > expiry) {
 							context.token = token;
 							context.update.$set = {
 								updated: context.now,
@@ -550,7 +550,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							};
 							context.updatePouch = {
 								$set: {
-									"pouch.$.date": context.now
+									"pouch.$.used": context.now
 								}
 							};
 							if (context.req.signedCookies.auth && context.rawPath !== "api/token/DELETE.njs") {

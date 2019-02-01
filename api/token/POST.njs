@@ -12,7 +12,7 @@ if (testEmail(this.req.body.email)) {
 					$push: {
 						pouch: {
 							value: youKnow.crypto.hash(token, user.salt.buffer),
-							date: this.now,
+							used: this.now,
 							role: 0,
 							super: this.now,
 							ip: this.req.realIP
