@@ -43,7 +43,7 @@ this.value = html`
 		<link rel="stylesheet" href="/css/style.css">
 		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>
 		<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-110090319-1");</script>`;
-/*if(this.showAds) {
+/*if (this.showAds) {
 	this.value += html`
 		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 		<script>(adsbygoogle=window.adsbygoogle||[]).push({google_ad_client:"ca-pub-2923503486893931",enable_page_level_ads:!0});</script>`;

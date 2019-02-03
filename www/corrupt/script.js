@@ -33,7 +33,7 @@ const resize = () => {
 	output.parentNode.style.height = `${input.offsetHeight}px`;
 };
 window.addEventListener("resize", () => {
-	if(output.parentNode.style.height) {
+	if (output.parentNode.style.height) {
 		resize();
 	}
 });

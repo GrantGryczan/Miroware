@@ -593,7 +593,7 @@ const updateProperties = () => {
 					previewAudio.classList.add("hidden");
 					previewVideo.classList.remove("hidden");
 					property.preview.classList.remove("hidden");
-				} else if(item.type !== "text/html") {
+				} else if (item.type !== "text/html") {
 					showEmbedAction = false;
 				}
 				if (showEmbedAction) {
@@ -626,7 +626,7 @@ embed.addEventListener("click", () => {
 	const typeAudio = item.type.startsWith("audio/");
 	const typeVideo = item.type.startsWith("video/");
 	const typeMedia = typeAudio || typeVideo;
-	if(typeMedia) {
+	if (typeMedia) {
 		embedProperties.appendChild(html`
 			<div class="mdc-form-field margined">
 				<div class="mdc-checkbox">
@@ -674,7 +674,7 @@ embed.addEventListener("click", () => {
 			</div><br>
 		`);
 		const input = evt => {
-			if(embed[evt.target.id] = evt.target.checked) {
+			if (embed[evt.target.id] = evt.target.checked) {
 				embed.setAttribute(evt.target.id, "");
 			} else {
 				embed.removeAttribute(evt.target.id);
@@ -686,15 +686,15 @@ embed.addEventListener("click", () => {
 		const noRemotePlayback = controlsList.querySelector("#noremoteplayback");
 		let noFullscreen;
 		embedProperties.querySelector("#controls").addEventListener("input", evt => {
-			if(evt.target.checked) {
+			if (evt.target.checked) {
 				controlsList.classList.remove("hidden");
-				if(noDownload.checked) {
+				if (noDownload.checked) {
 					embed.controlsList.add("nodownload");
 				}
-				if(noRemotePlayback.checked) {
+				if (noRemotePlayback.checked) {
 					embed.controlsList.add("noremoteplayback");
 				}
-				if(noFullscreen && noFullscreen.checked) {
+				if (noFullscreen && noFullscreen.checked) {
 					embed.controlsList.add("nofullscreen");
 				}
 			} else {
@@ -707,11 +707,11 @@ embed.addEventListener("click", () => {
 		embedProperties.querySelector("#autoplay").addEventListener("input", input);
 		embedProperties.querySelector("#muted").addEventListener("input", input);
 		const inputControls = evt => {
-			if(evt.target.checked) {
+			if (evt.target.checked) {
 				embed.controlsList.add(evt.target.id);
 			} else {
 				embed.controlsList.remove(evt.target.id);
-				if(!embed.controlsList.length) {
+				if (!embed.controlsList.length) {
 					embed.removeAttribute("controlslist");
 				}
 			}
@@ -719,7 +719,7 @@ embed.addEventListener("click", () => {
 		};
 		noDownload.addEventListener("input", inputControls);
 		noRemotePlayback.addEventListener("input", inputControls);
-		if(typeAudio) {
+		if (typeAudio) {
 			embed = document.createElement("audio");
 		} else {
 			embed = document.createElement("video");
@@ -737,7 +737,7 @@ embed.addEventListener("click", () => {
 		embed.controls = true;
 		embed.controlsList.add("nodownload");
 	}
-	if(!typeAudio) {
+	if (!typeAudio) {
 		embedProperties.insertBefore(html`
 			<div class="mdc-text-field margined">
 				<input id="width" class="mdc-text-field__input" type="number" min="0">
@@ -751,8 +751,8 @@ embed.addEventListener("click", () => {
 			</div><br>
 		`, embedProperties.firstChild);
 		const input = evt => {
-			if(evt.target.checkValidity()) {
-				if(evt.target.value) {
+			if (evt.target.checkValidity()) {
+				if (evt.target.value) {
 					embed[evt.target.id] = evt.target.value;
 				} else {
 					embed.removeAttribute(evt.target.id);
@@ -762,9 +762,9 @@ embed.addEventListener("click", () => {
 		};
 		embedProperties.querySelector("#width").addEventListener("input", input);
 		embedProperties.querySelector("#height").addEventListener("input", input);
-		if(item.type.startsWith("image/")) {
+		if (item.type.startsWith("image/")) {
 			embed = document.createElement("img");
-		} else if(item.type === "text/html") {
+		} else if (item.type === "text/html") {
 			embed = html`<iframe style="border: 0;"></iframe>`;
 		}
 	}

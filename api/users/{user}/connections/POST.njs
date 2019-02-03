@@ -4,7 +4,7 @@ if (isMe) {
 		connect(this).then(data => {
 			const servicePassword = data.connection[0] === "password";
 			let hashBuffer;
-			if(servicePassword) {
+			if (servicePassword) {
 				hashBuffer = youKnow.crypto.hash(data.connection[1], user.salt.buffer);
 			}
 			if (this.user.connections.some(connection => connection.service === data.connection[0] && (servicePassword ? connection.hash.buffer.equals(hashBuffer) : connection.id === data.id))) {

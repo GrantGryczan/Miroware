@@ -1,4 +1,4 @@
-if(!this.user || this.user.role !== 0) {
+if (!this.user || this.user.role !== 0) {
 	this.value = {
 		error: "You do not have permission to access that user."
 	};
