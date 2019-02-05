@@ -128,8 +128,8 @@ const star = (msg, callback, channel) => {
 					value: String(msg.author),
 					inline: true
 				}, {
-					name: "Message",
-					value: `${msg.channel}/[${msg.guild.id}](https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id})`,
+					name: "Channel",
+					value: `${msg.channel}/[...](https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id})`,
 					inline: true
 				}, {
 					name: "Message",
