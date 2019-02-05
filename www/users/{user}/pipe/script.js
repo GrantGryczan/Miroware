@@ -553,6 +553,9 @@ const updateProperties = () => {
 	save.classList.add("hidden");
 	download.classList.add("hidden");
 	embed.classList.add("hidden");
+	previewImage.src = "";
+	previewAudio.src = "";
+	previewVideo.src = "";
 	const selected = items.querySelectorAll(".item.selected");
 	if (selectionLength.textContent = selected.length) {
 		property.actions.classList.remove("hidden");
@@ -578,23 +581,17 @@ const updateProperties = () => {
 				if (item.type.startsWith("image/")) {
 					previewImage.src = item.url;
 					previewImage.classList.remove("hidden");
-					previewAudio.src = "";
 					previewAudio.classList.add("hidden");
-					previewVideo.src = "";
 					previewVideo.classList.add("hidden");
 					property.preview.classList.remove("hidden");
 				} else if (item.type.startsWith("audio/")) {
-					previewImage.src = "";
 					previewImage.classList.add("hidden");
 					previewAudio.src = item.url;
 					previewAudio.classList.remove("hidden");
-					previewVideo.src = "";
 					previewVideo.classList.add("hidden");
 					property.preview.classList.remove("hidden");
 				} else if (item.type.startsWith("video/")) {
-					previewImage.src = "";
 					previewImage.classList.add("hidden");
-					previewAudio.src = "";
 					previewAudio.classList.add("hidden");
 					previewVideo.src = item.url;
 					previewVideo.classList.remove("hidden");
