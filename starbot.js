@@ -121,15 +121,15 @@ const star = (msg, callback, channel) => {
 				timestamp: msg.createdAt.toISOString(),
 				color: data.guilds[msg.guild.id][3],
 				footer: {
-					text: `${decodeURI(data.guilds[msg.guild.id][1])} | [${msg.id}](https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id})`
+					text: `${decodeURI(data.guilds[msg.guild.id][1])} | ${msg.id}`
 				},
 				fields: [{
 					name: "Author",
 					value: String(msg.author),
 					inline: true
 				}, {
-					name: "Channel",
-					value: String(msg.channel),
+					name: "Message",
+					value: `${msg.channel}/[${msg.guild.id}](https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id})`,
 					inline: true
 				}, {
 					name: "Message",
