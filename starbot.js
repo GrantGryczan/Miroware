@@ -134,6 +134,9 @@ const star = (msg, callback, channel) => {
 				}, {
 					name: "Message",
 					value: msg.content || "..."
+				}, {
+					name: "Link",
+					value: `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`
 				}]
 			}
 		};
