@@ -578,19 +578,25 @@ const updateProperties = () => {
 				if (item.type.startsWith("image/")) {
 					previewImage.src = item.url;
 					previewImage.classList.remove("hidden");
+					previewAudio.src = "";
 					previewAudio.classList.add("hidden");
+					previewVideo.src = "";
 					previewVideo.classList.add("hidden");
 					property.preview.classList.remove("hidden");
 				} else if (item.type.startsWith("audio/")) {
-					previewAudio.src = item.url;
+					previewImage.src = "";
 					previewImage.classList.add("hidden");
+					previewAudio.src = item.url;
 					previewAudio.classList.remove("hidden");
+					previewVideo.src = "";
 					previewVideo.classList.add("hidden");
 					property.preview.classList.remove("hidden");
 				} else if (item.type.startsWith("video/")) {
-					previewVideo.src = item.url;
+					previewImage.src = "";
 					previewImage.classList.add("hidden");
+					previewAudio.src = "";
 					previewAudio.classList.add("hidden");
+					previewVideo.src = item.url;
 					previewVideo.classList.remove("hidden");
 					property.preview.classList.remove("hidden");
 				} else if (item.type !== "text/html") {
