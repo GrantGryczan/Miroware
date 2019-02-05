@@ -132,11 +132,12 @@ const star = (msg, callback, channel) => {
 					value: String(msg.channel),
 					inline: true
 				}, {
+					name: "Link",
+					value: `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`,
+					inline: true
+				}, {
 					name: "Message",
 					value: msg.content || "..."
-				}, {
-					name: "Link",
-					value: `https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`
 				}]
 			}
 		};
