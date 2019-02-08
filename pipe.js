@@ -11,6 +11,7 @@ const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
+const referrerTest = !/^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[/:]/;
 (async () => {
 	require("replthis")(v => eval(v));
 	const db = (await MongoClient.connect(youKnow.db, {
@@ -90,7 +91,7 @@ const s3 = new AWS.S3({
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 			const referrer = req.get("Referrer");
-			if (referrer && !referrer.startsWith("https://mspfa.com/") && !referrer.startsWith("https://miroware.io/") && !referrer.startsWith("https://pipe.miroware.io/") && !referrer.startsWith("https://d.miroware.io/")) {
+			if (referrer && referrerTest.test(referrer)) {
 				console.log(new Date(), referrer);
 			}
 		}
