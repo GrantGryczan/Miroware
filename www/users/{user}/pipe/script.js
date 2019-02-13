@@ -1297,7 +1297,5 @@ const resize = () => {
 items.parentNode.addEventListener("scroll", resize, {
 	passive: true
 });
-window.addEventListener("resize", resize, {
-	passive: true
-});
+window.addEventListener("resize", resize);
 updateViewMode();
