@@ -1294,6 +1294,10 @@ const resize = () => {
 		}
 	}
 };
-items.parentNode.addEventListener("scroll", resize);
-window.addEventListener("resize", resize);
+items.parentNode.addEventListener("scroll", resize, {
+	passive: true
+});
+window.addEventListener("resize", resize, {
+	passive: true
+});
 updateViewMode();
