@@ -24,9 +24,11 @@ this.value += html`
 							<input id="factor" class="mdc-text-field__input" type="number" min="0" max="10000" value="8" title="Corruption factor" required>
 							<label class="mdc-floating-label" for="factor">Factor</label>
 							<div class="mdc-line-ripple"></div>
-						</div><button id="corrupt" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit" title="Corrupt image" disabled>Corrupt</button>
+						</div><button id="corrupt" class="mdc-button spaced mdc-ripple" type="submit" title="Corrupt image" disabled>Corrupt</button>
 					</div>
-					<button id="download" class="mdc-button mdc-ripple" title="Download image" disabled>Download</button>
+					<button id="download" class="mdc-button mdc-ripple" title="Download image" disabled>
+						<i class="mdc-button__icon material-icons">file_download</i>Download
+					</button>
 				</form>
 				<div id="content">
 					<div id="input">
