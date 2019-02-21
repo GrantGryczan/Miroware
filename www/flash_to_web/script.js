@@ -42,7 +42,7 @@ fileInput.addEventListener("change", () => {
 				throw new Error("Unsupported compression method");
 			}
 			data.file.Version = data.result[3];
-			if((data.file.FileLength = parseInt([...data.result.slice(4, 8)].reverse().map(hexString).join(""), 16)) !== data.result.length) {
+			if((data.file.FileLength = parseInt([...data.result.slice(4, 8)].reverse().map(hexString).join(""), 16)) !== data.array.length + 8) {
 				throw new Error("Incorrect FileLength");
 			}
 			data.bit = 0;
