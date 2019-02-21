@@ -9,6 +9,7 @@ fileInput.addEventListener("change", () => {
 		Miro.progress.close();
 		const array = new Uint8Array(reader.result);
 		console.log(array);
+		panel.classList.remove("hidden");
 	});
 	reader.readAsArrayBuffer(fileInput.files[0]);
 	fileInput.value = null;
