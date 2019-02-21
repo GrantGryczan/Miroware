@@ -128,7 +128,7 @@ fileInput.addEventListener("change", () => {
 				throw new Error("Unsupported compression method");
 			}
 			data.file.Version = data.array[3];
-			data.file.FileLength = ((data.bytes[4] | data.bytes[5] << 8) | data.bytes[6] << 16) | data.bytes[7] << 24;
+			data.file.FileLength = ((data.array[4] | data.array[5] << 8) | data.array[6] << 16) | data.array[7] << 24;
 			data.byte = 0;
 			data.bit = 0;
 			panel.classList.remove("hidden");
