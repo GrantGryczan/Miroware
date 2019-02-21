@@ -1,9 +1,95 @@
 const form = document.body.querySelector("#form");
 const panel = form.querySelector("#panel");
 let data;
-const hexString = byte => {
-	const hex = byte.toString(16);
-	return hex.length === 1 ? `0${hex}` : hex;
+const alignToByte = () => {
+	if(bit > 0) {
+		byte++;
+		bit = 0;
+	}
+};
+const SWF = {
+	SI8: () => { // Signed 8-bit integer value
+		const byte = SWF.UI8();
+		return byte >> 7 ? byte - (1 << 8) : byte;
+	},
+	SI16: () => { // Signed 16-bit integer value
+		const byte = SWF.UI16();
+		return byte >> 15 ? byte - (1 << 16) : byte;
+	},
+	SI32: () => { // Signed 32-bit integer value
+		alignToByte();
+		const byte = SWF.UI32();
+		return byte >> 31 ? byte - (1 << 32) : byte;
+	},
+	SI8Array: n => { // Signed 8-bit array
+		alignToByte();
+		
+	},
+	SI16Array: n => { // Signed 16-bit array
+		alignToByte();
+		
+	},
+	UI8: () => { // Unsigned 8-bit integer value
+		alignToByte();
+		return data.bytes[data.byte++];
+	},
+	UI16: () => { // Unsigned 16-bit integer value
+		alignToByte();
+		return data.bytes[data.byte++] | data.bytes[data.byte++] << 8;
+	},
+	UI32: () => { // Unsigned 32-bit integer value
+		alignToByte();
+		return ((data.bytes[data.byte++] | data.bytes[data.byte++] << 8) | data.bytes[data.byte++] << 16) | data.bytes[data.byte++] << 24;
+	},
+	UI8Array: n => { // Unsigned 8-bit array
+		alignToByte();
+		
+	},
+	UI16Array: n => { // Unsigned 16-bit array
+		alignToByte();
+		
+	},
+	UI24Array: n => { // Unsigned 24-bit array
+		alignToByte();
+		
+	},
+	UI32Array: n => { // Unsigned 32-bit array
+		alignToByte();
+		
+	},
+	FIXED: () => { // 32-bit 16.16 fixed-point number
+		alignToByte();
+		
+	},
+	FIXED8: () => { // 16-bit 8.8 fixed-point number
+		alignToByte();
+		
+	},
+	FLOAT16: () => { // Half-prevision (16-bit) floating-point number
+		alignToByte();
+		
+	},
+	FLOAT: () => { // Half-prevision (32-bit) IEEE Standard 754 compatible
+		alignToByte();
+		
+	},
+	DOUBLE: () => { // Half-prevision (64-bit) IEEE Standard 754 compatible
+		alignToByte();
+		
+	},
+	EncodedU32: () => { // Variable length encoded 32-bit unsigned integer
+		alignToByte();
+		
+	},
+	SB: nBits => { // Signed-bit value
+		
+	},
+	UB: nBits => { // Unsigned-bit value
+		
+	},
+	FB: nBits => { // Signed, fixed-point bit value
+		
+	}
 };
 const fileInput = document.createElement("input");
 fileInput.type = "file";
@@ -42,7 +128,8 @@ fileInput.addEventListener("change", () => {
 				throw new Error("Unsupported compression method");
 			}
 			data.file.Version = data.array[3];
-			data.file.FileLength = parseInt([...data.array.slice(4, 8)].reverse().map(hexString).join(""), 16);
+			data.file.FileLength = ((data.bytes[4] | data.bytes[5] << 8) | data.bytes[6] << 16) | data.bytes[7] << 24;
+			data.byte = 0;
 			data.bit = 0;
 			panel.classList.remove("hidden");
 		} catch(err) {
