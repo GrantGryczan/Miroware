@@ -28,6 +28,8 @@ this.value += html`
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
-		<script src="script.js"></script>`;
+		<script src="script.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.8/pako_inflate.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/lzma@2.3.2/src/lzma-d-min.js"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
