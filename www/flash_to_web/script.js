@@ -4,6 +4,7 @@ const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.accept = "application/x-shockwave-flash";
 fileInput.addEventListener("change", () => {
+	panel.classList.add("hidden");
 	Miro.formState(form, false);
 	Miro.progress.open();
 	const reader = new FileReader();
