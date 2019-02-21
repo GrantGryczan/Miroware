@@ -17,16 +17,13 @@ const SWF = {
 		return byte >> 15 ? byte - (1 << 16) : byte;
 	},
 	SI32: () => { // Signed 32-bit integer value
-		alignToByte();
 		const byte = SWF.UI32();
 		return byte >> 31 ? byte - (1 << 32) : byte;
 	},
 	SI8Array: n => { // Signed 8-bit array
-		alignToByte();
 		
 	},
 	SI16Array: n => { // Signed 16-bit array
-		alignToByte();
 		
 	},
 	UI8: () => { // Unsigned 8-bit integer value
@@ -42,19 +39,15 @@ const SWF = {
 		return ((data.bytes[data.byte++] | data.bytes[data.byte++] << 8) | data.bytes[data.byte++] << 16) | data.bytes[data.byte++] << 24;
 	},
 	UI8Array: n => { // Unsigned 8-bit array
-		alignToByte();
 		
 	},
 	UI16Array: n => { // Unsigned 16-bit array
-		alignToByte();
 		
 	},
 	UI24Array: n => { // Unsigned 24-bit array
-		alignToByte();
 		
 	},
 	UI32Array: n => { // Unsigned 32-bit array
-		alignToByte();
 		
 	},
 	FIXED: () => { // 32-bit 16.16 fixed-point number
