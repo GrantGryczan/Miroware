@@ -1,4 +1,5 @@
 const form = document.body.querySelector("#form");
+const panel = form.querySelector("#panel");
 const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.accept = "application/x-shockwave-flash";
@@ -7,11 +8,11 @@ fileInput.addEventListener("change", () => {
 	Miro.progress.open();
 	const reader = new FileReader();
 	reader.addEventListener("loadend", () => {
+		const array = new Uint8Array(reader.result);
+		console.log(window.array = array);
+		panel.classList.remove("hidden");
 		Miro.formState(form, true);
 		Miro.progress.close();
-		const array = new Uint8Array(reader.result);
-		console.log(array);
-		form.classList.remove("hidden");
 	});
 	reader.readAsArrayBuffer(fileInput.files[0]);
 	fileInput.value = null;
