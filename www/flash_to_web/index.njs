@@ -18,7 +18,7 @@ this.value += html`
 						<input id="title" name="title" class="mdc-text-field__input" type="text" autocomplete="off" required>
 						<label class="mdc-floating-label" for="title">Title</label>
 						<div class="mdc-line-ripple"></div>
-					</div>
+					</div><br>
 					<button id="convert" class="mdc-button margined mdc-ripple" type="submit" title="Convert to HTML5">
 						<i class="mdc-button__icon material-icons">swap_horizontal</i>Convert to HTML5
 					</button>
