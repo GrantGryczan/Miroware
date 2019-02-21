@@ -15,34 +15,34 @@ fileInput.addEventListener("change", () => {
 	const reader = new FileReader();
 	reader.addEventListener("loadend", () => {
 		data = {
-			result: new Uint8Array(reader.result),
+			array: new Uint8Array(reader.result),
 			file: {}
 		};
 		try {
-			data.file.Signature = String.fromCharCode(...data.result.slice(0, 3));
+			data.file.Signature = String.fromCharCode(...data.array.slice(0, 3));
 			if(data.file.Signature.slice(1) !== "WS") {
 				throw new Error("Invalid SWF signature");
 			}
 			const compression = data.file.Signature[0];
 			if(compression === "F") {
-				data.array = data.result.slice(8);
+				data.bytes = data.array.slice(8);
 			} else if(compression === "C") {
-				data.array = pako.inflate(data.result.slice(8));
+				data.bytes = pako.inflate(data.array.slice(8));
 			} else if(compression === "Z") {
-				const result = LZMA.decompress(data.result.slice(8));
+				const result = LZMA.decompress(data.array.slice(8));
 				if(typeof result === "string") {
-					data.array = new Uint8Array(result.length);
+					data.bytes = new Uint8Array(result.length);
 					for(let i = 0; i < result.length; i++) {
-						data.array[i] = result[i].charCodeAt();
+						data.bytes[i] = result[i].charCodeAt();
 					}
 				} else {
-					data.array = result;
+					data.bytes = result;
 				}
 			} else {
 				throw new Error("Unsupported compression method");
 			}
-			data.file.Version = data.result[3];
-			if((data.file.FileLength = parseInt([...data.result.slice(4, 8)].reverse().map(hexString).join(""), 16)) !== data.array.length + 8) {
+			data.file.Version = data.array[3];
+			if((data.file.FileLength = parseInt([...data.array.slice(4, 8)].reverse().map(hexString).join(""), 16)) !== data.bytes.length + 8) {
 				throw new Error("Incorrect FileLength");
 			}
 			data.bit = 0;
