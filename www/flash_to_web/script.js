@@ -1,6 +1,10 @@
 const form = document.body.querySelector("#form");
 const panel = form.querySelector("#panel");
 let data;
+const hexString = byte => {
+	const hex = byte.toString(16);
+	return hex.length === 1 ? `0${hex}` : hex;
+};
 const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.accept = "application/x-shockwave-flash";
@@ -14,19 +18,18 @@ fileInput.addEventListener("change", () => {
 			file: {}
 		};
 		try {
-			const array = new Uint8Array(reader.result);
-			console.log(array);
-			data.file.Signature = String.fromCharCode(...array.slice(0, 3));
+			data.result = new Uint8Array(reader.result);
+			data.file.Signature = String.fromCharCode(...data.result.slice(0, 3));
 			if(data.file.Signature.slice(1) !== "WS") {
 				throw new Error("Invalid SWF signature");
 			}
 			const compression = data.file.Signature[0];
 			if(compression === "F") {
-				data.array = array.slice(8);
+				data.array = data.result.slice(8);
 			} else if(compression === "C") {
-				data.array = pako.inflate(array.slice(8));
+				data.array = pako.inflate(data.result.slice(8));
 			} else if(compression === "Z") {
-				const result = LZMA.decompress(array.slice(8));
+				const result = LZMA.decompress(data.result.slice(8));
 				if(typeof result === "string") {
 					data.array = new Uint8Array(result.length);
 					for(let i = 0; i < result.length; i++) {
@@ -38,8 +41,8 @@ fileInput.addEventListener("change", () => {
 			} else {
 				throw new Error("Unsupported compression method");
 			}
-			data.file.Version = array[3];
-			
+			data.file.Version = data.result[3];
+			data.file.FileLength = parseInt([...data.result.slice(4, 8)].reverse().map(hexString).join(""), 16);
 			data.bit = 0;
 			panel.classList.remove("hidden");
 		} catch(err) {
