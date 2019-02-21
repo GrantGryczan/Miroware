@@ -10,7 +10,7 @@ fileInput.addEventListener("change", () => {
 	const reader = new FileReader();
 	reader.addEventListener("loadend", () => {
 		const array = new Uint8Array(reader.result);
-		console.log(window.array = array);
+		window.array = array; // TODO: Decode SWF
 		panel.classList.remove("hidden");
 		Miro.formState(form, true);
 		Miro.progress.close();
