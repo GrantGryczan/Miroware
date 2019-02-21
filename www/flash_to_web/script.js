@@ -1,24 +1,25 @@
-const panel = document.body.querySelector("#panel");
+const form = document.body.querySelector("#form");
 const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.accept = "application/x-shockwave-flash";
 fileInput.addEventListener("change", () => {
+	Miro.formState(form, false);
 	Miro.progress.open();
 	const reader = new FileReader();
 	reader.addEventListener("loadend", () => {
+		Miro.formState(form, true);
 		Miro.progress.close();
 		const array = new Uint8Array(reader.result);
 		console.log(array);
-		panel.classList.remove("hidden");
+		form.classList.remove("hidden");
 	});
 	reader.readAsArrayBuffer(fileInput.files[0]);
 	fileInput.value = null;
 });
-document.body.querySelector("#upload").addEventListener("click", fileInput.click.bind(fileInput));
-panel.addEventListener("submit", evt => {
+form.elements.import.addEventListener("click", fileInput.click.bind(fileInput));
+form.addEventListener("submit", evt => {
 	evt.preventDefault();
-	const code = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${html.escape(panel.elements.title.value)}</title></head><body></body></html>`;
-	html`<a href="$${URL.createObjectURL(new Blob([code], {
+	html`<a href="$${URL.createObjectURL(new Blob([`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${html.escape(form.elements.title.value)}</title></head><body></body></html>`], {
 		type: "text/html"
-	}))}" download="$${panel.elements.title.value}.html"></a>`.click();
+	}))}" download="$${form.elements.title.value}.html"></a>`.click();
 });
