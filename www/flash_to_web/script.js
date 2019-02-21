@@ -15,6 +15,7 @@ fileInput.addEventListener("change", () => {
 		};
 		try {
 			const array = new Uint8Array(reader.result);
+			console.log(array);
 			data.file.Signature = String.fromCharCode(...array.slice(0, 3));
 			if(data.file.Signature.slice(1) !== "WS") {
 				throw new Error("Invalid SWF signature");
