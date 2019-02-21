@@ -128,7 +128,7 @@ fileInput.addEventListener("change", () => {
 		} catch(err) {
 			new Miro.Dialog("Error", html`An error occurred while trying to read the SWF file.<br>$${err}`);
 		}
-		console.log(data);
+		console.log(SWF, data);
 		Miro.formState(form, true);
 		Miro.progress.close();
 	});
