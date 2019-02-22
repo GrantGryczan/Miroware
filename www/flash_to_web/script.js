@@ -8,77 +8,61 @@ const alignToByte = () => {
 	}
 };
 const SWF = {
-	SI8: () => { // Signed 8-bit integer value
+	SI8: () => {
 		const value = SWF.UI8();
 		return value >>> 7 ? value - (1 << 8) : value;
 	},
-	SI16: () => { // Signed 16-bit integer value
+	SI16: () => {
 		const value = SWF.UI16();
 		return value >>> 15 ? value - (1 << 16) : value;
 	},
-	SI32: () => { // Signed 32-bit integer value
+	SI32: () => {
 		const value = SWF.UI32();
 		return value >>> 31 ? value - (1 << 32) : value;
 	},
-	SI8Array: n => { // Signed 8-bit array
+	SI8Array: n => {
 		
 	},
-	SI16Array: n => { // Signed 16-bit array
+	SI16Array: n => {
 		
 	},
-	UI8: () => { // Unsigned 8-bit integer value
+	UI8: () => {
 		alignToByte();
 		return data.bytes[data.byte++];
 	},
-	UI16: () => { // Unsigned 16-bit integer value
-		alignToByte();
-		return data.bytes[data.byte++] | data.bytes[data.byte++] << 8;
-	},
-	UI24: () => { // Unsigned 24-bit integer value
-		alignToByte();
-		return (data.bytes[data.byte++] | data.bytes[data.byte++] << 8) | data.bytes[data.byte++] << 16;
-	},
-	UI32: () => { // Unsigned 32-bit integer value
-		alignToByte();
-		return ((data.bytes[data.byte++] | data.bytes[data.byte++] << 8) | data.bytes[data.byte++] << 16) | data.bytes[data.byte++] << 24;
-	},
-	FIXED: () => { // 32-bit 16.16 fixed-point number
-		alignToByte();
-		
-	},
-	FIXED8: () => { // 16-bit 8.8 fixed-point number
-		alignToByte();
-		
-	},
-	FLOAT16: () => { // Half-precision (16-bit) floating-point number
+	UI16: () => SWF.UI8() | data.bytes[data.byte++] << 8,
+	UI24: () => SWF.UI16() | data.bytes[data.byte++] << 16,
+	UI32: () => SWF.UI24() | data.bytes[data.byte++] << 24,
+	FIXED: () => SWF.SI16() + 2 ** (Math.log(data.bytes[data.byte++]) / Math.log(2) - 16),
+	FIXED8: () => SWF.SI8() + 2 ** (Math.log(data.bytes[data.byte++]) / Math.log(2) - 8),
+	FLOAT16: () => {
 		const value = SWF.UI16();
 		const sign = value >>> 15 ? -1 : 1;
 		const exponent = ((value << 17) >>> 27) - 15;
 		const significand = (value << 22) >>> 22;
 		return exponent === 16 ? (significand ? NaN : sign * Infinity) : sign * 2 ** exponent * ((exponent ? 1 : 0) + 2 ** (Math.log(significand) / Math.log(2) - 10));
 	},
-	FLOAT: () => { // Single-precision (32-bit) IEEE Standard 754 compatible
+	FLOAT: () => {
 		const value = SWF.UI32();
 		const sign = value >>> 31 ? -1 : 1;
 		const exponent = ((value << 1) >>> 24) - 127;
 		const significand = (value << 9) >>> 9;
 		return exponent === 128 ? (significand ? NaN : sign * Infinity) : sign * 2 ** exponent * ((exponent ? 1 : 0) + 2 ** (Math.log(significand) / Math.log(2) - 23));
 	},
-	DOUBLE: () => { // Double-precision (64-bit) IEEE Standard 754 compatible
+	DOUBLE: () => {
+		
+	},
+	EncodedU32: () => {
 		alignToByte();
 		
 	},
-	EncodedU32: () => { // Variable length encoded 32-bit unsigned integer
-		alignToByte();
+	SB: nBits => {
 		
 	},
-	SB: nBits => { // Signed-bit value
+	UB: nBits => {
 		
 	},
-	UB: nBits => { // Unsigned-bit value
-		
-	},
-	FB: nBits => { // Signed, fixed-point bit value
+	FB: nBits => {
 		
 	}
 };
