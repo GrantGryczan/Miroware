@@ -10,15 +10,15 @@ const alignToByte = () => {
 const SWF = {
 	SI8: () => {
 		const value = SWF.UI8();
-		return value >>> 7 ? value - 256 : value;
+		return value >>> 7 ? value - 256 /* 2 ** 8 */ : value;
 	},
 	SI16: () => {
 		const value = SWF.UI16();
-		return value >>> 15 ? value - 65536 : value;
+		return value >>> 15 ? value - 65536 /* 2 ** 16 */ : value;
 	},
 	SI32: () => {
 		const value = SWF.UI32();
-		return value >>> 31 ? value - 4294967296 : value;
+		return value >>> 31 ? value - 4294967296 /* 2 ** 32 */ : value;
 	},
 	UI8: () => {
 		alignToByte();
@@ -27,21 +27,21 @@ const SWF = {
 	UI16: () => SWF.UI8() | data.bytes[data.byte++] << 8,
 	UI24: () => SWF.UI16() | data.bytes[data.byte++] << 16,
 	UI32: () => SWF.UI24() | data.bytes[data.byte++] << 24,
-	FIXED: () => SWF.SI16() + (data.bytes[data.byte++] | data.bytes[data.byte++] << 8) / 65536,
-	FIXED8: () => SWF.SI8() + data.bytes[data.byte++] / 256,
+	FIXED: () => SWF.SI16() + (data.bytes[data.byte++] | data.bytes[data.byte++] << 8) / 65536 /* 2 ** 16 */,
+	FIXED8: () => SWF.SI8() + data.bytes[data.byte++] / 256 /* 2 ** 8 */,
 	FLOAT16: () => {
 		const value = SWF.UI16();
 		const sign = value >>> 15 ? -1 : 1;
 		const exponent = (value << 17) >>> 27;
 		const significand = (value << 22) >>> 22;
-		return exponent === 21 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 15) * (+!!exponent + significand / 1024);
+		return exponent === 21 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 15) * (+!!exponent + significand / 1024 /* 2 ** 10 */);
 	},
 	FLOAT: () => {
 		const value = SWF.UI32();
 		const sign = value >>> 31 ? -1 : 1;
 		const exponent = (value << 1) >>> 24;
 		const significand = (value << 9) >>> 9;
-		return exponent === 255 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 127) * (+!!exponent + significand / 8388608);
+		return exponent === 255 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 127) * (+!!exponent + significand / 8388608 /* 2 ** 23 */);
 	},
 	DOUBLE: () => {
 		const value = SWF.UI32();
@@ -49,7 +49,7 @@ const SWF = {
 		const exponent = (value << 1) >>> 21;
 		const significand2 = (((data.bytes[data.byte++] | data.bytes[data.byte++] << 8) | data.bytes[data.byte++] << 16) | data.bytes[data.byte++] << 24).toString(2);
 		const significand = parseInt(((value << 12) >>> 12).toString(2) + "0".repeat(32 - significand2.length) + significand2, 2);
-		return exponent === 2047 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * (+!!exponent + significand / 4503599627370496);
+		return exponent === 2047 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * (+!!exponent + significand / 4503599627370496 /* 2 ** 52 */);
 	},
 	EncodedU32: () => {
 		alignToByte();
