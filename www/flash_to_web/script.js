@@ -20,12 +20,6 @@ const SWF = {
 		const value = SWF.UI32();
 		return value >>> 31 ? value - (1 << 32) : value;
 	},
-	SI8Array: n => {
-		
-	},
-	SI16Array: n => {
-		
-	},
 	UI8: () => {
 		alignToByte();
 		return data.bytes[data.byte++];
