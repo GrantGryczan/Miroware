@@ -57,14 +57,14 @@ const SWF = {
 		const significand = (value << 22) >>> 22;
 		return exponent === 16 ? (significand ? NaN : sign * Infinity) : sign * 2 ** exponent * ((exponent ? 1 : 0) + 2 ** (Math.log(significand) / Math.log(2) - 10));
 	},
-	FLOAT: () => { // Half-precision (32-bit) IEEE Standard 754 compatible
+	FLOAT: () => { // Single-precision (32-bit) IEEE Standard 754 compatible
 		const value = SWF.UI32();
 		const sign = value >>> 31 ? -1 : 1;
 		const exponent = ((value << 1) >>> 24) - 127;
 		const significand = (value << 9) >>> 9;
 		return exponent === 128 ? (significand ? NaN : sign * Infinity) : sign * 2 ** exponent * ((exponent ? 1 : 0) + 2 ** (Math.log(significand) / Math.log(2) - 23));
 	},
-	DOUBLE: () => { // Half-precision (64-bit) IEEE Standard 754 compatible
+	DOUBLE: () => { // Double-precision (64-bit) IEEE Standard 754 compatible
 		alignToByte();
 		
 	},
