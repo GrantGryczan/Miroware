@@ -47,14 +47,21 @@ const SWF = {
 		const value = SWF.UI32();
 		const sign = value >>> 31 ? -1 : 1;
 		const exponent = (value << 1) >>> 21;
-		const significand1 = ((value << 12) >>> 12).toString(2);
 		const significand2 = (((data.bytes[data.byte++] | data.bytes[data.byte++] << 8) | data.bytes[data.byte++] << 16) | data.bytes[data.byte++] << 24).toString(2);
-		const significand = parseInt("0".repeat(20 - significand1.length) + significand1 + "0".repeat(32 - significand2.length) + significand2, 2);
+		const significand = parseInt(((value << 12) >>> 12).toString(2) + "0".repeat(32 - significand2.length) + significand2, 2);
 		return exponent === 2047 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * (+!!exponent + significand / 4503599627370496);
 	},
 	EncodedU32: () => {
 		alignToByte();
-		
+		let value = 0;
+		for(let i = 0; i < 5; i++) {
+			const byte = data.bytes[data.byte++];
+			value |= (byte & 127) << 7 * i;
+			if (byte >>> 7 === 0) {
+				break;
+			}
+		}
+		return value;
 	},
 	SB: nBits => {
 		
