@@ -222,6 +222,7 @@ fileInput.addEventListener("change", () => {
 			data.file.FrameCount = SWF.UI16();
 			panel.classList.remove("hidden");
 		} catch(err) {
+			console.error(err);
 			new Miro.Dialog("Error", html`An error occurred while trying to read the SWF file.<br>$${err}`);
 		}
 		console.log(data);
