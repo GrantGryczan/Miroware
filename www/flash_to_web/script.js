@@ -44,7 +44,7 @@ const SWF = {
 	},
 	UI8: () => {
 		alignToByte();
-		data.bytes[data.byte++]
+		return data.bytes[data.byte++];
 	},
 	UI16: () => SWF.UI8() | SWF.UI8() << 8,
 	UI24: () => SWF.UI16() | SWF.UI8() << 16,
