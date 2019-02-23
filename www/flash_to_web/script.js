@@ -225,7 +225,7 @@ fileInput.addEventListener("change", () => {
 			data.file.Version = data.array[3];
 			data.file.FileLength = ((data.array[4] | data.array[5] << 8) | data.array[6] << 16) | data.array[7] << 24;
 			data.file.FrameSize = SWF.RECT();
-			data.file.FrameRate = SWF.UI16();
+			data.file.FrameRate = SWF.FIXED8();
 			data.file.FrameCount = SWF.UI16();
 			panel.classList.remove("hidden");
 		} catch(err) {
