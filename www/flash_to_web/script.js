@@ -182,6 +182,17 @@ const SWF = {
 			value.AlphaAddTerm = SWF.SB(value.Nbits);
 		}
 		return value;
+	},
+	RECORDHEADER: () => {
+		const value = {
+			TagCodeAndLength: SWF.UI16()
+		};
+		value.TagCode = value.TagCodeAndLength >>> 6;
+		value.Length = value.TagCodeAndLength & 0b0000000000111111;
+		if (value.Length === 0b111111) {
+			value.Length = SWF.UI32();
+		}
+		return value;
 	}
 };
 const read = function() {
