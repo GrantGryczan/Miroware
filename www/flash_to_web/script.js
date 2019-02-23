@@ -39,7 +39,10 @@ const SWF = {
 		const value = SWF.UI32();
 		return value >>> 31 ? value - 4294967296 /* 2 ** 32 */ : value;
 	},
-	UI8: () => data.bytes[data.byte++],
+	UI8: () => {
+		alignToByte();
+		data.bytes[data.byte++]
+	},
 	UI16: () => SWF.UI8() | SWF.UI8() << 8,
 	UI24: () => SWF.UI16() | SWF.UI8() << 16,
 	UI32: () => SWF.UI24() | SWF.UI8() << 24,
@@ -78,12 +81,12 @@ const SWF = {
 		}
 		return value;
 	},
-	SB: nBits => { // no byte alignment
+	SB: nBits => {
 		const value = SWF.UB(nBits);
 		return value[0] ? value - 2 ** nBits : +value;
 	},
-	UB: nBits => new BitValue(nBits), // no byte alignment
-	FB: nBits => { // no byte alignment
+	UB: nBits => new BitValue(nBits),
+	FB: nBits => {
 		const value = SWF.UB(nBits);
 		console.log(`FB[${nBits}]`, value);
 		return 1; // TODO: Find the position of the decimal point
@@ -109,6 +112,7 @@ const SWF = {
 		Blue: SWF.UI8()
 	}),
 	RECT: () => {
+		alignToByte();
 		const value = {
 			Nbits: +SWF.UB(5)
 		};
@@ -119,6 +123,7 @@ const SWF = {
 		return value;
 	},
 	MATRIX: () => {
+		alignToByte();
 		const value = {};
 		if(value.HasScale = +SWF.UB(1)) {
 			value.NScaleBits = +SWF.UB(5);
@@ -136,6 +141,7 @@ const SWF = {
 		return value;
 	},
 	CXFORM: () => {
+		alignToByte();
 		const value = {
 			HasAddTerms: +SWF.UB(1),
 			HasMultTerms: +SWF.UB(1),
@@ -154,6 +160,7 @@ const SWF = {
 		return value;
 	},
 	CXFORMWITHALPHA: () => {
+		alignToByte();
 		const value = {
 			HasAddTerms: +SWF.UB(1),
 			HasMultTerms: +SWF.UB(1),
