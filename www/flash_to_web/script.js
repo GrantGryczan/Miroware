@@ -20,9 +20,6 @@ const BitValue = class BitValue extends Array {
 				data.bit++;
 			}
 		}
-		this.update();
-	}
-	update() {
 		this.primitive = parseInt(this.join(""), 2);
 	}
 	[Symbol.toPrimitive]() {
