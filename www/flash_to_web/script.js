@@ -86,9 +86,10 @@ const SWF = {
 		return value[0] ? value - 2 ** nBits : +value;
 	},
 	UB: nBits => new BitValue(nBits), // no byte alignment
-	FB: nBits => { // no byte alignment // TODO: Find the position of the decimal point
+	FB: nBits => { // no byte alignment
 		const value = SWF.UB(nBits);
 		console.log(`FB[${nBits}]`, value);
+		return 1; // TODO: Find the position of the decimal point
 	},
 	STRING: () => {
 		let value = "";
@@ -112,12 +113,29 @@ const SWF = {
 	}),
 	RECT: () => {
 		const value = {
-			Nbits: SWF.UB(5)
+			Nbits: +SWF.UB(5)
 		};
 		value.Xmin = SWF.SB(value.Nbits);
 		value.Xmax = SWF.SB(value.Nbits);
 		value.Ymin = SWF.SB(value.Nbits);
 		value.Ymax = SWF.SB(value.Nbits);
+		return value;
+	},
+	MATRIX: () => {
+		const value = {};
+		if(value.HasScale = +SWF.UB(1)) {
+			value.NScaleBits = +SWF.UB(5);
+			value.ScaleX = SWF.FB(value.NScaleBits);
+			value.ScaleY = SWF.FB(value.NScaleBits);
+		}
+		if(value.HasRotate = +SWF.UB(1)) {
+			value.NRotateBits = +SWF.UB(5);
+			value.RotateSkew0 = SWF.FB(value.NRotateBits);
+			value.RotateSkew1 = SWF.FB(value.NRotateBits);
+		}
+		value.NTranslateBits = +SWF.UB(5);
+		value.TranslateX = SWF.SB(value.NTranslateBits);
+		value.TranslateY = SWF.SB(value.NTranslateBits);
 		return value;
 	}
 };
