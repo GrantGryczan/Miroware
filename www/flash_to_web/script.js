@@ -137,6 +137,44 @@ const SWF = {
 		value.TranslateX = SWF.SB(value.NTranslateBits);
 		value.TranslateY = SWF.SB(value.NTranslateBits);
 		return value;
+	},
+	CXFORM: () => {
+		const value = {
+			HasAddTerms: +SWF.UB(1),
+			HasMultTerms: +SWF.UB(1),
+			Nbits: +SWF.UB(4)
+		};
+		if(value.HasMultTerms) {
+			value.RedMultTerm = SWF.SB(value.Nbits);
+			value.GreenMultTerm = SWF.SB(value.Nbits);
+			value.BlueMultTerm = SWF.SB(value.Nbits);
+		}
+		if(value.HasAddTerms) {
+			value.RedAddTerm = SWF.SB(value.Nbits);
+			value.GreenAddTerm = SWF.SB(value.Nbits);
+			value.BlueAddTerm = SWF.SB(value.Nbits);
+		}
+		return value;
+	},
+	CXFORMWITHALPHA: () => {
+		const value = {
+			HasAddTerms: +SWF.UB(1),
+			HasMultTerms: +SWF.UB(1),
+			Nbits: +SWF.UB(4)
+		};
+		if(value.HasMultTerms) {
+			value.RedMultTerm = SWF.SB(value.Nbits);
+			value.GreenMultTerm = SWF.SB(value.Nbits);
+			value.BlueMultTerm = SWF.SB(value.Nbits);
+			value.AlphaMultTerm = SWF.SB(value.Nbits);
+		}
+		if(value.HasAddTerms) {
+			value.RedAddTerm = SWF.SB(value.Nbits);
+			value.GreenAddTerm = SWF.SB(value.Nbits);
+			value.BlueAddTerm = SWF.SB(value.Nbits);
+			value.AlphaAddTerm = SWF.SB(value.Nbits);
+		}
+		return value;
 	}
 };
 const fileInput = document.createElement("input");
