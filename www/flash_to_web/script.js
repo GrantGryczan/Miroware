@@ -49,14 +49,8 @@ const SWF = {
 	UI16: () => SWF.UI8() | SWF.UI8() << 8,
 	UI24: () => SWF.UI16() | SWF.UI8() << 16,
 	UI32: () => SWF.UI24() | SWF.UI8() << 24,
-	FIXED: () => {
-		const value = SWF.UI16() / 65536 /* 2 ** 16 */ + SWF.UI16();
-		return value >>> 15 ? value - 65536 /* 2 ** 16 */ : value;
-	},
-	FIXED8: () => {
-		const value = SWF.UI8() / 256 /* 2 ** 8 */ + SWF.UI8();
-		return value >>> 7 ? value - 256 /* 2 ** 8 */ : value;
-	},
+	FIXED: () => SWF.SI16() + SWF.UI16() / 65536,
+	FIXED8: () => SWF.SI8() + SWF.UI8() / 256,
 	FLOAT16: () => {
 		const value = SWF.UI16();
 		const sign = value >>> 15 ? -1 : 1;
@@ -223,7 +217,7 @@ const read = function() {
 		data.file.Version = data.array[3];
 		data.file.FileLength = ((data.array[4] | data.array[5] << 8) | data.array[6] << 16) | data.array[7] << 24;
 		data.file.FrameSize = SWF.RECT();
-		data.file.FrameRate = SWF.FIXED8();
+		data.file.FrameRate = SWF.UI8() / 256 /* 2 ** 8 */ + SWF.UI8();
 		data.file.FrameCount = SWF.UI16();
 		panel.classList.remove("hidden");
 	} catch(err) {
