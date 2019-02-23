@@ -2,9 +2,31 @@ const form = document.body.querySelector("#form");
 const panel = form.querySelector("#panel");
 let data;
 const alignToByte = () => {
-	if (bit > 0) {
-		byte++;
-		bit = 0;
+	if (data.bit !== 0) {
+		data.byte++;
+		data.bit = 0;
+	}
+};
+const BitValue = class BitValue extends Array {
+	constructor(length) {
+		super(+length);
+		let byte = data.bytes[data.byte];
+		for (let i = 0; i < this.length; i++) {
+			this[i] = byte & 1 << 7 - data.bit ? 1 : 0;
+			if (data.bit + 1 === 8) {
+				byte = data.bytes[++data.byte];
+				data.bit = 0;
+			} else {
+				data.bit++;
+			}
+		}
+		this.update();
+	}
+	update() {
+		this.primitive = parseInt(this.join(""), 2);
+	}
+	[Symbol.toPrimitive]() {
+		return this.primitive;
 	}
 };
 const SWF = {
@@ -34,14 +56,14 @@ const SWF = {
 		const sign = value >>> 15 ? -1 : 1;
 		const exponent = (value << 17) >>> 27;
 		const significand = (value << 22) >>> 22;
-		return exponent === 21 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 15) * (+!!exponent + significand / 1024 /* 2 ** 10 */);
+		return exponent === 21 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 15) * ((exponent ? 1 : 0) + significand / 1024 /* 2 ** 10 */);
 	},
 	FLOAT: () => {
 		const value = SWF.UI32();
 		const sign = value >>> 31 ? -1 : 1;
 		const exponent = (value << 1) >>> 24;
 		const significand = (value << 9) >>> 9;
-		return exponent === 255 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 127) * (+!!exponent + significand / 8388608 /* 2 ** 23 */);
+		return exponent === 255 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 127) * ((exponent ? 1 : 0) + significand / 8388608 /* 2 ** 23 */);
 	},
 	DOUBLE: () => {
 		const value = SWF.UI32();
@@ -49,7 +71,7 @@ const SWF = {
 		const exponent = (value << 1) >>> 21;
 		const significand2 = (((data.bytes[data.byte++] | data.bytes[data.byte++] << 8) | data.bytes[data.byte++] << 16) | data.bytes[data.byte++] << 24).toString(2);
 		const significand = parseInt(((value << 12) >>> 12).toString(2) + "0".repeat(32 - significand2.length) + significand2, 2);
-		return exponent === 2047 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * (+!!exponent + significand / 4503599627370496 /* 2 ** 52 */);
+		return exponent === 2047 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * ((exponent ? 1 : 0) + significand / 4503599627370496 /* 2 ** 52 */);
 	},
 	EncodedU32: () => {
 		alignToByte();
@@ -64,13 +86,15 @@ const SWF = {
 		return value;
 	},
 	SB: nBits => {
-		
+		const value = SWF.UB(nBits);
+		return value[0] ? value - 2 ** nBits : +value;
 	},
 	UB: nBits => {
-		
+		return new BitValue(nBits);
 	},
-	FB: nBits => {
-		
+	FB: nBits => { // TODO
+		const value = SWF.UB(nBits);
+		console.log(`FB[${nBits}]`, value);
 	}
 };
 const fileInput = document.createElement("input");
