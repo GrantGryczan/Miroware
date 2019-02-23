@@ -42,15 +42,12 @@ const SWF = {
 		const value = SWF.UI32();
 		return value >>> 31 ? value - 4294967296 /* 2 ** 32 */ : value;
 	},
-	UI8: () => {
-		alignToByte();
-		return data.bytes[data.byte++];
-	},
-	UI16: () => SWF.UI8() | data.bytes[data.byte++] << 8,
-	UI24: () => SWF.UI16() | data.bytes[data.byte++] << 16,
-	UI32: () => SWF.UI24() | data.bytes[data.byte++] << 24,
-	FIXED: () => SWF.SI16() + (data.bytes[data.byte++] | data.bytes[data.byte++] << 8) / 65536 /* 2 ** 16 */,
-	FIXED8: () => SWF.SI8() + data.bytes[data.byte++] / 256 /* 2 ** 8 */,
+	UI8: () => data.bytes[data.byte++],
+	UI16: () => SWF.UI8() | SWF.UI8() << 8,
+	UI24: () => SWF.UI16() | SWF.UI8() << 16,
+	UI32: () => SWF.UI24() | SWF.UI8() << 24,
+	FIXED: () => SWF.SI16() + (SWF.UI8() | SWF.UI8() << 8) / 65536 /* 2 ** 16 */,
+	FIXED8: () => SWF.SI8() + SWF.UI8() / 256 /* 2 ** 8 */,
 	FLOAT16: () => {
 		const value = SWF.UI16();
 		const sign = value >>> 15 ? -1 : 1;
@@ -69,7 +66,7 @@ const SWF = {
 		const value = SWF.UI32();
 		const sign = value >>> 31 ? -1 : 1;
 		const exponent = (value << 1) >>> 21;
-		const significand2 = (((data.bytes[data.byte++] | data.bytes[data.byte++] << 8) | data.bytes[data.byte++] << 16) | data.bytes[data.byte++] << 24).toString(2);
+		const significand2 = SWF.UI32().toString(2);
 		const significand = parseInt(((value << 12) >>> 12).toString(2) + "0".repeat(32 - significand2.length) + significand2, 2);
 		return exponent === 2047 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * ((exponent ? 1 : 0) + significand / 4503599627370496 /* 2 ** 52 */);
 	},
@@ -77,7 +74,7 @@ const SWF = {
 		alignToByte();
 		let value = 0;
 		for (let i = 0; i < 5; i++) {
-			const byte = data.bytes[data.byte++];
+			const byte = SWF.UI8();
 			value |= (byte & 127) << 7 * i;
 			if (byte >>> 7 === 0) {
 				break;
@@ -95,6 +92,14 @@ const SWF = {
 	FB: nBits => { // TODO
 		const value = SWF.UB(nBits);
 		console.log(`FB[${nBits}]`, value);
+	},
+	STRING: () => {
+		let value = "";
+		let byte;
+		while (byte = SWF.UI8()) {
+			value += String.fromCharCode(byte);
+		}
+		return value;
 	}
 };
 const fileInput = document.createElement("input");
