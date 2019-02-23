@@ -12,7 +12,7 @@ const BitValue = class BitValue {
 		this.array = new Array(+length);
 		let byte = data.bytes[data.byte];
 		for (let i = 0; i < this.array.length; i++) {
-			this.array[i] = byte & 1 << 7 - data.bit ? 1 : 0;
+			this.array[i] = byte >>> 7 - data.bit & 1;
 			if (data.bit + 1 === 8) {
 				byte = data.bytes[++data.byte];
 				data.bit = 0;
@@ -32,15 +32,15 @@ const BitValue = class BitValue {
 const SWF = {
 	SI8: () => {
 		const value = SWF.UI8();
-		return value >>> 7 ? value - 256 /* 2 ** 8 */ : value;
+		return value & 0b10000000 ? value - 256 /* 2 ** 8 */ : value;
 	},
 	SI16: () => {
 		const value = SWF.UI16();
-		return value >>> 15 ? value - 65536 /* 2 ** 16 */ : value;
+		return value & 0b1000000000000000 ? value - 65536 /* 2 ** 16 */ : value;
 	},
 	SI32: () => {
 		const value = SWF.UI32();
-		return value >>> 31 ? value - 4294967296 /* 2 ** 32 */ : value;
+		return value & 0b10000000000000000000000000000000 ? value - 4294967296 /* 2 ** 32 */ : value;
 	},
 	UI8: () => {
 		alignToByte();
@@ -49,35 +49,35 @@ const SWF = {
 	UI16: () => SWF.UI8() | SWF.UI8() << 8,
 	UI24: () => SWF.UI16() | SWF.UI8() << 16,
 	UI32: () => SWF.UI24() | SWF.UI8() << 24,
-	FIXED: () => SWF.SI16() + SWF.UI16() / 65536,
-	FIXED8: () => SWF.SI8() + SWF.UI8() / 256,
+	FIXED: () => SWF.SI16() + SWF.UI16() / 65536 /* 2 ** 16 */,
+	FIXED8: () => SWF.SI8() + SWF.UI8() / 256 /* 2 ** 8 */,
 	FLOAT16: () => {
 		const value = SWF.UI16();
-		const sign = value >>> 15 ? -1 : 1;
-		const exponent = (value << 17) >>> 27;
-		const significand = (value << 22) >>> 22;
-		return exponent === 21 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 15) * ((exponent ? 1 : 0) + significand / 1024 /* 2 ** 10 */);
+		const sign = value & 0b1000000000000000 ? -1 : 1;
+		const exponent = value >>> 10 & 0b011111;
+		const significand = value & 0b0000001111111111;
+		return exponent === 0b11111 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 15) * ((exponent ? 1 : 0) + significand / 1024 /* 2 ** 10 */);
 	},
 	FLOAT: () => {
 		const value = SWF.UI32();
-		const sign = value >>> 31 ? -1 : 1;
-		const exponent = (value << 1) >>> 24;
-		const significand = (value << 9) >>> 9;
-		return exponent === 255 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 127) * ((exponent ? 1 : 0) + significand / 8388608 /* 2 ** 23 */);
+		const sign = value & 0b10000000000000000000000000000000 ? -1 : 1;
+		const exponent = value >>> 23 & 0b011111111;
+		const significand = value & 0b00000000011111111111111111111111;
+		return exponent === 0b11111111 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 127) * ((exponent ? 1 : 0) + significand / 8388608 /* 2 ** 23 */);
 	},
 	DOUBLE: () => {
 		const value = SWF.UI32();
-		const sign = value >>> 31 ? -1 : 1;
-		const exponent = (value << 1) >>> 21;
+		const sign = value & 0b10000000000000000000000000000000 ? -1 : 1;
+		const exponent = value >>> 20 & 0b011111111111;
 		const significand2 = SWF.UI32().toString(2);
-		const significand = parseInt(((value << 12) >>> 12).toString(2) + "0".repeat(32 - significand2.length) + significand2, 2);
-		return exponent === 2047 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * ((exponent ? 1 : 0) + significand / 4503599627370496 /* 2 ** 52 */);
+		const significand = parseInt((value & 0b00000000000011111111111111111111).toString(2) + "0".repeat(32 - significand2.length) + significand2, 2);
+		return exponent === 0b11111111111 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * ((exponent ? 1 : 0) + significand / 4503599627370496 /* 2 ** 52 */);
 	},
 	EncodedU32: () => {
 		let value = 0;
 		for (let i = 0; i < 5; i++) {
 			const byte = SWF.UI8();
-			value |= (byte & 127) << 7 * i;
+			value |= (byte & 0b01111111) << 7 * i;
 			if (byte >>> 7 === 0) {
 				break;
 			}
@@ -128,12 +128,12 @@ const SWF = {
 	MATRIX: () => {
 		alignToByte();
 		const value = {};
-		if(value.HasScale = +SWF.UB(1)) {
+		if (value.HasScale = +SWF.UB(1)) {
 			value.NScaleBits = +SWF.UB(5);
 			value.ScaleX = SWF.FB(value.NScaleBits);
 			value.ScaleY = SWF.FB(value.NScaleBits);
 		}
-		if(value.HasRotate = +SWF.UB(1)) {
+		if (value.HasRotate = +SWF.UB(1)) {
 			value.NRotateBits = +SWF.UB(5);
 			value.RotateSkew0 = SWF.FB(value.NRotateBits);
 			value.RotateSkew1 = SWF.FB(value.NRotateBits);
@@ -150,12 +150,12 @@ const SWF = {
 			HasMultTerms: +SWF.UB(1),
 			Nbits: +SWF.UB(4)
 		};
-		if(value.HasMultTerms) {
+		if (value.HasMultTerms) {
 			value.RedMultTerm = SWF.SB(value.Nbits);
 			value.GreenMultTerm = SWF.SB(value.Nbits);
 			value.BlueMultTerm = SWF.SB(value.Nbits);
 		}
-		if(value.HasAddTerms) {
+		if (value.HasAddTerms) {
 			value.RedAddTerm = SWF.SB(value.Nbits);
 			value.GreenAddTerm = SWF.SB(value.Nbits);
 			value.BlueAddTerm = SWF.SB(value.Nbits);
@@ -169,13 +169,13 @@ const SWF = {
 			HasMultTerms: +SWF.UB(1),
 			Nbits: +SWF.UB(4)
 		};
-		if(value.HasMultTerms) {
+		if (value.HasMultTerms) {
 			value.RedMultTerm = SWF.SB(value.Nbits);
 			value.GreenMultTerm = SWF.SB(value.Nbits);
 			value.BlueMultTerm = SWF.SB(value.Nbits);
 			value.AlphaMultTerm = SWF.SB(value.Nbits);
 		}
-		if(value.HasAddTerms) {
+		if (value.HasAddTerms) {
 			value.RedAddTerm = SWF.SB(value.Nbits);
 			value.GreenAddTerm = SWF.SB(value.Nbits);
 			value.BlueAddTerm = SWF.SB(value.Nbits);
