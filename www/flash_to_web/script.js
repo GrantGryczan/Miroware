@@ -49,8 +49,14 @@ const SWF = {
 	UI16: () => SWF.UI8() | SWF.UI8() << 8,
 	UI24: () => SWF.UI16() | SWF.UI8() << 16,
 	UI32: () => SWF.UI24() | SWF.UI8() << 24,
-	FIXED: () => SWF.SI16() / 65536 /* 2 ** 16 */ + SWF.UI16(),
-	FIXED8: () => SWF.SI8() / 256 /* 2 ** 8 */ + SWF.UI8(),
+	FIXED: () => {
+		const value = SWF.UI16() / 65536 /* 2 ** 16 */ + SWF.UI16();
+		return value >>> 15 ? value - 65536 /* 2 ** 16 */ : value;
+	},
+	FIXED8: () => {
+		const value = SWF.UI8() / 256 /* 2 ** 8 */ + SWF.UI8();
+		return value >>> 7 ? value - 256 /* 2 ** 8 */ : value;
+	},
 	FLOAT16: () => {
 		const value = SWF.UI16();
 		const sign = value >>> 15 ? -1 : 1;
