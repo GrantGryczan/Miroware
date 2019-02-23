@@ -46,7 +46,7 @@ const SWF = {
 	UI16: () => SWF.UI8() | SWF.UI8() << 8,
 	UI24: () => SWF.UI16() | SWF.UI8() << 16,
 	UI32: () => SWF.UI24() | SWF.UI8() << 24,
-	FIXED: () => SWF.SI16() + (SWF.UI8() | SWF.UI8() << 8) / 65536 /* 2 ** 16 */,
+	FIXED: () => SWF.SI16() + SWF.UI16() / 65536 /* 2 ** 16 */,
 	FIXED8: () => SWF.SI8() + SWF.UI8() / 256 /* 2 ** 8 */,
 	FLOAT16: () => {
 		const value = SWF.UI16();
@@ -71,7 +71,6 @@ const SWF = {
 		return exponent === 2047 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * ((exponent ? 1 : 0) + significand / 4503599627370496 /* 2 ** 52 */);
 	},
 	EncodedU32: () => {
-		alignToByte();
 		let value = 0;
 		for (let i = 0; i < 5; i++) {
 			const byte = SWF.UI8();
@@ -82,14 +81,12 @@ const SWF = {
 		}
 		return value;
 	},
-	SB: nBits => {
+	SB: nBits => { // no byte alignment
 		const value = SWF.UB(nBits);
 		return value[0] ? value - 2 ** nBits : +value;
 	},
-	UB: nBits => {
-		return new BitValue(nBits);
-	},
-	FB: nBits => { // TODO
+	UB: nBits => new BitValue(nBits), // no byte alignment
+	FB: nBits => { // no byte alignment // TODO: Find the position of the decimal point
 		const value = SWF.UB(nBits);
 		console.log(`FB[${nBits}]`, value);
 	},
@@ -99,6 +96,28 @@ const SWF = {
 		while (byte = SWF.UI8()) {
 			value += String.fromCharCode(byte);
 		}
+		return value;
+	},
+	LANGCODE: () => SWF.UI8(),
+	RGB: () => ({
+		Red: SWF.UI8(),
+		Green: SWF.UI8(),
+		Blue: SWF.UI8()
+	}),
+	RGBA: () => ({
+		Alpha: SWF.UI8(),
+		Red: SWF.UI8(),
+		Green: SWF.UI8(),
+		Blue: SWF.UI8()
+	}),
+	RECT: () => {
+		const value = {
+			Nbits: SWF.UB(5)
+		};
+		value.Xmin = SWF.SB(value.Nbits);
+		value.Xmax = SWF.SB(value.Nbits);
+		value.Ymin = SWF.SB(value.Nbits);
+		value.Ymax = SWF.SB(value.Nbits);
 		return value;
 	}
 };
