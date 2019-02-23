@@ -190,6 +190,50 @@ const SWF = {
 		return value;
 	}
 };
+const read = function() {
+	data = {
+		array: new Uint8Array(this.result),
+		file: {},
+		byte: 0,
+		bit: 0
+	};
+	try {
+		data.file.Signature = String.fromCharCode(...data.array.slice(0, 3));
+		if (data.file.Signature.slice(1) !== "WS") {
+			throw new Error("Invalid SWF signature");
+		}
+		const compression = data.file.Signature[0];
+		if (compression === "F") {
+			data.bytes = data.array.slice(8);
+		} else if (compression === "C") {
+			data.bytes = pako.inflate(data.array.slice(8));
+		} else if (compression === "Z") {
+			const result = LZMA.decompress(data.array.slice(8));
+			if (typeof result === "string") {
+				data.bytes = new Uint8Array(result.length);
+				for (let i = 0; i < result.length; i++) {
+					data.bytes[i] = result[i].charCodeAt();
+				}
+			} else {
+				data.bytes = result;
+			}
+		} else {
+			throw new Error("Unsupported compression method");
+		}
+		data.file.Version = data.array[3];
+		data.file.FileLength = ((data.array[4] | data.array[5] << 8) | data.array[6] << 16) | data.array[7] << 24;
+		data.file.FrameSize = SWF.RECT();
+		data.file.FrameRate = SWF.FIXED8();
+		data.file.FrameCount = SWF.UI16();
+		panel.classList.remove("hidden");
+	} catch(err) {
+		console.error(err);
+		new Miro.Dialog("Error", html`An error occurred while trying to read the SWF file.<br>$${err}`);
+	}
+	console.log(data);
+	Miro.formState(form, true);
+	Miro.progress.close();
+};
 const fileInput = document.createElement("input");
 fileInput.type = "file";
 fileInput.accept = "application/x-shockwave-flash";
@@ -198,50 +242,7 @@ fileInput.addEventListener("change", () => {
 	Miro.formState(form, false);
 	Miro.progress.open();
 	const reader = new FileReader();
-	reader.addEventListener("loadend", () => {
-		data = {
-			array: new Uint8Array(reader.result),
-			file: {},
-			byte: 0,
-			bit: 0
-		};
-		try {
-			data.file.Signature = String.fromCharCode(...data.array.slice(0, 3));
-			if (data.file.Signature.slice(1) !== "WS") {
-				throw new Error("Invalid SWF signature");
-			}
-			const compression = data.file.Signature[0];
-			if (compression === "F") {
-				data.bytes = data.array.slice(8);
-			} else if (compression === "C") {
-				data.bytes = pako.inflate(data.array.slice(8));
-			} else if (compression === "Z") {
-				const result = LZMA.decompress(data.array.slice(8));
-				if (typeof result === "string") {
-					data.bytes = new Uint8Array(result.length);
-					for (let i = 0; i < result.length; i++) {
-						data.bytes[i] = result[i].charCodeAt();
-					}
-				} else {
-					data.bytes = result;
-				}
-			} else {
-				throw new Error("Unsupported compression method");
-			}
-			data.file.Version = data.array[3];
-			data.file.FileLength = ((data.array[4] | data.array[5] << 8) | data.array[6] << 16) | data.array[7] << 24;
-			data.file.FrameSize = SWF.RECT();
-			data.file.FrameRate = SWF.FIXED8();
-			data.file.FrameCount = SWF.UI16();
-			panel.classList.remove("hidden");
-		} catch(err) {
-			console.error(err);
-			new Miro.Dialog("Error", html`An error occurred while trying to read the SWF file.<br>$${err}`);
-		}
-		console.log(data);
-		Miro.formState(form, true);
-		Miro.progress.close();
-	});
+	reader.addEventListener("loadend", read);
 	reader.readAsArrayBuffer(fileInput.files[0]);
 	fileInput.value = null;
 });
