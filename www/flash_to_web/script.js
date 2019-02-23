@@ -188,7 +188,9 @@ fileInput.addEventListener("change", () => {
 	reader.addEventListener("loadend", () => {
 		data = {
 			array: new Uint8Array(reader.result),
-			file: {}
+			file: {},
+			byte: 0,
+			bit: 0
 		};
 		try {
 			data.file.Signature = String.fromCharCode(...data.array.slice(0, 3));
@@ -215,8 +217,9 @@ fileInput.addEventListener("change", () => {
 			}
 			data.file.Version = data.array[3];
 			data.file.FileLength = ((data.array[4] | data.array[5] << 8) | data.array[6] << 16) | data.array[7] << 24;
-			data.byte = 0;
-			data.bit = 0;
+			data.file.FrameSize = SWF.RECT();
+			data.file.FrameRate = SWF.UI16();
+			data.file.FrameCount = SWF.UI16();
 			panel.classList.remove("hidden");
 		} catch(err) {
 			new Miro.Dialog("Error", html`An error occurred while trying to read the SWF file.<br>$${err}`);
