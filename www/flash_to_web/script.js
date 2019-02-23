@@ -54,7 +54,7 @@ const SWF = {
 	EncodedU32: () => {
 		alignToByte();
 		let value = 0;
-		for(let i = 0; i < 5; i++) {
+		for (let i = 0; i < 5; i++) {
 			const byte = data.bytes[data.byte++];
 			value |= (byte & 127) << 7 * i;
 			if (byte >>> 7 === 0) {
