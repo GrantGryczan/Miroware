@@ -7,12 +7,12 @@ const alignToByte = () => {
 		data.bit = 0;
 	}
 };
-const BitValue = class BitValue extends Array {
+const BitValue = class BitValue {
 	constructor(length) {
-		super(+length);
+		this.array = new Array(+length);
 		let byte = data.bytes[data.byte];
-		for (let i = 0; i < this.length; i++) {
-			this[i] = byte & 1 << 7 - data.bit ? 1 : 0;
+		for (let i = 0; i < this.array.length; i++) {
+			this.array[i] = byte & 1 << 7 - data.bit ? 1 : 0;
 			if (data.bit + 1 === 8) {
 				byte = data.bytes[++data.byte];
 				data.bit = 0;
@@ -20,7 +20,10 @@ const BitValue = class BitValue extends Array {
 				data.bit++;
 			}
 		}
-		this.primitive = parseInt(this.join(""), 2);
+		this.update();
+	}
+	update() {
+		this.primitive = parseInt(this.array.join(""), 2);
 	}
 	[Symbol.toPrimitive]() {
 		return this.primitive;
@@ -83,7 +86,7 @@ const SWF = {
 	},
 	SB: nBits => {
 		const value = SWF.UB(nBits);
-		return value[0] ? value - 2 ** nBits : +value;
+		return value.array[0] ? value - 2 ** nBits : +value;
 	},
 	UB: nBits => new BitValue(nBits),
 	FB: nBits => {
