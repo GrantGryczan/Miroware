@@ -94,10 +94,10 @@ const SWF = {
 		console.log(`FB[${nBits}]`, value);
 		return 1; // TODO: Find the position of the decimal point
 	},
-	STRING: () => {
+	STRING: (length = Infinity) => {
 		let value = "";
 		let byte;
-		while (byte = SWF.UI8()) {
+		while (value.length < length && byte = SWF.UI8()) {
 			value += String.fromCharCode(byte);
 		}
 		return value;
