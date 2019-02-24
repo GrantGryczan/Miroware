@@ -97,7 +97,7 @@ const SWF = {
 	STRING: (length = Infinity) => {
 		let value = "";
 		let byte;
-		while (value.length < length && byte = SWF.UI8()) {
+		while (value.length < length && (byte = SWF.UI8())) {
 			value += String.fromCharCode(byte);
 		}
 		return value;
