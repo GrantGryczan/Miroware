@@ -24,7 +24,7 @@ const present = () => {
 	client.user.setPresence({
 		status: "online"
 	});
-	client.user.setActivity("with magic");
+	client.user.setActivity("https://miroware.io/");
 };
 client.once("ready", () => {
 	guild = client.guilds.get("343250948233101312");
