@@ -245,10 +245,14 @@ const SWF = {
 		};
 		const clipActionEndFlag = data.file.Version < 6 ? SWF.UI16 : SWF.UI32;
 		alignToByte();
-		for (let bytePos, endFlag; bytePos = data.bytePos, endFlag = clipActionEndFlag()) {
+		for (let bytePos, endFlag; bytePos = data.bytePos, endFlag = clipActionEndFlag();) {
 			data.bytePos = bytePos;
 			value.ClipActionRecords.push(SWF.CLIPACTIONRECORD());
 		}
+		return value;
+	},
+	CLIPACTIONRECORD: () => {
+		const value = {};
 		return value;
 	}
 };
