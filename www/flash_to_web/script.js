@@ -2,22 +2,22 @@ const form = document.body.querySelector("#form");
 const panel = form.querySelector("#panel");
 let data;
 const alignToByte = () => {
-	if (data.bit !== 0) {
-		data.byte++;
-		data.bit = 0;
+	if (data.bitPos !== 0) {
+		data.bytePos++;
+		data.bitPos = 0;
 	}
 };
 const BitValue = class BitValue {
 	constructor(length) {
 		this.array = new Array(+length);
-		let byte = data.bytes[data.byte];
+		let byte = data.bytes[data.bytePos];
 		for (let i = 0; i < this.array.length; i++) {
-			this.array[i] = byte >>> 7 - data.bit & 1;
-			if (data.bit + 1 === 8) {
-				byte = data.bytes[++data.byte];
-				data.bit = 0;
+			this.array[i] = byte >>> 7 - data.bitPos & 1;
+			if (data.bitPos + 1 === 8) {
+				byte = data.bytes[++data.bytePos];
+				data.bitPos = 0;
 			} else {
-				data.bit++;
+				data.bitPos++;
 			}
 		}
 		this.update();
@@ -44,7 +44,7 @@ const SWF = {
 	},
 	UI8: () => {
 		alignToByte();
-		return data.bytes[data.byte++];
+		return data.bytes[data.bytePos++];
 	},
 	UI16: () => SWF.UI8() | SWF.UI8() << 8,
 	UI24: () => SWF.UI16() | SWF.UI8() << 16,
@@ -195,25 +195,73 @@ const SWF = {
 		return value;
 	},
 	PlaceObject: value => {
-		const byte = data.byte;
+		const bytePos = data.bytePos;
 		value.CharacterId = SWF.UI16();
 		value.Depth = SWF.UI16();
 		value.Matrix = SWF.MATRIX();
-		if (byte < data.byte + value.Header.Length) {
+		if (bytePos < data.bytePos + value.Header.Length) {
 			value.ColorTransform = SWF.CXFORM();
+		}
+		return value;
+	},
+	PlaceObject2: value => {
+		value.PlaceFlagHasClipActions = +SWF.UB(1);
+		value.PlaceFlagHasClipDepth = +SWF.UB(1);
+		value.PlaceFlagHasName = +SWF.UB(1);
+		value.PlaceFlagHasRatio = +SWF.UB(1);
+		value.PlaceFlagHasColorTransform = +SWF.UB(1);
+		value.PlaceFlagHasMatrix = +SWF.UB(1);
+		value.PlaceFlagHasCharacter = +SWF.UB(1);
+		value.PlaceFlagMove = +SWF.UB(1);
+		value.Depth = SWF.UI16();
+		if (value.PlaceFlagHasCharacter) {
+			value.CharacterId = SWF.UI16();
+		}
+		if (value.PlaceFlagHasMatrix) {
+			value.Matrix = SWF.MATRIX();
+		}
+		if (value.PlaceFlagHasColorTransform) {
+			value.ColorTransform = SWF.CXFORMWITHALPHA();
+		}
+		if (value.PlaceFlagHasRatio) {
+			value.Ratio = SWF.UI16();
+		}
+		if (value.PlaceFlagHasName) {
+			value.Name = SWF.STRING();
+		}
+		if (value.PlaceFlagHasClipDepth) {
+			value.ClipDepth = SWF.UI16();
+		}
+		if (value.PlaceFlagHasClipActions) {
+			value.ClipActions = SWF.CLIPACTIONS();
+		}
+		return value;
+	},
+	CLIPACTIONS: () => {
+		data.bytePos += 16;
+		const value = {
+			AllEventFlags: SWF.CLIPEVENTFLAGS(),
+			ClipActionRecords: []
+		};
+		const clipActionEndFlag = data.file.Version < 6 ? SWF.UI16 : SWF.UI32;
+		alignToByte();
+		for (let bytePos, endFlag; bytePos = data.bytePos, endFlag = clipActionEndFlag()) {
+			data.bytePos = bytePos;
+			value.ClipActionRecords.push(SWF.CLIPACTIONRECORD());
 		}
 		return value;
 	}
 };
 const tagTypes = {
-	4: "PlaceObject"
+	4: "PlaceObject",
+	26: "PlaceObject2"
 };
 const read = function() {
 	data = {
 		array: new Uint8Array(this.result),
 		file: {},
-		byte: 0,
-		bit: 0
+		bytePos: 0,
+		bitPos: 0
 	};
 	try {
 		data.file.Signature = String.fromCharCode(...data.array.slice(0, 3));
@@ -244,7 +292,7 @@ const read = function() {
 		data.file.FrameRate = SWF.UI8() / 256 /* 2 ** 8 */ + SWF.UI8();
 		data.file.FrameCount = SWF.UI16();
 		data.file.Tags = [];
-		while (data.byte < data.bytes.length) {
+		while (data.bytePos < data.bytes.length) {
 			const tag = {
 				Header: SWF.RECORDHEADER()
 			};
@@ -252,7 +300,7 @@ const read = function() {
 			if (tagType) {
 				SWF[tagType](tag);
 			} else {
-				SWF.UB(8 * tag.Header.Length);
+				data.bytePos += tag.Header.Length;
 			}
 			data.file.Tags.push(tag);
 		}
