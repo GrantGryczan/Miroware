@@ -193,7 +193,20 @@ const SWF = {
 			value.Length = SWF.UI32();
 		}
 		return value;
+	},
+	PlaceObject: value => {
+		const byte = data.byte;
+		value.CharacterId = SWF.UI16();
+		value.Depth = SWF.UI16();
+		value.Matrix = SWF.MATRIX();
+		if (byte < data.byte + value.Header.Length) {
+			value.ColorTransform = SWF.CXFORM();
+		}
+		return value;
 	}
+};
+const tagTypes = {
+	4: "PlaceObject"
 };
 const read = function() {
 	data = {
@@ -230,6 +243,19 @@ const read = function() {
 		data.file.FrameSize = SWF.RECT();
 		data.file.FrameRate = SWF.UI8() / 256 /* 2 ** 8 */ + SWF.UI8();
 		data.file.FrameCount = SWF.UI16();
+		data.file.Tags = [];
+		while (data.byte < data.bytes.length) {
+			const tag = {
+				Header: SWF.RECORDHEADER()
+			};
+			const tagType = tagTypes[tag.Header.TagCode];
+			if (tagType) {
+				SWF[tagType](tag);
+			} else {
+				SWF.UB(8 * tag.Header.Length);
+			}
+			data.file.Tags.push(tag);
+		}
 		panel.classList.remove("hidden");
 	} catch(err) {
 		console.error(err);
