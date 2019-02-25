@@ -23,7 +23,7 @@ const BitValue = class BitValue {
 		this.update();
 	}
 	update() {
-		this.primitive = parseInt(this.array.join(""), 2); // Arrays and strings must be used because a SWF bit value can be longer than 32 bits, and JavaScript binary operations do not values that long.
+		this.primitive = this.array.length === 0 ? 0 : parseInt(this.array.join(""), 2); // Arrays and strings must be used because a SWF bit value can be longer than 32 bits, and JavaScript binary operations do not values that long.
 	}
 	[Symbol.toPrimitive]() {
 		return this.primitive;
