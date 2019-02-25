@@ -252,7 +252,18 @@ const SWF = {
 		return value;
 	},
 	CLIPACTIONRECORD: () => {
-		const value = {};
+		const value = {
+			EventFlags: SWF.CLIPEVENTFLAGS(),
+			ActionRecordSize: SWF.UI32()
+		};
+		const endPos = data.bytePos + value.ActionRecordSize;
+		if (value.EventFlags.ClipEventKeyPress) {
+			value.KeyCode = SWF.UI8();
+		}
+		value.Actions = [];
+		while (data.bytePos < endPos) {
+			value.Actions.push(SWF.ACTIONRECORD());
+		}
 		return value;
 	}
 };
