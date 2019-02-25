@@ -265,11 +265,101 @@ const SWF = {
 			value.Actions.push(SWF.ACTIONRECORD());
 		}
 		return value;
+	},
+	PlaceObject3: value => {
+		value.PlaceFlagHasClipActions = +SWF.UB(1);
+		value.PlaceFlagHasClipDepth = +SWF.UB(1);
+		value.PlaceFlagHasName = +SWF.UB(1);
+		value.PlaceFlagHasRatio = +SWF.UB(1);
+		value.PlaceFlagHasColorTransform = +SWF.UB(1);
+		value.PlaceFlagHasMatrix = +SWF.UB(1);
+		value.PlaceFlagHasCharacter = +SWF.UB(1);
+		value.PlaceFlagMove = +SWF.UB(1);
+		value.PlaceFlagOpaqueBackground = +SWF.UB(1);
+		value.PlaceFlagHasVisible = +SWF.UB(1);
+		value.PlaceFlagHasImage = +SWF.UB(1);
+		value.PlaceFlagHasClassName = +SWF.UB(1);
+		value.PlaceFlagHasCacheAsBitmap = +SWF.UB(1);
+		value.PlaceFlagHasBlendMode = +SWF.UB(1);
+		value.PlaceFlagHasFilterList = +SWF.UB(1);
+		value.Depth = SWF.UI16();
+		if (value.PlaceFlagHasClassName || (value.PlaceFlagHasImage && value.PlaceFlagHasCharacter)) {
+			value.ClassName = SWF.STRING();
+		}
+		if (value.PlaceFlagHasCharacter) {
+			value.CharacterId = SWF.UI16();
+		}
+		if (value.PlaceFlagHasMatrix) {
+			value.Matrix = SWF.MATRIX();
+		}
+		if (value.PlaceFlagHasColorTransform) {
+			value.ColorTransform = SWF.CXFORMWITHALPHA();
+		}
+		if (value.PlaceFlagHasRatio) {
+			value.Ratio = SWF.UI16();
+		}
+		if (value.PlaceFlagHasName) {
+			value.Name = SWF.STRING();
+		}
+		if (value.PlaceFlagHasClipDepth) {
+			value.ClipDepth = SWF.UI16();
+		}
+		if (value.PlaceFlagHasFilterList) {
+			value.SurfaceFilterList = SWF.FILTERLIST();
+		}
+		if (value.PlaceFlagHasBlendMode) {
+			value.BlendMode = SWF.UI8();
+		}
+		if (value.PlaceFlagHasCacheAsBitmap) {
+			value.BitmapCache = SWF.UI8();
+		}
+		if (value.PlaceFlagHasVisible) {
+			value.Visible = SWF.UI8();
+			value.BackgroundColor = SWF.RGBA();
+		}
+		if (value.PlaceFlagHasClipActions) {
+			value.ClipActions = SWF.CLIPACTIONS();
+		}
+		return value;
+	},
+	FILTERLIST: () => {
+		const value = {
+			NumberOfFilters: SWF.UI8(),
+			Filter: []
+		};
+		for (let i = 0; i < value.NumberOfFilters; i++) {
+			value.Filter.push(SWF.FILTER());
+		}
+		return value;
+	},
+	FILTER: () => {
+		const value = {
+			FilterID: SWF.UI8()
+		};
+		if (value.FilterID === 0) {
+			value.DropShadowFilter = SWF.DROPSHADOWFILTER();
+		} else if (value.FilterID === 1) {
+			value.BlurFilter = SWF.BLURFILTER();
+		} else if (value.FilterID === 2) {
+			value.GlowFilter = SWF.GLOWFILTER();
+		} else if (value.FilterID === 3) {
+			value.BevelFilter = SWF.BEVELFILTER();
+		} else if (value.FilterID === 4) {
+			value.GradientGlowFilter = SWF.GRADIENTGLOWFILTER();
+		} else if (value.FilterID === 5) {
+			value.ConvolutionFilter = SWF.CONVOLUTIONFILTER();
+		} else if (value.FilterID === 6) {
+			value.ColorMatrixFilter = SWF.COLORMATRIXFILTER();
+		} else if (value.FilterID === 7) {
+			value.GradientBevelFilter = SWF.GRADIENTBEVELFILTER();
+		}
+		return value;
 	}
 };
 const tagTypes = {
 	4: "PlaceObject",
-	26: "PlaceObject2"
+	26: "PlaceObject2",
+	70: "PlaceObject3"
 };
 const read = function() {
 	data = {
