@@ -492,7 +492,7 @@ const read = function() {
 	try {
 		data.file.Signature = String.fromCharCode(...data.array.slice(0, 3));
 		if (data.file.Signature.slice(1) !== "WS") {
-			throw new Error("Invalid SWF signature");
+			throw new Error("Invalid SWF Signature");
 		}
 		const compression = data.file.Signature[0];
 		if (compression === "F") {
