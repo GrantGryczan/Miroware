@@ -416,9 +416,37 @@ const SWF = {
 		const value = {
 			NumColors: SWF.UI8()
 		};
-		value.GradientColors = SWF.RGBA(value.NumColors);
-		value.GradientRatio = SWF.RGBA(value.NumColors);
-		
+		value.GradientColors = SWF.Array(SWF.RGBA, value.NumColors);
+		value.GradientRatio = SWF.Array(SWF.UI8, value.NumColors);
+		value.BlurX = SWF.FIXED();
+		value.BlurY = SWF.FIXED();
+		value.Angle = SWF.FIXED();
+		value.Distance = SWF.FIXED();
+		value.Strength = SWF.FIXED8();
+		value.InnerShadow = SWF.UB();
+		value.Knockout = SWF.UB();
+		value.CompositeSource = SWF.UB();
+		value.OnTop = SWF.UB();
+		value.Passes = SWF.UB(4);
+		return value;
+	},
+	GRADIENTBEVELFILTER: () => {
+		const value = {
+			NumColors: SWF.UI8()
+		};
+		value.GradientColors = SWF.Array(SWF.RGBA, value.NumColors);
+		value.GradientRatio = SWF.Array(SWF.UI8, value.NumColors);
+		value.BlurX = SWF.FIXED();
+		value.BlurY = SWF.FIXED();
+		value.Angle = SWF.FIXED();
+		value.Distance = SWF.FIXED();
+		value.Strength = SWF.FIXED8();
+		value.InnerShadow = SWF.UB();
+		value.Knockout = SWF.UB();
+		value.CompositeSource = SWF.UB();
+		value.OnTop = SWF.UB();
+		value.Passes = SWF.UB(4);
+		return value;
 	}
 };
 const tagTypes = {
