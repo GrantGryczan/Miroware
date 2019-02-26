@@ -379,11 +379,32 @@ const SWF = {
 			value.Matrix.push(SWF.FLOAT());
 		}
 		value.DefaultColor = SWF.RGBA();
-		value.Reserved = +SWF.UB(6);
+		SWF.UB(6);
 		value.CLamp = +SWF.UB(1);
 		value.PreserveAlpha = +SWF.UB(1);
 		return value;
-	}
+	},
+	BLURFILTER: () => {
+		const value = {
+			BlurX: SWF.FIXED(),
+			BlurY: SWF.FIXED(),
+			Passes: +SWF.UB(5)
+		};
+		SWF.UB(3);
+		return value;
+	},
+	DROPSHADOWFILTER: () => ({
+		DropShadowColor: SWF.RGBA(),
+		BlurX: SWF.FIXED(),
+		BlurY: SWF.FIXED(),
+		Angle: SWF.FIXED(),
+		Distance: SWF.FIXED(),
+		Strength: SWF.FIXED8(),
+		InnerShadow: +SWF.UB(1),
+		Knockout: +SWF.UB(1),
+		CompositeSource: +SWF.UB(1),
+		Passes: +SWF.UB(5)
+	})
 };
 const tagTypes = {
 	4: "PlaceObject",
