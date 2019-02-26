@@ -92,7 +92,7 @@ const SWF = {
 		}
 	},
 	FB: nBits => {
-		const value = new BitValue(nBits);
+		const value = SWF.UB(nBits, true);
 		console.log(`FB[${nBits}]`, value);
 		return 1; // TODO: Find the position of the decimal point
 	},
