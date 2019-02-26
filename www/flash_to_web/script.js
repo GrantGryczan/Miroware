@@ -8,6 +8,13 @@ const alignToByte = () => {
 	}
 };
 const SWF = {
+	Array: (type, n) => {
+		const array = new Array(+n);
+		for (let i = 0; i < n; i++) {
+			array[i] = type();
+		}
+		return array;
+	},
 	SI8: () => {
 		const value = SWF.UI8();
 		return value & 0b10000000 ? value - 256 /* 2 ** 8 */ : value;
@@ -62,37 +69,24 @@ const SWF = {
 		}
 		return value;
 	},
-	SB: nBits => {
+	SB: (nBits = 1) => {
 		const value = SWF.UB(nBits);
 		return value & 1 << nBits - 1 ? value - 2 ** nBits : value;
 	},
-	UB: (nBits, array) => {
-		if (array) {
-			const value = new Array(+length);
-			let byte = data.bytes[data.bytePos];
-			for (let i = 0; i < nBits; i++) {
-				value[i] = byte >>> 7 - data.bitPos & 1;
-				if (++data.bitPos === 8) {
-					byte = data.bytes[++data.bytePos];
-					data.bitPos = 0;
-				}
+	UB: (nBits = 1) => {
+		let value = 0;
+		let byte = data.bytes[data.bytePos];
+		for (let i = 0; i < nBits; i++) {
+			value = value << 1 | (byte >>> 7 - data.bitPos & 1);
+			if (++data.bitPos === 8) {
+				byte = data.bytes[++data.bytePos];
+				data.bitPos = 0;
 			}
-			return value;
-		} else {
-			let value = 0;
-			let byte = data.bytes[data.bytePos];
-			for (let i = 0; i < nBits; i++) {
-				value = value << 1 | (byte >>> 7 - data.bitPos & 1);
-				if (++data.bitPos === 8) {
-					byte = data.bytes[++data.bytePos];
-					data.bitPos = 0;
-				}
-			}
-			return value;
 		}
+		return value;
 	},
-	FB: nBits => {
-		const value = SWF.UB(nBits, true);
+	FB: (nBits = 1) => {
+		const value = SWF.Array(SWF.UB, nBits);
 		console.log(`FB[${nBits}]`, value);
 		return 1; // TODO: Find the position of the decimal point
 	},
@@ -132,12 +126,12 @@ const SWF = {
 	MATRIX: () => {
 		alignToByte();
 		const value = {};
-		if (value.HasScale = SWF.UB(1)) {
+		if (value.HasScale = SWF.UB()) {
 			value.NScaleBits = SWF.UB(5);
 			value.ScaleX = SWF.FB(value.NScaleBits);
 			value.ScaleY = SWF.FB(value.NScaleBits);
 		}
-		if (value.HasRotate = SWF.UB(1)) {
+		if (value.HasRotate = SWF.UB()) {
 			value.NRotateBits = SWF.UB(5);
 			value.RotateSkew0 = SWF.FB(value.NRotateBits);
 			value.RotateSkew1 = SWF.FB(value.NRotateBits);
@@ -150,8 +144,8 @@ const SWF = {
 	CXFORM: () => {
 		alignToByte();
 		const value = {
-			HasAddTerms: SWF.UB(1),
-			HasMultTerms: SWF.UB(1),
+			HasAddTerms: SWF.UB(),
+			HasMultTerms: SWF.UB(),
 			Nbits: SWF.UB(4)
 		};
 		if (value.HasMultTerms) {
@@ -169,8 +163,8 @@ const SWF = {
 	CXFORMWITHALPHA: () => {
 		alignToByte();
 		const value = {
-			HasAddTerms: SWF.UB(1),
-			HasMultTerms: SWF.UB(1),
+			HasAddTerms: SWF.UB(),
+			HasMultTerms: SWF.UB(),
 			Nbits: SWF.UB(4)
 		};
 		if (value.HasMultTerms) {
@@ -209,14 +203,14 @@ const SWF = {
 		return value;
 	},
 	PlaceObject2: value => {
-		value.PlaceFlagHasClipActions = SWF.UB(1);
-		value.PlaceFlagHasClipDepth = SWF.UB(1);
-		value.PlaceFlagHasName = SWF.UB(1);
-		value.PlaceFlagHasRatio = SWF.UB(1);
-		value.PlaceFlagHasColorTransform = SWF.UB(1);
-		value.PlaceFlagHasMatrix = SWF.UB(1);
-		value.PlaceFlagHasCharacter = SWF.UB(1);
-		value.PlaceFlagMove = SWF.UB(1);
+		value.PlaceFlagHasClipActions = SWF.UB();
+		value.PlaceFlagHasClipDepth = SWF.UB();
+		value.PlaceFlagHasName = SWF.UB();
+		value.PlaceFlagHasRatio = SWF.UB();
+		value.PlaceFlagHasColorTransform = SWF.UB();
+		value.PlaceFlagHasMatrix = SWF.UB();
+		value.PlaceFlagHasCharacter = SWF.UB();
+		value.PlaceFlagMove = SWF.UB();
 		value.Depth = SWF.UI16();
 		if (value.PlaceFlagHasCharacter) {
 			value.CharacterId = SWF.UI16();
@@ -271,21 +265,21 @@ const SWF = {
 		return value;
 	},
 	PlaceObject3: value => {
-		value.PlaceFlagHasClipActions = SWF.UB(1);
-		value.PlaceFlagHasClipDepth = SWF.UB(1);
-		value.PlaceFlagHasName = SWF.UB(1);
-		value.PlaceFlagHasRatio = SWF.UB(1);
-		value.PlaceFlagHasColorTransform = SWF.UB(1);
-		value.PlaceFlagHasMatrix = SWF.UB(1);
-		value.PlaceFlagHasCharacter = SWF.UB(1);
-		value.PlaceFlagMove = SWF.UB(1);
-		value.PlaceFlagOpaqueBackground = SWF.UB(1);
-		value.PlaceFlagHasVisible = SWF.UB(1);
-		value.PlaceFlagHasImage = SWF.UB(1);
-		value.PlaceFlagHasClassName = SWF.UB(1);
-		value.PlaceFlagHasCacheAsBitmap = SWF.UB(1);
-		value.PlaceFlagHasBlendMode = SWF.UB(1);
-		value.PlaceFlagHasFilterList = SWF.UB(1);
+		value.PlaceFlagHasClipActions = SWF.UB();
+		value.PlaceFlagHasClipDepth = SWF.UB();
+		value.PlaceFlagHasName = SWF.UB();
+		value.PlaceFlagHasRatio = SWF.UB();
+		value.PlaceFlagHasColorTransform = SWF.UB();
+		value.PlaceFlagHasMatrix = SWF.UB();
+		value.PlaceFlagHasCharacter = SWF.UB();
+		value.PlaceFlagMove = SWF.UB();
+		value.PlaceFlagOpaqueBackground = SWF.UB();
+		value.PlaceFlagHasVisible = SWF.UB();
+		value.PlaceFlagHasImage = SWF.UB();
+		value.PlaceFlagHasClassName = SWF.UB();
+		value.PlaceFlagHasCacheAsBitmap = SWF.UB();
+		value.PlaceFlagHasBlendMode = SWF.UB();
+		value.PlaceFlagHasFilterList = SWF.UB();
 		value.Depth = SWF.UI16();
 		if (value.PlaceFlagHasClassName || (value.PlaceFlagHasImage && value.PlaceFlagHasCharacter)) {
 			value.ClassName = SWF.STRING();
@@ -328,12 +322,9 @@ const SWF = {
 	},
 	FILTERLIST: () => {
 		const value = {
-			NumberOfFilters: SWF.UI8(),
-			Filter: []
+			NumberOfFilters: SWF.UI8()
 		};
-		for (let i = 0; i < value.NumberOfFilters; i++) {
-			value.Filter.push(SWF.FILTER());
-		}
+		value.Filters = SWF.Array(SWF.FILTER, value.NumberOfFilters);
 		return value;
 	},
 	FILTER: () => {
@@ -359,31 +350,21 @@ const SWF = {
 		}
 		return value;
 	},
-	COLORMATRIXFILTER: () => {
-		const value = {
-			Matrix: []
-		};
-		for (let i = 0; i < 20; i++) {
-			value.Matrix.push(SWF.FLOAT());
-		}
-		return value;
-	},
+	COLORMATRIXFILTER: () => ({
+		Matrix: SWF.Array(SWF.FLOAT, 20)
+	}),
 	CONVOLUTIONFILTER: () => {
 		const value = {
 			MatrixX: SWF.UI8(),
 			MatrixY: SWF.UI8(),
 			Divisor: SWF.FLOAT(),
-			Bias: SWF.FLOAT(),
-			Matrix: []
+			Bias: SWF.FLOAT()
 		};
-		const length = value.MatrixX * value.MatrixY;
-		for (let i = 0; i < length; i++) {
-			value.Matrix.push(SWF.FLOAT());
-		}
+		value.Matrix = SWF.Array(SWF.FLOAT, value.MatrixX * value.MatrixY);
 		value.DefaultColor = SWF.RGBA();
 		SWF.UB(6);
-		value.Clamp = SWF.UB(1);
-		value.PreserveAlpha = SWF.UB(1);
+		value.Clamp = SWF.UB();
+		value.PreserveAlpha = SWF.UB();
 		return value;
 	},
 	BLURFILTER: () => {
@@ -402,9 +383,9 @@ const SWF = {
 		Angle: SWF.FIXED(),
 		Distance: SWF.FIXED(),
 		Strength: SWF.FIXED8(),
-		InnerShadow: SWF.UB(1),
-		Knockout: SWF.UB(1),
-		CompositeSource: SWF.UB(1),
+		InnerShadow: SWF.UB(),
+		Knockout: SWF.UB(),
+		CompositeSource: SWF.UB(),
 		Passes: SWF.UB(5)
 	}),
 	GLOWFILTER: () => ({
@@ -412,9 +393,9 @@ const SWF = {
 		BlurX: SWF.FIXED(),
 		BlurY: SWF.FIXED(),
 		Strength: SWF.FIXED8(),
-		InnerGlow: SWF.UB(1),
-		Knockout: SWF.UB(1),
-		CompositeSource: SWF.UB(1),
+		InnerGlow: SWF.UB(),
+		Knockout: SWF.UB(),
+		CompositeSource: SWF.UB(),
 		Passes: SWF.UB(5)
 	}),
 	BEVELFILTER: () => ({
@@ -425,12 +406,20 @@ const SWF = {
 		Angle: SWF.FIXED(),
 		Distance: SWF.FIXED(),
 		Strength: SWF.FIXED8(),
-		InnerShadow: SWF.UB(1),
-		Knockout: SWF.UB(1),
-		CompositeSource: SWF.UB(1),
-		OnTop: SWF.UB(1),
+		InnerShadow: SWF.UB(),
+		Knockout: SWF.UB(),
+		CompositeSource: SWF.UB(),
+		OnTop: SWF.UB(),
 		Passes: SWF.UB(4)
-	})
+	}),
+	GRADIENTGLOWFILTER: () => {
+		const value = {
+			NumColors: SWF.UI8()
+		};
+		value.GradientColors = SWF.RGBA(value.NumColors);
+		value.GradientRatio = SWF.RGBA(value.NumColors);
+		
+	}
 };
 const tagTypes = {
 	4: "PlaceObject",
