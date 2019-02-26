@@ -478,9 +478,9 @@ const SWF = {
 	}
 };
 const tagTypes = {
-	4: "PlaceObject",
-	26: "PlaceObject2",
-	70: "PlaceObject3"
+	4: SWF.PlaceObject,
+	26: SWF.PlaceObject2,
+	70: SWF.PlaceObject3
 };
 const read = function() {
 	data = {
@@ -510,7 +510,7 @@ const read = function() {
 				data.bytes = result;
 			}
 		} else {
-			throw new Error("Unsupported compression method");
+			throw new Error(`Unsupported compression Signature: ${compression}`);
 		}
 		data.file.Version = data.array[3];
 		data.file.FileLength = ((data.array[4] | data.array[5] << 8) | data.array[6] << 16) | data.array[7] << 24;
@@ -524,8 +524,9 @@ const read = function() {
 			};
 			const tagType = tagTypes[tag.Header.TagCode];
 			if (tagType) {
-				SWF[tagType](tag);
+				tagType(tag);
 			} else {
+				console.warn(`Unsupported TagCode: ${tag.Header.TagCode}`);
 				data.bytePos += tag.Header.Length;
 			}
 			data.file.Tags.push(tag);
