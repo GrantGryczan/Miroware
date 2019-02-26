@@ -369,7 +369,7 @@ const SWF = {
 		return value;
 	},
 	CONVOLUTIONFILTER: () => {
-		const value = {,
+		const value = {
 			MatrixX: SWF.UI8(),
 			MatrixY: SWF.UI8(),
 			Divisor: SWF.FLOAT(),
