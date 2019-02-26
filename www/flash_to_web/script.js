@@ -356,6 +356,33 @@ const SWF = {
 			value.GradientBevelFilter = SWF.GRADIENTBEVELFILTER();
 		}
 		return value;
+	},
+	COLORMATRIXFILTER: () => {
+		const value = {
+			Matrix: []
+		};
+		for (let i = 0; i < 20; i++) {
+			value.Matrix.push(SWF.FLOAT());
+		}
+		return value;
+	},
+	CONVOLUTIONFILTER: () => {
+		const value = {,
+			MatrixX: SWF.UI8(),
+			MatrixY: SWF.UI8(),
+			Divisor: SWF.FLOAT(),
+			Bias: SWF.FLOAT(),
+			Matrix: []
+		};
+		const length = value.MatrixX * value.MatrixY;
+		for (let i = 0; i < length; i++) {
+			value.Matrix.push(SWF.FLOAT());
+		}
+		value.DefaultColor = SWF.RGBA();
+		value.Reserved = +SWF.UB(6);
+		value.CLamp = +SWF.UB(1);
+		value.PreserveAlpha = +SWF.UB(1);
+		return value;
 	}
 };
 const tagTypes = {
