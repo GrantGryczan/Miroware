@@ -382,7 +382,7 @@ const SWF = {
 		}
 		value.DefaultColor = SWF.RGBA();
 		SWF.UB(6);
-		value.CLamp = SWF.UB(1);
+		value.Clamp = SWF.UB(1);
 		value.PreserveAlpha = SWF.UB(1);
 		return value;
 	},
