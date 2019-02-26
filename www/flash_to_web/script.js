@@ -542,8 +542,8 @@ const read = function() {
 			}
 			data.file.Tags.push(tag);
 		}
-		if (data.bytePos !== data.file.FileLength) {
-			throw new Error(`Final bytePos ${data.bytePos} does not equal FileLength ${data.file.FileLength}`);
+		if ((data.bytePos += 8) !== data.file.FileLength) {
+			throw new Error(`Final offset bytePos ${data.bytePos} does not equal FileLength ${data.file.FileLength}`);
 		}
 		panel.classList.remove("hidden");
 	} catch(err) {
