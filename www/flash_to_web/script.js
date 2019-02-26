@@ -102,7 +102,9 @@ const SWF = {
 		}
 		return value;
 	},
-	LANGCODE: () => SWF.UI8(),
+	LANGCODE: () => ({
+		LanguageCode: SWF.UI8()
+	}),
 	RGB: () => ({
 		Red: SWF.UI8(),
 		Green: SWF.UI8(),
