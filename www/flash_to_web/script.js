@@ -406,6 +406,30 @@ const SWF = {
 		Knockout: SWF.UB(1),
 		CompositeSource: SWF.UB(1),
 		Passes: SWF.UB(5)
+	}),
+	GLOWFILTER: () => ({
+		GlowColor: SWF.RGBA(),
+		BlurX: SWF.FIXED(),
+		BlurY: SWF.FIXED(),
+		Strength: SWF.FIXED8(),
+		InnerGlow: SWF.UB(1),
+		Knockout: SWF.UB(1),
+		CompositeSource: SWF.UB(1),
+		Passes: SWF.UB(5)
+	}),
+	BEVELFILTER: () => ({
+		ShadowColor: SWF.RGBA(),
+		HighlightColor: SWF.RGBA(),
+		BlurX: SWF.FIXED(),
+		BlurY: SWF.FIXED(),
+		Angle: SWF.FIXED(),
+		Distance: SWF.FIXED(),
+		Strength: SWF.FIXED8(),
+		InnerShadow: SWF.UB(1),
+		Knockout: SWF.UB(1),
+		CompositeSource: SWF.UB(1),
+		OnTop: SWF.UB(1),
+		Passes: SWF.UB(4)
 	})
 };
 const tagTypes = {
