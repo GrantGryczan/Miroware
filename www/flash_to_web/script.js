@@ -475,12 +475,23 @@ const SWF = {
 			SWF.UB(8);
 		}
 		return value;
-	}
+	},
+	RemoveObject: value => {
+		value.CharacterId = SWF.UI16();
+		value.Depth = SWF.UI16();
+	},
+	RemoveObject2: value => {
+		value.Depth = SWF.UI16();
+	},
+	ShowFrame: () => {}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
 	26: SWF.PlaceObject2,
-	70: SWF.PlaceObject3
+	70: SWF.PlaceObject3,
+	5: SWF.RemoveObject,
+	28: SWF.RemoveObject2,
+	1: SWF.ShowFrame
 };
 const read = function() {
 	data = {
@@ -510,7 +521,7 @@ const read = function() {
 				data.bytes = result;
 			}
 		} else {
-			throw new Error(`Unsupported compression Signature: ${compression}`);
+			throw new Error(`Unsupported compression Signature ${compression}`);
 		}
 		data.file.Version = data.array[3];
 		data.file.FileLength = ((data.array[4] | data.array[5] << 8) | data.array[6] << 16) | data.array[7] << 24;
@@ -526,10 +537,13 @@ const read = function() {
 			if (tagType) {
 				tagType(tag);
 			} else {
-				console.warn(`Unsupported TagCode: ${tag.Header.TagCode}`);
+				console.warn(`Unsupported TagCode ${tag.Header.TagCode}`);
 				data.bytePos += tag.Header.Length;
 			}
 			data.file.Tags.push(tag);
+		}
+		if (data.bytePos !== data.file.FileLength) {
+			throw new Error(`Final bytePos ${data.bytePos} does not equal FileLength ${data.file.FileLength}`);
 		}
 		panel.classList.remove("hidden");
 	} catch(err) {
