@@ -447,6 +447,34 @@ const SWF = {
 		value.OnTop = SWF.UB();
 		value.Passes = SWF.UB(4);
 		return value;
+	},
+	CLIPEVENTFLAGS: () => {
+		const value = {
+			ClipEventKeyUp: SWF.UB(),
+			ClipEventKeyDown: SWF.UB(),
+			ClipEventMouseUp: SWF.UB(),
+			ClipEventMouseDown: SWF.UB(),
+			ClipEventMouseMove: SWF.UB(),
+			ClipEventUnload: SWF.UB(),
+			ClipEventEnterFrame: SWF.UB(),
+			ClipEventLoad: SWF.UB(),
+			ClipEventDragOver: SWF.UB(),
+			ClipEventRollOut: SWF.UB(),
+			ClipEventRollOver: SWF.UB(),
+			ClipEventReleaseOutside: SWF.UB(),
+			ClipEventRelease: SWF.UB(),
+			ClipEventPress: SWF.UB(),
+			ClipEventInitialize: SWF.UB(),
+			ClipEventData: SWF.UB()
+		};
+		if (data.file.Version >= 6) {
+			SWF.UB(5);
+			value.ClipEventConstruct = SWF.UB();
+			value.ClipEventKeyPress = SWF.UB();
+			value.ClipEventDragOut = SWF.UB();
+			SWF.UB(8);
+		}
+		return value;
 	}
 };
 const tagTypes = {
