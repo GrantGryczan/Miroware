@@ -521,6 +521,10 @@ const SWF = {
 	EnableDebugger2: value => {
 		SWF.UI16();
 		value.Password = SWF.STRING();
+	},
+	ScriptLimits: value => {
+		value.MaxRecursionDepth = SWF.UI16();
+		value.ScriptTimeoutSeconds = SWF.UI16();
 	}
 };
 const tagTypes = {
@@ -537,7 +541,8 @@ const tagTypes = {
 	56: SWF.ExportAssets,
 	57: SWF.ImportAssets,
 	58: SWF.EnableDebugger,
-	64: SWF.EnableDebugger2
+	64: SWF.EnableDebugger2,
+	65: SWF.ScriptLimits
 };
 const read = function() {
 	data = {
