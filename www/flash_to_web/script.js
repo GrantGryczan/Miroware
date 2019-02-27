@@ -594,8 +594,22 @@ const SWF = {
 		value.Actions = getFlaggedArray(SWF.ACTIONRECORD, SWF.UI8, 0);
 	},
 	ACTIONRECORD: () => {
-		const header = SWF.ACTIONRECORDHEADER();
-		return actionTypes[header.ActionCode](header);
+		const value = {
+			Header: SWF.ACTIONRECORDHEADER()
+		};
+		const actionType = actionTypes[value.Header.ActionCode];
+		if (actionType) {
+			actionType(value);
+		} else {
+			const message = `Unsupported ActionCode ${value.Header.ActionCode}`;
+			if ("Length" in value.Header) {
+				console.warn(message);
+				data.bytePos += value.Header.Length;
+			} else {
+				throw new Error(message);
+			}
+		}
+		return value;
 	},
 	ACTIONRECORDHEADER: () => {
 		const value = {
@@ -606,10 +620,9 @@ const SWF = {
 		}
 		return value;
 	},
-	ActionGotoFrame: header => ({
-		ActionGotoFrame: header,
-		Frame: SWF.UI16()
-	})
+	ActionGotoFrame: value => {
+		value.Frame = SWF.UI16();
+	}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -692,7 +705,7 @@ const read = function() {
 			throw new Error(`Final bytePos ${data.bytePos} does not equal FileLength ${data.file.FileLength}`);
 		}
 		panel.classList.remove("hidden");
-	} catch(err) {
+	} catch (err) {
 		console.error(err);
 		new Miro.Dialog("Error", html`An error occurred while trying to read the SWF file.<br>$${err}`);
 	}
