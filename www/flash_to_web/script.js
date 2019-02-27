@@ -502,18 +502,22 @@ const SWF = {
 	End: () => {},
 	ExportAssets: value => {
 		value.Count = SWF.U16();
-		value.Tag1 = SWF.U16();
-		value.Name1 = SWF.STRING();
-		value.TagN = SWF.U16();
-		value.NameN = SWF.STRING();
+		value.Tag = [];
+		value.Name = [];
+		for (let i = 0; i < value.Count; i++) {
+			value.Tag[i] = SWF.U16();
+			value.Name[i] = SWF.STRING();
+		}
 	},
 	ImportAssets: value => {
 		value.URL = SWF.STRING();
 		value.Count = SWF.U16();
-		value.Tag1 = SWF.U16();
-		value.Name1 = SWF.STRING();
-		value.TagN = SWF.U16();
-		value.NameN = SWF.STRING();
+		value.Tag = [];
+		value.Name = [];
+		for (let i = 0; i < value.Count; i++) {
+			value.Tag[i] = SWF.U16();
+			value.Name[i] = SWF.STRING();
+		}
 	},
 	EnableDebugger: value => {
 		value.Password = SWF.STRING();
@@ -525,6 +529,64 @@ const SWF = {
 	ScriptLimits: value => {
 		value.MaxRecursionDepth = SWF.UI16();
 		value.ScriptTimeoutSeconds = SWF.UI16();
+	},
+	SetTabIndex: value => {
+		value.Depth = SWF.UI16();
+		value.TabIndex = SWF.UI16();
+	},
+	FileAttributes: value => {
+		SWF.UB();
+		value.UseDirectBlit = SWF.UB();
+		value.UseGPU = SWF.UB();
+		value.HasMetadata = SWF.UB();
+		value.ActionScript3 = SWF.UB();
+		SWF.UB(2);
+		value.UseNetwork = SWF.UB();
+		SWF.UB(24);
+	},
+	ImportAssets2: value => {
+		value.URL = SWF.STRING();
+		SWF.UI8();
+		SWF.UI8();
+		value.Count = SWF.U16();
+		value.Tag = [];
+		value.Name = [];
+		for (let i = 0; i < value.Count; i++) {
+			value.Tag[i] = SWF.U16();
+			value.Name[i] = SWF.STRING();
+		}
+	},
+	SymbolClass: value => {
+		value.NumSymbols = SWF.U16();
+		value.Tag = [];
+		value.Name = [];
+		for (let i = 0; i < value.NumSymbols; i++) {
+			value.Tag[i] = SWF.U16();
+			value.Name[i] = SWF.STRING();
+		}
+	},
+	Metadata: value => {
+		value.Metadata = SWF.STRING();
+	},
+	DefineScalingGrid: value => {
+		value.CharacterId = SWF.UI16();
+		value.Splitter = SWF.RECT();
+	},
+	DefineSceneAndFrameLabelData: value => {
+		value.SceneCount = SWF.EncodedU32();
+		value.Offset = [];
+		value.Name = [];
+		for (let i = 0; i < value.SceneCount; i++) {
+			value.Offset[i] = SWF.EncodedU32();
+			value.Name[i] = SWF.STRING();
+		}
+		value.FrameLabelCount = SWF.EncodedU32();
+		value.FrameNum = [];
+		value.FrameLabel = [];
+		for (let i = 0; i < value.FrameLabelCount; i++) {
+			value.FrameNum[i] = SWF.EncodedU32();
+			value.FrameLabel[i] = SWF.STRING();
+		}
 	}
 };
 const tagTypes = {
@@ -542,7 +604,14 @@ const tagTypes = {
 	57: SWF.ImportAssets,
 	58: SWF.EnableDebugger,
 	64: SWF.EnableDebugger2,
-	65: SWF.ScriptLimits
+	65: SWF.ScriptLimits,
+	66: SWF.SetTabIndex,
+	67: SWF.FileAttributes,
+	71: SWF.ImportAssets2,
+	76: SWF.SymbolClass,
+	77: SWF.Metadata,
+	78: SWF.DefineScalingGrid,
+	86: SWF.DefineSceneAndFrameLabelData
 };
 const read = function() {
 	data = {
