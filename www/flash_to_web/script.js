@@ -58,7 +58,7 @@ const SWF = {
 		const significand = parseInt((value & 0b00000000000011111111111111111111).toString(2) + "0".repeat(32 - significand2.length) + significand2, 2);
 		return exponent === 0b11111111111 ? (significand ? NaN : sign * Infinity) : sign * 2 ** (exponent - 1023) * ((exponent ? 1 : 0) + significand / 4503599627370496 /* 2 ** 52 */);
 	},
-	EncodedU32: () => {
+	EncodedUI32: () => {
 		let value = 0;
 		for (let i = 0; i < 5; i++) {
 			const byte = SWF.UI8();
@@ -501,21 +501,21 @@ const SWF = {
 	},
 	End: () => {},
 	ExportAssets: value => {
-		value.Count = SWF.U16();
+		value.Count = SWF.UI16();
 		value.Tag = [];
 		value.Name = [];
 		for (let i = 0; i < value.Count; i++) {
-			value.Tag[i] = SWF.U16();
+			value.Tag[i] = SWF.UI16();
 			value.Name[i] = SWF.STRING();
 		}
 	},
 	ImportAssets: value => {
 		value.URL = SWF.STRING();
-		value.Count = SWF.U16();
+		value.Count = SWF.UI16();
 		value.Tag = [];
 		value.Name = [];
 		for (let i = 0; i < value.Count; i++) {
-			value.Tag[i] = SWF.U16();
+			value.Tag[i] = SWF.UI16();
 			value.Name[i] = SWF.STRING();
 		}
 	},
@@ -548,20 +548,20 @@ const SWF = {
 		value.URL = SWF.STRING();
 		SWF.UI8();
 		SWF.UI8();
-		value.Count = SWF.U16();
+		value.Count = SWF.UI16();
 		value.Tag = [];
 		value.Name = [];
 		for (let i = 0; i < value.Count; i++) {
-			value.Tag[i] = SWF.U16();
+			value.Tag[i] = SWF.UI16();
 			value.Name[i] = SWF.STRING();
 		}
 	},
 	SymbolClass: value => {
-		value.NumSymbols = SWF.U16();
+		value.NumSymbols = SWF.UI16();
 		value.Tag = [];
 		value.Name = [];
 		for (let i = 0; i < value.NumSymbols; i++) {
-			value.Tag[i] = SWF.U16();
+			value.Tag[i] = SWF.UI16();
 			value.Name[i] = SWF.STRING();
 		}
 	},
@@ -573,18 +573,18 @@ const SWF = {
 		value.Splitter = SWF.RECT();
 	},
 	DefineSceneAndFrameLabelData: value => {
-		value.SceneCount = SWF.EncodedU32();
+		value.SceneCount = SWF.EncodedUI32();
 		value.Offset = [];
 		value.Name = [];
 		for (let i = 0; i < value.SceneCount; i++) {
-			value.Offset[i] = SWF.EncodedU32();
+			value.Offset[i] = SWF.EncodedUI32();
 			value.Name[i] = SWF.STRING();
 		}
-		value.FrameLabelCount = SWF.EncodedU32();
+		value.FrameLabelCount = SWF.EncodedUI32();
 		value.FrameNum = [];
 		value.FrameLabel = [];
 		for (let i = 0; i < value.FrameLabelCount; i++) {
-			value.FrameNum[i] = SWF.EncodedU32();
+			value.FrameNum[i] = SWF.EncodedUI32();
 			value.FrameLabel[i] = SWF.STRING();
 		}
 	}
