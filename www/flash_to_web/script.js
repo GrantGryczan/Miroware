@@ -601,7 +601,8 @@ const SWF = {
 		if (actionType) {
 			actionType(value);
 		} else {
-			const message = `Unsupported ActionCode 0x${value.Header.ActionCode.toString(16)}`;
+			const hex = value.Header.ActionCode.toString(16);
+			const message = `Unsupported ActionCode 0x${hex.length === 1 ? `0${hex}` : hex}`;
 			if ("Length" in value.Header) {
 				console.warn(message);
 				data.bytePos += value.Header.Length;
