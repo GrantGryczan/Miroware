@@ -236,7 +236,7 @@ const SWF = {
 		return value;
 	},
 	CLIPACTIONS: () => {
-		data.bytePos += 16;
+		SWF.UI16();
 		const value = {
 			AllEventFlags: SWF.CLIPEVENTFLAGS(),
 			ClipActionRecords: []
@@ -499,7 +499,29 @@ const SWF = {
 			value.Password = SWF.STRING();
 		}
 	},
-	End: () => {}
+	End: () => {},
+	ExportAssets: value => {
+		value.Count = SWF.U16();
+		value.Tag1 = SWF.U16();
+		value.Name1 = SWF.STRING();
+		value.TagN = SWF.U16();
+		value.NameN = SWF.STRING();
+	},
+	ImportAssets: value => {
+		value.URL = SWF.STRING();
+		value.Count = SWF.U16();
+		value.Tag1 = SWF.U16();
+		value.Name1 = SWF.STRING();
+		value.TagN = SWF.U16();
+		value.NameN = SWF.STRING();
+	},
+	EnableDebugger: value => {
+		value.Password = SWF.STRING();
+	},
+	EnableDebugger2: value => {
+		SWF.UI16();
+		value.Password = SWF.STRING();
+	}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -511,7 +533,11 @@ const tagTypes = {
 	9: SWF.SetBackgroundColor,
 	43: SWF.FrameLabel,
 	24: SWF.Protect,
-	0: SWF.End
+	0: SWF.End,
+	56: SWF.ExportAssets,
+	57: SWF.ImportAssets,
+	58: SWF.EnableDebugger,
+	64: SWF.EnableDebugger2
 };
 const read = function() {
 	data = {
