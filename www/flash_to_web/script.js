@@ -7,14 +7,23 @@ const alignToByte = () => {
 		data.bitPos = 0;
 	}
 };
+const getArray = (type, n) => {
+	const array = new Array(+n);
+	for (let i = 0; i < n; i++) {
+		array[i] = type();
+	}
+	return array;
+};
+const getFlaggedArray = (type, flagType, flagValue) => {
+	alignToByte();
+	const array = [];
+	for (let bytePos; bytePos = data.bytePos, flagType() !== flagValue;) {
+		data.bytePos = bytePos;
+		array.push(type());
+	}
+	return array;
+};
 const SWF = {
-	Array: (type, n) => {
-		const array = new Array(+n);
-		for (let i = 0; i < n; i++) {
-			array[i] = type();
-		}
-		return array;
-	},
 	SI8: () => {
 		const value = SWF.UI8();
 		return value & 0b10000000 ? value - 256 /* 2 ** 8 */ : value;
@@ -86,7 +95,7 @@ const SWF = {
 		return value;
 	},
 	FB: (nBits = 1) => {
-		const value = SWF.Array(SWF.UB, nBits);
+		const value = getArray(SWF.UB, nBits);
 		console.log(`FB[${nBits}]`, value);
 		return 1; // TODO: Find the position of the decimal point
 	},
@@ -237,17 +246,10 @@ const SWF = {
 	},
 	CLIPACTIONS: () => {
 		SWF.UI16();
-		const value = {
+		return {
 			AllEventFlags: SWF.CLIPEVENTFLAGS(),
-			ClipActionRecords: []
+			ClipActionRecords: getFlaggedArray(SWF.CLIPACTIONRECORD, data.file.Version < 6 ? SWF.UI16 : SWF.UI32, 0)
 		};
-		const clipActionEndFlag = data.file.Version < 6 ? SWF.UI16 : SWF.UI32;
-		alignToByte();
-		for (let bytePos, endFlag; bytePos = data.bytePos, endFlag = clipActionEndFlag();) {
-			data.bytePos = bytePos;
-			value.ClipActionRecords.push(SWF.CLIPACTIONRECORD());
-		}
-		return value;
 	},
 	CLIPACTIONRECORD: () => {
 		const value = {
@@ -324,7 +326,7 @@ const SWF = {
 		const value = {
 			NumberOfFilters: SWF.UI8()
 		};
-		value.Filters = SWF.Array(SWF.FILTER, value.NumberOfFilters);
+		value.Filters = getArray(SWF.FILTER, value.NumberOfFilters);
 		return value;
 	},
 	FILTER: () => {
@@ -351,7 +353,7 @@ const SWF = {
 		return value;
 	},
 	COLORMATRIXFILTER: () => ({
-		Matrix: SWF.Array(SWF.FLOAT, 20)
+		Matrix: getArray(SWF.FLOAT, 20)
 	}),
 	CONVOLUTIONFILTER: () => {
 		const value = {
@@ -360,7 +362,7 @@ const SWF = {
 			Divisor: SWF.FLOAT(),
 			Bias: SWF.FLOAT()
 		};
-		value.Matrix = SWF.Array(SWF.FLOAT, value.MatrixX * value.MatrixY);
+		value.Matrix = getArray(SWF.FLOAT, value.MatrixX * value.MatrixY);
 		value.DefaultColor = SWF.RGBA();
 		SWF.UB(6);
 		value.Clamp = SWF.UB();
@@ -416,8 +418,8 @@ const SWF = {
 		const value = {
 			NumColors: SWF.UI8()
 		};
-		value.GradientColors = SWF.Array(SWF.RGBA, value.NumColors);
-		value.GradientRatio = SWF.Array(SWF.UI8, value.NumColors);
+		value.GradientColors = getArray(SWF.RGBA, value.NumColors);
+		value.GradientRatio = getArray(SWF.UI8, value.NumColors);
 		value.BlurX = SWF.FIXED();
 		value.BlurY = SWF.FIXED();
 		value.Angle = SWF.FIXED();
@@ -434,8 +436,8 @@ const SWF = {
 		const value = {
 			NumColors: SWF.UI8()
 		};
-		value.GradientColors = SWF.Array(SWF.RGBA, value.NumColors);
-		value.GradientRatio = SWF.Array(SWF.UI8, value.NumColors);
+		value.GradientColors = getArray(SWF.RGBA, value.NumColors);
+		value.GradientRatio = getArray(SWF.UI8, value.NumColors);
 		value.BlurX = SWF.FIXED();
 		value.BlurY = SWF.FIXED();
 		value.Angle = SWF.FIXED();
