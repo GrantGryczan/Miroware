@@ -593,6 +593,10 @@ const SWF = {
 	DoAction: value => {
 		value.Actions = getFlaggedArray(SWF.ACTIONRECORD, SWF.UI8, 0);
 	},
+	ACTIONRECORD: () => {
+		const header = SWF.ACTIONRECORDHEADER();
+		return actionTypes[header.ActionCode](header);
+	},
 	ACTIONRECORDHEADER: () => {
 		const value = {
 			ActionCode: SWF.UI8()
@@ -601,7 +605,11 @@ const SWF = {
 			value.Length = SWF.UI16();
 		}
 		return value;
-	}
+	},
+	ActionGotoFrame: header => ({
+		ActionGotoFrame: header,
+		Frame: SWF.UI16()
+	})
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -627,6 +635,9 @@ const tagTypes = {
 	78: SWF.DefineScalingGrid,
 	86: SWF.DefineSceneAndFrameLabelData,
 	12: SWF.DoAction
+};
+const actionTypes = {
+	0x81: SWF.ActionGotoFrame
 };
 const read = function() {
 	data = {
