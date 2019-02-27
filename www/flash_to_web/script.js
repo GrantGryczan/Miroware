@@ -589,6 +589,18 @@ const SWF = {
 			value.FrameNum[i] = SWF.EncodedUI32();
 			value.FrameLabel[i] = SWF.STRING();
 		}
+	},
+	DoAction: value => {
+		value.Actions = getFlaggedArray(SWF.ACTIONRECORD, SWF.UI8, 0);
+	},
+	ACTIONRECORDHEADER: () => {
+		const value = {
+			ActionCode: SWF.UI8()
+		};
+		if (value.ActionCode >= 0x80) {
+			value.Length = SWF.UI16();
+		}
+		return value;
 	}
 };
 const tagTypes = {
@@ -613,7 +625,8 @@ const tagTypes = {
 	76: SWF.SymbolClass,
 	77: SWF.Metadata,
 	78: SWF.DefineScalingGrid,
-	86: SWF.DefineSceneAndFrameLabelData
+	86: SWF.DefineSceneAndFrameLabelData,
+	12: SWF.DoAction
 };
 const read = function() {
 	data = {
