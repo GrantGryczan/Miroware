@@ -493,7 +493,13 @@ const SWF = {
 		if (data.bytePos < endPos) {
 			value.NamedAnchor = SWF.UI8();
 		}
-	}
+	},
+	Protect: value => {
+		if (value.Header.Length) {
+			value.Password = SWF.STRING();
+		}
+	},
+	End: () => {}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -503,7 +509,9 @@ const tagTypes = {
 	28: SWF.RemoveObject2,
 	1: SWF.ShowFrame,
 	9: SWF.SetBackgroundColor,
-	43: SWF.FrameLabel
+	43: SWF.FrameLabel,
+	24: SWF.Protect,
+	0: SWF.End
 };
 const read = function() {
 	data = {
