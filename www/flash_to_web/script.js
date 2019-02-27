@@ -193,11 +193,11 @@ const SWF = {
 		return value;
 	},
 	PlaceObject: value => {
-		const bytePos = data.bytePos;
+		const endPos = data.bytePos + value.Header.Length;
 		value.CharacterId = SWF.UI16();
 		value.Depth = SWF.UI16();
 		value.Matrix = SWF.MATRIX();
-		if (bytePos < data.bytePos + value.Header.Length) {
+		if (data.bytePos < endPos) {
 			value.ColorTransform = SWF.CXFORM();
 		}
 		return value;
@@ -483,7 +483,17 @@ const SWF = {
 	RemoveObject2: value => {
 		value.Depth = SWF.UI16();
 	},
-	ShowFrame: () => {}
+	ShowFrame: () => {},
+	SetBackgroundColor: value => {
+		value.BackgroundColor = SWF.RGB();
+	},
+	FrameLabel: value => {
+		const endPos = data.bytePos + value.Header.Length;
+		value.Name = SWF.STRING();
+		if (data.bytePos < endPos) {
+			value.NamedAnchor = SWF.UI8();
+		}
+	}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -491,7 +501,9 @@ const tagTypes = {
 	70: SWF.PlaceObject3,
 	5: SWF.RemoveObject,
 	28: SWF.RemoveObject2,
-	1: SWF.ShowFrame
+	1: SWF.ShowFrame,
+	9: SWF.SetBackgroundColor,
+	43: SWF.FrameLabel
 };
 const read = function() {
 	data = {
