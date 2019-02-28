@@ -7,9 +7,9 @@ const alignToByte = () => {
 		data.bitPos = 0;
 	}
 };
-const getArray = (type, n) => {
-	const array = new Array(+n);
-	for (let i = 0; i < n; i++) {
+const getArray = (type, length) => {
+	const array = new Array(+length);
+	for (let i = 0; i < length; i++) {
 		array[i] = type();
 	}
 	return array;
@@ -99,10 +99,10 @@ const SWF = {
 		console.log(`FB[${nBits}]`, value);
 		return 1; // TODO: Find the position of the decimal point
 	},
-	STRING: (length = Infinity) => {
+	STRING: () => {
 		let value = "";
 		let byte;
-		while (value.length < length && (byte = SWF.UI8())) {
+		while (byte = SWF.UI8()) {
 			value += String.fromCharCode(byte);
 		}
 		return value;
@@ -721,7 +721,31 @@ const SWF = {
 	},
 	ActionTrace: () => {},
 	ActionGetTime: () => {},
-	ActionRandomNumber: () => {}
+	ActionRandomNumber: () => {},
+	ActionCallFunction: () => {},
+	ActionCallMethod: () => {},
+	ActionConstantPool: value => {
+		value.ConstantPool = getArray(SWF.STRING, value.Count = SWF.UI16());
+	},
+	ActionDefineFunction: value => {
+		value.FunctionName = SWF.STRING();
+		value.param = getArray(SWF.STRING, value.NumParams = SWF.UI16());
+		value.codeSize = SWF.UI16();
+		console.warn(`Skipped ActionDefineFunction.codeSize ${value.codeSize} bytes`, data.bytes.slice(data.bytePos, data.bytePos += value.codeSize));
+	},
+	ActionDefineLocal: () => {},
+	ActionDefineLocal2: () => {},
+	ActionDelete: () => {},
+	ActionDelete2: () => {},
+	ActionEnumerate: () => {},
+	ActionEquals2: () => {},
+	ActionGetMember: () => {},
+	ActionInitArray: () => {},
+	ActionInitObject: () => {},
+	ActionNewMethod: () => {},
+	ActionNewObject: () => {},
+	ActionSetMember: () => {},
+	ActionTargetPath: () => {}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -800,7 +824,24 @@ const actionTypes = {
 	0x8d: SWF.ActionWaitForFrame2,
 	0x26: SWF.ActionTrace,
 	0x34: SWF.ActionGetTime,
-	0x30: SWF.ActionRandomNumber
+	0x30: SWF.ActionRandomNumber,
+	0x3d: SWF.ActionCallFunction,
+	0x52: SWF.ActionCallMethod,
+	0x88: SWF.ActionConstantPool,
+	0x9b: SWF.ActionDefineFunction,
+	0x3c: SWF.ActionDefineLocal,
+	0x31: SWF.ActionDefineLocal2,
+	0x3a: SWF.ActionDelete,
+	0x3b: SWF.ActionDelete2,
+	0x46: SWF.ActionEnumerate,
+	0x49: SWF.ActionEquals2,
+	0x4e: SWF.ActionGetMember,
+	0x42: SWF.ActionInitArray,
+	0x43: SWF.ActionInitObject,
+	0x53: SWF.ActionNewMethod,
+	0x40: SWF.ActionNewObject,
+	0x4f: SWF.ActionSetMember,
+	0x45: SWF.ActionTargetPath
 };
 const read = function() {
 	data = {
