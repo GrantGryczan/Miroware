@@ -708,7 +708,14 @@ const SWF = {
 		if (value.SceneBiasFlag) {
 			value.SceneBias = SWF.UI16();
 		}
-	}
+	},
+	ActionSetTarget2: () => {},
+	ActionGetProperty: () => {},
+	ActionSetProperty: () => {},
+	ActionCloneSprite: () => {},
+	ActionRemoveSprite: () => {},
+	ActionStartDrag: () => {},
+	ActionEndDrag: () => {}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -776,7 +783,14 @@ const actionTypes = {
 	0x1c: SWF.ActionGetVariable,
 	0x1d: SWF.ActionSetVariable,
 	0x9a: SWF.ActionGetURL2,
-	0x9f: SWF.ActionGotoFrame2
+	0x9f: SWF.ActionGotoFrame2,
+	0x20: SWF.ActionSetTarget2,
+	0x22: SWF.ActionGetProperty,
+	0x23: SWF.ActionSetProperty,
+	0x24: SWF.ActionCloneSprite,
+	0x25: SWF.ActionRemoveSprite,
+	0x27: SWF.ActionStartDrag,
+	0x28: SWF.ActionEndDrag
 };
 const read = function() {
 	data = {
