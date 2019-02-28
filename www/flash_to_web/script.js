@@ -823,7 +823,13 @@ const SWF = {
 		value.CatchBody = getArray(SWF.UI8, value.CatchSize);
 		value.FinallyBody = getArray(SWF.UI8, value.FinallySize);
 	},
-	ActionThrow: () => {}
+	ActionThrow: () => {},
+	DoABC: value => {
+		const endPos = data.bytePos + value.Header.Length;
+		value.Flags = SWF.UI32();
+		value.Name = SWF.STRING();
+		value.ABCData = data.bytes.slice(data.bytePos, data.bytePos = endPos);
+	}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -849,7 +855,8 @@ const tagTypes = {
 	78: SWF.DefineScalingGrid,
 	86: SWF.DefineSceneAndFrameLabelData,
 	12: SWF.DoAction,
-	59: SWF.DoInitAction
+	59: SWF.DoInitAction,
+	82: SWF.DoABC
 };
 const actionTypes = {
 	0x81: SWF.ActionGotoFrame,
