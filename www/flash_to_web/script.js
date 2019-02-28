@@ -672,7 +672,20 @@ const SWF = {
 	ActionEquals: () => {},
 	ActionLess: () => {},
 	ActionAnd: () => {},
-	ActionOr: () => {}
+	ActionOr: () => {},
+	ActionNot: () => {},
+	ActionStringEquals: () => {},
+	ActionStringLength: () => {},
+	ActionStringAdd: () => {},
+	ActionStringExtract: () => {},
+	ActionStringLess: () => {},
+	ActionMBStringLength: () => {},
+	ActionMBStringExtract: () => {},
+	ActionToInteger: () => {},
+	ActionCharToAscii: () => {},
+	ActionAsciiToChar: () => {},
+	ActionMBCharToAscii: () => {},
+	ActionMBAsciiToChar: () => {}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -720,7 +733,20 @@ const actionTypes = {
 	0x0e: SWF.ActionEquals,
 	0x0f: SWF.ActionLess,
 	0x10: SWF.ActionAnd,
-	0x11: SWF.ActionOr
+	0x11: SWF.ActionOr,
+	0x12: SWF.ActionNot,
+	0x13: SWF.ActionStringEquals,
+	0x14: SWF.ActionStringLength,
+	0x21: SWF.ActionStringAdd,
+	0x15: SWF.ActionStringExtract,
+	0x29: SWF.ActionStringLess,
+	0x31: SWF.ActionMBStringLength,
+	0x35: SWF.ActionMBStringExtract,
+	0x18: SWF.ActionToInteger,
+	0x32: SWF.ActionCharToAscii,
+	0x33: SWF.ActionAsciiToChar,
+	0x36: SWF.ActionMBCharToAscii,
+	0x37: SWF.ActionMBAsciiToChar
 };
 const read = function() {
 	data = {
