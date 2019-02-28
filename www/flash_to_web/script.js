@@ -643,7 +643,36 @@ const SWF = {
 	},
 	ActionGoToLabel: value => {
 		value.Label = SWF.STRING();
-	}
+	},
+	ActionPush: value => {
+		value.Type = SWF.UI8();
+		if (value.Type === 0) {
+			value.String = SWF.STRING();
+		} else if (value.Type === 1) {
+			value.Float = SWF.FLOAT();
+		} else if (value.Type === 4) {
+			value.RegisterNumber = SWF.UI8();
+		} else if (value.Type === 5) {
+			value.Boolean = SWF.UI8();
+		} else if (value.Type === 6) {
+			value.Double = SWF.DOUBLE();
+		} else if (value.Type === 7) {
+			value.Integer = SWF.UI32();
+		} else if (value.Type === 8) {
+			value.Constant8 = SWF.UI8();
+		} else if (value.Type === 9) {
+			value.Constant16 = SWF.UI16();
+		}
+	},
+	ActionPop: () => {},
+	ActionAdd: () => {},
+	ActionSubtract: () => {},
+	ActionMultiply: () => {},
+	ActionDivide: () => {},
+	ActionEquals: () => {},
+	ActionLess: () => {},
+	ActionAnd: () => {},
+	ActionOr: () => {}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -681,7 +710,17 @@ const actionTypes = {
 	0x09: SWF.ActionStopSounds,
 	0x8a: SWF.ActionWaitForFrame,
 	0x8b: SWF.ActionSetTarget,
-	0x8c: SWF.ActionGoToLabel
+	0x8c: SWF.ActionGoToLabel,
+	0x96: SWF.ActionPush,
+	0x17: SWF.ActionPop,
+	0x0a: SWF.ActionAdd,
+	0x0b: SWF.ActionSubtract,
+	0x0c: SWF.ActionMultiply,
+	0x0d: SWF.ActionDivide,
+	0x0e: SWF.ActionEquals,
+	0x0f: SWF.ActionLess,
+	0x10: SWF.ActionAnd,
+	0x11: SWF.ActionOr
 };
 const read = function() {
 	data = {
