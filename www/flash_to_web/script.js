@@ -14,9 +14,12 @@ const getArray = (type, length) => {
 	}
 	return array;
 };
-const getFlaggedArray = (type, flagType, flagValue) => {
+const getFlaggedArray = (type, flagType, flagValue, oneOrMore) => {
 	alignToByte();
 	const array = [];
+	if (oneOrMore) {
+		array.push(type());
+	}
 	for (let bytePos; bytePos = data.bytePos, flagType() !== flagValue;) {
 		data.bytePos = bytePos;
 		array.push(type());
@@ -248,7 +251,7 @@ const SWF = {
 		SWF.UI16();
 		return {
 			AllEventFlags: SWF.CLIPEVENTFLAGS(),
-			ClipActionRecords: getFlaggedArray(SWF.CLIPACTIONRECORD, data.file.Version < 6 ? SWF.UI16 : SWF.UI32, 0)
+			ClipActionRecords: getFlaggedArray(SWF.CLIPACTIONRECORD, data.file.Version < 6 ? SWF.UI16 : SWF.UI32, 0, true)
 		};
 	},
 	CLIPACTIONRECORD: () => {
@@ -745,7 +748,82 @@ const SWF = {
 	ActionNewMethod: () => {},
 	ActionNewObject: () => {},
 	ActionSetMember: () => {},
-	ActionTargetPath: () => {}
+	ActionTargetPath: () => {},
+	ActionWith: value => {
+		value.Size = SWF.UI16();
+	},
+	ActionToNumber: () => {},
+	ActionToString: () => {},
+	ActionTypeOf: () => {},
+	ActionAdd2: () => {},
+	ActionLess2: () => {},
+	ActionModulo: () => {},
+	ActionBitAnd: () => {},
+	ActionBitLShift: () => {},
+	ActionBitOr: () => {},
+	ActionBitRShift: () => {},
+	ActionBitURShift: () => {},
+	ActionBitXOr: () => {},
+	ActionDecrement: () => {},
+	ActionIncrement: () => {},
+	ActionPushDuplicate: () => {},
+	ActionReturn: () => {},
+	ActionStackSwap: () => {},
+	ActionStoreRegister: value => {
+		value.RegisterNumber = SWF.UI8();
+	},
+	DoInitAction: value => {
+		value.SpriteID = SWF.UI16();
+		value.Actions = getFlaggedArray(SWF.ACTIONRECORD, SWF.UI8, 0);
+	},
+	ActionInstanceOf: () => {},
+	ActionEnumerate2: () => {},
+	ActionStrictEquals: () => {},
+	ActionGreater: () => {},
+	ActionStringGreater: () => {},
+	ActionDefineFunction2: value => {
+		value.FunctionName = SWF.STRING();
+		value.NumParams = SWF.UI16();
+		value.RegisterCount = SWF.UI8();
+		value.PreloadParentFlag = SWF.UB();
+		value.PreloadRootFlag = SWF.UB();
+		value.SuppressSuperFlag = SWF.UB();
+		value.PreloadSuperFlag = SWF.UB();
+		value.SuppressArgumentsFlag = SWF.UB();
+		value.PreloadArgumentsFlag = SWF.UB();
+		value.SuppressThisFlag = SWF.UB();
+		value.PreloadThisFlag = SWF.UB();
+		SWF.UB(7);
+		value.PreloadGlobalFlag = SWF.UB();
+		value.Parameters = getArray(SWF.REGISTERPARAM, value.NumParams);
+		value.codeSize = SWF.UI16();
+		console.warn(`Skipped ActionDefineFunction2.codeSize ${value.codeSize} bytes`, data.bytes.slice(data.bytePos, data.bytePos += value.codeSize));
+	},
+	REGISTERPARAM: () => ({
+		Register: SWF.UI8(),
+		ParamName: SWF.STRING()
+	}),
+	ActionExtends: () => {},
+	ActionCastOp: () => {},
+	ActionImplementsOp: () => {},
+	ActionTry: value => {
+		SWF.UB(5);
+		value.CatchInRegisterFlag = SWF.UB();
+		value.FinallyBlockFlag = SWF.UB();
+		value.CatchBlockFlag = SWF.UB();
+		value.TrySize = SWF.UI16();
+		value.CatchSize = SWF.UI16();
+		value.FinallySize = SWF.UI16();
+		if (value.CatchInRegisterFlag) {
+			value.CatchRegister = SWF.UI8();
+		} else {
+			value.CatchName = SWF.STRING();
+		}
+		value.TryBody = getArray(SWF.UI8, value.TrySize);
+		value.CatchBody = getArray(SWF.UI8, value.CatchSize);
+		value.FinallyBody = getArray(SWF.UI8, value.FinallySize);
+	},
+	ActionThrow: () => {}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -770,7 +848,8 @@ const tagTypes = {
 	77: SWF.Metadata,
 	78: SWF.DefineScalingGrid,
 	86: SWF.DefineSceneAndFrameLabelData,
-	12: SWF.DoAction
+	12: SWF.DoAction,
+	59: SWF.DoInitAction
 };
 const actionTypes = {
 	0x81: SWF.ActionGotoFrame,
@@ -841,7 +920,37 @@ const actionTypes = {
 	0x53: SWF.ActionNewMethod,
 	0x40: SWF.ActionNewObject,
 	0x4f: SWF.ActionSetMember,
-	0x45: SWF.ActionTargetPath
+	0x45: SWF.ActionTargetPath,
+	0x94: SWF.ActionWith,
+	0x4a: SWF.ActionToNumber,
+	0x4b: SWF.ActionToString,
+	0x44: SWF.ActionTypeOf,
+	0x47: SWF.ActionAdd2,
+	0x48: SWF.ActionLess2,
+	0x3f: SWF.ActionModulo,
+	0x60: SWF.ActionBitAnd,
+	0x63: SWF.ActionBitLShift,
+	0x61: SWF.ActionBitOr,
+	0x64: SWF.ActionBitRShift,
+	0x65: SWF.ActionBitURShift,
+	0x62: SWF.ActionBitXOr,
+	0x51: SWF.ActionDecrement,
+	0x50: SWF.ActionIncrement,
+	0x4c: SWF.ActionPushDuplicate,
+	0x3e: SWF.ActionReturn,
+	0x4d: SWF.ActionStackSwap,
+	0x87: SWF.ActionStoreRegister,
+	0x54: SWF.ActionInstanceOf,
+	0x55: SWF.ActionEnumerate2,
+	0x66: SWF.ActionStrictEquals,
+	0x67: SWF.ActionGreater,
+	0x68: SWF.ActionStringGreater,
+	0x8e: SWF.ActionDefineFunction2,
+	0x69: SWF.ActionExtends,
+	0x2b: SWF.ActionCastOp,
+	0x2c: SWF.ActionImplementsOp,
+	0x8f: SWF.ActionTry,
+	0x2a: SWF.ActionThrow
 };
 const read = function() {
 	data = {
