@@ -685,7 +685,30 @@ const SWF = {
 	ActionCharToAscii: () => {},
 	ActionAsciiToChar: () => {},
 	ActionMBCharToAscii: () => {},
-	ActionMBAsciiToChar: () => {}
+	ActionMBAsciiToChar: () => {},
+	ActionJump: value => {
+		value.BranchOffset = SWF.SI16();
+	},
+	ActionIf: value => {
+		value.BranchOffset = SWF.SI16();
+	},
+	ActionCall: () => {},
+	ActionGetVariable: () => {},
+	ActionSetVariable: () => {},
+	ActionGetURL2: value => {
+		value.SendVarsMethod = SWF.UB(2);
+		SWF.UB(4);
+		value.LoadTargetFlag = SWF.UB();
+		value.LoadVariablesFlag = SWF.UB();
+	},
+	ActionGotoFrame2: value => {
+		SWF.UB(6);
+		value.SceneBiasFlag = SWF.UB();
+		value.PlayFlag = SWF.UB();
+		if (value.SceneBiasFlag) {
+			value.SceneBias = SWF.UI16();
+		}
+	}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -746,7 +769,14 @@ const actionTypes = {
 	0x32: SWF.ActionCharToAscii,
 	0x33: SWF.ActionAsciiToChar,
 	0x36: SWF.ActionMBCharToAscii,
-	0x37: SWF.ActionMBAsciiToChar
+	0x37: SWF.ActionMBAsciiToChar,
+	0x99: SWF.ActionJump,
+	0x9d: SWF.ActionIf,
+	0x9e: SWF.ActionCall,
+	0x1c: SWF.ActionGetVariable,
+	0x1d: SWF.ActionSetVariable,
+	0x9a: SWF.ActionGetURL2,
+	0x9f: SWF.ActionGotoFrame2
 };
 const read = function() {
 	data = {
