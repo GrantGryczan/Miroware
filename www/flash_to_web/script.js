@@ -623,6 +623,26 @@ const SWF = {
 	},
 	ActionGotoFrame: value => {
 		value.Frame = SWF.UI16();
+	},
+	ActionGetURL: value => {
+		value.UrlString = SWF.STRING();
+		value.TargetString = SWF.STRING();
+	},
+	ActionNextFrame: () => {},
+	ActionPreviousFrame: () => {},
+	ActionPlay: () => {},
+	ActionStop: () => {},
+	ActionToggleQuality: () => {},
+	ActionStopSounds: () => {},
+	ActionWaitForFrame: value => {
+		value.Frame = SWF.UI16();
+		value.SkipCount = SWF.UI8();
+	},
+	ActionSetTarget: value => {
+		value.TargetName = SWF.STRING();
+	},
+	ActionGoToLabel: value => {
+		value.Label = SWF.STRING();
 	}
 };
 const tagTypes = {
@@ -651,7 +671,17 @@ const tagTypes = {
 	12: SWF.DoAction
 };
 const actionTypes = {
-	0x81: SWF.ActionGotoFrame
+	0x81: SWF.ActionGotoFrame,
+	0x83: SWF.ActionGetURL,
+	0x04: SWF.ActionNextFrame,
+	0x05: SWF.ActionPreviousFrame,
+	0x06: SWF.ActionPlay,
+	0x07: SWF.ActionStop,
+	0x08: SWF.ActionToggleQuality,
+	0x09: SWF.ActionStopSounds,
+	0x8a: SWF.ActionWaitForFrame,
+	0x8b: SWF.ActionSetTarget,
+	0x8c: SWF.ActionGoToLabel
 };
 const read = function() {
 	data = {
