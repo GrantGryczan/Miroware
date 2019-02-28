@@ -715,7 +715,13 @@ const SWF = {
 	ActionCloneSprite: () => {},
 	ActionRemoveSprite: () => {},
 	ActionStartDrag: () => {},
-	ActionEndDrag: () => {}
+	ActionEndDrag: () => {},
+	ActionWaitForFrame2: value => {
+		value.SkipCount = SWF.UI8();
+	},
+	ActionTrace: () => {},
+	ActionGetTime: () => {},
+	ActionRandomNumber: () => {}
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
@@ -790,7 +796,11 @@ const actionTypes = {
 	0x24: SWF.ActionCloneSprite,
 	0x25: SWF.ActionRemoveSprite,
 	0x27: SWF.ActionStartDrag,
-	0x28: SWF.ActionEndDrag
+	0x28: SWF.ActionEndDrag,
+	0x8d: SWF.ActionWaitForFrame2,
+	0x26: SWF.ActionTrace,
+	0x34: SWF.ActionGetTime,
+	0x30: SWF.ActionRandomNumber
 };
 const read = function() {
 	data = {
