@@ -901,7 +901,7 @@ const SWF = {
 			NumFillBits: SWF.UB(4),
 			NumLineBits: SWF.UB(4)
 		};
-		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0);
+		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0, true);
 		return value;
 	},
 	SHAPEWITHSTYLE: () => {
@@ -911,7 +911,7 @@ const SWF = {
 			NumFillBits: SWF.UB(4),
 			NumLineBits: SWF.UB(4)
 		};
-		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0);
+		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0, true);
 		return value;
 	},
 	SHAPERECORD: shape => {
