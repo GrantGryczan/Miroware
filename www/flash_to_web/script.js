@@ -889,7 +889,11 @@ const SWF = {
 		if (value.JoinStyle === 2) {
 			value.MiterLimitFacter = SWF.UI16();
 		}
-		value.FillType = (value.HasFillFlag ? SWF.FILLSTYLE : SWF.RGBA)();
+		if (value.HasFillFlag) {
+			value.Color = SWF.RGBA();
+		} else {
+			value.FillType = SWF.FILLSTYLE();
+		}
 		return value;
 	},
 	SHAPE: () => {
