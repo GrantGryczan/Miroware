@@ -902,7 +902,7 @@ const SWF = {
 	},
 	SHAPEWITHSTYLE: () => {
 		const value = {
-			FillStyle: SWF.FILLSTYLEARRAY(),
+			FillStyles: SWF.FILLSTYLEARRAY(),
 			LineStyles: SWF.LINESTYLEARRAY(),
 			NumFillBits: SWF.UB(4),
 			NumLineBits: SWF.UB(4)
