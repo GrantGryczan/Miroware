@@ -1199,7 +1199,7 @@ const read = function() {
 			data.tag = {
 				Header: SWF.RECORDHEADER()
 			};
-			const tagType = tagTypes[data.tag.Header.TagCode];
+			tagType = tagTypes[data.tag.Header.TagCode];
 			if (tagType) {
 				tagType(data.tag);
 			} else {
