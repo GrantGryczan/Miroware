@@ -581,14 +581,14 @@ const SWF = {
 		value.SceneCount = SWF.EncodedU32();
 		value.Offset = [];
 		value.Name = [];
-		for (let i = 0; i <= value.SceneCount; i++) {
+		for (let i = 0; i < value.SceneCount; i++) {
 			value.Offset[i] = SWF.EncodedU32();
 			value.Name[i] = SWF.STRING();
 		}
 		value.FrameLabelCount = SWF.EncodedU32();
 		value.FrameNum = [];
 		value.FrameLabel = [];
-		for (let i = 0; i <= value.FrameLabelCount; i++) {
+		for (let i = 0; i < value.FrameLabelCount; i++) {
 			value.FrameNum[i] = SWF.EncodedU32();
 			value.FrameLabel[i] = SWF.STRING();
 		}
