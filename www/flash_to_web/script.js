@@ -15,13 +15,13 @@ const getArray = (type, length) => {
 	return array;
 };
 const getFlaggedArray = (type, flagType, flagValue, oneOrMore) => {
-	alignToByte();
 	const array = [];
 	if (oneOrMore) {
 		array.push(type());
 	}
-	for (let bytePos; bytePos = data.bytePos, flagType() !== flagValue;) {
+	for (let bytePos, bitPos; bytePos = data.bytePos, bitPos = data.bitPos, flagType() !== flagValue;) {
 		data.bytePos = bytePos;
+		data.bitPos = bitPos;
 		array.push(type());
 	}
 	return array;
@@ -829,6 +829,176 @@ const SWF = {
 		value.Flags = SWF.UI32();
 		value.Name = SWF.STRING();
 		value.ABCData = data.bytes.slice(data.bytePos, data.bytePos = endPos);
+	},
+	FILLSTYLEARRAY: () => {
+		const value = {
+			FillStyleCount: SWF.UI8()
+		};
+		if (value.FillStyleCount === 0xff) {
+			value.FillStyleCount = SWF.UI16();
+		}
+		value.FillStyle = getArray(SWF.FILLSTYLE, value.FillStyleCount);
+		return value;
+	},
+	FILLSTYLE: () => {
+		const value = {
+			FillStyleType: SWF.UI8()
+		};
+		if (value.FillStyleType === 0x00) {
+			value.Color = SWF.RGBA();
+		} else {
+			value.Color = SWF.RGB();
+			const focalRadialGradientFill = value.FillStyleType === 0x13;
+			if (focalRadialGradientFill || value.FillStyleType === 0x10 || value.FillStyleType === 0x12) {
+				value.GradientMatrix = SWF.MATRIX();
+				value.Gradient = (focalRadialGradientFill ? SWF.FOCALGRADIENT : SWF.GRADIENT)();
+			} else if (value.FillStyleType === 0x40 || value.FillStyleType === 0x41 || value.FillStyleType === 0x42 || value.FillStyleType === 0x43) {
+				value.BitmapId = SWF.UI16();
+				value.BitmapMatrix = SWF.MATRIX();
+			}
+		}
+		return value;
+	},
+	LINESTYLEARRAY: () => {
+		const value = {
+			LineStyleCount: SWF.UI8()
+		};
+		if (value.LineStyleCount === 0xff) {
+			value.LineStyleCount = SWF.UI16();
+		}
+		value.LineStyles = getArray(data.tag.Header.TagCode === 2 || data.tag.Header.TagCode === 22 || data.tag.Header.TagCode === 32 ? SWF.LINESTYLE : SWF.LINESTYLE2, value.LineStyleCount);
+		return value;
+	},
+	LINESTYLE: () => ({
+		Width: SWF.UI16(),
+		Color: (data.tag.Header.TagCode === 32 ? SWF.RGBA : SWF.RGB)()
+	}),
+	LINESTYLE2: () => {
+		const value = {
+			Width: SWF.UI16(),
+			StartCapStyle: SWF.UB(2),
+			JoinStyle: SWF.UB(2),
+			HasFillFlag: SWF.UB(),
+			NoHScaleFlag: SWF.UB(),
+			NoVScaleFlag: SWF.UB(),
+			PixelHintingFlag: SWF.UB()
+		};
+		SWF.UB(5);
+		value.NoClose = SWF.UB();
+		value.EndCapStyle = SWF.UB(2);
+		if (value.JoinStyle === 2) {
+			value.MiterLimitFacter = SWF.UI16();
+		}
+		value.FillType = (value.HasFillFlag ? SWF.FILLSTYLE : SWF.RGBA)();
+		return value;
+	},
+	SHAPE: () => {
+		const value = {
+			NumFillBits: SWF.UB(4),
+			NumLineBits: SWF.UB(4),
+			ShapeRecords: getFlaggedArray(SWF.SHAPERECORD, SWF.UB.bind(null, 6), 0)
+		};
+		return value;
+	},
+	SHAPEWITHSTYLE: () => {
+		const value = {
+			FillStyle: SWF.FILLSTYLEARRAY(),
+			LineStyles: SWF.LINESTYLEARRAY(),
+			NumFillBits: SWF.UB(4),
+			NumLineBits: SWF.UB(4),
+			ShapeRecords: getFlaggedArray(SWF.SHAPERECORD, SWF.UB.bind(null, 6), 0)
+		};
+		return value;
+	},
+	SHAPERECORD: () => {
+		const value = {
+			TypeFlag: SWF.UB()
+		};
+		if (value.TypeFlag) {
+			if (value.StraightFlag = SWF.UB()) {
+				SWF.StraightEdgeRecord(value);
+			} else {
+				SWF.CurvedEdgeRecord(value);
+			}
+		} else {
+			SWF.StyleChangeRecord(value);
+		}
+		return value;
+	},
+	StyleChangeRecord: () => {
+		const value = {
+			StateNewStyles: SWF.UB(),
+			StateLineStyle: SWF.UB(),
+			StateFillStyle1: SWF.UB(),
+			StateFillstyle0: SWF.UB(),
+			StateMoveTo: SWF.UB()
+		};
+		if (value.StateMoveTo) {
+			value.MoveBits = SWF.UB(5);
+			value.MoveDeltaX = SWF.SB(value.MoveBits);
+			value.MoveDeltaY = SWF.SB(value.MoveBits);
+		}
+		if (value.StateFillStyle0) {
+			value.FillStyle0 = SWF.UB(data.tag.Shapes.NumFillBits);
+		}
+		if (value.StateFillStyle1) {
+			value.FillStyle1 = SWF.UB(data.tag.Shapes.NumFillBits);
+		}
+		if (value.StateLineStyle) {
+			value.LineStyle = SWF.UB(value.LineBits);
+		}
+		if (value.StateNewStyles) {
+			value.FillStyles = SWF.FILLSTYLEARRAY();
+			value.LineStyles = SWF.LINESTYLEARRAY();
+			value.NumFillBits = SWF.UB(4);
+			value.NumLineBits = SWF.UB(4);
+		}
+	},
+	StraightEdgeRecord: value => {
+		value.NumBits = SWF.UB(4);
+		value.GeneralLineFlag = SWF.UB();
+		if (value.GeneralLineFlag === 0) {
+			value.VertLineFlag = SWF.UB();
+		}
+		if (value.GeneralLineFlag || value.VertLineFlag === 0) {
+			value.DeltaX = SWF.SB(value.NumBits + 2);
+		}
+		if (value.GeneralLineFlag || value.VertLineFlag === 1) {
+			value.DeltaY = SWF.SB(value.NumBits + 2);
+		}
+	},
+	CurvedEdgeRecord: value => {
+		value.NumBits = SWF.UB(4);
+		const numBitsPlus2 = value.NumBits + 2;
+		value.ControlDeltaX = SWF.UB(numBitsPlus2);
+		value.ControlDeltaY = SWF.UB(numBitsPlus2);
+		value.AnchorDeltaX = SWF.UB(numBitsPlus2);
+		value.AnchorDeltaY = SWF.UB(numBitsPlus2);
+	},
+	DefineShape: value => {
+		value.ShapeId = SWF.UI16();
+		value.ShapeBounds = SWF.RECT();
+		value.Shapes = SWF.SHAPEWITHSTYLE();
+	},
+	DefineShape2: value => {
+		value.ShapeId = SWF.UI16();
+		value.ShapeBounds = SWF.RECT();
+		value.Shapes = SWF.SHAPEWITHSTYLE();
+	},
+	DefineShape3: value => {
+		value.ShapeId = SWF.UI16();
+		value.ShapeBounds = SWF.RECT();
+		value.Shapes = SWF.SHAPEWITHSTYLE();
+	},
+	DefineShape4: value => {
+		value.ShapeId = SWF.UI16();
+		value.ShapeBounds = SWF.RECT();
+		value.EdgeBounds = SWF.RECT();
+		SWF.UB(5);
+		value.UsesFillWindingRule = SWF.UB();
+		value.UsesNonScalingStrokes = SWF.UB();
+		value.UsesScalingStrokes = SWF.UB();
+		value.Shapes = SWF.SHAPEWITHSTYLE();
 	}
 };
 const tagTypes = {
@@ -856,7 +1026,11 @@ const tagTypes = {
 	86: SWF.DefineSceneAndFrameLabelData,
 	12: SWF.DoAction,
 	59: SWF.DoInitAction,
-	82: SWF.DoABC
+	82: SWF.DoABC,
+	2: SWF.DefineShape,
+	22: SWF.DefineShape2,
+	32: SWF.DefineShape3,
+	83: SWF.DefineShape4
 };
 const actionTypes = {
 	0x81: SWF.ActionGotoFrame,
@@ -996,17 +1170,17 @@ const read = function() {
 		data.file.FrameCount = SWF.UI16();
 		data.file.Tags = [];
 		while (data.bytePos < data.bytes.length) {
-			const tag = {
+			data.tag = {
 				Header: SWF.RECORDHEADER()
 			};
-			const tagType = tagTypes[tag.Header.TagCode];
+			const tagType = tagTypes[data.tag.Header.TagCode];
 			if (tagType) {
-				tagType(tag);
+				tagType(data.tag);
 			} else {
-				console.warn(`Unsupported TagCode ${tag.Header.TagCode}`);
-				data.bytePos += tag.Header.Length;
+				console.warn(`Unsupported TagCode ${data.tag.Header.TagCode}`);
+				data.bytePos += data.tag.Header.Length;
 			}
-			data.file.Tags.push(tag);
+			data.file.Tags.push(data.tag);
 		}
 		if ((data.bytePos += 8) !== data.file.FileLength) {
 			throw new Error(`Final bytePos ${data.bytePos} does not equal FileLength ${data.file.FileLength}`);
