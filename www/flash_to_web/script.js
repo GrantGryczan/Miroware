@@ -890,9 +890,9 @@ const SWF = {
 			value.MiterLimitFacter = SWF.UI16();
 		}
 		if (value.HasFillFlag) {
-			value.Color = SWF.RGBA();
-		} else {
 			value.FillType = SWF.FILLSTYLE();
+		} else {
+			value.Color = SWF.RGBA();
 		}
 		return value;
 	},
