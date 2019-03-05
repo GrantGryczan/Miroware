@@ -1202,6 +1202,9 @@ const read = function() {
 			const tagType = tagTypes[data.tag.Header.TagCode];
 			if (tagType) {
 				tagType(data.tag);
+				if (tagType === SWF.End) {
+					break;
+				}
 			} else {
 				console.warn(`Unsupported TagCode ${data.tag.Header.TagCode}`);
 				data.bytePos += data.tag.Header.Length;
