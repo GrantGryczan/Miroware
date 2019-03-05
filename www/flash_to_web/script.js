@@ -997,7 +997,30 @@ const SWF = {
 		value.UsesNonScalingStrokes = SWF.UB();
 		value.UsesScalingStrokes = SWF.UB();
 		value.Shapes = SWF.SHAPEWITHSTYLE();
-	}
+	},
+	GRADIENT: () => {
+		const value = {
+			SpreadMode: SWF.UB(2),
+			InterpolationMode: SWF.UB(2),
+			NumGradients: SWF.UB(4)
+		};
+		value.GradientRecords = getArray(SWF.GRADRECORD, value.NumGradients);
+		return value;
+	},
+	FOCALGRADIENT: () => {
+		const value = {
+			SpreadMode: SWF.UB(2),
+			InterpolationMode: SWF.UB(2),
+			NumGradients: SWF.UB(4)
+		};
+		value.GradientRecords = getArray(SWF.GRADRECORD, value.NumGradients);
+		value.FocalPoint = SWF.FIXED8();
+		return value;
+	},
+	GRADRECORD: () => ({
+		Ratio: SWF.UI8(),
+		Color: (data.tag.Header.TagCode === 32 ? SWF.RGBA : SWF.RGB)()
+	})
 };
 const tagTypes = {
 	4: SWF.PlaceObject,
