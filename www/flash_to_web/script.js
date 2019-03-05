@@ -1202,14 +1202,14 @@ const read = function() {
 			const tagType = tagTypes[data.tag.Header.TagCode];
 			if (tagType) {
 				tagType(data.tag);
-				if (tagType === SWF.End) {
-					break;
-				}
 			} else {
 				console.warn(`Unsupported TagCode ${data.tag.Header.TagCode}`);
 				data.bytePos += data.tag.Header.Length;
 			}
 			data.file.Tags.push(data.tag);
+			if (tagType === SWF.End) {
+				break;
+			}
 		}
 		if ((data.bytePos += 8) !== data.file.FileLength) {
 			throw new Error(`Final bytePos ${data.bytePos} does not equal FileLength ${data.file.FileLength}`);
