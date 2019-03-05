@@ -930,7 +930,9 @@ const SWF = {
 		return value;
 	},
 	StyleChangeRecord: (value, shape) => {
-		value.StateNewStyles = SWF.UB();
+		if (data.tag.Header.TagCode === 22 || data.tag.Header.TagCode === 32) {
+			value.StateNewStyles = SWF.UB();
+		}
 		value.StateLineStyle = SWF.UB();
 		value.StateFillStyle1 = SWF.UB();
 		value.StateFillstyle0 = SWF.UB();
