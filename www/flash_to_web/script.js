@@ -934,7 +934,7 @@ const SWF = {
 		}
 		value.StateLineStyle = SWF.UB();
 		value.StateFillStyle1 = SWF.UB();
-		value.StateFillstyle0 = SWF.UB();
+		value.StateFillStyle0 = SWF.UB();
 		value.StateMoveTo = SWF.UB();
 		if (value.StateMoveTo) {
 			value.MoveBits = SWF.UB(5);
