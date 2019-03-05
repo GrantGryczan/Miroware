@@ -895,9 +895,9 @@ const SWF = {
 	SHAPE: () => {
 		const value = {
 			NumFillBits: SWF.UB(4),
-			NumLineBits: SWF.UB(4),
-			ShapeRecords: getFlaggedArray(SWF.SHAPERECORD, SWF.UB.bind(null, 6), 0)
+			NumLineBits: SWF.UB(4)
 		};
+		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0);
 		return value;
 	},
 	SHAPEWITHSTYLE: () => {
@@ -905,44 +905,42 @@ const SWF = {
 			FillStyle: SWF.FILLSTYLEARRAY(),
 			LineStyles: SWF.LINESTYLEARRAY(),
 			NumFillBits: SWF.UB(4),
-			NumLineBits: SWF.UB(4),
-			ShapeRecords: getFlaggedArray(SWF.SHAPERECORD, SWF.UB.bind(null, 6), 0)
+			NumLineBits: SWF.UB(4)
 		};
+		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0);
 		return value;
 	},
-	SHAPERECORD: () => {
+	SHAPERECORD: shape => {
 		const value = {
 			TypeFlag: SWF.UB()
 		};
 		if (value.TypeFlag) {
 			if (value.StraightFlag = SWF.UB()) {
-				SWF.StraightEdgeRecord(value);
+				SWF.StraightEdgeRecord(value, shape);
 			} else {
-				SWF.CurvedEdgeRecord(value);
+				SWF.CurvedEdgeRecord(value, shape);
 			}
 		} else {
-			SWF.StyleChangeRecord(value);
+			SWF.StyleChangeRecord(value, shape);
 		}
 		return value;
 	},
-	StyleChangeRecord: () => {
-		const value = {
-			StateNewStyles: SWF.UB(),
-			StateLineStyle: SWF.UB(),
-			StateFillStyle1: SWF.UB(),
-			StateFillstyle0: SWF.UB(),
-			StateMoveTo: SWF.UB()
-		};
+	StyleChangeRecord: (value, shape) => {
+		value.StateNewStyles = SWF.UB();
+		value.StateLineStyle = SWF.UB();
+		value.StateFillStyle1 = SWF.UB();
+		value.StateFillstyle0 = SWF.UB();
+		value.StateMoveTo = SWF.UB();
 		if (value.StateMoveTo) {
 			value.MoveBits = SWF.UB(5);
 			value.MoveDeltaX = SWF.SB(value.MoveBits);
 			value.MoveDeltaY = SWF.SB(value.MoveBits);
 		}
 		if (value.StateFillStyle0) {
-			value.FillStyle0 = SWF.UB(data.tag.Shapes.NumFillBits);
+			value.FillStyle0 = SWF.UB(shape.NumFillBits);
 		}
 		if (value.StateFillStyle1) {
-			value.FillStyle1 = SWF.UB(data.tag.Shapes.NumFillBits);
+			value.FillStyle1 = SWF.UB(shape.NumFillBits);
 		}
 		if (value.StateLineStyle) {
 			value.LineStyle = SWF.UB(value.LineBits);
