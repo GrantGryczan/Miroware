@@ -19,10 +19,12 @@ const getFlaggedArray = (type, flagType, flagValue, oneOrMore) => {
 	if (oneOrMore) {
 		array.push(type());
 	}
-	for (let bytePos, bitPos; bytePos = data.bytePos, bitPos = data.bitPos, flagType() !== flagValue;) {
+	for (let bytePos = data.bytePos, bitPos = data.bitPos; flagType() !== flagValue;) {
 		data.bytePos = bytePos;
 		data.bitPos = bitPos;
 		array.push(type());
+		bytePos = data.bytePos;
+		bitPos = data.bitPos;
 	}
 	return array;
 };
