@@ -1211,8 +1211,8 @@ const read = function() {
 			}
 			data.file.Tags.push(data.tag);
 			const tagLength = data.bytePos - startPos;
-			if (tagLength !== data.tag.Header.TagLength) {
-				console.warn(`Tag length ${tagLength} does not equal TagLength ${data.tag.Header.TagLength} for tag`, data.tag);
+			if (tagLength !== data.tag.Header.Length) {
+				console.warn(`Tag length ${tagLength} does not equal Length ${data.tag.Header.Length} for tag`, data.tag);
 			}
 		}
 		if ((data.bytePos += 8) !== data.file.FileLength) {
