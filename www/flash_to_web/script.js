@@ -979,7 +979,7 @@ const SWF = {
 		value.ControlDeltaY = SWF.UB(numBitsPlus2);
 		value.AnchorDeltaX = SWF.UB(numBitsPlus2);
 		value.AnchorDeltaY = SWF.UB(numBitsPlus2);
-	},
+	},/*
 	DefineShape: value => {
 		value.ShapeId = SWF.UI16();
 		value.ShapeBounds = SWF.RECT();
@@ -1004,7 +1004,7 @@ const SWF = {
 		value.UsesNonScalingStrokes = SWF.UB();
 		value.UsesScalingStrokes = SWF.UB();
 		value.Shapes = SWF.SHAPEWITHSTYLE();
-	},
+	},*/
 	GRADIENT: () => {
 		const value = {
 			SpreadMode: SWF.UB(2),
