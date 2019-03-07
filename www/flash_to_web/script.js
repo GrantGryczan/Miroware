@@ -37,17 +37,17 @@ const SWF = {
 		const value = SWF.UI16();
 		return value & 0b1000000000000000 ? value - 65536 /* 2 ** 16 */ : value;
 	},
-	SI32: () => {
-		const value = SWF.UI32();
-		return value & 0b10000000000000000000000000000000 ? value - 4294967296 /* 2 ** 32 */ : value;
-	},
+	SI32: () => SWF.UI24() | SWF.UI8() << 24,
 	UI8: () => {
 		alignToByte();
 		return data.bytes[data.bytePos++];
 	},
 	UI16: () => SWF.UI8() | SWF.UI8() << 8,
 	UI24: () => SWF.UI16() | SWF.UI8() << 16,
-	UI32: () => SWF.UI24() | SWF.UI8() << 24,
+	UI32: () => {
+		const value = SWF.UI32();
+		return value & 0b10000000000000000000000000000000 ? value + 4294967296 /* 2 ** 32 */ : value;
+	},
 	FIXED: () => SWF.SI16() + SWF.UI16() / 65536 /* 2 ** 16 */,
 	FIXED8: () => SWF.SI8() + SWF.UI8() / 256 /* 2 ** 8 */,
 	FLOAT16: () => {
@@ -81,7 +81,7 @@ const SWF = {
 				break;
 			}
 		}
-		return value;
+		return value & 0b10000000000000000000000000000000 ? value + 4294967296 /* 2 ** 32 */ : value;
 	},
 	SB: (nBits = 1) => {
 		const value = SWF.UB(nBits);
