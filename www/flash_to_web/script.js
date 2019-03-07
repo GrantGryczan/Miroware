@@ -45,7 +45,7 @@ const SWF = {
 	UI16: () => SWF.UI8() | SWF.UI8() << 8,
 	UI24: () => SWF.UI16() | SWF.UI8() << 16,
 	UI32: () => {
-		const value = SWF.UI32();
+		const value = SWF.SI32();
 		return value & 0b10000000000000000000000000000000 ? value + 4294967296 /* 2 ** 32 */ : value;
 	},
 	FIXED: () => SWF.SI16() + SWF.UI16() / 65536 /* 2 ** 16 */,
