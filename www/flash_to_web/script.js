@@ -1046,7 +1046,7 @@ const tagTypes = {
 	64: SWF.EnableDebugger2,
 	65: SWF.ScriptLimits,
 	66: SWF.SetTabIndex,
-	67: SWF.FileAttributes,
+	69: SWF.FileAttributes,
 	71: SWF.ImportAssets2,
 	76: SWF.SymbolClass,
 	77: SWF.Metadata,
