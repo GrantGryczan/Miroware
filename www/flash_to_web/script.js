@@ -736,7 +736,8 @@ const SWF = {
 		value.FunctionName = SWF.STRING();
 		value.param = getArray(SWF.STRING, value.NumParams = SWF.UI16());
 		value.codeSize = SWF.UI16();
-		console.warn(`Skipped ActionDefineFunction.codeSize ${value.codeSize} bytes`, data.bytes.slice(data.bytePos, data.bytePos += value.codeSize));
+		value.code = data.bytes.slice(data.bytePos, data.bytePos += value.codeSize);
+		console.warn(`Skipped ActionDefineFunction.codeSize ${value.codeSize} bytes for tag`, value);
 	},
 	ActionDefineLocal: () => {},
 	ActionDefineLocal2: () => {},
@@ -799,7 +800,8 @@ const SWF = {
 		value.PreloadGlobalFlag = SWF.UB();
 		value.Parameters = getArray(SWF.REGISTERPARAM, value.NumParams);
 		value.codeSize = SWF.UI16();
-		console.warn(`Skipped ActionDefineFunction2.codeSize ${value.codeSize} bytes`, data.bytes.slice(data.bytePos, data.bytePos += value.codeSize));
+		value.code = data.bytes.slice(data.bytePos, data.bytePos += value.codeSize);
+		console.warn(`Skipped ActionDefineFunction2.codeSize ${value.codeSize} bytes for tag`, value);
 	},
 	REGISTERPARAM: () => ({
 		Register: SWF.UI8(),
@@ -1205,15 +1207,15 @@ const read = function() {
 			tagType = tagTypes[data.tag.Header.TagCode];
 			if (tagType) {
 				tagType(data.tag);
+				const tagLength = data.bytePos - startPos;
+				if (tagLength !== data.tag.Header.Length) {
+					console.warn(`Tag length ${tagLength} does not equal Length ${data.tag.Header.Length} for tag`, data.tag);
+				}
 			} else {
-				console.warn(`Unsupported TagCode ${data.tag.Header.TagCode}`);
+				console.warn(`Unsupported TagCode ${data.tag.Header.TagCode} for tag`, data.tag);
 				data.bytePos += data.tag.Header.Length;
 			}
 			data.file.Tags.push(data.tag);
-			const tagLength = data.bytePos - startPos;
-			if (tagLength !== data.tag.Header.Length) {
-				console.warn(`Tag length ${tagLength} does not equal Length ${data.tag.Header.Length} for tag`, data.tag);
-			}
 		}
 		if ((data.bytePos += 8) !== data.file.FileLength) {
 			throw new Error(`Final bytePos ${data.bytePos} does not equal FileLength ${data.file.FileLength}`);
