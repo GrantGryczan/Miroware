@@ -121,6 +121,12 @@ const SWF = {
 		Blue: SWF.UI8()
 	}),
 	RGBA: () => ({
+		Red: SWF.UI8(),
+		Green: SWF.UI8(),
+		Blue: SWF.UI8(),
+		Alpha: SWF.UI8()
+	}),
+	ARGB: () => ({
 		Alpha: SWF.UI8(),
 		Red: SWF.UI8(),
 		Green: SWF.UI8(),
