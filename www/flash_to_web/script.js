@@ -838,7 +838,7 @@ const SWF = {
 		const value = {
 			FillStyleCount: SWF.UI8()
 		};
-		if (value.FillStyleCount === 0xff) {
+		if ((data.tag.Header.TagCode === 22 || data.tag.Header.TagCode === 32) && value.FillStyleCount === 0xff) {
 			value.FillStyleCount = SWF.UI16();
 		}
 		value.FillStyle = getArray(SWF.FILLSTYLE, value.FillStyleCount);
