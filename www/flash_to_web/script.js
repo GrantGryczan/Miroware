@@ -1001,7 +1001,7 @@ const SWF = {
 		value.ShapeId = SWF.UI16();
 		value.ShapeBounds = SWF.RECT();
 		value.EdgeBounds = SWF.RECT();
-		value.Reserved = SWF.UB(5);
+		SWF.UB(5);
 		value.UsesFillWindingRule = SWF.UB();
 		value.UsesNonScalingStrokes = SWF.UB();
 		value.UsesScalingStrokes = SWF.UB();
