@@ -1215,6 +1215,7 @@ const read = function() {
 			tagType = tagTypes[data.tag.Header.TagCode];
 			if (tagType) {
 				tagType(data.tag);
+				alignToByte();
 				const tagLength = data.bytePos - startPos;
 				if (tagLength !== data.tag.Header.Length) {
 					console.warn(`Tag length ${tagLength} does not equal Length ${data.tag.Header.Length} for tag`, data.tag);
