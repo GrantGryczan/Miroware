@@ -910,8 +910,8 @@ const SWF = {
 			NumFillBits: SWF.UB(4),
 			NumLineBits: SWF.UB(4)
 		};
-		value.NumFillBits = value.NumFillBits;
-		value.NumLineBits = value.NumLineBits;
+		(value.FillStylesValue = value.FillStyles).unshift(null);
+		(value.LineStylesValue = value.LineStyles).unshift(null);
 		(value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0)).unshift(null);
 		return value;
 	},
@@ -922,11 +922,11 @@ const SWF = {
 			NumFillBits: SWF.UB(4),
 			NumLineBits: SWF.UB(4)
 		};
-		value.FillStylesValue = value.FillStyles;
-		value.LineStylesValue = value.LineStyles;
+		(value.FillStylesValue = value.FillStyles).unshift(null);
+		(value.LineStylesValue = value.LineStyles).unshift(null);
 		value.NumFillBitsValue = value.NumFillBits;
 		value.NumLineBitsValue = value.NumLineBits;
-		(value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0)).unshift(null);
+		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0);
 		return value;
 	},
 	SHAPERECORD: shape => {
