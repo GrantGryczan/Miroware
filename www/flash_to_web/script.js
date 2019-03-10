@@ -1014,6 +1014,7 @@ const SWF = {
 		value.Shapes = SWF.SHAPEWITHSTYLE();
 	},
 	GRADIENT: () => {
+		alignToByte();
 		const value = {
 			SpreadMode: SWF.UB(2),
 			InterpolationMode: SWF.UB(2),
@@ -1023,6 +1024,7 @@ const SWF = {
 		return value;
 	},
 	FOCALGRADIENT: () => {
+		alignToByte();
 		const value = {
 			SpreadMode: SWF.UB(2),
 			InterpolationMode: SWF.UB(2),
