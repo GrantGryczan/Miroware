@@ -1207,12 +1207,12 @@ const read = function() {
 		data.file.FrameRate = SWF.UI8() / 256 /* 2 ** 8 */ + SWF.UI8();
 		data.file.FrameCount = SWF.UI16();
 		data.file.Tags = [];
-		for (let tagType; tagType !== SWF.End;) {
+		while (data.bytePos < data.file.FileLength) {
 			data.tag = {
 				Header: SWF.RECORDHEADER()
 			};
 			const startPos = data.bytePos;
-			tagType = tagTypes[data.tag.Header.TagCode];
+			const tagType = tagTypes[data.tag.Header.TagCode];
 			if (tagType) {
 				tagType(data.tag);
 				alignToByte();
