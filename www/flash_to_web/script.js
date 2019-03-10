@@ -847,7 +847,7 @@ const SWF = {
 		if ((data.tag.Header.TagCode === 22 || data.tag.Header.TagCode === 32) && value.FillStyleCount === 0xff) {
 			value.FillStyleCount = SWF.UI16();
 		}
-		value.FillStyles = getArray(SWF.FILLSTYLE, value.FillStyleCount);
+		(value.FillStyles = getArray(SWF.FILLSTYLE, value.FillStyleCount)).unshift(null);
 		return value;
 	},
 	FILLSTYLE: () => {
@@ -875,7 +875,7 @@ const SWF = {
 		if (value.LineStyleCount === 0xff) {
 			value.LineStyleCount = SWF.UI16();
 		}
-		value.LineStyles = getArray(data.tag.Header.TagCode === 2 || data.tag.Header.TagCode === 22 || data.tag.Header.TagCode === 32 ? SWF.LINESTYLE : SWF.LINESTYLE2, value.LineStyleCount);
+		(value.LineStyles = getArray(data.tag.Header.TagCode === 2 || data.tag.Header.TagCode === 22 || data.tag.Header.TagCode === 32 ? SWF.LINESTYLE : SWF.LINESTYLE2, value.LineStyleCount)).unshift(null);
 		return value;
 	},
 	LINESTYLE: () => ({
@@ -910,8 +910,8 @@ const SWF = {
 			NumFillBits: SWF.UB(4),
 			NumLineBits: SWF.UB(4)
 		};
-		(value.FillStylesValue = value.FillStyles).unshift(null);
-		(value.LineStylesValue = value.LineStyles).unshift(null);
+		value.NumFillBits = value.NumFillBits;
+		value.NumLineBits = value.NumLineBits;
 		(value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0)).unshift(null);
 		return value;
 	},
@@ -922,8 +922,8 @@ const SWF = {
 			NumFillBits: SWF.UB(4),
 			NumLineBits: SWF.UB(4)
 		};
-		(value.FillStylesValue = value.FillStyles).unshift(null);
-		(value.LineStylesValue = value.LineStyles).unshift(null);
+		value.FillStylesValue = value.FillStyles;
+		value.LineStylesValue = value.LineStyles;
 		value.NumFillBitsValue = value.NumFillBits;
 		value.NumLineBitsValue = value.NumLineBits;
 		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0);
