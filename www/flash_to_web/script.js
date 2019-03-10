@@ -855,7 +855,7 @@ const SWF = {
 			FillStyleType: SWF.UI8()
 		};
 		if (value.FillStyleType === 0x00) {
-			value.Color = SWF.RGB();
+			value.Color = (data.tag.Header.TagCode === 32 ? SWF.RGBA : SWF.RGB)();
 		} else {
 			const focalRadialGradientFill = value.FillStyleType === 0x13;
 			if (focalRadialGradientFill || value.FillStyleType === 0x10 || value.FillStyleType === 0x12) {
