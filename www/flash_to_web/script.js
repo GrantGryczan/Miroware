@@ -956,13 +956,13 @@ const SWF = {
 			value.MoveDeltaY = SWF.SB(value.MoveBits);
 		}
 		if (value.StateFillStyle0) {
-			value.FillStyle0Value = shape.FillStyles[value.FillStyle0 = SWF.UB(shape.FillBitsValue)];
+			value.FillStyle0Value = shape.FillStyles[value.FillStyle0 = SWF.UB(shape.NumFillBitsValue)];
 		}
 		if (value.StateFillStyle1) {
-			value.FillStyle1Value = shape.FillStyles[value.FillStyle1 = SWF.UB(shape.FillBitsValue)];
+			value.FillStyle1Value = shape.FillStyles[value.FillStyle1 = SWF.UB(shape.NumFillBitsValue)];
 		}
 		if (value.StateLineStyle) {
-			value.LineStyleValue = shape.LineStyles[value.LineStyle = SWF.UB(value.LineBitsValue)];
+			value.LineStyleValue = shape.LineStyles[value.LineStyle = SWF.UB(value.NumLineBitsValue)];
 		}
 		if (value.StateNewStyles) {
 			shape.FillStylesValue = value.FillStyles = SWF.FILLSTYLEARRAY();
