@@ -910,9 +910,9 @@ const SWF = {
 			NumFillBits: SWF.UB(4),
 			NumLineBits: SWF.UB(4)
 		};
-		value.FillBits = value.NumFillBits;
-		value.LineBits = value.NumLineBits;
-		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0);
+		value.NumFillBits = value.NumFillBits;
+		value.NumLineBits = value.NumLineBits;
+		(value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0)).unshift(null);
 		return value;
 	},
 	SHAPEWITHSTYLE: () => {
@@ -922,9 +922,11 @@ const SWF = {
 			NumFillBits: SWF.UB(4),
 			NumLineBits: SWF.UB(4)
 		};
-		value.FillBits = value.NumFillBits;
-		value.LineBits = value.NumLineBits;
-		value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0);
+		value.FillStylesValue = value.FillStyles;
+		value.LineStylesValue = value.LineStyles;
+		value.NumFillBitsValue = value.NumFillBits;
+		value.NumLineBitsValue = value.NumLineBits;
+		(value.ShapeRecords = getFlaggedArray(SWF.SHAPERECORD.bind(null, value), SWF.UB.bind(null, 6), 0)).unshift(null);
 		return value;
 	},
 	SHAPERECORD: shape => {
@@ -954,19 +956,19 @@ const SWF = {
 			value.MoveDeltaY = SWF.SB(value.MoveBits);
 		}
 		if (value.StateFillStyle0) {
-			value.FillStyle0 = SWF.UB(shape.FillBits);
+			value.FillStyle0Value = shape.FillStyles[value.FillStyle0 = SWF.UB(shape.FillBitsValue)];
 		}
 		if (value.StateFillStyle1) {
-			value.FillStyle1 = SWF.UB(shape.FillBits);
+			value.FillStyle1Value = shape.FillStyles[value.FillStyle1 = SWF.UB(shape.FillBitsValue)];
 		}
 		if (value.StateLineStyle) {
-			value.LineStyle = SWF.UB(value.LineBits);
+			value.LineStyleValue = shape.LineStyles[value.LineStyle = SWF.UB(value.LineBitsValue)];
 		}
 		if (value.StateNewStyles) {
-			value.FillStyles = SWF.FILLSTYLEARRAY();
-			value.LineStyles = SWF.LINESTYLEARRAY();
-			shape.FillBits = value.NumFillBits = SWF.UB(4);
-			shape.NumBits = value.NumLineBits = SWF.UB(4);
+			shape.FillStylesValue = value.FillStyles = SWF.FILLSTYLEARRAY();
+			shape.LineStylesValue = value.LineStyles = SWF.LINESTYLEARRAY();
+			shape.NumFillBitsValue = value.NumFillBits = SWF.UB(4);
+			shape.NumNumBitsValue = value.NumLineBits = SWF.UB(4);
 		}
 	},
 	StraightEdgeRecord: value => {
