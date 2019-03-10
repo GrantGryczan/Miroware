@@ -924,6 +924,7 @@ const SWF = {
 		return value;
 	},
 	SHAPERECORD: shape => {
+		alignToByte();
 		const value = {
 			TypeFlag: SWF.UB()
 		};
