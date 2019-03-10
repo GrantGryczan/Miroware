@@ -1207,7 +1207,7 @@ const read = function() {
 		data.file.FrameRate = SWF.UI8() / 256 /* 2 ** 8 */ + SWF.UI8();
 		data.file.FrameCount = SWF.UI16();
 		data.file.Tags = [];
-		while (data.bytePos < data.file.FileLength) {
+		do {
 			data.tag = {
 				Header: SWF.RECORDHEADER()
 			};
@@ -1225,7 +1225,7 @@ const read = function() {
 				data.bytePos += data.tag.Header.Length;
 			}
 			data.file.Tags.push(data.tag);
-		}
+		} while (data.bytePos < data.file.FileLength);
 		if ((data.bytePos += 8) !== data.file.FileLength) {
 			throw new Error(`Final bytePos ${data.bytePos} does not equal FileLength ${data.file.FileLength}`);
 		}
