@@ -1225,7 +1225,7 @@ const read = function() {
 				data.bytePos += data.tag.Header.Length;
 			}
 			data.file.Tags.push(data.tag);
-		} while (data.bytePos < data.file.FileLength);
+		} while (data.bytePos < data.bytes.length);
 		if ((data.bytePos += 8) !== data.file.FileLength) {
 			throw new Error(`Final bytePos ${data.bytePos} does not equal FileLength ${data.file.FileLength}`);
 		}
