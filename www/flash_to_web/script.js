@@ -966,21 +966,21 @@ const SWF = {
 		}
 	},
 	StraightEdgeRecord: value => {
-		value.NumBits = SWF.UB(4);
+		value.NumBits = SWF.UB(4) + 2;
 		value.GeneralLineFlag = SWF.UB();
 		if (value.GeneralLineFlag === 0) {
 			value.VertLineFlag = SWF.UB();
 		}
 		if (value.GeneralLineFlag || value.VertLineFlag === 0) {
-			value.DeltaX = SWF.SB(value.NumBits + 2);
+			value.DeltaX = SWF.SB(value.NumBits);
 		}
 		if (value.GeneralLineFlag || value.VertLineFlag === 1) {
-			value.DeltaY = SWF.SB(value.NumBits + 2);
+			value.DeltaY = SWF.SB(value.NumBits);
 		}
 	},
 	CurvedEdgeRecord: value => {
-		value.NumBits = SWF.UB(4);
-		const numBitsPlus2 = value.NumBits + 2;
+		value.NumBits = SWF.UB(4) + 2;
+		const numBitsPlus2 = value.NumBits;
 		value.ControlDeltaX = SWF.UB(numBitsPlus2);
 		value.ControlDeltaY = SWF.UB(numBitsPlus2);
 		value.AnchorDeltaX = SWF.UB(numBitsPlus2);
