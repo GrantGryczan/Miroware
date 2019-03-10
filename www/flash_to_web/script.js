@@ -980,11 +980,10 @@ const SWF = {
 	},
 	CurvedEdgeRecord: value => {
 		value.NumBits = SWF.UB(4) + 2;
-		const numBitsPlus2 = value.NumBits;
-		value.ControlDeltaX = SWF.UB(numBitsPlus2);
-		value.ControlDeltaY = SWF.UB(numBitsPlus2);
-		value.AnchorDeltaX = SWF.UB(numBitsPlus2);
-		value.AnchorDeltaY = SWF.UB(numBitsPlus2);
+		value.ControlDeltaX = SWF.UB(value.NumBits);
+		value.ControlDeltaY = SWF.UB(value.NumBits);
+		value.AnchorDeltaX = SWF.UB(value.NumBits);
+		value.AnchorDeltaY = SWF.UB(value.NumBits);
 	},
 	DefineShape: value => {
 		value.ShapeId = SWF.UI16();
