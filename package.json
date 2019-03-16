@@ -20,22 +20,22 @@
 	},
 	"homepage": "https://miroware.io/",
 	"dependencies": {
-		"aws-sdk": "^2.394.0",
+		"aws-sdk": "^2.422.0",
 		"babel-plugin-iife-wrap": "^1.1.0",
 		"body-parser": "^1.18.3",
 		"bson-ext": "^2.0.1",
-		"cookie-parser": "^1.4.3",
+		"cookie-parser": "^1.4.4",
 		"discord.js": "github:hydrabolt/discord.js",
 		"express": "^4.16.4",
 		"fs-extra": "^5.0.0",
-		"google-auth-library": "^3.0.1",
+		"google-auth-library": "^3.1.0",
 		"http-proxy": "^1.17.0",
 		"mime": "^2.4.0",
 		"mongodb": "^3.1.13",
 		"nodemailer": "^4.7.0",
 		"replthis": "^1.0.2",
 		"request": "^2.88.0",
-		"request-promise-native": "^1.0.5",
-		"servecube": "^1.16.14"
+		"request-promise-native": "^1.0.7",
+		"servecube": "^1.16.17"
 	}
 }
