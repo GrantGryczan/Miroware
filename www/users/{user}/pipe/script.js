@@ -120,7 +120,7 @@ const PipeItem = class PipeItem {
 	constructor(item) {
 		this.id = item.id;
 		(this.element = html`
-			<a class="item" draggable="false">
+			<a class="item" draggable="false" ondragstart="return false;">
 				<div class="cell thumbnail material-icons"></div>
 				<div class="cell icon">
 					<button class="mdc-icon-button material-icons"></button>
@@ -869,7 +869,7 @@ if (Miro.data.isMe) {
 			this.path = path;
 			this.file = file;
 			this.element = html`
-				<a class="item loading" draggable="false">
+				<a class="item loading" draggable="false" ondragstart="return false;">
 					<div class="label">
 						<div class="title" title="$${this.file.name}">$${this.file.name}</div>
 						<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${this.size = getSize(this.file.size)})</div>
@@ -1067,9 +1067,6 @@ if (Miro.data.isMe) {
 	});
 	let allowDrop = true;
 	document.addEventListener("dragstart", evt => {
-		if (evt.target.classList.contains("item")) {
-			evt.preventDefault();
-		}
 		allowDrop = false;
 	}, {
 		capture: true,
@@ -1088,10 +1085,8 @@ if (Miro.data.isMe) {
 			clearTimeout(dragLeaveTimeout);
 			dragLeaveTimeout = null;
 		}
-		if (allowDrop && Miro.focused()) {
-			if (evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
-				indicateTarget(container);
-			}
+		if (allowDrop && Miro.focused() && evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
+			indicateTarget(container);
 		}
 	}, true);
 	document.addEventListener("dragleave", () => {
