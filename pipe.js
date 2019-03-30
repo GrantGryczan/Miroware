@@ -50,7 +50,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 			});
 			if (user) {
 				path = path.join("/");
-				const item = user.pipe.find(item => item.name === path);
+				const item = user.pipe.find(item => item.name === path && item.privacy !== 2);
 				if (item) {
 					if (item.type === "/") {
 						res.set("Content-Type", "application/zip");
