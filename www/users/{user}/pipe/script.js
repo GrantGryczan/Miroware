@@ -51,12 +51,13 @@ const indicateTarget = target => {
 		targetIndicator.classList.remove("visible");
 	}
 };
+const getTargetName = () => indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
 const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
 let path = "";
-const getName = name => path ? name.slice(path.length + 1) : name;
-const applyPath = name => (path ? `${path}/` : "") + name;
+const getName = (name, parent = path) => parent ? name.slice(parent.length + 1) : name;
+const applyPath = (name, parent = path) => (parent ? `${parent}/` : "") + name;
 const encodedSlashes = /%2F/g;
 const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
 const quotationMarks = /\"/g;
@@ -458,10 +459,10 @@ document.addEventListener("mouseup", evt => {
 					for (const itemElement of items.querySelectorAll(".item.selected")) {
 						itemElement.classList.remove("selected");
 						itemElement.classList.add("loading");
-						const targetName = indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
+						const targetName = getTargetName();
 						const name = getName(itemElement._item.name);
 						Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
-							name: targetName ? `${targetName}/${name}` : name
+							name: getName(name, targetName)
 						}).then(Miro.response(xhr => {
 							itemElement._item.name = xhr.response.name;
 							itemElement.classList.remove("loading");
@@ -796,16 +797,16 @@ embed.addEventListener("click", () => {
 });
 updateProperties();
 if (Miro.data.isMe) {
-	const checkName = async name => {
+	const checkName = async (name, parent = path) => {
 		let takenItem;
-		let fullName = applyPath(name);
+		let fullName = applyPath(name, parent);
 		while (takenItem = getItem(fullName)) {
 			const value = await new Miro.Dialog("Error", html`
-				<b>$${name}</b> already exists.
+				<b>$${fullName}</b> already exists.
 			`, ["Replace", "Rename", "Cancel"]);
 			if (value === 0) {
 				if (await new Miro.Dialog("Replace", html`
-					Are you sure you want to replace <b>$${name}</b>?
+					Are you sure you want to replace <b>$${fullName}</b>?
 				`, ["Yes", "No"]) === 0) {
 					Miro.response(() => {
 						takenItem.delete();
@@ -833,7 +834,7 @@ if (Miro.data.isMe) {
 			} else {
 				return false;
 			}
-			fullName = applyPath(name);
+			fullName = applyPath(name, parent);
 		}
 		return name;
 	};
@@ -865,13 +866,15 @@ if (Miro.data.isMe) {
 	};
 	window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
 	const PipeFile = class PipeFile {
-		constructor(file) {
-			this.path = path;
+		constructor(file, name, parent = path) {
 			this.file = file;
+			this.name = name || file.name;
+			this.path = parent;
+			const fullName = applyPath(this.name);
 			this.element = html`
 				<a class="item loading" draggable="false" ondragstart="return false;">
 					<div class="label">
-						<div class="title" title="$${this.file.name}">$${this.file.name}</div>
+						<div class="title" title="$${this.name}">$${this.name}</div>
 						<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${this.size = getSize(this.file.size)})</div>
 					</div>
 					<button class="close mdc-icon-button material-icons">close</button>
@@ -882,7 +885,7 @@ if (Miro.data.isMe) {
 			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 				"Content-Type": "application/octet-stream",
 				"X-Data": JSON.stringify({
-					name: applyPath(this.file.name)
+					name: fullName
 				})
 			}, this.file, xhr => {
 				this.xhr = xhr;
@@ -943,7 +946,7 @@ if (Miro.data.isMe) {
 				evt.preventDefault();
 			}
 			if (this.element.classList.contains("loading") && await new Miro.Dialog("Cancel", html`
-				Are you sure you want to cancel uploading <b>$${this.file.name}</b>?
+				Are you sure you want to cancel uploading <b>$${this.name}</b>?
 			`, ["Yes", "No"]) !== 0) {
 				return;
 			}
@@ -962,22 +965,19 @@ if (Miro.data.isMe) {
 			}
 		}
 	}
-	const addFile = async (file, name) => {
-		name = await checkName(typeof name === "string" ? name : file.name);
-		if (!name) {
+	const addFile = async (file, name, parent) => {
+		if (!(name = await checkName(typeof name === "string" ? name : file.name, parent))) {
 			return;
-		} else if (name !== file.name) {
-			Object.defineProperty(file, "name", {
-				get: () => name
-			});
 		}
-		queuedItems.appendChild(new PipeFile(file).element);
+		queuedItems.appendChild(new PipeFile(file, name, parent).element);
 	};
 	const fileInput = document.createElement("input");
 	fileInput.type = "file";
 	fileInput.multiple = true;
 	fileInput.addEventListener("change", () => {
-		Array.prototype.forEach.call(fileInput.files, addFile);
+		for (const file of fileInput.files) {
+			addFile(file);
+		}
 		fileInput.value = null;
 	});
 	creation.querySelector("#addFiles").addEventListener("click", fileInput.click.bind(fileInput));
@@ -1086,7 +1086,18 @@ if (Miro.data.isMe) {
 			dragLeaveTimeout = null;
 		}
 		if (allowDrop && Miro.focused() && evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
-			indicateTarget(container);
+			if (evt.target.classList.contains("ancestor")) {
+				indicateTarget(evt.target);
+			} else if (items.contains(evt.target)) {
+				for (const itemElement of items.querySelectorAll(".item")) {
+					if (itemElement.contains(evt.target)) {
+						indicateTarget(itemElement);
+						break;
+					}
+				}
+			} else {
+				indicateTarget(container);
+			}
 		}
 	}, true);
 	document.addEventListener("dragleave", () => {
@@ -1102,7 +1113,10 @@ if (Miro.data.isMe) {
 		evt.preventDefault();
 		if (allowDrop && Miro.focused()) {
 			if (evt.dataTransfer.files.length) {
-				Array.prototype.forEach.call(evt.dataTransfer.files, addFile);
+				const targetName = getTargetName();
+				for (const file of evt.dataTransfer.files) {
+					addFile(file, targetName);
+				}
 			}/* else if (evt.dataTransfer.types.includes("text/uri-list")) {
 				addURL(evt.dataTransfer.getData("text/uri-list"));
 			}*/
