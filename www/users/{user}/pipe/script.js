@@ -1086,18 +1086,18 @@ if (Miro.data.isMe) {
 			dragLeaveTimeout = null;
 		}
 		if (allowDrop && Miro.focused() && evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
-			if (evt.target.classList.contains("ancestor")) {
-				indicateTarget(evt.target);
-			} else if (items.contains(evt.target)) {
-				for (const itemElement of items.querySelectorAll(".item")) {
+			if (items.contains(evt.target)) {
+				for (const itemElement of items.querySelectorAll(".item.typeDir")) {
 					if (itemElement.contains(evt.target)) {
 						indicateTarget(itemElement);
-						break;
+						return;
 					}
 				}
-			} else {
-				indicateTarget(container);
+			} else if (evt.target.classList.contains("ancestor")) {
+				indicateTarget(evt.target);
+				return;
 			}
+			indicateTarget(container);
 		}
 	}, true);
 	document.addEventListener("dragleave", () => {
