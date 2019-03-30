@@ -51,7 +51,7 @@ const indicateTarget = target => {
 		targetIndicator.classList.remove("visible");
 	}
 };
-const getTargetName = () => indicatedTarget._item ? indicatedTarget._item.name : decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1));
+const getTargetName = () => indicatedTarget._item ? indicatedTarget._item.name : (indicatedTarget instanceof HTMLAnchorElement ? decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1)) : path);
 const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
