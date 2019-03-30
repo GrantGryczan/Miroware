@@ -60,6 +60,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 						});
 						archive.pipe(res);
 						const prefix = `${path}/`;
+						const sliceStart = path.lastIndexOf("/") + 1;
 						let itemsToZip = 0;
 						let zippedItems = 0;
 						for (const item of user.pipe) {
@@ -72,7 +73,9 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 									if (err) {
 										res.status(err.statusCode).send(err.message);
 									} else {
-										archive.append(data.Body, item.name);
+										archive.append(data.Body, {
+											name: item.name.slice(sliceStart)
+										});
 										if (++zippedItems === itemsToZip) {
 											archive.finalize();
 										}
