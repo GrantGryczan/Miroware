@@ -1115,7 +1115,7 @@ if (Miro.data.isMe) {
 			if (evt.dataTransfer.files.length) {
 				const targetName = getTargetName();
 				for (const file of evt.dataTransfer.files) {
-					addFile(file, targetName);
+					addFile(file, undefined, targetName);
 				}
 			}/* else if (evt.dataTransfer.types.includes("text/uri-list")) {
 				addURL(evt.dataTransfer.getData("text/uri-list"));
