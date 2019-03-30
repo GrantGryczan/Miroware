@@ -87,7 +87,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 				if (response.headers["content-length"]) { // This is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
 					res.set("Content-Length", response.headers["content-length"]);
 				}
-				res.status(response.statusCode).set("Content-Type", req.query.download === undefined ? response.headers["content-type"] : "application/octet-stream").set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src pipe.miroware.io miro.gg 'unsafe-inline' 'unsafe-eval'");
+				res.status(response.statusCode).set("Content-Type", req.query.download === undefined ? response.headers["content-type"] : "application/octet-stream").set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src pipe.miroware.io miro.gg data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'");
 				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 			const referrer = req.get("Referrer");
