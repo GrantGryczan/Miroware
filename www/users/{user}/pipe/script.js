@@ -162,7 +162,7 @@ const PipeItem = class PipeItem {
 		const typeDir = this.type === "/";
 		const slashIndex = (this[_name] = value).lastIndexOf("/");
 		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
-		this.element.href = typeDir ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(this.name)}`);
+		this.element.href = typeDir ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`);
 		this.updateThumbnail();
 		if (oldName) {
 			if (typeDir) {
@@ -170,7 +170,7 @@ const PipeItem = class PipeItem {
 				if (pathIndex !== -1) {
 					cachedPaths.splice(pathIndex, 1, value);
 				}
-				const prefix = `${this.name}/`;
+				const prefix = `${oldName}/`;
 				for (const item of pipe) {
 					if (item.testPath(prefix)) {
 						item.name = value + item.name.slice(oldName.length);
