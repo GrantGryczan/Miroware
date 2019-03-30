@@ -65,7 +65,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 						const scan = prefix => {
 							prefix = `${prefix}/`;
 							for (const item of user.pipe) {
-								if (item.name.startsWith(prefix) && !item.name.includes("/", path.length) && item.privacy === 0) {
+								if (item.name.startsWith(prefix) && !item.name.includes("/", prefix.length) && item.privacy === 0) {
 									if (item.type === "/") {
 										scan(item.name);
 									} else {
