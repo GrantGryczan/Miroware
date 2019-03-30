@@ -869,8 +869,7 @@ if (Miro.data.isMe) {
 		constructor(file, name, parent = path) {
 			this.file = file;
 			this.name = name || file.name;
-			this.path = parent;
-			const fullName = applyPath(this.name);
+			const fullName = applyPath(this.name, this.path = parent);
 			this.element = html`
 				<a class="item loading" draggable="false" ondragstart="return false;">
 					<div class="label">
