@@ -59,30 +59,37 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 							throw err;
 						});
 						archive.pipe(res);
-						const prefix = `${path}/`;
 						const sliceStart = path.lastIndexOf("/") + 1;
 						let itemsToZip = 0;
 						let zippedItems = 0;
-						for (const item of user.pipe) {
-							if (item.type !== "/" && item.name.startsWith(prefix)) {
-								itemsToZip++;
-								s3.getObject({
-									Bucket: "miroware-pipe",
-									Key: item.id
-								}, (err, data) => {
-									if (err) {
-										res.status(err.statusCode).send(err.message);
+						const scan = prefix => {
+							prefix = `${prefix}/`;
+							for (const item of user.pipe) {
+								if (item.name.startsWith(prefix) && !item.name.includes("/", path.length) && item.privacy === 0) {
+									if (item.type === "/") {
+										scan(item.name);
 									} else {
-										archive.append(data.Body, {
-											name: item.name.slice(sliceStart)
+										itemsToZip++;
+										s3.getObject({
+											Bucket: "miroware-pipe",
+											Key: item.id
+										}, (err, data) => {
+											if (err) {
+												res.status(err.statusCode).send(err.message);
+											} else {
+												archive.append(data.Body, {
+													name: item.name.slice(sliceStart)
+												});
+												if (++zippedItems === itemsToZip) {
+													archive.finalize();
+												}
+											}
 										});
-										if (++zippedItems === itemsToZip) {
-											archive.finalize();
-										}
 									}
-								});
+								}
 							}
-						}
+						};
+						scan(path);
 						if (itemsToZip === 0) {
 							archive.finalize();
 						}
