@@ -6,6 +6,7 @@ const https = require("https");
 const express = require("express");
 const {MongoClient, ObjectID} = require("mongodb");
 const AWS = require("aws-sdk");
+const archiver = require("archiver");
 const youKnow = require("./secret/youknow.js");
 const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
@@ -49,18 +50,51 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 			});
 			if (user) {
 				path = path.join("/");
-				const item = user.pipe.find(item => item.type !== "/" && item.name === path);
+				const item = user.pipe.find(item => item.name === path);
 				if (item) {
-					s3.getObject({
-						Bucket: "miroware-pipe",
-						Key: item.id
-					}, (err, data) => {
-						if (err) {
-							res.status(err.statusCode).send(err.message);
-						} else {
-							res.set("Content-Type", item.type).set("Content-Length", String(data.Body.length)).send(data.Body);
+					if (item.type === "/") {
+						res.set("Content-Type", "application/zip");
+						const archive = archiver("zip");
+						archive.on("error", err => {
+							throw err;
+						});
+						archive.pipe(res);
+						const prefix = `${path}/`;
+						let itemsToZip = 0;
+						let zippedItems = 0;
+						for (const item of user.pipe) {
+							if (item.type !== "/" && item.name.startsWith(prefix)) {
+								itemsToZip++;
+								s3.getObject({
+									Bucket: "miroware-pipe",
+									Key: item.id
+								}, (err, data) => {
+									if (err) {
+										res.status(err.statusCode).send(err.message);
+									} else {
+										archive.append(data.Body, item.name);
+										if (++zippedItems === itemsToZip) {
+											archive.finalize();
+										}
+									}
+								});
+							}
 						}
-					});
+						if (itemsToZip === 0) {
+							archive.finalize();
+						}
+					} else {
+						s3.getObject({
+							Bucket: "miroware-pipe",
+							Key: item.id
+						}, (err, data) => {
+							if (err) {
+								res.status(err.statusCode).send(err.message);
+							} else {
+								res.set("Content-Type", item.type).set("Content-Length", String(data.Body.length)).send(data.Body);
+							}
+						});
+					}
 				} else {
 					res.sendStatus(404);
 					return;

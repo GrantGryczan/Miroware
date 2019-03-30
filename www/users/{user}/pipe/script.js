@@ -567,6 +567,8 @@ const updateProperties = () => {
 			showProperty("name");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
+			download.href = `${item.url}?download`;
+			download.classList.remove("hidden");
 			if (item.type !== "/") {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				showProperty("type");
@@ -576,8 +578,6 @@ const updateProperties = () => {
 				property.url.classList.remove("hidden");
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 				property.url._label.classList.add("mdc-floating-label--float-above");
-				download.href = `${item.url}?download`;
-				download.classList.remove("hidden");
 				let showEmbedAction = true;
 				if (item.type.startsWith("image/")) {
 					previewImage.src = item.url;

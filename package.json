@@ -20,6 +20,7 @@
 	},
 	"homepage": "https://miroware.io/",
 	"dependencies": {
+		"archiver": "^3.0.0",
 		"aws-sdk": "^2.422.0",
 		"babel-plugin-iife-wrap": "^1.1.0",
 		"body-parser": "^1.18.3",
