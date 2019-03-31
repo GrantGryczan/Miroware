@@ -567,17 +567,18 @@ const updateProperties = () => {
 			showProperty("name");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
-			download.href = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.name)}` : `${item.url}?download`;
+			const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.name)}` : item.url;
+			properties.elements.url._prev = properties.elements.url.value = linkPreview.href = url;
+			property.url.classList.remove("hidden");
+			properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
+			property.url._label.classList.add("mdc-floating-label--float-above");
+			download.href = `${url}?download`;
 			download.classList.remove("hidden");
 			if (item.type !== "/") {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				showProperty("type");
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
 				property.type._label.classList.add("mdc-floating-label--float-above");
-				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = item.url;
-				property.url.classList.remove("hidden");
-				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
-				property.url._label.classList.add("mdc-floating-label--float-above");
 				let showEmbedAction = true;
 				if (item.type.startsWith("image/")) {
 					previewImage.src = item.url;
