@@ -462,7 +462,7 @@ document.addEventListener("mouseup", evt => {
 						const targetName = getTargetName();
 						const name = getName(itemElement._item.name);
 						Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
-							name: getName(name, targetName)
+							name: applyPath(name, targetName)
 						}).then(Miro.response(xhr => {
 							itemElement._item.name = xhr.response.name;
 							itemElement.classList.remove("loading");
