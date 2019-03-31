@@ -112,6 +112,9 @@ this.value += html`
 					<div class="property hidden" data-key="actions">
 						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><a id="download" class="mdc-icon-button material-icons spaced mdc-ripple" title="Download" target="_blank" draggable="false" ondragstart="return false;">file_download</a><button id="embed" class="mdc-icon-button material-icons spaced mdc-ripple" title="Embed">code</button><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple${isMe ? "" : " hidden"}" title="Delete">delete</button>
 					</div>
+					<div class="property hidden" data-key="note">
+						Downloaded directories will only include items with privacy set to public.
+					</div>
 					<div class="property hidden" data-key="preview">
 						<span class="alwaysFloat">Preview</span><br>
 						<img id="previewImage" class="previewMedia hidden">

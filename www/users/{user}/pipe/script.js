@@ -574,7 +574,9 @@ const updateProperties = () => {
 			property.url._label.classList.add("mdc-floating-label--float-above");
 			download.href = `${url}?download`;
 			download.classList.remove("hidden");
-			if (item.type !== "/") {
+			if (item.type === "/") {
+				property.note.classList.remove("hidden");
+			} else {
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				showProperty("type");
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");

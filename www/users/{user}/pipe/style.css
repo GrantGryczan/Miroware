@@ -235,6 +235,10 @@
 .property[data-key="url"] > .mdc-text-field {
 	width: calc(100% - 48px);
 }
+.property[data-key="note"] {
+	opacity: 0.75;
+	font-size: 12px;
+}
 .previewMedia {
 	max-width: 100%;
 }
