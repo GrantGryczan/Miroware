@@ -103,7 +103,7 @@ a {
 	& &__subtitle {
 		color: rgba(255, 255, 255, 0.87);
 	}
-	&__title, $__subtitle {
+	&__title, &__subtitle {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
