@@ -236,7 +236,7 @@
 	width: calc(100% - 48px);
 }
 .property[data-key="note"] {
-	opacity: 0.75;
+	opacity: 0.5;
 	font-size: 12px;
 }
 .previewMedia {
