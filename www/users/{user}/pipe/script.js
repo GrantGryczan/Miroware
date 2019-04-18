@@ -1069,7 +1069,8 @@ if (Miro.data.isMe) {
 	});
 	let allowDrop = true;
 	document.addEventListener("dragstart", evt => {
-		allowDrop = false;
+		allowDrop = false; // This prevents things on the page from being dropped to the same page.
+		indicateTarget();
 	}, {
 		capture: true,
 		passive: true
