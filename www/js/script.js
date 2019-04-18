@@ -341,11 +341,11 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 		}
 		const xhr = new XMLHttpRequest();
 		xhr.withCredentials = true;
+		xhr.responseType = "text";
 		if (typeof beforeOpen === "function") {
 			beforeOpen(xhr);
 		}
 		xhr.open(method, url, true);
-		xhr.responseType = "text";
 		for (const header of Object.keys(headers)) {
 			xhr.setRequestHeader(header, headers[header]);
 		}
