@@ -1088,7 +1088,7 @@ if (Miro.data.isMe) {
 			clearTimeout(dragLeaveTimeout);
 			dragLeaveTimeout = null;
 		}
-		if (allowDrop && Miro.focused() && evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list")) {
+		if (allowDrop && Miro.focused() && (evt.dataTransfer.types.includes("Files") || evt.dataTransfer.types.includes("text/uri-list"))) {
 			if (items.contains(evt.target)) {
 				for (const itemElement of items.querySelectorAll(".item.typeDir")) {
 					if (itemElement.contains(evt.target)) {
