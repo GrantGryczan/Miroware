@@ -326,9 +326,7 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 	method = typeof method === "string" ? method.toUpperCase() : "GET";
 	const request = new Promise(resolve => {
 		if (typeof url === "string") {
-			if (url.startsWith("/")) {
-				url = apiOrigin + url;
-			}
+			url = apiOrigin + url;
 		} else {
 			throw new MiroError("The `url` parameter must be a string.");
 		}
