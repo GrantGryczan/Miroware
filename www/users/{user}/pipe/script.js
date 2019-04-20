@@ -160,29 +160,9 @@ const PipeItem = class PipeItem {
 	set name(value) {
 		const oldName = this.name;
 		const typeDir = this.type === "/";
-		const slashIndex = (this[_name] = value).lastIndexOf("/");
-		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
-		this.element.href = typeDir ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`);
-		this.updateThumbnail();
 		if (oldName) {
 			const pathIndex = cachedPaths.indexOf(oldName);
 			const noPathIndex = pathIndex === -1;
-			if (noPathIndex) {
-				let ancestry = "";
-				for (const name of oldName.split("/").slice(0, -1)) {
-					const item = getItem(ancestry += (ancestry && "/") + name);
-					if (item) {
-						item.size -= this.size;
-					}
-				}
-				ancestry = "";
-				for (const name of this.name.split("/").slice(0, -1)) {
-					const item = getItem(ancestry += (ancestry && "/") + name);
-					if (item) {
-						item.size += this.size;
-					}
-				}
-			}
 			if (typeDir) {
 				if (!noPathIndex) {
 					cachedPaths.splice(pathIndex, 1, value);
@@ -194,7 +174,27 @@ const PipeItem = class PipeItem {
 					}
 				}
 			}
+			if (noPathIndex) {
+				let ancestry = "";
+				for (const name of oldName.split("/").slice(0, -1)) {
+					const item = getItem(ancestry += (ancestry && "/") + name);
+					if (item) {
+						item.size -= this.size;
+					}
+				}
+				ancestry = "";
+				for (const name of value.split("/").slice(0, -1)) {
+					const item = getItem(ancestry += (ancestry && "/") + name);
+					if (item) {
+						item.size += this.size;
+					}
+				}
+			}
 		}
+		const slashIndex = (this[_name] = value).lastIndexOf("/");
+		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
+		this.element.href = typeDir ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`);
+		this.updateThumbnail();
 	}
 	get size() {
 		return this[_size];
