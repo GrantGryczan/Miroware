@@ -436,6 +436,7 @@ document.addEventListener("mousedown", evt => {
 	mouseMoved = false;
 	mouseX = evt.clientX;
 	mouseY = evt.clientY;
+	indicateTarget();
 	if (evt.button !== 0 && evt.button !== 2) {
 		return;
 	}
