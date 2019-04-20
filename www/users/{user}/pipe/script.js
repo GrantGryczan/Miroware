@@ -447,6 +447,7 @@ document.addEventListener("mousedown", evt => {
 	} else if (evt.target._item) {
 		focusedItem = evt.target;
 	}
+	indicateTarget();
 }, {
 	capture: true,
 	passive: true
