@@ -167,17 +167,6 @@ const PipeItem = class PipeItem {
 		if (oldName) {
 			const pathIndex = cachedPaths.indexOf(oldName);
 			const noPathIndex = pathIndex === -1;
-			if (typeDir) {
-				if (!noPathIndex) {
-					cachedPaths.splice(pathIndex, 1, value);
-				}
-				const prefix = `${oldName}/`;
-				for (const item of pipe) {
-					if (item.testPath(prefix)) {
-						item.name = value + item.name.slice(oldName.length);
-					}
-				}
-			}
 			if (noPathIndex) {
 				let ancestry = "";
 				for (const name of oldName.split("/").slice(0, -1)) {
@@ -191,6 +180,17 @@ const PipeItem = class PipeItem {
 					const item = getItem(ancestry += (ancestry && "/") + name);
 					if (item) {
 						item.size += this.size;
+					}
+				}
+			}
+			if (typeDir) {
+				if (!noPathIndex) {
+					cachedPaths.splice(pathIndex, 1, value);
+				}
+				const prefix = `${oldName}/`;
+				for (const item of pipe) {
+					if (item.testPath(prefix)) {
+						item.name = value + item.name.slice(oldName.length);
 					}
 				}
 			}
