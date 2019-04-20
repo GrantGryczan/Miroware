@@ -485,7 +485,7 @@ document.addEventListener("mouseup", evt => {
 			selectItem(mouseTarget.parentNode.parentNode, {
 				ctrlKey: true
 			});
-		} else if (!mouseMoved) {
+		} else {
 			deselectItems();
 		}
 	}
