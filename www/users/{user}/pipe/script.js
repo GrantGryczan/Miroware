@@ -877,10 +877,6 @@ if (Miro.data.isMe) {
 	window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
 	const PipeFile = class PipeFile {
 		constructor(file, name, parent = path) {
-			if (file.size > 100 * 1024 * 1024) { // 100 MiB
-				new Miro.Dialog("Error", "Files larger than 100 MiB are currently not supported due to technical limitations. Sorry!");
-				return;
-			}
 			this.file = file;
 			this.name = name || file.name;
 			const fullName = applyPath(this.name, this.path = parent);
@@ -979,6 +975,10 @@ if (Miro.data.isMe) {
 		}
 	};
 	const addFile = async (file, name, parent) => {
+		if (file.size > 100 * 1024 * 1024) { // 100 MiB
+			new Miro.Dialog("Error", "Files larger than 100 MiB are currently not supported due to technical limitations. Sorry!");
+			return;
+		}
 		if (!(name = await checkName(typeof name === "string" ? name : file.name, parent))) {
 			return;
 		}
