@@ -266,7 +266,7 @@ const PipeItem = class PipeItem {
 	testPath(prefix) {
 		return this.name.startsWith(prefix) && !this.name.includes("/", prefix.length);
 	}
-}
+};
 const removeItem = itemElement => {
 	itemElement.classList.remove("selected");
 	itemElement.classList.add("loading");
@@ -973,12 +973,28 @@ if (Miro.data.isMe) {
 				this.dequeue();
 			}
 		}
-	}
+	};
 	const addFile = async (file, name, parent) => {
 		if (!(name = await checkName(typeof name === "string" ? name : file.name, parent))) {
 			return;
 		}
 		queuedItems.appendChild(new PipeFile(file, name, parent).element);
+	};
+	const addURL = async (url, parent) => {
+		let name = decodeURI(url);
+		name = name.slice(name.lastIndexOf("/"));
+		const queryIndex = name.indexOf("?");
+		if (queryIndex !== -1) {
+			name = name.slice(0, queryIndex);
+		}
+		if (!(name = await checkName(await enterName(name), parent))) {
+			return;
+		}
+		/*
+		const file = ;
+		queuedItems.appendChild(new PipeFile(file, name, parent).element);
+		*/
+		new Miro.Dialog("Error", "URL uploads aren't supported yet. Try again soon!");
 	};
 	const fileInput = document.createElement("input");
 	fileInput.type = "file";
@@ -1009,7 +1025,7 @@ if (Miro.data.isMe) {
 				}
 			}));
 		}
-	}
+	};
 	creation.querySelector("#addDirectory").addEventListener("click", () => {
 		const dialog = new Miro.Dialog("Directory", html`
 			Enter a directory name.<br>
@@ -1030,44 +1046,54 @@ if (Miro.data.isMe) {
 			}
 		});
 	});
+	const enterName = async name => {
+		const dialog = new Miro.Dialog("Paste", html`
+			Enter a file name.<br>
+			<div class="mdc-text-field">
+				<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+				<div class="mdc-line-ripple"></div>
+			</div>
+		`, [{
+			text: "Okay",
+			type: "submit"
+		}, "Cancel"]);
+		await Miro.wait();
+		dialog.form.elements.name.focus();
+		const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
+		dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
+		if (await dialog === 0) {
+			name = dialog.form.elements.name.value;
+		} else {
+			return;
+		}
+		resolve(name);
+	};
 	const htmlFilenameTest = /\/([^\/]+?)"/;
 	document.addEventListener("paste", async evt => {
 		if (Miro.focused() && !Miro.typing() && evt.clipboardData.items.length) {
 			let file;
+			let htmlString;
 			let string;
 			for (const dataTransferItem of evt.clipboardData.items) {
 				if (dataTransferItem.kind === "file") {
 					file = dataTransferItem;
 				} else if (dataTransferItem.kind === "string") {
-					string = dataTransferItem;
+					if (dataTransferItem.type === "text/html") {
+						htmlString = dataTransferItem;
+					} else if (dataTransferItem.type === "text/plain") {
+						string = dataTransferItem;
+					}
 				}
 			}
 			if (file) {
 				let name = (file = file.getAsFile()).name;
-				if (string) {
-					const htmlFilename = (await new Promise(string.getAsString.bind(string))).match(htmlFilenameTest);
+				if (htmlString) {
+					const htmlFilename = (await new Promise(htmlString.getAsString.bind(htmlString))).match(htmlFilenameTest);
 					name = htmlFilename ? htmlFilename[1] : "file";
 				}
-				const dialog = new Miro.Dialog("Paste", html`
-					Enter a file name.<br>
-					<div class="mdc-text-field">
-						<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
-						<div class="mdc-line-ripple"></div>
-					</div>
-				`, [{
-					text: "Okay",
-					type: "submit"
-				}, "Cancel"]);
-				await Miro.wait();
-				dialog.form.elements.name.focus();
-				const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
-				dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
-				if (await dialog === 0) {
-					name = dialog.form.elements.name.value;
-				} else {
-					return;
-				}
-				addFile(file, name);
+				addFile(file, await enterName(name));
+			} else if (string && string.includes("://") && string === encodeURI(string)) {
+				addURL(string);
 			}
 		}
 	}, {
@@ -1121,14 +1147,14 @@ if (Miro.data.isMe) {
 	document.addEventListener("drop", evt => {
 		evt.preventDefault();
 		if (allowDrop && Miro.focused()) {
+			const targetName = getTargetName();
 			if (evt.dataTransfer.files.length) {
-				const targetName = getTargetName();
 				for (const file of evt.dataTransfer.files) {
 					addFile(file, undefined, targetName);
 				}
-			}/* else if (evt.dataTransfer.types.includes("text/uri-list")) {
-				addURL(evt.dataTransfer.getData("text/uri-list"));
-			}*/
+			} else if (evt.dataTransfer.types.includes("text/uri-list")) {
+				addURL(evt.dataTransfer.getData("text/uri-list"), targetName);
+			}
 			indicateTarget();
 		}
 	}, true);
