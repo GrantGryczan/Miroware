@@ -1092,8 +1092,11 @@ if (Miro.data.isMe) {
 					name = htmlFilename ? htmlFilename[1] : "file";
 				}
 				addFile(file, await enterName(name));
-			} else if (string && string.includes("://") && string === encodeURI(string)) {
-				addURL(string);
+			} else if (string) {
+				string = await new Promise(htmlString.getAsString.bind(htmlString));
+				if (string.includes("://") && string === encodeURI(string)) {
+					addURL(string);
+				}
 			}
 		}
 	}, {
