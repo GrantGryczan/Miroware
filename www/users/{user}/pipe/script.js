@@ -987,7 +987,7 @@ if (Miro.data.isMe) {
 		if (queryIndex !== -1) {
 			name = name.slice(0, queryIndex);
 		}
-		if (!(name = await checkName(await enterName(name), parent))) {
+		if (!(name = await checkName(await enterFileName(name), parent))) {
 			return;
 		}
 		/*
@@ -1046,7 +1046,7 @@ if (Miro.data.isMe) {
 			}
 		});
 	});
-	const enterName = async name => await new Promise(async resolve => {
+	const enterFileName = async name => await new Promise(async resolve => {
 		const dialog = new Miro.Dialog("Paste", html`
 			Enter a file name.<br>
 			<div class="mdc-text-field">
@@ -1091,7 +1091,7 @@ if (Miro.data.isMe) {
 					const htmlFilename = (await new Promise(htmlString.getAsString.bind(htmlString))).match(htmlFilenameTest);
 					name = htmlFilename ? htmlFilename[1] : "file";
 				}
-				addFile(file, await enterName(name));
+				addFile(file, await enterFileName(name));
 			} else if (string) {
 				string = await new Promise(string.getAsString.bind(string));
 				if (string.includes("://") && string === encodeURI(string)) {
