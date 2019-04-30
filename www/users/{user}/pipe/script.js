@@ -982,7 +982,7 @@ if (Miro.data.isMe) {
 	};
 	const addURL = async (url, parent) => {
 		let name = decodeURI(url);
-		name = name.slice(name.lastIndexOf("/"));
+		name = name.slice(name.lastIndexOf("/") + 1);
 		const queryIndex = name.indexOf("?");
 		if (queryIndex !== -1) {
 			name = name.slice(0, queryIndex);
