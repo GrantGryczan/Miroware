@@ -1046,7 +1046,7 @@ if (Miro.data.isMe) {
 			}
 		});
 	});
-	const enterName = async name => {
+	const enterName = async name => await new Promise(async resolve => {
 		const dialog = new Miro.Dialog("Paste", html`
 			Enter a file name.<br>
 			<div class="mdc-text-field">
@@ -1067,7 +1067,7 @@ if (Miro.data.isMe) {
 			return;
 		}
 		resolve(name);
-	};
+	});
 	const htmlFilenameTest = /\/([^\/]+?)"/;
 	document.addEventListener("paste", async evt => {
 		if (Miro.focused() && !Miro.typing() && evt.clipboardData.items.length) {
