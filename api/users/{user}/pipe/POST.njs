@@ -167,7 +167,7 @@ if (isMe) {
 				}
 				const contentType = response.headers["content-type"];
 				if (contentType) {
-					semicolonIndex = contentType.indexOf(";");
+					const semicolonIndex = contentType.indexOf(";");
 					if (semicolonIndex !== -1) {
 						contentType = contentType.slice(semicolonIndex);
 					}
