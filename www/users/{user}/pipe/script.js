@@ -900,21 +900,23 @@ if (Miro.data.isMe) {
 			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 				"Content-Type": "application/octet-stream",
 				"X-Data": JSON.stringify(data)
-			}, this.file, !data.url && (xhr => {
+			}, this.file, xhr => {
 				this.xhr = xhr;
-				this.loaded = 0;
-				this.xhr.upload.addEventListener("progress", evt => {
-					if (this.xhr.readyState !== XMLHttpRequest.DONE) {
-						const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
-						this.element.style.backgroundSize = `${percentage}%`;
-						this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
-						this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${this.size})`;
-						updateQueue();
-					}
-				});
-				queue.push(this);
-				updateQueue();
-			}), true).then(Miro.response(xhr => {
+				if (!data.url) {
+					this.loaded = 0;
+					this.xhr.upload.addEventListener("progress", evt => {
+						if (this.xhr.readyState !== XMLHttpRequest.DONE) {
+							const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
+							this.element.style.backgroundSize = `${percentage}%`;
+							this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
+							this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${this.size})`;
+							updateQueue();
+						}
+					});
+					queue.push(this);
+					updateQueue();
+				}
+			}, true).then(Miro.response(xhr => {
 				this.element.classList.remove("loading");
 				this.element.href = `#${this.path}`;
 				this.subtitleElement.title = `${xhr.response.size} B`;
