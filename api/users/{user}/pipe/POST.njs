@@ -155,13 +155,14 @@ if (isMe) {
 				});
 			} catch (err) {
 				this.value = {
-					error: html`An error occurred while requesting <b>$${data.url}</b>:<br>$${err.message}`
+					error: err.message
 				};
 				this.status = 422;
 				this.done();
 				return;
 			}
 		}
+		console.log(body);
 		const id = String(ObjectID());
 		s3.putObject({
 			Bucket: "miroware-pipe",
