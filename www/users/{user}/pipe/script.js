@@ -1102,7 +1102,7 @@ if (Miro.data.isMe) {
 				string = await new Promise(string.getAsString.bind(string));
 				if (string.includes("://")) {
 					try {
-						addURL(decodeURI(string));
+						addURL(decodeURIComponent(string));
 					} catch (err) {}
 				}
 			}
