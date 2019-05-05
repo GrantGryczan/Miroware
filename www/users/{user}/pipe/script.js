@@ -877,7 +877,8 @@ if (Miro.data.isMe) {
 	window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
 	const PipeFile = class PipeFile {
 		constructor(file, name, parent = path) {
-			this.name = name || (this.file = file).name;
+			this.file = file;
+			this.name = name || file.name;
 			const fullName = applyPath(this.name, this.path = parent);
 			const data = {
 				name: fullName
