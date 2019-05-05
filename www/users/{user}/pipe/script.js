@@ -918,7 +918,7 @@ if (Miro.data.isMe) {
 				this.element.classList.remove("loading");
 				this.element.href = `#${this.path}`;
 				this.subtitleElement.title = `${xhr.response.size} B`;
-				this.subtitleElement.textContent = xhr.response.size;
+				this.subtitleElement.textContent = getSize(xhr.response.size);
 				this.closeElement.textContent = "done";
 				const item = setItem(new PipeItem(xhr.response));
 				selectItem(item.element, {
