@@ -889,7 +889,7 @@ if (Miro.data.isMe) {
 				<a class="item loading" draggable="false" ondragstart="return false;">
 					<div class="label">
 						<div class="title" title="$${this.name}">$${this.name}</div>
-						<div class="subtitle" title="$${data.url && : `0 B / ${this.file.size} B`}">$${data.url && `0% (0 B / ${this.size = getSize(this.file.size)}`})</div>
+						<div class="subtitle" title="$${data.url && `0 B / ${this.file.size} B`}">$${data.url && `0% (0 B / ${this.size = getSize(this.file.size)}`})</div>
 					</div>
 					<button class="close mdc-icon-button material-icons">close</button>
 				</a>
