@@ -169,7 +169,7 @@ if (isMe) {
 				if (contentType) {
 					const semicolonIndex = contentType.indexOf(";");
 					if (semicolonIndex !== -1) {
-						contentType = contentType.slice(semicolonIndex);
+						contentType = contentType.slice(0, semicolonIndex);
 					}
 					if (contentType.length <= 255 && mimeTest.test(contentType)) {
 						data.type = contentType.toLowerCase();
