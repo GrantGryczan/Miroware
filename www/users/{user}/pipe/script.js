@@ -973,7 +973,7 @@ if (Miro.data.isMe) {
 		}
 		retry(evt) {
 			if (!this.closeElement.contains(evt.target)) {
-				this.element.parentNode.replaceChild(new PipeFile(this.file).element, this.element);
+				this.element.parentNode.replaceChild(new PipeFile(this.file, this.name, this.path).element, this.element);
 				this.dequeue();
 			}
 		}
