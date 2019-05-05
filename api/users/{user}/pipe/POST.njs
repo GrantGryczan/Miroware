@@ -157,6 +157,14 @@ if (isMe) {
 					resolveWithFullResponse: true
 				});
 				body = response.body;
+				if (body.length > 100 * 1024 * 1024) { // 100 MiB
+					this.value = {
+						error: "Files larger than 100 MiB are currently not supported due to technical limitations. Sorry!"
+					};
+					this.status = 422;
+					this.done();
+					return;
+				}
 				const contentType = response.headers["content-type"];
 				if (contentType.length <= 255 && mimeTest.test(contentType)) {
 					data.type = contentType.toLowerCase();
