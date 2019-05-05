@@ -899,7 +899,7 @@ if (Miro.data.isMe) {
 			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 				"Content-Type": "application/octet-stream",
 				"X-Data": JSON.stringify(data)
-			}, this.file, !data.url && xhr => {
+			}, this.file, !data.url && (xhr => {
 				this.xhr = xhr;
 				this.loaded = 0;
 				this.xhr.upload.addEventListener("progress", evt => {
@@ -913,7 +913,7 @@ if (Miro.data.isMe) {
 				});
 				queue.push(this);
 				updateQueue();
-			}, true).then(Miro.response(xhr => {
+			}), true).then(Miro.response(xhr => {
 				this.element.classList.remove("loading");
 				this.element.href = `#${this.path}`;
 				this.subtitleElement.title = `${xhr.response.size} B`;
