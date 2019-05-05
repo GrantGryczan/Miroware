@@ -1100,7 +1100,7 @@ if (Miro.data.isMe) {
 				addFile(file, await enterFileName(name));
 			} else if (string) {
 				string = await new Promise(string.getAsString.bind(string));
-				if (string.includes("://") && string === encodeURI(string)) {
+				if (string.includes("://")) {
 					addURL(string);
 				}
 			}
