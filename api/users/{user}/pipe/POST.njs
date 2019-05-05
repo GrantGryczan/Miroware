@@ -145,14 +145,18 @@ if (isMe) {
 			this.done();
 			return;
 		}
-		let body = this.req.body;
+		let body;
+		let type;
 		if (data.url) {
 			try {
-				body = Buffer.from(await request.get(data.url, {
+				const response = await request.get(data.url, {
 					headers: {
 						"User-Agent": "Miroware"
-					}
-				}));
+					},
+					resolveWithFullResponse: true
+				});
+				body = Buffer.from(response.body);
+				type = response.headers["content-type"];
 			} catch (err) {
 				this.value = {
 					error: err.message
@@ -161,6 +165,9 @@ if (isMe) {
 				this.done();
 				return;
 			}
+		} else {
+			body = this.req.body;
+			type = data.type || mime.getType(data.name) || "application/octet-stream";
 		}
 		const id = String(ObjectID());
 		s3.putObject({
@@ -183,7 +190,7 @@ if (isMe) {
 						id,
 						date: Date.now(),
 						name: data.name,
-						type: data.type || mime.getType(data.name) || "application/octet-stream",
+						type: type,
 						size: body.length,
 						privacy: data.privacy
 					}
