@@ -40,10 +40,11 @@ this.value += html`
 				<div class="panel side left">
 					<div class="pane${isMe ? "" : " hidden"}">
 						<div id="creation">
-							<button id="addFiles" class="mdc-button mdc-button--raised spaced mdc-ripple" title="Upload file(s)">
+							<button id="addFiles" class="mdc-button mdc-button--raised mdc-ripple" title="Upload file(s)">
 								<i class="mdc-button__icon material-icons">file_upload</i>Upload
 							</button>
-							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" title="Create directory">create_new_folder</button>
+							<button id="addURL" class="mdc-icon-button mdc-button--raised material-icons mdc-ripple" title="Upload from URL">link</button>
+							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons mdc-ripple" title="Create directory">create_new_folder</button>
 						</div>
 						<div id="queuedItems" class="items"></div>
 					</div>

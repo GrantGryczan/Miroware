@@ -991,7 +991,7 @@ if (Miro.data.isMe) {
 		queuedItems.appendChild(new PipeFile(file, name, parent).element);
 	};
 	const addURL = async (url, parent) => {
-		let name = decodeURI(url);
+		let name = decodeURIComponent(url);
 		name = name.slice(name.lastIndexOf("/") + 1);
 		const queryIndex = name.indexOf("?");
 		if (queryIndex !== -1) {
@@ -1052,6 +1052,22 @@ if (Miro.data.isMe) {
 			}
 		});
 	});
+	creation.querySelector("#addURL").addEventListener("click", () => {
+		const dialog = new Miro.Dialog("Directory", html`
+			Enter a URL to upload from.<br>
+			<div class="mdc-text-field">
+				<input name="url" class="mdc-text-field__input" type="url" maxlength="2047" size="24" autocomplete="off" spellcheck="false" required>
+				<div class="mdc-line-ripple"></div>
+			</div>
+		`, [{
+			text: "Okay",
+			type: "submit"
+		}, "Cancel"]).then(async value => {
+			if (value === 0) {
+				addURL(dialog.form.elements.url.value);
+			}
+		});
+	});
 	const enterFileName = async name => await new Promise(async resolve => {
 		const dialog = new Miro.Dialog("Paste", html`
 			Enter a file name.<br>
@@ -1102,7 +1118,8 @@ if (Miro.data.isMe) {
 				string = await new Promise(string.getAsString.bind(string));
 				if (string.includes("://")) {
 					try {
-						addURL(decodeURIComponent(string));
+						decodeURIComponent(string);
+						addURL(string);
 					} catch (err) {}
 				}
 			}
