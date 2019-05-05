@@ -997,7 +997,7 @@ if (Miro.data.isMe) {
 		if (queryIndex !== -1) {
 			name = name.slice(0, queryIndex);
 		}
-		if (!(name = await checkName(await enterFileName(name), parent))) {
+		if (!(name = await checkName(await enterFileName("URL Upload", name, url), parent))) {
 			return;
 		}
 		queuedItems.appendChild(new PipeFile(url, name, parent).element);
@@ -1053,7 +1053,7 @@ if (Miro.data.isMe) {
 		});
 	});
 	creation.querySelector("#addURL").addEventListener("click", () => {
-		const dialog = new Miro.Dialog("Directory", html`
+		const dialog = new Miro.Dialog("URL Upload", html`
 			Enter a URL to upload from.<br>
 			<div class="mdc-text-field">
 				<input name="url" class="mdc-text-field__input" type="url" maxlength="2047" size="24" autocomplete="off" spellcheck="false" required>
@@ -1068,9 +1068,9 @@ if (Miro.data.isMe) {
 			}
 		});
 	});
-	const enterFileName = async name => await new Promise(async resolve => {
-		const dialog = new Miro.Dialog("Paste", html`
-			Enter a file name.<br>
+	const enterFileName = async (title, name, label) => await new Promise(async resolve => {
+		const dialog = new Miro.Dialog(title, html`
+			Enter a file name${label ? ` for <b>${html.escape(label)}</b>` : ""}.<br>
 			<div class="mdc-text-field">
 				<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
 				<div class="mdc-line-ripple"></div>
@@ -1113,7 +1113,7 @@ if (Miro.data.isMe) {
 					const htmlFilename = (await new Promise(htmlString.getAsString.bind(htmlString))).match(htmlFilenameTest);
 					name = htmlFilename ? htmlFilename[1] : "file";
 				}
-				addFile(file, await enterFileName(name));
+				addFile(file, await enterFileName("Paste", name));
 			} else if (string) {
 				string = await new Promise(string.getAsString.bind(string));
 				if (string.includes("://")) {
