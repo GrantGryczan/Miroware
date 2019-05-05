@@ -153,9 +153,10 @@ if (isMe) {
 					headers: {
 						"User-Agent": "Miroware"
 					},
+					encoding: null,
 					resolveWithFullResponse: true
 				});
-				body = Buffer.from(response.body);
+				body = response.body;
 				const contentType = response.headers["content-type"];
 				if (contentType.length <= 255 && mimeTest.test(contentType)) {
 					data.type = contentType.toLowerCase();
