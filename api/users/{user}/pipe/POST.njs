@@ -146,7 +146,7 @@ if (isMe) {
 			return;
 		}
 		let body;
-		let type;
+		let type = data.type || mime.getType(data.name) || "application/octet-stream";
 		if (data.url) {
 			try {
 				const response = await request.get(data.url, {
@@ -156,7 +156,10 @@ if (isMe) {
 					resolveWithFullResponse: true
 				});
 				body = Buffer.from(response.body);
-				type = response.headers["content-type"];
+				const contentType = response.headers["content-type"];
+				if (contentType.length <= 255 && mimeTest.test(contentType)) {
+					data.type = contentType.toLowerCase();
+				}
 			} catch (err) {
 				this.value = {
 					error: err.message
@@ -167,7 +170,6 @@ if (isMe) {
 			}
 		} else {
 			body = this.req.body;
-			type = data.type || mime.getType(data.name) || "application/octet-stream";
 		}
 		const id = String(ObjectID());
 		s3.putObject({
