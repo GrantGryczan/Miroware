@@ -877,14 +877,19 @@ if (Miro.data.isMe) {
 	window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
 	const PipeFile = class PipeFile {
 		constructor(file, name, parent = path) {
-			this.file = file;
-			this.name = name || file.name;
+			this.name = name || (this.file = file).name;
 			const fullName = applyPath(this.name, this.path = parent);
+			const data = {
+				name: fullName
+			};
+			if (typeof this.file === "string") {
+				data.url = this.file;
+			}
 			this.element = html`
 				<a class="item loading" draggable="false" ondragstart="return false;">
 					<div class="label">
 						<div class="title" title="$${this.name}">$${this.name}</div>
-						<div class="subtitle" title="0 B / ${this.file.size} B">0% (0 B / ${this.size = getSize(this.file.size)})</div>
+						<div class="subtitle" title="$${data.url && : `0 B / ${this.file.size} B`}">$${data.url && `0% (0 B / ${this.size = getSize(this.file.size)}`})</div>
 					</div>
 					<button class="close mdc-icon-button material-icons">close</button>
 				</a>
@@ -893,10 +898,8 @@ if (Miro.data.isMe) {
 			this.subtitleElement = this.element.querySelector(".subtitle");
 			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 				"Content-Type": "application/octet-stream",
-				"X-Data": JSON.stringify({
-					name: fullName
-				})
-			}, this.file, xhr => {
+				"X-Data": JSON.stringify(data)
+			}, this.file, !data.url && xhr => {
 				this.xhr = xhr;
 				this.loaded = 0;
 				this.xhr.upload.addEventListener("progress", evt => {
@@ -913,8 +916,8 @@ if (Miro.data.isMe) {
 			}, true).then(Miro.response(xhr => {
 				this.element.classList.remove("loading");
 				this.element.href = `#${this.path}`;
-				this.subtitleElement.title = `${this.file.size} B`;
-				this.subtitleElement.textContent = this.size;
+				this.subtitleElement.title = `${xhr.response.size} B`;
+				this.subtitleElement.textContent = xhr.response.size;
 				this.closeElement.textContent = "done";
 				const item = setItem(new PipeItem(xhr.response));
 				selectItem(item.element, {
@@ -994,11 +997,7 @@ if (Miro.data.isMe) {
 		if (!(name = await checkName(await enterFileName(name), parent))) {
 			return;
 		}
-		/* TODO
-		const file = ;
-		queuedItems.appendChild(new PipeFile(file, name, parent).element);
-		*/
-		new Miro.Dialog("Error", "URL uploads aren't supported yet. Try again soon!");
+		queuedItems.appendChild(new PipeFile(url, name, parent).element);
 	};
 	const fileInput = document.createElement("input");
 	fileInput.type = "file";

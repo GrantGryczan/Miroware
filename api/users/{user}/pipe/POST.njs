@@ -145,12 +145,29 @@ if (isMe) {
 			this.done();
 			return;
 		}
+		let body = this.req.body;
+		if (data.url) {
+			try {
+				body = await request.get(data.url, {
+					headers: {
+						"User-Agent": "Miroware"
+					}
+				});
+			} catch (err) {
+				this.value = {
+					error: html`An error occurred while requesting <b>$${data.url}</b>:<br>$${err.message}`
+				};
+				this.status = 422;
+				this.done();
+				return;
+			}
+		}
 		const id = String(ObjectID());
 		s3.putObject({
 			Bucket: "miroware-pipe",
 			Key: id,
-			ContentLength: this.req.body.length,
-			Body: this.req.body,
+			ContentLength: body.length,
+			Body: body,
 			Metadata: {
 				user: String(user._id)
 			}
@@ -167,7 +184,7 @@ if (isMe) {
 						date: Date.now(),
 						name: data.name,
 						type: data.type || mime.getType(data.name) || "application/octet-stream",
-						size: this.req.body.length,
+						size: body.length,
 						privacy: data.privacy
 					}
 				};
