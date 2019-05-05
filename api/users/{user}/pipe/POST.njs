@@ -148,11 +148,11 @@ if (isMe) {
 		let body = this.req.body;
 		if (data.url) {
 			try {
-				body = await request.get(data.url, {
+				body = Buffer.from(await request.get(data.url, {
 					headers: {
 						"User-Agent": "Miroware"
 					}
-				});
+				}));
 			} catch (err) {
 				this.value = {
 					error: err.message
@@ -162,7 +162,6 @@ if (isMe) {
 				return;
 			}
 		}
-		console.log(body);
 		const id = String(ObjectID());
 		s3.putObject({
 			Bucket: "miroware-pipe",
