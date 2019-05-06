@@ -172,7 +172,7 @@ if (isMe) {
 						contentType = contentType.slice(0, semicolonIndex);
 					}
 					if (contentType.length <= 255 && mimeTest.test(contentType)) {
-						data.type = contentType.toLowerCase();
+						type = contentType.toLowerCase();
 					}
 				}
 			} catch (err) {
