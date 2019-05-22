@@ -87,7 +87,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 										scan(item.name);
 									} else {
 										itemsToZip++;
-										request(`/${item.name}`).then(response => {
+										request(`/${user._id}/${item.name}`).then(response => {
 											archive.append(response, {
 												name: item.name.slice(sliceStart)
 											});
