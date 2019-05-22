@@ -579,11 +579,12 @@ const updateProperties = () => {
 			property.url.classList.remove("hidden");
 			properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 			property.url._label.classList.add("mdc-floating-label--float-above");
-			download.href = `${url}?download`;
+			download.href = url;
 			download.classList.remove("hidden");
 			if (item.type === "/") {
 				property.note.classList.remove("hidden");
 			} else {
+				download.href += "?download";
 				properties.elements.type._prev = properties.elements.type.value = item.type;
 				showProperty("type");
 				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
