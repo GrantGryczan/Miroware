@@ -22,6 +22,23 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 	const app = express();
 	app.disable("X-Powered-By");
 	const userAgents = [];
+	const request = path => new Promise(resolve => {
+		const userAgent = `MirowarePipe (${Math.random()})`;
+		userAgents.push(userAgent);
+		if (path.endsWith("/")) {
+			path += "index.html";
+		}
+		https.get({
+			hostname: "piped.miroware.io",
+			path,
+			headers: {
+				"User-Agent": userAgent
+			}
+		}, response => {
+			resolve(response);
+			userAgents.splice(userAgents.indexOf(userAgent), 1);
+		});
+	});
 	app.get("*", async (req, res) => {
 		let path = req.path;
 		if (path === "/") {
@@ -70,19 +87,12 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 										scan(item.name);
 									} else {
 										itemsToZip++;
-										s3.getObject({
-											Bucket: "miroware-pipe",
-											Key: item.id
-										}, (err, data) => {
-											if (err) {
-												res.status(err.statusCode).send(err.message);
-											} else {
-												archive.append(data.Body, {
-													name: item.name.slice(sliceStart)
-												});
-												if (++zippedItems === itemsToZip) {
-													archive.finalize();
-												}
+										request(item.name).then(response => {
+											archive.append(response, {
+												name: item.name.slice(sliceStart)
+											});
+											if (++zippedItems === itemsToZip) {
+												archive.finalize();
 											}
 										});
 									}
@@ -115,24 +125,12 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 			}
 		} else {
 			res.set("X-Powered-By", "Miroware");
-			const userAgent = `MirowarePipe (${Math.random()})`;
-			userAgents.push(userAgent);
-			if (path.endsWith("/")) {
-				path += "index.html";
-			}
-			https.get({
-				hostname: "piped.miroware.io",
-				path,
-				headers: {
-					"User-Agent": userAgent
-				}
-			}, response => {
+			request(path).then(response => {
 				response.pipe(res);
 				if (response.headers["content-length"]) { // This is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
 					res.set("Content-Length", response.headers["content-length"]);
 				}
 				res.status(response.statusCode).set("Content-Type", req.query.download === undefined ? response.headers["content-type"] : "application/octet-stream").set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src pipe.miroware.io miro.gg data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'");
-				userAgents.splice(userAgents.indexOf(userAgent), 1);
 			});
 			const referrer = req.get("Referrer");
 			if (referrer && !referrerTest.test(referrer)) {
