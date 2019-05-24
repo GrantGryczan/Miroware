@@ -1329,7 +1329,7 @@ document.addEventListener("keydown", evt => {
 					selectItem(item, evt);
 				}
 			}
-		} else if (evt.keyCode === 65) { // ^`A`
+		} else if (superKey && evt.keyCode === 65) { // ^`A`
 			evt.preventDefault();
 			for (const item of items.querySelectorAll(".item:not(.selected)")) {
 				item.classList.add("selected");
