@@ -172,11 +172,7 @@ client.on("message", async msg => {
 			if (content) {
 				content = content.replace(spaces, " ");
 				const spaceIndex = content.indexOf(" ");
-				if (spaceIndex === -1) {
-					content = [content, ""];
-				} else {
-					content = [content.slice(0, spaceIndex), content.slice(spaceIndex + 1)];
-				}
+				content = spaceIndex === -1 ? [content, ""] : [content.slice(0, spaceIndex), content.slice(spaceIndex + 1)];
 				content[0] = content[0].toLowerCase();
 				const contentIsColor = content[0] === "color" || content[0] === "colour";
 				if (contentIsColor || content[0] === "reset") {
