@@ -1,4 +1,4 @@
-if (this.socialicons) {
+if (this.socialIcons) {
 	this.value = "";
 	this.done();
 } else {
@@ -21,10 +21,10 @@ if (this.socialicons) {
 	this.value = html`
 					<div id="externalContainer">
 						<div id="externals">`;
-	for (const service of ["discord", "patreon", "youtube", "twitter", "github", "twitch"]) {
+	for (const service of ["discord", "sponsus", "youtube", "twitter", "github", "twitch"]) {
 		const context = await load(`www/${service}/`, {
 			...this,
-			socialicons: true
+			socialIcons: true
 		});
 		const origin = context.redir.slice(0, context.redir.indexOf("/", context.redir.indexOf("//") + 2));
 		let body;
