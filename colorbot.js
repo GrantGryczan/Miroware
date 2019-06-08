@@ -329,7 +329,7 @@ client.on("message", async msg => {
 					} else if (content[0] === "create") {
 						if (content[1]) {
 							if (content[1].includes(" ")) {
-								msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(errSendMessages(msg));
+								msg.channel.send(`${msg.author} Group names cannot include spaces.`).catch(errSendMessages(msg));
 							} else if (data.guilds[msg.guild.id][1][content[1]]) {
 								msg.channel.send(`${msg.author} A group by that name already exists.`).catch(errSendMessages(msg));
 							} else {
@@ -403,7 +403,7 @@ client.on("message", async msg => {
 						if (content[1].length < 2) {
 							msg.channel.send(`${msg.author} No group name was provided.`).catch(errSendMessages(msg));
 						} else if (content[1].length > 2) {
-							msg.channel.send(`${msg.author} Group names cannot contain spaces.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} Group names cannot include spaces.`).catch(errSendMessages(msg));
 						} else if (data.guilds[msg.guild.id][1][content[1][1]]) {
 							msg.channel.send(`${msg.author} A group by that name already exists.`).catch(errSendMessages(msg));
 						} else if (data.guilds[msg.guild.id][1][content[1][0]]) {

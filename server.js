@@ -374,7 +374,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				return;
 			} else if (!subdomainTest.test(concat.sub)) {
 				context.value = {
-					error: "The `sub` value may only contain alphanumeric characters, and hyphens and underscores if not on the ends."
+					error: "The `sub` value may only include alphanumeric characters, and hyphens and underscores if not on the ends."
 				};
 				context.status = 400;
 				context.done();
