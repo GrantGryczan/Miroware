@@ -11,8 +11,9 @@ if (isMe) {
 		this.done();
 		return;
 	}
+	let parent;
 	if (typeof data.parent === "string") {
-		if (!user.pipe.some(item => item.type === "/" && item.id === data.parent)) {
+		if (!(parent = user.pipe.find(item => item.type === "/" && item.id === data.parent))) {
 			this.value = {
 				error: "That parent directory does not exist."
 			};
@@ -125,6 +126,7 @@ if (isMe) {
 				date: Date.now(),
 				parent: data.parent,
 				name: data.name,
+				path: `${parent.path}/${data.name}`,
 				type: "/",
 				privacy: data.privacy
 			}
@@ -206,6 +208,7 @@ if (isMe) {
 						date: Date.now(),
 						parent: data.parent,
 						name: data.name,
+						path: `${parent.path}/${data.name}`,
 						type: type,
 						size: body.length,
 						privacy: data.privacy
