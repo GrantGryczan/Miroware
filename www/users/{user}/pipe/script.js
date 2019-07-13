@@ -145,7 +145,7 @@ const PipeItem = class PipeItem {
 		this.name = item.name;
 		this.path = item.path;
 		if (this.type === "/") {
-			this.element.href = this.url = `#${this.path}`;
+			this.element.href = this.url = `#${this.id}`;
 		}
 		this.size = item.size;
 		this.privacy = item.privacy;
