@@ -326,7 +326,7 @@ const render = () => {
 			ancestors.appendChild(html`
 				<span>
 					<span class="separator">/</span>
-					<a class="ancestor" href="#$${getItemByPath(ancestry += (ancestry && "/") + name)}">$${name}</a>
+					<a class="ancestor" href="#$${getItemByPath(ancestry += (ancestry && "/") + name).id}">$${name}</a>
 				</span>
 			`);
 		}
