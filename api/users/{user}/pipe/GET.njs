@@ -21,7 +21,7 @@ if (this.req.query.parent) {
 	this.req.query.parent = null;
 }
 this.value.items = user.pipe.filter(item => item.parent === this.req.query.parent && (isMe || item.privacy === 0));
-for (const item of this.value) {
+for (const item of this.value.items) {
 	if (item.type === "/") {
 		const parentPath = `${item.path}/`;
 		item.size = user.pipe.reduce((size, item2) => {
