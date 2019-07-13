@@ -350,7 +350,7 @@ const goHome = () => {
 	location.hash = "#";
 };
 const hashChange = () => {
-	queryParent = location.hash.slice(1);
+	queryParent = location.hash.slice(1) || null;
 	if (!cachedParents.includes(queryParent)) {
 		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?parent=${encodeForPipe(queryParent)}`).then(Miro.response(xhr => {
 			if (xhr.response.parent && !getItemByID(xhr.response.parent.id)) {
