@@ -927,7 +927,7 @@ if (Miro.data.isMe) {
 					ctrlKey: true
 				});
 				let ancestry = "";
-				for (const name of this.path.split("/")) {
+				for (const name of this.path.split("/").slice(0, -1)) {
 					const ancestorItem = getItemByPath(ancestry += (ancestry && "/") + name);
 					if (ancestorItem) {
 						ancestorItem.size += item.size;
