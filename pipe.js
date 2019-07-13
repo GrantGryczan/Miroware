@@ -59,7 +59,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 			let userID;
 			try {
 				if (slashIndex === -1) {
-					throw;
+					throw 404;
 				}
 				userID = ObjectID(path.slice(0, slashIndex));
 			} catch (err) {
