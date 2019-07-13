@@ -199,7 +199,6 @@ const PipeItem = class PipeItem {
 	set path(value) {
 		if (this.type !== "/") {
 			this.element.href = this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`;
-			this.updateThumbnail();
 		} else if (this.path) {
 			const prefix = `${this.path}/`;
 			for (const item of pipe) {
@@ -229,9 +228,13 @@ const PipeItem = class PipeItem {
 		this.iconElement.textContent = typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
 		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
 		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
-		if (this.url) {
-			this.updateThumbnail();
-		}
+	}
+	get url() {
+		return this[_url];
+	}
+	set url(value) {
+		this[_url] = value;
+		this.updateThumbnail();
 	}
 	get date() {
 		return this[_date];
