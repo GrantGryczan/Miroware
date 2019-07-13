@@ -253,7 +253,7 @@ const PipeItem = class PipeItem {
 			}
 			for (let i = pipe.length - 1; i >= 0; i--) {
 				const item = pipe[i];
-				if (item.parent === this.parent) {
+				if (item.parent === this.parent && item !== this) {
 					item.delete();
 				}
 			}
