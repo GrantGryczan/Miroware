@@ -353,7 +353,7 @@ const hashChange = () => {
 	queryParent = location.hash.slice(1);
 	if (!cachedParents.includes(queryParent)) {
 		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?parent=${encodeForPipe(queryParent)}`).then(Miro.response(xhr => {
-			if (!getItemByID(xhr.response.parent.id)) {
+			if (xhr.response.parent && !getItemByID(xhr.response.parent.id)) {
 				setItem(new PipeItem(xhr.response.parent));
 			}
 			for (const item of xhr.response.items) {
