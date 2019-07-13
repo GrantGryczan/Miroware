@@ -885,6 +885,7 @@ if (Miro.data.isMe) {
 			if (typeof this.file === "string") {
 				data.url = this.file;
 			}
+			this.path = `${getItemByID(this.parent)}/${this.name}`;
 			this.element = html`
 				<a class="item loading" draggable="false" ondragstart="return false;">
 					<div class="label">
