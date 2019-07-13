@@ -112,11 +112,12 @@ for (const sortButton of sortButtons) {
 	sortButton.addEventListener("click", clickSort);
 }
 const items = container.querySelector("#items");
+const _type = Symbol("type");
 const _parent = Symbol("parent");
 const _name = Symbol("name");
 const _path = Symbol("path");
+const _url = Symbol("url");
 const _size = Symbol("size");
-const _type = Symbol("type");
 const _date = Symbol("date");
 const PipeItem = class PipeItem {
 	constructor(item) {
@@ -152,13 +153,15 @@ const PipeItem = class PipeItem {
 		this.date = new Date(item.date);
 		this.element.addEventListener("click", this.click.bind(this));
 	}
-	updateThumbnail() {
-		if (this.type.startsWith("image/")) {
-			this.thumbnailElement.style.backgroundImage = `url(${this.url.replace(quotationMarks, "%22").replace(apostrophes, "%27").replace(openingParentheses, "%28").replace(closingParentheses, "%29")})`;
-		} else {
-			this.thumbnailElement.style.backgroundImage = "";
-			this.thumbnailElement.textContent = this.iconElement.textContent;
-		}
+	get type() {
+		return this[_type];
+	}
+	set type(value) {
+		const typeDir = (this[_type] = value) === "/";
+		this.typeElement.textContent = this.typeElement.title = typeDir ? "" : value;
+		this.iconElement.textContent = typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
+		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
+		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
 	}
 	get parent() {
 		return this[_parent];
@@ -209,6 +212,21 @@ const PipeItem = class PipeItem {
 		}
 		this[_path] = value;
 	}
+	updateThumbnail() {
+		if (this.type.startsWith("image/")) {
+			this.thumbnailElement.style.backgroundImage = `url(${this.url.replace(quotationMarks, "%22").replace(apostrophes, "%27").replace(openingParentheses, "%28").replace(closingParentheses, "%29")})`;
+		} else {
+			this.thumbnailElement.style.backgroundImage = "";
+			this.thumbnailElement.textContent = this.iconElement.textContent;
+		}
+	}
+	get url() {
+		return this[_url];
+	}
+	set url(value) {
+		this[_url] = value;
+		this.updateThumbnail();
+	}
 	get size() {
 		return this[_size];
 	}
@@ -218,23 +236,6 @@ const PipeItem = class PipeItem {
 		if (this.element.classList.contains("selected")) {
 			updateProperties();
 		}
-	}
-	get type() {
-		return this[_type];
-	}
-	set type(value) {
-		const typeDir = (this[_type] = value) === "/";
-		this.typeElement.textContent = this.typeElement.title = typeDir ? "" : value;
-		this.iconElement.textContent = typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
-		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
-		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
-	}
-	get url() {
-		return this[_url];
-	}
-	set url(value) {
-		this[_url] = value;
-		this.updateThumbnail();
 	}
 	get date() {
 		return this[_date];
