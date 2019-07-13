@@ -52,7 +52,7 @@ const indicateTarget = target => {
 	}
 };
 let queryParent = null;
-const getTargetID = () => indicatedTarget._item ? indicatedTarget._item.id : (indicatedTarget instanceof HTMLAnchorElement ? decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1)) : queryParent);
+const getTargetID = () => indicatedTarget._item ? indicatedTarget._item.id : (indicatedTarget instanceof HTMLAnchorElement ? decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1)) || null : queryParent);
 const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
