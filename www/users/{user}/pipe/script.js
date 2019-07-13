@@ -229,7 +229,9 @@ const PipeItem = class PipeItem {
 		this.iconElement.textContent = typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
 		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
 		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
-		this.updateThumbnail();
+		if (this.url) {
+			this.updateThumbnail();
+		}
 	}
 	get date() {
 		return this[_date];
