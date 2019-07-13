@@ -1,6 +1,6 @@
 const {user, isMe} = await parseUser(this);
+this.value = {};
 if (this.req.query.parent) {
-	this.value = {};
 	if (this.value.parent = user.pipe.find(item => item.type === "/" && item.id === this.req.query.parent && (isMe || item.privacy < 2))) {
 		const parentPath = `${this.value.parent.path}/`;
 		this.value.parent.size = user.pipe.reduce((size, item2) => {
