@@ -1,7 +1,8 @@
 const {user, isMe} = await parseUser(this);
-this.value = {};
+this.value = {
+	ancestors: []
+};
 if (this.req.query.parent) {
-	this.value.ancestors = [];
 	let parent = {
 		parent: this.req.query.parent
 	};
