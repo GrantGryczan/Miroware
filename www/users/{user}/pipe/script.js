@@ -326,7 +326,7 @@ const render = () => {
 			ancestors.appendChild(html`
 				<span>
 					<span class="separator">/</span>
-					<a class="ancestor" href="#$${ancestry += (ancestry && "/") + name /* TODO */}">$${name}</a>
+					<a class="ancestor" href="#$${getItemByPath(ancestry += (ancestry && "/") + name)}">$${name}</a>
 				</span>
 			`);
 		}
@@ -353,11 +353,10 @@ const hashChange = () => {
 	queryParent = location.hash.slice(1) || null;
 	if (!cachedParents.includes(queryParent)) {
 		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?parent=${queryParent ? encodeForPipe(queryParent) : ""}`).then(Miro.response(xhr => {
-			if (xhr.response.parent && !getItemByID(xhr.response.parent.id)) {
-				setItem(new PipeItem(xhr.response.parent));
-			}
-			for (const item of xhr.response.items) {
-				setItem(new PipeItem(item));
+			for (const item of xhr.response.ancestors.concat(xhr.response.items)) {
+				if (!getItemByID(item.id)) {
+					setItem(new PipeItem(item));
+				}
 			}
 			cachedParents.push(queryParent);
 			render();
