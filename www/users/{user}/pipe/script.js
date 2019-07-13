@@ -259,7 +259,7 @@ const PipeItem = class PipeItem {
 			}
 		}
 		let item = this;
-		while (item = item.parent) {
+		while (item = getItemByID(item.parent)) {
 			item.size -= this.size;
 		}
 		pipe.splice(pipe.indexOf(this), 1);
@@ -326,7 +326,7 @@ const render = () => {
 			ancestors.appendChild(html`
 				<span>
 					<span class="separator">/</span>
-					<a class="ancestor" href="#$${ancestry += (ancestry && "/") + name}">$${name}</a>
+					<a class="ancestor" href="#$${ancestry += (ancestry && "/") + name /* TODO */}">$${name}</a>
 				</span>
 			`);
 		}
