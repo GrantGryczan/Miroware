@@ -11,7 +11,7 @@ if (isMe) {
 		this.done();
 		return;
 	}
-	let parent;
+	let parent = null;
 	if (typeof data.parent === "string") {
 		if (!(parent = user.pipe.find(item => item.type === "/" && item.id === data.parent))) {
 			this.value = {
@@ -126,7 +126,7 @@ if (isMe) {
 				date: Date.now(),
 				parent: data.parent,
 				name: data.name,
-				path: `${parent.path}/${data.name}`,
+				path: parent ? `${parent.path}/${data.name}` : data.name,
 				type: "/",
 				privacy: data.privacy
 			}
@@ -208,7 +208,7 @@ if (isMe) {
 						date: Date.now(),
 						parent: data.parent,
 						name: data.name,
-						path: `${parent.path}/${data.name}`,
+						path: parent ? `${parent.path}/${data.name}` : data.name,
 						type: type,
 						size: body.length,
 						privacy: data.privacy
