@@ -5,9 +5,9 @@ if (isMe) {
 		if (found.type === "/") {
 			const items = [found];
 			const fileItems = [];
-			const prefix = `${found.name}/`;
+			const prefix = `${found.path}/`;
 			for (const item of user.pipe) {
-				if (item.name.startsWith(prefix)) {
+				if (item.path.startsWith(prefix)) {
 					items.push(item);
 					if (item.type !== "/") {
 						fileItems.push(item);
@@ -31,7 +31,7 @@ if (isMe) {
 						this.status = err.statusCode;
 						delete this.update.$pull.pipe;
 					} else {
-						purgeCache(...fileItems.map(item => `https://pipe.miroware.io/${user._id}/${encodeForPipe(item.name)}`), ...fileItems.map(item => `https://piped.miroware.io/${user._id}/${encodeForPipe(item.name)}`)); // TODO: `flatMap` and define `encodedName`
+						purgeCache(...fileItems.map(item => `https://pipe.miroware.io/${user._id}/${encodeForPipe(item.path)}`), ...fileItems.map(item => `https://piped.miroware.io/${user._id}/${encodeForPipe(item.path)}`)); // TODO: `flatMap` and define `encodedName`
 					}
 					this.done();
 				});
@@ -52,8 +52,8 @@ if (isMe) {
 					this.update.$pull.pipe = {
 						id: found.id
 					};
-					const encodedName = encodeForPipe(found.name);
-					purgeCache(`https://pipe.miroware.io/${user._id}/${encodedName}`, `https://piped.miroware.io/${user._id}/${encodedName}`);
+					const encodedPath = encodeForPipe(found.path);
+					purgeCache(`https://pipe.miroware.io/${user._id}/${encodedPath}`, `https://piped.miroware.io/${user._id}/${encodedPath}`);
 				}
 				this.done();
 			});

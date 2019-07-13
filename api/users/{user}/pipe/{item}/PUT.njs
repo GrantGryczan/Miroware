@@ -1,9 +1,51 @@
 const {user, isMe} = await parseUser(this);
 if (isMe) {
-	const found = this.user.pipe.find(item => item.id === this.params.item);
+	const found = user.pipe.find(item => item.id === this.params.item);
 	if (found) {
 		const typeDir = found.type === "/";
-		const item = {};
+		const putItem = {};
+		if (this.req.body.parent !== undefined) {
+			if (typeof this.req.body.parent === "string") {
+				let parent = user.pipe.find(item => item.type === "/" && item.id === this.req.body.parent);
+				if (!parent) {
+					this.value = {
+						error: "That parent directory does not exist."
+					};
+					this.status = 422;
+					this.done();
+					return;
+				} else if (typeDir) {
+					do {
+						if (parent === found) {
+							this.value = {
+								error: "Directories cannot be moved into themselves."
+							};
+							this.status = 422;
+							this.done();
+							return;
+						}
+					} while (parent.parent && (parent = user.pipe.find(item => item.type === "/" && item.id === parent.parent)));
+				}
+				putItem.parent = this.req.body.parent;
+			} else if (this.req.body.parent === null) {
+				putItem.parent = null;
+			} else {
+				this.value = {
+					error: "The `parent` value must be a string or null."
+				};
+				this.status = 400;
+				this.done();
+				return;
+			}
+			if (user.pipe.some(item => item.parent === this.req.body.parent && item.name === found.name)) {
+				this.value = {
+					error: "That name is already taken."
+				};
+				this.status = 422;
+				this.done();
+				return;
+			}
+		}
 		if (this.req.body.name !== undefined) {
 			if (typeof this.req.body.name === "string") {
 				this.req.body.name = this.req.body.name.trim();
@@ -21,49 +63,22 @@ if (isMe) {
 					this.status = 400;
 					this.done();
 					return;
-				} else if (this.req.body.name.startsWith("/") || this.req.body.name.endsWith("/")) {
+				} else if (this.req.body.name.includes("/")) {
 					this.value = {
-						error: "The `name` value cannot start or end with a slash."
+						error: "The `name` value cannot include slashes."
 					};
 					this.status = 400;
 					this.done();
 					return;
-				} else if (this.req.body.name.includes("//")) {
-					this.value = {
-						error: "The `name` value cannot contain multiple consecutive slashes."
-					};
-					this.status = 400;
-					this.done();
-					return;
-				} else if (this.user.pipe.some(item => item.name === this.req.body.name)) {
+				} else if (user.pipe.some(item => item.parent === found.parent && item.name === this.req.body.name)) {
 					this.value = {
 						error: "That name is already taken."
 					};
 					this.status = 422;
 					this.done();
 					return;
-				} else if (typeDir && this.req.body.name.startsWith(`${found.name}/`)) {
-					this.value = {
-						error: "Directories cannot be moved into themselves."
-					};
-					this.status = 422;
-					this.done();
-					return;
-				} else {
-					const slashIndex = this.req.body.name.lastIndexOf("/");
-					if (slashIndex !== -1) {
-						const parent = this.req.body.name.slice(0, slashIndex);
-						if (!this.user.pipe.some(item => item.type === "/" && item.name === parent)) {
-							this.value = {
-								error: "That path does not exist."
-							};
-							this.status = 422;
-							this.done();
-							return;
-						}
-					}
 				}
-				item.name = this.req.body.name;
+				putItem.name = this.req.body.name;
 			} else {
 				this.value = {
 					error: "The `name` value must be a string."
@@ -99,7 +114,7 @@ if (isMe) {
 					this.done();
 					return;
 				} else {
-					item.type = this.req.body.type.toLowerCase();
+					putItem.type = this.req.body.type.toLowerCase();
 				}
 			} else {
 				this.value = {
@@ -113,7 +128,7 @@ if (isMe) {
 		if (this.req.body.privacy !== undefined) {
 			if (typeof this.req.body.privacy === "number") {
 				if (this.req.body.privacy === 0 || this.req.body.privacy === 1 || (typeDir && this.req.body.privacy === 2)) {
-					item.privacy = this.req.body.privacy;
+					putItem.privacy = this.req.body.privacy;
 				} else {
 					this.value = {
 						error: `The \`privacy\` value must be 0 (public)${typeDir ? ", 1 (unlisted), or 2 (private)" : " or 1 (unlisted)"}.`
@@ -131,18 +146,28 @@ if (isMe) {
 				return;
 			}
 		}
+		if (putItem.name || putItem.parent !== undefined) {
+			putItem.path = putItem.name || found.name;
+			let parent = putItem.parent === undefined ? found.parent : putItem.parent;
+			if (parent) {
+				parent = user.pipe.find(item => item.type === "/" && item.id === parent);
+				do {
+					putItem.path = `${parent.name}/${putItem.path}`;
+				} while (parent.parent && (parent = user.pipe.find(item => item.type === "/" && item.id === parent.parent)));
+			}
+		}
 		this.value = {
 			...found,
-			...item
+			...putItem
 		};
-		const keys = Object.keys(item);
+		const keys = Object.keys(putItem);
 		if (!keys.length) {
 			this.done();
 			return;
 		}
 		const set = {};
 		for (const key of keys) {
-			set[`pipe.$.${key}`] = item[key];
+			set[`pipe.$.${key}`] = putItem[key];
 		}
 		users.updateOne({
 			_id: user._id,
@@ -150,31 +175,30 @@ if (isMe) {
 		}, {
 			$set: set
 		});
-		const urls = [`https://pipe.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(found.name)}`, `https://pipe.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`, `https://piped.miroware.io/${user._id}/${encodeForPipe(this.value.name)}`];
-		if (typeDir) {
-			const itemPath = `${found.name}/`;
-			this.value.size = user.pipe.reduce((size, item2) => {
-				if (item2.type !== "/" && item2.name.startsWith(itemPath)) {
-					size += item2.size;
-				}
-				return size;
-			}, 0);
-			if (item.name) {
-				const prefix = `${found.name}/`;
+		const encodedPath = encodeForPipe(found.path);
+		const urls = [`https://pipe.miroware.io/${user._id}/${encodedPath}`, `https://piped.miroware.io/${user._id}/${encodedPath}`];
+		if (putItem.path) {
+			if (typeDir) {
+				const prefix = `${found.path}/`;
+				this.value.size = user.pipe.reduce((size, item) => {
+					if (item.type !== "/" && item.path.startsWith(prefix)) {
+						size += item.size;
+					}
+					return size;
+				}, 0);
 				for (const child of user.pipe) {
-					if (child.name.startsWith(prefix)) {
-						const name = item.name + child.name.slice(found.name.length);
+					if (child.path.startsWith(prefix)) {
+						const path = putItem.path + child.path.slice(found.path.length);
 						users.updateOne({
 							_id: user._id,
 							"pipe.id": child.id
 						}, {
 							$set: {
-								"pipe.$.name": name
+								"pipe.$.path": path
 							}
 						});
-						const encodedChildName = encodeForPipe(child.name);
-						const encodedName = encodeForPipe(name);
-						urls.push(`https://pipe.miroware.io/${user._id}/${encodedChildName}`, `https://piped.miroware.io/${user._id}/${encodedChildName}`, `https://pipe.miroware.io/${user._id}/${encodedName}`, `https://piped.miroware.io/${user._id}/${encodedName}`);
+						const encodedChildPath = encodeForPipe(child.path);
+						urls.push(`https://pipe.miroware.io/${user._id}/${encodedChildPath}`, `https://piped.miroware.io/${user._id}/${encodedChildPath}`);
 					}
 				}
 			}

@@ -51,22 +51,21 @@ const indicateTarget = target => {
 		targetIndicator.classList.remove("visible");
 	}
 };
-const getTargetName = () => indicatedTarget._item ? indicatedTarget._item.name : (indicatedTarget instanceof HTMLAnchorElement ? decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1)) : path);
+let queryParent = "";
+const getTargetID = () => indicatedTarget._item ? indicatedTarget._item.id : (indicatedTarget instanceof HTMLAnchorElement ? decodeURI(indicatedTarget.href.slice(indicatedTarget.href.indexOf("#") + 1)) : queryParent);
 const titleBar = document.body.querySelector(".mdc-top-app-bar__title");
 const ancestors = document.body.querySelector("#ancestors");
 titleBar.appendChild(ancestors);
-let path = "";
-const getName = (name, parent = path) => parent ? name.slice(parent.length + 1) : name;
-const applyPath = (name, parent = path) => (parent ? `${parent}/` : "") + name;
 const encodedSlashes = /%2F/g;
-const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
+const encodeForPipe = path => encodeURIComponent(path).replace(encodedSlashes, "/");
 const quotationMarks = /\"/g;
 const apostrophes = /\'/g;
 const openingParentheses = /\(/g;
 const closingParentheses = /\)/g;
 const pipe = [];
-const cachedPaths = [];
-const getItem = name => pipe.find(item => item.name === name);
+const cachedParents = [];
+const getItemByID = id => pipe.find(item => item.id === id);
+const getItemByPath = path => pipe.find(item => item.path === path);
 const setItem = item => {
 	const itemIndex = pipe.findIndex(({id}) => id === item.id);
 	if (itemIndex === -1) {
@@ -76,7 +75,7 @@ const setItem = item => {
 	}
 	return item;
 };
-const currentItems = item => (!path && !item.name.includes("/")) || (item.name.startsWith(path) && item.name.slice(path.length).lastIndexOf("/") === 0);
+const currentItems = item => queryParent === item.parent;
 const sort = {
 	name: (a, b) => b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1,
 	size: (a, b) => b.size - a.size || b.date - a.date,
@@ -113,7 +112,9 @@ for (const sortButton of sortButtons) {
 	sortButton.addEventListener("click", clickSort);
 }
 const items = container.querySelector("#items");
+const _parent = Symbol("parent");
 const _name = Symbol("name");
+const _path = Symbol("path");
 const _size = Symbol("size");
 const _type = Symbol("type");
 const _date = Symbol("date");
@@ -140,7 +141,12 @@ const PipeItem = class PipeItem {
 		this.typeElement = this.element.querySelector(".cell.type");
 		this.dateElement = this.element.querySelector(".cell.date");
 		this.type = item.type;
+		this.parent = item.parent;
 		this.name = item.name;
+		this.path = item.path;
+		if (this.type === "/") {
+			this.element.href = this.url = `#${this.path}`;
+		}
 		this.size = item.size;
 		this.privacy = item.privacy;
 		this.date = new Date(item.date);
@@ -154,49 +160,55 @@ const PipeItem = class PipeItem {
 			this.thumbnailElement.textContent = this.iconElement.textContent;
 		}
 	}
+	get parent() {
+		return this[_parent];
+	}
+	set parent(value) {
+		this[_parent] = value;
+		if (this.path) {
+			let ancestry = "";
+			for (const name of this.path.split("/").slice(0, -1)) {
+				const item = getItemByPath(ancestry += (ancestry && "/") + name);
+				if (item) {
+					item.size -= this.size;
+				}
+			}
+			this.path = this.parent ? `${getItemByID(this.parent).path}/${this.name}` : this.name;
+			ancestry = "";
+			for (const name of this.path.split("/").slice(0, -1)) {
+				const item = getItemByPath(ancestry += (ancestry && "/") + name);
+				if (item) {
+					item.size += this.size;
+				}
+			}
+		}
+	}
 	get name() {
 		return this[_name];
 	}
 	set name(value) {
-		const oldName = this.name;
-		const typeDir = this.type === "/";
-		const slashIndex = (this[_name] = value).lastIndexOf("/");
-		this.nameElement.textContent = this.nameElement.title = slashIndex === -1 ? value : value.slice(slashIndex + 1);
-		this.element.href = typeDir ? `#${value}` : (this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`);
-		this.updateThumbnail();
-		this.moving = true;
-		if (oldName) {
-			const pathIndex = cachedPaths.indexOf(oldName);
-			const noPathIndex = pathIndex === -1;
-			if (typeDir) {
-				if (!noPathIndex) {
-					cachedPaths.splice(pathIndex, 1, value);
-				}
-				const prefix = `${oldName}/`;
-				for (const item of pipe) {
-					if (item.testPath(prefix)) {
-						item.name = value + item.name.slice(oldName.length);
-					}
-				}
-			}
-			if (noPathIndex) {
-				let ancestry = "";
-				for (const name of oldName.split("/").slice(0, -1)) {
-					const item = getItem(ancestry += (ancestry && "/") + name);
-					if (item) {
-						item.size -= this.size;
-					}
-				}
-				ancestry = "";
-				for (const name of value.split("/").slice(0, -1)) {
-					const item = getItem(ancestry += (ancestry && "/") + name);
-					if (item && !item.moving) {
-						item.size += this.size;
-					}
+		this.nameElement.textContent = this.nameElement.title = this[_name] = value;
+		if (this.path) {
+			const nameIndex = this.path.lastIndexOf("/") + 1;
+			this.path = (nameIndex ? this.path.slice(0, nameIndex) : "") + value;
+		}
+	}
+	get path() {
+		return this[_path];
+	}
+	set path(value) {
+		if (this.type !== "/") {
+			this.element.href = this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`;
+			this.updateThumbnail();
+		} else if (this.path) {
+			const prefix = `${this.path}/`;
+			for (const item of pipe) {
+				if (item.path.startsWith(prefix)) {
+					item.path = `${value}/${item.name}`;
 				}
 			}
 		}
-		delete this.moving;
+		this[_path] = value;
 	}
 	get size() {
 		return this[_size];
@@ -235,24 +247,20 @@ const PipeItem = class PipeItem {
 			focusedItem = null;
 		}
 		if (this.type === "/") {
-			const pathIndex = cachedPaths.indexOf(this.name);
-			if (pathIndex !== -1) {
-				cachedPaths.splice(pathIndex, 1);
+			const cachedParentIndex = cachedParents.indexOf(this.id);
+			if (cachedParentIndex !== -1) {
+				cachedParents.splice(cachedParentIndex, 1);
 			}
-			const prefix = `${this.name}/`;
 			for (let i = pipe.length - 1; i >= 0; i--) {
 				const item = pipe[i];
-				if (item.testPath(prefix)) {
+				if (item.parent === this.parent) {
 					item.delete();
 				}
 			}
 		}
-		let ancestry = "";
-		for (const name of this.name.split("/").slice(0, -1)) {
-			const item = getItem(ancestry += (ancestry && "/") + name);
-			if (item) {
-				item.size -= this.size;
-			}
+		let item = this;
+		while (item = item.parent) {
+			item.size -= this.size;
 		}
 		pipe.splice(pipe.indexOf(this), 1);
 	}
@@ -262,9 +270,6 @@ const PipeItem = class PipeItem {
 		} else {
 			open(this.element.href);
 		}
-	}
-	testPath(prefix) {
-		return this.name.startsWith(prefix) && !this.name.includes("/", prefix.length);
 	}
 };
 const removeItem = itemElement => {
@@ -283,7 +288,7 @@ const removeItems = () => {
 		if (itemElements.length === 1) {
 			const itemElement = itemElements[0];
 			new Miro.Dialog("Remove Item", html`
-				Are you sure you want to remove <b>$${getName(itemElement._item.name)}</b>?<br>${itemElement._item.type === "/" ? `
+				Are you sure you want to remove <b>$${itemElement._item.name}</b>?<br>${itemElement._item.type === "/" ? `
 				Items inside the directory will also be removed.<br>` : ""}
 				This cannot be undone.
 			`, ["Yes", "No"]).then(value => {
@@ -315,9 +320,9 @@ const render = () => {
 			<a class="ancestor" href="#">$${Miro.data.user.name}</a>
 		</span>
 	`);
-	if (path) {
+	if (queryParent) {
 		let ancestry = "";
-		for (const name of path.split("/")) {
+		for (const name of getItemByID(queryParent).path.split("/")) {
 			ancestors.appendChild(html`
 				<span>
 					<span class="separator">/</span>
@@ -345,19 +350,16 @@ const goHome = () => {
 	location.hash = "#";
 };
 const hashChange = () => {
-	try {
-		path = decodeURI(location.hash.slice(1));
-	} catch (err) {
-		new Miro.Dialog("Error", "The path is malformed.");
-		goHome();
-		return;
-	}
-	if (!cachedPaths.includes(path)) {
-		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?path=${encodeForPipe(path)}`).then(Miro.response(xhr => {
-			for (const item of xhr.response) {
+	queryParent = location.hash.slice(1);
+	if (!cachedParents.includes(queryParent)) {
+		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?parent=${encodeForPipe(queryParent)}`).then(Miro.response(xhr => {
+			if (!getItemByID(xhr.response.parent.id)) {
+				setItem(new PipeItem(xhr.response.parent));
+			}
+			for (const item of xhr.response.items) {
 				setItem(new PipeItem(item));
 			}
-			cachedPaths.push(path);
+			cachedParents.push(queryParent);
 			render();
 		}, goHome));
 	} else {
@@ -462,18 +464,17 @@ document.addEventListener("mouseup", evt => {
 		if (mouseTarget.parentNode._item || mouseTarget._item) {
 			if (mouseMoved) {
 				if (indicatedTarget) {
-					const sourcePath = path;
+					const sourceParent = queryParent;
 					for (const itemElement of items.querySelectorAll(".item.selected")) {
 						itemElement.classList.remove("selected");
 						itemElement.classList.add("loading");
-						const targetName = getTargetName();
-						const name = getName(itemElement._item.name);
+						const targetID = getTargetID();
 						Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
-							name: applyPath(name, targetName)
+							parent: targetID
 						}).then(Miro.response(xhr => {
-							itemElement._item.name = xhr.response.name;
+							itemElement._item.parent = xhr.response.parent;
 							itemElement.classList.remove("loading");
-							if (sourcePath === path) {
+							if (sourceParent === queryParent) {
 								render();
 							}
 						}, () => {
@@ -570,11 +571,11 @@ const updateProperties = () => {
 		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
 		if (selected.length === 1) {
 			const item = selected[0]._item;
-			properties.elements.name._prev = properties.elements.name.value = getName(item.name);
+			properties.elements.name._prev = properties.elements.name.value = item.name;
 			showProperty("name");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
-			const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.name)}` : item.url;
+			const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.path)}` : item.url;
 			properties.elements.url._prev = properties.elements.url.value = linkPreview.href = url;
 			property.url.classList.remove("hidden");
 			properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
@@ -808,16 +809,15 @@ embed.addEventListener("click", () => {
 });
 updateProperties();
 if (Miro.data.isMe) {
-	const checkName = async (name, parent = path) => {
+	const checkName = async (name, parent = queryParent) => {
 		let takenItem;
-		let fullName = applyPath(name, parent);
-		while (takenItem = getItem(fullName)) {
+		while (takenItem = pipe.find(item => item.name === name && item.parent === parent)) {
 			const value = await new Miro.Dialog("Error", html`
-				<b>$${fullName}</b> already exists.
+				<b>$${takenItem.path}</b> already exists.
 			`, ["Replace", "Rename", "Cancel"]);
 			if (value === 0) {
 				if (await new Miro.Dialog("Replace", html`
-					Are you sure you want to replace <b>$${fullName}</b>?
+					Are you sure you want to replace <b>$${takenItem.path}</b>?
 				`, ["Yes", "No"]) === 0) {
 					Miro.response(() => {
 						takenItem.delete();
@@ -845,7 +845,6 @@ if (Miro.data.isMe) {
 			} else {
 				return false;
 			}
-			fullName = applyPath(name, parent);
 		}
 		return name;
 	};
@@ -877,12 +876,11 @@ if (Miro.data.isMe) {
 	};
 	window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
 	const PipeFile = class PipeFile {
-		constructor(file, name, parent = path) {
+		constructor(file, name, parent = queryParent) {
 			this.file = file;
-			this.name = name || file.name;
-			const fullName = applyPath(this.name, this.path = parent);
 			const data = {
-				name: fullName
+				parent: this.parent = parent,
+				name: this.name = name || file.name
 			};
 			if (typeof this.file === "string") {
 				data.url = this.file;
@@ -919,7 +917,7 @@ if (Miro.data.isMe) {
 				}
 			}, true).then(Miro.response(xhr => {
 				this.element.classList.remove("loading");
-				this.element.href = `#${this.path}`;
+				this.element.href = `#${this.parent}`;
 				this.subtitleElement.title = `${xhr.response.size} B`;
 				this.subtitleElement.textContent = getSize(xhr.response.size);
 				this.closeElement.textContent = "done";
@@ -929,12 +927,12 @@ if (Miro.data.isMe) {
 				});
 				let ancestry = "";
 				for (const name of this.path.split("/")) {
-					const ancestorItem = getItem(ancestry += (ancestry && "/") + name);
+					const ancestorItem = getItemByPath(ancestry += (ancestry && "/") + name);
 					if (ancestorItem) {
 						ancestorItem.size += item.size;
 					}
 				}
-				if (path === this.path) {
+				if (queryParent === this.parent) {
 					render();
 				}
 			}, (xhr, error) => {
@@ -976,7 +974,7 @@ if (Miro.data.isMe) {
 		}
 		retry(evt) {
 			if (!this.closeElement.contains(evt.target)) {
-				this.element.parentNode.replaceChild(new PipeFile(this.file, this.name, this.path).element, this.element);
+				this.element.parentNode.replaceChild(new PipeFile(this.file, this.name, this.parent).element, this.element);
 				this.dequeue();
 			}
 		}
@@ -1015,19 +1013,20 @@ if (Miro.data.isMe) {
 	creation.querySelector("#addFiles").addEventListener("click", fileInput.click.bind(fileInput));
 	const PipeDirectory = class PipeDirectory {
 		constructor(name) {
-			this.path = path;
+			this.parent = queryParent;
 			this.name = name;
 			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 				"X-Data": JSON.stringify({
-					name: applyPath(this.name),
+					parent: this.parent,
+					name: this.name,
 					type: "/"
 				})
 			}).then(Miro.response(xhr => {
 				selectItem(setItem(new PipeItem(xhr.response)).element, {
 					ctrlKey: true
 				});
-				cachedPaths.push(xhr.response.name);
-				if (path === this.path) {
+				cachedParents.push(xhr.response.id);
+				if (queryParent === this.parent) {
 					render();
 				}
 			}));
@@ -1037,7 +1036,7 @@ if (Miro.data.isMe) {
 		const dialog = new Miro.Dialog("Directory", html`
 			Enter a directory name.<br>
 			<div class="mdc-text-field">
-				<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+				<input name="name" class="mdc-text-field__input" type="text" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
 				<div class="mdc-line-ripple"></div>
 			</div>
 		`, [{
@@ -1176,13 +1175,13 @@ if (Miro.data.isMe) {
 	document.addEventListener("drop", evt => {
 		evt.preventDefault();
 		if (allowDrop && Miro.focused()) {
-			const targetName = getTargetName();
+			const targetID = getTargetID();
 			if (evt.dataTransfer.files.length) {
 				for (const file of evt.dataTransfer.files) {
-					addFile(file, undefined, targetName);
+					addFile(file, undefined, targetID);
 				}
 			} else if (evt.dataTransfer.types.includes("text/uri-list")) {
-				addURL(evt.dataTransfer.getData("text/uri-list"), targetName);
+				addURL(evt.dataTransfer.getData("text/uri-list"), targetID);
 			}
 			indicateTarget();
 		}
@@ -1241,7 +1240,7 @@ if (Miro.data.isMe) {
 			itemElement.classList.add("loading");
 			const data = {};
 			if (changedName) {
-				data.name = applyPath(properties.elements.name.value);
+				data.name = properties.elements.name.value;
 			}
 			if (changedType) {
 				data.type = properties.elements.type.value;
@@ -1265,7 +1264,7 @@ if (Miro.data.isMe) {
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
 				await Miro.wait();
-				if (itemElement._item.testPath(path ? `${path}/` : "")) {
+				if (itemElement._item.parent === queryParent) {
 					render();
 				}
 			}, () => {
@@ -1273,7 +1272,7 @@ if (Miro.data.isMe) {
 				save.disabled = false;
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				if (itemElement._item.testPath(path ? `${path}/` : "")) {
+				if (itemElement._item.parent === queryParent) {
 					updateProperties();
 				}
 			})).then(countResponse);

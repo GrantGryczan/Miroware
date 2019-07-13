@@ -11,6 +11,23 @@ if (isMe) {
 		this.done();
 		return;
 	}
+	if (typeof data.parent === "string") {
+		if (!user.pipe.some(item => item.type === "/" && item.id === data.parent)) {
+			this.value = {
+				error: "That parent directory does not exist."
+			};
+			this.status = 422;
+			this.done();
+			return;
+		}
+	} else if (data.parent !== null) {
+		this.value = {
+			error: "The `parent` value must be a string or null."
+		};
+		this.status = 400;
+		this.done();
+		return;
+	}
 	if (typeof data.name === "string") {
 		data.name = data.name.trim();
 		if (data.name.length < 1) {
@@ -27,40 +44,20 @@ if (isMe) {
 			this.status = 400;
 			this.done();
 			return;
-		} else if (data.name.startsWith("/") || data.name.endsWith("/")) {
+		} else if (data.name.includes("/")) {
 			this.value = {
-				error: "The `name` value cannot start or end with a slash."
+				error: "The `name` value cannot include slashes."
 			};
 			this.status = 400;
 			this.done();
 			return;
-		} else if (data.name.includes("//")) {
-			this.value = {
-				error: "The `name` value cannot contain multiple consecutive slashes."
-			};
-			this.status = 400;
-			this.done();
-			return;
-		} else if (user.pipe.some(item => item.name === data.name)) {
+		} else if (user.pipe.some(item => item.parent === data.parent && item.name === data.name)) {
 			this.value = {
 				error: "That name is already taken."
 			};
 			this.status = 422;
 			this.done();
 			return;
-		} else {
-			const slashIndex = data.name.lastIndexOf("/");
-			if (slashIndex !== -1) {
-				const parent = data.name.slice(0, slashIndex);
-				if (!user.pipe.some(item => item.type === "/" && item.name === parent)) {
-					this.value = {
-						error: "That path does not exist."
-					};
-					this.status = 422;
-					this.done();
-					return;
-				}
-			}
 		}
 	} else {
 		this.value = {
@@ -126,6 +123,7 @@ if (isMe) {
 			pipe: this.value = {
 				id: String(ObjectID()),
 				date: Date.now(),
+				parent: data.parent,
 				name: data.name,
 				type: "/",
 				privacy: data.privacy
@@ -206,14 +204,13 @@ if (isMe) {
 					pipe: this.value = {
 						id,
 						date: Date.now(),
+						parent: data.parent,
 						name: data.name,
 						type: type,
 						size: body.length,
 						privacy: data.privacy
 					}
 				};
-				const encodedName = encodeForPipe(data.name);
-				purgeCache(`https://pipe.miroware.io/${user._id}/${encodedName}`, `https://piped.miroware.io/${user._id}/${encodedName}`);
 			}
 			this.done();
 		});

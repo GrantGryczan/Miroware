@@ -12,19 +12,26 @@ const MiroError = class MiroError extends Error {
 }
 const doNothing = () => {};
 const container = document.body.querySelector("#container");
-let rawQuery = location.href;
-const hashIndex = rawQuery.indexOf("#");
-if (hashIndex !== -1) {
-	rawQuery = rawQuery.slice(0, hashIndex);
-}
-rawQuery = rawQuery.indexOf("?") !== -1 ? rawQuery.slice(rawQuery.indexOf("?") + 1).split("&") : [];
-Miro.query = {};
-for (const pair of rawQuery) {
-	try {
-		const param = pair.split("=");
-		Miro.query[param[0]] = decodeURIComponent(param[1]);
-	} catch (err) {}
-}
+Miro.parseQuery = () => {
+	Miro.query = {};
+	let rawQuery = location.href;
+	const hashIndex = rawQuery.indexOf("#");
+	if (hashIndex !== -1) {
+		rawQuery = rawQuery.slice(0, hashIndex);
+	}
+	const queryIndex = rawQuery.indexOf("?");
+	if (queryIndex !== -1) {
+		rawQuery = rawQuery.slice(queryIndex + 1).split("&");
+		for (const pair of rawQuery) {
+			try {
+				const [key, value] = pair.split("=");
+				Miro.query[key] = decodeURIComponent(value);
+			} catch (err) {}
+		}
+	}
+	return Miro.query;
+};
+Miro.parseQuery();
 const addTwo = (a, b) => a + b;
 Miro.sum = (...values) => values.reduce(addTwo, 0);
 Miro.average = (...values) => Miro.sum(...values) / values.length;

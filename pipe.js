@@ -55,9 +55,13 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 				res.status(400).send(err.message);
 				return;
 			}
-			let userID = (path = path.split("/")).shift();
+			const slashIndex = path.indexOf("/");
+			let userID;
 			try {
-				userID = ObjectID(userID);
+				if (slashIndex === -1) {
+					throw;
+				}
+				userID = ObjectID(path.slice(0, slashIndex));
 			} catch (err) {
 				res.sendStatus(404);
 				return;
@@ -66,8 +70,8 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 				_id: userID
 			});
 			if (user) {
-				path = path.join("/");
-				const item = user.pipe.find(item => item.name === path && item.privacy !== 2);
+				path = path.slice(slashIndex + 1);
+				const item = user.pipe.find(item => item.path === path && item.privacy !== 2);
 				if (item) {
 					if (item.type === "/") {
 						res.set("Content-Type", "application/zip");
@@ -79,17 +83,16 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 						const sliceStart = path.lastIndexOf("/") + 1;
 						let itemsToZip = 0;
 						let zippedItems = 0;
-						const scan = prefix => {
-							prefix = `${prefix}/`;
+						const scan = parent => {
 							for (const item of user.pipe) {
-								if (item.name.startsWith(prefix) && !item.name.includes("/", prefix.length) && item.privacy === 0) {
+								if (item.parent === parent && item.privacy === 0) {
 									if (item.type === "/") {
-										scan(item.name);
+										scan(item.id);
 									} else {
 										itemsToZip++;
-										request(`/${user._id}/${item.name}`).then(response => {
+										request(`/${user._id}/${item.path}`).then(response => {
 											archive.append(response, {
-												name: item.name.slice(sliceStart)
+												name: item.path.slice(sliceStart)
 											});
 											if (++zippedItems === itemsToZip) {
 												archive.finalize();
@@ -99,7 +102,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 								}
 							}
 						};
-						scan(path);
+						scan(item.id);
 						if (itemsToZip === 0) {
 							archive.finalize();
 						}
@@ -127,7 +130,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 			res.set("X-Powered-By", "Miroware");
 			request(path).then(response => {
 				response.pipe(res);
-				if (response.headers["content-length"]) { // This is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
+				if (response.headers["content-length"]) { // This condition is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
 					res.set("Content-Length", response.headers["content-length"]);
 				}
 				res.status(response.statusCode).set("Content-Type", req.query.download === undefined ? response.headers["content-type"] : "application/octet-stream").set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src pipe.miroware.io miro.gg data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'");

@@ -1,20 +1,31 @@
 const {user, isMe} = await parseUser(this);
-if (this.req.query.path && !user.pipe.some(item => item.type === "/" && item.name === this.req.query.path && (isMe || item.privacy < 2))) {
-	this.value = {
-		error: "That path does not exist."
-	};
-	this.status = 422;
-	this.done();
-	return;
+if (this.req.query.parent) {
+	this.value = {};
+	if (this.value.parent = user.pipe.find(item => item.type === "/" && item.id === this.req.query.parent && (isMe || item.privacy < 2))) {
+		const parentPath = `${this.value.parent.path}/`;
+		this.value.parent.size = user.pipe.reduce((size, item2) => {
+			if (item2.type !== "/" && item2.path.startsWith(parentPath)) {
+				size += item2.size;
+			}
+			return size;
+		}, 0);
+	} else {
+		this.value = {
+			error: "That parent directory does not exist."
+		};
+		this.status = 422;
+		this.done();
+		return;
+	}
+} else {
+	this.req.query.parent = null;
 }
-const fileItems = [];
-const path = (this.req.query.path && `${this.req.query.path}/`) || "";
-this.value = user.pipe.filter(item => item.name.startsWith(path) && !item.name.includes("/", path.length) && (isMe || item.privacy === 0));
+this.value.items = user.pipe.filter(item => item.parent === this.req.query.parent && (isMe || item.privacy === 0));
 for (const item of this.value) {
 	if (item.type === "/") {
-		const itemPath = `${item.name}/`;
+		const parentPath = `${item.path}/`;
 		item.size = user.pipe.reduce((size, item2) => {
-			if (item2.type !== "/" && item2.name.startsWith(itemPath)) {
+			if (item2.type !== "/" && item2.path.startsWith(parentPath)) {
 				size += item2.size;
 			}
 			return size;
