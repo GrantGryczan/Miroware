@@ -924,7 +924,7 @@ if (Miro.data.isMe) {
 				}
 			}, true).then(Miro.response(xhr => {
 				this.element.classList.remove("loading");
-				this.element.href = `#${this.parent}`;
+				this.element.href = `#${this.parent || ""}`;
 				this.subtitleElement.title = `${xhr.response.size} B`;
 				this.subtitleElement.textContent = getSize(xhr.response.size);
 				this.closeElement.textContent = "done";
