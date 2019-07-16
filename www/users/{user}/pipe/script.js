@@ -905,7 +905,7 @@ if (Miro.data.isMe) {
 			this.subtitleElement = this.element.querySelector(".subtitle");
 			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 				"Content-Type": "application/octet-stream",
-				"X-Data": JSON.stringify(data)
+				"X-Data": encodeURI(JSON.stringify(data))
 			}, this.file, xhr => {
 				this.xhr = xhr;
 				if (!data.url) {
@@ -1023,11 +1023,11 @@ if (Miro.data.isMe) {
 			this.parent = queryParent;
 			this.name = name;
 			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
-				"X-Data": JSON.stringify({
+				"X-Data": encodeURI(JSON.stringify({
 					parent: this.parent,
 					name: this.name,
 					type: "/"
-				})
+				}))
 			}).then(Miro.response(xhr => {
 				selectItem(setItem(new PipeItem(xhr.response)).element, {
 					ctrlKey: true

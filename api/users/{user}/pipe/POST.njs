@@ -2,10 +2,10 @@ const {user, isMe} = await parseUser(this);
 if (isMe) {
 	let data;
 	try {
-		data = JSON.parse(this.req.get("X-Data"));
+		data = JSON.parse(decodeURI(this.req.get("X-Data")));
 	} catch (err) {
 		this.value = {
-			error: "The `X-Data` header must be valid JSON."
+			error: "The `X-Data` header must be valid URI-encoded JSON."
 		};
 		this.status = 400;
 		this.done();
