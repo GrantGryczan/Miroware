@@ -1181,7 +1181,7 @@ if (Miro.data.isMe) {
 	});
 	document.addEventListener("drop", evt => {
 		evt.preventDefault();
-		if (allowDrop && Miro.focused()) {
+		if (allowDrop && Miro.focused() && indicatedTarget) {
 			const targetID = getTargetID();
 			if (evt.dataTransfer.files.length) {
 				for (const file of evt.dataTransfer.files) {
