@@ -542,9 +542,10 @@ const selectionLength = properties.querySelector("#selectionLength");
 const selectionSize = properties.querySelector("#selectionSize");
 const linkPreview = property.url.querySelector("#linkPreview");
 const privateOption = properties.elements.privacy.options[2];
-const save = property.actions.querySelector("#save");
-const download = property.actions.querySelector("#download");
-const embed = property.actions.querySelector("#embed");
+const actionSave = property.actions.querySelector("#save");
+const actionDownload = property.actions.querySelector("#download");
+const actionEmbed = property.actions.querySelector("#embed");
+const actionDelete = property.actions.querySelector("#delete");
 const previewImage = properties.querySelector("#previewImage");
 const previewAudio = properties.querySelector("#previewAudio");
 const previewVideo = properties.querySelector("#previewVideo");
@@ -563,9 +564,10 @@ const updateProperties = () => {
 			input.type = "hidden";
 		}
 	}
-	save.classList.add("hidden");
-	download.classList.add("hidden");
-	embed.classList.add("hidden");
+	actionSave.classList.add("hidden");
+	actionDownload.classList.add("hidden");
+	actionEmbed.classList.add("hidden");
+	actionDelete.classList.add("hidden");
 	previewImage.src = "";
 	previewAudio.src = "";
 	previewVideo.src = "";
@@ -585,12 +587,12 @@ const updateProperties = () => {
 				property.url.classList.remove("hidden");
 				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 				property.url._label.classList.add("mdc-floating-label--float-above");
-				download.href = url;
-				download.classList.remove("hidden");
+				actionDownload.href = url;
+				actionDownload.classList.remove("hidden");
 				if (item.type === "/") {
 					property.note.classList.remove("hidden");
 				} else {
-					download.href += "?download";
+					actionDownload.href += "?download";
 					properties.elements.type._prev = properties.elements.type.value = item.type;
 					showProperty("type");
 					properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
@@ -618,7 +620,7 @@ const updateProperties = () => {
 						showEmbedAction = false;
 					}
 					if (showEmbedAction) {
-						embed.classList.remove("hidden");
+						actionEmbed.classList.remove("hidden");
 					}
 				}
 			}
@@ -631,9 +633,10 @@ const updateProperties = () => {
 				properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
 				privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
 				property.privacy.classList.remove("hidden");
+				actionDelete.classList.add("hidden");
 			}
-			save.disabled = true;
-			save.classList.remove("hidden");
+			actionSave.disabled = true;
+			actionSave.classList.remove("hidden");
 		}
 	} else {
 		selectionSize.textContent = "0 B";
@@ -644,7 +647,7 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
 });
-embed.addEventListener("click", () => {
+actionEmbed.addEventListener("click", () => {
 	const item = items.querySelector(".item.selected")._item;
 	const embedPreview = html`<div id="embedPreview"></div>`;
 	const embedProperties = html`<div id="embedProperties"></div>`;
@@ -884,7 +887,7 @@ if (Miro.data.isMe) {
 			creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
 		}
 	};
-	window.onbeforeunload = () => container.querySelector(".loading") || !save.disabled || undefined;
+	window.onbeforeunload = () => container.querySelector(".loading") || !actionSave.disabled || undefined;
 	const PipeFile = class PipeFile {
 		constructor(file, name, parent = queryParent) {
 			this.file = file;
@@ -1194,7 +1197,7 @@ if (Miro.data.isMe) {
 			indicateTarget();
 		}
 	}, true);
-	property.actions.querySelector("#delete").addEventListener("click", removeItems);
+	actionDelete.addEventListener("click", removeItems);
 	for (const input of properties.elements) {
 		const instanceInput = input instanceof HTMLInputElement;
 		input._input = instanceInput || input instanceof HTMLSelectElement;
@@ -1217,7 +1220,7 @@ if (Miro.data.isMe) {
 				}
 			}
 		}
-		save.disabled = !changed.length;
+		actionSave.disabled = !changed.length;
 	};
 	properties.addEventListener("input", onInput);
 	properties.addEventListener("change", onInput);
@@ -1267,7 +1270,7 @@ if (Miro.data.isMe) {
 					itemElement._item.privacy = xhr.response.privacy;
 				}
 				if (noFailure) {
-					save.disabled = true;
+					actionSave.disabled = true;
 				}
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
@@ -1277,7 +1280,7 @@ if (Miro.data.isMe) {
 				}
 			}, () => {
 				noFailure = false;
-				save.disabled = false;
+				actionSave.disabled = false;
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
 				if (itemElement._item.parent === queryParent) {
