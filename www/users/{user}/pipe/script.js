@@ -159,7 +159,7 @@ const PipeItem = class PipeItem {
 	set type(value) {
 		const typeDir = (this[_type] = value) === "/";
 		this.typeElement.textContent = this.typeElement.title = typeDir ? "" : value;
-		this.iconElement.textContent = typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file")));
+		this.iconElement.textContent = this.id === "trash" ? "delete" : (typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file"))));
 		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
 		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
 	}
@@ -321,23 +321,23 @@ const render = () => {
 	while (ancestors.lastChild) {
 		ancestors.removeChild(ancestors.lastChild);
 	}
-	ancestors.appendChild(html`
+	if (queryParent) {
+		let parent = getItemByID(queryParent);
+		do {
+			ancestors.insertBefore(ancestors.firstChild, html`
+				<span>
+					<span class="separator">/</span>
+					<a class="ancestor" href="#$${parent.id}">$${parent.name}</a>
+				</span>
+			`);
+		} while (parent = parent.parent);
+	}
+	ancestors.insertBefore(ancestors.firstChild, html`
 		<span>
 			<span class="separator">/</span>
 			<a class="ancestor" href="#">$${Miro.data.user.name}</a>
 		</span>
 	`);
-	if (queryParent) {
-		let ancestry = "";
-		for (const name of getItemByID(queryParent).path.split("/")) {
-			ancestors.appendChild(html`
-				<span>
-					<span class="separator">/</span>
-					<a class="ancestor" href="#$${getItemByPath(ancestry += (ancestry && "/") + name).id}">$${name}</a>
-				</span>
-			`);
-		}
-	}
 	const ancestorLinks = ancestors.querySelectorAll(".ancestor");
 	ancestorLinks[ancestorLinks.length - 1].removeAttribute("href");
 	while (items.lastChild) {
