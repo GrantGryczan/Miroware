@@ -133,6 +133,9 @@ const PipeItem = class PipeItem {
 				<div class="cell date"></div>
 			</a>
 		`)._item = this;
+		if (this.id === "trash") {
+			this.element.id = "item_trash";
+		}
 		this.element.removeChild(this.thumbnailElement = this.element.querySelector(".cell.thumbnail"));
 		this.thumbnailHidden = true;
 		this.iconElement = this.element.querySelector(".cell.icon > button");
@@ -568,61 +571,67 @@ const updateProperties = () => {
 	previewVideo.src = "";
 	const selected = items.querySelectorAll(".item.selected");
 	if (selectionLength.textContent = selected.length) {
-		property.actions.classList.remove("hidden");
 		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
+		property.actions.classList.remove("hidden");
 		if (selected.length === 1) {
 			const item = selected[0]._item;
 			properties.elements.name._prev = properties.elements.name.value = item.name;
 			showProperty("name");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
-			const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.path)}` : item.url;
-			properties.elements.url._prev = properties.elements.url.value = linkPreview.href = url;
-			property.url.classList.remove("hidden");
-			properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
-			property.url._label.classList.add("mdc-floating-label--float-above");
-			download.href = url;
-			download.classList.remove("hidden");
-			if (item.type === "/") {
-				property.note.classList.remove("hidden");
-			} else {
-				download.href += "?download";
-				properties.elements.type._prev = properties.elements.type.value = item.type;
-				showProperty("type");
-				properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
-				property.type._label.classList.add("mdc-floating-label--float-above");
-				let showEmbedAction = true;
-				if (item.type.startsWith("image/")) {
-					previewImage.src = item.url;
-					previewImage.classList.remove("hidden");
-					previewAudio.classList.add("hidden");
-					previewVideo.classList.add("hidden");
-					property.preview.classList.remove("hidden");
-				} else if (item.type.startsWith("audio/")) {
-					previewImage.classList.add("hidden");
-					previewAudio.src = item.url;
-					previewAudio.classList.remove("hidden");
-					previewVideo.classList.add("hidden");
-					property.preview.classList.remove("hidden");
-				} else if (item.type.startsWith("video/")) {
-					previewImage.classList.add("hidden");
-					previewAudio.classList.add("hidden");
-					previewVideo.src = item.url;
-					previewVideo.classList.remove("hidden");
-					property.preview.classList.remove("hidden");
-				} else if (item.type !== "text/html") {
-					showEmbedAction = false;
-				}
-				if (showEmbedAction) {
-					embed.classList.remove("hidden");
+			if (item.id !== "trash") {
+				const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.path)}` : item.url;
+				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = url;
+				property.url.classList.remove("hidden");
+				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
+				property.url._label.classList.add("mdc-floating-label--float-above");
+				download.href = url;
+				download.classList.remove("hidden");
+				if (item.type === "/") {
+					property.note.classList.remove("hidden");
+				} else {
+					download.href += "?download";
+					properties.elements.type._prev = properties.elements.type.value = item.type;
+					showProperty("type");
+					properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
+					property.type._label.classList.add("mdc-floating-label--float-above");
+					let showEmbedAction = true;
+					if (item.type.startsWith("image/")) {
+						previewImage.src = item.url;
+						previewImage.classList.remove("hidden");
+						previewAudio.classList.add("hidden");
+						previewVideo.classList.add("hidden");
+						property.preview.classList.remove("hidden");
+					} else if (item.type.startsWith("audio/")) {
+						previewImage.classList.add("hidden");
+						previewAudio.src = item.url;
+						previewAudio.classList.remove("hidden");
+						previewVideo.classList.add("hidden");
+						property.preview.classList.remove("hidden");
+					} else if (item.type.startsWith("video/")) {
+						previewImage.classList.add("hidden");
+						previewAudio.classList.add("hidden");
+						previewVideo.src = item.url;
+						previewVideo.classList.remove("hidden");
+						property.preview.classList.remove("hidden");
+					} else if (item.type !== "text/html") {
+						showEmbedAction = false;
+					}
+					if (showEmbedAction) {
+						embed.classList.remove("hidden");
+					}
 				}
 			}
 		}
 		if (Miro.data.isMe) {
-			const privacy = selected[0]._item.privacy;
-			properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
-			privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
-			property.privacy.classList.remove("hidden");
+			if (items.querySelector("#item_trash.selected")) {
+				// TODO: unhide empty trash button
+			} else {
+				const privacy = selected[0]._item.privacy;
+				properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
+				privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
+				property.privacy.classList.remove("hidden");
+			}
 			save.disabled = true;
 			save.classList.remove("hidden");
 		}
