@@ -324,20 +324,20 @@ const render = () => {
 	if (queryParent) {
 		let parent = getItemByID(queryParent);
 		do {
-			ancestors.insertBefore(ancestors.firstChild, html`
+			ancestors.insertBefore(html`
 				<span>
 					<span class="separator">/</span>
 					<a class="ancestor" href="#$${parent.id}">$${parent.name}</a>
 				</span>
-			`);
+			`, ancestors.firstChild);
 		} while (parent = parent.parent);
 	}
-	ancestors.insertBefore(ancestors.firstChild, html`
+	ancestors.insertBefore(html`
 		<span>
 			<span class="separator">/</span>
 			<a class="ancestor" href="#">$${Miro.data.user.name}</a>
 		</span>
-	`);
+	`, ancestors.firstChild);
 	const ancestorLinks = ancestors.querySelectorAll(".ancestor");
 	ancestorLinks[ancestorLinks.length - 1].removeAttribute("href");
 	while (items.lastChild) {
