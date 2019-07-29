@@ -71,6 +71,10 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 			});
 			if (user) {
 				path = path.slice(slashIndex + 1);
+				if (path.startsWith(`${user.pipe.find(item => item.id === "trash").path}/`) {
+					res.sendStatus(404);
+					return;
+				}
 				const item = user.pipe.find(item => item.path === path && item.privacy !== 2);
 				if (item) {
 					if (item.type === "/") {
