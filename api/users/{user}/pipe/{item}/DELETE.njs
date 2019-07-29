@@ -2,7 +2,13 @@ const {user, isMe} = await parseUser(this);
 if (isMe) {
 	const found = user.pipe.find(item => item.id === this.params.item);
 	if (found) {
-		if (found.type === "/") {
+		if (found.id === "trash") {
+			this.value = {
+				error: "The trash directory cannot be deleted."
+			};
+			this.status = 422;
+			this.done();
+		} else if (found.type === "/") {
 			const items = [found];
 			const fileItems = [];
 			const prefix = `${found.path}/`;
@@ -41,12 +47,6 @@ if (isMe) {
 			} else {
 				this.done();
 			}
-		} else if (found.id === "trash") {
-			this.value = {
-				error: "The trash directory cannot be deleted."
-			};
-			this.status = 422;
-			this.done();
 		} else {
 			s3.deleteObject({
 				Bucket: "miroware-pipe",
