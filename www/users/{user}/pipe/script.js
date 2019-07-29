@@ -330,7 +330,7 @@ const render = () => {
 					<a class="ancestor" href="#$${parent.id}">$${parent.name}</a>
 				</span>
 			`, ancestors.firstChild);
-		} while (parent = parent.parent);
+		} while (parent = getItemByID(parent.parent));
 	}
 	ancestors.insertBefore(html`
 		<span>
