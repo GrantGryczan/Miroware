@@ -633,7 +633,7 @@ const updateProperties = () => {
 				properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
 				privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
 				property.privacy.classList.remove("hidden");
-				actionDelete.classList.add("hidden");
+				actionDelete.classList.remove("hidden");
 			}
 			actionSave.disabled = true;
 			actionSave.classList.remove("hidden");
