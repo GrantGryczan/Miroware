@@ -91,7 +91,15 @@ if (testEmail(this.req.body.email)) {
 				desc: "",
 				icon: null,
 				concats: [],
-				pipe: []
+				pipe: [{
+					id,
+					date: Date.now(),
+					parent: null,
+					name: "Trash",
+					path: "Trash",
+					type: "/",
+					privacy: 2
+				}]
 			};
 			if (!insertData.verified) {
 				insertData.unverified = this.req.body.email;

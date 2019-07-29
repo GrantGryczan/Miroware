@@ -41,7 +41,7 @@ if (isMe) {
 			} else {
 				this.done();
 			}
-		} else if (found.type === "trash") {
+		} else if (found.id === "trash") {
 			this.value = {
 				error: "The trash directory cannot be deleted."
 			};
