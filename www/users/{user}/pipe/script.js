@@ -169,7 +169,7 @@ const PipeItem = class PipeItem {
 		if (this.path) {
 			let parent = this;
 			while (parent = getItemByID(parent.parent)) {
-				parent.size -= item.size;
+				parent.size -= this.size;
 			}
 		}
 		this[_parent] = value;
@@ -177,7 +177,7 @@ const PipeItem = class PipeItem {
 			this.path = this.parent ? `${getItemByID(this.parent).path}/${this.name}` : this.name;
 			let parent = this;
 			while (parent = getItemByID(parent.parent)) {
-				parent.size += item.size;
+				parent.size += this.size;
 			}
 		}
 	}
@@ -260,9 +260,9 @@ const PipeItem = class PipeItem {
 				}
 			}
 		}
-		let item = this;
-		while (item = getItemByID(item.parent)) {
-			item.size -= this.size;
+		let parent = this;
+		while (parent = getItemByID(parent.parent)) {
+			parent.size -= this.size;
 		}
 		pipe.splice(pipe.indexOf(this), 1);
 	}
