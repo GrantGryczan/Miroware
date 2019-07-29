@@ -3,8 +3,17 @@ if (isMe) {
 	const found = user.pipe.find(item => item.id === this.params.item);
 	if (found) {
 		const typeDir = found.type === "/";
+		const typeTrash = found.type === "trash";
 		const putItem = {};
 		if (this.req.body.parent !== undefined) {
+			if (typeTrash) {
+				this.value = {
+					error: "The trash directory cannot be moved."
+				};
+				this.status = 422;
+				this.done();
+				return;
+			}
 			if (typeof this.req.body.parent === "string") {
 				let parent = user.pipe.find(item => item.type === "/" && item.id === this.req.body.parent);
 				if (!parent) {
@@ -89,9 +98,9 @@ if (isMe) {
 			}
 		}
 		if (this.req.body.type !== undefined) {
-			if (typeDir) {
+			if (typeDir || typeTrash) {
 				this.value = {
-					error: "The `type` value cannot be changed for a directory."
+					error: `The type of ${typeDir ? "a" : "the trash"} directory cannot be changed.`
 				};
 				this.status = 422;
 				this.done();
@@ -126,6 +135,14 @@ if (isMe) {
 			}
 		}
 		if (this.req.body.privacy !== undefined) {
+			if (found.type === "trash") {
+				this.value = {
+					error: "The privacy of the trash directory cannot be changed."
+				};
+				this.status = 422;
+				this.done();
+				return;
+			}
 			if (typeof this.req.body.privacy === "number") {
 				if (this.req.body.privacy === 0 || this.req.body.privacy === 1 || (typeDir && this.req.body.privacy === 2)) {
 					putItem.privacy = this.req.body.privacy;

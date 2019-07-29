@@ -38,6 +38,12 @@ if (isMe) {
 			} else {
 				this.done();
 			}
+		} else if (found.type === "trash") {
+			this.value = {
+				error: "The trash directory cannot be deleted."
+			};
+			this.status = 422;
+			this.done();
 		} else {
 			s3.deleteObject({
 				Bucket: "miroware-pipe",
