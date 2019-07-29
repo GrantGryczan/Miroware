@@ -3,7 +3,7 @@ if (this.params.user !== (user && String(user._id))) {
 	let userID;
 	try {
 		userID = ObjectID(this.params.user);
-	} catch (err) {
+	} catch {
 		Object.assign(this, await load("error/400", this));
 		this.done();
 		return;

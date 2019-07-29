@@ -8,7 +8,7 @@ if (!isMe) {
 	let userID;
 	try {
 		userID = ObjectID(this.params.user);
-	} catch (err) {}
+	} catch {}
 	if (userID) {
 		user = await users.findOne({
 			_id: userID

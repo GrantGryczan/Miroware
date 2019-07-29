@@ -17,7 +17,7 @@ const youKnow = require("./secret/youknow.js");
 		req.val = req.url.startsWith("/") ? req.url.slice(1) : req.url;
 		try {
 			decodeURI(req.val);
-		} catch (err) {
+		} catch {
 			res.sendStatus(400);
 			return;
 		}

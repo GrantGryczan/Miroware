@@ -1127,7 +1127,7 @@ if (Miro.data.isMe) {
 					try {
 						decodeURIComponent(string);
 						addURL(string);
-					} catch (err) {}
+					} catch {}
 				}
 			}
 		}

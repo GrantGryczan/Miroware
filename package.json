@@ -37,6 +37,6 @@
 		"replthis": "^1.0.2",
 		"request": "^2.88.0",
 		"request-promise-native": "^1.0.7",
-		"servecube": "^1.16.19"
+		"servecube": "^1.17.0"
 	}
 }

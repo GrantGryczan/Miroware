@@ -17,7 +17,7 @@ const start = () => {
 	let splitTest;
 	try {
 		splitTest = new RegExp(splitInput.value);
-	} catch (err) {
+	} catch {
 		new Miro.Dialog("Error", "The split expression must be a valid JavaScript regular expression.");
 		return;
 	}

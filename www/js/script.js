@@ -26,7 +26,7 @@ Miro.parseQuery = () => {
 			try {
 				const [key, value] = pair.split("=");
 				Miro.query[key] = decodeURIComponent(value);
-			} catch (err) {}
+			} catch {}
 		}
 	}
 	return Miro.query;
@@ -406,7 +406,7 @@ const clickAuth = service => function() {
 			setTimeout(() => {
 				sendAuth(service, code).then(closeAndResolveAuth);
 			});
-		} catch (err) {
+		} catch {
 			throw new MiroError("The `send` parameter must be a promise (of `Miro.request` or which resolves a `Miro.request`).");
 		}
 	}).catch(catchAuth);

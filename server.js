@@ -147,7 +147,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			let userID;
 			try {
 				userID = ObjectID(context.params.user);
-			} catch (err) {
+			} catch {
 				context.value = {
 					error: "That is not a valid user ID."
 				};
@@ -184,7 +184,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						remoteip: context.req.get("CF-Connecting-IP") || context.req.ip
 					}
 				})));
-			} catch (err) {}
+			} catch {}
 			if (success) {
 				resolve();
 			} else {

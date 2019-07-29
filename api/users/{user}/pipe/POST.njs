@@ -3,7 +3,7 @@ if (isMe) {
 	let data;
 	try {
 		data = JSON.parse(decodeURI(this.req.get("X-Data")));
-	} catch (err) {
+	} catch {
 		this.value = {
 			error: "The `X-Data` header must be valid URI-encoded JSON."
 		};
