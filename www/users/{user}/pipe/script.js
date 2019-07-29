@@ -626,7 +626,8 @@ const updateProperties = () => {
 			}
 		}
 		if (Miro.data.isMe) {
-			if (items.querySelector("#item_trash.selected")) {
+			const trashSelected = items.querySelector("#item_trash.selected");
+			if (trashSelected) {
 				// TODO: unhide empty trash button
 			} else {
 				const privacy = selected[0]._item.privacy;
@@ -635,8 +636,10 @@ const updateProperties = () => {
 				property.privacy.classList.remove("hidden");
 				actionDelete.classList.remove("hidden");
 			}
-			actionSave.disabled = true;
-			actionSave.classList.remove("hidden");
+			if (selected.length === 1 || !trashSelected) {
+				actionSave.disabled = true;
+				actionSave.classList.remove("hidden");
+			}
 		}
 	} else {
 		selectionSize.textContent = "0 B";
