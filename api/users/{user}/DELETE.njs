@@ -16,7 +16,10 @@ if (isMe) {
 					};
 					this.status = err.statusCode;
 				} else {
-					purgeCache(...fileItems.map(item => `https://pipe.miroware.io/${user._id}/${encodeURI(item.name)}`), ...fileItems.map(item => `https://piped.miroware.io/${user._id}/${encodeURI(item.name)}`)); // TODO: `flatMap` and define `encodedName`
+					purgeCache(...fileItems.flatMap(item => {
+						const encodedPath = encodeForPipe(item.path);
+						return [`https://pipe.miroware.io/${user._id}/${encodedPath}`, `https://piped.miroware.io/${user._id}/${encodedPath}`];
+					}));
 					users.deleteOne(this.userFilter);
 				}
 				this.done();
