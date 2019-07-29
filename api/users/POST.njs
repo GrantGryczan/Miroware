@@ -92,7 +92,7 @@ if (testEmail(this.req.body.email)) {
 				icon: null,
 				concats: [],
 				pipe: [{
-					id,
+					id: "trash",
 					date: Date.now(),
 					parent: null,
 					name: "Trash",
