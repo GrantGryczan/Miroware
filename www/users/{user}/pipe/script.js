@@ -65,7 +65,6 @@ const closingParentheses = /\)/g;
 const pipe = [];
 const cachedParents = [];
 const getItemByID = id => pipe.find(item => item.id === id);
-const getItemByPath = path => pipe.find(item => item.path === path);
 const setItem = item => {
 	const itemIndex = pipe.findIndex(({id}) => id === item.id);
 	if (itemIndex === -1) {
@@ -167,22 +166,18 @@ const PipeItem = class PipeItem {
 		return this[_parent];
 	}
 	set parent(value) {
+		if (this.path) {
+			let parent = this;
+			while (parent = getItemByID(parent.parent)) {
+				parent.size -= item.size;
+			}
+		}
 		this[_parent] = value;
 		if (this.path) {
-			let ancestry = "";
-			for (const name of this.path.split("/").slice(0, -1)) {
-				const item = getItemByPath(ancestry += (ancestry && "/") + name);
-				if (item) {
-					item.size -= this.size;
-				}
-			}
 			this.path = this.parent ? `${getItemByID(this.parent).path}/${this.name}` : this.name;
-			ancestry = "";
-			for (const name of this.path.split("/").slice(0, -1)) {
-				const item = getItemByPath(ancestry += (ancestry && "/") + name);
-				if (item) {
-					item.size += this.size;
-				}
+			let parent = this;
+			while (parent = getItemByID(parent.parent)) {
+				parent.size += item.size;
 			}
 		}
 	}
@@ -932,12 +927,9 @@ if (Miro.data.isMe) {
 				selectItem(item.element, {
 					ctrlKey: true
 				});
-				let ancestry = "";
-				for (const name of this.path.split("/").slice(0, -1)) {
-					const ancestorItem = getItemByPath(ancestry += (ancestry && "/") + name);
-					if (ancestorItem) {
-						ancestorItem.size += item.size;
-					}
+				let parent = this;
+				while (parent = getItemByID(parent.parent)) {
+					parent.size += item.size;
 				}
 				if (queryParent === this.parent) {
 					render();
