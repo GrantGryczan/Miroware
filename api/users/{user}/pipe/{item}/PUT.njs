@@ -145,11 +145,11 @@ if (isMe) {
 				return;
 			}
 			if (typeof this.req.body.privacy === "number") {
-				if (this.req.body.privacy === 0 || this.req.body.privacy === 1 || (typeDir && this.req.body.privacy === 2)) {
+				if (this.req.body.privacy === 0 || this.req.body.privacy === 1 || this.req.body.privacy === 2) {
 					putItem.privacy = this.req.body.privacy;
 				} else {
 					this.value = {
-						error: `The \`privacy\` value must be 0 (public)${typeDir ? ", 1 (unlisted), or 2 (private)" : " or 1 (unlisted)"}.`
+						error: "The `privacy` value must be 0 (public), 1 (unlisted), or 2 (private)."
 					};
 					this.status = 400;
 					this.done();

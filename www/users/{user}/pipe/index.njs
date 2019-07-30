@@ -23,7 +23,8 @@ if (user) {
 			id: user._id,
 			name: user.name
 		},
-		isMe
+		isMe,
+		trashName: user.pipe.find(item => item.id === "trash").name
 	}
 	this.description = `View ${user.name}'s Pipe.`;
 } else {

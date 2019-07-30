@@ -193,6 +193,9 @@ const PipeItem = class PipeItem {
 			const nameIndex = this.path.lastIndexOf("/") + 1;
 			this.path = (nameIndex ? this.path.slice(0, nameIndex) : "") + value;
 		}
+		if(this.id === "trash") {
+			Miro.data.trashName = value;
+		}
 	}
 	get path() {
 		return this[_path];
@@ -212,7 +215,7 @@ const PipeItem = class PipeItem {
 	}
 	updateThumbnail() {
 		if (this.type.startsWith("image/")) {
-			this.thumbnailElement.style.backgroundImage = `url(${this.url.replace(quotationMarks, "%22").replace(apostrophes, "%27").replace(openingParentheses, "%28").replace(closingParentheses, "%29")})`;
+			this.thumbnailElement.style.backgroundImage = `url(${(this.isPrivate() ? `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${this.id}/content` : this.url).replace(quotationMarks, "%22").replace(apostrophes, "%27").replace(openingParentheses, "%28").replace(closingParentheses, "%29")})`;
 		} else {
 			this.thumbnailElement.style.backgroundImage = "";
 			this.thumbnailElement.textContent = this.iconElement.textContent;
@@ -275,6 +278,9 @@ const PipeItem = class PipeItem {
 		} else {
 			open(this.element.href);
 		}
+	}
+	isPrivate() {
+		return this.privacy === 2 || this.path.startsWith(`${Miro.data.trashName}/`);
 	}
 };
 const removeItem = itemElement => {
@@ -541,7 +547,6 @@ for (const propertyElement of properties.querySelectorAll("[data-key]")) {
 const selectionLength = properties.querySelector("#selectionLength");
 const selectionSize = properties.querySelector("#selectionSize");
 const linkPreview = property.url.querySelector("#linkPreview");
-const privateOption = properties.elements.privacy.options[2];
 const actionSave = property.actions.querySelector("#save");
 const actionDownload = property.actions.querySelector("#download");
 const actionEmbed = property.actions.querySelector("#embed");
@@ -577,43 +582,48 @@ const updateProperties = () => {
 		property.actions.classList.remove("hidden");
 		if (selected.length === 1) {
 			const item = selected[0]._item;
+			const notPrivate = !item.isPrivate();
 			properties.elements.name._prev = properties.elements.name.value = item.name;
 			showProperty("name");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
 			if (item.id !== "trash") {
-				const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.path)}` : item.url;
-				properties.elements.url._prev = properties.elements.url.value = linkPreview.href = url;
-				property.url.classList.remove("hidden");
-				properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
-				property.url._label.classList.add("mdc-floating-label--float-above");
-				actionDownload.href = url;
-				actionDownload.classList.remove("hidden");
+				if (notPrivate) {
+					const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.path)}` : item.url;
+					properties.elements.url._prev = properties.elements.url.value = linkPreview.href = url;
+					property.url.classList.remove("hidden");
+					properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
+					property.url._label.classList.add("mdc-floating-label--float-above");
+					actionDownload.href = url;
+					actionDownload.classList.remove("hidden");
+				}
 				if (item.type === "/") {
 					property.note.classList.remove("hidden");
 				} else {
-					actionDownload.href += "?download";
+					if (notPrivate) {
+						actionDownload.href += "?download";
+					}
 					properties.elements.type._prev = properties.elements.type.value = item.type;
 					showProperty("type");
 					properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
 					property.type._label.classList.add("mdc-floating-label--float-above");
-					let showEmbedAction = true;
+					let showEmbedAction = notPrivate;
 					if (item.type.startsWith("image/")) {
-						previewImage.src = item.url;
+						previewImage.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeURIComponent(item.name)}`;
 						previewImage.classList.remove("hidden");
 						previewAudio.classList.add("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("audio/")) {
 						previewImage.classList.add("hidden");
-						previewAudio.src = item.url;
+						previewAudio.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeURIComponent(item.name)}`;
 						previewAudio.classList.remove("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("video/")) {
 						previewImage.classList.add("hidden");
 						previewAudio.classList.add("hidden");
-						previewVideo.src = item.url;
+						previewVideo.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeURIComponent(item.name)}`;
 						previewVideo.classList.remove("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type !== "text/html") {
@@ -632,7 +642,6 @@ const updateProperties = () => {
 			} else {
 				const privacy = selected[0]._item.privacy;
 				properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
-				privateOption.disabled = privateOption.hidden = !!items.querySelector(".item.typeFile.selected");
 				property.privacy.classList.remove("hidden");
 				actionDelete.classList.remove("hidden");
 			}
