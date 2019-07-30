@@ -115,7 +115,6 @@ const _type = Symbol("type");
 const _parent = Symbol("parent");
 const _name = Symbol("name");
 const _path = Symbol("path");
-const _url = Symbol("url");
 const _size = Symbol("size");
 const _date = Symbol("date");
 const PipeItem = class PipeItem {
@@ -143,13 +142,13 @@ const PipeItem = class PipeItem {
 		this.sizeElement = this.element.querySelector(".cell.size");
 		this.typeElement = this.element.querySelector(".cell.type");
 		this.dateElement = this.element.querySelector(".cell.date");
+		if (this.type === "/") {
+			this.element.href = this.url = `#${this.id}`;
+		}
 		this.type = item.type;
 		this.parent = item.parent;
 		this.name = item.name;
 		this.path = item.path;
-		if (this.type === "/") {
-			this.element.href = this.url = `#${this.id}`;
-		}
 		this.size = item.size;
 		this.privacy = item.privacy;
 		this.date = new Date(item.date);
@@ -164,6 +163,7 @@ const PipeItem = class PipeItem {
 		this.iconElement.textContent = this.id === "trash" ? "delete" : (typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file"))));
 		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
 		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
+		this.updateThumbnail();
 	}
 	get parent() {
 		return this[_parent];
@@ -220,13 +220,6 @@ const PipeItem = class PipeItem {
 			this.thumbnailElement.style.backgroundImage = "";
 			this.thumbnailElement.textContent = this.iconElement.textContent;
 		}
-	}
-	get url() {
-		return this[_url];
-	}
-	set url(value) {
-		this[_url] = value;
-		setTimeout(this.updateThumbnail.bind(this));
 	}
 	get size() {
 		return this[_size];
