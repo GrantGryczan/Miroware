@@ -19,7 +19,7 @@ if (isMe) {
 					};
 					this.status = err.statusCode;
 				} else {
-					this.res.set("Content-Type", this.req.query.download ? "application/octet-stream" : found.type).set("Content-Length", String(data.Body.length));
+					this.res.set("Content-Type", "download" in this.req.query ? "application/octet-stream" : found.type).set("Content-Length", String(data.Body.length));
 					this.value = data.Body;
 				}
 				this.done();
