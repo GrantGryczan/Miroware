@@ -1287,7 +1287,6 @@ if (Miro.data.isMe) {
 				}
 			}, () => {
 				noFailure = false;
-				actionSave.disabled = false;
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
 				if (itemElement._item.parent === queryParent) {
