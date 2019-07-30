@@ -41,8 +41,8 @@ if (isMe) {
 					putItem.restore = found.parent;
 				} else if (found.parent === "trash") {
 					update.$unset = {
-						trashed: true,
-						restore: true
+						"pipe.$.trashed": true,
+						"pipe.$.restore": true
 					};
 				}
 			} else if (this.req.body.parent === null) {
