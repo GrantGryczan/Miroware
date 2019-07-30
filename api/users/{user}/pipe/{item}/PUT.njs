@@ -39,11 +39,6 @@ if (isMe) {
 				if (this.req.body.parent === "trash") {
 					putItem.trashed = Date.now();
 					putItem.restore = found.parent;
-				} else if (found.parent === "trash") {
-					update.$unset = {
-						"pipe.$.trashed": true,
-						"pipe.$.restore": true
-					};
 				}
 			} else if (this.req.body.parent === null) {
 				putItem.parent = null;
@@ -63,6 +58,14 @@ if (isMe) {
 					this.status = 422;
 					this.done();
 					return;
+				}
+				if (found.parent === "trash") {
+					update.$unset = {
+						"pipe.$.trashed": true,
+						"pipe.$.restore": true
+					};
+					delete found.trashed;
+					delete found.restore;
 				}
 			}
 		}
