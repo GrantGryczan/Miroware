@@ -226,7 +226,7 @@ const PipeItem = class PipeItem {
 	}
 	set url(value) {
 		this[_url] = value;
-		this.updateThumbnail();
+		setTimeout(this.updateThumbnail);
 	}
 	get size() {
 		return this[_size];
@@ -609,21 +609,21 @@ const updateProperties = () => {
 					property.type._label.classList.add("mdc-floating-label--float-above");
 					let showEmbedAction = notPrivate;
 					if (item.type.startsWith("image/")) {
-						previewImage.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeURIComponent(item.name)}`;
+						previewImage.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeForPipe(item.name)}`;
 						previewImage.classList.remove("hidden");
 						previewAudio.classList.add("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("audio/")) {
 						previewImage.classList.add("hidden");
-						previewAudio.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeURIComponent(item.name)}`;
+						previewAudio.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeForPipe(item.name)}`;
 						previewAudio.classList.remove("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("video/")) {
 						previewImage.classList.add("hidden");
 						previewAudio.classList.add("hidden");
-						previewVideo.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeURIComponent(item.name)}`;
+						previewVideo.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeForPipe(item.name)}`;
 						previewVideo.classList.remove("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type !== "text/html") {
