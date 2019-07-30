@@ -226,7 +226,7 @@ const PipeItem = class PipeItem {
 	}
 	set url(value) {
 		this[_url] = value;
-		setTimeout(this.updateThumbnail);
+		setTimeout(this.updateThumbnail.bind(this));
 	}
 	get size() {
 		return this[_size];
