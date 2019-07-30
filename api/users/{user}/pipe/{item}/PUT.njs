@@ -146,6 +146,14 @@ if (isMe) {
 			}
 			if (typeof this.req.body.privacy === "number") {
 				if (this.req.body.privacy === 0 || this.req.body.privacy === 1 || this.req.body.privacy === 2) {
+					if (this.req.body.privacy === 2 && true) { // TODO: not Amber
+						this.value = {
+							error: "Private items require an Amber subscription."
+						};
+						this.status = 422;
+						this.done();
+						return;
+					}
 					putItem.privacy = this.req.body.privacy;
 				} else {
 					this.value = {
