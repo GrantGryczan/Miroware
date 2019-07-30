@@ -650,7 +650,9 @@ const updateProperties = () => {
 				const privacy = selected[0]._item.privacy;
 				properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
 				property.privacy.classList.remove("hidden");
-				actionDelete.textContent = queryParent === "trash" ? "delete_forever" : "delete";
+				const inTrash = queryParent === "trash";
+				actionDelete.title = inTrash ? "Delete" : "Move to trash";
+				actionDelete.textContent = inTrash ? "delete_forever" : "delete";
 				actionDelete.classList.remove("hidden");
 			}
 			if (selected.length === 1 || !trashSelected) {
