@@ -279,33 +279,46 @@ const PipeItem = class PipeItem {
 const removeItem = itemElement => {
 	itemElement.classList.remove("selected");
 	itemElement.classList.add("loading");
-	Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`).then(Miro.response(() => {
-		itemElement._item.delete();
-		render();
-	}, () => {
-		itemElement.classList.remove("loading");
-	}));
+	if (itemElement._item.parent === "trash") {
+		Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`).then(Miro.response(() => {
+			itemElement._item.delete();
+			render();
+		}, () => {
+			itemElement.classList.remove("loading");
+		}));
+	} else {
+		const sourceParent = itemElement._item.parent;
+		Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
+			parent: "trash"
+		}).then(Miro.response(xhr => {
+			itemElement._item.parent = xhr.response.parent;
+			itemElement.classList.remove("loading");
+			if (queryParent === sourceParent || queryParent === "trash") {
+				render();
+			}
+		}, () => {
+			itemElement.classList.remove("loading");
+		}));
+	}
 };
 const removeItems = () => {
 	const itemElements = items.querySelectorAll(".item.selected");
 	if (itemElements.length) {
+		const inTrash = queryParent === "trash";
 		if (itemElements.length === 1) {
 			const itemElement = itemElements[0];
 			new Miro.Dialog("Remove Item", html`
-				Are you sure you want to remove <b>$${itemElement._item.name}</b>?<br>${itemElement._item.type === "/" ? `
-				Items inside the directory will also be removed.<br>` : ""}
-				This cannot be undone.
+				Are you sure you want to ${inTrash ? "permanently delete" : "move"} <b>$${itemElement._item.name}</b>${inTrash ? "" : " to the trash"}?${inTrash && itemElement._item.type === "/" ? `<br>
+				Items inside directories will also be deleted.` : ""}
 			`, ["Yes", "No"]).then(value => {
 				if (value === 0) {
 					removeItem(itemElement);
 				}
 			});
 		} else {
-			const selectedDirs = items.querySelectorAll(".item.typeDir.selected").length;
 			new Miro.Dialog("Remove Items", html`
-				Are you sure you want to remove all those items?<br>${selectedDirs ? `
-				Items inside the ${selectedDirs === 1 ? "directory" : "directories"} will also be removed.<br>` : ""}
-				This cannot be undone.
+				Are you sure you want to ${inTrash ? "permanently delete the selected items" : "move the selected items to the trash"}?${inTrash && items.querySelector(".item.typeDir.selected") ? `<br>
+				Items inside deleted directories will also be deleted.` : ""}
 			`, ["Yes", "No"]).then(value => {
 				if (value === 0) {
 					itemElements.forEach(removeItem);
@@ -477,12 +490,14 @@ document.addEventListener("mouseup", evt => {
 						}).then(Miro.response(xhr => {
 							itemElement._item.parent = xhr.response.parent;
 							itemElement.classList.remove("loading");
-							if (sourceParent === queryParent || targetID === queryParent) {
+							if (queryParent === sourceParent || queryParent === targetID) {
 								render();
 							}
 						}, () => {
 							itemElement.classList.remove("loading");
-							updateProperties();
+							if (queryParent === sourceParent) {
+								updateProperties();
+							}
 						}));
 					}
 					indicateTarget();
@@ -1274,7 +1289,7 @@ if (Miro.data.isMe) {
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
 				await Miro.wait();
-				if (sourceParent === queryParent) {
+				if (queryParent === sourceParent) {
 					render();
 					if (notUpdatedFormState) {
 						Miro.formState(properties, true);
@@ -1285,7 +1300,7 @@ if (Miro.data.isMe) {
 			}, () => {
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				if (sourceParent === queryParent) {
+				if (queryParent === sourceParent) {
 					updateProperties();
 					if (notUpdatedFormState) {
 						Miro.formState(properties, true);
