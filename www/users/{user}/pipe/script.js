@@ -142,13 +142,13 @@ const PipeItem = class PipeItem {
 		this.sizeElement = this.element.querySelector(".cell.size");
 		this.typeElement = this.element.querySelector(".cell.type");
 		this.dateElement = this.element.querySelector(".cell.date");
-		if (this.type === "/") {
-			this.element.href = this.url = `#${this.id}`;
-		}
 		this.type = item.type;
 		this.parent = item.parent;
 		this.name = item.name;
 		this.path = item.path;
+		if (this.type === "/") {
+			this.element.href = this.url = `#${this.id}`;
+		}
 		this.size = item.size;
 		this.privacy = item.privacy;
 		this.date = new Date(item.date);
