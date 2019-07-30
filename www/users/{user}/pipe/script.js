@@ -252,9 +252,8 @@ const PipeItem = class PipeItem {
 			if (cachedParentIndex !== -1) {
 				cachedParents.splice(cachedParentIndex, 1);
 			}
-			for (let i = pipe.length - 1; i >= 0; i--) {
-				const item = pipe[i];
-				if (item.parent === this.parent && item !== this) {
+			for (const item in pipe) {
+				if (item.parent === this) {
 					item.delete();
 				}
 			}
