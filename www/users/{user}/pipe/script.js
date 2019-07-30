@@ -477,7 +477,7 @@ document.addEventListener("mouseup", evt => {
 						}).then(Miro.response(xhr => {
 							itemElement._item.parent = xhr.response.parent;
 							itemElement.classList.remove("loading");
-							if (sourceParent === queryParent) {
+							if (sourceParent === queryParent || targetID === queryParent) {
 								render();
 							}
 						}, () => {
