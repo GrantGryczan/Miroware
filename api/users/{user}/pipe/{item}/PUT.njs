@@ -192,7 +192,7 @@ if (isMe) {
 			$set: set
 		});
 		const encodedPath = encodeForPipe(found.path);
-		const urls = [`https://pipe.miroware.io/${user._id}/${encodedPath}`, `https://piped.miroware.io/${user._id}/${encodedPath}`];
+		const itemsToPurge = [found];
 		if (putItem.path) {
 			if (typeDir) {
 				const prefix = `${found.path}/`;
@@ -213,13 +213,12 @@ if (isMe) {
 								"pipe.$.path": path
 							}
 						});
-						const encodedChildPath = encodeForPipe(child.path);
-						urls.push(`https://pipe.miroware.io/${user._id}/${encodedChildPath}`, `https://piped.miroware.io/${user._id}/${encodedChildPath}`);
+						itemsToPurge.push(child);
 					}
 				}
 			}
 		}
-		purgeCache(...urls);
+		purgePipeCache(user, itemsToPurge);
 	} else {
 		this.value = {
 			error: "That item does not exist."

@@ -40,19 +40,17 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 const wait = delay => new Promise(resolve => {
 	setTimeout(resolve, delay);
 });
-const validateConnection = (context, data) => {
-	return new Promise(resolve => {
-		if (context.user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
-			resolve(true);
-		} else {
-			context.value = {
-				error: "Authentication failed."
-			};
-			context.status = 401;
-			context.done();
-		}
-	});
-};
+const validateConnection = (context, data) => new Promise(resolve => {
+	if (context.user.connections.some(connection => connection.service === data.connection[0] && connection.id === data.id)) {
+		resolve(true);
+	} else {
+		context.value = {
+			error: "Authentication failed."
+		};
+		context.status = 401;
+		context.done();
+	}
+});
 const sanitizeConnection = connection => ({
 	service: connection.service,
 	id: connection.id
@@ -84,15 +82,6 @@ const notLoggedIn = context => {
 const purgeCache = async (...files) => {
 	for (let i = 0; i < files.length; i += 30) {
 		const slicedFiles = files.slice(i, i + 30);
-		for (const file of slicedFiles) {
-			if (file.endsWith("/index.html")) {
-				const altFile = file.slice(0, -10);
-				if (slicedFiles.length < 30) {
-					slicedFiles.push(altFile);
-				}
-				files.push(altFile);
-			}
-		}
 		let errors = 0;
 		do {
 			await wait(1000);
@@ -118,6 +107,19 @@ const purgeCache = async (...files) => {
 		} while (true);
 	}
 };
+const purgePipeCache = (user, items) => purgeCache(...items.flatMap(item => {
+	const encodedPath = encodeForPipe(item.path);
+	const urls = [`https://pipe.miroware.io/${user._id}/${encodedPath}`, `https://piped.miroware.io/${user._id}/${encodedPath}`];
+	for (let slashIndex = encodedPath.indexOf("/"); slashIndex !== -1; slashIndex = encodedPath.indexOf("/", slashIndex + 1)) {
+		const slicedPath = encodedPath.slice(0, slashIndex);
+		urls.push(`https://pipe.miroware.io/${user._id}/${slicedPath}`, `https://piped.miroware.io/${user._id}/${slicedPath}`);
+	}
+	if (encodedPath.endsWith("/index.html") || encodedPath === "index.html") {
+		const slicedPath = encodedPath.slice(0, encodedPath.lastIndexOf("/") + 1);
+		urls.push(`https://pipe.miroware.io/${user._id}/${slicedPath}`, `https://piped.miroware.io/${user._id}/${slicedPath}`);
+	}
+	return urls;
+}));
 const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
 	const myEval = v => eval(v);
