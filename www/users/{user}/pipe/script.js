@@ -1275,6 +1275,7 @@ if (Miro.data.isMe) {
 				itemElement.classList.add("selected");
 				await Miro.wait();
 				if (sourceParent === queryParent) {
+					actionSave.disabled = true;
 					render();
 					if (notUpdatedFormState) {
 						Miro.formState(properties, true);
@@ -1285,6 +1286,7 @@ if (Miro.data.isMe) {
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
 				if (sourceParent === queryParent) {
+					actionSave.disabled = true;
 					updateProperties();
 					if (notUpdatedFormState) {
 						Miro.formState(properties, true);
