@@ -215,6 +215,7 @@ if (isMe) {
 					}
 				};
 			}
+			purgePipeCache(user, [this.value]);
 			this.done();
 		});
 	}
