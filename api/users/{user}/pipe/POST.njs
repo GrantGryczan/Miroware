@@ -140,6 +140,9 @@ if (isMe) {
 				privacy: data.privacy
 			}
 		};
+		if (this.value.parent === "trash") {
+			this.value.trashed = Date.now();
+		}
 		this.value = {
 			...this.value,
 			size: 0
@@ -223,6 +226,9 @@ if (isMe) {
 						privacy: data.privacy
 					}
 				};
+			}
+			if (this.value.parent === "trash") {
+				this.value.trashed = Date.now();
 			}
 			purgePipeCache(user, [this.value]);
 			this.done();

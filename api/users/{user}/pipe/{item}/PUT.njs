@@ -2,6 +2,7 @@ const {user, isMe} = await parseUser(this);
 if (isMe) {
 	const found = user.pipe.find(item => item.id === this.params.item);
 	if (found) {
+		const update = {};
 		const typeDir = found.type === "/";
 		const putItem = {};
 		if (this.req.body.parent !== undefined) {
@@ -35,6 +36,15 @@ if (isMe) {
 					} while (parent.parent && (parent = user.pipe.find(item => item.type === "/" && item.id === parent.parent)));
 				}
 				putItem.parent = this.req.body.parent;
+				if (this.req.body.parent === "trash") {
+					putItem.trashed = Date.now();
+					putItem.restore = found.parent;
+				} else if (found.parent === "trash") {
+					update.$unset = {
+						trashed: true,
+						restore: true
+					};
+				}
 			} else if (this.req.body.parent === null) {
 				putItem.parent = null;
 			} else {
@@ -191,16 +201,14 @@ if (isMe) {
 			this.done();
 			return;
 		}
-		const set = {};
+		update.$set =  = {};
 		for (const key of keys) {
-			set[`pipe.$.${key}`] = putItem[key];
+			update.$set[`pipe.$.${key}`] = putItem[key];
 		}
 		users.updateOne({
 			_id: user._id,
 			"pipe.id": found.id
-		}, {
-			$set: set
-		});
+		}, update);
 		const encodedPath = encodeForPipe(found.path);
 		const itemsToPurge = [found];
 		if (putItem.path) {
