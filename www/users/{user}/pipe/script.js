@@ -1246,13 +1246,8 @@ if (Miro.data.isMe) {
 		const changedType = changed.includes(properties.elements.type);
 		const changedPrivacy = changed.includes(properties.elements.privacy);
 		const selected = items.querySelectorAll(".item.selected");
-		let responses = 0;
-		const countResponse = () => {
-			if (++responses === selected.length) {
-				Miro.formState(properties, true);
-			}
-		};
-		let noFailure = true;
+		const sourceParent = queryParent;
+		let notUpdatedFormState = true;
 		for (const itemElement of selected) {
 			itemElement.classList.remove("selected");
 			itemElement.classList.add("loading");
@@ -1276,23 +1271,27 @@ if (Miro.data.isMe) {
 				if (changedPrivacy) {
 					itemElement._item.privacy = xhr.response.privacy;
 				}
-				if (noFailure) {
-					actionSave.disabled = true;
-				}
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
 				await Miro.wait();
-				if (itemElement._item.parent === queryParent) {
+				if (sourceParent === queryParent) {
 					render();
+					if (notUpdatedFormState) {
+						Miro.formState(properties, true);
+						notUpdatedFormState = false;
+					}
 				}
 			}, () => {
-				noFailure = false;
 				itemElement.classList.remove("loading");
 				itemElement.classList.add("selected");
-				if (itemElement._item.parent === queryParent) {
+				if (sourceParent === queryParent) {
 					updateProperties();
+					if (notUpdatedFormState) {
+						Miro.formState(properties, true);
+						notUpdatedFormState = false;
+					}
 				}
-			})).then(countResponse);
+			}));
 		}
 	});
 }
