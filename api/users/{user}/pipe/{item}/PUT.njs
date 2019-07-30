@@ -204,13 +204,12 @@ if (isMe) {
 				}, 0);
 				for (const child of user.pipe) {
 					if (child.path.startsWith(prefix)) {
-						const path = putItem.path + child.path.slice(found.path.length);
 						users.updateOne({
 							_id: user._id,
 							"pipe.id": child.id
 						}, {
 							$set: {
-								"pipe.$.path": path
+								"pipe.$.path": child.path = putItem.path + child.path.slice(found.path.length)
 							}
 						});
 						itemsToPurge.push(child);
