@@ -587,9 +587,9 @@ const updateProperties = () => {
 					property.url.classList.remove("hidden");
 					properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 					property.url._label.classList.add("mdc-floating-label--float-above");
-					actionDownload.href = url;
-					actionDownload.classList.remove("hidden");
 				}
+				actionDownload.href = notPrivate ? url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeForPipe(item.name)}`;
+				actionDownload.classList.remove("hidden");
 				if (item.type === "/") {
 					property.note.classList.remove("hidden");
 				} else {
@@ -602,21 +602,21 @@ const updateProperties = () => {
 					property.type._label.classList.add("mdc-floating-label--float-above");
 					let showEmbedAction = notPrivate;
 					if (item.type.startsWith("image/")) {
-						previewImage.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeForPipe(item.name)}`;
+						previewImage.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`;
 						previewImage.classList.remove("hidden");
 						previewAudio.classList.add("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("audio/")) {
 						previewImage.classList.add("hidden");
-						previewAudio.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeForPipe(item.name)}`;
+						previewAudio.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`;
 						previewAudio.classList.remove("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("video/")) {
 						previewImage.classList.add("hidden");
 						previewAudio.classList.add("hidden");
-						previewVideo.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeForPipe(item.name)}`;
+						previewVideo.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`;
 						previewVideo.classList.remove("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type !== "text/html") {
