@@ -201,7 +201,7 @@ if (isMe) {
 			this.done();
 			return;
 		}
-		update.$set =  = {};
+		update.$set = {};
 		for (const key of keys) {
 			update.$set[`pipe.$.${key}`] = putItem[key];
 		}
