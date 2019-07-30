@@ -14,7 +14,9 @@ if (isMe) {
 				this.done();
 				return;
 			}
-			if (typeof this.req.body.parent === "string") {
+			if (this.req.body.parent === found.parent) {
+				delete this.req.body.parent;
+			} else if (typeof this.req.body.parent === "string") {
 				let parent = user.pipe.find(item => item.type === "/" && item.id === this.req.body.parent);
 				if (!parent) {
 					this.value = {
