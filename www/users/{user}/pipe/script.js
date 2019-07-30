@@ -581,8 +581,8 @@ const updateProperties = () => {
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
 			if (item.id !== "trash") {
+				const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.path)}` : item.url;
 				if (notPrivate) {
-					const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.path)}` : item.url;
 					properties.elements.url._prev = properties.elements.url.value = linkPreview.href = url;
 					property.url.classList.remove("hidden");
 					properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
