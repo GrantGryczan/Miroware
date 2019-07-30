@@ -45,13 +45,15 @@ if (isMe) {
 				this.done();
 				return;
 			}
-			if (user.pipe.some(item => item.parent === this.req.body.parent && item.name === found.name)) {
-				this.value = {
-					error: "That name is already taken."
-				};
-				this.status = 422;
-				this.done();
-				return;
+			if (this.req.body.parent !== "trash") {
+				if (user.pipe.some(item => item.parent === this.req.body.parent && item.name === found.name)) {
+					this.value = {
+						error: "That name is already taken."
+					};
+					this.status = 422;
+					this.done();
+					return;
+				}
 			}
 		}
 		if (this.req.body.name !== undefined) {
@@ -78,7 +80,7 @@ if (isMe) {
 					this.status = 400;
 					this.done();
 					return;
-				} else if (user.pipe.some(item => item.parent === found.parent && item.name === this.req.body.name)) {
+				} else if (found.parent !== "trash" && user.pipe.some(item => item.parent === found.parent && item.name === this.req.body.name)) {
 					this.value = {
 						error: "That name is already taken."
 					};

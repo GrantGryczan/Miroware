@@ -52,7 +52,7 @@ if (isMe) {
 			this.status = 400;
 			this.done();
 			return;
-		} else if (user.pipe.some(item => item.parent === data.parent && item.name === data.name)) {
+		} else if (data.parent !== "trash" && user.pipe.some(item => item.parent === data.parent && item.name === data.name)) {
 			this.value = {
 				error: "That name is already taken."
 			};
