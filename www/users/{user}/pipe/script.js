@@ -163,7 +163,7 @@ const PipeItem = class PipeItem {
 		this.iconElement.textContent = this.id === "trash" ? "delete" : (typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file"))));
 		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
 		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
-		this.updateThumbnail();
+		setTimeout(this.updateThumbnail.bind(this));
 	}
 	get parent() {
 		return this[_parent];
