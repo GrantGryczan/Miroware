@@ -826,40 +826,42 @@ actionEmbed.addEventListener("click", () => {
 updateProperties();
 if (Miro.data.isMe) {
 	const checkName = async (name, parent = queryParent) => {
-		let takenItem;
-		while (takenItem = pipe.find(item => item.name === name && item.parent === parent)) {
-			const value = await new Miro.Dialog("Error", html`
-				<b>$${takenItem.path}</b> already exists.
-			`, ["Replace", "Rename", "Cancel"]);
-			if (value === 0) {
-				if (await new Miro.Dialog("Replace", html`
-					Are you sure you want to replace <b>$${takenItem.path}</b>?
-				`, ["Yes", "No"]) === 0) {
-					Miro.response(() => {
-						takenItem.delete();
-						render();
-					})(await Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${takenItem.id}`));
+		if (parent !== "trash") {
+			let takenItem;
+			while (takenItem = pipe.find(item => item.name === name && item.parent === parent)) {
+				const value = await new Miro.Dialog("Error", html`
+					<b>$${takenItem.path}</b> already exists.
+				`, ["Replace", "Rename", "Cancel"]);
+				if (value === 0) {
+					if (await new Miro.Dialog("Replace", html`
+						Are you sure you want to replace <b>$${takenItem.path}</b>?
+					`, ["Yes", "No"]) === 0) {
+						Miro.response(() => {
+							takenItem.delete();
+							render();
+						})(await Miro.request("DELETE", `/users/${Miro.data.user.id}/pipe/${takenItem.id}`));
+					}
+				} else if (value === 1) {
+					const dialog = new Miro.Dialog("Rename", html`
+						Enter a new name for <b>$${name}</b>.<br>
+						<div class="mdc-text-field">
+							<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
+							<div class="mdc-line-ripple"></div>
+						</div>
+					`, [{
+						text: "Okay",
+						type: "submit"
+					}, "Cancel"]);
+					await Miro.wait();
+					dialog.form.elements.name.focus();
+					const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
+					dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
+					if (await dialog === 0) {
+						name = dialog.form.elements.name.value;
+					}
+				} else {
+					return false;
 				}
-			} else if (value === 1) {
-				const dialog = new Miro.Dialog("Rename", html`
-					Enter a new name for <b>$${name}</b>.<br>
-					<div class="mdc-text-field">
-						<input name="name" class="mdc-text-field__input" type="text" value="$${name}" maxlength="255" size="24" pattern="^[^/]+$" autocomplete="off" spellcheck="false" required>
-						<div class="mdc-line-ripple"></div>
-					</div>
-				`, [{
-					text: "Okay",
-					type: "submit"
-				}, "Cancel"]);
-				await Miro.wait();
-				dialog.form.elements.name.focus();
-				const extensionIndex = dialog.form.elements.name.value.lastIndexOf(".");
-				dialog.form.elements.name.setSelectionRange(0, extensionIndex > 0 ? extensionIndex : dialog.form.elements.name.value.length);
-				if (await dialog === 0) {
-					name = dialog.form.elements.name.value;
-				}
-			} else {
-				return false;
 			}
 		}
 		return name;
