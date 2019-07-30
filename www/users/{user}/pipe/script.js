@@ -308,7 +308,7 @@ const removeItems = () => {
 			const itemElement = itemElements[0];
 			new Miro.Dialog("Remove Item", html`
 				Are you sure you want to ${inTrash ? "permanently delete" : "move"} <b>$${itemElement._item.name}</b>${inTrash ? "" : " to the trash"}?${inTrash && itemElement._item.type === "/" ? `<br>
-				Items inside directories will also be deleted.` : ""}
+				Items inside deleted directories will also be deleted.` : ""}
 			`, ["Yes", "No"]).then(value => {
 				if (value === 0) {
 					removeItem(itemElement);
