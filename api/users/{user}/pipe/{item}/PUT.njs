@@ -52,7 +52,7 @@ if (isMe) {
 				this.done();
 				return;
 			}
-			if (this.req.body.parent !== "trash") {
+			if (this.req.body.parent !== undefined && this.req.body.parent !== "trash") {
 				if (user.pipe.some(item => item.parent === this.req.body.parent && item.name === found.name)) {
 					this.value = {
 						error: "That name is already taken."
