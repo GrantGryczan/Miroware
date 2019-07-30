@@ -19,7 +19,7 @@ if (isMe) {
 					};
 					this.status = err.statusCode;
 				} else {
-					this.res.set("Content-Type", found.type);
+					this.res.set("Content-Type", "application/octet-stream");
 					this.value = data.Body;
 				}
 				this.done();
