@@ -230,6 +230,7 @@ if (isMe) {
 			}
 			if (this.value.parent === "trash") {
 				this.value.trashed = Date.now();
+				this.value.restore = null;
 			}
 			purgePipeCache(user, [this.value]);
 			this.done();
