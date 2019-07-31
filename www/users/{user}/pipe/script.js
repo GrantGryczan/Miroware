@@ -143,7 +143,10 @@ const PipeItem = class PipeItem {
 		this.typeElement = this.element.querySelector(".cell.type");
 		this.dateElement = this.element.querySelector(".cell.date");
 		this.type = item.type;
-		this.parent = item.parent;
+		if ((this.parent = item.parent) === "trash") {
+			this.trashed = item.trashed;
+			this.restore = item.restore;
+		}
 		this.name = item.name;
 		this.path = item.path;
 		if (this.type === "/") {
@@ -253,8 +256,10 @@ const PipeItem = class PipeItem {
 				cachedParents.splice(cachedParentIndex, 1);
 			}
 			for (const item in pipe) {
-				if (item.parent === this) {
+				if (item.parent === this.id) {
 					item.delete();
+				} else if (item.restore === this.id) {
+					item.restore = null;
 				}
 			}
 		}
@@ -284,6 +289,7 @@ const removeItem = itemElement => {
 			render();
 		}, () => {
 			itemElement.classList.remove("loading");
+			itemElement.classList.add("selected");
 		}));
 	} else {
 		const sourceParent = itemElement._item.parent;
@@ -291,12 +297,16 @@ const removeItem = itemElement => {
 			parent: "trash"
 		}).then(Miro.response(xhr => {
 			itemElement._item.parent = xhr.response.parent;
+			itemElement._item.trashed = xhr.response.trashed;
+			itemElement._item.restore = xhr.response.restore;
 			itemElement.classList.remove("loading");
+			itemElement.classList.add("selected");
 			if (queryParent === sourceParent || queryParent === "trash") {
 				render();
 			}
 		}, () => {
 			itemElement.classList.remove("loading");
+			itemElement.classList.add("selected");
 		}));
 	}
 };
@@ -487,7 +497,13 @@ document.addEventListener("mouseup", evt => {
 						Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
 							parent: targetID
 						}).then(Miro.response(xhr => {
-							itemElement._item.parent = xhr.response.parent;
+							if ((itemElement._item.parent = xhr.response.parent) === "trash") {
+								itemElement._item.trashed = xhr.response.trashed;
+								itemElement._item.restore = xhr.response.restore;
+							} else {
+								delete itemElement._item.trashed;
+								delete itemElement._item.restore;
+							}
 							itemElement.classList.remove("loading");
 							if (queryParent === sourceParent || queryParent === targetID) {
 								render();
@@ -557,6 +573,7 @@ const linkPreview = property.url.querySelector("#linkPreview");
 const actionSave = property.actions.querySelector("#save");
 const actionDownload = property.actions.querySelector("#download");
 const actionEmbed = property.actions.querySelector("#embed");
+const actionRestore = property.actions.querySelector("#restore");
 const actionDelete = property.actions.querySelector("#delete");
 const previewImage = properties.querySelector("#previewImage");
 const previewAudio = properties.querySelector("#previewAudio");
@@ -579,6 +596,7 @@ const updateProperties = () => {
 	actionSave.classList.add("hidden");
 	actionDownload.classList.add("hidden");
 	actionEmbed.classList.add("hidden");
+	actionRestore.classList.add("hidden");
 	actionDelete.classList.add("hidden");
 	previewImage.src = "";
 	previewAudio.src = "";
@@ -645,12 +663,15 @@ const updateProperties = () => {
 		if (Miro.data.isMe) {
 			const trashSelected = items.querySelector("#item_trash.selected");
 			if (trashSelected) {
-				// TODO: unhide empty trash button
+				actionRestore.classList.remove("hidden");
 			} else {
 				const privacy = selected[0]._item.privacy;
 				properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
 				property.privacy.classList.remove("hidden");
 				const inTrash = queryParent === "trash";
+				if (inTrash) {
+					actionRestore.classList.remove("hidden");
+				}
 				actionDelete.title = inTrash ? "Delete" : "Move to trash";
 				actionDelete.textContent = inTrash ? "delete_forever" : "delete";
 				actionDelete.classList.remove("hidden");
@@ -1221,6 +1242,47 @@ if (Miro.data.isMe) {
 			indicateTarget();
 		}
 	}, true);
+	const restoreItem = itemElement => {
+		itemElement.classList.remove("selected");
+		itemElement.classList.add("loading");
+		const targetParent = itemElement._item.restore;
+		Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
+			parent: targetParent
+		}).then(Miro.response(xhr => {
+			itemElement._item.parent = xhr.response.parent;
+			delete itemElement._item.trashed;
+			delete itemElement._item.restore;
+			itemElement.classList.remove("loading");
+			itemElement.classList.add("selected");
+			if (queryParent === "trash" || queryParent === targetParent) {
+				render();
+			}
+		}, () => {
+			itemElement.classList.remove("loading");
+			itemElement.classList.add("selected");
+		}));
+	};
+	actionRestore.addEventListener("click", () => {
+		const itemElements = items.querySelectorAll(".item.selected");
+		if (itemElements.length) {
+			if (itemElements.length === 1) {
+				const itemElement = itemElements[0];
+				new Miro.Dialog("Restore Item", html`
+					Are you sure you want to restore <b>$${itemElement._item.name}</b>?
+				`, ["Yes", "No"]).then(value => {
+					if (value === 0) {
+						restoreItem(itemElement);
+					}
+				});
+			} else {
+				new Miro.Dialog("Restore Items", "Are you sure you want to restore the selected items?", ["Yes", "No"]).then(value => {
+					if (value === 0) {
+						itemElements.forEach(restoreItem);
+					}
+				});
+			}
+		}
+	});
 	actionDelete.addEventListener("click", removeItems);
 	for (const input of properties.elements) {
 		const instanceInput = input instanceof HTMLInputElement;

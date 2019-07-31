@@ -15,7 +15,20 @@ if (isMe) {
 			for (const item of user.pipe) {
 				if (item.path.startsWith(prefix)) {
 					items.push(item);
-					if (item.type !== "/") {
+					if (item.type === "/") {
+						users.updateOne({
+							_id: user._id
+						}, {
+							$set: {
+								"pipe.$[item].restore": null
+							}
+						}, {
+							arrayFilters: [{
+								"item.restore": item.id
+							}],
+							multi: true
+						});
+					} else {
 						fileItems.push(item);
 					}
 				}
