@@ -661,10 +661,8 @@ const updateProperties = () => {
 			}
 		}
 		if (Miro.data.isMe) {
-			const trashSelected = items.querySelector("#item_trash.selected");
-			if (trashSelected) {
-				actionRestore.classList.remove("hidden");
-			} else {
+			const trashDeselected = !items.querySelector("#item_trash.selected");
+			if (trashDeselected) {
 				const privacy = selected[0]._item.privacy;
 				properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
 				property.privacy.classList.remove("hidden");
@@ -676,7 +674,7 @@ const updateProperties = () => {
 				actionDelete.textContent = inTrash ? "delete_forever" : "delete";
 				actionDelete.classList.remove("hidden");
 			}
-			if (selected.length === 1 || !trashSelected) {
+			if (trashDeselected || selected.length === 1) {
 				actionSave.disabled = true;
 				actionSave.classList.remove("hidden");
 			}
