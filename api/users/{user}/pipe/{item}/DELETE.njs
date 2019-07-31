@@ -15,20 +15,7 @@ if (isMe) {
 			for (const item of user.pipe) {
 				if (item.path.startsWith(prefix)) {
 					items.push(item);
-					if (item.type === "/") {
-						users.updateOne({
-							_id: user._id
-						}, {
-							$set: {
-								"pipe.$[item].restore": null
-							}
-						}, {
-							arrayFilters: [{
-								"item.restore": item.id
-							}],
-							multi: true
-						});
-					} else {
+					if (item.type !== "/") {
 						fileItems.push(item);
 					}
 				}
@@ -36,6 +23,22 @@ if (isMe) {
 			this.update.$pull.pipe = {
 				$or: items.map(byDBQueryObject)
 			};
+			for (const item of items) {
+				if (item.type === "/") {
+					users.updateOne({
+						_id: user._id
+					}, {
+						$set: {
+							"pipe.$[item].restore": null
+						}
+					}, {
+						arrayFilters: [{
+							"item.restore": item.id
+						}],
+						multi: true
+					});
+				}
+			}
 			if (fileItems.length) {
 				s3.deleteObjects({
 					Bucket: "miroware-pipe",
