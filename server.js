@@ -129,11 +129,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	})).db("web");
 	const users = db.collection("users");
 	const domain = production ? "miroware.io" : "localhost:8081";
-	const TOKEN_SUPER_COOLDOWN = 300000;
+	const TOKEN_SUPER_COOLDOWN = 5 * 60 * 1000;
 	const cookieOptions = {
 		domain: `.${production ? domain : "localhost"}`,
 		path: "/",
-		maxAge: 2592000000,
+		maxAge: 1000 * 60 * 60 * 24 * 30,
 		secure: production,
 		httpOnly: true,
 		signed: true
@@ -552,19 +552,10 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						}
 					}
 					if (context.user) {
-						const expiry = context.now - cookieOptions.maxAge;
-						context.update = {
-							$pull: {
-								pouch: {
-									used: {
-										$lte: expiry
-									}
-								}
-							}
-						};
+						context.update = {};
 						const hash = youKnow.crypto.hash(auth[1], context.user.salt.buffer);
 						const token = context.user.pouch.find(token => token.value.buffer.equals(hash));
-						if (token && token.used > expiry) {
+						if (token && token.used > context.now - cookieOptions.maxAge) {
 							context.token = token;
 							context.update.$set = {
 								updated: context.now,
@@ -624,5 +615,24 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			plugins: ["iife-wrap"]
 		}
 	});
+	const interval = () => {
+		const aMonthAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
+		users.updateMany({}, {
+			$pull: {
+				pouch: {
+					used: {
+						$lte: aMonthAgo
+					}
+				},
+				pipe: {
+					trashed: {
+						$lte: aMonthAgo
+					}
+				}
+			}
+		});
+	};
+	setInterval(interval, 1000 * 60 * 60);
+	interval();
 	const {load} = cube;
 })();
