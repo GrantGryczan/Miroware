@@ -204,9 +204,8 @@ const PipeItem = class PipeItem {
 		return this[_path];
 	}
 	set path(value) {
-		if (this.type !== "/") {
-			this.element.href = this.url = this.isPrivate() ? "" : `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`;
-		} else if (this.path) {
+		const typeDir = this.type === "/";
+		if (typeDir && this.path) {
 			const prefix = `${this.path}/`;
 			for (const item of pipe) {
 				if (item.path.startsWith(prefix)) {
@@ -215,6 +214,9 @@ const PipeItem = class PipeItem {
 			}
 		}
 		this[_path] = value;
+		if (!typeDir) {
+			this.element.href = this.url = this.isPrivate() ? "" : `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`;
+		}
 	}
 	updateThumbnail() {
 		if (this.type.startsWith("image/")) {
