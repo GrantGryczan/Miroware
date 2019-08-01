@@ -74,8 +74,10 @@ this.value += html`
 					</div>
 				</div>
 				<form id="properties" class="panel side right">
-					<div id="selectionInfo" class="margined"></div>
-					<div id="trashInfo" class="margined"></div>
+					<div id="info" class="margined">
+						<div id="selectionInfo"></div>
+						<div id="trashInfo"></div>
+					</div>
 					<div class="property hidden" data-key="name">
 						<div class="mdc-text-field">
 							<input id="name" name="name" class="mdc-text-field__input" type="text" maxlength="255" pattern="^[^/]+$" autocomplete="off" spellcheck="false" ${isMe ? "required" : "readonly"}>

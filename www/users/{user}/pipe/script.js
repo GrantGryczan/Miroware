@@ -621,7 +621,7 @@ const updateProperties = () => {
 					properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 					property.url._label.classList.add("mdc-floating-label--float-above");
 				} else if (item.parent === "trash") {
-					const daysUntilDeletion = Math.ceil(30 - (Date.now() - item.deleted) / 1000 / 60 / 60 / 24);
+					const daysUntilDeletion = Math.ceil(30 - (Date.now() - item.trashed) / 1000 / 60 / 60 / 24);
 					trashInfo.textContent = `${daysUntilDeletion} day${daysUntilDeletion === 1 ? "" : "s"} until deletion`;
 					trashInfo.classList.remove("hidden");
 				}
