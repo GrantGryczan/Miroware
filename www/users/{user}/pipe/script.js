@@ -215,7 +215,9 @@ const PipeItem = class PipeItem {
 		}
 		this[_path] = value;
 		if (!typeDir) {
-			this.element.href = this.url = this.isPrivate() ? "" : `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`;
+			if (!(this.element.href = this.url = this.isPrivate() ? "" : `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`)) {
+				this.element.removeAttribute("href");
+			}
 		}
 	}
 	updateThumbnail() {
