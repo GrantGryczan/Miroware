@@ -230,17 +230,20 @@
 	color: rgba(255, 255, 255, 0.6);
 }
 .property {
-	margin: 8px 0;
+	margin-top: 8px;
+	&[data-key="url"] > .mdc-text-field {
+		width: calc(100% - 48px);
+	}
+	&[data-key="actions"] {
+		margin: 12px 0;
+	}
+	&[data-key="note"] {
+		opacity: 0.5;
+		font-size: 12px;
+	}
 	& > .mdc-text-field, & > .mdc-select {
 		width: 100%;
 	}
-}
-.property[data-key="url"] > .mdc-text-field {
-	width: calc(100% - 48px);
-}
-.property[data-key="note"] {
-	opacity: 0.5;
-	font-size: 12px;
 }
 .previewMedia {
 	max-width: 100%;
