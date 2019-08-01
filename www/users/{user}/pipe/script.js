@@ -567,8 +567,8 @@ const property = {};
 for (const propertyElement of properties.querySelectorAll("[data-key]")) {
 	(property[propertyElement.getAttribute("data-key")] = propertyElement)._label = propertyElement.querySelector("label");
 }
-const selectionLength = properties.querySelector("#selectionLength");
-const selectionSize = properties.querySelector("#selectionSize");
+const selectionInfo = properties.querySelector("#selectionInfo");
+const trashInfo = properties.querySelector("#trashInfo");
 const linkPreview = property.url.querySelector("#linkPreview");
 const actionSave = property.actions.querySelector("#save");
 const actionDownload = property.actions.querySelector("#download");
@@ -585,6 +585,7 @@ const showProperty = key => {
 };
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
 const updateProperties = () => {
+	trashInfo.classList.add("hidden");
 	for (const propertyElement of Object.values(property)) {
 		propertyElement.classList.add("hidden");
 	}
@@ -602,8 +603,8 @@ const updateProperties = () => {
 	previewAudio.src = "";
 	previewVideo.src = "";
 	const selected = items.querySelectorAll(".item.selected");
-	if (selectionLength.textContent = selected.length) {
-		selectionSize.textContent = getSize(Array.prototype.reduce.call(selected, sizeReducer, 0));
+	if (selected.length) {
+		selectionInfo.textContent = `${selected.length} selected item${selected.length === 1 ? "" : "s"} (${getSize(Array.prototype.reduce.call(selected, sizeReducer, 0))})`;
 		property.actions.classList.remove("hidden");
 		if (selected.length === 1) {
 			const item = selected[0]._item;
@@ -619,6 +620,10 @@ const updateProperties = () => {
 					property.url.classList.remove("hidden");
 					properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 					property.url._label.classList.add("mdc-floating-label--float-above");
+				} else if (item.parent === "trash") {
+					const daysUntilDeletion = Math.ceil(30 - (Date.now() - item.deleted) / 1000 / 60 / 60 / 24);
+					trashInfo.textContent = `${daysUntilDeletion} day${daysUntilDeletion === 1 ? "" : "s"} until deletion`;
+					trashInfo.classList.remove("hidden");
 				}
 				actionDownload.href = notPrivate ? url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeForPipe(item.name)}`;
 				actionDownload.classList.remove("hidden");
@@ -680,7 +685,7 @@ const updateProperties = () => {
 			}
 		}
 	} else {
-		selectionSize.textContent = "0 B";
+		selectionInfo.textContent = "No selected items";
 	}
 };
 property.url.querySelector("#copyURL").addEventListener("click", () => {
