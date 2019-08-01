@@ -205,7 +205,7 @@ const PipeItem = class PipeItem {
 	}
 	set path(value) {
 		if (this.type !== "/") {
-			this.element.href = this.url = `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`;
+			this.element.href = this.url = this.isPrivate() ? "" : `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`;
 		} else if (this.path) {
 			const prefix = `${this.path}/`;
 			for (const item of pipe) {
