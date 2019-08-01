@@ -276,6 +276,10 @@ const PipeItem = class PipeItem {
 	open() {
 		if (this.type === "/") {
 			location.href = this.element.href;
+		} else if (this.parent === "trash") {
+			if (Miro.data.isMe) {
+				restoreItems();
+			}
 		} else {
 			open(this.element.href);
 		}
@@ -312,6 +316,47 @@ const removeItem = itemElement => {
 			itemElement.classList.remove("loading");
 			itemElement.classList.add("selected");
 		}));
+	}
+};
+const restoreItem = itemElement => {
+	itemElement.classList.remove("selected");
+	itemElement.classList.add("loading");
+	const targetParent = itemElement._item.restore;
+	Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
+		parent: targetParent
+	}).then(Miro.response(xhr => {
+		itemElement._item.parent = xhr.response.parent;
+		delete itemElement._item.trashed;
+		delete itemElement._item.restore;
+		itemElement.classList.remove("loading");
+		itemElement.classList.add("selected");
+		if (queryParent === "trash" || queryParent === targetParent) {
+			render();
+		}
+	}, () => {
+		itemElement.classList.remove("loading");
+		itemElement.classList.add("selected");
+	}));
+};
+const restoreItems = () => {
+	const itemElements = items.querySelectorAll(".item.selected");
+	if (itemElements.length) {
+		if (itemElements.length === 1) {
+			const itemElement = itemElements[0];
+			new Miro.Dialog("Restore Item", html`
+				Are you sure you want to restore <b>$${itemElement._item.name}</b>?
+			`, ["Yes", "No"]).then(value => {
+				if (value === 0) {
+					restoreItem(itemElement);
+				}
+			});
+		} else {
+			new Miro.Dialog("Restore Items", "Are you sure you want to restore the selected items?", ["Yes", "No"]).then(value => {
+				if (value === 0) {
+					itemElements.forEach(restoreItem);
+				}
+			});
+		}
 	}
 };
 const removeItems = () => {
@@ -1249,47 +1294,7 @@ if (Miro.data.isMe) {
 			indicateTarget();
 		}
 	}, true);
-	const restoreItem = itemElement => {
-		itemElement.classList.remove("selected");
-		itemElement.classList.add("loading");
-		const targetParent = itemElement._item.restore;
-		Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}`, {}, {
-			parent: targetParent
-		}).then(Miro.response(xhr => {
-			itemElement._item.parent = xhr.response.parent;
-			delete itemElement._item.trashed;
-			delete itemElement._item.restore;
-			itemElement.classList.remove("loading");
-			itemElement.classList.add("selected");
-			if (queryParent === "trash" || queryParent === targetParent) {
-				render();
-			}
-		}, () => {
-			itemElement.classList.remove("loading");
-			itemElement.classList.add("selected");
-		}));
-	};
-	actionRestore.addEventListener("click", () => {
-		const itemElements = items.querySelectorAll(".item.selected");
-		if (itemElements.length) {
-			if (itemElements.length === 1) {
-				const itemElement = itemElements[0];
-				new Miro.Dialog("Restore Item", html`
-					Are you sure you want to restore <b>$${itemElement._item.name}</b>?
-				`, ["Yes", "No"]).then(value => {
-					if (value === 0) {
-						restoreItem(itemElement);
-					}
-				});
-			} else {
-				new Miro.Dialog("Restore Items", "Are you sure you want to restore the selected items?", ["Yes", "No"]).then(value => {
-					if (value === 0) {
-						itemElements.forEach(restoreItem);
-					}
-				});
-			}
-		}
-	});
+	actionRestore.addEventListener("click", restoreItems);
 	actionDelete.addEventListener("click", removeItems);
 	for (const input of properties.elements) {
 		const instanceInput = input instanceof HTMLInputElement;
