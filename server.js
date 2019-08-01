@@ -615,7 +615,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			plugins: ["iife-wrap"]
 		}
 	});
-	const interval = () => {
+	const hourly = () => {
 		const aMonthAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
 		users.updateMany({}, {
 			$pull: {
@@ -632,7 +632,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		});
 	};
-	setInterval(interval, 1000 * 60 * 60);
-	interval();
+	setInterval(hourly, 1000 * 60 * 60);
+	hourly();
 	const {load} = cube;
 })();
