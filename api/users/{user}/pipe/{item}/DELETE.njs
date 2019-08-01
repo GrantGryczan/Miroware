@@ -20,8 +20,10 @@ if (isMe) {
 					}
 				}
 			}
-			this.update.$pull.pipe = {
-				$or: items.map(byDBQueryObject)
+			this.update.$pull = {
+				pipe: {
+					$or: items.map(byDBQueryObject)
+				}
 			};
 			for (const item of items) {
 				if (item.type === "/") {
@@ -71,8 +73,10 @@ if (isMe) {
 					};
 					this.status = err.statusCode;
 				} else {
-					this.update.$pull.pipe = {
-						id: found.id
+					this.update.$pull = {
+						pipe: {
+							id: found.id
+						}
 					};
 					purgePipeCache(user, [found]);
 				}

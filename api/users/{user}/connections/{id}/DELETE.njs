@@ -8,8 +8,10 @@ if (isMe) {
 				};
 				this.status = 422;
 			} else {
-				this.update.$pull.connections = {
-					id: this.params.id
+				this.update.$pull = {
+					connections: {
+						id: this.params.id
+					}
 				};
 			}
 		} else {
