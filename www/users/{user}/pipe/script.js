@@ -762,7 +762,7 @@ actionEmbed.addEventListener("click", () => {
 			<div id="controlsList">
 				<div class="mdc-form-field">
 					<div class="mdc-checkbox">
-						<input id="nodownload" class="mdc-checkbox__native-control" type="checkbox" checked>
+						<input id="nodownload" class="mdc-checkbox__native-control" type="checkbox">
 						<div class="mdc-checkbox__background"></div>
 					</div>
 					<label for="nodownload">Disable download</label>
@@ -813,13 +813,25 @@ actionEmbed.addEventListener("click", () => {
 			if (evt.target.checked) {
 				controlsList.classList.remove("hidden");
 				if (noDownload.checked) {
-					embed.controlsList.add("nodownload");
+					try {
+						embed.controlsList.add("nodownload");
+					} catch {
+						noDownload.checked = false;
+					}
 				}
 				if (noRemotePlayback.checked) {
-					embed.controlsList.add("noremoteplayback");
+					try {
+						embed.controlsList.add("noremoteplayback");
+					} catch {
+						noRemotePlayback.checked = false;
+					}
 				}
 				if (noFullscreen && noFullscreen.checked) {
-					embed.controlsList.add("nofullscreen");
+					try {
+						embed.controlsList.add("nofullscreen");
+					} catch {
+						noFullscreen.checked = false;
+					}
 				}
 			} else {
 				controlsList.classList.add("hidden");
@@ -832,12 +844,19 @@ actionEmbed.addEventListener("click", () => {
 		embedProperties.querySelector("#muted").addEventListener("input", input);
 		const inputControls = evt => {
 			if (evt.target.checked) {
-				embed.controlsList.add(evt.target.id);
-			} else {
-				embed.controlsList.remove(evt.target.id);
-				if (!embed.controlsList.length) {
-					embed.removeAttribute("controlslist");
+				try {
+					embed.controlsList.add(evt.target.id);
+				} catch {
+					new Miro.Dialog("Error", "That option is not supported by your browser.");
+					evt.target.checked = false;
 				}
+			} else {
+				try {
+					embed.controlsList.remove(evt.target.id);
+					if (!embed.controlsList.length) {
+						embed.removeAttribute("controlslist");
+					}
+				} catch {}
 			}
 			updateCode();
 		};
@@ -859,7 +878,10 @@ actionEmbed.addEventListener("click", () => {
 			(noFullscreen = controlsList.querySelector("#nofullscreen")).addEventListener("input", inputControls);
 		}
 		embed.controls = true;
-		embed.controlsList.add("nodownload");
+		if (embed.controlsList) {
+			embed.controlsList.add("nodownload");
+			noDownload.checked = true;
+		}
 	}
 	if (!typeAudio) {
 		embedProperties.insertBefore(html`
