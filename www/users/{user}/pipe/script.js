@@ -163,7 +163,7 @@ const PipeItem = class PipeItem {
 	set type(value) {
 		const typeDir = (this[_type] = value) === "/";
 		this.typeElement.textContent = this.typeElement.title = typeDir ? "" : value;
-		this.iconElement.textContent = this.id === "trash" ? "delete" : (typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : "insert_drive_file"))));
+		this.iconElement.textContent = this.id === "trash" ? "delete" : (typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : (value === "text/html" ? "web" : "insert_drive_file")))));
 		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
 		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
 		setTimeout(this.updateThumbnail.bind(this));
