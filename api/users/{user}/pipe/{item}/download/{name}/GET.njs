@@ -46,7 +46,9 @@ if (isMe) {
 				}
 			};
 			scan(found.id);
-			Promise.all(promises).then(archive.finalize);
+			Promise.all(promises).then(() => {
+				archive.finalize();
+			});
 		} else {
 			s3.getObject({
 				Bucket: "miroware-pipe",

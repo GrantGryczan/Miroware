@@ -102,7 +102,9 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 							}
 						};
 						scan(item.id);
-						Promise.all(promises).then(archive.finalize);
+						Promise.all(promises).then(() => {
+							archive.finalize();
+						});
 					} else {
 						s3.getObject({
 							Bucket: "miroware-pipe",
