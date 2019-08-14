@@ -14,7 +14,7 @@ if (isMe) {
 				throw err;
 			});
 			const data = [];
-			archive.on("data", data.push);
+			archive.on("data", data.push.bind(data));
 			archive.on("end", () => {
 				this.res.set("Content-Type", "application/zip");
 				this.value = Buffer.concat(data);
@@ -46,9 +46,7 @@ if (isMe) {
 				}
 			};
 			scan(found.id);
-			Promise.all(promises).then(() => {
-				archive.finalize();
-			});
+			Promise.all(promises).then(archive.finalize.bind(archive));
 		} else {
 			s3.getObject({
 				Bucket: "miroware-pipe",
