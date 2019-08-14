@@ -45,7 +45,7 @@ if (isMe) {
 					}
 				}
 			};
-			scan(item.id);
+			scan(found.id);
 			Promise.all(promises).then(archive.finalize);
 		} else {
 			s3.getObject({
