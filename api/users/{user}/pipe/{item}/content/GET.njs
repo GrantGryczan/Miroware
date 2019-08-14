@@ -4,7 +4,7 @@ if (isMe) {
 	if (found) {
 		if (found.type === "/") {
 			this.value = {
-				error: "Directories do not have contents."
+				error: "Directories do not have file content."
 			};
 			this.status = 404;
 			this.done();

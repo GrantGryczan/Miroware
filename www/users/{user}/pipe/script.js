@@ -674,14 +674,11 @@ const updateProperties = () => {
 					trashInfo.textContent = `${daysUntilDeletion} day${daysUntilDeletion === 1 ? "" : "s"} until deletion`;
 					trashInfo.classList.remove("hidden");
 				}
-				actionDownload.href = notPrivate ? url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content/${encodeForPipe(item.name)}`;
+				actionDownload.href = `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/download/${encodeForPipe(item.name)}`;
 				actionDownload.classList.remove("hidden");
 				if (item.type === "/") {
 					property.note.classList.remove("hidden");
 				} else {
-					if (notPrivate) {
-						actionDownload.href += "?download";
-					}
 					properties.elements.type._prev = properties.elements.type.value = item.type;
 					showProperty("type");
 					properties.elements.type.parentNode.classList.remove("mdc-text-field--invalid");
