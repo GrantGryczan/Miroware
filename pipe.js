@@ -85,31 +85,24 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 						});
 						archive.pipe(res);
 						const sliceStart = path.lastIndexOf("/") + 1;
-						let itemsToZip = 0;
-						let zippedItems = 0;
+						const promises = [];
 						const scan = parent => {
 							for (const item of user.pipe) {
 								if (item.parent === parent && item.privacy === 0) {
 									if (item.type === "/") {
 										scan(item.id);
 									} else {
-										itemsToZip++;
-										request(`/${user._id}/${item.path}`).then(response => {
+										promises.push(request(`/${user._id}/${item.path}`).then(response => {
 											archive.append(response, {
 												name: item.path.slice(sliceStart)
 											});
-											if (++zippedItems === itemsToZip) {
-												archive.finalize();
-											}
-										});
+										}));
 									}
 								}
 							}
 						};
 						scan(item.id);
-						if (itemsToZip === 0) {
-							archive.finalize();
-						}
+						Promise.all(promises).then(archive.finalize);
 					} else {
 						s3.getObject({
 							Bucket: "miroware-pipe",
