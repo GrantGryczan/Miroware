@@ -683,21 +683,21 @@ const updateProperties = () => {
 					property.type._label.classList.add("mdc-floating-label--float-above");
 					let showEmbedAction = notPrivate;
 					if (item.type.startsWith("image/")) {
-						previewImage.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`;
+						previewImage.src = notPrivate ? `${item.url}?v=${Date.now()}` : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`;
 						previewImage.classList.remove("hidden");
 						previewAudio.classList.add("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("audio/")) {
 						previewImage.classList.add("hidden");
-						previewAudio.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`;
+						previewAudio.src = notPrivate ? `${item.url}?v=${Date.now()}` : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`;
 						previewAudio.classList.remove("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("video/")) {
 						previewImage.classList.add("hidden");
 						previewAudio.classList.add("hidden");
-						previewVideo.src = notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`;
+						previewVideo.src = notPrivate ? `${item.url}?v=${Date.now()}` : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`;
 						previewVideo.classList.remove("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type !== "text/html") {
