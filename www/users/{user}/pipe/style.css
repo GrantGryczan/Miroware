@@ -182,7 +182,7 @@
 .cell {
 	line-height: 42px;
 	font-size: 14px;
-	padding: 0 0.25em;
+	margin: 0 0.25em;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	&.sort > button {
@@ -199,7 +199,7 @@
 		display: none;
 		width: 100%;
 		height: calc(100% - 42px);
-		padding: 0;
+		margin: 0;
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: contain;
