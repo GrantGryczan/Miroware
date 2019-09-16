@@ -182,9 +182,12 @@
 .cell {
 	line-height: 42px;
 	font-size: 14px;
-	margin: 0 0.25em;
+	padding: 0 0.25em;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	&.view, &.icon {
+		text-overflow: clip;
+	}
 	&.sort > button {
 		opacity: 0;
 		transition: opacity 0.15s ease-out;
@@ -199,7 +202,7 @@
 		display: none;
 		width: 100%;
 		height: calc(100% - 42px);
-		margin: 0;
+		padding: 0;
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: contain;
