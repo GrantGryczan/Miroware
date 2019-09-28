@@ -655,6 +655,7 @@ const updateProperties = () => {
 	if (selected.length) {
 		selectionInfo.textContent = `${selected.length} selected item${selected.length === 1 ? "" : "s"} (${getSize(Array.prototype.reduce.call(selected, sizeReducer, 0))})`;
 		property.actions.classList.remove("hidden");
+		const trashDeselected = !items.querySelector("#item_trash.selected");
 		if (selected.length === 1) {
 			const item = selected[0]._item;
 			const notPrivate = !item.isPrivate();
@@ -662,7 +663,7 @@ const updateProperties = () => {
 			showProperty("name");
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
-			if (item.id !== "trash") {
+			if (trashDeselected) {
 				const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.path)}` : item.url;
 				if (notPrivate) {
 					properties.elements.url._prev = properties.elements.url.value = linkPreview.href = url;
@@ -670,7 +671,7 @@ const updateProperties = () => {
 					properties.elements.url.parentNode.classList.remove("mdc-text-field--invalid");
 					property.url._label.classList.add("mdc-floating-label--float-above");
 				} else if (item.parent === "trash") {
-					const daysUntilDeletion = Math.ceil(30 - Math.max(0, Date.now() - item.trashed) / 1000 / 60 / 60 / 24);
+					const daysUntilDeletion = Math.ceil(30 - Math.max(0, Date.now() - item.trashed) / (1000 * 60 * 60 * 24));
 					trashInfo.textContent = `${daysUntilDeletion} day${daysUntilDeletion === 1 ? "" : "s"} until deletion`;
 					trashInfo.classList.remove("hidden");
 				}
@@ -708,9 +709,11 @@ const updateProperties = () => {
 					}
 				}
 			}
+		} else if (trashDeselected) {
+			actionDownload.href = `https://api.miroware.io/users/${Miro.data.user.id}/pipe/download?items=${Array.prototype.map.call(selected, itemElement => itemElement._item.id).join(",")}`;
+			actionDownload.classList.remove("hidden");
 		}
 		if (Miro.data.isMe) {
-			const trashDeselected = !items.querySelector("#item_trash.selected");
 			if (trashDeselected) {
 				const privacy = selected[0]._item.privacy;
 				properties.elements.privacy._prev = properties.elements.privacy.value = Array.prototype.every.call(selected, itemElement => privacy === itemElement._item.privacy) ? String(privacy) : "";
