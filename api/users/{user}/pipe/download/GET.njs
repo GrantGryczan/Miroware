@@ -13,7 +13,7 @@ if (isMe) {
 			this.done();
 		});
 		const promises = [];
-		for (found of this.req.query.items.split(",").map(id => user.pipe.find(item => item.id === id))) {
+		for (const found of this.req.query.items.split(",").map(id => user.pipe.find(item => item.id === id))) {
 			if (found.id && found.id !== "trash") {
 				if (found.type === "/") {
 					const sliceStart = found.path.lastIndexOf("/") + 1;
