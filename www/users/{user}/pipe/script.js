@@ -656,7 +656,8 @@ const updateProperties = () => {
 		selectionInfo.textContent = `${selected.length} selected item${selected.length === 1 ? "" : "s"} (${getSize(Array.prototype.reduce.call(selected, sizeReducer, 0))})`;
 		property.actions.classList.remove("hidden");
 		const trashDeselected = !items.querySelector("#item_trash.selected");
-		if (selected.length === 1) {
+		const oneSelected = selected.length === 1;
+		if (oneSelected) {
 			const item = selected[0]._item;
 			const notPrivate = !item.isPrivate();
 			properties.elements.name._prev = properties.elements.name.value = item.name;
@@ -726,7 +727,7 @@ const updateProperties = () => {
 				actionDelete.textContent = inTrash ? "delete_forever" : "delete";
 				actionDelete.classList.remove("hidden");
 			}
-			if (trashDeselected || selected.length === 1) {
+			if (trashDeselected || oneSelected) {
 				actionSave.disabled = true;
 				actionSave.classList.remove("hidden");
 			}
