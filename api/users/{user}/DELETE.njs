@@ -11,6 +11,7 @@ if (isMe) {
 				}
 			}, err => {
 				if (err) {
+					console.error(err);
 					this.value = {
 						error: err.message
 					};

@@ -49,6 +49,7 @@ if (isMe) {
 					}
 				}, err => {
 					if (err) {
+						console.error(err);
 						this.value = {
 							error: err.message
 						};
@@ -68,6 +69,7 @@ if (isMe) {
 				Key: found.id
 			}, err => {
 				if (err) {
+					console.error(err);
 					this.value = {
 						error: err.message
 					};

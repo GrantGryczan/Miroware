@@ -109,6 +109,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 							Key: item.id
 						}, (err, data) => {
 							if (err) {
+								console.error(err);
 								res.status(err.statusCode).send(err.message);
 							} else {
 								res.set("Content-Type", item.type).set("Content-Length", String(data.Body.length)).send(data.Body);

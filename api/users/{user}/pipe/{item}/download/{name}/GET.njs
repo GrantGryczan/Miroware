@@ -58,6 +58,7 @@ if (found) {
 			Key: found.id
 		}, (err, data) => {
 			if (err) {
+				console.error(err);
 				this.value = {
 					error: err.message
 				};
