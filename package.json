@@ -21,7 +21,7 @@
 	"homepage": "https://miroware.io/",
 	"dependencies": {
 		"archiver": "^3.1.1",
-		"aws-sdk": "^2.553.0",
+		"aws-sdk": "^2.554.0",
 		"babel-plugin-iife-wrap": "^1.1.0",
 		"body-parser": "^1.19.0",
 		"bson-ext": "^2.0.3",
@@ -29,7 +29,7 @@
 		"discord.js": "github:hydrabolt/discord.js",
 		"express": "^4.17.1",
 		"fs-extra": "^5.0.0",
-		"google-auth-library": "^5.5.0",
+		"google-auth-library": "^5.5.1",
 		"http-proxy": "^1.18.0",
 		"mime": "^2.4.4",
 		"mongodb": "^3.3.3",
