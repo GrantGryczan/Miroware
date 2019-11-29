@@ -92,7 +92,7 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 									if (item.type === "/") {
 										scan(item.id);
 									} else {
-										promises.push(request(`/${user._id}/${item.path}`).then(response => {
+										promises.push(request(`/${user._id}/${encodeForPipe(item.path)}`).then(response => {
 											archive.append(response, {
 												name: item.path.slice(sliceStart)
 											});
