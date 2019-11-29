@@ -12,6 +12,8 @@ const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
+const encodedSlashes = /%2F/g;
+const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
 const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[/:]/;
 (async () => {
 	require("replthis")(v => eval(v));
