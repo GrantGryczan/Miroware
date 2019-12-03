@@ -34,7 +34,7 @@ form.addEventListener("change", onInput);
 const setForm = () => {
 	if (changed.includes(form.elements.email)) {
 		new Miro.Dialog("Account Verification", html`
-			A verification email has sent to <b>$${form.elements.email.value}</b>.
+			A verification email has sent to <b>$${form.elements.email.value}</b>. Be sure to check your spam!
 		`).then(Miro.reload);
 	}
 	if (changed.includes(form.elements.name)) {
@@ -111,9 +111,8 @@ add.addEventListener("click", Miro.checkSuper.bind(null, () => {
 }));
 form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 window.onbeforeunload = () => !submit.disabled || undefined;
-const respondReload = Miro.response(Miro.reload);
 const deleteAccount = Miro.checkSuper.bind(null, () => {
-	Miro.request("DELETE", "/users/@me").then(respondReload);
+	Miro.request("DELETE", "/users/@me").then(Miro.response(Miro.reload));
 });
 const checkDeleteAccount = value => {
 	if (value === 0) {
@@ -136,25 +135,26 @@ const confirmDownload = value => {
 form.querySelector("#download").addEventListener("click", () => {
 	new Miro.Dialog("Download", "Would you like a copy of your user data?", ["Yes", "No"]).then(confirmDownload);
 });
+const verificationResent = Miro.response(() => {
+	new Miro.Dialog("Account Verification", html`A verification email has been resent to <b>$${form.elements.email.value}</b>.`);
+});
 const verifyEmail = form.querySelector("#verifyEmail");
-if (verifyEmail) {
-	const confirmVerifyEmail = value => {
+const confirmVerifyEmail = value => {
+	if (value === 0) {
+		Miro.request("POST", "/users/@me/verification", {}, {}).then(verificationResent);
+	}
+};
+verifyEmail.addEventListener("click", () => {
+	new Miro.Dialog("Account Verification", "Are you sure you want to resend the verification email?", ["Yes", "No"]).then(confirmVerifyEmail);
+});
+const cancelVerify = form.querySelector("#cancelVerify");
+if (cancelVerify) {
+	const confirmCancelVerify = value => {
 		if (value === 0) {
-			Miro.request("POST", "/users/@me/verification", {}, {}).then(respondReload);
+			Miro.request("DELETE", "/users/@me/verification").then(verificationResent);
 		}
 	};
-	verifyEmail.addEventListener("click", () => {
-		new Miro.Dialog("Account Verification", "Are you sure you want to resend the verification email?", ["Yes", "No"]).then(confirmVerifyEmail);
+	cancelVerify.addEventListener("click", () => {
+		new Miro.Dialog("Account Verification", "Are you sure you want to cancel the account verification?", ["Yes", "No"]).then(confirmCancelVerify);
 	});
-	const cancelVerify = form.querySelector("#cancelVerify");
-	if (cancelVerify) {
-		const confirmCancelVerify = value => {
-			if (value === 0) {
-				Miro.request("DELETE", "/users/@me/verification").then(respondReload);
-			}
-		};
-		cancelVerify.addEventListener("click", () => {
-			new Miro.Dialog("Account Verification", "Are you sure you want to cancel the account verification?", ["Yes", "No"]).then(confirmCancelVerify);
-		});
-	}
 }

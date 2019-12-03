@@ -4,7 +4,7 @@ if (isMe) {
 		verifyEmail(user, this.update.$set);
 	} else {
 		this.value = {
-			error: "You cannot resend verification without an unverified email."
+			error: "You cannot resend verification if your email is already verified."
 		};
 		this.status = 422;
 	}

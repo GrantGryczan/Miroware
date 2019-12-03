@@ -7,7 +7,7 @@ if (user) {
 		_id: {
 			$ne: user._id
 		}
-	})) {
+	})) { // if the email being verified is already verified by a different user
 		users.updateOne({
 			_id: user._id
 		}, {
@@ -27,6 +27,7 @@ if (user) {
 				emailCode: null
 			}
 		});
+		createToken(this, user);
 		this.redirect = "/account/verification/done/?result=success";
 		this.done();
 		return;

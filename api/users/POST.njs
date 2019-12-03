@@ -59,7 +59,6 @@ if (testEmail(this.req.body.email)) {
 				this.done();
 				return;
 			}
-			const token = youKnow.crypto.token();
 			const salt = youKnow.crypto.salt();
 			const connection = {
 				service: data.connection[0],
@@ -70,13 +69,7 @@ if (testEmail(this.req.body.email)) {
 			}
 			const insertData = {
 				salt,
-				pouch: [{
-					value: youKnow.crypto.hash(token, salt),
-					used: this.now,
-					role: 0,
-					super: this.now,
-					ip: this.req.realIP
-				}],
+				pouch: [],
 				connections: [connection],
 				created: this.now,
 				updated: this.now,
@@ -105,12 +98,9 @@ if (testEmail(this.req.body.email)) {
 				insertData.unverified = this.req.body.email;
 				verifyEmail(insertData);
 			}
-			const id = String((await users.insertOne(insertData)).ops[0]._id);
 			this.value = {
-				id,
-				token
+				id: String((await users.insertOne(insertData)).ops[0]._id)
 			};
-			this.res.cookie("auth", Buffer.from(`${id}:${token}`).toString("base64"), cookieOptions);
 			this.done();
 		});
 	}

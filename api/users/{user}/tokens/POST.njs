@@ -7,4 +7,5 @@ if (!this.user || this.user.role !== 0) {
 	return;
 }
 const {user} = await parseUser(this);
-addToken(this, user);
+this.value = createToken(this, user);
+this.done();

@@ -49,6 +49,15 @@ const executeCaptcha = resolve => {
 	captchaCallbacks.push(resolve);
 	grecaptcha.execute();
 };
+const clickResend = () => {
+	new Miro.Dialog("Account Verification", "Are you sure you want to resend the verification email?", ["Yes", "No"]).then(value => {
+		if (value === 0) {
+			Miro.request("POST", "/users/@me/verification", {}, {}).then(Miro.response(() => {
+				new Miro.Dialog("Account Verification", "A verification email has been resent.");
+			}));
+		}
+	});
+};
 const signUp = async (service, code) => Miro.request("POST", "/users", {
 	"X-Captcha": await new Promise(executeCaptcha)
 }, {
@@ -57,10 +66,28 @@ const signUp = async (service, code) => Miro.request("POST", "/users", {
 	name: signupDialog.form.elements.name.value,
 	birth: +new Date(signupDialog.form.elements.birth.value)
 });
+const finishSignup = () => {
+	new Miro.Dialog("Account Verification", html`
+		A verification email has been sent to <b>$${signupDialog.form.elements.email.value}</b>. Be sure to check your spam!<br>
+		If your email is not verified within 30 days, your account will be removed.<br>
+		Click <a name="verifyEmail" href="javascript:;">here</a> to resend the verification email.
+	`).form.elements.verifyEmail.addEventListener("click", clickResend);
+};
 const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
 	connection: `${service} ${btoa(code)}`,
 	email: loginForm.elements.email.value
 });
+const finishLogin = xhr => {
+	if (xhr.response.unverified) {
+		new Miro.Dialog("Account Verification", html`
+			A verification email has been sent to <b>$${loginForm.elements.email.value}</b>. Be sure to check your spam!<br>
+			If your email is not verified within 30 days, your account will be removed.<br>
+			Click <a name="verifyEmail" href="javascript:;">here</a> to resend the verification email.
+		`).form.elements.verifyEmail.addEventListener("click", clickResend);
+	} else {
+		Miro.reload();
+	}
+};
 loginForm.addEventListener("submit", evt => {
 	evt.preventDefault();
 	Miro.formState(loginForm, false);
@@ -70,15 +97,17 @@ loginForm.addEventListener("submit", evt => {
 			type: "submit"
 		}, "Cancel"]).then(value => {
 			if (value === 0) {
-				Miro.auth("Signup", "Secure your Miroware account by connecting it to a login method.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(Miro.reload);
+				Miro.auth("Signup", "Secure your Miroware account by connecting it to a login method.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(finishSignup);
 			} else {
 				Miro.formState(loginForm, true);
 			}
 		});
 		signupDialog.form.elements.email.value = loginForm.elements.email.value;
 		signupDialog.form.elements.email.parentNode.querySelector("label").classList.add("mdc-floating-label--float-above");
-		setTimeout(signupDialog.form.elements.name.focus.bind(signupDialog.form.elements.name));
+		setTimeout(() => {
+			signupDialog.form.elements.name.focus();
+		});
 	} else {
-		Miro.auth("Login", "Choose a login method.", logIn, dialogCallback).then(Miro.reload);
+		Miro.auth("Login", "Choose a login method.", logIn, dialogCallback).then(finishLogin);
 	}
 });

@@ -337,7 +337,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		});
 	};
-	const addToken = (context, user) => {
+	const createToken = (context, user) => {
 		const token = youKnow.crypto.token();
 		users.updateOne({
 			_id: user._id
@@ -353,12 +353,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		});
 		const id = String(user._id);
-		context.value = {
+		context.res.cookie("auth", Buffer.from(`${id}:${token}`).toString("base64"), cookieOptions);
+		return {
 			id,
 			token
 		};
-		context.res.cookie("auth", Buffer.from(`${id}:${token}`).toString("base64"), cookieOptions);
-		context.done();
 	};
 	const sanitizeConcat = (context, put) => new Promise(resolve => {
 		const concat = {
