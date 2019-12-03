@@ -517,7 +517,7 @@ Miro.auth = function(title, message, send, dialogCallback, creation) {
 	if (dialogCallback instanceof Function) {
 		dialogCallback(authDialog);
 	}
-	return new Promise((resolve, rejectAuth) => {
+	return new Promise((resolve, reject) => {
 		resolveAuth = resolve;
 		rejectAuth = reject;
 	});
