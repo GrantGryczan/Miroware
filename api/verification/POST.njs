@@ -1,10 +1,16 @@
 if (testEmail(this.req.body.email)) {
 	const user = await users.findOne({
-		email: this.req.body.email.trim().toLowerCase()
+		unverified: this.req.body.email.trim().toLowerCase()
 	});
 	if (user) {
 		if (user.emailCode) {
-			verifyEmail(user, this.update.$set);
+			const update = {
+				$set: {}
+			};
+			verifyEmail(user, update.$set);
+			users.updateOne({
+				_id: user._id
+			}, update);
 		} else {
 			this.value = {
 				error: "You cannot resend verification if your email is already verified."
