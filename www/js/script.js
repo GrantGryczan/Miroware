@@ -321,8 +321,8 @@ Miro.response = (success, failure) => async xhr => {
 		}
 	} else if (!xhr._aborted) {
 		const error = (xhr.response && xhr.response.error && html`${xhr.response.error}`) || xhr.statusText || "An unknown error occurred.";
-		if (failure instanceof Function) {
-			failure(xhr, error);
+		if (failure instanceof Function && failure(xhr, error)) {
+			return; // if the failure function returns truthy, do not display the default error dialog
 		}
 		await new Miro.Dialog("Error", error);
 	}
@@ -392,10 +392,9 @@ const catchAuth = err => {
 };
 const closeAndResolveAuth = Miro.response(xhr => {
 	authDialog.close(-2);
-	resolveAuth(xhr);
+	return resolveAuth(xhr);
 }, xhr => {
-	authDialog.close(-2);
-	rejectAuth(xhr);
+	return rejectAuth(xhr);
 });
 const clickAuth = service => function() {
 	const notPassword = service !== "password";
@@ -520,7 +519,7 @@ Miro.auth = function(title, message, send, dialogCallback, creation) {
 	return new Promise((resolve, reject) => {
 		resolveAuth = resolve;
 		rejectAuth = reject;
-	});
+	}).catch(doNothing);
 };
 const putToken = (service, code) => Miro.request("PUT", "/token", {}, {
 	connection: `${service} ${btoa(code)}`

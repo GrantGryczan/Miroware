@@ -79,15 +79,14 @@ const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
 	connection: `${service} ${btoa(code)}`,
 	email: loginForm.elements.email.value
 });
-const finishLogin = xhr => {
+const loginFail = xhr => {
 	if (xhr.response.unverified) {
 		new Miro.Dialog("Account Verification", html`
 			A verification email has been sent to <b>$${loginForm.elements.email.value}</b>. Be sure to check your spam!<br>
 			If your email is not verified within 30 days, your account will be removed.<br>
 			Click <a id="verifyEmail" href="javascript:;">here</a> to resend the verification email.
 		`).then(enableLoginForm).form.querySelector("#verifyEmail").addEventListener("click", clickResend);
-	} else {
-		Miro.reload();
+		return true;
 	}
 };
 loginForm.addEventListener("submit", evt => {
@@ -110,6 +109,6 @@ loginForm.addEventListener("submit", evt => {
 			signupDialog.form.elements.name.focus();
 		});
 	} else {
-		Miro.auth("Login", "Choose a login method.", logIn, dialogCallback).then(finishLogin);
+		Miro.auth("Login", "Choose a login method.", logIn, dialogCallback).then(Miro.reload).catch(loginFail);
 	}
 });
