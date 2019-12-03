@@ -25,16 +25,18 @@ forgot.addEventListener("click", () => {
 		}
 	});
 });
-const enableFormOnAuthCancel = value => {
-	if (value !== -2) {
-		Miro.formState(loginForm, true);
-	}
+const enableLoginForm = () => {
+	Miro.formState(loginForm, true);
 };
 const dialogCallback = dialog => {
 	dialog.content.appendChild(document.createElement("br"));
 	dialog.content.appendChild(document.createElement("br"));
 	dialog.content.appendChild(signup ? captchaElem : forgot);
-	dialog.then(enableFormOnAuthCancel);
+	dialog.then(value => {
+		if (value !== -2) {
+			enableLoginForm();
+		}
+	});
 };
 let signupDialog;
 const captchaCallbacks = [];
@@ -70,8 +72,8 @@ const finishSignup = () => {
 	new Miro.Dialog("Account Verification", html`
 		A verification email has been sent to <b>$${signupDialog.form.elements.email.value}</b>. Be sure to check your spam!<br>
 		If your email is not verified within 30 days, your account will be removed.<br>
-		Click <a name="verifyEmail" href="javascript:;">here</a> to resend the verification email.
-	`).form.elements.verifyEmail.addEventListener("click", clickResend);
+		Click <a id="verifyEmail" href="javascript:;">here</a> to resend the verification email.
+	`).then(enableLoginForm).form.elements.querySelector("#verifyEmail").addEventListener("click", clickResend);
 };
 const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
 	connection: `${service} ${btoa(code)}`,
@@ -82,8 +84,8 @@ const finishLogin = xhr => {
 		new Miro.Dialog("Account Verification", html`
 			A verification email has been sent to <b>$${loginForm.elements.email.value}</b>. Be sure to check your spam!<br>
 			If your email is not verified within 30 days, your account will be removed.<br>
-			Click <a name="verifyEmail" href="javascript:;">here</a> to resend the verification email.
-		`).form.elements.verifyEmail.addEventListener("click", clickResend);
+			Click <a id="verifyEmail" href="javascript:;">here</a> to resend the verification email.
+		`).then(enableLoginForm).form.elements.querySelector("#verifyEmail").addEventListener("click", clickResend);
 	} else {
 		Miro.reload();
 	}
@@ -99,7 +101,7 @@ loginForm.addEventListener("submit", evt => {
 			if (value === 0) {
 				Miro.auth("Signup", "Secure your Miroware account by connecting it to a login method.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(finishSignup);
 			} else {
-				Miro.formState(loginForm, true);
+				enableLoginForm();
 			}
 		});
 		signupDialog.form.elements.email.value = loginForm.elements.email.value;
