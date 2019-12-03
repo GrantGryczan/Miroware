@@ -18,7 +18,7 @@ this.value += html`
 					<p class="mdc-text-field-helper-text">
 						A verification email has been sent to <b>$${this.user.unverified}</b>. Click <a id="verifyEmail" href="javascript:;">here</a> to resend or click <a id="cancelVerify" href="javascript:;">here</a> to cancel. Be sure to check your spam!
 					</p>` : html`<br>`) + html`
-					<div class="mdc-form-field">
+					<div class="mdc-form-field margined">
 						<div class="mdc-checkbox">
 							<input id="publicEmail" name="publicEmail" class="mdc-checkbox__native-control" type="checkbox"${this.user.publicEmail ? " checked" : ""}>
 							<div class="mdc-checkbox__background"></div>
