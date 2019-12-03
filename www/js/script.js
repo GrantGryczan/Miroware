@@ -380,7 +380,7 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 let authDialog;
 let sendAuth;
 let resolveAuth;
-let rejecteAuth;
+let rejectAuth;
 const authFailed = data => {
 	if (data) {
 		new Miro.Dialog("Error", (data.response && data.response.error && html`${xhr.response.error}`) || data.statusText || data.details || data.error || data);
