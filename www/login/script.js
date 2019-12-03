@@ -109,6 +109,6 @@ loginForm.addEventListener("submit", evt => {
 			signupDialog.form.elements.name.focus();
 		});
 	} else {
-		Miro.auth("Login", "Choose a login method.", logIn, dialogCallback, undefined, false, Miro.reload, loginFail);
+		Miro.auth("Login", "Choose a login method.", logIn, dialogCallback, false, Miro.reload, loginFail);
 	}
 });
