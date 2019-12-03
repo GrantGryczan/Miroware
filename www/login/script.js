@@ -54,8 +54,11 @@ const executeCaptcha = resolve => {
 const clickResend = () => {
 	new Miro.Dialog("Account Verification", "Are you sure you want to resend the verification email?", ["Yes", "No"]).then(value => {
 		if (value === 0) {
-			Miro.request("POST", "/users/@me/verification", {}, {}).then(Miro.response(() => {
-				new Miro.Dialog("Account Verification", "A verification email has been resent. Be sure to check your spam!");
+			const email = (signup ? signupDialog.form : loginForm).elements.email.value;
+			Miro.request("POST", "/verification", {}, {
+				email
+			}).then(Miro.response(() => {
+				new Miro.Dialog("Account Verification", html`A verification email has been resent to <b>$${email}</b>. Be sure to check your spam!`);
 			}));
 		}
 	});

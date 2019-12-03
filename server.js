@@ -215,7 +215,13 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			to: `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`,
 			subject: "Miroware / Account Verification",
 			text: "Verify your Miroware account.",
-			html: html` Click the following link to verify your Miroware account.<br> <a href="${verifyLink}">${verifyLink}</a> <p> <i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i> </p> `
+			html: html`
+				Click the following link to verify your Miroware account.<br>
+				<a href="${verifyLink}">${verifyLink}</a>
+				<p>
+					<i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i>
+				</p>
+			`
 		});
 	};
 	const connect = (context, user) => {

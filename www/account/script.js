@@ -136,7 +136,7 @@ form.querySelector("#download").addEventListener("click", () => {
 	new Miro.Dialog("Download", "Would you like a copy of your user data?", ["Yes", "No"]).then(confirmDownload);
 });
 const verificationResent = Miro.response(() => {
-	new Miro.Dialog("Account Verification", "A verification email has been resent. Be sure to check your spam!");
+	new Miro.Dialog("Account Verification", html`A verification email has been resent to <b>$${form.elements.email.value}</b>. Be sure to check your spam!`);
 });
 const verifyEmail = form.querySelector("#verifyEmail");
 const confirmVerifyEmail = value => {
