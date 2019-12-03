@@ -380,6 +380,7 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 let authDialog;
 let sendAuth;
 let resolveAuth;
+let rejecteAuth;
 const authFailed = data => {
 	if (data) {
 		new Miro.Dialog("Error", (data.response && data.response.error && html`${xhr.response.error}`) || data.statusText || data.details || data.error || data);
@@ -392,6 +393,9 @@ const catchAuth = err => {
 const closeAndResolveAuth = Miro.response(xhr => {
 	authDialog.close(-2);
 	resolveAuth(xhr);
+}, xhr => {
+	authDialog.close(-2);
+	rejectAuth(xhr);
 });
 const clickAuth = service => function() {
 	const notPassword = service !== "password";
@@ -513,8 +517,9 @@ Miro.auth = function(title, message, send, dialogCallback, creation) {
 	if (dialogCallback instanceof Function) {
 		dialogCallback(authDialog);
 	}
-	return new Promise(resolve => {
+	return new Promise((resolve, rejectAuth) => {
 		resolveAuth = resolve;
+		rejectAuth = reject;
 	});
 };
 const putToken = (service, code) => Miro.request("PUT", "/token", {}, {

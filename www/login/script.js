@@ -55,7 +55,7 @@ const clickResend = () => {
 	new Miro.Dialog("Account Verification", "Are you sure you want to resend the verification email?", ["Yes", "No"]).then(value => {
 		if (value === 0) {
 			Miro.request("POST", "/users/@me/verification", {}, {}).then(Miro.response(() => {
-				new Miro.Dialog("Account Verification", "A verification email has been resent.");
+				new Miro.Dialog("Account Verification", "A verification email has been resent. Be sure to check your spam!");
 			}));
 		}
 	});
@@ -73,7 +73,7 @@ const finishSignup = () => {
 		A verification email has been sent to <b>$${signupDialog.form.elements.email.value}</b>. Be sure to check your spam!<br>
 		If your email is not verified within 30 days, your account will be removed.<br>
 		Click <a id="verifyEmail" href="javascript:;">here</a> to resend the verification email.
-	`).then(enableLoginForm).form.elements.querySelector("#verifyEmail").addEventListener("click", clickResend);
+	`).then(enableLoginForm).form.querySelector("#verifyEmail").addEventListener("click", clickResend);
 };
 const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
 	connection: `${service} ${btoa(code)}`,
@@ -85,7 +85,7 @@ const finishLogin = xhr => {
 			A verification email has been sent to <b>$${loginForm.elements.email.value}</b>. Be sure to check your spam!<br>
 			If your email is not verified within 30 days, your account will be removed.<br>
 			Click <a id="verifyEmail" href="javascript:;">here</a> to resend the verification email.
-		`).then(enableLoginForm).form.elements.querySelector("#verifyEmail").addEventListener("click", clickResend);
+		`).then(enableLoginForm).form.querySelector("#verifyEmail").addEventListener("click", clickResend);
 	} else {
 		Miro.reload();
 	}
