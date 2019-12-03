@@ -151,7 +151,7 @@ const cancelVerify = form.querySelector("#cancelVerify");
 if (cancelVerify) {
 	const confirmCancelVerify = value => {
 		if (value === 0) {
-			Miro.request("DELETE", "/users/@me/verification").then(verificationResent);
+			Miro.request("DELETE", "/users/@me/verification").then(Miro.response(Miro.reload));
 		}
 	};
 	cancelVerify.addEventListener("click", () => {
