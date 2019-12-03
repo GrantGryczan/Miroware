@@ -392,9 +392,13 @@ const catchAuth = err => {
 };
 const closeAndResolveAuth = Miro.response(xhr => {
 	authDialog.close(-2);
-	return resolveAuth(xhr);
+	if (resolveAuth instanceof Function) {
+		return resolveAuth(xhr);
+	}
 }, xhr => {
-	return rejectAuth(xhr);
+	if (rejectAuth instanceof Function) {
+		return rejectAuth(xhr);
+	}
 });
 const clickAuth = service => function() {
 	const notPassword = service !== "password";
@@ -489,7 +493,7 @@ const auths = {
 		});
 	}
 };
-Miro.auth = function(title, message, send, dialogCallback, creation) {
+Miro.auth = function(title, message, send, dialogCallback, creation, resolve, reject) {
 	if (!(typeof message === "string")) {
 		throw new MiroError("The `message` parameter must be a string.");
 	}
@@ -516,10 +520,8 @@ Miro.auth = function(title, message, send, dialogCallback, creation) {
 	if (dialogCallback instanceof Function) {
 		dialogCallback(authDialog);
 	}
-	return new Promise((resolve, reject) => {
-		resolveAuth = resolve;
-		rejectAuth = reject;
-	});
+	resolveAuth = resolve;
+	rejectAuth = reject;
 };
 const putToken = (service, code) => Miro.request("PUT", "/token", {}, {
 	connection: `${service} ${btoa(code)}`
@@ -532,7 +534,7 @@ Miro.checkSuper = success => {
 		if (xhr.response.super) {
 			success(xhr);
 		} else {
-			Miro.auth("Security", "You must confirm the validity of your credentials before continuing.", putToken).then(success).catch(Miro.doNothing);
+			Miro.auth("Security", "You must confirm the validity of your credentials before continuing.", putToken, undefined, false, success);
 		}
 	}));
 };

@@ -98,7 +98,7 @@ loginForm.addEventListener("submit", evt => {
 			type: "submit"
 		}, "Cancel"]).then(value => {
 			if (value === 0) {
-				Miro.auth("Signup", "Secure your Miroware account by connecting it to a login method.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(finishSignup).catch(Miro.doNothing);
+				Miro.auth("Signup", "Secure your Miroware account by connecting it to a login method.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true, finishSignup);
 			} else {
 				enableLoginForm();
 			}
@@ -109,6 +109,6 @@ loginForm.addEventListener("submit", evt => {
 			signupDialog.form.elements.name.focus();
 		});
 	} else {
-		Miro.auth("Login", "Choose a login method.", logIn, dialogCallback).then(Miro.reload).catch(loginFail);
+		Miro.auth("Login", "Choose a login method.", logIn, dialogCallback, undefined, false, Miro.reload, loginFail);
 	}
 });

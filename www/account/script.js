@@ -107,7 +107,7 @@ const requestConnections = Miro.checkSuper.bind(null, () => {
 	Miro.request("GET", "/users/@me/connections").then(connectionsResponse);
 });
 add.addEventListener("click", Miro.checkSuper.bind(null, () => {
-	Miro.auth("Add Connection", "Authenticate a new connection for your account.", postConnection, undefined, true).then(newConnection).catch(Miro.doNothing);
+	Miro.auth("Add Connection", "Authenticate a new connection for your account.", postConnection, undefined, true, newConnection);
 }));
 form.querySelector("#manageConnections").addEventListener("click", requestConnections);
 window.onbeforeunload = () => !submit.disabled || undefined;
