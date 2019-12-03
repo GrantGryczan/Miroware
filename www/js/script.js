@@ -10,7 +10,7 @@ const MiroError = class MiroError extends Error {
 		return err;
 	}
 }
-const doNothing = () => {};
+Miro.doNothing = () => {};
 const container = document.body.querySelector("#container");
 Miro.parseQuery = () => {
 	Miro.query = {};
@@ -310,7 +310,7 @@ Miro.snackbar = (message, actionText, actionHandler) => {
 	};
 	if (actionText) {
 		dataObj.actionText = actionText;
-		dataObj.actionHandler = actionHandler || doNothing;
+		dataObj.actionHandler = actionHandler || Miro.doNothing;
 	}
 	snackbar.show(dataObj);
 };
@@ -519,7 +519,7 @@ Miro.auth = function(title, message, send, dialogCallback, creation) {
 	return new Promise((resolve, reject) => {
 		resolveAuth = resolve;
 		rejectAuth = reject;
-	}).catch(doNothing);
+	});
 };
 const putToken = (service, code) => Miro.request("PUT", "/token", {}, {
 	connection: `${service} ${btoa(code)}`
@@ -532,7 +532,7 @@ Miro.checkSuper = success => {
 		if (xhr.response.super) {
 			success(xhr);
 		} else {
-			Miro.auth("Security", "You must confirm the validity of your credentials before continuing.", putToken).then(success);
+			Miro.auth("Security", "You must confirm the validity of your credentials before continuing.", putToken).then(success).catch(Miro.doNothing);
 		}
 	}));
 };

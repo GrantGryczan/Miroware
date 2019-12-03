@@ -98,7 +98,7 @@ loginForm.addEventListener("submit", evt => {
 			type: "submit"
 		}, "Cancel"]).then(value => {
 			if (value === 0) {
-				Miro.auth("Signup", "Secure your Miroware account by connecting it to a login method.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(finishSignup);
+				Miro.auth("Signup", "Secure your Miroware account by connecting it to a login method.\nThe option to change or add more connections is available after signing up.", signUp, dialogCallback, true).then(finishSignup).catch(Miro.doNothing);
 			} else {
 				enableLoginForm();
 			}
