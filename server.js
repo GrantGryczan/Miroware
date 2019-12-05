@@ -121,6 +121,94 @@ const purgePipeCache = (user, items) => purgeCache(...items.flatMap(item => {
 	}
 	return urls;
 }));
+const deletePipeItem = (user, item, update, context) => {
+	if (item.type === "/") {
+		const items = [item]; // all recursive children of the directory being deleted
+		const fileItems = []; // all recursive children of the directory being deleted which are files
+		const prefix = `${item.path}/`;
+		for (const item2 of user.pipe) {
+			if (item2.path.startsWith(prefix)) {
+				items.push(item2);
+				if (item2.type !== "/") {
+					fileItems.push(item2);
+				}
+			}
+		}
+		if (!update.$pull) {
+			update.$pull = {};
+		}
+		update.$pull.pipe = {
+			$or: items.map(byDBQueryObject)
+		};
+		for (const item2 of items) {
+			if (item2.type === "/") {
+				users.updateOne({
+					_id: user._id
+				}, {
+					$set: {
+						"pipe.$[item].restore": null
+					}
+				}, {
+					arrayFilters: [{
+						"item.restore": item2.id
+					}],
+					multi: true
+				}); // reset other items' restore property if they were set to the item being deleted
+			}
+		}
+		if (fileItems.length) {
+			s3.deleteObjects({
+				Bucket: "miroware-pipe",
+				Delete: {
+					Objects: fileItems.map(byS3Object)
+				}
+			}, err => {
+				if (err) {
+					console.error(err);
+					if (context) {
+						context.value = {
+							error: err.message
+						};
+						context.status = err.statusCode;
+					}
+					delete update.$pull.pipe; // there was an error deleting the files, so don't pull from the database
+				} else {
+					purgePipeCache(user, fileItems);
+				}
+				if (context) {
+					context.done();
+				}
+			});
+		} else if (context) {
+			context.done();
+		}
+	} else {
+		s3.deleteObject({
+			Bucket: "miroware-pipe",
+			Key: item.id
+		}, err => {
+			if (err) {
+				console.error(err);
+				if (context) {
+					context.value = {
+						error: err.message
+					};
+					context.status = err.statusCode;
+				}
+			} else {
+				update.$pull = {
+					pipe: {
+						id: item.id
+					}
+				};
+				purgePipeCache(user, [item]);
+			}
+			if (context) {
+				context.done();
+			}
+		});
+	}
+};
 const bodyMethods = ["POST", "PUT", "PATCH"];
 (async () => {
 	const myEval = v => eval(v);
@@ -622,19 +710,30 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}
 	});
 	const hourly = () => {
-		const aMonthAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
+		const thirtyDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
 		users.updateMany({}, {
 			$pull: {
 				pouch: {
 					used: {
-						$lte: aMonthAgo
-					}
-				},
-				pipe: {
-					trashed: {
-						$lte: aMonthAgo
+						$lte: thirtyDaysAgo
 					}
 				}
+			}
+		});
+		users.find().forEach(user => {
+			const update = {};
+			let updated = false;
+			for (let i = 0; i < user.pipe.length; i++) {
+				const item = user.pipe[i];
+				if (item.trashed && item.trashed <= thirtyDaysAgo) {
+					deletePipeItem(user, item.id, update);
+					updated = true;
+				}
+			}
+			if (updated) {
+				users.updateOne({
+					_id: user._id
+				}, update);
 			}
 		});
 	};

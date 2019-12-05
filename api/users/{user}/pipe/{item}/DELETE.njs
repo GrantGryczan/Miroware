@@ -8,82 +8,8 @@ if (isMe) {
 			};
 			this.status = 422;
 			this.done();
-		} else if (found.type === "/") {
-			const items = [found];
-			const fileItems = [];
-			const prefix = `${found.path}/`;
-			for (const item of user.pipe) {
-				if (item.path.startsWith(prefix)) {
-					items.push(item);
-					if (item.type !== "/") {
-						fileItems.push(item);
-					}
-				}
-			}
-			this.update.$pull = {
-				pipe: {
-					$or: items.map(byDBQueryObject)
-				}
-			};
-			for (const item of items) {
-				if (item.type === "/") {
-					users.updateOne({
-						_id: user._id
-					}, {
-						$set: {
-							"pipe.$[item].restore": null
-						}
-					}, {
-						arrayFilters: [{
-							"item.restore": item.id
-						}],
-						multi: true
-					});
-				}
-			}
-			if (fileItems.length) {
-				s3.deleteObjects({
-					Bucket: "miroware-pipe",
-					Delete: {
-						Objects: fileItems.map(byS3Object)
-					}
-				}, err => {
-					if (err) {
-						console.error(err);
-						this.value = {
-							error: err.message
-						};
-						this.status = err.statusCode;
-						delete this.update.$pull.pipe;
-					} else {
-						purgePipeCache(user, fileItems);
-					}
-					this.done();
-				});
-			} else {
-				this.done();
-			}
 		} else {
-			s3.deleteObject({
-				Bucket: "miroware-pipe",
-				Key: found.id
-			}, err => {
-				if (err) {
-					console.error(err);
-					this.value = {
-						error: err.message
-					};
-					this.status = err.statusCode;
-				} else {
-					this.update.$pull = {
-						pipe: {
-							id: found.id
-						}
-					};
-					purgePipeCache(user, [found]);
-				}
-				this.done();
-			});
+			deletePipeItem(user, found, this.update, this);
 		}
 	} else {
 		this.value = {
