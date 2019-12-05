@@ -322,7 +322,7 @@ Miro.response = (success, failure) => async xhr => {
 	} else if (!xhr._aborted) {
 		const error = (xhr.response && xhr.response.error && html`${xhr.response.error}`) || xhr.statusText || "An unknown error occurred.";
 		if (failure instanceof Function && failure(xhr, error)) {
-			return; // if the failure function returns truthy, do not display the default error dialog
+			return; // If the failure function returns truthy, do not display the default error dialog.
 		}
 		await new Miro.Dialog("Error", error);
 	}

@@ -7,7 +7,7 @@ if (user) {
 		_id: {
 			$ne: user._id
 		}
-	})) { // if the email being verified is already verified by a different user
+	})) { // If the email being verified is already verified by a different user
 		users.updateOne({
 			_id: user._id
 		}, {

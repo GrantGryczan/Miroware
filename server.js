@@ -517,7 +517,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							"item.restore": item2.id
 						}],
 						multi: true
-					}); // reset other items' restore directories if they were set to the directory being deleted
+					}); // Reset other items' restore directories if they were set to the directory being deleted.
 				}
 			}
 			if (fileItems.length) {
@@ -535,7 +535,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							};
 							context.status = err.statusCode;
 						}
-						delete update.$pull.pipe; // there was an error deleting the files, so don't pull from the database
+						delete update.$pull.pipe; // There was an error deleting the files, so don't pull from the database.
 					} else {
 						purgePipeCache(user, fileItems);
 					}
