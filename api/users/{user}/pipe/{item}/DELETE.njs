@@ -9,7 +9,8 @@ if (isMe) {
 			this.status = 422;
 			this.done();
 		} else {
-			deletePipeItem(user, found, this.update, this);
+			await deletePipeItem(user, found, this.update, this);
+			this.done();
 		}
 	} else {
 		this.value = {

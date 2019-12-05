@@ -485,7 +485,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		});
 	});
-	const deletePipeItem = (user, item, update, context) => {
+	const deletePipeItem = (user, item, update, context) => new Promise(resolve => {
 		if (item.type === "/") {
 			const items = [item]; // all recursive children of the directory being deleted
 			const fileItems = []; // all recursive children of the directory being deleted which are files
@@ -539,12 +539,10 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					} else {
 						purgePipeCache(user, fileItems);
 					}
-					if (context) {
-						context.done();
-					}
+					resolve();
 				});
-			} else if (context) {
-				context.done();
+			} else {
+				resolve();
 			}
 		} else {
 			s3.deleteObject({
@@ -567,12 +565,10 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					};
 					purgePipeCache(user, [item]);
 				}
-				if (context) {
-					context.done();
-				}
+				resolve();
 			});
 		}
-	};
+	});
 	const cube = await serve({
 		eval: myEval,
 		domain,
@@ -720,13 +716,13 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				}
 			}
 		});
-		users.find().forEach(user => {
+		users.find().forEach(async user => {
 			const update = {};
 			let updated = false;
 			for (let i = 0; i < user.pipe.length; i++) {
 				const item = user.pipe[i];
 				if (item.trashed && item.trashed <= thirtyDaysAgo) {
-					deletePipeItem(user, item, update);
+					await deletePipeItem(user, item, update);
 					updated = true;
 				}
 			}
