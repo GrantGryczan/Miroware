@@ -517,7 +517,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							"item.restore": item2.id
 						}],
 						multi: true
-					}); // reset other items' restore property if they were set to the item being deleted
+					}); // reset other items' restore directories if they were set to the directory being deleted
 				}
 			}
 			if (fileItems.length) {
@@ -726,7 +726,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			for (let i = 0; i < user.pipe.length; i++) {
 				const item = user.pipe[i];
 				if (item.trashed && item.trashed <= thirtyDaysAgo) {
-					deletePipeItem(user, item.id, update);
+					deletePipeItem(user, item, update);
 					updated = true;
 				}
 			}
