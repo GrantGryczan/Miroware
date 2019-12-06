@@ -14,7 +14,6 @@ const s3 = new AWS.S3({
 });
 const encodedSlashes = /%2F/g;
 const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
-const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[/:]/;
 (async () => {
 	require("replthis")(v => eval(v));
 	const db = (await MongoClient.connect(youKnow.db, {
@@ -135,10 +134,6 @@ const referrerTest = /^https?:\/\/(?:\w+\.)?(?:mspfa.com|miroware.io|localhost)[
 				}
 				res.status(response.statusCode).set("Content-Type", "download" in req.query ? "application/octet-stream" : response.headers["content-type"]).set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src pipe.miroware.io miro.gg data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'");
 			});
-			const referrer = req.get("Referrer");
-			if (referrer && !referrerTest.test(referrer)) {
-				console.log(new Date(), referrer);
-			}
 		}
 	});
 	http.createServer(app).listen(8082);
