@@ -486,6 +486,15 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		});
 	});
 	const deletePipeItem = (user, item, update, context) => new Promise(resolve => {
+		if (!update.$pull) {
+			update.$pull = {};
+		}
+		if (!update.$pull.pipe) {
+			update.$pull.pipe = {};
+		}
+		if (!update.$pull.pipe.$or) {
+			update.$pull.pipe.$or = [];
+		}
 		if (item.type === "/") {
 			const items = [item]; // all recursive children of the directory being deleted
 			const fileItems = []; // all recursive children of the directory being deleted which are files
@@ -498,28 +507,25 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					}
 				}
 			}
-			if (!update.$pull) {
-				update.$pull = {};
-			}
-			update.$pull.pipe = {
-				$or: items.map(byDBQueryObject)
-			};
-			for (const item2 of items) {
-				if (item2.type === "/") {
-					users.updateOne({
-						_id: user._id
-					}, {
-						$set: {
-							"pipe.$[item].restore": null
-						}
-					}, {
-						arrayFilters: [{
-							"item.restore": item2.id
-						}],
-						multi: true
-					}); // Reset other items' restore directories if they were set to the directory being deleted.
+			const applyUpdate = () => {
+				update.$pull.pipe.$or.push(...items.map(byDBQueryObject));
+				for (const item2 of items) {
+					if (item2.type === "/") {
+						users.updateOne({
+							_id: user._id
+						}, {
+							$set: {
+								"pipe.$[item].restore": null
+							}
+						}, {
+							arrayFilters: [{
+								"item.restore": item2.id
+							}],
+							multi: true
+						}); // Reset other items' restore directories if they were set to the directory being deleted.
+					}
 				}
-			}
+			};
 			if (fileItems.length) {
 				s3.deleteObjects({
 					Bucket: "miroware-pipe",
@@ -535,14 +541,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 							};
 							context.status = err.statusCode;
 						}
-						delete update.$pull.pipe; // There was an error deleting the files, so don't pull from the database.
 					} else {
+						applyUpdate();
 						purgePipeCache(user, fileItems);
 					}
 					resolve();
 				});
 			} else {
-				resolve();
+				applyUpdate();
 			}
 		} else {
 			s3.deleteObject({
@@ -558,11 +564,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						context.status = err.statusCode;
 					}
 				} else {
-					update.$pull = {
-						pipe: {
-							id: item.id
-						}
-					};
+					update.$pull.pipe.$or.push({
+						id: item.id
+					});
 					purgePipeCache(user, [item]);
 				}
 				resolve();
