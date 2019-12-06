@@ -8,7 +8,7 @@ const youKnow = require("./secret/youknow.js");
 (async () => {
 	require("replthis")(v => eval(v));
 	const db = (await MongoClient.connect(youKnow.db, {
-		native_parser: true
+		useUnifiedTopology: true
 	})).db("web");
 	const users = db.collection("users");
 	const app = express();
