@@ -128,7 +128,7 @@ form.querySelector("#delete").addEventListener("click", () => {
 			}
 		});
 	});
-}));
+});
 form.querySelector("#download").addEventListener("click", () => {
 	new Miro.Dialog("Download", "Would you like a copy of your user data?", ["Yes", "No"]).then(value => {
 		if (value === 0) {
