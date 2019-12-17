@@ -96,7 +96,7 @@ if (testEmail(this.req.body.email)) {
 			};
 			if (!insertData.verified) {
 				insertData.unverified = this.req.body.email;
-				verifyEmail(insertData);
+				sendVerification(insertData);
 			}
 			this.value = {
 				id: String((await users.insertOne(insertData)).ops[0]._id)

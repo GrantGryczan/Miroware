@@ -7,7 +7,7 @@ if (testEmail(this.req.body.email)) {
 			const update = {
 				$set: {}
 			};
-			verifyEmail(user, update.$set);
+			sendVerification(user, update.$set);
 			users.updateOne({
 				_id: user._id
 			}, update);

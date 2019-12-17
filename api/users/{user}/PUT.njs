@@ -87,7 +87,7 @@ if (isMe) {
 					if (!user.verified) {
 						this.update.$set.email = this.req.body.email;
 					}
-					verifyEmail(user, this.update.$set);
+					sendVerification(user, this.update.$set);
 				}
 			} else {
 				this.value = {

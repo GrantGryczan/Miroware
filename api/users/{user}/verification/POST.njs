@@ -1,7 +1,7 @@
 const {user, isMe} = await parseUser(this);
 if (isMe) {
 	if (user.emailCode) {
-		verifyEmail(user, this.update.$set);
+		sendVerification(user, this.update.$set);
 	} else {
 		this.value = {
 			error: "You cannot resend verification if your email is already verified."

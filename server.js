@@ -205,7 +205,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			context.done();
 		}
 	});
-	const verifyEmail = (user, set) => {
+	const sendVerification = (user, set) => {
 		if (!set) {
 			set = user;
 		}
