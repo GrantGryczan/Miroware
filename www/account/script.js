@@ -33,9 +33,7 @@ form.addEventListener("input", onInput);
 form.addEventListener("change", onInput);
 const setForm = () => {
 	if (changed.includes(form.elements.email)) {
-		new Miro.Dialog("Account Verification", html`
-			A verification email has sent to <b>$${form.elements.email.value}</b>. Be sure to check your spam!
-		`).then(Miro.reload);
+		new Miro.Dialog("Account Verification", html`A verification email has sent to <b>$${form.elements.email.value}</b>. Be sure to check your spam!`).then(Miro.reload);
 	}
 	if (changed.includes(form.elements.name)) {
 		Miro.inputState(form.elements.name, false);
@@ -62,7 +60,6 @@ const removeConnection = evt => {
 		if (value === 0) {
 			Miro.checkSuper(() => {
 				Miro.request("DELETE", `/users/@me/connections/${encodeURIComponent(evt.target.parentNode.parentNode.parentNode._connection.id)}`).then(Miro.response(() => {
-					evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.parentNode.nextSibling);
 					evt.target.parentNode.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode.parentNode);
 				}));
 			});
@@ -74,13 +71,13 @@ const postConnection = (service, code) => Miro.request("POST", "/users/@me/conne
 });
 let connectionBody;
 const add = html`
-	<button class="mdc-button margined">
-		<i class="mdc-button__icon material-icons">add</i>Add
+	<button id="addConnection" class="mdc-button margined">
+		<i class="mdc-button__icon material-icons">add</i>New connection
 	</button>
 `;
 const appendCard = connection => {
 	const card = html`
-		<div class="mdc-card margined">
+		<div class="connection mdc-card margined">
 			<div class="mdc-card__area">
 				<h2 class="mdc-card__title mdc-typography--headline6">${connection.id}</h2>
 				<h3 class="mdc-card__subtitle mdc-typography--subtitle2">${connection.service}</h3>
