@@ -31,12 +31,14 @@
 		"fs-extra": "^5.0.0",
 		"google-auth-library": "^5.5.1",
 		"http-proxy": "^1.18.0",
+		"mailparser": "^2.7.7",
 		"mime": "^2.4.4",
 		"mongodb": "^3.3.3",
 		"nodemailer": "^4.7.0",
 		"replthis": "^1.0.2",
 		"request": "^2.88.0",
 		"request-promise-native": "^1.0.7",
-		"servecube": "^1.17.0"
+		"servecube": "^1.17.0",
+		"smtp-server": "^3.5.0"
 	}
 }
