@@ -52,7 +52,7 @@ form.addEventListener("submit", evt => {
 	}
 	Miro.formState(form, false);
 	Miro.request("PUT", "/users/@me", {}, body).then(Miro.response(() => {
-		setTimeout.bind(setForm);
+		setTimeout(setForm);
 	})).finally(() => {
 		Miro.formState(form, true);
 	});
@@ -114,17 +114,19 @@ form.querySelector("#manageConnections").addEventListener("click", () => {
 	});
 });
 window.onbeforeunload = () => !submit.disabled || undefined;
-form.querySelector("#delete").addEventListener("click", Miro.checkSuper.bind(null, () => {
-	new Miro.Dialog("Delete", "Are you sure you want to delete your account?", ["Yes", "No"]).then(value => {
-		if (value === 0) {
-			new Miro.Dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(value => {
-				if (value === 0) {
-					Miro.checkSuper(() => {
-						Miro.request("DELETE", "/users/@me").then(Miro.response(Miro.reload));
-					});
-				}
-			});
-		}
+form.querySelector("#delete").addEventListener("click", () => {
+	Miro.checkSuper(() => {
+		new Miro.Dialog("Delete", "Are you sure you want to delete your account?", ["Yes", "No"]).then(value => {
+			if (value === 0) {
+				new Miro.Dialog("Delete", "Are you sure you're sure you want to delete your account?\nOnce you press \"Yes\" there's no turning back!", ["Yes", "No"]).then(value => {
+					if (value === 0) {
+						Miro.checkSuper(() => {
+							Miro.request("DELETE", "/users/@me").then(Miro.response(Miro.reload));
+						});
+					}
+				});
+			}
+		});
 	});
 }));
 form.querySelector("#download").addEventListener("click", () => {
