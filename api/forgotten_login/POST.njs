@@ -5,7 +5,7 @@ if (testEmail(this.req.body.email)) {
 	if (user) {
 		const password = crypto.randomBytes(24).toString("base64");
 		transporter.sendMail({
-			from: "Miroware <info@miroware.io>",
+			from: "Miroware <bot@miroware.io>",
 			to: `${JSON.stringify(user.name)} <${user.email}>`,
 			subject: "Miroware / Forgot Login",
 			text: "Use this password to log into your Miroware account.",
