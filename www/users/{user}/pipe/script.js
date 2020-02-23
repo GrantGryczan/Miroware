@@ -1036,14 +1036,15 @@ if (Miro.data.isMe) {
 				if (!data.url) {
 					this.loaded = 0;
 					this.xhr.upload.addEventListener("progress", evt => {
-						if (this.xhr.readyState !== XMLHttpRequest.DONE) {
+						if (this.xhr.readyState === XMLHttpRequest.DONE) {
+							if (this.cancelDialog) {
+								this.cancelDialog.close();
+							}
+						} else {
 							const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
 							this.element.style.backgroundSize = `${percentage}%`;
 							this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
 							this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${this.size})`;
-							if (this.cancelDialog) {
-								this.cancelDialog.close();
-							}
 							updateQueue();
 						}
 					});
