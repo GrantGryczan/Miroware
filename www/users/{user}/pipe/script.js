@@ -1041,6 +1041,9 @@ if (Miro.data.isMe) {
 							this.element.style.backgroundSize = `${percentage}%`;
 							this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
 							this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${this.size})`;
+							if (this.cancelDialog) {
+								this.cancelDialog.close();
+							}
 							updateQueue();
 						}
 					});
@@ -1088,11 +1091,13 @@ if (Miro.data.isMe) {
 			if (evt instanceof Event) {
 				evt.preventDefault();
 			}
-			if (this.element.classList.contains("loading") && await new Miro.Dialog("Cancel", html`
+			if (this.element.classList.contains("loading") && await (this.cancelDialog = new Miro.Dialog("Cancel", html`
 				Are you sure you want to cancel uploading <b>$${this.name}</b>?
-			`, ["Yes", "No"]) !== 0) {
+			`, ["Yes", "No"])) !== 0) {
+				delete this.cancelDialog;
 				return;
 			}
+			delete this.cancelDialog;
 			if (this.element.parentNode) {
 				this.xhr.abort();
 				this.element.parentNode.removeChild(this.element);
