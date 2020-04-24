@@ -458,6 +458,7 @@ client.on("message", async msg => {
 					} else if (content[0] === "erase") {
 						if (content[1] === "confirm") {
 							delete data.guilds[msg.guild.id];
+							save();
 							purgeColorRoles(msg.guild).then(() => {
 								msg.guild.leave();
 							});
