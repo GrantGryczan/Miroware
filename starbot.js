@@ -253,15 +253,10 @@ client.on("message", async msg => {
 								}
 							};
 							const contentArray = content.split(" ");
-							console.log(contentArray);
 							const messageLinkMatch = contentArray[0] && contentArray[0].match(messageLinkTest);
-							console.log(messageLinkMatch);
 							const linkedChannel = messageLinkMatch && msg.guild.channels.resolve(messageLinkMatch[2]);
-							console.log(linkedChannel);
 							const fetchMessage = linkedChannel && linkedChannel.messages.fetch(messageLinkMatch[3]);
-							console.log(fetchMessage);
 							if (fetchMessage) {
-								console.log(true);
 								fetchMessage.then(msg2 => {
 									star(msg2, result => {
 										msg.channel.send(`${msg.author} The linked message has been sent to ${result.channel}.`).catch(errSendMessages(msg));
