@@ -2,7 +2,7 @@
 console.log("< Colorbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
-const prefix = /^!cb +/;
+const prefix = /^!cb +/i;
 const spaces = / +/g;
 const underscores = /_/g;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;

@@ -2,7 +2,7 @@
 console.log("< Starbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
-const prefix = /^!star +/;
+const prefix = /^!star +/i;
 const spaces = / +/g;
 const underscores = /_/g;
 const channelTest = /^<#(\d+)>$/;
