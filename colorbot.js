@@ -75,7 +75,7 @@ const sendHelp = (msg, perm) => {
 	if (permOrNoGuild) {
 		help += "\n\nWith role management permission, you can use the following commands.\n\n`!cb open`\nToggle open color mode. This is disabled by default.\n\n`!cb create <group name>`\nCreate a role group.\n\n`!cb group <group name> <role name>`\nAdd a role to a role group.\n\n`!cb ungroup <role name>`\nRemove a role from its role group.\n\n`!cb limit <group name> <number>`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n`!cb rename <group name> <new group name>`\nRename a role group.\n\n`!cb delete <group name>`\nDelete a role group.";
 	}
-	help += "\n\nTo invite me to one of your own Discord servers, go to <https://miroware.io/discord/colorbot/>.";
+	help += "\n\nTo report any issues, message the bot owner @Grant#2604.\nTo invite me to one of your own Discord servers, go to <https://miroware.io/discord/colorbot/>.";
 	msg.channel.send(help).catch(errSendMessages(msg));
 };
 const present = () => {
