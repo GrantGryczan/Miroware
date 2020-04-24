@@ -73,7 +73,7 @@ const sendHelp = (msg, perm) => {
 	const permOrNoGuild = perm || noGuild;
 	let help = `${noGuild ? "" : `${msg.author} `}You can use the following commands.${(noGuild || data.guilds[msg.guild.id][0] || perm) ? `\n\n\`!cb color <hex color code>\`\nSet your color${permOrNoGuild ? ", if open color mode is enabled" : ""}.\n\n\`!cb reset\`\nReset your color role${permOrNoGuild ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`!cb list\`\nList all role groups and their roles.\n\n\`!cb add <role name>\`\nGive yourself a role.\n\n\`!cb remove <role name>\`\nRemove a role from yourself.`;
 	if (permOrNoGuild) {
-		help += "\n\nWith role management permission, you can use the following commands.\n\n`!cb open`\nToggle open color mode. This is disabled by default.\n\n`!cb create <group name>`\nCreate a role group.\n\n`!cb group <group name> <role name>`\nAdd a role to a role group.\n\n`!cb ungroup <role name>`\nRemove a role from its role group.\n\n`!cb limit <group name> <number>`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n`!cb rename <group name> <new group name>`\nRename a role group.\n\n`!cb delete <group name>`\nDelete a role group.";
+		help += "\n\nWith role management permission, you can use the following commands.\n\n`!cb open`\nToggle open color mode. This is disabled by default.\n\n`!cb create <group name>`\nCreate a role group.\n\n`!cb group <group name> <role name>`\nAdd a role to a role group.\n\n`!cb ungroup <role name>`\nRemove a role from its role group.\n\n`!cb limit <group name> <number>`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n`!cb rename <group name> <new group name>`\nRename a role group.\n\n`!cb delete <group name>`\nDelete a role group.\n\n`!cb purge`\nDelete all color roles created by Colorbot.\n\n`!cb erase`\nKick Colorbot from the server after deleting all color roles created by Colorbot and erasing all Colorbot data associated with your server.";
 	}
 	help += "\n\nTo report any issues, message the bot owner @Grant#2604.\nTo invite me to one of your own Discord servers, go to <https://miroware.io/discord/colorbot/>.";
 	msg.channel.send(help).catch(errSendMessages(msg));
@@ -171,6 +171,13 @@ const ungroup = (id, role) => {
 	}
 	return found;
 };
+const purgeColorRoles = guild => {
+	for (const [, role] of guild.roles.cache) {
+		if (properColorTest.test(role.name)) {
+			role.delete().catch(errManageRoles(guild));
+		}
+	}
+};
 client.on("message", async msg => {
 	if (msg.system) {
 		return;
@@ -193,27 +200,27 @@ client.on("message", async msg => {
 					} else if (contentIsColor) {
 						if (content[1]) {
 							if (colorTest.test(content[1])) {
-								content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
+								const colorCode = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
 								const addColorRole = () => {
-									const currentRole = msg.guild.roles.cache.find(role => role.name === content[1]) || msg.guild.roles.cache.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+									const currentRole = msg.guild.roles.cache.find(role => role.name === colorCode) || msg.guild.roles.cache.find(role => role.name.toLowerCase() === colorCode.toLowerCase());
 									if (currentRole) {
-										setColor(member, content[1], currentRole, msg);
+										setColor(member, colorCode, currentRole, msg);
 									} else {
 										msg.guild.roles.create({
 											data: {
-												name: content[1],
-												color: content[1],
+												name: colorCode,
+												color: colorCode,
 												permissions: 0
 											}
 										}).then(role => {
-											setColor(member, content[1], role, msg);
+											setColor(member, colorCode, role, msg);
 										}).catch(err => {
 											if (err.message === "Missing Permissions") {
 												permWarn(msg.guild, "manage roles");
 											} else {
-												const red = parseInt(content[1].slice(1, 3), 16);
-												const green = parseInt(content[1].slice(3, 5), 16);
-												const blue = parseInt(content[1].slice(5, 7), 16);
+												const red = parseInt(colorCode.slice(1, 3), 16);
+												const green = parseInt(colorCode.slice(3, 5), 16);
+												const blue = parseInt(colorCode.slice(5, 7), 16);
 												const colors = [];
 												for (const [, role] of msg.guild.roles.cache) {
 													if (properColorTest.test(role.name)) {
@@ -226,7 +233,7 @@ client.on("message", async msg => {
 												msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
 													embed: {
 														description: colors.sort(byColorDiff).slice(0, 20).map(byRoles).join(" "),
-														color: parseInt(content[1].slice(1), 16)
+														color: parseInt(colorCode.slice(1), 16)
 													}
 												}).catch(errEmbedLinks(msg));
 											}
@@ -437,6 +444,20 @@ client.on("message", async msg => {
 							}
 						} else {
 							msg.channel.send(`${msg.author} No group was provided.`).catch(errSendMessages(msg));
+						}
+					} else if (content[0] === "purge") {
+						if (content[1] === "confirm") {
+							purgeColorRoles(msg.guild);
+						} else {
+							msg.channel.send(`${msg.author} Are you sure you want to delete all color roles created by Colorbot on this server? This cannot be undone. Enter \`!cb purge confirm\` to confirm.`).catch(errSendMessages(msg));
+						}
+					} else if (content[0] === "erase") {
+						if (content[1] === "confirm") {
+							purgeColorRoles(msg.guild);
+							delete data.guilds[msg.guild.id];
+							msg.guild.leave();
+						} else {
+							msg.channel.send(`${msg.author} Are you sure you want to kick Colorbot from the server after deleting all color roles created by Colorbot and erasing all Colorbot data associated with your server? This cannot be undone. Enter \`!cb erase confirm\` to confirm.`).catch(errSendMessages(msg));
 						}
 					} else {
 						sendHelp(msg, perm);
