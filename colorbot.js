@@ -453,7 +453,7 @@ client.on("message", async msg => {
 								msg.channel.send(`${msg.author} All color roles created by Colorbot have been purged.`).catch(errSendMessages(msg));
 							});
 						} else {
-							msg.channel.send(`${msg.author} Are you sure you want to delete all color roles created by Colorbot on this server? This cannot be undone. Enter \`!cb purge confirm\` to confirm.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} Are you sure you want to delete all color roles created by Colorbot on this server? This cannot be undone and may take some time. Enter \`!cb purge confirm\` to confirm.`).catch(errSendMessages(msg));
 						}
 					} else if (content[0] === "erase") {
 						if (content[1] === "confirm") {
@@ -462,7 +462,7 @@ client.on("message", async msg => {
 								msg.guild.leave();
 							});
 						} else {
-							msg.channel.send(`${msg.author} Are you sure you want to kick Colorbot from the server after deleting all color roles created by Colorbot and erasing all Colorbot data associated with your server? This cannot be undone. Enter \`!cb erase confirm\` to confirm.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} Are you sure you want to kick Colorbot from the server after deleting all color roles created by Colorbot and erasing all Colorbot data associated with your server? This cannot be undone and may take some time. Enter \`!cb erase confirm\` to confirm.`).catch(errSendMessages(msg));
 						}
 					} else {
 						sendHelp(msg, perm);
