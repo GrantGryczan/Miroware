@@ -71,9 +71,12 @@ const sendHelp = (msg, perm) => {
 };
 const present = () => {
 	client.user.setPresence({
-		status: "online"
+		status: "online",
+		activity: {
+			type: "WATCHING",
+			name: 'for >🎨'
+		}
 	});
-	client.user.setActivity('Enter ">🎨" for info.');
 };
 client.once("ready", () => {
 	for (const [id] of client.guilds.cache) {
@@ -85,7 +88,7 @@ client.once("ready", () => {
 		const guild = client.guilds.resolve(id);
 		if (guild) {
 			for (const group of Object.keys(data.guilds[id][1])) {
-				data.guilds[id][1][group][1] = data.guilds[id][1][group][1].filter(roleID => guild.roles.cache.get(roleID));
+				data.guilds[id][1][group][1] = data.guilds[id][1][group][1].filter(roleID => guild.roles.resolve(roleID));
 			}
 			for (const [, role] of guild.roles.cache) {
 				if (properColorTest.test(role.name) && role.members.size === 0) {
@@ -183,7 +186,7 @@ client.on("message", async msg => {
 							if (colorTest.test(content[1])) {
 								content[1] = content[1].replace(colorTest, "#$1$1$2$2$3$3$4").toLowerCase();
 								const addColorRole = () => {
-									const currentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+									const currentRole = msg.guild.roles.cache.find(role => role.name === content[1]) || msg.guild.roles.cache.find(role => role.name.toLowerCase() === content[1].toLowerCase());
 									if (currentRole) {
 										setColor(member, content[1], currentRole, msg);
 									} else {
@@ -239,7 +242,7 @@ client.on("message", async msg => {
 						for (const group of Object.keys(data.guilds[msg.guild.id][1])) {
 							fields.push({
 								name: `${group} (${data.guilds[msg.guild.id][1][group][0] ? `limit: ${data.guilds[msg.guild.id][1][group][0]}` : "no limit"})`,
-								value: data.guilds[msg.guild.id][1][group][1].length ? data.guilds[msg.guild.id][1][group][1].map(roleID => msg.guild.roles.cache.get(roleID)).join(" ") : "(empty)"
+								value: data.guilds[msg.guild.id][1][group][1].length ? data.guilds[msg.guild.id][1][group][1].map(roleID => msg.guild.roles.resolve(roleID)).join(" ") : "(empty)"
 							});
 						}
 						msg.channel.send(String(msg.author), {
@@ -252,7 +255,7 @@ client.on("message", async msg => {
 					}
 				} else if (content[0] === "add") {
 					if (content[1]) {
-						const contentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+						const contentRole = msg.guild.roles.cache.find(role => role.name === content[1]) || msg.guild.roles.cache.find(role => role.name.toLowerCase() === content[1].toLowerCase());
 						if (contentRole) {
 							let found = false;
 							for (const group of Object.keys(data.guilds[msg.guild.id][1])) {
@@ -296,7 +299,7 @@ client.on("message", async msg => {
 					}
 				} else if (content[0] === "remove") {
 					if (content[1]) {
-						const contentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+						const contentRole = msg.guild.roles.cache.find(role => role.name === content[1]) || msg.guild.roles.cache.find(role => role.name.toLowerCase() === content[1].toLowerCase());
 						if (contentRole) {
 							let found = false;
 							for (const [, role] of Object.values(data.guilds[msg.guild.id][1])) {
@@ -349,7 +352,7 @@ client.on("message", async msg => {
 								const group = data.guilds[msg.guild.id][1][content[1].slice(0, spaceIndex2)];
 								if (group) {
 									content[1] = content[1].slice(spaceIndex2 + 1);
-									const contentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+									const contentRole = msg.guild.roles.cache.find(role => role.name === content[1]) || msg.guild.roles.cache.find(role => role.name.toLowerCase() === content[1].toLowerCase());
 									if (contentRole) {
 										if (group[1].includes(contentRole.id)) {
 											msg.channel.send(`${msg.author} That role is already in that group.`).catch(errSendMessages(msg));
@@ -371,7 +374,7 @@ client.on("message", async msg => {
 						}
 					} else if (content[0] === "ungroup") {
 						if (content[1]) {
-							const contentRole = msg.guild.roles.find(role => role.name === content[1]) || msg.guild.roles.find(role => role.name.toLowerCase() === content[1].toLowerCase());
+							const contentRole = msg.guild.roles.cache.find(role => role.name === content[1]) || msg.guild.roles.cache.find(role => role.name.toLowerCase() === content[1].toLowerCase());
 							if (contentRole) {
 								if (ungroup(msg.guild.id, contentRole.id)) {
 									msg.channel.send(`${msg.author} That role has been ungrouped.`).catch(errSendMessages(msg));

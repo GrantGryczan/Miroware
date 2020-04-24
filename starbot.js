@@ -78,9 +78,12 @@ const sendHelp = (msg, perm) => {
 };
 const present = () => {
 	client.user.setPresence({
-		status: "online"
+		status: "online",
+		activity: {
+			type: "WATCHING",
+			name: 'for >⭐'
+		}
 	});
-	client.user.setActivity('Enter ">⭐" for info.');
 };
 client.once("ready", () => {
 	for (const [id, guild] of client.guilds.cache) {
