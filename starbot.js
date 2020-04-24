@@ -221,7 +221,7 @@ client.on("message", async msg => {
 									if (msg.guild.channels.resolve(starboard)) {
 										data.guilds[msg.guild.id][0] = starboard;
 										save();
-										msg.channel.send(`${msg.author} The starboard channel has been set to ${content}.`).catch(errSendMessages(msg));
+										msg.channel.send(`${msg.author} The starboard channel has been starred to ${content}.`).catch(errSendMessages(msg));
 									} else {
 										msg.channel.send(`${msg.author} That channel does not exist, or I do not have permission to read messages in it.`).catch(errSendMessages(msg));
 									}
@@ -247,14 +247,19 @@ client.on("message", async msg => {
 								}
 							};
 							const contentArray = content.split(" ");
-							const messageLinkMatch = contentArray[1] && contentArray[1].match(messageLinkTest);
+							console.log(contentArray);
+							const messageLinkMatch = contentArray[0] && contentArray[0].match(messageLinkTest);
+							console.log(messageLinkMatch);
 							const linkedChannel = messageLinkMatch && msg.guild.channels.resolve(messageLinkMatch[2]);
+							console.log(linkedChannel);
 							const fetchMessage = linkedChannel && linkedChannel.messages.fetch(messageLinkMatch[3]);
+							console.log(fetchMessage);
 							if (fetchMessage) {
+								console.log(true);
 								fetchMessage.then(msg2 => {
 									star(msg2, result => {
 										msg.channel.send(`${msg.author} The linked message has been sent to ${result.channel}.`).catch(errSendMessages(msg));
-									}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
+									}, contentArray[1] && channelTest.test(contentArray[1]) ? contentArray[1].replace(channelTest, "$1") : undefined);
 								}).catch(noLinkedMessage);
 							} else {
 								noLinkedMessage();
