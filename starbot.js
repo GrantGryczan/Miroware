@@ -7,6 +7,7 @@ const spaces = / +/g;
 const underscores = /_/g;
 const channelTest = /^<#(\d+)>$/;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
+const messageLinkTest = /^https:\/\/discordapp\.com\/channels\/(\w+)\/(\w+)\/(\w+)$/;
 const doNothing = () => {};
 const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
 const byTextChannels = channel => channel.type === "text";
@@ -77,7 +78,7 @@ const sendHelp = (msg, perm) => {
 	if (noGuild || data.guilds[msg.guild.id][0]) {
 		let help = noGuild ? "" : `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURI(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if (perm || noGuild) {
-			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`!star <channel tag>\`\nSet the starboard channel.\n\n\`!star <number>\`\nDefine how many reactions should get messages starred.\n\n\`!star <emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`!star <hex color code>\`\nChange the starred embed color.\n\n\`!star <message link>\`\nStar a message manually.\n\n\`!star selfstar\`\nToggle whether users can star their own messages. Self-starring is allowed by default.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages.`;
+			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`!star <channel tag>\`\nSet the starboard channel.\n\n\`!star <number>\`\nDefine how many reactions should get messages starred.\n\n\`!star <emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`!star <hex color code>\`\nChange the starred embed color.\n\n\`!star <message link> [target channel]\`\nStar a message manually. If no target channel is specified, it will default to the starboard if one is set.\n\n\`!star selfstar\`\nToggle whether users can star their own messages. Self-starring is allowed by default.\n\n\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages.`;
 		}
 		help += "\nTo report any issues, message the bot owner @Grant#2604.\nTo invite me to one of your own Discord servers, go to <https://miroware.io/discord/starbot/>.";
 		msg.channel.send(help).catch(errSendMessages(msg));
@@ -214,12 +215,7 @@ client.on("message", async msg => {
 						}).catch(err => {
 							data.guilds[msg.guild.id][1] = old1;
 							save();
-							const contentArray = content.split(" ");
-							((contentArray[1] && channelTest.test(contentArray[1]) ? msg.guild.channels.resolve(contentArray[1].replace(channelTest, "$1")) : false) || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
-								star(msg2, () => {
-									msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
-								}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
-							}).catch(() => {
+							const noLinkedMessage = () => {
 								if (channelTest.test(content)) {
 									const starboard = content.replace(channelTest, "$1");
 									if (msg.guild.channels.resolve(starboard)) {
@@ -249,7 +245,20 @@ client.on("message", async msg => {
 										sendHelp(msg, perm);
 									}
 								}
-							});
+							};
+							const contentArray = content.split(" ");
+							const messageLinkMatch = contentArray[1] && contentArray[1].match(messageLinkTest);
+							const linkedChannel = messageLinkMatch && msg.guild.channels.resolve(messageLinkMatch[2]);
+							const fetchMessage = linkedChannel && linkedChannel.messages.fetch(messageLinkMatch[3]);
+							if (fetchMessage) {
+								fetchMessage.then(msg2 => {
+									star(msg2, result => {
+										msg.channel.send(`${msg.author} The linked message has been sent to ${result.channel}.`).catch(errSendMessages(msg));
+									}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
+								}).catch(noLinkedMessage);
+							} else {
+								noLinkedMessage();
+							}
 						});
 					}
 				} else {
