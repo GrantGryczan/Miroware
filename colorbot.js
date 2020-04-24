@@ -73,7 +73,7 @@ const sendHelp = (msg, perm) => {
 	const permOrNoGuild = perm || noGuild;
 	let help = `${noGuild ? "" : `${msg.author} `}You can use the following commands.${(noGuild || data.guilds[msg.guild.id][0] || perm) ? `\n\n\`!cb color <hex color code>\`\nSet your color${permOrNoGuild ? ", if open color mode is enabled" : ""}.\n\n\`!cb reset\`\nReset your color role${permOrNoGuild ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`!cb list\`\nList all role groups and their roles.\n\n\`!cb add <role name>\`\nGive yourself a role.\n\n\`!cb remove <role name>\`\nRemove a role from yourself.`;
 	if (permOrNoGuild) {
-		help += "\n\nWith role management permission, you can use the following commands.\n\n`!cb open`\nToggle open color mode. This is disabled by default.\n\n`!cb create <group name>`\nCreate a role group.\n\n`!cb group <group name> <role name>`\nAdd a role to a role group.\n\n`!cb ungroup <role name>`\nRemove a role from its role group.\n\n`!cb limit <group name> <number>`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n`!cb rename <group name> <new group name>`\nRename a role group.\n\n`!cb delete <group name>`\nDelete a role group.\n\n`!cb purge`\nDelete all color roles created by Colorbot.\n\n`!cb erase`\nKick Colorbot from the server after deleting all color roles created by Colorbot and erasing all Colorbot data associated with your server.";
+		help += "\n\nWith role management permission, you can use the following commands.\n\n`!cb open`\nToggle open color mode. This is disabled by default.\n\n`!cb create <group name>`\nCreate a role group.\n\n`!cb group <group name> <role name>`\nAdd a role to a role group.\n\n`!cb ungroup <role name>`\nRemove a role from its role group.\n\n`!cb limit <group name> <number>`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n`!cb rename <group name> <new group name>`\nRename a role group.\n\n`!cb delete <group name>`\nDelete a role group.\n\n`!cb purge`\nDelete all color roles created by me.\n\n`!cb erase`\nKick me from the server after deleting all color roles created by me and erasing all my data associated with your server.";
 	}
 	help += "\n\nTo report any issues, message the bot owner @Grant#2604.\nTo invite me to one of your own Discord servers, go to <https://miroware.io/discord/colorbot/>.";
 	msg.channel.send(help).catch(errSendMessages(msg));
@@ -450,10 +450,10 @@ client.on("message", async msg => {
 					} else if (content[0] === "purge") {
 						if (content[1] === "confirm") {
 							purgeColorRoles(msg.guild).then(() => {
-								msg.channel.send(`${msg.author} All color roles created by Colorbot have been purged.`).catch(errSendMessages(msg));
+								msg.channel.send(`${msg.author} All color roles created by me have been purged.`).catch(errSendMessages(msg));
 							});
 						} else {
-							msg.channel.send(`${msg.author} Are you sure you want to delete all color roles created by Colorbot on this server? This cannot be undone and may take some time. Enter \`!cb purge confirm\` to confirm.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} Are you sure you want to delete all color roles created by me on this server? This cannot be undone and may take some time. Enter \`!cb purge confirm\` to confirm.`).catch(errSendMessages(msg));
 						}
 					} else if (content[0] === "erase") {
 						if (content[1] === "confirm") {
@@ -463,7 +463,7 @@ client.on("message", async msg => {
 								msg.guild.leave();
 							});
 						} else {
-							msg.channel.send(`${msg.author} Are you sure you want to kick Colorbot from the server after deleting all color roles created by Colorbot and erasing all Colorbot data associated with your server? This cannot be undone and may take some time. Enter \`!cb erase confirm\` to confirm.`).catch(errSendMessages(msg));
+							msg.channel.send(`${msg.author} Are you sure you want to kick me from the server after deleting all color roles created by me and erasing all my data associated with your server? This cannot be undone and may take some time. Enter \`!cb erase confirm\` to confirm.`).catch(errSendMessages(msg));
 						}
 					} else {
 						sendHelp(msg, perm);
