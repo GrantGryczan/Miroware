@@ -123,9 +123,6 @@ const star = (msg, callback, channel) => {
 			embed: {
 				timestamp: msg.createdAt.toISOString(),
 				color: data.guilds[msg.guild.id][3],
-				footer: {
-					text: `${decodeURI(data.guilds[msg.guild.id][1])} | ${msg.id}`
-				},
 				fields: [{
 					name: "Author",
 					value: String(msg.author),
