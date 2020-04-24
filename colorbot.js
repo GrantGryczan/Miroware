@@ -43,9 +43,11 @@ const inform = (guild, string1, string2) => {
 	}
 };
 const broadcast = string => {
+	const sentRecipients = [];
 	for (const [, guild] of client.guilds.cache) {
-		if (guild.available) {
+		if (guild.available && !sentRecipients.includes(guild.owner.id)) {
 			inform(guild, string, `${guild.owner} ${string}`);
+			sentRecipients.push(guild.owner.id);
 		}
 	}
 };
