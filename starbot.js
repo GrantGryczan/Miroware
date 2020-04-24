@@ -2,7 +2,7 @@
 console.log("< Starbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
-const prefix = /^> ?⭐ */;
+const prefix = /^!⭐ */;
 const spaces = / +/g;
 const underscores = /_/g;
 const channelTest = /^<#(\d+)>$/;
@@ -26,19 +26,26 @@ const exitOnError = err => {
 process.once("unhandledRejection", exitOnError);
 client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
-const inform = (guild, str1, str2) => {
+const inform = (guild, string1, string2) => {
 	if (guild.available) {
-		guild.owner.send(str1).catch(() => {
+		guild.owner.send(string1).catch(() => {
 			const channels = guild.channels.cache.filter(byTextChannels);
 			let i = -1;
 			const testChannel = () => {
 				i++;
 				if (channels[i]) {
-					channels[i].send(str2).catch(testChannel);
+					channels[i].send(string2).catch(testChannel);
 				}
 			};
 			testChannel();
 		});
+	}
+};
+const broadcast = string => {
+	for (const guild of client.guilds.cache) {
+		if (guild.available) {
+			inform(guild, string, `${guild.owner} ${string}`);
+		}
 	}
 };
 const permWarn = (guild, perms) => {
@@ -46,7 +53,7 @@ const permWarn = (guild, perms) => {
 	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 };
 const noStarboard = guild => {
-	const warning = ', as there is nowhere for starred messages to be placed. No starboard channel has been set!\nWith admin permissions, you can set the starboard channel by entering ">⭐" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.';
+	const warning = ', as there is nowhere for starred messages to be placed. No starboard channel has been set!\nWith admin permissions, you can set the starboard channel by entering "!⭐" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.';
 	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 }
 const guildCreate = guild => {
@@ -68,9 +75,9 @@ const sendHelp = (msg, perm) => {
 	if (noGuild || data.guilds[msg.guild.id][0]) {
 		let help = noGuild ? "" : `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURI(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if (perm || noGuild) {
-			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`>⭐<channel tag>\`\nSet the starboard channel.\n\n\`>⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`>⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`>⭐<hex color code>\`\nChange the starred embed color.\n\n\`>⭐<message ID> [<source channel tag> [target channel tag]]\`\nStar a message manually. If you are entering the command in a channel other than the one the desired message is not in, the second parameter should be that channel. The other channel tag makes it post the star embed to that channel instead of the default starboard.\n\n\`>⭐selfstar\`\nToggle whether users can star their own messages. Self-starring is allowed by default.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
+			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`!⭐<channel tag>\`\nSet the starboard channel.\n\n\`!⭐<number>\`\nDefine how many reactions should get messages starred.\n\n\`!⭐<emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`!⭐<hex color code>\`\nChange the starred embed color.\n\n\`!⭐<message ID> [<source channel tag> [target channel tag]]\`\nStar a message manually. If you are entering the command in a channel other than the one the desired message is not in, the second parameter should be that channel. The other channel tag makes it post the star embed to that channel instead of the default starboard.\n\n\`!⭐selfstar\`\nToggle whether users can star their own messages. Self-starring is allowed by default.\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages (which is already disabled by default for messages posted by me).`;
 		}
-		help += "\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/starbot/>.";
+		help += "\nTo invite me to one of your own Discord servers, go to <https://miroware.io/discord/starbot/>.";
 		msg.channel.send(help).catch(errSendMessages(msg));
 	} else {
 		noStarboard(msg.guild);
@@ -81,7 +88,7 @@ const present = () => {
 		status: "online",
 		activity: {
 			type: "WATCHING",
-			name: 'for >⭐'
+			name: 'for "!⭐"'
 		}
 	});
 };

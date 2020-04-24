@@ -2,7 +2,7 @@
 console.log("< Colorbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
-const prefix = /^> ?🎨 */;
+const prefix = /^!cb */;
 const spaces = / +/g;
 const underscores = /_/g;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
@@ -42,6 +42,13 @@ const inform = (guild, string1, string2) => {
 		});
 	}
 };
+const broadcast = string => {
+	for (const guild of client.guilds.cache) {
+		if (guild.available) {
+			inform(guild, string, `${guild.owner} ${string}`);
+		}
+	}
+};
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild}`);
 	data.guilds[guild] = [0, {}];
@@ -62,11 +69,11 @@ const errManageRoles = guild => () => {
 const sendHelp = (msg, perm) => {
 	const noGuild = !msg.guild;
 	const permOrNoGuild = perm || noGuild;
-	let help = `${noGuild ? "" : `${msg.author} `}You can use the following commands.${(noGuild || data.guilds[msg.guild.id][0] || perm) ? `\n\n\`>🎨color <hex color code>\`\nSet your color${permOrNoGuild ? ", if open color mode is enabled" : ""}.\n\n\`>🎨reset\`\nReset your color role${permOrNoGuild ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`>🎨list\`\nList all role groups and their roles.\n\n\`>🎨add <role name>\`\nGive yourself a role.\n\n\`>🎨remove <role name>\`\nRemove a role from yourself.`;
+	let help = `${noGuild ? "" : `${msg.author} `}You can use the following commands.${(noGuild || data.guilds[msg.guild.id][0] || perm) ? `\n\n\`!cb color <hex color code>\`\nSet your color${permOrNoGuild ? ", if open color mode is enabled" : ""}.\n\n\`!cb reset\`\nReset your color role${permOrNoGuild ? ", if open color mode is enabled" : ""}.` : ""}\n\n\`!cb list\`\nList all role groups and their roles.\n\n\`!cb add <role name>\`\nGive yourself a role.\n\n\`!cb remove <role name>\`\nRemove a role from yourself.`;
 	if (permOrNoGuild) {
-		help += "\n\nWith role management permission, you can use the following commands.\n\n`>🎨open`\nToggle open color mode. This is disabled by default.\n\n`>🎨create <group name>`\nCreate a role group.\n\n`>🎨group <group name> <role name>`\nAdd a role to a role group.\n\n`>🎨ungroup <role name>`\nRemove a role from its role group.\n\n`>🎨limit <group name> <number>`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n`>🎨rename <group name> <new group name>`\nRename a role group.\n\n`>🎨delete <group name>`\nDelete a role group.";
+		help += "\n\nWith role management permission, you can use the following commands.\n\n`!cb open`\nToggle open color mode. This is disabled by default.\n\n`!cb create <group name>`\nCreate a role group.\n\n`!cb group <group name> <role name>`\nAdd a role to a role group.\n\n`!cb ungroup <role name>`\nRemove a role from its role group.\n\n`!cb limit <group name> <number>`\nLimit how many roles each user can have from a certain group. (This defaults to 1 for each group. Set to 0 to remove the limit.)\n\n`!cb rename <group name> <new group name>`\nRename a role group.\n\n`!cb delete <group name>`\nDelete a role group.";
 	}
-	help += "\n\nTo invite me to one of your own Discord servers, you can go to <https://miroware.io/discord/colorbot/>.";
+	help += "\n\nTo invite me to one of your own Discord servers, go to <https://miroware.io/discord/colorbot/>.";
 	msg.channel.send(help).catch(errSendMessages(msg));
 };
 const present = () => {
@@ -74,7 +81,7 @@ const present = () => {
 		status: "online",
 		activity: {
 			type: "WATCHING",
-			name: 'for >🎨'
+			name: 'for "!cb"'
 		}
 	});
 };
@@ -180,7 +187,7 @@ client.on("message", async msg => {
 				const contentIsColor = content[0] === "color" || content[0] === "colour";
 				if (contentIsColor || content[0] === "reset") {
 					if (data.guilds[msg.guild.id][0] === 0) {
-						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? ' With role management permission, you can enable it by entering ">🎨open".' : ""}`).catch(errSendMessages(msg));
+						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? ' With role management permission, you can enable it by entering "!cb open".' : ""}`).catch(errSendMessages(msg));
 					} else if (contentIsColor) {
 						if (content[1]) {
 							if (colorTest.test(content[1])) {
