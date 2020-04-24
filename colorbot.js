@@ -172,11 +172,13 @@ const ungroup = (id, role) => {
 	return found;
 };
 const purgeColorRoles = guild => {
+	const promises = [];
 	for (const [, role] of guild.roles.cache) {
 		if (properColorTest.test(role.name)) {
-			role.delete().catch(errManageRoles(guild));
+			promises.push(role.delete());
 		}
 	}
+	return Promise.all(promises).catch(errManageRoles(guild));
 };
 client.on("message", async msg => {
 	if (msg.system) {
@@ -447,15 +449,18 @@ client.on("message", async msg => {
 						}
 					} else if (content[0] === "purge") {
 						if (content[1] === "confirm") {
-							purgeColorRoles(msg.guild);
+							purgeColorRoles(msg.guild).then(() => {
+								msg.channel.send(`${msg.author} All color roles created by Colorbot have been purged.`).catch(errSendMessages(msg));
+							});
 						} else {
 							msg.channel.send(`${msg.author} Are you sure you want to delete all color roles created by Colorbot on this server? This cannot be undone. Enter \`!cb purge confirm\` to confirm.`).catch(errSendMessages(msg));
 						}
 					} else if (content[0] === "erase") {
 						if (content[1] === "confirm") {
-							purgeColorRoles(msg.guild);
 							delete data.guilds[msg.guild.id];
-							msg.guild.leave();
+							purgeColorRoles(msg.guild).then(() => {
+								msg.guild.leave();
+							});
 						} else {
 							msg.channel.send(`${msg.author} Are you sure you want to kick Colorbot from the server after deleting all color roles created by Colorbot and erasing all Colorbot data associated with your server? This cannot be undone. Enter \`!cb erase confirm\` to confirm.`).catch(errSendMessages(msg));
 						}
