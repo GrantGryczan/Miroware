@@ -215,7 +215,7 @@ client.on("message", async msg => {
 												const green = parseInt(content[1].slice(3, 5), 16);
 												const blue = parseInt(content[1].slice(5, 7), 16);
 												const colors = [];
-												for (const [, role] of msg.guild.roles) {
+												for (const [, role] of msg.guild.roles.cache) {
 													if (properColorTest.test(role.name)) {
 														const redDiff = parseInt(role.name.slice(1, 3), 16) - red;
 														const greenDiff = parseInt(role.name.slice(3, 5), 16) - green;
