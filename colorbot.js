@@ -27,15 +27,15 @@ const exitOnError = err => {
 process.once("unhandledRejection", exitOnError);
 client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
-const inform = (guild, str1, str2) => {
+const inform = (guild, string1, string2) => {
 	if (guild.available) {
-		guild.owner.send(str1).catch(() => {
-			const channels = guild.channels.filter(byTextChannels);
+		guild.owner.send(string1).catch(() => {
+			const channels = guild.channels.cache.filter(byTextChannels);
 			let i = -1;
 			const testChannel = () => {
 				i++;
 				if (channels[i]) {
-					channels[i].send(str2).catch(testChannel);
+					channels[i].send(string2).catch(testChannel);
 				}
 			};
 			testChannel();
@@ -76,18 +76,18 @@ const present = () => {
 	client.user.setActivity('Enter ">🎨" for info.');
 };
 client.once("ready", () => {
-	for (const [id] of client.guilds) {
+	for (const [id] of client.guilds.cache) {
 		if (!data.guilds[id]) {
 			guildCreate(id);
 		}
 	}
 	for (const id of Object.keys(data.guilds)) {
-		const guild = client.guilds.get(id);
+		const guild = client.guilds.resolve(id);
 		if (guild) {
 			for (const group of Object.keys(data.guilds[id][1])) {
-				data.guilds[id][1][group][1] = data.guilds[id][1][group][1].filter(guild.roles.get.bind(guild.roles));
+				data.guilds[id][1][group][1] = data.guilds[id][1][group][1].filter(roleID => guild.roles.cache.get(roleID));
 			}
-			for (const [, role] of guild.roles) {
+			for (const [, role] of guild.roles.cache) {
 				if (properColorTest.test(role.name) && role.members.size === 0) {
 					role.delete().catch(errManageRoles(guild));
 				}
@@ -106,7 +106,7 @@ client.on("guildCreate", ({id}) => {
 });
 client.on("guildMemberRemove", member => {
 	if (member.guild.available) {
-		for (const [, role] of member.roles) {
+		for (const [, role] of member.roles.cache) {
 			if (properColorTest.test(role.name) && role.members.size === 0) {
 				role.delete().catch(errManageRoles(member.guild));
 				break;
@@ -140,7 +140,7 @@ const setColor = (member, color, role, msg) => {
 	}).catch(errEmbedLinks(msg));
 };
 const removeColor = member => {
-	for (const [, role] of member.roles) {
+	for (const [, role] of member.roles.cache) {
 		if (properColorTest.test(role.name)) {
 			return role.members.size > 1 ? member.roles.remove(role) : role.delete();
 		}
@@ -239,7 +239,7 @@ client.on("message", async msg => {
 						for (const group of Object.keys(data.guilds[msg.guild.id][1])) {
 							fields.push({
 								name: `${group} (${data.guilds[msg.guild.id][1][group][0] ? `limit: ${data.guilds[msg.guild.id][1][group][0]}` : "no limit"})`,
-								value: data.guilds[msg.guild.id][1][group][1].length ? data.guilds[msg.guild.id][1][group][1].map(msg.guild.roles.get.bind(msg.guild.roles)).join(" ") : "(empty)"
+								value: data.guilds[msg.guild.id][1][group][1].length ? data.guilds[msg.guild.id][1][group][1].map(roleID => msg.guild.roles.cache.get(roleID)).join(" ") : "(empty)"
 							});
 						}
 						msg.channel.send(String(msg.author), {
@@ -258,13 +258,13 @@ client.on("message", async msg => {
 							for (const group of Object.keys(data.guilds[msg.guild.id][1])) {
 								const roleIndex = data.guilds[msg.guild.id][1][group][1].indexOf(contentRole.id);
 								if (roleIndex !== -1) {
-									if (member.roles.has(contentRole.id)) {
+									if (member.roles.cache.has(contentRole.id)) {
 										msg.channel.send(`${msg.author} You already have that role.`).catch(errSendMessages(msg));
 									} else {
 										let has = 0;
 										if (data.guilds[msg.guild.id][1][group][0]) {
 											for (const role of data.guilds[msg.guild.id][1][group][1]) {
-												if (member.roles.has(role)) {
+												if (member.roles.cache.has(role)) {
 													if (data.guilds[msg.guild.id][1][group][0] === 1) {
 														member.roles.remove(role);
 													} else {
@@ -302,7 +302,7 @@ client.on("message", async msg => {
 							for (const [, role] of Object.values(data.guilds[msg.guild.id][1])) {
 								const roleIndex = role.indexOf(contentRole.id);
 								if (roleIndex !== -1) {
-									if (member.roles.has(contentRole.id)) {
+									if (member.roles.cache.has(contentRole.id)) {
 										member.roles.remove(contentRole).then(() => {
 											msg.channel.send(`${msg.author} That role has been removed from yourself.`).catch(errSendMessages(msg));
 										}).catch(errManageRoles(msg));

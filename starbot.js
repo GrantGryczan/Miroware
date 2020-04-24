@@ -29,7 +29,7 @@ client.once("disconnect", exitOnError);
 const inform = (guild, str1, str2) => {
 	if (guild.available) {
 		guild.owner.send(str1).catch(() => {
-			const channels = guild.channels.filter(byTextChannels);
+			const channels = guild.channels.cache.filter(byTextChannels);
 			let i = -1;
 			const testChannel = () => {
 				i++;
@@ -52,7 +52,7 @@ const noStarboard = guild => {
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild}`);
 	data.guilds[guild] = [null, "%E2%AD%90", 5, 16755763];
-	noStarboard(client.guilds.get(guild));
+	noStarboard(client.guilds.resolve(guild));
 };
 const errSendMessages = msg => () => {
 	permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
@@ -83,9 +83,9 @@ const present = () => {
 	client.user.setActivity('Enter ">⭐" for info.');
 };
 client.once("ready", () => {
-	for (const [id, guild] of client.guilds) {
+	for (const [id, guild] of client.guilds.cache) {
 		if (data.guilds[id]) {
-			if (data.guilds[id][0] && !guild.channels.get(data.guilds[id][0])) {
+			if (data.guilds[id][0] && !guild.channels.resolve(data.guilds[id][0])) {
 				data.guilds[id][0] = null;
 			}
 		} else {
@@ -150,7 +150,7 @@ const star = (msg, callback, channel) => {
 				url: attachment.url
 			};
 		}
-		const starboard = msg.guild.channels.get(channel);
+		const starboard = msg.guild.channels.resolve(channel);
 		starboard.send(embed).then(callback).catch(() => {
 			permWarn(msg.guild, `send messages, ${attachment ? "and/or embed links" : "embed links, and/or attach files"}, in the ${starboard} channel or otherwise`);
 		});
@@ -206,14 +206,14 @@ client.on("message", async msg => {
 							data.guilds[msg.guild.id][1] = old1;
 							save();
 							const contentArray = content.split(" ");
-							((contentArray[1] && channelTest.test(contentArray[1]) ? msg.guild.channels.get(contentArray[1].replace(channelTest, "$1")) : false) || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
+							((contentArray[1] && channelTest.test(contentArray[1]) ? msg.guild.channels.resolve(contentArray[1].replace(channelTest, "$1")) : false) || msg.channel).messages.fetch(contentArray[0]).then(msg2 => {
 								star(msg2, () => {
 									msg.channel.send(`${msg.author} Message #${msg2.id} has been starred.`).catch(errSendMessages(msg));
 								}, contentArray[2] && channelTest.test(contentArray[2]) ? contentArray[2].replace(channelTest, "$1") : undefined);
 							}).catch(() => {
 								if (channelTest.test(content)) {
 									const starboard = content.replace(channelTest, "$1");
-									if (msg.guild.channels.get(starboard)) {
+									if (msg.guild.channels.resolve(starboard)) {
 										data.guilds[msg.guild.id][0] = starboard;
 										save();
 										msg.channel.send(`${msg.author} The starboard channel has been set to ${content}.`).catch(errSendMessages(msg));
