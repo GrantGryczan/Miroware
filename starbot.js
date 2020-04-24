@@ -2,7 +2,7 @@
 console.log("< Starbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
-const prefix = /^!star +/i;
+const prefix = /^!star */i;
 const spaces = / +/g;
 const underscores = /_/g;
 const channelTest = /^<#(\d+)>$/;
@@ -190,7 +190,7 @@ client.on("message", async msg => {
 			const member = msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author);
 			const perm = member.hasPermission(8) || member.id === "152282430915608578";
 			if (perm) {
-				content = content.replace(prefix, "");
+				content = content.replace(prefix, ""); // TODO: Don't let no space after "!star" be valid
 				if (content) {
 					content = content.replace(spaces, " ");
 					if (content === "selfstar") {

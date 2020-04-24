@@ -2,7 +2,7 @@
 console.log("< Colorbot >");
 const fs = require("fs");
 const Discord = require("discord.js");
-const prefix = /^!cb +/i;
+const prefix = /^!cb */i;
 const spaces = / +/g;
 const underscores = /_/g;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
@@ -180,7 +180,7 @@ client.on("message", async msg => {
 		if (prefix.test(content)) {
 			const member = msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author);
 			const perm = member.hasPermission(268435456 /* Manage Roles */) || member.id === "152282430915608578";
-			content = content.replace(prefix, "");
+			content = content.replace(prefix, ""); // TODO: Don't let no space after "!cb" be valid
 			if (content) {
 				content = content.replace(spaces, " ");
 				const spaceIndex = content.indexOf(" ");
