@@ -43,7 +43,7 @@ const inform = (guild, string1, string2) => {
 	}
 };
 const broadcast = string => {
-	for (const guild of client.guilds.cache) {
+	for (const [, guild] of client.guilds.cache) {
 		if (guild.available) {
 			inform(guild, string, `${guild.owner} ${string}`);
 		}
