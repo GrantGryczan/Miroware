@@ -171,7 +171,7 @@ const star = (msg, callback, channel) => {
 client.on("messageReactionAdd", async reaction => {
 	if (!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1]) {
 		let {count} = reaction;
-		if (data.guilds[reaction.message.guild.id][4] && reaction.users.has(reaction.message.author.id)) {
+		if (data.guilds[reaction.message.guild.id][4] && reaction.users.resolve(reaction.message.author.id)) {
 			count--;
 			reaction.message.author.send(`Trying to star your own message? That star doesn't count on ${italicize(reaction.message.guild.name)}.`).catch(doNothing);
 			reaction.users.remove(reaction.message.author).catch(errManageMessages(reaction.message));
