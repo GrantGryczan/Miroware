@@ -56,7 +56,7 @@ const permWarn = (guild, perms) => {
 	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 };
 const noStarboard = guild => {
-	const warning = ', as there is nowhere for starred messages to be placed. No starboard channel has been set!\nWith admin permissions, you can set the starboard channel by entering "!star" with a channel tag after it. It is recommended that you also set permissions on that channel channel so only I can send messages in it.';
+	const warning = ', as there is nowhere for starred messages to be placed. No starboard channel has been set!\nWith admin permissions, you can set the starboard channel by entering `!star <channel tag>`. It is recommended that you also set permissions on that channel channel so only I can send messages in it.';
 	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
 }
 const guildCreate = guild => {
@@ -78,7 +78,7 @@ const sendHelp = (msg, perm) => {
 	if (noGuild || data.guilds[msg.guild.id][0]) {
 		let help = noGuild ? "" : `${msg.author} You can add ${data.guilds[msg.guild.id][2]} ${decodeURI(data.guilds[msg.guild.id][1])} ${data.guilds[msg.guild.id][2] === 1 ? "reaction" : "reactions"} to a message on this server to add it to the <#${data.guilds[msg.guild.id][0]}> channel.`;
 		if (perm || noGuild) {
-			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`!star <channel tag>\`\nSet the starboard channel.\n\n\`!star <number>\`\nDefine how many reactions should get messages starred.\n\n\`!star <emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`!star <hex color code>\`\nChange the starred embed color.\n\n\`!star <message link> [target channel]\`\nStar a message manually. If no target channel is specified, it will default to the starboard if one is set.\n\n\`!star selfstar\`\nToggle whether users can star their own messages. Self-starring is allowed by default.\n\n\`!star erase\`\nKick me from the server after erasing all my data associated with your server. (The starboard channel will remain unaffected.)\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages.`;
+			help += `${noGuild ? "" : "\n"}With admin permissions, you can use the following commands.\n\n\`!star <channel tag>\`\nSet the starboard channel.\n\n\`!star <number>\`\nDefine how many reactions should get messages starred.\n\n\`!star <emoji, not custom>\`\nDefine which emoji should be used to star messages.\n\n\`!star <hex color code>\`\nChange the starred embed color.\n\n\`!star <message link> [target channel tag]\`\nStar a message manually. If no target channel is specified, it will default to the starboard if one is set.\n\n\`!star selfstar\`\nToggle whether users can star their own messages. Self-starring is allowed by default.\n\n\`!star erase\`\nKick me from the server after erasing all my data associated with your server. (The starboard channel will remain unaffected.)\n\nYou can also prevent me from scanning messages and accepting commands in a certain channel by adding me to its channel permissions and disabling my permission to read messages.`;
 		}
 		help += "\n\nTo report any issues, message the bot owner @Grant#2604.\nTo invite me to one of your own Discord servers, go to <https://miroware.io/discord/starbot/>.";
 		msg.channel.send(help).catch(errSendMessages(msg));

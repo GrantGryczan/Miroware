@@ -198,7 +198,7 @@ client.on("message", async msg => {
 				const contentIsColor = content[0] === "color" || content[0] === "colour";
 				if (contentIsColor || content[0] === "reset") {
 					if (data.guilds[msg.guild.id][0] === 0) {
-						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? ' With role management permission, you can enable it by entering "!cb open".' : ""}`).catch(errSendMessages(msg));
+						msg.channel.send(`${msg.author} This command is unavailable, as open color mode is disabled.${perm ? " With role management permission, you can enable it by entering `!cb open`." : ""}`).catch(errSendMessages(msg));
 					} else if (contentIsColor) {
 						if (content[1]) {
 							if (colorTest.test(content[1])) {
