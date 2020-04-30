@@ -72,9 +72,9 @@ if (isMe) {
 	if (this.req.body.email !== undefined) {
 		if (typeof this.req.body.email === "string") {
 			if (testEmail(this.req.body.email)) {
-				this.req.body.email = this.req.body.email.trim().toLowerCase();
+				const email = this.req.body.email.trim().toLowerCase();
 				if (await users.findOne({
-					email: this.req.body.email
+					email
 				})) {
 					this.value = {
 						error: "That email is already taken."
@@ -83,9 +83,9 @@ if (isMe) {
 					this.done();
 					return;
 				} else {
-					this.update.$set.unverified = this.req.body.email;
+					this.update.$set.unverified = email;
 					if (!user.verified) {
-						this.update.$set.email = this.req.body.email;
+						this.update.$set.email = email;
 					}
 					sendVerification(user, this.update.$set);
 				}

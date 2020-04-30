@@ -1,6 +1,7 @@
 if (testEmail(this.req.body.email)) {
+	const email = this.req.body.email.trim().toLowerCase();
 	if (await users.findOne({
-		email: this.req.body.email = this.req.body.email.trim().toLowerCase()
+		email
 	})) {
 		this.value = {
 			error: "That email is already taken."
@@ -73,8 +74,8 @@ if (testEmail(this.req.body.email)) {
 				connections: [connection],
 				created: this.now,
 				updated: this.now,
-				email: this.req.body.email,
-				verified: data.verified && this.req.body.email === data.email,
+				email,
+				verified: data.verified && email === data.email,
 				unverified: null,
 				emailCode: null,
 				publicEmail: false,
@@ -95,7 +96,7 @@ if (testEmail(this.req.body.email)) {
 				}]
 			};
 			if (!insertData.verified) {
-				insertData.unverified = this.req.body.email;
+				insertData.unverified = email;
 				sendVerification(insertData);
 			}
 			this.value = {
