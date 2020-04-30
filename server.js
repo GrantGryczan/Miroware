@@ -549,6 +549,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				});
 			} else {
 				applyUpdate();
+				resolve();
 			}
 		} else {
 			s3.deleteObject({
