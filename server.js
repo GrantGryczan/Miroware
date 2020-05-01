@@ -365,6 +365,30 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			token
 		};
 	};
+	const deleteUser = (user, userFilter = {
+		_id: user._id
+	}) => new Promise((resolve, reject) => {
+		const fileItems = user.pipe.filter(pipeFiles);
+		if (fileItems.length) {
+			s3.deleteObjects({
+				Bucket: "miroware-pipe",
+				Delete: {
+					Objects: fileItems.map(byS3Object)
+				}
+			}, err => {
+				if (err) {
+					reject(err);
+				} else {
+					purgePipeCache(user, fileItems);
+					users.deleteOne(userFilter);
+					resolve();
+				}
+			});
+		} else {
+			users.deleteOne(userFilter);
+			resolve();
+		}
+	});
 	const sanitizeConcat = (context, put) => new Promise(resolve => {
 		const concat = {
 			anon: !!context.req.body.anon,
