@@ -333,7 +333,6 @@ const restoreItem = itemElement => {
 		delete itemElement._item.trashed;
 		delete itemElement._item.restore;
 		itemElement.classList.remove("loading");
-		itemElement.classList.add("selected");
 		if (queryParent === "trash" || queryParent === targetParent) {
 			render();
 		}
@@ -1066,14 +1065,14 @@ if (Miro.data.isMe) {
 				this.subtitleElement.textContent = getSizeString(xhr.response.size);
 				this.closeElement.textContent = "done";
 				const item = setItem(this.item = new PipeItem(xhr.response));
-				selectItem(item.element, {
-					ctrlKey: true
-				});
 				let parent = this;
 				while (parent = getItemByID(parent.parent)) {
 					parent.size += item.size;
 				}
 				if (queryParent === this.parent) {
+					selectItem(item.element, {
+						ctrlKey: true
+					});
 					render();
 				}
 			}, (xhr, error) => {
@@ -1169,11 +1168,11 @@ if (Miro.data.isMe) {
 					type: "/"
 				}))
 			}).then(Miro.response(xhr => {
-				selectItem(setItem(this.item = new PipeItem(xhr.response)).element, {
-					ctrlKey: true
-				});
 				cachedParents.push(xhr.response.id);
 				if (queryParent === this.parent) {
+					selectItem(setItem(this.item = new PipeItem(xhr.response)).element, {
+						ctrlKey: true
+					});
 					render();
 				}
 			}));
@@ -1430,9 +1429,9 @@ if (Miro.data.isMe) {
 					itemElement._item.privacy = xhr.response.privacy;
 				}
 				itemElement.classList.remove("loading");
+				itemElement.classList.add("selected");
 				await Miro.wait();
 				if (queryParent === sourceParent) {
-					itemElement.classList.add("selected");
 					render();
 					if (notUpdatedFormState) {
 						Miro.formState(properties, true);
@@ -1442,8 +1441,8 @@ if (Miro.data.isMe) {
 				}
 			}, () => {
 				itemElement.classList.remove("loading");
+				itemElement.classList.add("selected");
 				if (queryParent === sourceParent) {
-					itemElement.classList.add("selected");
 					updateProperties();
 					if (notUpdatedFormState) {
 						Miro.formState(properties, true);
