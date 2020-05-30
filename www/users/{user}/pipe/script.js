@@ -1342,7 +1342,9 @@ if (Miro.data.isMe) {
 								traverseEntries(entries, item.id);
 							});
 						} else {
-							addFile(entry.file(), parent);
+							entry.file(file => {
+								addFile(file, parent);
+							});
 						}
 					}
 				};
