@@ -1160,8 +1160,8 @@ if (Miro.data.isMe) {
 		fileInput.click();
 	});
 	const PipeDirectory = class PipeDirectory {
-		constructor(name) {
-			this.parent = queryParent;
+		constructor(name, parent = queryParent) {
+			this.parent = parent;
 			this.name = name;
 			this.request = Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 				"X-Data": encodeURI(JSON.stringify({
