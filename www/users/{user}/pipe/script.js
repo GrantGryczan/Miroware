@@ -155,8 +155,8 @@ const PipeItem = class PipeItem {
 		this.size = item.size;
 		this.privacy = item.privacy;
 		this.date = new Date(item.date);
-		this.element.addEventListener("click", () => {
-			this.element.click();
+		this.element.addEventListener("click", evt => {
+			this.click(evt);
 		});
 	}
 	get type() {
@@ -1030,8 +1030,8 @@ if (Miro.data.isMe) {
 					<button class="close mdc-icon-button material-icons">close</button>
 				</a>
 			`;
-			(this.closeElement = this.element.querySelector(".close")).addEventListener("click", () => {
-				this.close();
+			(this.closeElement = this.element.querySelector(".close")).addEventListener("click", evt => {
+				this.close(evt);
 			});
 			this.subtitleElement = this.element.querySelector(".subtitle");
 			this.request = Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
@@ -1078,8 +1078,8 @@ if (Miro.data.isMe) {
 				this.element.classList.add("error");
 				this.subtitleElement.title = error;
 				this.subtitleElement.textContent = "An error occurred. Click to retry.";
-				this.element.addEventListener("click", () => {
-					this.retry();
+				this.element.addEventListener("click", evt => {
+					this.retry(evt);
 				});
 				if (this.dequeue()) {
 					updateQueue();
