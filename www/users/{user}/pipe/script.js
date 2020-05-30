@@ -1324,9 +1324,12 @@ if (Miro.data.isMe) {
 		evt.preventDefault();
 		if (allowDrop && Miro.focused() && indicatedTarget) {
 			const targetID = getTargetID();
+			const fileQuantity = evt.dataTransfer.files.length;
+			const uriData = evt.dataTransfer.getData("text/uri-list");
+			const items = [...evt.dataTransfer.items];
 			indicateTarget();
 			await cacheItem(targetID);
-			if (evt.dataTransfer.files.length) {
+			if (fileQuantity) {
 				const traverseEntries = async (entries, parent) => {
 					await cacheItem(parent);
 					for (const entry of entries) {
@@ -1349,7 +1352,7 @@ if (Miro.data.isMe) {
 					}
 				};
 				const rootEntries = [];
-				for (const item of evt.dataTransfer.items) {
+				for (const item of items) {
 					if (item.webkitGetAsEntry) {
 						rootEntries.push(item.webkitGetAsEntry());
 					} else {
@@ -1359,8 +1362,8 @@ if (Miro.data.isMe) {
 				if (rootEntries.length) {
 					traverseEntries(rootEntries, targetID);
 				}
-			} else if (evt.dataTransfer.types.includes("text/uri-list")) {
-				addURL(evt.dataTransfer.getData("text/uri-list"), targetID);
+			} else if (uriData) {
+				addURL(uriData, targetID);
 			}
 		}
 	}, true);
