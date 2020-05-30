@@ -328,7 +328,16 @@ Miro.response = (success, failure) => async xhr => {
 	}
 };
 const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
-let loadingRequests = 0;
+let loadingQueue = 0;
+Miro.startLoading = () => {
+	loadingQueue++;
+	Miro.progress.open();
+};
+Miro.endLoading = () => {
+	if (!--loadingQueue) {
+		Miro.progress.close();
+	}
+};
 Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 	method = typeof method === "string" ? method.toUpperCase() : "GET";
 	const request = new Promise(resolve => {
@@ -339,7 +348,7 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 		}
 		const progress = !noProgress;
 		if (progress) {
-			loadingRequests++;
+			loadingQueue++;
 			Miro.progress.open();
 		}
 		headers = headers instanceof Object ? headers : {};
@@ -361,7 +370,7 @@ Miro.request = (method, url, headers, body, beforeOpen, noProgress) => {
 		});
 		xhr.addEventListener("readystatechange", () => {
 			if (xhr.readyState === XMLHttpRequest.DONE) {
-				if (progress && !--loadingRequests) {
+				if (progress && !--loadingQueue) {
 					Miro.progress.close();
 				}
 				if (xhr.response) {
