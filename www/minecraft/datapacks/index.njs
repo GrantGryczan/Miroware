@@ -27,8 +27,8 @@ for (const dataPack of dataPacks) {
 					<div class="mdc-card__text-section">
 						<div class="mdc-card__supporting-text">$${dataPack.description}</div>
 					</div>
-					<div class="mdc-card__actions">
-						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="$${dataPack.video}">play_circle_outline</a>
+					<div class="mdc-card__actions">${dataPack.video ? html`
+						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="$${dataPack.video}">play_circle_outline</a>` : ""}
 						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}">file_download</a>
 					</div>
 				</div>`;

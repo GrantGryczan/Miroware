@@ -1,0 +1,8 @@
+.mdc-card {
+	display: inline-flex;
+	width: 400px;
+	margin: 8px;
+	&__actions {
+		justify-content: flex-end;
+	}
+}
