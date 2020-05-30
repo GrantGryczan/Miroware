@@ -104,9 +104,9 @@ if (isMe) {
 		data.privacy = 1;
 	} else if (typeof data.privacy === "number") {
 		if (data.privacy === 2) {
-			if (true) { // TODO: not Amber
+			if (true /* TODO: not subscribed */) {
 				this.value = {
-					error: "Private items require an Amber subscription."
+					error: "Private items require a paid subscription."
 				};
 				this.status = 422;
 				this.done();

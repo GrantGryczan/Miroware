@@ -161,9 +161,9 @@ if (isMe) {
 			}
 			if (typeof this.req.body.privacy === "number") {
 				if (this.req.body.privacy === 0 || this.req.body.privacy === 1 || this.req.body.privacy === 2) {
-					if (this.req.body.privacy === 2 && true) { // TODO: not Amber
+					if (this.req.body.privacy === 2 && true /* TODO: not subscribed */) {
 						this.value = {
-							error: "Private items require an Amber subscription."
+							error: "Private items require a paid subscription."
 						};
 						this.status = 422;
 						this.done();
