@@ -85,7 +85,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 							throw err;
 						});
 						archive.pipe(res);
-						const sliceStart = path.lastIndexOf("/") + 1;
+						const sliceStart = path.length + 1; // To put the folder inside of the ZIP instead of having the ZIP be the folder itself, change `path.length` to `path.lastIndexOf("/")`.
 						const promises = [];
 						const scan = parent => {
 							for (const item of user.pipe) {
