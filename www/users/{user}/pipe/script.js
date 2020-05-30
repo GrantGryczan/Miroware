@@ -1334,9 +1334,8 @@ if (Miro.data.isMe) {
 								({item} = directory);
 							}
 							const reader = entry.createReader();
-							Miro.startLoading();
 							let entries;
-							while (entries = await new Promise(reader.readEntries.bind(reader))) {
+							while ((entries = await new Promise(reader.readEntries.bind(reader))).length) {
 								traverseEntries(entries, item.id);
 							}
 						} else {
