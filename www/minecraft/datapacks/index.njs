@@ -18,7 +18,7 @@ const dataPacks = [{
 for (const dataPack of dataPacks) {
 	this.tags.push(...dataPack.tags);
 	this.value += html`
-				<div class="mdc-card">
+				<div id="$${dataPack.id}" class="mdc-card">
 					<div class="mdc-card__text-section">
 						<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}/icon.png">
 						<div class="mdc-card__title">$${dataPack.title}</div>
