@@ -192,6 +192,11 @@ main {
 		padding-left: 16px;
 		padding-right: 16px;
 		padding-top: 16px;
+	    font-size: 0.875rem;
+	    line-height: 1.25rem;
+	    font-weight: 400;
+	    letter-spacing: 0.0178571429em;
+	    opacity: 0.6;
 		&:last-child {
 			padding-bottom: 16px;
 		}
@@ -201,6 +206,7 @@ main {
 		line-height: 2rem;
 		font-weight: 500;
 		letter-spacing: 0.0125em;
+		opacity: 1;
 	}
 	&__subtitle {
 		font-size: 0.875rem;
