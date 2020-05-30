@@ -25,7 +25,7 @@ for (const dataPack of dataPacks) {
 						<div class="mdc-card__subhead">$${dataPack.version} for Minecraft $${dataPack.compatibility}</div>
 					</div>
 					<div class="mdc-card__text-section">
-						<div class="mdc-card__supporting-text">$${dataPack.description}</div>
+						<div class="mdc-card__supporting-text">${dataPack.description}</div>
 					</div>
 					<div class="mdc-card__actions">${dataPack.video ? html`
 						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="$${dataPack.video}" target="_blank" title="Open Video">play_circle_outline</a>` : ""}
