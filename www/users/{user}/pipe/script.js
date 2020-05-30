@@ -1340,7 +1340,7 @@ if (Miro.data.isMe) {
 							const reader = entry.createReader();
 							Miro.startLoading();
 							let entries;
-							while (entries = await new Promise(reader.readEntries)) {
+							while (entries = await new Promise(reader.readEntries.bind(reader))) {
 								traverseEntries(entries, item.id);
 							}
 						} else {
