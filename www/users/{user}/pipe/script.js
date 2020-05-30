@@ -65,6 +65,7 @@ const closingParentheses = /\)/g;
 const pipe = [];
 const cachedParents = [];
 const getItemByID = id => pipe.find(item => item.id === id);
+const getItemByName = (name, parent = queryParent) => pipe.find(item => item.name === name && item.parent === parent);
 const setItem = item => {
 	const itemIndex = pipe.findIndex(({id}) => id === item.id);
 	if (itemIndex === -1) {
@@ -428,21 +429,23 @@ const render = () => {
 const goHome = () => {
 	location.hash = "#";
 };
-const hashChange = () => {
-	queryParent = location.hash.slice(1) || null;
-	if (!cachedParents.includes(queryParent)) {
-		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?parent=${queryParent ? encodeForPipe(queryParent) : ""}`).then(Miro.response(xhr => {
+const cacheItem = id => new Promise((resolve, reject) => {
+	if (cachedParents.includes(queryParent)) {
+		resolve();
+	} else {
+		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?parent=${id ? encodeForPipe(id) : ""}`).then(Miro.response(xhr => {
 			for (const item of xhr.response.ancestors.concat(xhr.response.items)) {
 				if (!getItemByID(item.id)) {
 					setItem(new PipeItem(item));
 				}
 			}
-			cachedParents.push(queryParent);
-			render();
-		}, goHome));
-	} else {
-		render();
+			cachedParents.push(id);
+			resolve();
+		}, reject));
 	}
+});
+const hashChange = () => {
+	cacheItem(queryParent = location.hash.slice(1) || null).then(render).catch(goHome);
 };
 hashChange();
 window.addEventListener("hashchange", hashChange);
@@ -944,8 +947,9 @@ updateProperties();
 if (Miro.data.isMe) {
 	const checkName = async (name, parent = queryParent) => {
 		if (parent !== "trash") {
+			await cacheItem(parent);
 			let takenItem;
-			while (takenItem = pipe.find(item => item.name === name && item.parent === parent)) {
+			while (takenItem = getItemByName(name, parent)) {
 				const value = await new Miro.Dialog("Error", html`
 					<b>$${takenItem.path}</b> already exists.
 				`, ["Replace", "Rename", "Cancel"]);
@@ -1321,22 +1325,37 @@ if (Miro.data.isMe) {
 		if (allowDrop && Miro.focused() && indicatedTarget) {
 			const targetID = getTargetID();
 			indicateTarget();
+			await cacheItem(targetID);
 			if (evt.dataTransfer.files.length) {
-				for (const item of evt.dataTransfer.items) {
-					let entry;
-					if (item.webkitGetAsEntry && (entry = item.webkitGetAsEntry()).isDirectory) {
-						const name = await checkName(entry.name);
-						if (name) {
-							(async () => {
-								const directory = new PipeDirectory(name, targetID).request;
-								await directory;
-								const reader = entry.createReader();
-								debugger;
-							})();
+				const traverseEntries = async (entries, parent) => {
+					await cacheItem(parent);
+					for (const entry of entries) {
+						if (entry.isDirectory) {
+							let item = getItemByName(entry.name, parent);
+							if (!item) {
+								const directory = new PipeDirectory(entry.name, parent);
+								await directory.request;
+								({item} = directory.item);
+							}
+							const reader = entry.createReader();
+							reader.readEntries(entries => {
+								traverseEntries(entries, item.id);
+							});
+						} else {
+							addFile(entry.file(), parent);
 						}
+					}
+				};
+				const rootEntries = [];
+				for (const item of evt.dataTransfer.items) {
+					if (item.webkitGetAsEntry) {
+						rootEntries.push(item.webkitGetAsEntry());
 					} else {
 						addFile(item.getAsFile(), targetID);
 					}
+				}
+				if (rootEntries.length) {
+					traverseEntries(rootEntries, targetID);
 				}
 			} else if (evt.dataTransfer.types.includes("text/uri-list")) {
 				addURL(evt.dataTransfer.getData("text/uri-list"), targetID);
