@@ -1,4 +1,4 @@
-this.title = "Grant Data Packs";
+this.title = "Grant's Data Packs";
 this.description = "All Minecraft data packs by Grant Gryczan";
 this.tags = ["minecraft", "mc", "data", "pack", "packs", "datapack", "datapacks", "command", "commands", "block", "blocks", "1.13", "1.14", "1.15", "1.16"];
 this.value = (await load("load/head", this)).value;
@@ -28,8 +28,8 @@ for (const dataPack of dataPacks) {
 						<div class="mdc-card__supporting-text">$${dataPack.description}</div>
 					</div>
 					<div class="mdc-card__actions">${dataPack.video ? html`
-						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="$${dataPack.video}">play_circle_outline</a>` : ""}
-						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}">file_download</a>
+						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="$${dataPack.video}" target="_blank">play_circle_outline</a>` : ""}
+						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}" target="_blank">file_download</a>
 					</div>
 				</div>`;
 }
