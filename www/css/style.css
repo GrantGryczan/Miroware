@@ -192,17 +192,17 @@ main {
 		padding: 16px;
 	}
 	&__title {
-	    font-size: 1.25rem;
-	    line-height: 2rem;
-	    font-weight: 500;
-	    letter-spacing: 0.0125em;
+		font-size: 1.25rem;
+		line-height: 2rem;
+		font-weight: 500;
+		letter-spacing: 0.0125em;
 	}
 	&__subtitle {
-	    font-size: 0.875rem;
-	    line-height: 1.25rem;
-	    font-weight: 400;
-	    letter-spacing: 0.0178571429em;
-	    opacity: 0.6;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		font-weight: 400;
+		letter-spacing: 0.0178571429em;
+		opacity: 0.6;
 	}
 }
 .mdc-button {
