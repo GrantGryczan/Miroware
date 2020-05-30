@@ -155,7 +155,9 @@ const PipeItem = class PipeItem {
 		this.size = item.size;
 		this.privacy = item.privacy;
 		this.date = new Date(item.date);
-		this.element.addEventListener("click", this.click.bind(this));
+		this.element.addEventListener("click", () => {
+			this.click();
+		});
 	}
 	get type() {
 		return this[_type];
@@ -166,7 +168,9 @@ const PipeItem = class PipeItem {
 		this.iconElement.textContent = this.id === "trash" ? "delete" : (typeDir ? "folder" : (value.startsWith("image/") ? "image" : (value.startsWith("audio/") ? "audiotrack" : (value.startsWith("video/") ? "movie" : (value === "text/html" ? "web" : "insert_drive_file")))));
 		this.element.classList[typeDir ? "add" : "remove"]("typeDir");
 		this.element.classList[typeDir ? "remove" : "add"]("typeFile");
-		setTimeout(this.updateThumbnail.bind(this));
+		setTimeout(() => {
+			this.updateThumbnail();
+		});
 	}
 	get parent() {
 		return this[_parent];
@@ -1026,9 +1030,11 @@ if (Miro.data.isMe) {
 					<button class="close mdc-icon-button material-icons">close</button>
 				</a>
 			`;
-			(this.closeElement = this.element.querySelector(".close")).addEventListener("click", this.close.bind(this));
+			(this.closeElement = this.element.querySelector(".close")).addEventListener("click", () => {
+				this.close();
+			});
 			this.subtitleElement = this.element.querySelector(".subtitle");
-			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
+			this.request = Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 				"Content-Type": "application/octet-stream",
 				"X-Data": encodeURI(JSON.stringify(data))
 			}, this.file, xhr => {
@@ -1056,7 +1062,7 @@ if (Miro.data.isMe) {
 				this.subtitleElement.title = `${xhr.response.size} B`;
 				this.subtitleElement.textContent = getSizeString(xhr.response.size);
 				this.closeElement.textContent = "done";
-				const item = setItem(new PipeItem(xhr.response));
+				const item = setItem(this.item = new PipeItem(xhr.response));
 				selectItem(item.element, {
 					ctrlKey: true
 				});
@@ -1072,7 +1078,9 @@ if (Miro.data.isMe) {
 				this.element.classList.add("error");
 				this.subtitleElement.title = error;
 				this.subtitleElement.textContent = "An error occurred. Click to retry.";
-				this.element.addEventListener("click", this.retry.bind(this));
+				this.element.addEventListener("click", () => {
+					this.retry();
+				});
 				if (this.dequeue()) {
 					updateQueue();
 				}
@@ -1113,8 +1121,8 @@ if (Miro.data.isMe) {
 			}
 		}
 	};
-	const addFile = async (file, name, parent) => {
-		if (file.size > 100 * 1024 * 1024) { // 100 MiB
+	const addFile = async (file, parent, name) => {
+		if (file.size > 100 * 1024 * 1024 /* 100 MiB */) {
 			new Miro.Dialog("Error", "You can't upload files above 100 MiB! It would clog the pipe!");
 			return;
 		}
@@ -1144,19 +1152,21 @@ if (Miro.data.isMe) {
 		}
 		fileInput.value = null;
 	});
-	creation.querySelector("#addFiles").addEventListener("click", fileInput.click.bind(fileInput));
+	creation.querySelector("#addFiles").addEventListener("click", () => {
+		fileInput.click();
+	});
 	const PipeDirectory = class PipeDirectory {
 		constructor(name) {
 			this.parent = queryParent;
 			this.name = name;
-			Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
+			this.request = Miro.request("POST", `/users/${Miro.data.user.id}/pipe`, {
 				"X-Data": encodeURI(JSON.stringify({
 					parent: this.parent,
 					name: this.name,
 					type: "/"
 				}))
 			}).then(Miro.response(xhr => {
-				selectItem(setItem(new PipeItem(xhr.response)).element, {
+				selectItem(setItem(this.item = new PipeItem(xhr.response)).element, {
 					ctrlKey: true
 				});
 				cachedParents.push(xhr.response.id);
@@ -1179,10 +1189,9 @@ if (Miro.data.isMe) {
 		}, "Cancel"]).then(async value => {
 			if (value === 0) {
 				const name = await checkName(dialog.form.elements.name.value);
-				if (!name) {
-					return;
+				if (name) {
+					new PipeDirectory(name);
 				}
-				new PipeDirectory(name);
 			}
 		});
 	});
@@ -1244,18 +1253,19 @@ if (Miro.data.isMe) {
 			if (file) {
 				let name = (file = file.getAsFile()).name;
 				if (htmlString) {
-					const htmlFilename = (await new Promise(htmlString.getAsString.bind(htmlString))).match(htmlFilenameTest);
+					const htmlFilename = (await new Promise(resolve => {
+						htmlString.getAsString(resolve);
+					})).match(htmlFilenameTest);
 					name = htmlFilename ? htmlFilename[1] : "file";
 				}
-				addFile(file, await enterFileName("Paste", name));
-			} else if (string) {
-				string = await new Promise(string.getAsString.bind(string));
-				if (string.includes("://")) {
-					try {
-						decodeURIComponent(string);
-						addURL(string);
-					} catch {}
-				}
+				addFile(file, undefined, await enterFileName("Paste", name));
+			} else if (string && (string = await new Promise(resolve => {
+				string.getAsString(resolve);
+			})).includes("://")) {
+				try {
+					decodeURIComponent(string);
+					addURL(string);
+				} catch {}
 			}
 		}
 	}, {
@@ -1306,18 +1316,31 @@ if (Miro.data.isMe) {
 		capture: true,
 		passive: true
 	});
-	document.addEventListener("drop", evt => {
+	document.addEventListener("drop", async evt => {
 		evt.preventDefault();
 		if (allowDrop && Miro.focused() && indicatedTarget) {
 			const targetID = getTargetID();
+			indicateTarget();
 			if (evt.dataTransfer.files.length) {
-				for (const file of evt.dataTransfer.files) {
-					addFile(file, undefined, targetID);
+				for (const item of evt.dataTransfer.items) {
+					let entry;
+					if (item.webkitGetAsEntry && (entry = item.webkitGetAsEntry()).isDirectory) {
+						const name = await checkName(entry.name);
+						if (name) {
+							(async () => {
+								const directory = new PipeDirectory(name, targetID).request;
+								await directory;
+								const reader = entry.createReader();
+								debugger;
+							})();
+						}
+					} else {
+						addFile(item.getAsFile(), targetID);
+					}
 				}
 			} else if (evt.dataTransfer.types.includes("text/uri-list")) {
 				addURL(evt.dataTransfer.getData("text/uri-list"), targetID);
 			}
-			indicateTarget();
 		}
 	}, true);
 	actionRestore.addEventListener("click", restoreItems);
