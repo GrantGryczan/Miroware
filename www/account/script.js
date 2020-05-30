@@ -79,8 +79,8 @@ const appendCard = connection => {
 	const card = html`
 		<div class="connection mdc-card margined">
 			<div class="mdc-card__area">
-				<h2 class="mdc-card__title mdc-typography--headline6">${connection.id}</h2>
-				<h3 class="mdc-card__subtitle mdc-typography--subtitle2">${connection.service}</h3>
+				<h2 class="mdc-card__title">${connection.id}</h2>
+				<h3 class="mdc-card__subtitle">${connection.service}</h3>
 			</div>
 			<div class="mdc-card__actions">
 				<div class="mdc-card__action-icons">

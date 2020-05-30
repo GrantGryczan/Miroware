@@ -188,22 +188,21 @@ main {
 }
 .mdc-card {
 	background-color: #303030;
+	&__area {
+		padding: 16px;
+	}
 	&__title {
-		margin: 0;
+	    font-size: 1.25rem;
+	    line-height: 2rem;
+	    font-weight: 500;
+	    letter-spacing: 0.0125em;
 	}
 	&__subtitle {
-		margin: 0;
-		color: rgba(255, 255, 255, 0.54);
-	}
-	&__area {
-		padding: 0 1rem 8px 1rem;
-		color: rgba(255, 255, 255, 0.54);
-		&:first-child {
-			padding-top: 1rem;
-		}
-		&:last-child {
-			padding-bottom: 1rem;
-		}
+	    font-size: 0.875rem;
+	    line-height: 1.25rem;
+	    font-weight: 400;
+	    letter-spacing: 0.0178571429em;
+	    opacity: 0.6;
 	}
 }
 .mdc-button {
