@@ -313,7 +313,6 @@ const removeItem = itemElement => {
 			itemElement._item.trashed = xhr.response.trashed;
 			itemElement._item.restore = xhr.response.restore;
 			itemElement.classList.remove("loading");
-			itemElement.classList.add("selected");
 			if (queryParent === sourceParent || queryParent === "trash") {
 				render();
 			}
@@ -1431,9 +1430,9 @@ if (Miro.data.isMe) {
 					itemElement._item.privacy = xhr.response.privacy;
 				}
 				itemElement.classList.remove("loading");
-				itemElement.classList.add("selected");
 				await Miro.wait();
 				if (queryParent === sourceParent) {
+					itemElement.classList.add("selected");
 					render();
 					if (notUpdatedFormState) {
 						Miro.formState(properties, true);
@@ -1443,8 +1442,8 @@ if (Miro.data.isMe) {
 				}
 			}, () => {
 				itemElement.classList.remove("loading");
-				itemElement.classList.add("selected");
 				if (queryParent === sourceParent) {
+					itemElement.classList.add("selected");
 					updateProperties();
 					if (notUpdatedFormState) {
 						Miro.formState(properties, true);
