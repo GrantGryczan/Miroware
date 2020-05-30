@@ -2,7 +2,7 @@
 document.title += ` / ${Miro.data.user.name}`;
 const getDate = date => String(date).split(" ").slice(1, 5).join(" ");
 const BYTE_SCALE = 1024;
-const getSize = size => {
+const getSizeString = size => {
 	if (size < BYTE_SCALE) {
 		return `${size} B`;
 	}
@@ -232,7 +232,7 @@ const PipeItem = class PipeItem {
 		return this[_size];
 	}
 	set size(value) {
-		this.sizeElement.textContent = getSize(this[_size] = value);
+		this.sizeElement.textContent = getSizeString(this[_size] = value);
 		this.sizeElement.title = `${value} B`;
 		if (this.element.classList.contains("selected")) {
 			updateProperties();
@@ -653,7 +653,7 @@ const updateProperties = () => {
 	previewVideo.src = "";
 	const selected = items.querySelectorAll(".item.selected");
 	if (selected.length) {
-		selectionInfo.textContent = `${selected.length} selected item${selected.length === 1 ? "" : "s"} (${getSize(Array.prototype.reduce.call(selected, sizeReducer, 0))})`;
+		selectionInfo.textContent = `${selected.length} selected item${selected.length === 1 ? "" : "s"} (${getSizeString(Array.prototype.reduce.call(selected, sizeReducer, 0))})`;
 		property.actions.classList.remove("hidden");
 		const trashDeselected = !items.querySelector("#item_trash.selected");
 		const oneSelected = selected.length === 1;
@@ -1021,7 +1021,7 @@ if (Miro.data.isMe) {
 				<a class="item loading" draggable="false" ondragstart="return false;">
 					<div class="label">
 						<div class="title" title="$${this.name}">$${this.name}</div>
-						<div class="subtitle" title="$${data.url || `0 B / ${this.file.size} B`}">$${data.url || `0% (0 B / ${this.size = getSize(this.file.size)}`})</div>
+						<div class="subtitle" title="$${data.url || `0 B / ${this.file.size} B`}">$${data.url || `0% (0 B / ${this.size = getSizeString(this.file.size)}`})</div>
 					</div>
 					<button class="close mdc-icon-button material-icons">close</button>
 				</a>
@@ -1040,7 +1040,7 @@ if (Miro.data.isMe) {
 							const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
 							this.element.style.backgroundSize = `${percentage}%`;
 							this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
-							this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSize(this.loaded)} / ${this.size})`;
+							this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSizeString(this.loaded)} / ${this.size})`;
 							updateQueue();
 						}
 					});
@@ -1054,7 +1054,7 @@ if (Miro.data.isMe) {
 				this.element.classList.remove("loading");
 				this.element.href = `#${this.parent || ""}`;
 				this.subtitleElement.title = `${xhr.response.size} B`;
-				this.subtitleElement.textContent = getSize(xhr.response.size);
+				this.subtitleElement.textContent = getSizeString(xhr.response.size);
 				this.closeElement.textContent = "done";
 				const item = setItem(new PipeItem(xhr.response));
 				selectItem(item.element, {
