@@ -1257,7 +1257,7 @@ if (Miro.data.isMe) {
 			if (file) {
 				let name = (file = file.getAsFile()).name;
 				if (htmlString) {
-					const htmlFilename = (await new Promise(htmlString.getAsString.bind(htmlString)).match(htmlFilenameTest);
+					const htmlFilename = (await new Promise(htmlString.getAsString.bind(htmlString))).match(htmlFilenameTest);
 					name = htmlFilename ? htmlFilename[1] : "file";
 				}
 				addFile(file, undefined, await enterFileName("Paste", name));
