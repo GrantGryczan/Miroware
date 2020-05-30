@@ -203,7 +203,7 @@ main {
 		letter-spacing: 0.0125em;
 		opacity: 1;
 	}
-	&__subhead, &__supporting_text {
+	&__subhead, &__supporting-text {
 		font-size: 0.875rem;
 		line-height: 1.25rem;
 		font-weight: 400;
