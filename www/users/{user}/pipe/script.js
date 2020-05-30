@@ -430,7 +430,7 @@ const goHome = () => {
 	location.hash = "#";
 };
 const cacheItem = id => new Promise((resolve, reject) => {
-	if (cachedParents.includes(queryParent)) {
+	if (cachedParents.includes(id)) {
 		resolve();
 	} else {
 		Miro.request("GET", `/users/${Miro.data.user.id}/pipe?parent=${id ? encodeForPipe(id) : ""}`).then(Miro.response(xhr => {
