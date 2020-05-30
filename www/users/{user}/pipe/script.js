@@ -1334,7 +1334,7 @@ if (Miro.data.isMe) {
 							if (!item) {
 								const directory = new PipeDirectory(entry.name, parent);
 								await directory.request;
-								({item} = directory.item);
+								({item} = directory);
 							}
 							const reader = entry.createReader();
 							reader.readEntries(entries => {
