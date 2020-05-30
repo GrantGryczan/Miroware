@@ -180,7 +180,7 @@ const PipeItem = class PipeItem {
 		}
 		this[_parent] = value;
 		if (this.path) {
-			this.path = this.parent ? `${getItemByID(this.parent).path}/${this.name}` : this.name;
+			this.path = this.parent ? `${this.parent === "trash" ? Miro.data.trashName : getItemByID(this.parent).path}/${this.name}` : this.name;
 			let parent = this;
 			while (parent = getItemByID(parent.parent)) {
 				parent.size += this.size;
