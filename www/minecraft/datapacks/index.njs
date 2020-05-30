@@ -20,6 +20,7 @@ for (const dataPack of dataPacks) {
 	this.value += html`
 				<div class="mdc-card">
 					<div class="mdc-card__text-section">
+						<img class="mdc-card__icon">
 						<div class="mdc-card__title">$${dataPack.title}</div>
 						<div class="mdc-card__subhead">$${dataPack.version} for Minecraft $${dataPack.compatibility}</div>
 					</div>
@@ -34,7 +35,5 @@ for (const dataPack of dataPacks) {
 }
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
-this.value += html`
-		<script src="script.js"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
