@@ -1,6 +1,6 @@
 "use strict";
 document.title += ` / ${Miro.data.user.name}`;
-const getDate = date => String(date).split(" ").slice(1, 5).join(" ");
+const getDateString = date => String(date).split(" ").slice(1, 5).join(" ");
 const BYTE_SCALE = 1024;
 const getSizeString = size => {
 	if (size < BYTE_SCALE) {
@@ -242,7 +242,7 @@ const PipeItem = class PipeItem {
 		return this[_date];
 	}
 	set date(value) {
-		this.dateElement.textContent = getDate(this.dateElement.title = this[_date] = value);
+		this.dateElement.textContent = getDateString(this.dateElement.title = this[_date] = value);
 	}
 	click(evt) {
 		evt.preventDefault();
