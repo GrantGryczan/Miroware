@@ -1133,7 +1133,7 @@ if (Miro.data.isMe) {
 		if (!(name = await checkName(typeof name === "string" ? name : file.name, parent))) {
 			return;
 		}
-		queuedItems.appendChild(new PipeFile(file, name, parent).element);
+		queuedItems.insertBefore(new PipeFile(file, name, parent).element, queuedItems.firstChild);
 	};
 	const addURL = async (url, parent) => {
 		let name = decodeURIComponent(url);
@@ -1145,7 +1145,7 @@ if (Miro.data.isMe) {
 		if (!(name = await checkName(await enterFileName("URL Upload", name, url), parent))) {
 			return;
 		}
-		queuedItems.appendChild(new PipeFile(url, name, parent).element);
+		queuedItems.insertBefore(new PipeFile(url, name, parent).element, queuedItems.firstChild);
 	};
 	const fileInput = document.createElement("input");
 	fileInput.type = "file";
@@ -1320,13 +1320,14 @@ if (Miro.data.isMe) {
 		capture: true,
 		passive: true
 	});
-	document.addEventListener("drop", async evt => {
+	document.addEventListener("drop", evt => {
 		evt.preventDefault();
 		if (allowDrop && Miro.focused() && indicatedTarget) {
 			const targetID = getTargetID();
 			indicateTarget();
 			if (evt.dataTransfer.files.length) {
 				const traverseEntries = async (entries, parent) => {
+					Miro.startLoading();
 					await cacheItem(parent);
 					for (const entry of entries) {
 						if (entry.isDirectory) {
@@ -1337,15 +1338,18 @@ if (Miro.data.isMe) {
 								({item} = directory);
 							}
 							const reader = entry.createReader();
-							reader.readEntries(entries => {
+							Miro.startLoading();
+							let entries;
+							while (entries = await new Promise(reader.readEntries)) {
 								traverseEntries(entries, item.id);
-							});
+							}
 						} else {
 							entry.file(file => {
 								addFile(file, parent);
 							});
 						}
 					}
+					Miro.endLoading();
 				};
 				const rootEntries = [];
 				for (const item of evt.dataTransfer.items) {
