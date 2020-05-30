@@ -156,7 +156,7 @@ const PipeItem = class PipeItem {
 		this.privacy = item.privacy;
 		this.date = new Date(item.date);
 		this.element.addEventListener("click", () => {
-			this.click();
+			this.element.click();
 		});
 	}
 	get type() {
