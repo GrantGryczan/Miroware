@@ -6,7 +6,7 @@ this.value += html`
 		<link rel="stylesheet" href="style.css">`;
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
-const dataPacks = [{
+for (const dataPack of [{
 	id: "confetti_creepers",
 	title: "Confetti Creepers",
 	version: "1.0.0",
@@ -108,7 +108,7 @@ const dataPacks = [{
 	title: "TPA",
 	version: "1.0.0",
 	compatibility: "1.16",
-	description: `Enter "/trigger tpa set <PID>" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.`,
+	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.`,
 	tags: []
 }, {
 	id: "unlock_all_recipes",
@@ -117,8 +117,7 @@ const dataPacks = [{
 	compatibility: "1.16",
 	description: "Automatically unlock all recipes as soon as you start playing.",
 	tags: []
-}];
-for (const dataPack of dataPacks) {
+}]) {
 	this.tags.push(...dataPack.tags);
 	this.value += html`
 				<div id="$${dataPack.id}" class="mdc-card">
