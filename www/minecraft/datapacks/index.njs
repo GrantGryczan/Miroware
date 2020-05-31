@@ -6,6 +6,8 @@ this.value += html`
 		<link rel="stylesheet" href="style.css">`;
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
+this.value += html`
+			<div id="dataPacks">`;
 for (const dataPack of [{
 	id: "confetti_creepers",
 	title: "Confetti Creepers",
@@ -120,21 +122,23 @@ for (const dataPack of [{
 }]) {
 	this.tags.push(...dataPack.tags);
 	this.value += html`
-				<div id="$${dataPack.id}" class="mdc-card">
-					<div class="mdc-card__text-section">
-						<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}/icon.$${dataPack.icon || "png"}">
-						<div class="mdc-card__title">$${dataPack.title}</div>
-						<div class="mdc-card__subhead">$${dataPack.version} for Minecraft $${dataPack.compatibility}</div>
-					</div>
-					<div class="mdc-card__text-section">
-						<div class="mdc-card__supporting-text">${dataPack.description}</div>
-					</div>
-					<div class="mdc-card__actions">${dataPack.video ? html`
-						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="$${dataPack.video}" target="_blank" title="Open Video">play_circle_outline</a>` : ""}
-						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}" target="_blank" title="Download">file_download</a>
-					</div>
-				</div>`;
+					<div id="$${dataPack.id}" class="dataPack mdc-card">
+						<div class="mdc-card__text-section">
+							<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}/icon.$${dataPack.icon || "png"}">
+							<div class="mdc-card__title">$${dataPack.title}</div>
+							<div class="mdc-card__subhead">$${dataPack.version} for Minecraft $${dataPack.compatibility}</div>
+						</div>
+						<div class="mdc-card__text-section">
+							<div class="mdc-card__supporting-text">${dataPack.description}</div>
+						</div>
+						<div class="mdc-card__actions">${dataPack.video ? html`
+							<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="$${dataPack.video}" target="_blank" title="Open Video">play_circle_outline</a>` : ""}
+							<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}" target="_blank" title="Download">file_download</a>
+						</div>
+					</div>`;
 }
+this.value += html`
+			</div>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += (await load("load/foot", this)).value;

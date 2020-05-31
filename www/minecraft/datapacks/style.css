@@ -1,14 +1,14 @@
-main {
+#dataPacks {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
-.mdc-card {
+.dataPack {
 	display: inline-flex;
 	width: 360px;
 	margin: 8px;
-	&__actions {
-		justify-content: flex-end;
-	    margin-top: auto;
-	}
+}
+.mdc-card__actions {
+    justify-content: flex-end;
+    margin-top: auto;
 }
