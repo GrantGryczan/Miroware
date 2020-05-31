@@ -12,7 +12,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.14-1.16",
 	description: "There is a chance each creeper will explode into confetti and do no damage to blocks.",
-	icon: "png",
 	video: "https://miroware.io/echo/?placeholder",
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
 }, {
@@ -37,7 +36,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: "Display each player's death count in the player list.",
-	icon: "png",
 	tags: []
 }, {
 	id: "graves",
@@ -45,7 +43,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: "Retrieve any items a player drops on death from the grave created at their death location.",
-	icon: "png",
 	tags: []
 }, {
 	id: "health_counter",
@@ -53,7 +50,7 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: "Display each player's health below their nametag.",
-	icon: "png",
+	icon: "gif",
 	tags: []
 }, {
 	id: "infinite_respawn_anchors",
@@ -61,7 +58,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: "If a respawn anchor has crying obsidian beneath it and an end crystal above it, it will never lose charge.",
-	icon: "png",
 	tags: []
 }, {
 	id: "invisible_item_frames",
@@ -69,7 +65,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: "Drop an item frame into a cauldron with an extended potion of invisibility to craft an invisible item frame.",
-	icon: "png",
 	tags: []
 }, {
 	id: "name_colors",
@@ -77,7 +72,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: 'Enter "/trigger color" to list the colors you can give to your username.',
-	icon: "png",
 	tags: []
 }, {
 	id: "never_too_expensive",
@@ -85,7 +79,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: "Drop an item into a cauldron with some XP bottles to reduce the item's repair cost.",
-	icon: "png",
 	tags: []
 }, {
 	id: "players_drop_heads",
@@ -93,7 +86,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: "Players drop their heads when killed by another player.",
-	icon: "png",
 	tags: []
 }, {
 	id: "spawn_command",
@@ -101,7 +93,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: 'Enter "/trigger spawn" to teleport to the world spawn point.',
-	icon: "png",
 	tags: []
 }, {
 	id: "teleporters",
@@ -109,7 +100,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: "Drop a lodestone compass with crying obsidian placed directly both above and below it to create a teleporter to that compass's lodestone.",
-	icon: "png",
 	tags: []
 }, {
 	id: "tpa",
@@ -117,7 +107,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: `Enter "/trigger tpa set <PID>" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.`,
-	icon: "png",
 	tags: []
 }, {
 	id: "unlock_all_recipes",
@@ -125,7 +114,6 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: "Automatically unlock all recipes as soon as you start playing.",
-	icon: "png",
 	tags: []
 }];
 for (const dataPack of dataPacks) {
@@ -133,7 +121,7 @@ for (const dataPack of dataPacks) {
 	this.value += html`
 				<div id="$${dataPack.id}" class="mdc-card">
 					<div class="mdc-card__text-section">
-						<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}/icon.$${dataPack.icon}">
+						<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}/icon.$${dataPack.icon || "png"}">
 						<div class="mdc-card__title">$${dataPack.title}</div>
 						<div class="mdc-card__subhead">$${dataPack.version} for Minecraft $${dataPack.compatibility}</div>
 					</div>
