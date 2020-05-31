@@ -1,11 +1,11 @@
 #versionContainer {
-    padding: 0 32px 32px 32px;
-    text-align: center;
+	padding: 0 32px 32px 32px;
+	text-align: center;
 }
 #dataPacks {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 .dataPack {
 	display: inline-flex;
@@ -13,6 +13,6 @@
 	margin: 8px;
 }
 .mdc-card__actions {
-    justify-content: flex-end;
-    margin-top: auto;
+	justify-content: flex-end;
+	margin-top: auto;
 }
