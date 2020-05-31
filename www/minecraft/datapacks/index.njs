@@ -94,6 +94,7 @@ const dataPacks = [{
 	version: "1.0.0",
 	compatibility: "1.16",
 	description: 'Enter "/trigger spawn" to teleport to the world spawn point.',
+	icon: "gif",
 	tags: []
 }, {
 	id: "teleporters",
