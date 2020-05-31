@@ -27,28 +27,28 @@ for (const dataPack of [{
 	title: "Craftable XP Bottles",
 	version: "1.0.0",
 	compatibility: "1.16",
-	description: "Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.<br>Smelt an XP bottle in a furnace to losslessly store its XP therein.",
+	description: "Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.<br>Smelt an XP bottle in a furnace to losslessly get your XP back.",
 	icon: "gif",
 	tags: []
 }, {
 	id: "death_counter",
 	title: "Death Counter",
 	version: "1.0.0",
-	compatibility: "1.16",
+	compatibility: "1.13-1.16",
 	description: "Display each player's death count in the player list.",
 	tags: []
 }, {
 	id: "graves",
 	title: "Graves",
 	version: "1.0.0",
-	compatibility: "1.16",
+	compatibility: "1.14-1.16",
 	description: "Retrieve any items a player drops on death from the grave created at their death location.",
 	tags: []
 }, {
 	id: "health_counter",
 	title: "Health Counter",
 	version: "1.0.0",
-	compatibility: "1.16",
+	compatibility: "1.13-1.16",
 	description: "Display each player's health below their nametag.",
 	icon: "gif",
 	tags: []
@@ -71,28 +71,28 @@ for (const dataPack of [{
 	id: "name_colors",
 	title: "Name Colors",
 	version: "1.0.0",
-	compatibility: "1.16",
+	compatibility: "1.13-1.16",
 	description: 'Enter "/trigger color" to list the colors you can give to your username.',
 	tags: []
 }, {
 	id: "never_too_expensive",
 	title: "Never Too Expensive",
 	version: "1.0.0",
-	compatibility: "1.16",
+	compatibility: "1.14-1.16",
 	description: "Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.",
 	tags: []
 }, {
 	id: "players_drop_heads",
 	title: "Players Drop Heads",
 	version: "1.0.0",
-	compatibility: "1.16",
+	compatibility: "1.14-1.16",
 	description: "Players drop their heads when killed by another player.",
 	tags: []
 }, {
 	id: "spawn_command",
 	title: "Spawn Command",
 	version: "1.0.0",
-	compatibility: "1.16",
+	compatibility: "1.13-1.16",
 	description: 'Enter "/trigger spawn" to teleport to the world spawn point.',
 	icon: "gif",
 	tags: []
@@ -107,14 +107,14 @@ for (const dataPack of [{
 	id: "tpa",
 	title: "TPA",
 	version: "1.0.0",
-	compatibility: "1.16",
+	compatibility: "1.13-1.16",
 	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.`,
 	tags: []
 }, {
 	id: "unlock_all_recipes",
 	title: "Unlock All Recipes",
 	version: "1.0.0",
-	compatibility: "1.16",
+	compatibility: "1.13-1.16",
 	description: "Automatically unlock all recipes as soon as you start playing.",
 	tags: []
 }]) {
