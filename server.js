@@ -370,20 +370,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	}) => new Promise((resolve, reject) => {
 		const fileItems = user.pipe.filter(pipeFiles);
 		if (fileItems.length) {
-			s3.deleteObjects({
-				Bucket: "miroware-pipe",
-				Delete: {
-					Objects: fileItems.map(byS3Object)
-				}
-			}, err => {
-				if (err) {
-					reject(err);
-				} else {
-					purgePipeCache(user, fileItems);
-					users.deleteOne(userFilter);
-					resolve();
-				}
-			});
+			deletePipeFiles(fileItems).then(() => {
+				purgePipeCache(user, fileItems);
+				users.deleteOne(userFilter);
+				resolve();
+			}).catch(reject);
 		} else {
 			users.deleteOne(userFilter);
 			resolve();
@@ -509,6 +500,28 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		});
 	});
+	const deletePipeFiles = fileItems => new Promise((resolve, reject) => {
+		const objects = fileItems.map(byS3Object);
+		const deleteMore = () => {
+			if (objects.length) {
+				s3.deleteObjects({
+					Bucket: "miroware-pipe",
+					Delete: {
+						Objects: objects.splice(0, 100)
+					}
+				}, err => {
+					if (err) {
+						reject(err);
+					} else {
+						deleteMore();
+					}
+				});
+			} else {
+				resolve();
+			}
+		};
+		deleteMore();
+	});
 	const deletePipeItem = (user, item, update, context) => new Promise(resolve => {
 		if (!update.$pull) {
 			update.$pull = {};
@@ -551,26 +564,18 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				}
 			};
 			if (fileItems.length) {
-				s3.deleteObjects({
-					Bucket: "miroware-pipe",
-					Delete: {
-						Objects: fileItems.map(byS3Object)
+				deletePipeFiles(fileItems).then(() => {
+					applyUpdate();
+					purgePipeCache(user, fileItems);
+				}).catch(err => {
+					console.error(err);
+					if (context) {
+						context.value = {
+							error: err.message
+						};
+						context.status = err.statusCode;
 					}
-				}, err => {
-					if (err) {
-						console.error(err);
-						if (context) {
-							context.value = {
-								error: err.message
-							};
-							context.status = err.statusCode;
-						}
-					} else {
-						applyUpdate();
-						purgePipeCache(user, fileItems);
-					}
-					resolve();
-				});
+				}).finally(resolve);
 			} else {
 				applyUpdate();
 				resolve();
