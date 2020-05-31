@@ -79,7 +79,7 @@ const dataPacks = [{
 	title: "Never Too Expensive",
 	version: "1.0.0",
 	compatibility: "1.16",
-	description: "Drop an item into a cauldron with some XP bottles to reduce the item's repair cost.",
+	description: "Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.",
 	tags: []
 }, {
 	id: "players_drop_heads",
