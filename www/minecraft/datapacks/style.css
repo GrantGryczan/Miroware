@@ -1,6 +1,11 @@
+main {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
 .mdc-card {
 	display: inline-flex;
-	width: 400px;
+	width: 360px;
 	margin: 8px;
 	&__actions {
 		justify-content: flex-end;
