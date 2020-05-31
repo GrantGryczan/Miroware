@@ -7,6 +7,19 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
+			<div id="versionContainer">
+				<div id="versionSelect" class="mdc-select">
+					<select id="versions" class="mdc-select__native-control">
+						<option value="1.16" selected>Java Edition 1.16</option>
+						<option value="1.15">Java Edition 1.15</option>
+						<option value="1.14">Java Edition 1.14</option>
+						<option value="1.13">Java Edition 1.13</option>
+					</select>
+					<div class="arrow"></div>
+					<label class="mdc-floating-label alwaysFloat" for="versions">Minecraft Version</label>
+					<div class="mdc-line-ripple"></div>
+				</div>
+			</div>
 			<div id="dataPacks">`;
 for (const dataPack of [{
 	id: "confetti_creepers",

@@ -1,3 +1,7 @@
+#versionContainer {
+    padding: 0 32px 32px 32px;
+    text-align: center;
+}
 #dataPacks {
     display: flex;
     justify-content: center;
