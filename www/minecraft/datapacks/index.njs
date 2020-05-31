@@ -14,6 +14,104 @@ const dataPacks = [{
 	description: "There is a chance each creeper will explode into confetti and do no damage to blocks.",
 	video: "https://miroware.io/echo/?placeholder",
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
+}, {
+	id: "craftable_enchanted_books",
+	title: "Craftable Enchanted Books",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.",
+	tags: []
+}, {
+	id: "craftable_xp_bottles",
+	title: "Craftable XP Bottles",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.<br>Smelt an XP bottle in a furnace to losslessly store its XP therein.",
+	tags: []
+}, {
+	id: "death_counter",
+	title: "Death Counter",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "Display each player's death count in the player list.",
+	tags: []
+}, {
+	id: "graves",
+	title: "Graves",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "Retrieve any items a player drops on death from the grave created at their death location.",
+	tags: []
+}, {
+	id: "health_counter",
+	title: "Health Counter",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "Display each player's health below their nametag.",
+	tags: []
+}, {
+	id: "infinite_respawn_anchors",
+	title: "Infinite Respawn Anchors",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "If a respawn anchor has crying obsidian beneath it and an end crystal above it, it will never lose charge.",
+	tags: []
+}, {
+	id: "invisible_item_frames",
+	title: "Invisible Item Frames",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "Drop an item frame into a cauldron with an extended potion of invisibility to craft an invisible item frame.",
+	tags: []
+}, {
+	id: "name_colors",
+	title: "Name Colors",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: 'Enter "/trigger color" to list the colors you can give to your username.',
+	tags: []
+}, {
+	id: "never_too_expensive",
+	title: "Never Too Expensive",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "Drop an item into a cauldron with some XP bottles to reduce the item's repair cost.",
+	tags: []
+}, {
+	id: "players_drop_heads",
+	title: "Players Drop Heads",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "Players drop their heads when killed by another player.",
+	tags: []
+}, {
+	id: "spawn_command",
+	title: "Spawn Command",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: 'Enter "/trigger spawn" to teleport to the world spawn point.',
+	tags: []
+}, {
+	id: "teleporters",
+	title: "Teleporters",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "Drop a lodestone compass with crying obsidian placed directly both above and below it to create a teleporter to that compass's lodestone.",
+	tags: []
+}, {
+	id: "tpa",
+	title: "TPA",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: `Enter "/trigger tpa set <PID>" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.`,
+	tags: []
+}, {
+	id: "unlock_all_recipes",
+	title: "Unlock All Recipes",
+	version: "1.0.0",
+	compatibility: "1.16",
+	description: "Automatically unlock all recipes as soon as you start playing.",
+	tags: []
 }];
 for (const dataPack of dataPacks) {
 	this.tags.push(...dataPack.tags);
