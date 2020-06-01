@@ -763,6 +763,10 @@ applyToChildren.addEventListener("click", () => {
 		if (value === 0) {
 			const privacy = +properties.elements.privacy.value;
 			for (const itemElement of itemElements) {
+				const wasSelected = itemElement.classList.contains("selected");
+				if (wasSelected) {
+					itemElement.classList.remove("selected");
+				}
 				itemElement.classList.add("loading");
 				Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}/children`, {}, {
 					privacy
@@ -778,6 +782,9 @@ applyToChildren.addEventListener("click", () => {
 					}
 				})).finally(() => {
 					itemElement.classList.remove("loading");
+					if (wasSelected) {
+						itemElement.classList.add("selected");
+					}
 				});
 			}
 		}
