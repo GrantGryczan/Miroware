@@ -32,9 +32,7 @@ const s3 = new AWS.S3({
 const byS3Object = item => ({
 	Key: item.id
 });
-const byDBQueryObject = item => ({
-	id: item.id
-});
+const byID = ({id}) => id;
 const pipeFiles = item => item.type !== "/";
 const encodedSlashes = /%2F/g;
 const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
@@ -529,8 +527,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		if (!update.$pull.pipe) {
 			update.$pull.pipe = {};
 		}
-		if (!update.$pull.pipe.$or) {
-			update.$pull.pipe.$or = [];
+		if (!update.$pull.pipe.id) {
+			update.$pull.pipe.id = {};
+		}
+		if (!update.$pull.pipe.id.$in) {
+			update.$pull.pipe.id.$in = [];
 		}
 		if (item.type === "/") {
 			const items = [item]; // all recursive children of the directory being deleted
@@ -545,7 +546,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				}
 			}
 			const applyUpdate = () => {
-				update.$pull.pipe.$or.push(...items.map(byDBQueryObject));
+				update.$pull.pipe.id.$in.push(...items.map(byID));
 				for (const item2 of items) {
 					if (item2.type === "/") {
 						users.updateOne({
@@ -594,9 +595,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						context.status = err.statusCode;
 					}
 				} else {
-					update.$pull.pipe.$or.push({
-						id: item.id
-					});
+					update.$pull.pipe.id.$in.push(item.id);
 					purgePipeCache(user, [item]);
 				}
 				resolve();
