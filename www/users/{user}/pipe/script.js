@@ -767,9 +767,14 @@ applyToChildren.addEventListener("click", () => {
 				Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}/children`, {}, {
 					privacy
 				}).then(Miro.response(() => {
-					itemElement._item.privacy = privacy;
-					if (queryParent === itemElement._item.parent) {
-						render();
+					const prefix = `${itemElement._item.path}/`;
+					for (const item of pipe) {
+						if (item.path.startsWith(prefix)) {
+							item.privacy = privacy;
+							if (queryParent === item.parent) {
+								render();
+							}
+						}
 					}
 				})).finally(() => {
 					itemElement.classList.remove("loading");
