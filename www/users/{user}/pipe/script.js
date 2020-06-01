@@ -1208,9 +1208,9 @@ if (Miro.data.isMe) {
 					type: "/"
 				}))
 			}).then(Miro.response(xhr => {
-				cachedParents.push((this.response = xhr.response).id);
+				cachedParents.push(setItem(this.item = new PipeItem(xhr.response)).id);
 				if (queryParent === this.parent) {
-					selectItem(setItem(new PipeItem(xhr.response)).element, {
+					selectItem(this.item.element, {
 						ctrlKey: true
 					});
 					render();
@@ -1369,7 +1369,7 @@ if (Miro.data.isMe) {
 							if (!item) {
 								const directory = new PipeDirectory(entry.name, parent);
 								await directory.request;
-								item = directory.response;
+								({item} = directory);
 							}
 							const reader = entry.createReader();
 							let entries;
