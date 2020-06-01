@@ -40,7 +40,7 @@ if (isMe) {
 		}
 		update.$set = {};
 		for (const key of keys) {
-			update.$set[`pipe.$.${key}`] = putItem[key];
+			update.$set[`pipe.$[item].${key}`] = putItem[key];
 		}
 		const items = [];
 		const prefix = `${found.path}/`;
@@ -50,11 +50,15 @@ if (isMe) {
 			}
 		}
 		users.updateOne({
-			_id: user._id,
-			"pipe.id": {
-				$in: items.map(byID)
-			}
-		}, update);
+			_id: user._id
+		}, update, {
+			arrayFilters: [{
+				"item.id": {
+					$in: items.map(byID)
+				}
+			}],
+			multi: true
+		});
 		purgePipeCache(user, items);
 	} else {
 		this.value = {
