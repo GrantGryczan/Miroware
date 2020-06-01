@@ -33,6 +33,14 @@ for (const dataPack of [{
 	id: "craftable_enchanted_books",
 	title: "Craftable Enchanted Books",
 	version: "1.0.0",
+	compatibility: "1_14 1_15",
+	description: "To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.",
+	icon: "gif",
+	tags: []
+}, {
+	id: "craftable_enchanted_books_2",
+	title: "Craftable Enchanted Books",
+	version: "2.0.0",
 	compatibility: "1_16",
 	description: "To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.",
 	icon: "gif",
@@ -41,6 +49,14 @@ for (const dataPack of [{
 	id: "craftable_xp_bottles",
 	title: "Craftable XP Bottles",
 	version: "1.0.0",
+	compatibility: "1_13 1_14 1_15",
+	description: "Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.",
+	icon: "gif",
+	tags: []
+}, {
+	id: "craftable_xp_bottles_2",
+	title: "Craftable XP Bottles",
+	version: "2.0.0",
 	compatibility: "1_16",
 	description: "Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.<br>Smelt an XP bottle in a furnace to losslessly get your XP back.",
 	icon: "gif",
@@ -56,7 +72,14 @@ for (const dataPack of [{
 	id: "graves",
 	title: "Graves",
 	version: "1.0.0",
-	compatibility: "1_14 1_15 1_16",
+	compatibility: "1_14 1_15",
+	description: "Retrieve any items a player drops on death from the grave created at their death location.",
+	tags: []
+}, {
+	id: "graves_2",
+	title: "Graves",
+	version: "2.0.0",
+	compatibility: "1_16",
 	description: "Retrieve any items a player drops on death from the grave created at their death location.",
 	tags: []
 }, {
