@@ -235,8 +235,20 @@
 }
 .property {
 	margin-top: 8px;
-	&[data-key="url"] > .mdc-text-field {
-		width: calc(100% - 48px);
+	&[data-key="url"] {
+		& > .mdc-text-field {
+			width: calc(100% - 48px);
+		}
+		& > button {
+			vertical-align: bottom;
+		}
+	}
+	&[data-key="privacy"] {
+		display: flex;
+		align-items: flex-end;
+		& > .mdc-select {
+			flex-grow: 1;
+		}
 	}
 	&[data-key="actions"] {
 		margin: 12px 0;
@@ -245,7 +257,7 @@
 		opacity: 0.5;
 		font-size: 12px;
 	}
-	& > .mdc-text-field, & > .mdc-select {
+	& > .mdc-text-field {
 		width: 100%;
 	}
 }

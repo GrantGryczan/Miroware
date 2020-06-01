@@ -624,6 +624,7 @@ for (const propertyElement of properties.querySelectorAll("[data-key]")) {
 const selectionInfo = properties.querySelector("#selectionInfo");
 const trashInfo = properties.querySelector("#trashInfo");
 const linkPreview = property.url.querySelector("#linkPreview");
+const applyToChildren = property.privacy.querySelector("#applyToChildren");
 const actionSave = property.actions.querySelector("#save");
 const actionDownload = property.actions.querySelector("#download");
 const actionEmbed = property.actions.querySelector("#embed");
@@ -648,6 +649,7 @@ const updateProperties = () => {
 			input.type = "hidden";
 		}
 	}
+	applyToChildren.classList.add("hidden");
 	actionSave.classList.add("hidden");
 	actionDownload.classList.add("hidden");
 	actionEmbed.classList.add("hidden");
@@ -731,6 +733,10 @@ const updateProperties = () => {
 				actionDelete.title = inTrash ? "Delete" : "Move to trash";
 				actionDelete.textContent = inTrash ? "delete_forever" : "delete";
 				actionDelete.classList.remove("hidden");
+				if (items.querySelector(".item.typeDir.selected")) {
+					applyToChildren.classList.remove("hidden");
+					applyToChildren.disabled = !properties.elements.privacy.value;
+				}
 			}
 			if (trashDeselected || oneSelected) {
 				actionSave.disabled = true;
@@ -745,6 +751,32 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	properties.elements.url.select();
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
+});
+applyToChildren.addEventListener("click", () => {
+	const itemElements = items.querySelectorAll(".item.typeDir.selected")
+	const privacyText = properties.elements.privacy.options[properties.elements.privacy.selectedIndex].textContent;
+	new Miro.Dialog("Privacy", itemElements.length === 1 ? html`
+		Are you sure you want to recursively apply the privacy <b>$${privacyText}</b> to all of the items in <b>$${itemElements[0]._item.name}</b>?
+	` : html`
+		Are you sure you want to recursively apply the privacy <b>$${privacyText}</b> to all of the items in the selected directories?
+	`, ["Yes", "No"]).then(value => {
+		if (value === 0) {
+			const privacy = +properties.elements.privacy.value;
+			for (const itemElement of itemElements) {
+				itemElement.classList.add("loading");
+				Miro.request("PUT", `/users/${Miro.data.user.id}/pipe/${itemElement._item.id}/children`, {}, {
+					privacy
+				}).then(Miro.response(() => {
+					itemElement._item.privacy = privacy;
+					if (queryParent === itemElement._item.parent) {
+						render();
+					}
+				})).finally(() => {
+					itemElement.classList.remove("loading");
+				});
+			}
+		}
+	});
 });
 actionEmbed.addEventListener("click", () => {
 	const item = items.querySelector(".item.selected")._item;
@@ -953,7 +985,7 @@ if (Miro.data.isMe) {
 				`, ["Replace", "Rename", "Cancel"]);
 				if (value === 0) {
 					if (await new Miro.Dialog("Replace", html`
-						Are you sure you want to replace <b>$${takenItem.path}</b>?
+						Are you sure you want to replace <b>$${takenItem.name}</b>?
 					`, ["Yes", "No"]) === 0) {
 						Miro.response(() => {
 							takenItem.delete();
@@ -1371,6 +1403,7 @@ if (Miro.data.isMe) {
 	}
 	const changed = [];
 	const onInput = evt => {
+		applyToChildren.disabled = !properties.elements.privacy.value;
 		changed.length = 0;
 		for (const input of properties.elements) {
 			if (input._input && input.type !== "hidden") {

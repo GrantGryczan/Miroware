@@ -214,7 +214,6 @@ if (isMe) {
 			_id: user._id,
 			"pipe.id": found.id
 		}, update);
-		const encodedPath = encodeForPipe(found.path);
 		const itemsToPurge = [found];
 		if (putItem.path) {
 			if (typeDir) {
