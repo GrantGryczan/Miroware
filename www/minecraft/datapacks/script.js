@@ -1,7 +1,9 @@
-const versionSelect = document.body.querySelector("#versionSelect");
+const versionSelect = document.body.querySelector("#versions");
 const dataPacks = document.body.querySelectorAll(".dataPack");
-versionSelect.addEventListener("change", () => {
+const setVersion = () => {
 	for (const dataPack of dataPacks) {
-		dataPack.classList[dataPack.classList.contains(versionSelect.value) ? "remove" : "add"]("hidden");
+		dataPack.classList[dataPack.classList.contains(versions.value) ? "remove" : "add"]("hidden");
 	}
-});
+};
+setVersion();
+versionSelect.addEventListener("change", setVersion);
