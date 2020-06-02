@@ -740,19 +740,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	});
 	const hourly = () => {
 		const thirtyDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
-		if (user.unverified) {
-			deleteUser();
-			return;
-		}
-		users.updateMany({}, {
-			unverified: {
-				$type: "string"
-			},
-			created: {
-				$lt: thirtyDaysAgo
-			}
-		});
 		users.find().forEach(async user => {
+			if (user.unverified && user.created < thirtyDaysAgo) {
+				deleteUser(user);
+				return;
+			}
 			const update = {};
 			let updated = false;
 			for (let i = 0; i < user.pipe.length; i++) {
