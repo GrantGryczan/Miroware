@@ -34,7 +34,7 @@ for (const dataPack of [{
 	title: "Craftable Enchanted Books",
 	version: "1.0.0",
 	compatibility: "1_14 1_15",
-	description: "To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Requires <b>Craftable XP Bottles<b>",
+	description: "To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Requires <b>Craftable XP Bottles</b>",
 	icon: "gif",
 	tags: []
 }, {
@@ -42,7 +42,7 @@ for (const dataPack of [{
 	title: "Craftable Enchanted Books",
 	version: "2.0.0",
 	compatibility: "1_16",
-	description: "To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Requires <b>Craftable XP Bottles<b>",
+	description: "To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Requires <b>Craftable XP Bottles</b>",
 	icon: "gif",
 	tags: []
 }, {
