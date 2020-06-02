@@ -54,17 +54,17 @@ client.on("message", async msg => {
 			content[0] = content[0].toLowerCase();
 			if (perm) {
 				if (content[0] === "say") {
-				   msg.delete().then(() => {
-					   msg.channel.send(content[1]).catch(doNothing);
-				   });
-			   } else if (content[0] === "delete") {
-				   msg.delete().then(() => {
-					   const messages = parseInt(content[1]);
-					   if (!isNaN(content[1])) {
-						   msg.channel.bulkDelete(parseInt(content[1])).catch(doNothing);
-					   }
-				   });
-			   } else if (content[0] === "react") {
+					msg.delete().then(() => {
+						msg.channel.send(content[1]).catch(doNothing);
+					});
+				} else if (content[0] === "delete") {
+					msg.delete().then(() => {
+						const messages = parseInt(content[1]);
+						if (!isNaN(content[1])) {
+							msg.channel.bulkDelete(parseInt(content[1])).catch(doNothing);
+						}
+					});
+				} else if (content[0] === "react") {
 					const emojis = content[1].split(" ");
 					msg.channel.messages.fetch({
 						limit: 1,
