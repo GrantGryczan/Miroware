@@ -158,7 +158,7 @@ for (const dataPack of [{
 }]) {
 	this.tags.push(...dataPack.tags);
 	this.value += html`
-					<div id="$${dataPack.id}" class="dataPack mdc-card ${dataPack.compatibility}">
+					<div id="$${dataPack.id}" class="dataPack mdc-card ${dataPack.compatibility} hidden">
 						<div class="mdc-card__text-section">
 							<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}/icon.$${dataPack.icon || "png"}">
 							<div class="mdc-card__title">$${dataPack.title}</div>
