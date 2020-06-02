@@ -740,13 +740,16 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	});
 	const hourly = () => {
 		const thirtyDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
+		if (user.unverified) {
+			deleteUser();
+			return;
+		}
 		users.updateMany({}, {
-			$pull: {
-				pouch: {
-					used: {
-						$lte: thirtyDaysAgo
-					}
-				}
+			unverified: {
+				$type: "string"
+			},
+			created: {
+				$lt: thirtyDaysAgo
 			}
 		});
 		users.find().forEach(async user => {
@@ -754,7 +757,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			let updated = false;
 			for (let i = 0; i < user.pipe.length; i++) {
 				const item = user.pipe[i];
-				if (item.trashed && item.trashed <= thirtyDaysAgo) {
+				if (item.trashed && item.trashed < thirtyDaysAgo) {
 					await deletePipeItem(user, item, update);
 					updated = true;
 				}
