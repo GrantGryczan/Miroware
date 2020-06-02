@@ -66,7 +66,7 @@ for (const dataPack of [{
 	title: "Death Counter",
 	version: "1.0.0",
 	compatibility: "1_13 1_14 1_15 1_16",
-	description: "Display each player's death count in the player list.",
+	description: "Display each player's death count in the player list.<br>Incompatible with <b>TPA</b>",
 	tags: []
 }, {
 	id: "graves",
@@ -146,7 +146,7 @@ for (const dataPack of [{
 	title: "TPA",
 	version: "1.0.0",
 	compatibility: "1_13 1_14 1_15 1_16",
-	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.`,
+	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br>Incompatible with <b>Death Counter</b>`,
 	tags: []
 }, {
 	id: "unlock_all_recipes",
