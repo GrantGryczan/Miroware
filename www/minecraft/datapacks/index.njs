@@ -1,6 +1,6 @@
 this.title = "Grant's Data Packs";
 this.description = "All Minecraft data packs by Grant Gryczan";
-this.tags = ["minecraft", "mc", "data", "pack", "packs", "datapack", "datapacks", "command", "commands", "block", "blocks", "1_13", "1_14", "1_15", "1_16"];
+this.tags = ["minecraft", "mc", "data", "pack", "packs", "datapack", "datapacks", "command", "commands", "block", "blocks", "1.13", "1.14", "1.15", "1.16"];
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;
@@ -26,7 +26,7 @@ for (const dataPack of [{
 	title: "Confetti Creepers",
 	version: "1.0.0",
 	compatibility: "1_14 1_15 1_16",
-	description: "There is a chance each creeper will explode into confetti and do no damage to blocks.",
+	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for more info.<br>Enter "/function confetti_creepers:config" for config options.',
 	video: "https://miroware.io/echo/?placeholder",
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
 }, {
@@ -34,7 +34,7 @@ for (const dataPack of [{
 	title: "Craftable Enchanted Books",
 	version: "1.0.0",
 	compatibility: "1_14 1_15",
-	description: "To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Requires <b>Craftable XP Bottles</b>",
+	description: `To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Enter "/trigger craEncBoo" to get the recipe book.<br><b>Requires Craftable XP Bottles</b>`,
 	icon: "gif",
 	tags: []
 }, {
@@ -42,7 +42,7 @@ for (const dataPack of [{
 	title: "Craftable Enchanted Books",
 	version: "2.0.0",
 	compatibility: "1_16",
-	description: "To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Requires <b>Craftable XP Bottles</b>",
+	description: `To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Enter "/trigger craEncBoo" to get the recipe book.<br><b>Requires Craftable XP Bottles</b>`,
 	icon: "gif",
 	tags: []
 }, {
@@ -66,21 +66,21 @@ for (const dataPack of [{
 	title: "Death Counter",
 	version: "1.0.0",
 	compatibility: "1_13 1_14 1_15 1_16",
-	description: "Display each player's death count in the player list.<br>Incompatible with <b>TPA</b>",
+	description: "Display each player's death count in the player list.<br><b>Incompatible with TPA</b>",
 	tags: []
 }, {
 	id: "graves",
 	title: "Graves",
 	version: "1.0.0",
 	compatibility: "1_14 1_15",
-	description: "Retrieve any items a player drops on death from the grave created at their death location.",
+	description: 'Retrieve any items a player drops on death from the grave created at their death location.<br>Enter "/function graves:config" for config options.',
 	tags: []
 }, {
 	id: "graves_2",
 	title: "Graves",
 	version: "2.0.0",
 	compatibility: "1_16",
-	description: "Retrieve any items a player drops on death from the grave created at their death location.",
+	description: 'Retrieve any items a player drops on death from the grave created at their death location.<br>Enter "/function graves:config" for config options.',
 	tags: []
 }, {
 	id: "health_counter",
@@ -117,7 +117,7 @@ for (const dataPack of [{
 	title: "Never Too Expensive",
 	version: "1.0.0",
 	compatibility: "1_14 1_15 1_16",
-	description: "Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.",
+	description: `Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>Enter "/trigger nevTooExp" for more info.<br>Enter "/function never_too_expensive:config" for config options.`,
 	tags: []
 }, {
 	id: "players_drop_heads",
@@ -146,7 +146,7 @@ for (const dataPack of [{
 	title: "TPA",
 	version: "1.0.0",
 	compatibility: "1_13 1_14 1_15 1_16",
-	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br>Incompatible with <b>Death Counter</b>`,
+	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br><b>Incompatible with Death Counter</b>`,
 	tags: []
 }, {
 	id: "unlock_all_recipes",
