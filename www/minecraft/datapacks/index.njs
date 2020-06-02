@@ -77,6 +77,13 @@ for (const dataPack of [{
 	description: "Display each player's death count in the player list.<br><b>Incompatible with TPA</b>",
 	tags: []
 }, {
+	id: "disable_enderman_griefing",
+	title: "Disable Enderman Griefing",
+	version: "1.0.0",
+	compatibility: "1_13 1_14 1_15 1_16",
+	description: "Disabling endermen picking up blocks.",
+	tags: []
+}, {
 	id: "graves",
 	title: "Graves",
 	version: "1.0.0",
