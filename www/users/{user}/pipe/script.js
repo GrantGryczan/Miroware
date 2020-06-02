@@ -624,7 +624,7 @@ for (const propertyElement of properties.querySelectorAll("[data-key]")) {
 const selectionInfo = properties.querySelector("#selectionInfo");
 const trashInfo = properties.querySelector("#trashInfo");
 const linkPreview = property.url.querySelector("#linkPreview");
-const applyToChildren = property.privacy.querySelector("#applyToChildren");
+const applyToDescendants = property.privacy.querySelector("#applyToDescendants");
 const actionSave = property.actions.querySelector("#save");
 const actionDownload = property.actions.querySelector("#download");
 const actionEmbed = property.actions.querySelector("#embed");
@@ -649,7 +649,7 @@ const updateProperties = () => {
 			input.type = "hidden";
 		}
 	}
-	applyToChildren.classList.add("hidden");
+	applyToDescendants.classList.add("hidden");
 	actionSave.classList.add("hidden");
 	actionDownload.classList.add("hidden");
 	actionEmbed.classList.add("hidden");
@@ -734,8 +734,8 @@ const updateProperties = () => {
 				actionDelete.textContent = inTrash ? "delete_forever" : "delete";
 				actionDelete.classList.remove("hidden");
 				if (items.querySelector(".item.typeDir.selected")) {
-					applyToChildren.classList.remove("hidden");
-					applyToChildren.disabled = !properties.elements.privacy.value;
+					applyToDescendants.classList.remove("hidden");
+					applyToDescendants.disabled = !properties.elements.privacy.value;
 				}
 			}
 			if (trashDeselected || oneSelected) {
@@ -752,13 +752,13 @@ property.url.querySelector("#copyURL").addEventListener("click", () => {
 	document.execCommand("copy");
 	Miro.snackbar("URL copied to clipboard");
 });
-applyToChildren.addEventListener("click", () => {
+applyToDescendants.addEventListener("click", () => {
 	const itemElements = items.querySelectorAll(".item.typeDir.selected")
 	const privacyText = properties.elements.privacy.options[properties.elements.privacy.selectedIndex].textContent;
 	new Miro.Dialog("Privacy", itemElements.length === 1 ? html`
-		Are you sure you want to apply the privacy <b>$${privacyText}</b> to all of the items in <b>$${itemElements[0]._item.name}</b>?
+		Are you sure you want to apply the privacy <b>$${privacyText}</b> to all of the descendants of <b>$${itemElements[0]._item.name}</b>?
 	` : html`
-		Are you sure you want to apply the privacy <b>$${privacyText}</b> to all of the items in the selected directories?
+		Are you sure you want to apply the privacy <b>$${privacyText}</b> to all of the descendants of the selected directories?
 	`, ["Yes", "No"]).then(value => {
 		if (value === 0) {
 			const privacy = +properties.elements.privacy.value;
@@ -1411,7 +1411,7 @@ if (Miro.data.isMe) {
 	}
 	const changed = [];
 	const onInput = evt => {
-		applyToChildren.disabled = !properties.elements.privacy.value;
+		applyToDescendants.disabled = !properties.elements.privacy.value;
 		changed.length = 0;
 		for (const input of properties.elements) {
 			if (input._input && input.type !== "hidden") {
