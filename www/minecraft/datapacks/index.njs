@@ -26,7 +26,7 @@ for (const dataPack of [{
 	title: "Confetti Creepers",
 	version: "1.0.0",
 	compatibility: "1_14 1_15 1_16",
-	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for more info.<br>Enter "/function confetti_creepers:config" for config options.',
+	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" for config options.',
 	video: "https://miroware.io/echo/?placeholder",
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
 }, {
@@ -117,7 +117,7 @@ for (const dataPack of [{
 	title: "Never Too Expensive",
 	version: "1.0.0",
 	compatibility: "1_14 1_15 1_16",
-	description: `Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>Enter "/trigger nevTooExp" for more info.<br>Enter "/function never_too_expensive:config" for config options.`,
+	description: `Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>Enter "/trigger nevTooExp" for details.<br>Enter "/function never_too_expensive:config" for config options.`,
 	tags: []
 }, {
 	id: "players_drop_heads",
