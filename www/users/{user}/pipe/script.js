@@ -756,9 +756,9 @@ applyToChildren.addEventListener("click", () => {
 	const itemElements = items.querySelectorAll(".item.typeDir.selected")
 	const privacyText = properties.elements.privacy.options[properties.elements.privacy.selectedIndex].textContent;
 	new Miro.Dialog("Privacy", itemElements.length === 1 ? html`
-		Are you sure you want to recursively apply the privacy <b>$${privacyText}</b> to all of the items in <b>$${itemElements[0]._item.name}</b>?
+		Are you sure you want to apply the privacy <b>$${privacyText}</b> to all of the items in <b>$${itemElements[0]._item.name}</b>?
 	` : html`
-		Are you sure you want to recursively apply the privacy <b>$${privacyText}</b> to all of the items in the selected directories?
+		Are you sure you want to apply the privacy <b>$${privacyText}</b> to all of the items in the selected directories?
 	`, ["Yes", "No"]).then(value => {
 		if (value === 0) {
 			const privacy = +properties.elements.privacy.value;

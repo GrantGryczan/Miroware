@@ -110,7 +110,7 @@ this.value += html`
 							<div class="arrow"></div>
 							<label class="mdc-floating-label alwaysFloat" for="privacy">Privacy</label>
 							<div class="mdc-line-ripple"></div>
-						</div><button id="applyToChildren" class="mdc-icon-button material-icons spaced hidden" type="button" title="Apply recursively to children" disabled>read_more</button><br>
+						</div><button id="applyToChildren" class="mdc-icon-button material-icons spaced hidden" type="button" title="Apply to all contents" disabled>read_more</button><br>
 					</div>
 					<div class="property hidden" data-key="actions">
 						<button id="save" class="mdc-icon-button mdc-button--raised material-icons spaced mdc-ripple" type="submit" title="Save" disabled>save</button><a id="download" class="mdc-icon-button material-icons spaced mdc-ripple" href="javascript:;" title="Download" target="_blank" draggable="false" ondragstart="return false;">file_download</a><button id="embed" class="mdc-icon-button material-icons spaced mdc-ripple" title="Embed">code</button><button id="restore" class="mdc-icon-button material-icons spaced mdc-ripple" title="Restore">restore</button><button id="delete" class="mdc-icon-button material-icons spaced mdc-ripple" title="Delete">delete</button>
