@@ -25,7 +25,15 @@ for (const dataPack of [{
 	id: "confetti_creepers",
 	title: "Confetti Creepers",
 	version: "1.0.0",
-	compatibility: "1_14 1_15 1_16",
+	compatibility: "1_14 1_15",
+	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" for config options.',
+	video: "https://miroware.io/echo/?placeholder",
+	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
+}, {
+	id: "confetti_creepers_2",
+	title: "Confetti Creepers",
+	version: "2.0.0",
+	compatibility: "1_16",
 	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" for config options.',
 	video: "https://miroware.io/echo/?placeholder",
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
@@ -109,14 +117,28 @@ for (const dataPack of [{
 	id: "name_colors",
 	title: "Name Colors",
 	version: "1.0.0",
-	compatibility: "1_13 1_14 1_15 1_16",
+	compatibility: "1_13 1_14 1_15",
+	description: 'Enter "/trigger color" to list the colors you can give to your username.',
+	tags: []
+}, {
+	id: "name_colors_2",
+	title: "Name Colors",
+	version: "2.0.0",
+	compatibility: "1_16",
 	description: 'Enter "/trigger color" to list the colors you can give to your username.',
 	tags: []
 }, {
 	id: "never_too_expensive",
 	title: "Never Too Expensive",
 	version: "1.0.0",
-	compatibility: "1_14 1_15 1_16",
+	compatibility: "1_14 1_15",
+	description: `Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>Enter "/trigger nevTooExp" for details.<br>Enter "/function never_too_expensive:config" for config options.`,
+	tags: []
+}, {
+	id: "never_too_expensive_2",
+	title: "Never Too Expensive",
+	version: "2.0.0",
+	compatibility: "1_16",
 	description: `Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>Enter "/trigger nevTooExp" for details.<br>Enter "/function never_too_expensive:config" for config options.`,
 	tags: []
 }, {
@@ -145,7 +167,14 @@ for (const dataPack of [{
 	id: "tpa",
 	title: "TPA",
 	version: "1.0.0",
-	compatibility: "1_13 1_14 1_15 1_16",
+	compatibility: "1_13 1_14 1_15",
+	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br><b>Incompatible with Death Counter</b>`,
+	tags: []
+}, {
+	id: "tpa_2",
+	title: "TPA",
+	version: "2.0.0",
+	compatibility: "1_16",
 	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br><b>Incompatible with Death Counter</b>`,
 	tags: []
 }, {
