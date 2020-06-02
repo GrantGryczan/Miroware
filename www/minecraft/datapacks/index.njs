@@ -81,7 +81,7 @@ for (const dataPack of [{
 	title: "Disable Enderman Griefing",
 	version: "1.0.0",
 	compatibility: "1_13 1_14 1_15 1_16",
-	description: "Disabling endermen picking up blocks.",
+	description: "Disable endermen picking up blocks.",
 	tags: []
 }, {
 	id: "graves",
