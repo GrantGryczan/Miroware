@@ -741,7 +741,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	const hourly = () => {
 		const thirtyDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
 		users.find().forEach(async user => {
-			if (user.unverified && user.created < thirtyDaysAgo) {
+			if (!user.verified && user.created < thirtyDaysAgo) {
 				deleteUser(user);
 				return;
 			}
