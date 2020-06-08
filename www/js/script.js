@@ -1,8 +1,5 @@
 "use strict";
 const Miro = window.Miro = {};
-Miro.magic = {};
-Miro.magic.magic = Miro.magic;
-console.log(Miro.magic);
 const MiroError = class MiroError extends Error {
 	constructor() {
 		const err = super(...arguments);
