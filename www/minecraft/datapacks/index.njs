@@ -27,7 +27,7 @@ for (const dataPack of [{
 	version: "1.0.0",
 	compatibility: "1_14 1_15",
 	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" to configure that chance.',
-	video: "https://miroware.io/echo/?placeholder",
+	video: "aznaL3Exl7g",
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
 }, {
 	id: "confetti_creepers_2",
@@ -35,7 +35,7 @@ for (const dataPack of [{
 	version: "2.0.0",
 	compatibility: "1_16",
 	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" to configure that chance.',
-	video: "https://miroware.io/echo/?placeholder",
+	video: "aznaL3Exl7g",
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
 }, {
 	id: "craftable_enchanted_books",
@@ -204,7 +204,7 @@ for (const dataPack of [{
 							<div class="mdc-card__supporting-text">${dataPack.description}</div>
 						</div>
 						<div class="mdc-card__actions">${dataPack.video ? html`
-							<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="$${dataPack.video}" target="_blank" title="Open video">play_circle_outline</a>` : ""}
+							<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://youtu.be/$${dataPack.video}" target="_blank" title="Open video">play_circle_outline</a>` : ""}
 							<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}" target="_blank" title="Download">file_download</a>
 						</div>
 					</div>`;
