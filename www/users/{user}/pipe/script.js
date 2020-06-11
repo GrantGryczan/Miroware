@@ -1028,21 +1028,21 @@ if (Miro.data.isMe) {
 	const creation = container.querySelector("#creation");
 	const queuedItems = container.querySelector("#queuedItems");
 	const queue = [];
-	const queueReducer = (progress, item) => {
-		progress.loaded += item.loaded;
-		progress.total += item.file.size;
-		return progress;
-	};
 	const updateQueue = () => {
 		if (!queue.length) {
 			creation.classList.remove("loading");
 			return;
 		}
-		const {loaded, total} = queue.reduce(queueReducer, {
-			loaded: 0,
-			total: 0
-		});
-		const done = loaded === total;
+		let loaded = 0;
+		let total = 0;
+		let done = true;
+		for (const item of queue) {
+			loaded += item.loaded;
+			total += item.file.size;
+			if (!item.item) {
+				done = false;
+			}
+		}
 		if (done) {
 			creation.classList.remove("loading");
 			queue.length = 0;
@@ -1105,6 +1105,7 @@ if (Miro.data.isMe) {
 				this.subtitleElement.textContent = getSizeString(xhr.response.size);
 				this.closeElement.textContent = "done";
 				const item = setItem(this.item = new PipeItem(xhr.response));
+				updateQueue();
 				let parent = this;
 				while (parent = getItemByID(parent.parent)) {
 					parent.size += item.size;
