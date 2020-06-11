@@ -27,7 +27,7 @@ for (const dataPack of [{
 	version: "1.1.0",
 	compatibility: "1_14 1_15",
 	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" to configure that chance.',
-	video: "aznaL3Exl7g",
+	video: "zyUbFVG__e4",
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
 }, {
 	id: "confetti_creepers_2",
@@ -35,7 +35,7 @@ for (const dataPack of [{
 	version: "2.1.0",
 	compatibility: "1_16",
 	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" to configure that chance.',
-	video: "aznaL3Exl7g",
+	video: "zyUbFVG__e4",
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "burst", "mobgriefing", "mob", "griefing", "disable"]
 }, {
 	id: "craftable_enchanted_books",
