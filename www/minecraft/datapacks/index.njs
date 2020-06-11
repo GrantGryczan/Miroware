@@ -24,7 +24,7 @@ this.value += html`
 for (const dataPack of [{
 	id: "confetti_creepers",
 	title: "Confetti Creepers",
-	version: "1.0.0",
+	version: "1.1.0",
 	compatibility: "1_14 1_15",
 	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" to configure that chance.',
 	video: "aznaL3Exl7g",
@@ -32,7 +32,7 @@ for (const dataPack of [{
 }, {
 	id: "confetti_creepers_2",
 	title: "Confetti Creepers",
-	version: "2.0.0",
+	version: "2.1.0",
 	compatibility: "1_16",
 	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" to configure that chance.',
 	video: "aznaL3Exl7g",
