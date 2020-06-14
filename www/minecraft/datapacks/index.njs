@@ -86,16 +86,16 @@ for (const dataPack of [{
 }, {
 	id: "graves",
 	title: "Graves",
-	version: "1.3.1",
+	version: "1.3.2",
 	compatibility: "1_14 1_15",
-	description: 'Retrieve any items and/or XP a player drops on death from the grave created at their death location.<br>Enter "/function graves:config" to configure whether grave robbing or grave locating are allowed.',
+	description: 'Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>Enter "/function graves:config" to configure whether grave robbing or grave locating are allowed.',
 	tags: []
 }, {
 	id: "graves_2",
 	title: "Graves",
-	version: "2.3.1",
+	version: "2.4.0",
 	compatibility: "1_16",
-	description: 'Retrieve any items and/or XP a player drops on death from the grave created at their death location.<br>Enter "/function graves:config" to configure whether grave robbing or grave locating are allowed.',
+	description: 'Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>Hold crouch when you right-click to make it so only you can pick up the items.<br>Enter "/function graves:config" to configure whether grave robbing or grave locating are allowed.',
 	tags: []
 }, {
 	id: "health_counter",
