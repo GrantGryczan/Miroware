@@ -27,16 +27,16 @@ for (const dataPack of [{
 	version: "1.1.0",
 	compatibility: "1_14 1_15",
 	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" to configure that chance.',
-	video: "iREMnbsZuTg",
-	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "mobgriefing", "mob", "griefing", "disable"]
+	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "mobgriefing", "mob", "griefing", "disable"],
+	video: "iREMnbsZuTg"
 }, {
 	id: "confetti_creepers_2",
 	title: "Confetti Creepers",
 	version: "2.1.0",
 	compatibility: "1_16",
 	description: 'There is a chance each creeper will explode into confetti and do no damage to blocks.<br>Enter "/trigger conCre" for details.<br>Enter "/function confetti_creepers:config" to configure that chance.',
-	video: "iREMnbsZuTg",
-	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "mobgriefing", "mob", "griefing", "disable"]
+	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "mobgriefing", "mob", "griefing", "disable"],
+	video: "iREMnbsZuTg"
 }, {
 	id: "craftable_enchanted_books",
 	title: "Craftable Enchanted Books",
@@ -89,14 +89,16 @@ for (const dataPack of [{
 	version: "1.4.0",
 	compatibility: "1_14 1_15",
 	description: 'Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>Hold crouch when you right-click to make it so only you can pick up the items.<br>Enter "/function graves:config" to configure whether grave robbing, graves collecting XP, and grave locating are enabled, or for an option to give yourself a grave key to forcibly open graves.',
-	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma"]
+	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma"],
+	video: "DWEVYImenj4"
 }, {
 	id: "graves_2",
 	title: "Graves",
 	version: "2.4.0",
 	compatibility: "1_16",
 	description: 'Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>Hold crouch when you right-click to make it so only you can pick up the items.<br>Enter "/function graves:config" to configure whether grave robbing, graves collecting XP, and grave locating are enabled, or for an option to give yourself a grave key to forcibly open graves.',
-	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma"]
+	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma"],
+	video: "DWEVYImenj4"
 }, {
 	id: "health_counter",
 	title: "Health Counter",
