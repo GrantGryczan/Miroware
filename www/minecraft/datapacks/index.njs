@@ -89,7 +89,7 @@ for (const dataPack of [{
 	version: "1.4.0",
 	compatibility: "1_14 1_15",
 	description: 'Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>Hold crouch when you right-click to make it so only you can pick up the items.<br>Enter "/function graves:config" to configure whether grave robbing, graves collecting XP, and grave locating are enabled, or for an option to give yourself a grave key to forcibly open graves.',
-	tags: []
+	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma"]
 }, {
 	id: "graves_2",
 	title: "Graves",
@@ -192,7 +192,11 @@ for (const dataPack of [{
 	description: "Automatically unlock all recipes as soon as you start playing.",
 	tags: []
 }]) {
-	this.tags.push(...dataPack.tags);
+	for (const tag of dataPack.tags) {
+		if (!this.tags.includes(tag)) {
+			this.tags.push(tag);
+		}
+	}
 	this.value += html`
 					<div id="$${dataPack.id}" class="dataPack mdc-card ${dataPack.compatibility} hidden">
 						<div class="mdc-card__text-section">
