@@ -139,14 +139,14 @@ for (const dataPack of [{
 }, {
 	id: "name_colors",
 	title: "Name Colors",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_13 1_14 1_15",
 	description: 'Enter "/trigger color" to list the colors you can give to your username.',
 	tags: []
 }, {
 	id: "name_colors_2",
 	title: "Name Colors",
-	version: "2.0.0",
+	version: "2.0.1",
 	compatibility: "1_16",
 	description: 'Enter "/trigger color" to list the colors you can give to your username.',
 	tags: []
