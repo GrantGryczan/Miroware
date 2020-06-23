@@ -1,6 +1,6 @@
 this.title = "Grant's Data Packs";
 this.description = "All Minecraft data packs by Grant Gryczan";
-this.tags = ["minecraft", "mc", "data", "pack", "packs", "datapack", "datapacks", "command", "commands", "block", "blocks", "1.13", "1.14", "1.15", "1.16"];
+this.tags = ["minecraft", "mc", "data", "pack", "packs", "datapack", "datapacks", "command", "commands", "block", "blocks", "vanilla", "1.13", "1.14", "1.15", "1.16"];
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;
@@ -89,7 +89,7 @@ for (const dataPack of [{
 	version: "1.4.1",
 	compatibility: "1_14 1_15",
 	description: 'Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>Hold crouch when you right-click to make it so only you can pick up the items.<br>Enter "/function graves:config" to configure whether grave robbing, graves collecting XP, and grave locating are enabled, or for an option to give yourself a grave key to forcibly open graves.',
-	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma"],
+	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma", "vanillatweaks", "vanilla", "tweaks"],
 	video: "DWEVYImenj4"
 }, {
 	id: "graves_2",
@@ -97,7 +97,7 @@ for (const dataPack of [{
 	version: "2.4.1",
 	compatibility: "1_16",
 	description: 'Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>Hold crouch when you right-click to make it so only you can pick up the items.<br>Enter "/function graves:config" to configure whether grave robbing, graves collecting XP, and grave locating are enabled, or for an option to give yourself a grave key to forcibly open graves.',
-	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma"],
+	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma", "vanillatweaks", "vanilla", "tweaks"],
 	video: "DWEVYImenj4"
 }, {
 	id: "health_counter",
