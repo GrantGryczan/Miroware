@@ -22,6 +22,13 @@ this.value += html`
 			</div>
 			<div id="dataPacks">`;
 for (const dataPack of [{
+	id: "bat_membranes",
+	title: "Bat Membranes",
+	version: "1.0.0",
+	compatibility: "1_15 1_16",
+	description: "Disable phantoms and get membranes from bats instead.",
+	tags: []
+}, {
 	id: "confetti_creepers",
 	title: "Confetti Creepers",
 	version: "1.1.0",
