@@ -111,7 +111,14 @@ for (const dataPack of [{
 	id: "home_command",
 	title: "Home Command",
 	version: "1.0.0",
-	compatibility: "1_13 1_14 1_15 1_16",
+	compatibility: "1_13 1_14 1_15",
+	description: 'Enter "/trigger sethome" to set your home point.<br>Enter "/trigger home" to teleport there at any time.<br>Enter "/trigger delhome" to reset your home point.',
+	tags: []
+}, {
+	id: "home_command_2",
+	title: "Home Command",
+	version: "2.0.0",
+	compatibility: "1_16",
 	description: 'Enter "/trigger sethome" to set your home point.<br>Enter "/trigger home" to teleport there at any time.<br>Enter "/trigger delhome" to reset your home point.',
 	tags: []
 }, {
