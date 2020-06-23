@@ -86,7 +86,7 @@ for (const dataPack of [{
 }, {
 	id: "graves",
 	title: "Graves",
-	version: "1.4.1",
+	version: "1.4.2",
 	compatibility: "1_14 1_15",
 	description: 'Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>Hold crouch when you right-click to make it so only you can pick up the items.<br>Enter "/function graves:config" to configure whether grave robbing, graves collecting XP, and grave locating are enabled, or for an option to give yourself a grave key to forcibly open graves.',
 	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma", "vanillatweaks", "vanilla", "tweaks"],
@@ -94,7 +94,7 @@ for (const dataPack of [{
 }, {
 	id: "graves_2",
 	title: "Graves",
-	version: "2.4.1",
+	version: "2.4.2",
 	compatibility: "1_16",
 	description: 'Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>Hold crouch when you right-click to make it so only you can pick up the items.<br>Enter "/function graves:config" to configure whether grave robbing, graves collecting XP, and grave locating are enabled, or for an option to give yourself a grave key to forcibly open graves.',
 	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma", "vanillatweaks", "vanilla", "tweaks"],
@@ -167,7 +167,7 @@ for (const dataPack of [{
 }, {
 	id: "players_drop_heads",
 	title: "Players Drop Heads",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_14 1_15 1_16",
 	description: "Players drop their heads when killed by another player.",
 	tags: []
