@@ -47,7 +47,7 @@ for (const dataPack of [{
 }, {
 	id: "craftable_enchanted_books",
 	title: "Craftable Enchanted Books",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_14 1_15",
 	description: `To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Enter "/trigger craEncBoo" to get the recipe book.<br><b>Requires Craftable XP Bottles</b>`,
 	icon: "gif",
@@ -55,7 +55,7 @@ for (const dataPack of [{
 }, {
 	id: "craftable_enchanted_books_2",
 	title: "Craftable Enchanted Books",
-	version: "2.0.0",
+	version: "2.0.1",
 	compatibility: "1_16",
 	description: `To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>Enter "/trigger craEncBoo" to get the recipe book.<br><b>Requires Craftable XP Bottles</b>`,
 	icon: "gif",
@@ -139,7 +139,7 @@ for (const dataPack of [{
 }, {
 	id: "invisible_item_frames",
 	title: "Invisible Item Frames",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_16",
 	description: "Drop an item frame into a cauldron with an extended potion of invisibility to craft an invisible item frame.",
 	tags: []
@@ -160,14 +160,14 @@ for (const dataPack of [{
 }, {
 	id: "never_too_expensive",
 	title: "Never Too Expensive",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_14 1_15",
 	description: `Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>Enter "/trigger nevTooExp" for details.<br>Enter "/function never_too_expensive:config" to configure the number of XP bottles required or the repair cost reduced.`,
 	tags: []
 }, {
 	id: "never_too_expensive_2",
 	title: "Never Too Expensive",
-	version: "2.0.0",
+	version: "2.0.1",
 	compatibility: "1_16",
 	description: `Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>Enter "/trigger nevTooExp" for details.<br>Enter "/function never_too_expensive:config" to configure the number of XP bottles required or the repair cost reduced.`,
 	tags: []
