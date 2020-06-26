@@ -149,6 +149,7 @@ for (const dataPack of [{
 	version: "1.0.0",
 	compatibility: "1_15",
 	description: 'Only a fraction of survival players in the overworld must sleep to skip the night.<br>Enter "/trigger mulSle" for details.\nEnter "/function multiplayer_sleep:config" to configure the percent of players required to sleep.',
+	icon: "gif",
 	tags: []
 }, {
 	id: "multiplayer_sleep_2",
@@ -156,6 +157,7 @@ for (const dataPack of [{
 	version: "2.0.0",
 	compatibility: "1_16",
 	description: 'Only a fraction of survival players in the overworld must sleep to skip the night.<br>Enter "/trigger mulSle" for details.\nEnter "/function multiplayer_sleep:config" to configure the percent of players required to sleep.',
+	icon: "gif",
 	tags: []
 }, {
 	id: "name_colors",
