@@ -160,14 +160,14 @@ for (const dataPack of [{
 }, {
 	id: "never_too_expensive",
 	title: "Never Too Expensive",
-	version: "1.0.1",
+	version: "1.0.2",
 	compatibility: "1_14 1_15",
 	description: `Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>Enter "/trigger nevTooExp" for details.<br>Enter "/function never_too_expensive:config" to configure the number of XP bottles required or the repair cost reduced.`,
 	tags: []
 }, {
 	id: "never_too_expensive_2",
 	title: "Never Too Expensive",
-	version: "2.0.1",
+	version: "2.0.2",
 	compatibility: "1_16",
 	description: `Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>Enter "/trigger nevTooExp" for details.<br>Enter "/function never_too_expensive:config" to configure the number of XP bottles required or the repair cost reduced.`,
 	tags: []
