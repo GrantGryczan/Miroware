@@ -144,6 +144,20 @@ for (const dataPack of [{
 	description: "Drop an item frame into a cauldron with an extended potion of invisibility to craft an invisible item frame.",
 	tags: []
 }, {
+	id: "multiplayer_sleep",
+	title: "Multiplayer Sleep",
+	version: "1.0.0",
+	compatibility: "1_15",
+	description: 'Only a fraction of survival players in the overworld must sleep to skip the night.<br>Enter "/trigger mulSle" for details.\nEnter "/function multiplayer_sleep:config" to configure the percent of players required to sleep.',
+	tags: []
+}, {
+	id: "multiplayer_sleep_2",
+	title: "Multiplayer Sleep",
+	version: "2.0.0",
+	compatibility: "1_16",
+	description: 'Only a fraction of survival players in the overworld must sleep to skip the night.<br>Enter "/trigger mulSle" for details.\nEnter "/function multiplayer_sleep:config" to configure the percent of players required to sleep.',
+	tags: []
+}, {
 	id: "name_colors",
 	title: "Name Colors",
 	version: "1.0.1",
