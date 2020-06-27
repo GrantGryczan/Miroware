@@ -29,6 +29,20 @@ for (const dataPack of [{
 	description: "Disable phantoms and get membranes from bats instead.",
 	tags: []
 }, {
+	id: "cauldron_concrete",
+	title: "Cauldron Concrete",
+	version: "1.0.0",
+	compatibility: "1_15",
+	description: "Drop concrete powder into a cauldron filled with water to instantly harden all of it.",
+	tags: []
+}, {
+	id: "cauldron_concrete_2",
+	title: "Cauldron Concrete",
+	version: "2.0.0",
+	compatibility: "1_16",
+	description: "Drop concrete powder into a cauldron filled with water to instantly harden all of it.",
+	tags: []
+}, {
 	id: "confetti_creepers",
 	title: "Confetti Creepers",
 	version: "1.1.0",
