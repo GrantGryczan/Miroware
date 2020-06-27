@@ -146,7 +146,7 @@ for (const dataPack of [{
 }, {
 	id: "multiplayer_sleep",
 	title: "Multiplayer Sleep",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_15",
 	description: 'Only a fraction of survival players in the overworld must sleep to skip the night.<br>Enter "/trigger mulSle" for details.\nEnter "/function multiplayer_sleep:config" to configure the percent of players required to sleep.',
 	icon: "gif",
@@ -154,7 +154,7 @@ for (const dataPack of [{
 }, {
 	id: "multiplayer_sleep_2",
 	title: "Multiplayer Sleep",
-	version: "2.0.0",
+	version: "2.0.1",
 	compatibility: "1_16",
 	description: 'Only a fraction of survival players in the overworld must sleep to skip the night.<br>Enter "/trigger mulSle" for details.\nEnter "/function multiplayer_sleep:config" to configure the percent of players required to sleep.',
 	icon: "gif",
