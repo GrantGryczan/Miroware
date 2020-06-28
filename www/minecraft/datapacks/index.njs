@@ -209,6 +209,13 @@ for (const dataPack of [{
 	description: "Players drop their heads when killed by another player.",
 	tags: []
 }, {
+	id: "sky_dimension",
+	title: "Sky Dimension",
+	version: "1.0.0",
+	compatibility: "1_16",
+	description: "Reach y=257 in the overworld to go to y=4 in the sky dimension. Reach y=-16 in the sky dimension to go to y=256 in the overworld.",
+	tags: []
+}, {
 	id: "spawn_command",
 	title: "Spawn Command",
 	version: "1.0.0",
