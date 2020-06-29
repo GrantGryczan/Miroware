@@ -131,14 +131,14 @@ for (const dataPack of [{
 }, {
 	id: "home_command",
 	title: "Home Command",
-	version: "1.0.1",
+	version: "1.1.0",
 	compatibility: "1_13 1_14 1_15",
 	description: 'Enter "/trigger sethome" to set your home point.<br>Enter "/trigger home" to teleport there at any time.<br>Enter "/trigger delhome" to reset your home point.',
 	tags: []
 }, {
 	id: "home_command_2",
 	title: "Home Command",
-	version: "2.0.1",
+	version: "2.1.0",
 	compatibility: "1_16",
 	description: 'Enter "/trigger sethome" to set your home point.<br>Enter "/trigger home" to teleport there at any time.<br>Enter "/trigger delhome" to reset your home point.',
 	tags: []
@@ -233,14 +233,14 @@ for (const dataPack of [{
 }, {
 	id: "tpa",
 	title: "TPA",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_13 1_14 1_15",
 	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br><b>Incompatible with Death Counter</b>`,
 	tags: []
 }, {
 	id: "tpa_2",
 	title: "TPA",
-	version: "2.0.0",
+	version: "2.0.1",
 	compatibility: "1_16",
 	description: `Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br><b>Incompatible with Death Counter</b>`,
 	tags: []
