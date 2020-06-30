@@ -133,14 +133,14 @@ for (const dataPack of [{
 	title: "Home Command",
 	version: "1.1.0",
 	compatibility: "1_13 1_14 1_15",
-	description: 'Enter "/trigger sethome" or "/trigger sethome set <ID>" to set a home.<br>Enter "/trigger home" or "/trigger home set <ID>" to teleport there at any time.<br>Enter "/trigger homes" to list your homes.<br>Enter "/trigger delhome" or "/trigger delhome set <ID>" to delete a home<br>Enter "/function home_command:config" to configure the maximum number of homes allowed per player or the time to delay teleportation after running the home command.',
+	description: 'Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>Enter "/trigger home" or "/trigger home set &lt;ID&gt;" to teleport there at any time.<br>Enter "/trigger homes" to list your homes.<br>Enter "/trigger delhome" or "/trigger delhome set &lt;ID&gt;" to delete a home.<br>Enter "/function home_command:config" to configure the maximum number of homes allowed per player or the time to delay teleportation after running the home command.',
 	tags: []
 }, {
 	id: "home_command_2",
 	title: "Home Command",
 	version: "2.1.0",
 	compatibility: "1_16",
-	description: 'Enter "/trigger sethome" or "/trigger sethome set <ID>" to set a home.<br>Enter "/trigger home" or "/trigger home set <ID>" to teleport there at any time.<br>Enter "/trigger homes" to list your homes.<br>Enter "/trigger delhome" or "/trigger delhome set <ID>" to delete a home<br>Enter "/function home_command:config" to configure the maximum number of homes allowed per player or the time to delay teleportation after running the home command.',
+	description: 'Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>Enter "/trigger home" or "/trigger home set &lt;ID&gt;" to teleport there at any time.<br>Enter "/trigger homes" to list your homes.<br>Enter "/trigger delhome" or "/trigger delhome set &lt;ID&gt;" to delete a home.<br>Enter "/function home_command:config" to configure the maximum number of homes allowed per player or the time to delay teleportation after running the home command.',
 	tags: []
 }, {
 	id: "infinite_respawn_anchors",
