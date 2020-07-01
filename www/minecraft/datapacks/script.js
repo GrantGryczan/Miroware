@@ -7,3 +7,13 @@ const setVersion = () => {
 };
 setVersion();
 versionSelect.addEventListener("change", setVersion);
+const clickShowMore = function() {
+	more.parentNode.replaceChild(this, this._more);
+};
+for (const more of document.body.querySelectorAll(".more")) {
+	const showMore = html`
+		<a href="javascript:;">Show More</a>
+	`;
+	showMore.addEventListener("click", clickShowMore);
+	more.parentNode.replaceChild(showMore._more = more, showMore);
+}
