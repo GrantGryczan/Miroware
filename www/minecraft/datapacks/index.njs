@@ -230,30 +230,28 @@ for (const dataPack of [{
 }, {
 	id: "multiplayer_sleep",
 	title: "Multiplayer Sleep",
-	version: "1.0.3",
+	version: "1.0.4",
 	compatibility: "1_15",
 	description: html`
-		Only a fraction of players in the overworld must sleep to skip the night.<br>
+		Only a fraction of players in the overworld must sleep to skip the night and the rain.<br>
 		<div class="more">
 			Enter "/trigger mulSle" for details.<br>
 			Enter "/function multiplayer_sleep:config" to configure the percent of players required to sleep or the color of the sleep progress bar.
 		</div>
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "multiplayer_sleep_2",
 	title: "Multiplayer Sleep",
-	version: "2.0.3",
+	version: "2.0.4",
 	compatibility: "1_16",
 		description: html`
-		Only a fraction of players in the overworld must sleep to skip the night.<br>
+		Only a fraction of players in the overworld must sleep to skip the night and the rain.<br>
 		<div class="more">
 			Enter "/trigger mulSle" for details.<br>
 			Enter "/function multiplayer_sleep:config" to configure the percent of players required to sleep or the color of the sleep progress bar.
 		</div>
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "name_colors",
