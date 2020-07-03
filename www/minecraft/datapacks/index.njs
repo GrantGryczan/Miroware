@@ -230,7 +230,7 @@ for (const dataPack of [{
 }, {
 	id: "multiplayer_sleep",
 	title: "Multiplayer Sleep",
-	version: "1.0.2",
+	version: "1.0.3",
 	compatibility: "1_15",
 	description: html`
 		Only a fraction of players in the overworld must sleep to skip the night.<br>
@@ -244,7 +244,7 @@ for (const dataPack of [{
 }, {
 	id: "multiplayer_sleep_2",
 	title: "Multiplayer Sleep",
-	version: "2.0.2",
+	version: "2.0.3",
 	compatibility: "1_16",
 		description: html`
 		Only a fraction of players in the overworld must sleep to skip the night.<br>
