@@ -33,7 +33,7 @@ for (const dataPack of [{
 }, {
 	id: "cauldron_concrete",
 	title: "Cauldron Concrete",
-	version: "1.0.1",
+	version: "1.0.2",
 	compatibility: "1_15",
 	description: html`
 		Drop concrete powder into a cauldron filled with water to instantly harden all of it.
@@ -42,7 +42,7 @@ for (const dataPack of [{
 }, {
 	id: "cauldron_concrete_2",
 	title: "Cauldron Concrete",
-	version: "2.0.1",
+	version: "2.0.2",
 	compatibility: "1_16",
 	description: html`
 		Drop concrete powder into a cauldron filled with water to instantly harden all of it.
