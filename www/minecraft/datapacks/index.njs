@@ -329,7 +329,7 @@ for (const dataPack of [{
 	icon: "gif",
 	tags: []
 }, {
-	id: "spawn_command",
+	id: "spawn_command_2",
 	title: "Spawn Command",
 	version: "2.1.0",
 	compatibility: "1_16",
