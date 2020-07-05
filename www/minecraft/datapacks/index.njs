@@ -318,10 +318,26 @@ for (const dataPack of [{
 }, {
 	id: "spawn_command",
 	title: "Spawn Command",
-	version: "1.0.0",
-	compatibility: "1_13 1_14 1_15 1_16",
+	version: "1.1.0",
+	compatibility: "1_13 1_14 1_15",
 	description: html`
-		Enter "/trigger spawn" to teleport to the world spawn point.
+		Enter "/trigger spawn" to teleport to the world spawn point.<br>
+		<div class="more">
+			Enter "/function spawn_command:config" to configure the time to delay teleportation after running the spawn command.
+		</div>
+	`,
+	icon: "gif",
+	tags: []
+}, {
+	id: "spawn_command",
+	title: "Spawn Command",
+	version: "2.1.0",
+	compatibility: "1_16",
+	description: html`
+		Enter "/trigger spawn" to teleport to the world spawn point.<br>
+		<div class="more">
+			Enter "/function spawn_command:config" to configure the time to delay teleportation after running the spawn command.
+		</div>
 	`,
 	icon: "gif",
 	tags: []
