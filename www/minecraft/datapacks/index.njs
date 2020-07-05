@@ -132,15 +132,6 @@ for (const dataPack of [{
 	`,
 	tags: []
 }, {
-	id: "disable_enderman_griefing",
-	title: "Disable Enderman Griefing",
-	version: "1.0.0",
-	compatibility: "1_13 1_14 1_15 1_16",
-	description: html`
-		Disable endermen picking up blocks.
-	`,
-	tags: []
-}, {
 	id: "graves",
 	title: "Graves",
 	version: "1.4.4",
@@ -295,6 +286,15 @@ for (const dataPack of [{
 			Enter "/trigger nevTooExp" for details.<br>
 			Enter "/function never_too_expensive:config" to configure the number of XP bottles required or the repair cost reduced.
 		</div>
+	`,
+	tags: []
+}, {
+	id: "no_enderman_griefing",
+	title: "No Enderman Griefing",
+	version: "1.0.0",
+	compatibility: "1_13 1_14 1_15 1_16",
+	description: html`
+		Disable endermen picking up blocks.
 	`,
 	tags: []
 }, {
