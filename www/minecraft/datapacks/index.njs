@@ -355,7 +355,7 @@ for (const dataPack of [{
 }, {
 	id: "tpa",
 	title: "TPA",
-	version: "1.0.2",
+	version: "1.0.3",
 	compatibility: "1_13 1_14 1_15",
 	description: html`
 		Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>
@@ -366,7 +366,7 @@ for (const dataPack of [{
 }, {
 	id: "tpa_2",
 	title: "TPA",
-	version: "2.0.2",
+	version: "2.0.3",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>
