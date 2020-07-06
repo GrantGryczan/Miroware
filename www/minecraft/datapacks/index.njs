@@ -172,13 +172,14 @@ for (const dataPack of [{
 }, {
 	id: "home_command",
 	title: "Home Command",
-	version: "1.1.0",
+	version: "1.2.0",
 	compatibility: "1_13 1_14 1_15",
 	description: html`
 		Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>
 		Enter "/trigger home" or "/trigger home set &lt;ID&gt;" to teleport there at any time.<br>
 		<div class="more">
 			Enter "/trigger homes" to list your homes.<br>
+			Enter "/trigger namehome" or "/trigger namehome set &lt;ID&gt;" to name a home.<br>
 			Enter "/trigger delhome" or "/trigger delhome set &lt;ID&gt;" to delete a home.<br>
 			Enter "/function home_command:config" to configure the maximum number of homes allowed per player or the time to delay teleportation after running the home command.
 		</div>
@@ -187,13 +188,14 @@ for (const dataPack of [{
 }, {
 	id: "home_command_2",
 	title: "Home Command",
-	version: "2.1.0",
+	version: "2.2.0",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>
 		Enter "/trigger home" or "/trigger home set &lt;ID&gt;" to teleport there at any time.<br>
 		<div class="more">
 			Enter "/trigger homes" to list your homes.<br>
+			Enter "/trigger namehome" or "/trigger namehome set &lt;ID&gt;" to name a home.<br>
 			Enter "/trigger delhome" or "/trigger delhome set &lt;ID&gt;" to delete a home.<br>
 			Enter "/function home_command:config" to configure the maximum number of homes allowed per player or the time to delay teleportation after running the home command.
 		</div>
