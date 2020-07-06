@@ -173,7 +173,7 @@ for (const dataPack of [{
 	id: "home_command",
 	title: "Home Command",
 	version: "1.2.1",
-	compatibility: "1_13 1_14 1_15",
+	compatibility: "1_15",
 	description: html`
 		Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>
 		Enter "/trigger home" or "/trigger home set &lt;ID&gt;" to teleport there at any time.<br>
