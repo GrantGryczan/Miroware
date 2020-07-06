@@ -172,7 +172,7 @@ for (const dataPack of [{
 }, {
 	id: "home_command",
 	title: "Home Command",
-	version: "1.2.0",
+	version: "1.2.1",
 	compatibility: "1_13 1_14 1_15",
 	description: html`
 		Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>
@@ -188,7 +188,7 @@ for (const dataPack of [{
 }, {
 	id: "home_command_2",
 	title: "Home Command",
-	version: "2.2.0",
+	version: "2.2.1",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>
