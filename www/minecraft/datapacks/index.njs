@@ -134,8 +134,8 @@ for (const dataPack of [{
 }, {
 	id: "graves",
 	title: "Graves",
-	version: "1.4.4",
-	compatibility: "1_14 1_15",
+	version: "1.5.0",
+	compatibility: "1_15",
 	description: html`
 		Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>
 		Hold crouch when you right-click to make it so only you can pick up the items.<br>
@@ -148,7 +148,7 @@ for (const dataPack of [{
 }, {
 	id: "graves_2",
 	title: "Graves",
-	version: "2.4.4",
+	version: "2.5.0",
 	compatibility: "1_16",
 	description: html`
 		Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>
