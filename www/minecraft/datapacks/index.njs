@@ -137,7 +137,7 @@ for (const dataPack of [{
 	version: "1.0.0",
 	compatibility: "1_14 1_15 1_16",
 	description: html`
-		Shulkers drop 1-2 shells instead of 0-1, and they always drop 2 shells with Looting II
+		Shulkers drop 1-2 shells instead of 0-1, and they always drop 2 shells with Looting II.
 	`,
 	tags: []
 }, {
