@@ -124,7 +124,7 @@ for (const dataPack of [{
 }, {
 	id: "custom_nether_portals",
 	title: "Custom Nether Portals",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_15",
 	description: html`
 		Ignite nether portals of any shape and size you like.<br>
@@ -137,7 +137,7 @@ for (const dataPack of [{
 }, {
 	id: "custom_nether_portals_2",
 	title: "Custom Nether Portals",
-	version: "2.0.0",
+	version: "2.0.1",
 	compatibility: "1_16",
 	description: html`
 		Ignite nether portals of any shape and size you like. You can use obsidian or crying obsidian in the portal frame.<br>
