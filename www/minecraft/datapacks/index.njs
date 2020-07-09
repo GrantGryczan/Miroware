@@ -132,6 +132,15 @@ for (const dataPack of [{
 	`,
 	tags: []
 }, {
+	id: "more_shulker_shells",
+	title: "More Shulker Shells",
+	version: "1.0.0",
+	compatibility: "1_14 1_15 1_16",
+	description: html`
+		Shulkers drop 1-2 shells instead of 0-1, and they always drop 2 shells with Looting II
+	`,
+	tags: []
+}, {
 	id: "graves",
 	title: "Graves",
 	version: "1.5.1",
