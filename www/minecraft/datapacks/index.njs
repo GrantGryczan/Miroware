@@ -140,10 +140,10 @@ for (const dataPack of [{
 	version: "2.1.0",
 	compatibility: "1_16",
 	description: html`
-		Ignite nether portals of any shape and size you like, or use crying obsidian in the portal frame.<br>
+		Ignite nether portals of any shape and size you like, or use crying obsidian in the portal frame if that's enabled.<br>
 		<div class="more">
 			Enter "/trigger cusNetPor" for details.<br>
-			Enter "/function custom_nether_portals:config" to configure the minimum and maximum nether portal size.
+			Enter "/function custom_nether_portals:config" to configure the minimum and maximum nether portal size or whether crying obsidian is allowed in nether portal frames.
 		</div>
 	`,
 	tags: []
