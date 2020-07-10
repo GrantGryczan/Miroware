@@ -130,7 +130,7 @@ for (const dataPack of [{
 		Ignite nether portals of any shape and size you like.<br>
 		<div class="more">
 			Enter "/trigger cusNetPor" for details.<br>
-			Enter "/function graves:config" to configure the minimum and maximum nether portal size.
+			Enter "/function custom_nether_portals:config" to configure the minimum and maximum nether portal size.
 		</div>
 	`,
 	tags: []
@@ -143,7 +143,7 @@ for (const dataPack of [{
 		Ignite nether portals of any shape and size you like, or use crying obsidian in the portal frame.<br>
 		<div class="more">
 			Enter "/trigger cusNetPor" for details.<br>
-			Enter "/function graves:config" to configure the minimum and maximum nether portal size.
+			Enter "/function custom_nether_portals:config" to configure the minimum and maximum nether portal size.
 		</div>
 	`,
 	tags: []
