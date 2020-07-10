@@ -169,7 +169,7 @@ for (const dataPack of [{
 }, {
 	id: "graves",
 	title: "Graves",
-	version: "1.5.1",
+	version: "1.5.2",
 	compatibility: "1_15",
 	description: html`
 		Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>
@@ -183,7 +183,7 @@ for (const dataPack of [{
 }, {
 	id: "graves_2",
 	title: "Graves",
-	version: "2.5.1",
+	version: "2.5.2",
 	compatibility: "1_16",
 	description: html`
 		Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>
