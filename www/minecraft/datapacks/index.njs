@@ -133,7 +133,8 @@ for (const dataPack of [{
 			Enter "/function custom_nether_portals:config" to configure the minimum and maximum nether portal size.
 		</div>
 	`,
-	tags: []
+	tags: ["custom", "customizable", "customized", "customizer", "nether", "portal", "portals", "shape", "shapes", "shaped", "size", "sizes", "sized", "crying", "obsidian", "light", "ignite", "min", "minimum", "max", "maximum", "dynamic", "giant", "large", "huge", "big", "small", "tiny"],
+	video: "WfqUtUhI7qM"
 }, {
 	id: "custom_nether_portals_2",
 	title: "Custom Nether Portals",
@@ -146,7 +147,8 @@ for (const dataPack of [{
 			Enter "/function custom_nether_portals:config" to configure the minimum and maximum nether portal size or whether crying obsidian is allowed in nether portal frames.
 		</div>
 	`,
-	tags: []
+	tags: ["custom", "customizable", "customized", "customizer", "nether", "portal", "portals", "shape", "shapes", "shaped", "size", "sizes", "sized", "crying", "obsidian", "light", "ignite", "min", "minimum", "max", "maximum", "dynamic", "giant", "large", "huge", "big", "small", "tiny"],
+	video: "WfqUtUhI7qM"
 }, {
 	id: "death_counter",
 	title: "Death Counter",
