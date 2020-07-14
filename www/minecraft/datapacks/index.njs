@@ -251,10 +251,10 @@ for (const dataPack of [{
 }, {
 	id: "invisible_item_frames",
 	title: "Invisible Item Frames",
-	version: "1.0.1",
+	version: "1.1.0",
 	compatibility: "1_16",
 	description: html`
-		Drop an item frame into a cauldron with an extended potion of invisibility to craft an invisible item frame.
+		Place an extended potion of invisibility into an item frame to make it invisible whenever it holds an item.
 	`,
 	tags: []
 }, {
