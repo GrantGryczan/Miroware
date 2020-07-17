@@ -124,13 +124,13 @@ for (const dataPack of [{
 }, {
 	id: "custom_nether_portals",
 	title: "Custom Nether Portals",
-	version: "1.0.2",
+	version: "1.1.0",
 	compatibility: "1_15",
 	description: html`
-		Ignite nether portals of any shape and size you like.<br>
+		Ignite nether portals of any shape or size you like. All features are configurable.<br>
 		<div class="more">
 			Enter "/trigger cusNetPor" for details.<br>
-			Enter "/function custom_nether_portals:config" to configure the minimum and maximum nether portal size.
+			Enter "/function custom_nether_portals:config" to configure whether non-rectangular nether portals are allowed or the minimum and maximum nether portal size.
 		</div>
 	`,
 	tags: ["custom", "customizable", "customized", "customizer", "nether", "portal", "portals", "shape", "shapes", "shaped", "size", "sizes", "sized", "crying", "obsidian", "light", "ignite", "min", "minimum", "max", "maximum", "rectangle", "rectangular", "circle", "circular", "round", "dynamic", "big", "bigger", "large", "larger", "giant", "huge", "small", "smaller", "tiny"],
@@ -138,13 +138,13 @@ for (const dataPack of [{
 }, {
 	id: "custom_nether_portals_2",
 	title: "Custom Nether Portals",
-	version: "2.1.1",
+	version: "2.2.0",
 	compatibility: "1_16",
 	description: html`
-		Ignite nether portals of any shape and size you like, or use crying obsidian in the portal frame if that's enabled.<br>
+		Ignite nether portals of any shape or size you like, or use crying obsidian in the portal frame. All features are configurable.<br>
 		<div class="more">
 			Enter "/trigger cusNetPor" for details.<br>
-			Enter "/function custom_nether_portals:config" to configure the minimum and maximum nether portal size or whether crying obsidian is allowed in nether portal frames.
+			Enter "/function custom_nether_portals:config" to configure whether non-rectangular nether portals are allowed, whether crying obsidian is allowed in nether portal frames, or the minimum and maximum nether portal size.
 		</div>
 	`,
 	tags: ["custom", "customizable", "customized", "customizer", "nether", "portal", "portals", "shape", "shapes", "shaped", "size", "sizes", "sized", "crying", "obsidian", "light", "ignite", "min", "minimum", "max", "maximum", "rectangle", "rectangular", "circle", "circular", "dynamic", "big", "bigger", "large", "larger", "giant", "huge", "small", "smaller", "tiny"],
