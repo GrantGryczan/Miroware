@@ -357,7 +357,7 @@ for (const dataPack of [{
 }, {
 	id: "spawn_command",
 	title: "Spawn Command",
-	version: "1.1.0",
+	version: "1.1.1",
 	compatibility: "1_13 1_14 1_15",
 	description: html`
 		Enter "/trigger spawn" to teleport to the world spawn point.<br>
@@ -370,7 +370,7 @@ for (const dataPack of [{
 }, {
 	id: "spawn_command_2",
 	title: "Spawn Command",
-	version: "2.1.0",
+	version: "2.1.1",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger spawn" to teleport to the world spawn point.<br>
