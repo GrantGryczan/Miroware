@@ -728,9 +728,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}],
 		loadEnd: [async context => {
 			if (context.depth === 1 && context.user && context.update) {
-				users.updateOne(context.userFilter, context.update);
+				await users.updateOne(context.userFilter, context.update);
 				if (context.updatePouch) {
-					users.updateOne(context.pouchFilter, context.updatePouch);
+					await users.updateOne(context.pouchFilter, context.updatePouch);
 				}
 			}
 		}],

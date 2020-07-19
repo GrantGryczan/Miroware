@@ -210,7 +210,7 @@ if (isMe) {
 		for (const key of keys) {
 			update.$set[`pipe.$.${key}`] = putItem[key];
 		}
-		users.updateOne({
+		await users.updateOne({
 			_id: user._id,
 			"pipe.id": found.id
 		}, update);
@@ -226,7 +226,7 @@ if (isMe) {
 				}, 0);
 				for (const child of user.pipe) {
 					if (child.path.startsWith(prefix)) {
-						users.updateOne({
+						await users.updateOne({
 							_id: user._id,
 							"pipe.id": child.id
 						}, {

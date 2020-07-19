@@ -8,7 +8,7 @@ if (testEmail(this.req.body.email)) {
 				$set: {}
 			};
 			sendVerification(user, update.$set);
-			users.updateOne({
+			await users.updateOne({
 				_id: user._id
 			}, update);
 		} else {

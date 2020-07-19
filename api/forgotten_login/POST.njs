@@ -19,7 +19,7 @@ if (testEmail(this.req.body.email)) {
 				</p>
 			`
 		});
-		users.updateOne({
+		await users.updateOne({
 			_id: user._id
 		}, {
 			$push: {

@@ -8,7 +8,7 @@ if (user) {
 			$ne: user._id
 		}
 	})) { // If the email being verified is already verified by a different user
-		users.updateOne({
+		await users.updateOne({
 			_id: user._id
 		}, {
 			$set: {
@@ -17,7 +17,7 @@ if (user) {
 			}
 		});
 	} else {
-		users.updateOne({
+		await users.updateOne({
 			_id: user._id
 		}, {
 			$set: {

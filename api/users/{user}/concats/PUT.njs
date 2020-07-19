@@ -16,7 +16,7 @@ if (isMe) {
 		for (const key of keys) {
 			set[`concats.$.${key}`] = concat[key];
 		}
-		users.updateOne({
+		await users.updateOne({
 			_id: user._id,
 			"concats.sub": found.sub,
 			"concats.val": found.val

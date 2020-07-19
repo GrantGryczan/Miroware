@@ -49,7 +49,7 @@ if (isMe) {
 				items.push(child);
 			}
 		}
-		users.updateOne({
+		await users.updateOne({
 			_id: user._id
 		}, update, {
 			arrayFilters: [{
