@@ -28,9 +28,9 @@ for (const dataPack of [{
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger back" to go back to the last location you teleported from.<br>
-		<div class="more">
-			Enter "/function back:config" to configure the time players must stand still before teleporting after running the back command.<br>
-		</div>
+		<span class="more">
+			Enter "/function back:config" to configure the time players must stand still before teleporting after running the back command.
+		</span><br>
 		<b>Requires Homes, Spawn, and/or TPA</b>
 	`,
 	tags: []
@@ -68,10 +68,10 @@ for (const dataPack of [{
 	compatibility: "1_14 1_15",
 	description: html`
 		There is a chance each creeper will explode into confetti and do no damage to blocks.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/trigger conCre" for details.<br>
 			Enter "/function confetti_creepers:config" to configure that chance.
-		</div>
+		</span>
 	`,
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "mobgriefing", "mob", "griefing", "disable"],
 	video: "iREMnbsZuTg"
@@ -82,10 +82,10 @@ for (const dataPack of [{
 	compatibility: "1_16",
 	description: html`
 		There is a chance each creeper will explode into confetti and do no damage to blocks.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/trigger conCre" for details.<br>
 			Enter "/function confetti_creepers:config" to configure that chance.
-		</div>
+		</span>
 	`,
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "mobgriefing", "mob", "griefing", "disable"],
 	video: "iREMnbsZuTg"
@@ -141,10 +141,10 @@ for (const dataPack of [{
 	compatibility: "1_15",
 	description: html`
 		Ignite nether portals of any shape or size you like. All features are configurable.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/trigger cusNetPor" for details.<br>
 			Enter "/function custom_nether_portals:config" to configure whether non-rectangular nether portals are allowed or the minimum and maximum nether portal size.
-		</div>
+		</span>
 	`,
 	tags: ["custom", "customizable", "customized", "customizer", "nether", "portal", "portals", "shape", "shapes", "shaped", "size", "sizes", "sized", "crying", "obsidian", "light", "ignite", "min", "minimum", "max", "maximum", "rectangle", "rectangular", "circle", "circular", "round", "dynamic", "big", "bigger", "large", "larger", "giant", "huge", "small", "smaller", "tiny"],
 	video: "WfqUtUhI7qM"
@@ -155,10 +155,10 @@ for (const dataPack of [{
 	compatibility: "1_16",
 	description: html`
 		Ignite nether portals of any shape or size you like, or use crying obsidian in the portal frame. All features are configurable.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/trigger cusNetPor" for details.<br>
 			Enter "/function custom_nether_portals:config" to configure whether non-rectangular nether portals are allowed, whether crying obsidian is allowed in nether portal frames, or the minimum and maximum nether portal size.
-		</div>
+		</span>
 	`,
 	tags: ["custom", "customizable", "customized", "customizer", "nether", "portal", "portals", "shape", "shapes", "shaped", "size", "sizes", "sized", "crying", "obsidian", "light", "ignite", "min", "minimum", "max", "maximum", "rectangle", "rectangular", "circle", "circular", "dynamic", "big", "bigger", "large", "larger", "giant", "huge", "small", "smaller", "tiny"],
 	video: "WfqUtUhI7qM"
@@ -189,9 +189,9 @@ for (const dataPack of [{
 	description: html`
 		Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>
 		Hold crouch when you right-click to make it so only you can pick up the items.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/function graves:config" to configure whether grave robbing, graves collecting XP, and grave locating are enabled, or for an option to give yourself a grave key to forcibly open graves.
-		</div>
+		</span>
 	`,
 	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma", "vanillatweaks", "vanilla", "tweaks"],
 	video: "DWEVYImenj4"
@@ -203,9 +203,9 @@ for (const dataPack of [{
 	description: html`
 		Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.<br>
 		Hold crouch when you right-click to make it so only you can pick up the items.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/function graves:config" to configure whether grave robbing, graves collecting XP, and grave locating are enabled, or for an option to give yourself a grave key to forcibly open graves.
-		</div>
+		</span>
 	`,
 	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma", "vanillatweaks", "vanilla", "tweaks"],
 	video: "DWEVYImenj4"
@@ -227,12 +227,12 @@ for (const dataPack of [{
 	description: html`
 		Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>
 		Enter "/trigger home" or "/trigger home set &lt;ID&gt;" to teleport there at any time.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/trigger homes" to list your homes.<br>
 			Enter "/trigger namehome" or "/trigger namehome set &lt;ID&gt;" to name a home.<br>
 			Enter "/trigger delhome" or "/trigger delhome set &lt;ID&gt;" to delete a home.<br>
 			Enter "/function homes:config" to configure the maximum number of homes allowed per player or the time players must stand still before teleporting after running the home command.
-		</div>
+		</span>
 	`,
 	tags: []
 }, {
@@ -261,10 +261,10 @@ for (const dataPack of [{
 	compatibility: "1_15",
 	description: html`
 		Only a fraction of players in the overworld must sleep to skip the night and the rain.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/trigger mulSle" for details.<br>
 			Enter "/function multiplayer_sleep:config" to configure the percent of players required to sleep or the color of the sleep progress bar.
-		</div>
+		</span>
 	`,
 	tags: []
 }, {
@@ -274,10 +274,10 @@ for (const dataPack of [{
 	compatibility: "1_16",
 		description: html`
 		Only a fraction of players in the overworld must sleep to skip the night and the rain.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/trigger mulSle" for details.<br>
 			Enter "/function multiplayer_sleep:config" to configure the percent of players required to sleep or the color of the sleep progress bar.
-		</div>
+		</span>
 	`,
 	tags: []
 }, {
@@ -305,10 +305,10 @@ for (const dataPack of [{
 	compatibility: "1_14 1_15",
 	description: html`
 		Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/trigger nevTooExp" for details.<br>
 			Enter "/function never_too_expensive:config" to configure the number of XP bottles required or the repair cost reduced.
-		</div>
+		</span>
 	`,
 	tags: []
 }, {
@@ -318,10 +318,10 @@ for (const dataPack of [{
 	compatibility: "1_16",
 	description: html`
 		Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/trigger nevTooExp" for details.<br>
 			Enter "/function never_too_expensive:config" to configure the number of XP bottles required or the repair cost reduced.
-		</div>
+		</span>
 	`,
 	tags: []
 }, {
@@ -358,9 +358,9 @@ for (const dataPack of [{
 	compatibility: "1_13 1_14 1_15",
 	description: html`
 		Enter "/trigger spawn" to teleport to the world spawn point.<br><br>
-		<div class="more">
+		<span class="more">
 			Enter "/function spawn:config" to configure the time players must stand still before teleporting after running the spawn command.
-		</div>
+		</span>
 	`,
 	icon: "gif",
 	tags: []
@@ -371,9 +371,9 @@ for (const dataPack of [{
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger spawn" to teleport to the world spawn point.<br>
-		<div class="more">
+		<span class="more">
 			Enter "/function spawn:config" to configure the time to delay teleportation after running the spawn command.
-		</div>
+		</span>
 	`,
 	icon: "gif",
 	tags: []
