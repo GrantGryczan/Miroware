@@ -22,6 +22,19 @@ this.value += html`
 			</div>
 			<div id="dataPacks">`;
 for (const dataPack of [{
+	id: "back",
+	title: "Back",
+	version: "1.0.0",
+	compatibility: "1_16",
+	description: html`
+		Enter "/trigger back" to go back to the last location you teleported from.<br>
+		<div class="more">
+			Enter "/function back:config" to configure the time players must stand still before teleporting after running the back command.
+		</div>
+		<b>Requires Homes, Spawn, and/or TPA</b>
+	`,
+	tags: []
+}, {
 	id: "bat_membranes",
 	title: "Bat Membranes",
 	version: "1.0.0",
@@ -207,8 +220,8 @@ for (const dataPack of [{
 	icon: "gif",
 	tags: []
 }, {
-	id: "home_command",
-	title: "Home Command",
+	id: "homes",
+	title: "Home",
 	version: "1.3.0",
 	compatibility: "1_16",
 	description: html`
@@ -218,7 +231,7 @@ for (const dataPack of [{
 			Enter "/trigger homes" to list your homes.<br>
 			Enter "/trigger namehome" or "/trigger namehome set &lt;ID&gt;" to name a home.<br>
 			Enter "/trigger delhome" or "/trigger delhome set &lt;ID&gt;" to delete a home.<br>
-			Enter "/function home_command:config" to configure the maximum number of homes allowed per player or the time players must stand still before teleporting after running the home command.
+			Enter "/function homes:config" to configure the maximum number of homes allowed per player or the time players must stand still before teleporting after running the home command.
 		</div>
 	`,
 	tags: []
@@ -339,27 +352,27 @@ for (const dataPack of [{
 	`,
 	tags: []
 }, {
-	id: "spawn_command",
-	title: "Spawn Command",
-	version: "1.1.1",
+	id: "spawn",
+	title: "Spawn",
+	version: "1.2.0",
 	compatibility: "1_13 1_14 1_15",
 	description: html`
-		Enter "/trigger spawn" to teleport to the world spawn point.<br>
+		Enter "/trigger spawn" to teleport to the world spawn point.<br><br>
 		<div class="more">
-			Enter "/function spawn_command:config" to configure the time to delay teleportation after running the spawn command.
+			Enter "/function spawn:config" to configure the time players must stand still before teleporting after running the spawn command.
 		</div>
 	`,
 	icon: "gif",
 	tags: []
 }, {
-	id: "spawn_command_2",
-	title: "Spawn Command",
-	version: "2.1.1",
+	id: "spawn_2",
+	title: "Spawn",
+	version: "2.2.0",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger spawn" to teleport to the world spawn point.<br>
 		<div class="more">
-			Enter "/function spawn_command:config" to configure the time to delay teleportation after running the spawn command.
+			Enter "/function spawn:config" to configure the time to delay teleportation after running the spawn command.
 		</div>
 	`,
 	icon: "gif",
@@ -387,7 +400,7 @@ for (const dataPack of [{
 }, {
 	id: "tpa_2",
 	title: "TPA",
-	version: "2.0.3",
+	version: "2.1.0",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>
