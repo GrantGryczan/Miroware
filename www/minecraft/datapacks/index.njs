@@ -30,7 +30,7 @@ for (const dataPack of [{
 		Enter "/trigger back" to go back to the last location you teleported from.<br>
 		<div class="more">
 			Enter "/function back:config" to configure the time players must stand still before teleporting after running the back command.
-		</div>
+		</div><br>
 		<b>Requires Homes, Spawn, and/or TPA</b>
 	`,
 	tags: []
