@@ -218,7 +218,7 @@ for (const dataPack of [{
 			Enter "/trigger homes" to list your homes.<br>
 			Enter "/trigger namehome" or "/trigger namehome set &lt;ID&gt;" to name a home.<br>
 			Enter "/trigger delhome" or "/trigger delhome set &lt;ID&gt;" to delete a home.<br>
-			Enter "/function home_command:config" to configure the maximum number of homes allowed per player or the time to require players to stand still before teleporting after running the home command.
+			Enter "/function home_command:config" to configure the maximum number of homes allowed per player or the time players must stand still before teleporting after running the home command.
 		</div>
 	`,
 	tags: []
