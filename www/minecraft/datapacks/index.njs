@@ -332,7 +332,7 @@ for (const dataPack of [{
 }, {
 	id: "sky_dimension",
 	title: "Sky Dimension",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_16",
 	description: html`
 		Reach y=257 in the overworld to go to y=4 in the sky dimension. Reach y=-16 in the sky dimension to go to y=256 in the overworld.
