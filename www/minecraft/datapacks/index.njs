@@ -24,7 +24,7 @@ this.value += html`
 for (const dataPack of [{
 	id: "back",
 	title: "Back",
-	version: "1.0.0",
+	version: "1.0.1",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger back" to go back to the last location you teleported from.<br>
