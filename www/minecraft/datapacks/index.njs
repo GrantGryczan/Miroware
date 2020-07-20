@@ -31,7 +31,7 @@ for (const dataPack of [{
 		<span class="more">
 			Enter "/function back:config" to configure the time players must stand still before teleporting after running the back command.
 		</span><br>
-		<b>Requires Homes, Spawn, and/or TPA</b>
+		<b>Requires Homes, Spawn, or TPA</b>
 	`,
 	tags: []
 }, {
