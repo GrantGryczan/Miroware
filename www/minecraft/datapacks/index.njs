@@ -222,7 +222,7 @@ for (const dataPack of [{
 }, {
 	id: "homes",
 	title: "Homes",
-	version: "1.3.1",
+	version: "1.3.2",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>
@@ -372,7 +372,7 @@ for (const dataPack of [{
 	description: html`
 		Enter "/trigger spawn" to teleport to the world spawn point.<br>
 		<span class="more">
-			Enter "/function spawn:config" to configure the time to delay teleportation after running the spawn command.
+			Enter "/function spawn:config" to configure the time players must stand still before teleportation after running the spawn command.
 		</span>
 	`,
 	icon: "gif",
@@ -389,22 +389,28 @@ for (const dataPack of [{
 }, {
 	id: "tpa",
 	title: "TPA",
-	version: "1.0.3",
+	version: "1.1.0",
 	compatibility: "1_13 1_14 1_15",
 	description: html`
 		Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>
 		Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br>
+		<span class="more">
+			Enter "/function tpa:config" to configure the time players must stand still before teleportation after their teleport request is accepted.<br>
+		</span>
 		<b>Incompatible with Death Counter</b>
 	`,
 	tags: []
 }, {
 	id: "tpa_2",
 	title: "TPA",
-	version: "2.1.0",
+	version: "2.2.0",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>
 		Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br>
+		<span class="more">
+			Enter "/function tpa:config" to configure the time players must stand still before teleportation after their teleport request is accepted.<br>
+		</span>
 		<b>Incompatible with Death Counter</b>
 	`,
 	tags: []
