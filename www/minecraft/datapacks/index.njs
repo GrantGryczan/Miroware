@@ -222,7 +222,7 @@ for (const dataPack of [{
 }, {
 	id: "homes",
 	title: "Homes",
-	version: "1.3.2",
+	version: "1.3.3",
 	compatibility: "1_16",
 	description: html`
 		Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>
