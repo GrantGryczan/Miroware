@@ -210,10 +210,10 @@ if (isMe) {
 		for (const key of keys) {
 			update.$set[`pipe.$.${key}`] = putItem[key];
 		}
-		await users.updateOne({
+		const promises = [users.updateOne({
 			_id: user._id,
 			"pipe.id": found.id
-		}, update);
+		}, update)];
 		const itemsToPurge = [found];
 		if (putItem.path) {
 			if (typeDir) {
@@ -226,19 +226,20 @@ if (isMe) {
 				}, 0);
 				for (const child of user.pipe) {
 					if (child.path.startsWith(prefix)) {
-						await users.updateOne({
+						promises.push(users.updateOne({
 							_id: user._id,
 							"pipe.id": child.id
 						}, {
 							$set: {
 								"pipe.$.path": child.path = putItem.path + child.path.slice(found.path.length)
 							}
-						});
+						}));
 						itemsToPurge.push(child);
 					}
 				}
 			}
 		}
+		await Promise.all(promises);
 		purgePipeCache(user, itemsToPurge);
 	} else {
 		this.value = {

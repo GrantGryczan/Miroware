@@ -728,10 +728,11 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}],
 		loadEnd: [async context => {
 			if (context.depth === 1 && context.user && context.update) {
-				await users.updateOne(context.userFilter, context.update);
+				const promises = [users.updateOne(context.userFilter, context.update)];
 				if (context.updatePouch) {
-					await users.updateOne(context.pouchFilter, context.updatePouch);
+					promises.push(users.updateOne(context.pouchFilter, context.updatePouch));
 				}
+				await Promise.all(promises);
 			}
 		}],
 		babelOptions: {
