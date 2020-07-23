@@ -99,7 +99,6 @@ for (const dataPack of [{
 		Enter "/trigger craEncBoo" to get the recipe book.<br>
 		<b>Requires Craftable XP Bottles</b>
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "craftable_enchanted_books_2",
@@ -111,7 +110,6 @@ for (const dataPack of [{
 		Enter "/trigger craEncBoo" to get the recipe book.<br>
 		<b>Requires Craftable XP Bottles</b>
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "craftable_xp_bottles",
@@ -121,7 +119,6 @@ for (const dataPack of [{
 	description: html`
 		Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "craftable_xp_bottles_2",
@@ -132,7 +129,6 @@ for (const dataPack of [{
 		Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.<br>
 		Smelt an XP bottle in a furnace to losslessly get your XP back.
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "custom_nether_portals",
@@ -217,7 +213,6 @@ for (const dataPack of [{
 	description: html`
 		Display each player's health below their nametag.
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "homes",
@@ -243,7 +238,6 @@ for (const dataPack of [{
 	description: html`
 		If a respawn anchor has crying obsidian beneath it and an end crystal above it, it will never lose charge.
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "invisible_item_frames",
@@ -362,7 +356,6 @@ for (const dataPack of [{
 			Enter "/function spawn:config" to configure the time players must stand still before teleporting after running the spawn command.
 		</span>
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "spawn_2",
@@ -375,7 +368,6 @@ for (const dataPack of [{
 			Enter "/function spawn:config" to configure the time players must stand still before teleportation after running the spawn command.
 		</span>
 	`,
-	icon: "gif",
 	tags: []
 }, {
 	id: "teleporters",
@@ -432,7 +424,7 @@ for (const dataPack of [{
 	this.value += html`
 					<div id="$${dataPack.id}" class="dataPack mdc-card ${dataPack.compatibility} hidden">
 						<div class="mdc-card__text-section">
-							<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}.zip/pack.$${dataPack.icon || "png"}">
+							<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}.zip/pack.png">
 							<div class="mdc-card__title">$${dataPack.title}</div>
 							<div class="mdc-card__subhead">$${dataPack.version}</div>
 						</div>
