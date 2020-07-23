@@ -65,7 +65,7 @@ for (const dataPack of [{
 	id: "confetti_creepers",
 	title: "Confetti Creepers",
 	version: "1.1.1",
-	compatibility: "1_14 1_15",
+	compatibility: "1_15",
 	description: html`
 		There is a chance each creeper will explode into confetti and do no damage to blocks.<br>
 		<span class="more">
@@ -93,7 +93,7 @@ for (const dataPack of [{
 	id: "craftable_enchanted_books",
 	title: "Craftable Enchanted Books",
 	version: "1.0.1",
-	compatibility: "1_14 1_15",
+	compatibility: "1_15",
 	description: html`
 		To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>
 		Enter "/trigger craEncBoo" to get the recipe book.<br>
@@ -115,7 +115,7 @@ for (const dataPack of [{
 	id: "craftable_xp_bottles",
 	title: "Craftable XP Bottles",
 	version: "1.0.0",
-	compatibility: "1_13 1_14 1_15",
+	compatibility: "1_15",
 	description: html`
 		Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.
 	`,
@@ -278,7 +278,7 @@ for (const dataPack of [{
 	id: "name_colors",
 	title: "Name Colors",
 	version: "1.0.1",
-	compatibility: "1_13 1_14 1_15",
+	compatibility: "1_15",
 	description: html`
 		Enter "/trigger color" to list the colors you can give to your username.
 	`,
@@ -296,7 +296,7 @@ for (const dataPack of [{
 	id: "never_too_expensive",
 	title: "Never Too Expensive",
 	version: "1.0.2",
-	compatibility: "1_14 1_15",
+	compatibility: "1_15",
 	description: html`
 		Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>
 		<span class="more">
@@ -349,7 +349,7 @@ for (const dataPack of [{
 	id: "spawn",
 	title: "Spawn",
 	version: "1.2.0",
-	compatibility: "1_13 1_14 1_15",
+	compatibility: "1_15",
 	description: html`
 		Enter "/trigger spawn" to teleport to the world spawn point.<br><br>
 		<span class="more">
@@ -382,7 +382,7 @@ for (const dataPack of [{
 	id: "tpa",
 	title: "TPA",
 	version: "1.1.0",
-	compatibility: "1_13 1_14 1_15",
+	compatibility: "1_15",
 	description: html`
 		Enter "/trigger tpa set &lt;PID&gt;" to request to teleport to another player.<br>
 		Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br>
@@ -410,7 +410,7 @@ for (const dataPack of [{
 	id: "unlock_all_recipes",
 	title: "Unlock All Recipes",
 	version: "1.0.0",
-	compatibility: "1_13 1_14 1_15 1_16",
+	compatibility: "1_15 1_16",
 	description: html`
 		Automatically unlock all recipes as soon as you start playing.
 	`,
