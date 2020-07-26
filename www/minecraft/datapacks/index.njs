@@ -114,19 +114,10 @@ for (const dataPack of [{
 }, {
 	id: "craftable_xp_bottles",
 	title: "Craftable XP Bottles",
-	version: "1.0.0",
-	compatibility: "1_15",
-	description: html`
-		Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.
-	`,
-	tags: []
-}, {
-	id: "craftable_xp_bottles_2",
-	title: "Craftable XP Bottles",
-	version: "2.0.0",
+	version: "1.1.0",
 	compatibility: "1_16",
 	description: html`
-		Crouch and jump on an enchanting table to fill a bottle in your inventory with some of your XP.<br>
+		Right-click an enchanting table with an empty bottle to fill it with some of your XP.<br>
 		Smelt an XP bottle in a furnace to losslessly get your XP back.
 	`,
 	tags: []
@@ -422,25 +413,28 @@ for (const dataPack of [{
 		}
 	}
 	this.value += html`
-					<div id="$${dataPack.id}" class="dataPack mdc-card ${dataPack.compatibility} hidden">
-						<div class="mdc-card__text-section">
-							<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}.zip/pack.png">
-							<div class="mdc-card__title">$${dataPack.title}</div>
-							<div class="mdc-card__subhead">$${dataPack.version}</div>
+				<div id="$${dataPack.id}" class="dataPack mdc-card ${dataPack.compatibility} hidden">
+					<div class="mdc-card__text-section">
+						<img class="mdc-card__icon" src="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}.zip/pack.png">
+						<div class="mdc-card__title">$${dataPack.title}</div>
+						<div class="mdc-card__subhead">$${dataPack.version}</div>
+					</div>
+					<div class="mdc-card__text-section">
+						<div class="mdc-card__supporting-text">
+							${dataPack.description}
 						</div>
-						<div class="mdc-card__text-section">
-							<div class="mdc-card__supporting-text">
-								${dataPack.description}
-							</div>
-						</div>
-						<div class="mdc-card__actions">${dataPack.video ? html`
-							<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://youtu.be/$${dataPack.video}" target="_blank" title="Open video">play_circle_outline</a>` : ""}
-							<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}.zip" target="_blank" title="Download">file_download</a>
-						</div>
-					</div>`;
+					</div>
+					<div class="mdc-card__actions">${dataPack.video ? html`
+						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://youtu.be/$${dataPack.video}" target="_blank" title="Open video">play_circle_outline</a>` : ""}
+						<a class="mdc-icon-button material-icons mdc-card__action mdc-card__action--button" href="https://pipe.miroware.io/5b275bca357b306dc588877d/minecraft/datapacks/$${dataPack.id}.zip" target="_blank" title="Download">file_download</a>
+					</div>
+				</div>`;
 }
 this.value += html`
-			</div>`;
+			</div>
+			Data packs compiled using <a target="_blank" href="https://github.com/IanSSenne/mcbuild" title="MC-Build">
+				<img src="mcb.png">
+			</a>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
