@@ -432,9 +432,9 @@ for (const dataPack of [{
 }
 this.value += html`
 			</div>
-			Data packs compiled using <a target="_blank" href="https://github.com/IanSSenne/mcbuild" title="MC-Build">
-				<img src="mcb.png">
-			</a>`;
+			<div id="credit">
+				Data packs compiled using <a target="_blank" href="https://github.com/IanSSenne/mcbuild">MC-Build</a>
+			</div>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += html`

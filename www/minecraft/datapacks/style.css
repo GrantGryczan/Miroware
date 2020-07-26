@@ -16,3 +16,7 @@
 	justify-content: flex-end;
 	margin-top: auto;
 }
+#credit {
+	margin-top: 12px;
+	text-align: center;
+}
