@@ -279,7 +279,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 						redirect_uri
 					})
 				}).then(async response => {
-					body = await response.json();
+					const body = await response.json();
 					if (response.ok) {
 						fetch("https://discordapp.com/api/users/@me", {
 							method: "GET",
@@ -287,7 +287,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 								"Authorization": `${body.token_type} ${body.access_token}`
 							}
 						}).then(async response2 => {
-							body2 = await response2.json();
+							const body2 = await response2.json();
 							if (response2.ok) {
 								resolve({
 									connection,
