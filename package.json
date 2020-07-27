@@ -35,10 +35,9 @@
 		"mailparser": "^2.8.0",
 		"mime": "^2.4.6",
 		"mongodb": "^3.5.9",
+		"node-fetch": "^2.6.0",
 		"nodemailer": "^4.7.0",
 		"replthis": "^1.0.2",
-		"request": "^2.88.0",
-		"request-promise-native": "^1.0.9",
 		"servecube": "^1.18.0",
 		"smtp-server": "^3.7.0"
 	}
