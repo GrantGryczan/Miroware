@@ -85,7 +85,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 							throw err;
 						});
 						archive.pipe(res);
-						const sliceStart = path.length + 1; // To put the folder inside of the ZIP instead of having the ZIP be the folder itself, change `path.length` to `path.lastIndexOf("/")`.
+						const sliceStart = path.length + 1; // Change `path.length` to `path.lastIndexOf("/")` to put the folder inside of the ZIP instead of having the ZIP be the folder itself.
 						const promises = [];
 						const scan = parent => {
 							for (const item of user.pipe) {
@@ -103,7 +103,9 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 							}
 						};
 						scan(item.id);
-						Promise.all(promises).then(archive.finalize.bind(archive));
+						Promise.all(promises).then(() => {
+							archive.finalize();
+						});
 					} else {
 						s3.getObject({
 							Bucket: "miroware-pipe",

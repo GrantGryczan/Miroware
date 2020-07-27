@@ -85,7 +85,8 @@ const purgeCache = async (...files) => {
 		do {
 			await wait(1000);
 			try {
-				await request.post(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
+				await fetch(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
+					method: "POST",
 					headers: {
 						"X-Auth-Email": youKnow.cloudflare.email,
 						"X-Auth-Key": youKnow.cloudflare.key,
@@ -178,13 +179,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		if (typeof captcha === "string") {
 			let success = false;
 			try {
-				({success} = JSON.parse(await request.post("https://www.google.com/recaptcha/api/siteverify", {
-					form: {
+				({success} = await (await fetch("https://www.google.com/recaptcha/api/siteverify", {
+					method: "POST",
+					body: new URLSearchParams({
 						secret: youKnow.captcha.secret,
 						response: captcha,
 						remoteip: context.req.get("CF-Connecting-IP") || context.req.ip
-					}
-				})));
+					})
+				})).json());
 			} catch {}
 			if (success) {
 				resolve();
@@ -260,38 +262,47 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				if (pathIndex !== -1) {
 					redirect_uri = `${redirect_uri.slice(0, pathIndex)}/login/discord/`;
 				}
-				const catchError = err => {
-					const error = JSON.parse(err.error);
+				const catchError = async err => {
 					context.value = {
-						error: error.error_description || error.error
+						error: err.message || err.error_description || err.error
 					};
 					context.status = 422;
 					context.done();
 				};
-				request.post("https://discordapp.com/api/oauth2/token", {
-					form: {
+				fetch("https://discordapp.com/api/oauth2/token", {
+					method: "POST",
+					body: new URLSearchParams({
 						client_id: youKnow.discord.id,
 						client_secret: youKnow.discord.secret,
 						grant_type: "authorization_code",
 						code: connection[1],
 						redirect_uri
+					})
+				}).then(async response => {
+					body = await response.json();
+					if (response.ok) {
+						fetch("https://discordapp.com/api/users/@me", {
+							method: "GET",
+							headers: {
+								"Authorization": `${body.token_type} ${body.access_token}`
+							}
+						}).then(async response2 => {
+							body2 = await response2.json();
+							if (response2.ok) {
+								resolve({
+									connection,
+									id: body2.id,
+									name: body2.username,
+									email: body2.email,
+									verified: body2.verified
+								});
+							} else {
+								catchError(body2);
+							}
+						}).catch(catchError);
+					} else {
+						catchError(body);
 					}
-				}).then(body => {
-					body = JSON.parse(body);
-					request.get("https://discordapp.com/api/users/@me", {
-						headers: {
-							"Authorization": `${body.token_type} ${body.access_token}`
-						}
-					}).then(body2 => {
-						body2 = JSON.parse(body2);
-						resolve({
-							connection,
-							id: body2.id,
-							name: body2.username,
-							email: body2.email,
-							verified: body2.verified
-						});
-					}).catch(catchError);
 				}).catch(catchError);
 			} else if (connection[0] === "password") {
 				if (connection[1].length < 8) {

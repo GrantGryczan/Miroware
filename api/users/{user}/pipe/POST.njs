@@ -162,14 +162,13 @@ if (isMe) {
 		let type = data.type || mime.getType(data.name) || "application/octet-stream";
 		if (data.url) {
 			try {
-				const response = await request.get(data.url, {
+				const response = await fetch(data.url, {
+					method: "GET",
 					headers: {
 						"User-Agent": "Miroware"
-					},
-					encoding: null,
-					resolveWithFullResponse: true
+					}
 				});
-				body = response.body;
+				body = await response.buffer();
 				if (body.length > 100 * 1024 * 1024) { // 100 MiB
 					this.value = {
 						error: "Files larger than 100 MiB are currently not supported due to technical limitations. Sorry!"
@@ -178,7 +177,7 @@ if (isMe) {
 					this.done();
 					return;
 				}
-				let contentType = response.headers["content-type"];
+				let contentType = response.headers.get("content-type");
 				if (contentType) {
 					const semicolonIndex = contentType.indexOf(";");
 					if (semicolonIndex !== -1) {

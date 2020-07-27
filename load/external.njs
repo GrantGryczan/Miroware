@@ -29,7 +29,9 @@ if (this.socialIcons) {
 		const origin = context.redir.slice(0, context.redir.indexOf("/", context.redir.indexOf("//") + 2));
 		let body;
 		try {
-			body = await request.get(context.redir);
+			body = await (await fetch(context.redir, {
+				method: "GET"
+			})).text();
 		} catch (err) {
 			body = err.error;
 		}
