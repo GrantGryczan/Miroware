@@ -1300,7 +1300,7 @@ if (Miro.data.isMe) {
 					name = htmlFilename ? htmlFilename[1] : "file";
 				}
 				addFile(file, undefined, await enterFileName("Paste", name));
-			} else if (string && (string = await new Promise(htmlString.getAsString.bind(htmlString))).includes("://")) {
+			} else if (string && (string = await new Promise(string.getAsString.bind(string))).includes("://")) {
 				try {
 					decodeURIComponent(string);
 					addURL(string);
