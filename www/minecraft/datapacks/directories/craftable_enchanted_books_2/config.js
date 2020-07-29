@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "craftable_enchanted_books",
-		version: [2, 0, 1],
+		version: "2.0.1",
 		name: "Craftable Enchanted Books",
 		compatibility: ["1.16"],
 		description: `

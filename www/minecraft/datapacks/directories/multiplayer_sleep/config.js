@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "multiplayer_sleep",
-		version: [1, 0, 4],
+		version: "1.0.4",
 		name: "Multiplayer Sleep",
 		compatibility: ["1.15"],
 		description: `

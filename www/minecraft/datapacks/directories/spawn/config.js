@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "spawn",
-		version: [1, 2, 0],
+		version: "1.2.0",
 		name: "Spawn",
 		compatibility: ["1.15"],
 		description: `

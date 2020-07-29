@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "confetti_creepers",
-		version: [1, 1, 1],
+		version: "1.1.1",
 		name: "Confetti Creepers",
 		compatibility: ["1.15"],
 		description: `

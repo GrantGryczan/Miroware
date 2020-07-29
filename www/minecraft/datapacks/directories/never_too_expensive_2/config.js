@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "never_too_expensive",
-		version: [2, 0, 2],
+		version: "2.0.2",
 		name: "Never Too Expensive",
 		compatibility: ["1.16"],
 		description: `

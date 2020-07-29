@@ -10,7 +10,7 @@ module.exports = {
 			archive.pipe(fs.createWriteStream(destination));
 		}
 		archive.directory("data", "data");
-		archive.append(`{\n\t"pack": {\n\t\t"pack_format": 5,\n\t\t"description": [{"text":${JSON.stringify(`${config.pack.name} ${config.pack.version.join(".")}`)},"color":"aqua"},{"text":"\\nmc.miro.gg/datapacks","color":"dark_aqua"}]\n\t}\n}\n`, {
+		archive.append(`{\n\t"pack": {\n\t\t"pack_format": 5,\n\t\t"description": [{"text":${JSON.stringify(`${config.pack.name} ${config.pack.version}`)},"color":"aqua"},{"text":"\\nmc.miro.gg/datapacks","color":"dark_aqua"}]\n\t}\n}\n`, {
 			name: "pack.mcmeta"
 		});
 		archive.file("pack.png", {

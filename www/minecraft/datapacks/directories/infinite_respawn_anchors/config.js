@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "infinite_respawn_anchors",
-		version: [1, 0, 0],
+		version: "1.0.0",
 		name: "Infinite Respawn Anchors",
 		compatibility: ["1.16"],
 		description: `

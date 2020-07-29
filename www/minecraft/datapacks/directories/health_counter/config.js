@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "health_counter",
-		version: [1, 0, 0],
+		version: "1.0.0",
 		name: "Health Counter",
 		compatibility: ["1.13", "1.14", "1.15", "1.16"],
 		description: `

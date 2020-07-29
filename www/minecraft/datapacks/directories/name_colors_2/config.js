@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "name_colors",
-		version: [2, 0, 1],
+		version: "2.0.1",
 		name: "Name Colors",
 		compatibility: ["1.16"],
 		description: `

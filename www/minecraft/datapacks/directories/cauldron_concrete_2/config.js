@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "cauldron_concrete",
-		version: [2, 0, 2],
+		version: "2.0.2",
 		name: "Cauldron Concrete",
 		compatibility: ["1.16"],
 		description: `

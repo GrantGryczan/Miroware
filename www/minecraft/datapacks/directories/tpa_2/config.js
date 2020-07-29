@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "tpa",
-		version: [2, 2, 0],
+		version: "2.2.0",
 		name: "TPA",
 		compatibility: ["1.16"],
 		description: `

@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "craftable_xp_bottles",
-		version: [1, 1, 0],
+		version: "1.1.0",
 		name: "Craftable XP Bottles",
 		compatibility: ["1.16"],
 		description: `

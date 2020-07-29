@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "sky_dimension",
-		version: [1, 0, 1],
+		version: "1.0.1",
 		name: "Sky Dimension",
 		compatibility: ["1.16"],
 		description: `

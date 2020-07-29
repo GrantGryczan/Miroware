@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "more_shulker_shells",
-		version: [1, 0, 0],
+		version: "1.0.0",
 		name: "More Shulker Shells",
 		compatibility: ["1.14", "1.15", "1.16"],
 		description: `

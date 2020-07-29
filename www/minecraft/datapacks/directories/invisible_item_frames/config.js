@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "invisible_item_frames",
-		version: [1, 1, 0],
+		version: "1.1.0",
 		name: "Invisible Item Frames",
 		compatibility: ["1.16"],
 		description: `

@@ -2,7 +2,7 @@ const builder = require("../../builder.js");
 module.exports = {
 	pack: {
 		namespace: "back",
-		version: [1, 0, 1],
+		version: "1.0.1",
 		name: "Back",
 		compatibility: ["1.16"],
 		description: `
