@@ -30,7 +30,7 @@ for (const id of await fs.readdir("www/minecraft/datapacks/directories")) {
 			}
 		}
 		this.value += html`
-				<div id="$${id}" class="dataPack mdc-card ${dataPack.compatibility} hidden">
+				<div id="$${id}" class="dataPack mdc-card ${dataPack.compatibility.join(" ")} hidden">
 					<div class="mdc-card__text-section">
 						<img class="mdc-card__icon" src="/minecraft/datapacks/directories/$${id}/pack.png">
 						<div class="mdc-card__title">$${dataPack.name}</div>
