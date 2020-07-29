@@ -22,7 +22,9 @@ this.value += html`
 			</div>
 			<div id="dataPacks">`;
 for (const id of await fs.readdir("www/minecraft/datapacks/directories")) {
-	const dataPack = require(`./www/minecraft/datapacks/directories/${id}/config.js`).pack;
+	const path = `./www/minecraft/datapacks/directories/${id}/pack.js`;
+	const dataPack = require(path);
+	delete require.cache[require.resolve(path)];
 	if (!dataPack.hidden) {
 		for (const tag of dataPack.tags) {
 			if (!this.tags.includes(tag)) {

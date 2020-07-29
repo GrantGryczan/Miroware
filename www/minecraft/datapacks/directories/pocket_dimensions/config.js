@@ -1,16 +1,6 @@
 const builder = require("../../builder.js");
 module.exports = {
-	pack: {
-		namespace: "pocket_dimensions",
-		version: "1.0.0",
-		name: "Pocket Dimensions",
-		compatibility: ["1.16"],
-		description: `
-			
-		`,
-		tags: [],
-		hidden: true
-	},
+	pack: require("./pack.js"),
 	mc: {
 		dev: false,
 		header: "",
