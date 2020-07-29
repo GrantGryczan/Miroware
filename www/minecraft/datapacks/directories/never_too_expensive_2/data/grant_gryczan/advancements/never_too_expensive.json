@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:anvil"
+		},
+		"title": "Never Too Expensive   ",
+		"description": ["",{"text":"Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger nevTooExp","color":"aqua"},{"text":" for details.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function never_too_expensive:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

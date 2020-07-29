@@ -1,0 +1,2 @@
+data merge entity @e[dx=0,dy=0,dz=0,type=minecraft:item,nbt={PickupDelay:10s,Item:{id:"minecraft:item_frame",Count:1b}},nbt=!{Item:{tag:{EntityTag:{}}}},limit=1] {Item:{tag:{display:{Name:'[{"text":"Invisible ","italic":false},{"translate":"item.minecraft.item_frame","italic":false}]'},EntityTag:{Tags:["invIteFra.placed"]}}}}
+kill @s

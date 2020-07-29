@@ -1,0 +1,2 @@
+advancement revoke @s only invisible_item_frames:activate_item_frame
+execute as @e[type=minecraft:item_frame,tag=!invIteFra.invisible,distance=..7,nbt={Item:{Count:1b}}] at @s run function invisible_item_frames:check_item_frame

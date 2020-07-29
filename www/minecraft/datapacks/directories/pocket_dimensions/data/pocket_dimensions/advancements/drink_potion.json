@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:air"
+		},
+		"title": "",
+		"description": "",
+		"show_toast": false,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"consume_item": {
+			"trigger": "minecraft:consume_item",
+			"conditions": {
+				"item": {
+					"item": "minecraft:potion",
+					"nbt": "{pocDim:1b}"
+				}
+			}
+		}
+	}
+}

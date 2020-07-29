@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:phantom_membrane"
+		},
+		"title": "Bat Membranes",
+		"description": ["",{"text":"Disable phantoms and get membranes from bats instead.","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

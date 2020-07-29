@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:air"
+		},
+		"title": "",
+		"description": "",
+		"show_toast": false,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"player_interacted_with_entity": {
+			"trigger": "minecraft:player_interacted_with_entity",
+			"conditions": {
+				"entity": {
+					"type": "minecraft:armor_stand",
+					"nbt": "{Tags:['graves.hitbox']}"
+				}
+			}
+		}
+	},
+	"rewards": {
+		"function": "graves:activate_grave"
+	}
+}

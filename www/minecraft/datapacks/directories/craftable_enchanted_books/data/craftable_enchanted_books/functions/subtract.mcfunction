@@ -1,0 +1,2 @@
+execute if score @s craEncBoo.count > #cost craEncBoo.dummy run function craftable_enchanted_books:subtract_portion
+execute unless score @s craEncBoo.count > #cost craEncBoo.dummy run function craftable_enchanted_books:subtract_whole

@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:name_tag"
+		},
+		"title": "Name Colors     ",
+		"description": ["",{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger color","color":"aqua"},{"text":" to list the colors you can give to your username.","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

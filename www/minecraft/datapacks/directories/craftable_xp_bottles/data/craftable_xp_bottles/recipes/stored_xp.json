@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:smelting",
+	"ingredient": {
+		"item": "minecraft:experience_bottle"
+	},
+	"result": "minecraft:glass_bottle",
+	"experience": 12,
+	"cookingtime": 1
+}

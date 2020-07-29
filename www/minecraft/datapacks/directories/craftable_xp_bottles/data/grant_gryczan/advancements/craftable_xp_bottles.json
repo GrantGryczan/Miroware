@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:experience_bottle"
+		},
+		"title": "Craftable XP Bottles",
+		"description": ["",{"text":"Right-click an enchanting table with an empty bottle to fill it with some of your XP.\nSmelt an XP bottle in a furnace to losslessly get your XP back.","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

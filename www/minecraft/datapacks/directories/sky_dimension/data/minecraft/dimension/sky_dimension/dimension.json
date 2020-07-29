@@ -1,0 +1,146 @@
+{
+	"type": "sky_dimension:type",
+	"generator": {
+		"biome_source": {
+			"seed": 0,
+			"large_biomes": false,
+			"type": "minecraft:vanilla_layered"
+		},
+		"seed": 0,
+		"settings": {
+			"name": "sky_dimension:dimension",
+			"bedrock_roof_position": -10,
+			"bedrock_floor_position": -10,
+			"sea_level": 0,
+			"disable_mob_generation": false,
+			"structures": {
+				"structures": {
+					"minecraft:fortress": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:swamp_hut": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:ocean_ruin": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:desert_pyramid": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:village": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:bastion_remnant": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:shipwreck": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:pillager_outpost": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:ruined_portal": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:buried_treasure": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:jungle_pyramid": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:stronghold": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:igloo": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:nether_fossil": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:mansion": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:endcity": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:mineshaft": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					},
+					"minecraft:monument": {
+						"spacing": 4096,
+						"separation": 4095,
+						"salt": 0
+					}
+				}
+			},
+			"noise": {
+				"density_factor": 0.0,
+				"density_offset": 0.0,
+				"simplex_surface_noise": true,
+				"bottom_slide": {
+					"target": -30,
+					"size": 7,
+					"offset": 1
+				},
+				"size_horizontal": 2,
+				"size_vertical": 1,
+				"height": 128,
+				"sampling": {
+					"xz_scale": 2,
+					"y_scale": 1.0,
+					"xz_factor": 160.0,
+					"y_factor": 160.0
+				},
+				"top_slide": {
+					"target": -300,
+					"size": 64,
+					"offset": -46
+				}
+			},
+			"default_block": {
+				"Name": "minecraft:stone"
+			},
+			"default_fluid": {
+				"Properties": {
+					"level": "0"
+				},
+				"Name": "minecraft:water"
+			}
+		},
+		"type": "minecraft:noise"
+	}
+}

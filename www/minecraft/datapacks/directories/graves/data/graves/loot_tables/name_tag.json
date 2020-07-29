@@ -1,0 +1,25 @@
+{
+	"type": "minecraft:command",
+	"pools": [
+		{
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "minecraft:item",
+					"name": "minecraft:name_tag",
+					"functions": [
+						{
+							"function": "minecraft:set_name",
+							"name": {"selector":"@a[tag=graves.player]"},
+							"entity": "this"
+						},
+						{
+							"function": "minecraft:set_nbt",
+							"tag": "{gravesNameTag:1b}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

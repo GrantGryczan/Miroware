@@ -1,0 +1,2 @@
+schedule clear invisible_item_frames:tick
+schedule clear invisible_item_frames:schedule

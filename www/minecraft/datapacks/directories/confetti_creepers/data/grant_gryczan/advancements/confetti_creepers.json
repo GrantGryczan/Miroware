@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:creeper_head"
+		},
+		"title": "Confetti Creepers    ",
+		"description": ["",{"text":"There is a chance each creeper will explode into confetti and do no damage to blocks.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger conCre","color":"aqua"},{"text":" for details.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function confetti_creepers:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

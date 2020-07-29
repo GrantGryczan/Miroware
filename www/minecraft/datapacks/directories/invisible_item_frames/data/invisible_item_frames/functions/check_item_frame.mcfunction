@@ -1,0 +1,2 @@
+execute if entity @s[tag=invIteFra.itemFrame] run function invisible_item_frames:set_invisible
+execute if entity @s[tag=!invIteFra.itemFrame,nbt={Item:{id:"minecraft:potion",tag:{Potion:"minecraft:long_invisibility"}}}] run function invisible_item_frames:consume_invisibility

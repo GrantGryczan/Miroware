@@ -1,0 +1,2 @@
+tellraw @s [{"score":{"name":"#percent","objective":"mulSle.config"},"color":"aqua"},{"text":"%","color":"aqua"},{"text":" of players in the overworld must sleep to skip the night and the rain.","color":"dark_aqua"}]
+scoreboard players set @a mulSle 0

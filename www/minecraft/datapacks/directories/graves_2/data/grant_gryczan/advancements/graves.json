@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:stone_brick_wall"
+		},
+		"title": "Graves                      ",
+		"description": ["",{"text":"Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.\nHold crouch when you right-click to make it so only you can pick up the items.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function graves:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

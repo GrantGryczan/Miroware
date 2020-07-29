@@ -1,0 +1,19 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:player_head",
+			"nbt": "{SkullOwner:'GrantGryczan'}"
+		},
+		"title": "Grant's Data Packs",
+		"frame": "challenge",
+		"description": ["",{"text":"All loaded data packs by Grant Gryczan\n","color":"dark_aqua"},{"text":"mc.miro.gg/datapacks","color":"aqua"}],
+		"background": "minecraft:textures/block/coal_block.png",
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

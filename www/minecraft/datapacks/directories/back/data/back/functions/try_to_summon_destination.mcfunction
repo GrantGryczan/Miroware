@@ -1,0 +1,2 @@
+execute store result score #id back.dummy run data get entity @s Item.tag.backData.id
+execute if score #id back.dummy = #dimension back.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {UUID:[I;1720808675,569658060,-1290656431,1684951819]}

@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:respawn_anchor"
+		},
+		"title": "Infinite Respawn Anchors",
+		"description": ["",{"text":"If a respawn anchor has crying obsidian beneath it and an end crystal above it, it will never lose charge.","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

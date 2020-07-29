@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:compass"
+		},
+		"title": "Spawn             ",
+		"description": ["",{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger spawn","color":"aqua"},{"text":" to teleport to the world spawn point.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function spawn:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

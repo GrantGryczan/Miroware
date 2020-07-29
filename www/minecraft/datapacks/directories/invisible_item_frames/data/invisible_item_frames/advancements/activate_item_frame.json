@@ -1,0 +1,25 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:air"
+		},
+		"title": "",
+		"description": "",
+		"show_toast": false,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"player_interacted_with_entity": {
+			"trigger": "minecraft:player_interacted_with_entity",
+			"conditions": {
+				"entity": {
+					"type": "minecraft:item_frame"
+				}
+			}
+		}
+	},
+	"rewards": {
+		"function": "invisible_item_frames:activate_item_frame"
+	}
+}

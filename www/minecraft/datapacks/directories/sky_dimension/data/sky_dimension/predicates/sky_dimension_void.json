@@ -1,0 +1,11 @@
+{
+	"condition": "minecraft:location_check",
+	"predicate": {
+		"dimension": "sky_dimension:dimension",
+		"position": {
+			"y": {
+				"max": -16.0
+			}
+		}
+	}
+}

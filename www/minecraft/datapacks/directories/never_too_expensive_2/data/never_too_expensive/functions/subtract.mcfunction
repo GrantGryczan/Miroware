@@ -1,0 +1,2 @@
+execute if score @s nevTooExp.count > @e[type=minecraft:item,tag=nevTooExp.subject,limit=1] nevTooExp.count run function never_too_expensive:subtract_portion
+execute unless score @s nevTooExp.count > @e[type=minecraft:item,tag=nevTooExp.subject,limit=1] nevTooExp.count run function never_too_expensive:subtract_whole
