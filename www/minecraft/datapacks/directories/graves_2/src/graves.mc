@@ -348,33 +348,6 @@ function remove_vanishing_item {
 	execute if data entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}] run function graves:remove_vanishing_item
 }
 namespace rotate {
-	function back_grave {
-		data modify storage graves:storage players[-1].graves prepend from storage graves:storage players[-1].graves[-1]
-		data remove storage graves:storage players[-1].graves[-1]
-		scoreboard players remove #remaining graves.dummy 1
-		execute unless score #remaining graves.dummy matches 0 run function graves:rotate/back_grave
-	}
-	function grave {
-		data modify storage graves:storage players[-1].graves prepend from storage graves:storage players[-1].graves[-1]
-		data remove storage graves:storage players[-1].graves[-1]
-		scoreboard players add #rotated graves.dummy 1
-		scoreboard players remove #remaining graves.dummy 1
-		execute store result score #id graves.dummy run data get storage graves:storage players[-1].graves[-1].id
-		execute unless score #remaining graves.dummy matches 0 unless score #id graves.dummy = #activated graves.dummy run function graves:rotate/grave
-	}
-	function graves {
-		execute store result score #remaining graves.dummy run data get storage graves:storage players[-1].graves
-		execute store result score #id graves.dummy run data get storage graves:storage players[-1].graves[-1].id
-		execute unless score #remaining graves.dummy matches 0 unless score #id graves.dummy = #activated graves.dummy run function graves:rotate/grave
-	}
-	function player {
-		data modify storage graves:storage players prepend from storage graves:storage players[-1]
-		data remove storage graves:storage players[-1]
-		scoreboard players remove #remaining graves.dummy 1
-		data modify storage graves:storage temp set from entity @s UUID
-		execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuid
-		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function graves:rotate/player
-	}
 	function players {
 		execute store result score #remaining graves.dummy run data get storage graves:storage players
 		data modify storage graves:storage temp set from entity @s UUID
@@ -386,13 +359,40 @@ namespace rotate {
 			data modify storage graves:storage players[-1].uuid set from entity @s UUID
 		}
 	}
+	function player {
+		data modify storage graves:storage players prepend from storage graves:storage players[-1]
+		data remove storage graves:storage players[-1]
+		scoreboard players remove #remaining graves.dummy 1
+		data modify storage graves:storage temp set from entity @s UUID
+		execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuid
+		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function $block
+	}
 	function player_as_grave {
 		data modify storage graves:storage players prepend from storage graves:storage players[-1]
 		data remove storage graves:storage players[-1]
 		scoreboard players remove #remaining graves.dummy 1
 		data modify storage graves:storage temp set from entity @s HandItems[1].tag.gravesData.uuid
 		execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuid
-		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function graves:rotate/player_as_grave
+		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function $block
+	}
+	function graves {
+		execute store result score #remaining graves.dummy run data get storage graves:storage players[-1].graves
+		execute store result score #id graves.dummy run data get storage graves:storage players[-1].graves[-1].id
+		execute unless score #remaining graves.dummy matches 0 unless score #id graves.dummy = #activated graves.dummy run function graves:rotate/grave
+	}
+	function grave {
+		data modify storage graves:storage players[-1].graves prepend from storage graves:storage players[-1].graves[-1]
+		data remove storage graves:storage players[-1].graves[-1]
+		scoreboard players add #rotated graves.dummy 1
+		scoreboard players remove #remaining graves.dummy 1
+		execute store result score #id graves.dummy run data get storage graves:storage players[-1].graves[-1].id
+		execute unless score #remaining graves.dummy matches 0 unless score #id graves.dummy = #activated graves.dummy run function $block
+	}
+	function back_grave {
+		data modify storage graves:storage players[-1].graves prepend from storage graves:storage players[-1].graves[-1]
+		data remove storage graves:storage players[-1].graves[-1]
+		scoreboard players remove #remaining graves.dummy 1
+		execute unless score #remaining graves.dummy matches 0 run function $block
 	}
 }
 function config {

@@ -1,6 +1,6 @@
 function load {
 	scoreboard objectives add back trigger "Back"
-	scoreboard objectives add back.timer dummy
+	scoreboard objectives add back.delay dummy
 	scoreboard objectives add back.dummy dummy
 	scoreboard objectives add back.config dummy "Back Config"
 	scoreboard objectives add back.x dummy
@@ -15,7 +15,7 @@ function uninstall {
 	data remove storage back:storage lastDimension
 	data remove storage back:storage temp
 	scoreboard objectives remove back
-	scoreboard objectives remove back.timer
+	scoreboard objectives remove back.delay
 	scoreboard objectives remove back.dummy
 	scoreboard objectives remove back.config
 	scoreboard objectives remove back.x
@@ -33,7 +33,7 @@ clock 1t {
 		execute if score #success back.dummy matches 0 run tellraw @s [{"text":"You have nowhere to go back to.","color":"red"}]
 		execute unless score #success back.dummy matches 0 run {
 			name start_to_go_back
-			scoreboard players operation @s back.timer = #delay back.config
+			scoreboard players operation @s back.delay = #delay back.config
 			execute store result score @s back.x run data get entity @s Pos[0] 10
 			execute store result score @s back.y run data get entity @s Pos[1] 10
 			execute store result score @s back.z run data get entity @s Pos[2] 10
@@ -41,9 +41,9 @@ clock 1t {
 		}
 		scoreboard players set @s back 0
 	}
-	execute as @a[scores={back.timer=0..}] run {
+	execute as @a[scores={back.delay=0..}] run {
 		name try_to_try_to_try_to_go_back
-		execute if score @s back.timer matches 0 run {
+		execute if score @s back.delay matches 0 run {
 			name try_to_try_to_go_back
 			function back:rotate/players
 			scoreboard players set #success back.dummy 0
@@ -75,41 +75,17 @@ clock 1t {
 						data modify entity @s Pos set from storage back:storage players[-1].back.pos
 						data modify entity @s Rotation set from storage back:storage players[-1].back.rot
 					}
-					execute at @s run {
-						name set_back
-						execute unless entity @e[type=minecraft:item_frame,tag=back.dimension,distance=0..] positioned 12940016 1000 17249568 run {
-							name summon_dimension_marker
-							forceload add ~ ~
-							summon minecraft:item_frame ~ ~ ~ {Tags:["back.dimension","back.new"],Fixed:1b,Invisible:1b,Item:{id:"minecraft:stone_button",Count:1b,tag:{backData:{}}}}
-							execute store result score #id back.dummy run data get storage back:storage lastDimension
-							execute store result entity @e[type=minecraft:item_frame,tag=back.new,limit=1] Item.tag.backData.id int 1 run scoreboard players add #id back.dummy 1
-							execute store result storage back:storage lastDimension int 1 run scoreboard players get #id back.dummy
-							data modify entity @e[type=minecraft:item_frame,tag=back.new,limit=1] Item.tag.backData.name set from entity @s Dimension
-							tag @e[type=minecraft:item_frame] remove back.new
-						}
-						function back:rotate/players
-						data modify storage back:storage players[-1].back.dim set from entity @e[type=minecraft:item_frame,tag=back.dimension,distance=0..,limit=1] Item.tag.backData.id
-						data modify storage back:storage players[-1].back.pos set from entity @s Pos
-						data modify storage back:storage players[-1].back.rot set from entity @s Rotation
-					}
+					execute at @s run function back:set_back
 					tp @s @e[type=minecraft:area_effect_cloud,tag=back.destination,limit=1]
 					kill @e[type=minecraft:area_effect_cloud,tag=back.destination]
 				}
 			}
-			scoreboard players reset @s back.timer
+			scoreboard players reset @s back.delay
 		}
-		execute unless score @s back.timer matches 0 run scoreboard players remove @s back.timer 1
+		execute unless score @s back.delay matches 0 run scoreboard players remove @s back.delay 1
 	}
 }
 namespace rotate {
-	function player {
-		data modify storage back:storage players prepend from storage back:storage players[-1]
-		data remove storage back:storage players[-1]
-		scoreboard players remove #remaining back.dummy 1
-		data modify storage back:storage temp set from entity @s UUID
-		execute store success score #success back.dummy run data modify storage back:storage temp set from storage back:storage players[-1].uuid
-		execute unless score #remaining back.dummy matches 0 if score #success back.dummy matches 1 run function back:rotate/player
-	}
 	function players {
 		execute store result score #remaining back.dummy run data get storage back:storage players
 		data modify storage back:storage temp set from entity @s UUID
@@ -121,6 +97,30 @@ namespace rotate {
 			data modify storage back:storage players[-1].uuid set from entity @s UUID
 		}
 	}
+	function player {
+		data modify storage back:storage players prepend from storage back:storage players[-1]
+		data remove storage back:storage players[-1]
+		scoreboard players remove #remaining back.dummy 1
+		data modify storage back:storage temp set from entity @s UUID
+		execute store success score #success back.dummy run data modify storage back:storage temp set from storage back:storage players[-1].uuid
+		execute unless score #remaining back.dummy matches 0 if score #success back.dummy matches 1 run function $block
+	}
+}
+function set_back {
+	execute unless entity @e[type=minecraft:item_frame,tag=back.dimension,distance=0..] positioned 12940016 1000 17249568 run {
+		name summon_dimension_marker
+		forceload add ~ ~
+		summon minecraft:item_frame ~ ~ ~ {Tags:["back.dimension","back.new"],Fixed:1b,Invisible:1b,Item:{id:"minecraft:stone_button",Count:1b,tag:{backData:{}}}}
+		execute store result score #id back.dummy run data get storage back:storage lastDimension
+		execute store result entity @e[type=minecraft:item_frame,tag=back.new,limit=1] Item.tag.backData.id int 1 run scoreboard players add #id back.dummy 1
+		execute store result storage back:storage lastDimension int 1 run scoreboard players get #id back.dummy
+		data modify entity @e[type=minecraft:item_frame,tag=back.new,limit=1] Item.tag.backData.name set from entity @s Dimension
+		tag @e[type=minecraft:item_frame] remove back.new
+	}
+	function back:rotate/players
+	data modify storage back:storage players[-1].back.dim set from entity @e[type=minecraft:item_frame,tag=back.dimension,distance=0..,limit=1] Item.tag.backData.id
+	data modify storage back:storage players[-1].back.pos set from entity @s Pos
+	data modify storage back:storage players[-1].back.rot set from entity @s Rotation
 }
 function config {
 	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #delay back.config <number>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #delay back.config "},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #delay back.config","color":"aqua"},{"text":".\nEnter the number after clicking.","color":"dark_aqua"}]}},{"text":" to set the number of ticks for which the player must stand still before teleporting after running the back command. (1 second = 20 ticks.) The default is ","color":"dark_aqua"},{"text":"0","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #delay back.config 0"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #delay back.config 0","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#delay","objective":"back.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]

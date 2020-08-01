@@ -44,7 +44,7 @@ clock 1t {
 		execute store result score #sleeping mulSle.dummy if entity @a[tag=mulSle.sleeping]
 		execute if score #sleeping mulSle.dummy matches 0 run {
 			name reset_progress
-			scoreboard players set #timer mulSle.dummy 0
+			scoreboard players set #delay mulSle.dummy 0
 			bossbar set multiplayer_sleep:progress visible false
 		}
 		execute unless score #sleeping mulSle.dummy matches 0 run {
@@ -57,11 +57,11 @@ clock 1t {
 			bossbar set multiplayer_sleep:progress name [{"score":{"name":"#sleeping","objective":"mulSle.dummy"}}," of ",{"score":{"name":"#total","objective":"mulSle.dummy"}}," player(s) asleep"]
 			bossbar set multiplayer_sleep:progress players @a[tag=mulSle.total]
 			bossbar set multiplayer_sleep:progress visible true
-			execute if score #sleeping mulSle.dummy < #total mulSle.dummy run scoreboard players set #timer mulSle.dummy 0
+			execute if score #sleeping mulSle.dummy < #total mulSle.dummy run scoreboard players set #delay mulSle.dummy 0
 			execute unless score #sleeping mulSle.dummy < #total mulSle.dummy run {
 				name sufficient_sleeping
-				scoreboard players add #timer mulSle.dummy 1
-				execute if score #timer mulSle.dummy matches 100 run {
+				scoreboard players add #delay mulSle.dummy 1
+				execute if score #delay mulSle.dummy matches 100 run {
 					name stop_sleeping
 					function multiplayer_sleep:reset_progress
 					scoreboard players set #sleeping mulSle.dummy 0

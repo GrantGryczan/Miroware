@@ -5,7 +5,7 @@ function load {
 	scoreboard objectives add namehome trigger "Name Home"
 	scoreboard objectives add delhome trigger "Delete Home"
 	scoreboard objectives add homes.target dummy
-	scoreboard objectives add homes.timer dummy
+	scoreboard objectives add homes.delay dummy
 	scoreboard objectives add homes.dummy dummy
 	scoreboard objectives add homes.config dummy "Homes Config"
 	scoreboard objectives add homes.x dummy
@@ -27,7 +27,7 @@ function uninstall {
 	scoreboard objectives remove namehome
 	scoreboard objectives remove delhome
 	scoreboard objectives remove homes.target
-	scoreboard objectives remove homes.timer
+	scoreboard objectives remove homes.delay
 	scoreboard objectives remove homes.dummy
 	scoreboard objectives remove homes.config
 	scoreboard objectives remove homes.x
@@ -144,7 +144,7 @@ clock 1t {
 		execute unless score #remaining homes.dummy matches 0 run {
 			name start_to_go_home
 			scoreboard players operation @s homes.target = #home homes.dummy
-			scoreboard players operation @s homes.timer = #delay homes.config
+			scoreboard players operation @s homes.delay = #delay homes.config
 			execute store result score @s homes.x run data get entity @s Pos[0] 10
 			execute store result score @s homes.y run data get entity @s Pos[1] 10
 			execute store result score @s homes.z run data get entity @s Pos[2] 10
@@ -208,7 +208,7 @@ clock 1t {
 	}
 	execute as @a[scores={homes.target=1..}] run {
 		name try_to_try_to_try_to_go_home
-		execute if score @s homes.timer matches 0 run {
+		execute if score @s homes.delay matches 0 run {
 			name try_to_try_to_go_home
 			function homes:rotate/players
 			scoreboard players operation #home homes.dummy = @s homes.target
@@ -246,10 +246,10 @@ clock 1t {
 					kill @e[type=minecraft:area_effect_cloud,tag=homes.destination]
 				}
 			}
-			scoreboard players reset @s homes.timer
+			scoreboard players reset @s homes.delay
 			scoreboard players reset @s homes.target
 		}
-		execute unless score @s homes.timer matches 0 run scoreboard players remove @s homes.timer 1
+		execute unless score @s homes.delay matches 0 run scoreboard players remove @s homes.delay 1
 	}
 }
 function bubble {
@@ -269,29 +269,21 @@ function bubble {
 		scoreboard players set #id2 homes.dummy 0
 	}
 	scoreboard players remove #remaining homes.dummy 1
-	execute unless score #remaining homes.dummy matches 1 run function homes:bubble
+	execute unless score #remaining homes.dummy matches 1 run function $block
 }
 namespace rotate {
-	function home {
-		data modify storage homes:storage players[-1].homes prepend from storage homes:storage players[-1].homes[-1]
-		data remove storage homes:storage players[-1].homes[-1]
-		scoreboard players remove #remaining homes.dummy 1
-		execute store result score #id homes.dummy run data get storage homes:storage players[-1].homes[-1].id
-		execute unless score #remaining homes.dummy matches 0 unless score #id homes.dummy = #home homes.dummy run function homes:rotate/home
-	}
 	function homes {
 		execute store result score #homes homes.dummy run data get storage homes:storage players[-1].homes
 		scoreboard players operation #remaining homes.dummy = #homes homes.dummy
 		execute store result score #id homes.dummy run data get storage homes:storage players[-1].homes[-1].id
 		execute unless score #remaining homes.dummy matches 0 unless score #id homes.dummy = #home homes.dummy run function homes:rotate/home
 	}
-	function player {
-		data modify storage homes:storage players prepend from storage homes:storage players[-1]
-		data remove storage homes:storage players[-1]
+	function home {
+		data modify storage homes:storage players[-1].homes prepend from storage homes:storage players[-1].homes[-1]
+		data remove storage homes:storage players[-1].homes[-1]
 		scoreboard players remove #remaining homes.dummy 1
-		data modify storage homes:storage temp set from entity @s UUID
-		execute store success score #success homes.dummy run data modify storage homes:storage temp set from storage homes:storage players[-1].uuid
-		execute unless score #remaining homes.dummy matches 0 if score #success homes.dummy matches 1 run function homes:rotate/player
+		execute store result score #id homes.dummy run data get storage homes:storage players[-1].homes[-1].id
+		execute unless score #remaining homes.dummy matches 0 unless score #id homes.dummy = #home homes.dummy run function $block
 	}
 	function players {
 		execute store result score #remaining homes.dummy run data get storage homes:storage players
@@ -303,6 +295,14 @@ namespace rotate {
 			data modify storage homes:storage players append value {homes:[]}
 			data modify storage homes:storage players[-1].uuid set from entity @s UUID
 		}
+	}
+	function player {
+		data modify storage homes:storage players prepend from storage homes:storage players[-1]
+		data remove storage homes:storage players[-1]
+		scoreboard players remove #remaining homes.dummy 1
+		data modify storage homes:storage temp set from entity @s UUID
+		execute store success score #success homes.dummy run data modify storage homes:storage temp set from storage homes:storage players[-1].uuid
+		execute unless score #remaining homes.dummy matches 0 if score #success homes.dummy matches 1 run function $block
 	}
 }
 function config {

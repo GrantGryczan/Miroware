@@ -1,5 +1,5 @@
 scoreboard players operation @s homes.target = #home homes.dummy
-scoreboard players operation @s homes.timer = #delay homes.config
+scoreboard players operation @s homes.delay = #delay homes.config
 execute store result score @s homes.x run data get entity @s Pos[0] 10
 execute store result score @s homes.y run data get entity @s Pos[1] 10
 execute store result score @s homes.z run data get entity @s Pos[2] 10

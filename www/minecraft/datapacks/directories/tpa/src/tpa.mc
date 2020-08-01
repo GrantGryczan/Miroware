@@ -2,7 +2,7 @@ function load {
 	scoreboard objectives add tpa.pid dummy "Player ID"
 	scoreboard objectives setdisplay list tpa.pid
 	scoreboard objectives add tpa.target dummy
-	scoreboard objectives add tpa.time dummy
+	scoreboard objectives add tpa.timeout dummy
 	scoreboard objectives add tpa trigger
 	scoreboard objectives add tpcancel trigger
 	scoreboard objectives add tpaccept trigger
@@ -11,7 +11,7 @@ function load {
 function uninstall {
 	scoreboard objectives remove tpa.pid
 	scoreboard objectives remove tpa.target
-	scoreboard objectives remove tpa.time
+	scoreboard objectives remove tpa.timeout
 	scoreboard objectives remove tpa
 	scoreboard objectives remove tpcancel
 	scoreboard objectives remove tpaccept
@@ -21,14 +21,14 @@ function uninstall {
 clock 1t {
 	name tick
 	execute as @a unless score @s tpa.pid matches 1.. store result score @s tpa.pid run scoreboard players add #last tpa.pid 1
-	scoreboard players add @a[scores={tpa.target=1..}] tpa.time 1
-	execute as @a[scores={tpa.time=6000..}] run {
+	scoreboard players add @a[scores={tpa.target=1..}] tpa.timeout 1
+	execute as @a[scores={tpa.timeout=6000..}] run {
 		name time_out_tpa
 		tag @s add tpa.sender
 		tellraw @s {"text":"Your teleport request has timed out after five minutes.","color":"red"}
 		execute as @a if score @s tpa.pid = @a[tag=tpa.sender,limit=1] tpa.target run tellraw @s ["",{"selector":"@a[tag=tpa.sender]","color":"red"},{"text":"'s teleport request has timed out after five minutes.","color":"red"}]
-		scoreboard players set @s tpa.target 0
-		scoreboard players set @s tpa.time 0
+		scoreboard players reset @s tpa.target
+		scoreboard players reset @s tpa.timeout
 		tag @s remove tpa.sender
 	}
 	execute as @a[scores={tpa=1..}] run {
@@ -69,8 +69,8 @@ clock 1t {
 			tellraw @a[tag=tpa.target] [{"text":"You have accepted ","color":"dark_aqua"},{"selector":"@s","color":"aqua"},{"text":"'s teleport request.","color":"dark_aqua"}]
 			tellraw @s ["",{"selector":"@a[tag=tpa.target]","color":"aqua"},{"text":" has accepted your teleport request.","color":"dark_aqua"}]
 			tp @s @a[tag=tpa.target,limit=1]
-			scoreboard players set @s tpa.target 0
-			scoreboard players set @s tpa.time 0
+			scoreboard players reset @s tpa.target
+			scoreboard players reset @s tpa.timeout
 			tag @s remove tpa.sender
 		}
 		tag @s remove tpa.target
@@ -89,8 +89,8 @@ clock 1t {
 			name deny_tpa
 			tellraw @a[tag=tpa.target] [{"text":"You have denied ","color":"dark_aqua"},{"selector":"@s","color":"aqua"},{"text":"'s teleport request.","color":"dark_aqua"}]
 			tellraw @s ["",{"selector":"@a[tag=tpa.target]","color":"red"},{"text":" has denied your teleport request.","color":"red"}]
-			scoreboard players set @s tpa.target 0
-			scoreboard players set @s tpa.time 0
+			scoreboard players reset @s tpa.target
+			scoreboard players reset @s tpa.timeout
 			tag @s remove tpa.sender
 		}
 		tag @s remove tpa.target
@@ -100,7 +100,7 @@ clock 1t {
 }
 function untag_older_senders {
 	tag @s add tpa.self
-	execute as @a[tag=tpa.sender] if score @s tpa.time > @a[tag=tpa.self,limit=1] tpa.time run tag @s remove tpa.sender
+	execute as @a[tag=tpa.sender] if score @s tpa.timeout > @a[tag=tpa.self,limit=1] tpa.timeout run tag @s remove tpa.sender
 	tag @s remove tpa.self
 }
 function cancel_tpa {
@@ -108,7 +108,7 @@ function cancel_tpa {
 	execute if entity @s[tag=tpa.sender] run tellraw @s {"text":"You have cancelled your previous teleport request.","color":"red"}
 	execute unless entity @s[tag=tpa.sender] run tellraw @s {"text":"You have cancelled your teleport request.","color":"dark_aqua"}
 	execute as @a if score @s tpa.pid = @a[tag=tpa.cancelSender,limit=1] tpa.target run tellraw @s ["",{"selector":"@a[tag=tpa.cancelSender]","color":"red"},{"text":" has cancelled their teleport request.","color":"red"}]
-	scoreboard players set @s tpa.target 0
-	scoreboard players set @s tpa.time 0
+	scoreboard players reset @s tpa.target
+	scoreboard players reset @s tpa.timeout
 	tag @s remove tpa.cancelSender
 }

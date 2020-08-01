@@ -2,7 +2,7 @@ function load {
 	scoreboard objectives add spawn trigger "Spawn"
 	scoreboard objectives add spawn.config dummy "Spawn Config"
 	scoreboard objectives add spawn.dummy dummy
-	scoreboard objectives add spawn.timer dummy
+	scoreboard objectives add spawn.delay dummy
 	scoreboard objectives add spawn.x dummy
 	scoreboard objectives add spawn.y dummy
 	scoreboard objectives add spawn.z dummy
@@ -12,7 +12,7 @@ function uninstall {
 	scoreboard objectives remove spawn
 	scoreboard objectives remove spawn.config
 	scoreboard objectives remove spawn.dummy
-	scoreboard objectives remove spawn.timer
+	scoreboard objectives remove spawn.delay
 	scoreboard objectives remove spawn.x
 	scoreboard objectives remove spawn.y
 	scoreboard objectives remove spawn.z
@@ -24,15 +24,15 @@ clock 1t {
 	execute as @a[scores={spawn=1..}] run {
 		name trigger_spawn
 		tellraw @s {"text":"Teleporting to world spawn...","color":"dark_aqua"}
-		scoreboard players operation @s spawn.timer = #delay spawn.config
+		scoreboard players operation @s spawn.delay = #delay spawn.config
 		execute store result score @s spawn.x run data get entity @s Pos[0] 10
 		execute store result score @s spawn.y run data get entity @s Pos[1] 10
 		execute store result score @s spawn.z run data get entity @s Pos[2] 10
 		scoreboard players set @s spawn 0
 	}
-	execute as @a[scores={spawn.timer=0..}] align xz positioned ~0.5 ~ ~0.5 run {
+	execute as @a[scores={spawn.delay=0..}] align xz positioned ~0.5 ~ ~0.5 run {
 		name try_to_try_to_go_to_spawn
-		execute if score @s spawn.timer matches 0 run {
+		execute if score @s spawn.delay matches 0 run {
 			name try_to_go_to_spawn
 			scoreboard players set #success spawn.dummy 0
 			execute store result score #value spawn.dummy run data get entity @s Pos[1] 10
@@ -63,9 +63,9 @@ clock 1t {
 				}
 				kill @e[type=minecraft:area_effect_cloud,tag=spawn.destination]
 			}
-			scoreboard players reset @s spawn.timer
+			scoreboard players reset @s spawn.delay
 		}
-		execute unless score @s spawn.timer matches 0 run scoreboard players remove @s spawn.timer 1
+		execute unless score @s spawn.delay matches 0 run scoreboard players remove @s spawn.delay 1
 	}
 }
 function config {

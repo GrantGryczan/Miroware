@@ -4,7 +4,7 @@ scoreboard objectives add home trigger "Home"
 scoreboard objectives add namehome trigger "Name Home"
 scoreboard objectives add delhome trigger "Delete Home"
 scoreboard objectives add homes.target dummy
-scoreboard objectives add homes.timer dummy
+scoreboard objectives add homes.delay dummy
 scoreboard objectives add homes.dummy dummy
 scoreboard objectives add homes.config dummy "Homes Config"
 scoreboard objectives add homes.x dummy

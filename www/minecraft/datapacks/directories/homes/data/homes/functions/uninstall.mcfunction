@@ -10,7 +10,7 @@ scoreboard objectives remove home
 scoreboard objectives remove namehome
 scoreboard objectives remove delhome
 scoreboard objectives remove homes.target
-scoreboard objectives remove homes.timer
+scoreboard objectives remove homes.delay
 scoreboard objectives remove homes.dummy
 scoreboard objectives remove homes.config
 scoreboard objectives remove homes.x

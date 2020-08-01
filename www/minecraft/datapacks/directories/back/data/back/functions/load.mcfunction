@@ -1,5 +1,5 @@
 scoreboard objectives add back trigger "Back"
-scoreboard objectives add back.timer dummy
+scoreboard objectives add back.delay dummy
 scoreboard objectives add back.dummy dummy
 scoreboard objectives add back.config dummy "Back Config"
 scoreboard objectives add back.x dummy

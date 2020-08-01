@@ -1,7 +1,7 @@
 scoreboard objectives add spawn trigger "Spawn"
 scoreboard objectives add spawn.config dummy "Spawn Config"
 scoreboard objectives add spawn.dummy dummy
-scoreboard objectives add spawn.timer dummy
+scoreboard objectives add spawn.delay dummy
 scoreboard objectives add spawn.x dummy
 scoreboard objectives add spawn.y dummy
 scoreboard objectives add spawn.z dummy
