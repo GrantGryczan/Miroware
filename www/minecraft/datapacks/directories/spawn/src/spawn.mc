@@ -48,7 +48,7 @@ clock 1t {
 			execute if score #success spawn.dummy matches 0 run tellraw @s [{"text":"You must stand still to teleport.","color":"red"}]
 			execute unless score #success spawn.dummy matches 0 run {
 				name go_to_spawn
-				summon minecraft:area_effect_cloud ~ ~ ~ {UUIDMost:4205119861201980097L,UUIDLeast:-7837081401576425538L}
+				summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["spawn.destination"]}
 				block {
 					name offset_up
 					tp ~ ~ ~
@@ -58,9 +58,9 @@ clock 1t {
 					name offset_down
 					tp ~ ~ ~
 					execute positioned ~ ~-1 ~ if block ~ ~ ~ minecraft:air run function $block
-					execute if entity @s[y=0,dy=0] at 3a5b963b-ece2-4ac1-933d-17fce73777be run tp ~ ~ ~
+					execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=spawn.destination] run tp ~ ~ ~
 				}
-				kill 3a5b963b-ece2-4ac1-933d-17fce73777be
+				kill @e[type=minecraft:area_effect_cloud,tag=spawn.destination]
 			}
 			scoreboard players reset @s spawn.timer
 		}

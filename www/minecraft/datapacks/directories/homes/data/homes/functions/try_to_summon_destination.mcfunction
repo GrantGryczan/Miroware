@@ -1,2 +1,2 @@
 execute store result score #id homes.dummy run data get entity @s Item.tag.homesData.id
-execute if score #id homes.dummy = #dimension homes.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {UUID:[I;1720808675,569658060,-1290656431,1684951819]}
+execute if score #id homes.dummy = #dimension homes.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["homes.destination"]}

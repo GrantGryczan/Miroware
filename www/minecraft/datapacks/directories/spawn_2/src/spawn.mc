@@ -49,7 +49,7 @@ clock 1t {
 			execute unless score #success spawn.dummy matches 0 run {
 				name go_to_spawn
 				execute at @s run function back:set_back
-				summon minecraft:area_effect_cloud ~ ~ ~ {UUID:[I;979080763,-320714047,-1824712708,-415795266]}
+				summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["spawn.destination"]}
 				block {
 					name offset_up
 					tp ~ ~ ~
@@ -59,9 +59,9 @@ clock 1t {
 					name offset_down
 					tp ~ ~ ~
 					execute positioned ~ ~-1 ~ if block ~ ~ ~ minecraft:air run function $block
-					execute if entity @s[y=0,dy=0] at 3a5b963b-ece2-4ac1-933d-17fce73777be run tp ~ ~ ~
+					execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=spawn.destination] run tp ~ ~ ~
 				}
-				kill 3a5b963b-ece2-4ac1-933d-17fce73777be
+				kill @e[type=minecraft:area_effect_cloud,tag=spawn.destination]
 			}
 			scoreboard players reset @s spawn.timer
 		}

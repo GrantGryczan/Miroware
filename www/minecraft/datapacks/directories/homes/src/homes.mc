@@ -234,13 +234,16 @@ clock 1t {
 					execute as @e[type=minecraft:item_frame,tag=homes.dimension] run {
 						name try_to_summon_destination
 						execute store result score #id homes.dummy run data get entity @s Item.tag.homesData.id
-						execute if score #id homes.dummy = #dimension homes.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {UUID:[I;1720808675,569658060,-1290656431,1684951819]}
+						execute if score #id homes.dummy = #dimension homes.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["homes.destination"]}
 					}
-					data modify entity 669174e3-21f4-4acc-b312-2551646e530b Pos set from storage homes:storage players[-1].homes[-1].pos
-					data modify entity 669174e3-21f4-4acc-b312-2551646e530b Rotation set from storage homes:storage players[-1].homes[-1].rot
+					execute as @e[type=minecraft:area_effect_cloud,tag=homes.destination] run {
+						name set_destination
+						data modify entity @s Pos set from storage homes:storage players[-1].homes[-1].pos
+						data modify entity @s Rotation set from storage homes:storage players[-1].homes[-1].rot
+					}
 					execute at @s run function back:set_back
-					tp @s 669174e3-21f4-4acc-b312-2551646e530b
-					kill 669174e3-21f4-4acc-b312-2551646e530b
+					tp @s @e[type=minecraft:area_effect_cloud,tag=homes.destination,limit=1]
+					kill @e[type=minecraft:area_effect_cloud,tag=homes.destination]
 				}
 			}
 			scoreboard players reset @s homes.timer

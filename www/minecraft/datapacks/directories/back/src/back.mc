@@ -68,10 +68,13 @@ clock 1t {
 					execute as @e[type=minecraft:item_frame,tag=back.dimension] run {
 						name try_to_summon_destination
 						execute store result score #id back.dummy run data get entity @s Item.tag.backData.id
-						execute if score #id back.dummy = #dimension back.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {UUID:[I;1720808675,569658060,-1290656431,1684951819]}
+						execute if score #id back.dummy = #dimension back.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["back.destination"]}
 					}
-					data modify entity 669174e3-21f4-4acc-b312-2551646e530b Pos set from storage back:storage players[-1].back.pos
-					data modify entity 669174e3-21f4-4acc-b312-2551646e530b Rotation set from storage back:storage players[-1].back.rot
+					execute as @e[type=minecraft:area_effect_cloud,tag=back.destination] run {
+						name set_destination
+						data modify entity @s Pos set from storage back:storage players[-1].back.pos
+						data modify entity @s Rotation set from storage back:storage players[-1].back.rot
+					}
 					execute at @s run {
 						name set_back
 						execute unless entity @e[type=minecraft:item_frame,tag=back.dimension,distance=0..] positioned 12940016 1000 17249568 run {
@@ -89,8 +92,8 @@ clock 1t {
 						data modify storage back:storage players[-1].back.pos set from entity @s Pos
 						data modify storage back:storage players[-1].back.rot set from entity @s Rotation
 					}
-					tp @s 669174e3-21f4-4acc-b312-2551646e530b
-					kill 669174e3-21f4-4acc-b312-2551646e530b
+					tp @s @e[type=minecraft:area_effect_cloud,tag=back.destination,limit=1]
+					kill @e[type=minecraft:area_effect_cloud,tag=back.destination]
 				}
 			}
 			scoreboard players reset @s back.timer
