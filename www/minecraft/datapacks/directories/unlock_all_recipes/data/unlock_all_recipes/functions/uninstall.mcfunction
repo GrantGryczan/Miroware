@@ -1,1 +1,1 @@
-schedule clear unlock_all_recipes:schedule
+schedule clear unlock_all_recipes:unlock_recipes

@@ -37,18 +37,134 @@ function uninstall {
 }
 clock 1t {
 	name tick
-	execute as @a[gamemode=!spectator,scores={graves.deaths=1..}] at @s run function graves:death
+	execute as @a[gamemode=!spectator,scores={graves.deaths=1..}] at @s run {
+		name death
+		execute store result score #xp graves.dummy run data get entity @s XpLevel
+		scoreboard players operation #xp graves.dummy *= #pointsPerLevel graves.dummy
+		execute if score #xp graves.dummy matches 101.. run scoreboard players set #xp graves.dummy 100
+		execute if score #xp graves.config matches 0 if score #xp graves.dummy matches 1.. run function graves:drop_xp
+		execute if data entity @s Inventory[0] align xyz run function graves:create_grave
+		execute if score #xp graves.config matches 1 if score #xp graves.dummy matches 1.. align xyz run function graves:create_grave
+		xp set @s 0 levels
+		xp set @s 0 points
+	}
 	scoreboard players set @a graves.deaths 0
-	execute as @e[type=minecraft:armor_stand,tag=graves.model] at @s run function graves:tick_model
-	execute as @a[nbt={SelectedItem:{tag:{gravesData:{}}}}] at @s run function graves:activate_grave
-	execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] at @s if entity @a[gamemode=!spectator,distance=..2] align xz run function graves:show_name
+	execute as @e[type=minecraft:armor_stand,tag=graves.model] at @s run {
+		name tick_model
+		tag @s add graves.subject
+		execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] if score @s graves.id = @e[type=minecraft:armor_stand,tag=graves.subject,limit=1] graves.id run tp ~ ~1.375 ~
+		tag @s remove graves.subject
+	}
+	execute as @a[nbt={SelectedItem:{tag:{gravesData:{}}}}] at @s run {
+		name activate_grave
+		tag @s add graves.subject
+		advancement revoke @s only graves:activate_grave
+		execute store result score #activated graves.dummy run data get entity @s SelectedItem.tag.gravesData.id
+		execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] run {
+			name check_hitbox
+			execute store result score #id graves.dummy run data get entity @s HandItems[1].tag.gravesData.id
+			execute if score #id graves.dummy = #activated graves.dummy run tag @s add graves.activated
+			scoreboard players operation @s graves.id = #id graves.dummy
+		}
+		execute if score #robbing graves.config matches 0 unless data entity @e[type=minecraft:armor_stand,tag=graves.activated,limit=1] ArmorItems[{tag:{gravesKey:1b}}] run {
+			name check_owner
+			data modify storage graves:storage temp set from entity @s UUIDMost
+			execute store success score #success graves.dummy run data modify storage graves:storage temp set from entity @e[type=minecraft:armor_stand,tag=graves.activated,limit=1] HandItems[1].tag.gravesData.uuidMost
+			execute if score #success graves.dummy matches 0 run {
+				name check_uuid_least
+				data modify storage graves:storage temp set from entity @s UUIDLeast
+				execute store success score #success graves.dummy run data modify storage graves:storage temp set from entity @e[type=minecraft:armor_stand,tag=graves.activated,limit=1] HandItems[1].tag.gravesData.uuidLeast
+			}
+			execute if score #success graves.dummy matches 1 run {
+				name fail_robbing
+				tellraw @s {"text":"Grave robbing is disabled.","color":"red"}
+				scoreboard players set #failed graves.dummy 1
+			}
+		}
+		execute as @e[type=minecraft:armor_stand,tag=graves.activated] run {
+			name fix_equipment/all
+			execute store result score #count graves.dummy run data get entity @s ArmorItems[0].Count
+			execute if score #count graves.dummy matches 1 run {
+				name fix_equipment/check_0
+				execute if entity @a[tag=graves.subject,gamemode=creative] run function graves:fix_equipment/drop_0
+				execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[0].tag.gravesKey run function graves:fix_equipment/drop_0
+			}
+			execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[0] set from entity @s HandItems[1]
+			execute store result score #count graves.dummy run data get entity @s ArmorItems[1].Count
+			execute if score #count graves.dummy matches 1 run {
+				name fix_equipment/check_1
+				execute if entity @a[tag=graves.subject,gamemode=creative] run function graves:fix_equipment/drop_1
+				execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[1].tag.gravesKey run function graves:fix_equipment/drop_1
+			}
+			execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[1] set from entity @s HandItems[1]
+			execute store result score #count graves.dummy run data get entity @s ArmorItems[2].Count
+			execute if score #count graves.dummy matches 1 run {
+				name fix_equipment/check_2
+				execute if entity @a[tag=graves.subject,gamemode=creative] run function graves:fix_equipment/drop_2
+				execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[2].tag.gravesKey run function graves:fix_equipment/drop_2
+			}
+			execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[2] set from entity @s HandItems[1]
+			execute store result score #count graves.dummy run data get entity @s ArmorItems[3].Count
+			execute if score #count graves.dummy matches 1 run {
+				name fix_equipment/check_3
+				execute if entity @a[tag=graves.subject,gamemode=creative] run function graves:fix_equipment/drop_3
+				execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[3].tag.gravesKey run function graves:fix_equipment/drop_3
+			}
+			execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[3] set from entity @s HandItems[1]
+			execute if score #failed graves.dummy matches 1 run tag @s remove graves.activated
+			scoreboard players set #failed graves.dummy 0
+		}
+		execute as @e[type=minecraft:armor_stand,tag=graves.activated] at @s run {
+			name open_grave
+			execute store result score #remaining graves.dummy run data get storage graves:storage players
+			data modify storage graves:storage temp set from entity @s HandItems[1].tag.gravesData.uuidMost
+			execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidMost
+			execute if score #success graves.dummy matches 0 run function graves:check_uuid_least_as_grave
+			execute if score #success graves.dummy matches 1 run function graves:rotate/player_as_grave
+			scoreboard players set #rotated graves.dummy 0
+			function graves:rotate/graves
+			data remove storage graves:storage players[-1].graves[-1]
+			scoreboard players remove #remaining graves.dummy 1
+			execute unless score #rotated graves.dummy matches 0 unless score #remaining graves.dummy matches 0 run function graves:rotate/back_grave
+			execute as @e[type=minecraft:armor_stand,tag=graves.model] run {
+				name check_model
+				execute store result score #id graves.dummy run data get entity @s ArmorItems[3].tag.gravesData.id
+				execute if score #id graves.dummy = #activated graves.dummy run kill @s
+				scoreboard players operation @s graves.id = #id graves.dummy
+			}
+			execute if data entity @s HandItems[0].tag.gravesData.items[0] run function graves:drop_item
+			execute store result score #xp graves.dummy run data get entity @s HandItems[0].tag.gravesData.xp
+			execute if entity @s[tag=graves.hasXP] run function graves:drop_xp
+			playsound minecraft:block.stone.break block @a
+			particle minecraft:poof ~ ~0.7 ~ 0 0 0 0.05 10
+			kill @s
+		}
+		clear @s minecraft:stone_button{gravesData:{}}
+		tag @s remove graves.subject
+	}
+	execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] at @s if entity @a[gamemode=!spectator,distance=..2] align xz run {
+		name show_name
+		execute unless entity @e[dx=0,dy=0,dz=0,type=minecraft:area_effect_cloud,tag=graves.name,limit=1] run {
+			name create_name
+			summon minecraft:area_effect_cloud ~0.5 ~ ~0.5 {Tags:["graves.name"],CustomNameVisible:1b,Duration:2}
+			data modify entity @e[dx=0,dy=0,dz=0,type=minecraft:area_effect_cloud,tag=graves.name,limit=1] CustomName set from entity @s CustomName
+		}
+		data modify entity @e[dx=0,dy=0,dz=0,type=minecraft:area_effect_cloud,tag=graves.name,limit=1] Age set value 0
+	}
 	scoreboard players enable @a grave
-	execute as @a[scores={grave=1}] run function graves:trigger_grave
+	execute as @a[scores={grave=1}] run {
+		name trigger_grave
+		execute if score #locating graves.config matches 0 run tellraw @s {"text":"Grave locating is disabled.","color":"red"}
+		execute if score #locating graves.config matches 1 run {
+			name locate_grave
+			function graves:rotate/players
+			execute store success score #success graves.dummy run data get storage graves:storage players[-1].graves[-1]
+			execute if score #success graves.dummy matches 1 run function graves:display_grave_location
+			execute unless score #success graves.dummy matches 1 run tellraw @s {"text":"You do not have a last grave.","color":"red"}
+		}
+		scoreboard players set @a grave 0
+	}
 	scoreboard players set @a graves.sneak 0
-}
-clock 20s {
-	name update_model
-	execute as @e[type=minecraft:armor_stand,tag=graves.model] run data merge entity @s {Fire:32767s,Air:32767s}
 }
 clock 2s {
 	name check_game_rules
@@ -58,261 +174,33 @@ clock 2s {
 	execute in minecraft:overworld store result score #doImmediateRespawn graves.dummy run gamerule doImmediateRespawn
 	execute if score #doImmediateRespawn graves.dummy matches 1 if score #prevOverworldDoImmediateRespawn graves.dummy matches 0 run tellraw @a {"text":"The Graves data pack cannot position graves correctly unless gamerule doImmediateRespawn is false.","color":"red"}
 	scoreboard players operation #prevOverworldDoImmediateRespawn graves.dummy = #doImmediateRespawn graves.dummy
-	execute if score #universalGameRules graves.dummy matches 0 run function graves:check_dimensional_game_rules
-}
-function trigger_grave {
-	execute if score #locating graves.config matches 0 run tellraw @s {"text":"Grave locating is disabled.","color":"red"}
-	execute if score #locating graves.config matches 1 run function graves:locate_grave
-	scoreboard players set @a grave 0
-}
-function tick_model {
-	tag @s add graves.subject
-	execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] if score @s graves.id = @e[type=minecraft:armor_stand,tag=graves.subject,limit=1] graves.id run tp ~ ~1.375 ~
-	tag @s remove graves.subject
-}
-function store_xp {
-	execute store result entity @s HandItems[0].tag.gravesData.xp short 1 run scoreboard players get #xp graves.dummy
-	tag @s add graves.hasXP
-	scoreboard players set #xp graves.dummy 0
-}
-function show_name {
-	execute unless entity @e[dx=0,dy=0,dz=0,type=minecraft:area_effect_cloud,tag=graves.name,limit=1] run function graves:create_name
-	data modify entity @e[dx=0,dy=0,dz=0,type=minecraft:area_effect_cloud,tag=graves.name,limit=1] Age set value 0
-}
-function set_owner {
-	data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Owner.L set from entity @s UUIDLeast
-	data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Owner.M set from entity @s UUIDMost
-}
-namespace rotate {
-	function player_as_grave {
-		data modify storage graves:storage players prepend from storage graves:storage players[-1]
-		data remove storage graves:storage players[-1]
-		scoreboard players remove #remaining graves.dummy 1
-		data modify storage graves:storage temp set from entity @s HandItems[1].tag.gravesData.uuidMost
-		execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidMost
-		execute if score #success graves.dummy matches 0 run function graves:check_uuid_least_as_grave
-		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function graves:rotate/player_as_grave
-	}
-	function players {
-		execute store result score #remaining graves.dummy run data get storage graves:storage players
-		data modify storage graves:storage temp set from entity @s UUIDMost
-		execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidMost
-		execute if score #success graves.dummy matches 0 run function graves:check_uuid_least_for_player_rotation
-		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function graves:rotate/player
-		execute if score #remaining graves.dummy matches 0 run function graves:add_player
-	}
-	function player {
-		data modify storage graves:storage players prepend from storage graves:storage players[-1]
-		data remove storage graves:storage players[-1]
-		scoreboard players remove #remaining graves.dummy 1
-		data modify storage graves:storage temp set from entity @s UUIDMost
-		execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidMost
-		execute if score #success graves.dummy matches 0 run function graves:check_uuid_least_for_player_rotation
-		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function graves:rotate/player
-	}
-	function graves {
-		execute store result score #remaining graves.dummy run data get storage graves:storage players[-1].graves
-		execute store result score #id graves.dummy run data get storage graves:storage players[-1].graves[-1].id
-		execute unless score #remaining graves.dummy matches 0 unless score #id graves.dummy = #activated graves.dummy run function graves:rotate/grave
-	}
-	function grave {
-		data modify storage graves:storage players[-1].graves prepend from storage graves:storage players[-1].graves[-1]
-		data remove storage graves:storage players[-1].graves[-1]
-		scoreboard players add #rotated graves.dummy 1
-		scoreboard players remove #remaining graves.dummy 1
-		execute store result score #id graves.dummy run data get storage graves:storage players[-1].graves[-1].id
-		execute unless score #remaining graves.dummy matches 0 unless score #id graves.dummy = #activated graves.dummy run function graves:rotate/grave
-	}
-	function back_grave {
-		data modify storage graves:storage players[-1].graves prepend from storage graves:storage players[-1].graves[-1]
-		data remove storage graves:storage players[-1].graves[-1]
-		scoreboard players remove #remaining graves.dummy 1
-		execute unless score #remaining graves.dummy matches 0 run function graves:rotate/back_grave
+	execute if score #universalGameRules graves.dummy matches 0 run {
+		name check_dimensional_game_rules
+		execute in minecraft:the_nether store result score #keepInventory graves.dummy run gamerule keepInventory
+		execute if score #keepInventory graves.dummy matches 0 if score #prevNetherKeepInventory graves.dummy matches 1 run tellraw @a {"text":"The Graves data pack cannot read player inventories correctly unless gamerule keepInventory is true.","color":"red"}
+		scoreboard players operation #prevNetherKeepInventory graves.dummy = #keepInventory graves.dummy
+		execute in minecraft:the_end store result score #keepInventory graves.dummy run gamerule keepInventory
+		execute if score #keepInventory graves.dummy matches 0 if score #prevEndKeepInventory graves.dummy matches 1 run tellraw @a {"text":"The Graves data pack cannot read player inventories correctly unless gamerule keepInventory is true.","color":"red"}
+		scoreboard players operation #prevEndKeepInventory graves.dummy = #keepInventory graves.dummy
+		execute in minecraft:the_nether store result score #doImmediateRespawn graves.dummy run gamerule doImmediateRespawn
+		execute if score #doImmediateRespawn graves.dummy matches 1 if score #prevNetherDoImmediateRespawn graves.dummy matches 0 run tellraw @a {"text":"The Graves data pack cannot position graves correctly unless gamerule doImmediateRespawn is false.","color":"red"}
+		scoreboard players operation #prevNetherDoImmediateRespawn graves.dummy = #doImmediateRespawn graves.dummy
+		execute in minecraft:the_end store result score #doImmediateRespawn graves.dummy run gamerule doImmediateRespawn
+		execute if score #doImmediateRespawn graves.dummy matches 1 if score #prevEndDoImmediateRespawn graves.dummy matches 0 run tellraw @a {"text":"The Graves data pack cannot position graves correctly unless gamerule doImmediateRespawn is false.","color":"red"}
+		scoreboard players operation #prevEndDoImmediateRespawn graves.dummy = #doImmediateRespawn graves.dummy
 	}
 }
-function remove_vanishing_item {
-	data remove entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}]
-	execute if data entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}] run function graves:remove_vanishing_item
+clock 20s {
+	name update_model
+	execute as @e[type=minecraft:armor_stand,tag=graves.model] run data merge entity @s {Fire:32767s,Air:32767s}
 }
-function prepare_model {
-	execute store result entity @s ArmorItems[3].tag.gravesData.id int 1 run scoreboard players get #id graves.dummy
-	scoreboard players operation @s graves.id = #id graves.dummy
-	execute if entity @a[tag=graves.player,y_rotation=-45..45] run tp @s ~ ~ ~ ~90 ~
-	execute if entity @a[tag=graves.player,y_rotation=135..225] run tp @s ~ ~ ~ ~90 ~
-	tp @s ~ ~-1.375 ~
-	tag @s remove graves.new
+function check_uuid_least_as_grave {
+	data modify storage graves:storage temp set from entity @s HandItems[1].tag.gravesData.uuidLeast
+	execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidLeast
 }
-function prepare_grave {
-	execute if data entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}] run function graves:remove_vanishing_item
-	execute if score #xp graves.config matches 1 if score #xp graves.dummy matches 1.. run function graves:store_xp
-	data modify entity @s HandItems[1].tag.gravesData.uuidMost set from entity @a[tag=graves.player,limit=1] UUIDMost
-	data modify entity @s HandItems[1].tag.gravesData.uuidLeast set from entity @a[tag=graves.player,limit=1] UUIDLeast
-	execute store result entity @s HandItems[1].tag.gravesData.id int 1 run scoreboard players get #id graves.dummy
-	scoreboard players operation @s graves.id = #id graves.dummy
-	data modify entity @s ArmorItems[0] set from entity @s HandItems[1]
-	data modify entity @s ArmorItems[1] set from entity @s HandItems[1]
-	data modify entity @s ArmorItems[2] set from entity @s HandItems[1]
-	data modify entity @s ArmorItems[3] set from entity @s HandItems[1]
-	execute store result score #y graves.dummy run data get entity @s Pos[1]
-	execute if score #y graves.dummy matches ..0 run tp @s ~ 1 ~
-	execute at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["graves.start"]}
-	execute at @s run function graves:offset_up
-	execute at @s if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function graves:offset_down
-	kill @e[type=minecraft:area_effect_cloud,tag=graves.start]
-	execute at @s positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run setblock ~ ~ ~ minecraft:grass_block
-	tag @s remove graves.new
-	execute at @s run tp ~0.5 ~ ~0.5
-	execute store result storage graves:storage players[-1].graves[-1].x int 1 run data get entity @s Pos[0]
-	execute store result storage graves:storage players[-1].graves[-1].y int 1 run data get entity @s Pos[1]
-	execute store result storage graves:storage players[-1].graves[-1].z int 1 run data get entity @s Pos[2]
-	execute at @s run function graves:create_model
-	execute if score #locating graves.config matches 1 as @a[tag=graves.player] run function graves:display_grave_location
-}
-function open_grave {
-	execute store result score #remaining graves.dummy run data get storage graves:storage players
-	data modify storage graves:storage temp set from entity @s HandItems[1].tag.gravesData.uuidMost
-	execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidMost
-	execute if score #success graves.dummy matches 0 run function graves:check_uuid_least_as_grave
-	execute if score #success graves.dummy matches 1 run function graves:rotate/player_as_grave
-	scoreboard players set #rotated graves.dummy 0
-	function graves:rotate/graves
-	data remove storage graves:storage players[-1].graves[-1]
-	scoreboard players remove #remaining graves.dummy 1
-	execute unless score #rotated graves.dummy matches 0 unless score #remaining graves.dummy matches 0 run function graves:rotate/back_grave
-	execute as @e[type=minecraft:armor_stand,tag=graves.model] run function graves:check_model
-	execute if data entity @s HandItems[0].tag.gravesData.items[0] run function graves:drop_item
-	execute store result score #xp graves.dummy run data get entity @s HandItems[0].tag.gravesData.xp
-	execute if entity @s[tag=graves.hasXP] run function graves:drop_xp
-	playsound minecraft:block.stone.break block @a
-	particle minecraft:poof ~ ~0.7 ~ 0 0 0 0.05 10
-	kill @s
-}
-function offset_up {
-	tp ~ ~ ~
-	execute unless predicate graves:valid positioned ~ ~1 ~ run function graves:offset_up
-	execute if predicate graves:valid if entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] positioned ~ ~1 ~ run function graves:offset_up
-}
-function offset_down {
-	tp ~ ~ ~
-	execute unless entity @s[y=0,dy=0] positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function graves:offset_down
-	execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=graves.start] run tp ~ ~ ~
-}
-function locate_grave {
-	function graves:rotate/players
-	execute store success score #success graves.dummy run data get storage graves:storage players[-1].graves[-1]
-	execute if score #success graves.dummy matches 1 run function graves:display_grave_location
-	execute unless score #success graves.dummy matches 1 run tellraw @s {"text":"You do not have a last grave.","color":"red"}
-}
-function kill_item {
-	data modify entity @s Item.Count set value 0b
-	kill @s
-}
-function give_grave_key {
-	give @s minecraft:player_head{gravesKey:1b,display:{Name:'["",{"text":"Grave Key","italic":false,"color":"yellow"}]',Lore:['"Right-click a grave with this to forcibly open it."','"Placing this down will disable its functionality."']},SkullOwner:{Id:"0-0-0-0-0",Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWVjNzA3NjllMzYzN2E3ZWRiNTcwMmJjYzQzM2NjMjQyYzJmMjIzNWNiNzNiOTQwODBmYjVmYWZmNDdiNzU0ZSJ9fX0="}]}}}
-}
-namespace fix_equipment {
-	function drop_3 {
-		summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
-		data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[3]
-		execute as @a[tag=graves.subject] run function graves:set_owner
-		tag @e[type=minecraft:item,tag=graves.item] remove graves.item
-	}
-	function drop_2 {
-		summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
-		data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[2]
-		execute as @a[tag=graves.subject] run function graves:set_owner
-		tag @e[type=minecraft:item,tag=graves.item] remove graves.item
-	}
-	function drop_1 {
-		summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
-		data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[1]
-		execute as @a[tag=graves.subject] run function graves:set_owner
-		tag @e[type=minecraft:item,tag=graves.item] remove graves.item
-	}
-	function drop_0 {
-		summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
-		data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[0]
-		execute as @a[tag=graves.subject] run function graves:set_owner
-		tag @e[type=minecraft:item,tag=graves.item] remove graves.item
-	}
-	function check_3 {
-		execute if entity @a[tag=graves.subject,gamemode=creative] run function graves:fix_equipment/drop_3
-		execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[3].tag.gravesKey run function graves:fix_equipment/drop_3
-	}
-	function check_2 {
-		execute if entity @a[tag=graves.subject,gamemode=creative] run function graves:fix_equipment/drop_2
-		execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[2].tag.gravesKey run function graves:fix_equipment/drop_2
-	}
-	function check_1 {
-		execute if entity @a[tag=graves.subject,gamemode=creative] run function graves:fix_equipment/drop_1
-		execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[1].tag.gravesKey run function graves:fix_equipment/drop_1
-	}
-	function check_0 {
-		execute if entity @a[tag=graves.subject,gamemode=creative] run function graves:fix_equipment/drop_0
-		execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[0].tag.gravesKey run function graves:fix_equipment/drop_0
-	}
-	function all {
-		execute store result score #count graves.dummy run data get entity @s ArmorItems[0].Count
-		execute if score #count graves.dummy matches 1 run function graves:fix_equipment/check_0
-		execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[0] set from entity @s HandItems[1]
-		execute store result score #count graves.dummy run data get entity @s ArmorItems[1].Count
-		execute if score #count graves.dummy matches 1 run function graves:fix_equipment/check_1
-		execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[1] set from entity @s HandItems[1]
-		execute store result score #count graves.dummy run data get entity @s ArmorItems[2].Count
-		execute if score #count graves.dummy matches 1 run function graves:fix_equipment/check_2
-		execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[2] set from entity @s HandItems[1]
-		execute store result score #count graves.dummy run data get entity @s ArmorItems[3].Count
-		execute if score #count graves.dummy matches 1 run function graves:fix_equipment/check_3
-		execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[3] set from entity @s HandItems[1]
-		execute if score #failed graves.dummy matches 1 run tag @s remove graves.activated
-		scoreboard players set #failed graves.dummy 0
-	}
-}
-function fail_robbing {
-	tellraw @s {"text":"Grave robbing is disabled.","color":"red"}
-	scoreboard players set #failed graves.dummy 1
-}
-function drop_xp {
-	summon minecraft:experience_orb ~ ~0.2 ~ {Tags:["graves.xp"]}
-	execute store result entity @e[type=minecraft:experience_orb,tag=graves.xp,limit=1] Value short 1 run scoreboard players get #xp graves.dummy
-	tag @e[type=minecraft:experience_orb] remove graves.xp
-}
-function drop_item {
-	summon minecraft:item ~ ~0.2 ~ {Tags:["graves.item"],Item:{id:"minecraft:bone",Count:1b}}
-	data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s HandItems[0].tag.gravesData.items[0]
-	execute as @a[tag=graves.subject,limit=1] if score @s graves.sneak matches 1.. run function graves:set_owner
-	tag @e[type=minecraft:item,tag=graves.item] remove graves.item
-	data remove entity @s HandItems[0].tag.gravesData.items[0]
-	execute if data entity @s HandItems[0].tag.gravesData.items[0] run function graves:drop_item
-}
-function display_grave_location {
-	execute store result score #dimension graves.dummy run data get storage graves:storage players[-1].graves[-1].dim
-	execute if score #dimension graves.dummy matches 0 run tellraw @s [{"text":"Your last grave is at ","color":"dark_aqua"},{"text":"(","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"aqua"},{"text":")","color":"aqua"},{"text":" in minecraft:overworld.","color":"dark_aqua"}]
-	execute if score #dimension graves.dummy matches -1 run tellraw @s [{"text":"Your last grave is at ","color":"dark_aqua"},{"text":"(","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"aqua"},{"text":")","color":"aqua"},{"text":" in minecraft:the_nether.","color":"dark_aqua"}]
-	execute if score #dimension graves.dummy matches 1 run tellraw @s [{"text":"Your last grave is at ","color":"dark_aqua"},{"text":"(","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"aqua"},{"text":")","color":"aqua"},{"text":" in minecraft:the_end.","color":"dark_aqua"}]
-	execute unless score #dimension graves.dummy matches -1..1 run tellraw @s [{"text":"Your last grave is at ","color":"dark_aqua"},{"text":"(","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"aqua"},{"text":")","color":"aqua"},{"text":" in dimension ","color":"dark_aqua"},{"score":{"name":"#dimension","objective":"graves.dummy"}},{"text":".","color":"dark_aqua"}]
-}
-function death {
-	execute store result score #xp graves.dummy run data get entity @s XpLevel
-	scoreboard players operation #xp graves.dummy *= #pointsPerLevel graves.dummy
-	execute if score #xp graves.dummy matches 101.. run scoreboard players set #xp graves.dummy 100
-	execute if score #xp graves.config matches 0 if score #xp graves.dummy matches 1.. run function graves:drop_xp
-	execute if data entity @s Inventory[0] align xyz run function graves:create_grave
-	execute if score #xp graves.config matches 1 if score #xp graves.dummy matches 1.. align xyz run function graves:create_grave
-	xp set @s 0 levels
-	xp set @s 0 points
-}
-function create_name {
-	summon minecraft:area_effect_cloud ~0.5 ~ ~0.5 {Tags:["graves.name"],CustomNameVisible:1b,Duration:2}
-	data modify entity @e[dx=0,dy=0,dz=0,type=minecraft:area_effect_cloud,tag=graves.name,limit=1] CustomName set from entity @s CustomName
-}
-function create_model {
-	summon minecraft:armor_stand ~ ~ ~ {Tags:["graves.marker","graves.model","graves.new"],Marker:1b,Invisible:1b,NoGravity:1b,Invulnerable:1b,ArmorItems:[{},{},{},{id:"minecraft:stone_brick_wall",Count:1b,tag:{gravesData:{}}}],Fire:32767s,Air:32767s}
-	execute as @e[type=minecraft:armor_stand,tag=graves.new] run function graves:prepare_model
-	loot spawn ~ ~ ~ loot graves:name_tag
-	tag @e[type=minecraft:item,nbt={Item:{tag:{gravesNameTag:1b}}}] add graves.nameTag
-	data modify entity @s CustomName set from entity @e[type=minecraft:item,tag=graves.nameTag,limit=1] Item.tag.display.Name
-	execute as @e[type=minecraft:item,tag=graves.nameTag,limit=1] run function graves:kill_item
+function check_uuid_least_for_player_rotation {
+	data modify storage graves:storage temp set from entity @s UUIDLeast
+	execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidLeast
 }
 function create_grave {
 	tag @s add graves.player
@@ -365,70 +253,182 @@ function create_grave {
 	replaceitem entity @s armor.legs minecraft:air
 	replaceitem entity @s armor.chest minecraft:air
 	replaceitem entity @s armor.head minecraft:air
-	execute as @e[type=minecraft:armor_stand,tag=graves.new] run function graves:prepare_grave
+	execute as @e[type=minecraft:armor_stand,tag=graves.new] run {
+		name prepare_grave
+		execute if data entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}] run function graves:remove_vanishing_item
+		execute if score #xp graves.config matches 1 if score #xp graves.dummy matches 1.. run {
+			name store_xp
+			execute store result entity @s HandItems[0].tag.gravesData.xp short 1 run scoreboard players get #xp graves.dummy
+			tag @s add graves.hasXP
+			scoreboard players set #xp graves.dummy 0
+		}
+		data modify entity @s HandItems[1].tag.gravesData.uuidMost set from entity @a[tag=graves.player,limit=1] UUIDMost
+		data modify entity @s HandItems[1].tag.gravesData.uuidLeast set from entity @a[tag=graves.player,limit=1] UUIDLeast
+		execute store result entity @s HandItems[1].tag.gravesData.id int 1 run scoreboard players get #id graves.dummy
+		scoreboard players operation @s graves.id = #id graves.dummy
+		data modify entity @s ArmorItems[0] set from entity @s HandItems[1]
+		data modify entity @s ArmorItems[1] set from entity @s HandItems[1]
+		data modify entity @s ArmorItems[2] set from entity @s HandItems[1]
+		data modify entity @s ArmorItems[3] set from entity @s HandItems[1]
+		execute store result score #y graves.dummy run data get entity @s Pos[1]
+		execute if score #y graves.dummy matches ..0 run tp @s ~ 1 ~
+		execute at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["graves.start"]}
+		execute at @s run function graves:offset_up
+		execute at @s if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function graves:offset_down
+		kill @e[type=minecraft:area_effect_cloud,tag=graves.start]
+		execute at @s positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run setblock ~ ~ ~ minecraft:grass_block
+		tag @s remove graves.new
+		execute at @s run tp ~0.5 ~ ~0.5
+		execute store result storage graves:storage players[-1].graves[-1].x int 1 run data get entity @s Pos[0]
+		execute store result storage graves:storage players[-1].graves[-1].y int 1 run data get entity @s Pos[1]
+		execute store result storage graves:storage players[-1].graves[-1].z int 1 run data get entity @s Pos[2]
+		execute at @s run {
+			name create_model
+			summon minecraft:armor_stand ~ ~ ~ {Tags:["graves.marker","graves.model","graves.new"],Marker:1b,Invisible:1b,NoGravity:1b,Invulnerable:1b,ArmorItems:[{},{},{},{id:"minecraft:stone_brick_wall",Count:1b,tag:{gravesData:{}}}],Fire:32767s,Air:32767s}
+			execute as @e[type=minecraft:armor_stand,tag=graves.new] run {
+				name prepare_model
+				execute store result entity @s ArmorItems[3].tag.gravesData.id int 1 run scoreboard players get #id graves.dummy
+				scoreboard players operation @s graves.id = #id graves.dummy
+				execute if entity @a[tag=graves.player,y_rotation=-45..45] run tp @s ~ ~ ~ ~90 ~
+				execute if entity @a[tag=graves.player,y_rotation=135..225] run tp @s ~ ~ ~ ~90 ~
+				tp @s ~ ~-1.375 ~
+				tag @s remove graves.new
+			}
+			loot spawn ~ ~ ~ loot graves:name_tag
+			tag @e[type=minecraft:item,nbt={Item:{tag:{gravesNameTag:1b}}}] add graves.nameTag
+			data modify entity @s CustomName set from entity @e[type=minecraft:item,tag=graves.nameTag,limit=1] Item.tag.display.Name
+			execute as @e[type=minecraft:item,tag=graves.nameTag,limit=1] run {
+				name kill_item
+				data modify entity @s Item.Count set value 0b
+				kill @s
+			}
+		}
+		execute if score #locating graves.config matches 1 as @a[tag=graves.player] run function graves:display_grave_location
+	}
 	tag @s remove graves.player
+}
+function display_grave_location {
+	execute store result score #dimension graves.dummy run data get storage graves:storage players[-1].graves[-1].dim
+	execute if score #dimension graves.dummy matches 0 run tellraw @s [{"text":"Your last grave is at ","color":"dark_aqua"},{"text":"(","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"aqua"},{"text":")","color":"aqua"},{"text":" in minecraft:overworld.","color":"dark_aqua"}]
+	execute if score #dimension graves.dummy matches -1 run tellraw @s [{"text":"Your last grave is at ","color":"dark_aqua"},{"text":"(","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"aqua"},{"text":")","color":"aqua"},{"text":" in minecraft:the_nether.","color":"dark_aqua"}]
+	execute if score #dimension graves.dummy matches 1 run tellraw @s [{"text":"Your last grave is at ","color":"dark_aqua"},{"text":"(","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"aqua"},{"text":")","color":"aqua"},{"text":" in minecraft:the_end.","color":"dark_aqua"}]
+	execute unless score #dimension graves.dummy matches -1..1 run tellraw @s [{"text":"Your last grave is at ","color":"dark_aqua"},{"text":"(","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"aqua"},{"text":")","color":"aqua"},{"text":" in dimension ","color":"dark_aqua"},{"score":{"name":"#dimension","objective":"graves.dummy"}},{"text":".","color":"dark_aqua"}]
+}
+function drop_item {
+	summon minecraft:item ~ ~0.2 ~ {Tags:["graves.item"],Item:{id:"minecraft:bone",Count:1b}}
+	data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s HandItems[0].tag.gravesData.items[0]
+	execute as @a[tag=graves.subject,limit=1] if score @s graves.sneak matches 1.. run function graves:set_owner
+	tag @e[type=minecraft:item,tag=graves.item] remove graves.item
+	data remove entity @s HandItems[0].tag.gravesData.items[0]
+	execute if data entity @s HandItems[0].tag.gravesData.items[0] run function graves:drop_item
+}
+function drop_xp {
+	summon minecraft:experience_orb ~ ~0.2 ~ {Tags:["graves.xp"]}
+	execute store result entity @e[type=minecraft:experience_orb,tag=graves.xp,limit=1] Value short 1 run scoreboard players get #xp graves.dummy
+	tag @e[type=minecraft:experience_orb] remove graves.xp
+}
+namespace fix_equipment {
+	function drop_0 {
+		summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
+		data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[0]
+		execute as @a[tag=graves.subject] run function graves:set_owner
+		tag @e[type=minecraft:item,tag=graves.item] remove graves.item
+	}
+	function drop_1 {
+		summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
+		data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[1]
+		execute as @a[tag=graves.subject] run function graves:set_owner
+		tag @e[type=minecraft:item,tag=graves.item] remove graves.item
+	}
+	function drop_2 {
+		summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
+		data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[2]
+		execute as @a[tag=graves.subject] run function graves:set_owner
+		tag @e[type=minecraft:item,tag=graves.item] remove graves.item
+	}
+	function drop_3 {
+		summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
+		data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[3]
+		execute as @a[tag=graves.subject] run function graves:set_owner
+		tag @e[type=minecraft:item,tag=graves.item] remove graves.item
+	}
+}
+function give_grave_key {
+	give @s minecraft:player_head{gravesKey:1b,display:{Name:'["",{"text":"Grave Key","italic":false,"color":"yellow"}]',Lore:['"Right-click a grave with this to forcibly open it."','"Placing this down will disable its functionality."']},SkullOwner:{Id:"0-0-0-0-0",Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWVjNzA3NjllMzYzN2E3ZWRiNTcwMmJjYzQzM2NjMjQyYzJmMjIzNWNiNzNiOTQwODBmYjVmYWZmNDdiNzU0ZSJ9fX0="}]}}}
+}
+function offset_down {
+	tp ~ ~ ~
+	execute unless entity @s[y=0,dy=0] positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function graves:offset_down
+	execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=graves.start] run tp ~ ~ ~
+}
+function offset_up {
+	tp ~ ~ ~
+	execute unless predicate graves:valid positioned ~ ~1 ~ run function graves:offset_up
+	execute if predicate graves:valid if entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] positioned ~ ~1 ~ run function graves:offset_up
+}
+function remove_vanishing_item {
+	data remove entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}]
+	execute if data entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}] run function graves:remove_vanishing_item
+}
+namespace rotate {
+	function back_grave {
+		data modify storage graves:storage players[-1].graves prepend from storage graves:storage players[-1].graves[-1]
+		data remove storage graves:storage players[-1].graves[-1]
+		scoreboard players remove #remaining graves.dummy 1
+		execute unless score #remaining graves.dummy matches 0 run function graves:rotate/back_grave
+	}
+	function grave {
+		data modify storage graves:storage players[-1].graves prepend from storage graves:storage players[-1].graves[-1]
+		data remove storage graves:storage players[-1].graves[-1]
+		scoreboard players add #rotated graves.dummy 1
+		scoreboard players remove #remaining graves.dummy 1
+		execute store result score #id graves.dummy run data get storage graves:storage players[-1].graves[-1].id
+		execute unless score #remaining graves.dummy matches 0 unless score #id graves.dummy = #activated graves.dummy run function graves:rotate/grave
+	}
+	function graves {
+		execute store result score #remaining graves.dummy run data get storage graves:storage players[-1].graves
+		execute store result score #id graves.dummy run data get storage graves:storage players[-1].graves[-1].id
+		execute unless score #remaining graves.dummy matches 0 unless score #id graves.dummy = #activated graves.dummy run function graves:rotate/grave
+	}
+	function player {
+		data modify storage graves:storage players prepend from storage graves:storage players[-1]
+		data remove storage graves:storage players[-1]
+		scoreboard players remove #remaining graves.dummy 1
+		data modify storage graves:storage temp set from entity @s UUIDMost
+		execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidMost
+		execute if score #success graves.dummy matches 0 run function graves:check_uuid_least_for_player_rotation
+		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function graves:rotate/player
+	}
+	function players {
+		execute store result score #remaining graves.dummy run data get storage graves:storage players
+		data modify storage graves:storage temp set from entity @s UUIDMost
+		execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidMost
+		execute if score #success graves.dummy matches 0 run function graves:check_uuid_least_for_player_rotation
+		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function graves:rotate/player
+		execute if score #remaining graves.dummy matches 0 run {
+			name add_player
+			data modify storage graves:storage players append value {graves:[]}
+			data modify storage graves:storage players[-1].uuidMost set from entity @s UUIDMost
+			data modify storage graves:storage players[-1].uuidLeast set from entity @s UUIDLeast
+		}
+	}
+	function player_as_grave {
+		data modify storage graves:storage players prepend from storage graves:storage players[-1]
+		data remove storage graves:storage players[-1]
+		scoreboard players remove #remaining graves.dummy 1
+		data modify storage graves:storage temp set from entity @s HandItems[1].tag.gravesData.uuidMost
+		execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidMost
+		execute if score #success graves.dummy matches 0 run function graves:check_uuid_least_as_grave
+		execute unless score #remaining graves.dummy matches 0 if score #success graves.dummy matches 1 run function graves:rotate/player_as_grave
+	}
+}
+function set_owner {
+	data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Owner.L set from entity @s UUIDLeast
+	data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Owner.M set from entity @s UUIDMost
 }
 function config {
 	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #robbing graves.config <0 or 1>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #robbing graves.config "},"hoverEvent":{"action":"show_text","value":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #robbing graves.config","color":"aqua"},{"text":".\nEnter 0 or 1 after clicking.","color":"dark_aqua"}]}},{"text":" to (0) disable or (1) enable grave robbing by allowing players to open graves they do not own. The default is ","color":"dark_aqua"},{"text":"0","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #robbing graves.config 0"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #robbing graves.config 0","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#robbing","objective":"graves.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
 	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #xp graves.config <0 or 1>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #xp graves.config "},"hoverEvent":{"action":"show_text","value":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #xp graves.config","color":"aqua"},{"text":".\nEnter 0 or 1 after clicking.","color":"dark_aqua"}]}},{"text":" to (0) disable or (1) enable graves collecting XP dropped on death. The default is ","color":"dark_aqua"},{"text":"1","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #xp graves.config 1"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #xp graves.config 1","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#xp","objective":"graves.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
 	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #locating graves.config <0 or 1>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #locating graves.config "},"hoverEvent":{"action":"show_text","value":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #locating graves.config","color":"aqua"},{"text":".\nEnter 0 or 1 after clicking.","color":"dark_aqua"}]}},{"text":" to (0) disable or (1) enable the command to locate the coordinates of your last grave. The default is ","color":"dark_aqua"},{"text":"1","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #locating graves.config 1"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #locating graves.config 1","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#locating","objective":"graves.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
 	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/function graves:give_grave_key","color":"aqua","clickEvent":{"action":"run_command","value":"/function graves:give_grave_key"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/function graves:give_grave_key","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":" to receive a grave key which can be used to forcibly remove graves.","color":"dark_aqua"}]
-}
-function check_uuid_least_for_player_rotation {
-	data modify storage graves:storage temp set from entity @s UUIDLeast
-	execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidLeast
-}
-function check_uuid_least_as_grave {
-	data modify storage graves:storage temp set from entity @s HandItems[1].tag.gravesData.uuidLeast
-	execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuidLeast
-}
-function check_uuid_least {
-	data modify storage graves:storage temp set from entity @s UUIDLeast
-	execute store success score #success graves.dummy run data modify storage graves:storage temp set from entity @e[type=minecraft:armor_stand,tag=graves.activated,limit=1] HandItems[1].tag.gravesData.uuidLeast
-}
-function check_owner {
-	data modify storage graves:storage temp set from entity @s UUIDMost
-	execute store success score #success graves.dummy run data modify storage graves:storage temp set from entity @e[type=minecraft:armor_stand,tag=graves.activated,limit=1] HandItems[1].tag.gravesData.uuidMost
-	execute if score #success graves.dummy matches 0 run function graves:check_uuid_least
-	execute if score #success graves.dummy matches 1 run function graves:fail_robbing
-}
-function check_model {
-	execute store result score #id graves.dummy run data get entity @s ArmorItems[3].tag.gravesData.id
-	execute if score #id graves.dummy = #activated graves.dummy run kill @s
-	scoreboard players operation @s graves.id = #id graves.dummy
-}
-function check_hitbox {
-	execute store result score #id graves.dummy run data get entity @s HandItems[1].tag.gravesData.id
-	execute if score #id graves.dummy = #activated graves.dummy run tag @s add graves.activated
-	scoreboard players operation @s graves.id = #id graves.dummy
-}
-function check_dimensional_game_rules {
-	execute in minecraft:the_nether store result score #keepInventory graves.dummy run gamerule keepInventory
-	execute if score #keepInventory graves.dummy matches 0 if score #prevNetherKeepInventory graves.dummy matches 1 run tellraw @a {"text":"The Graves data pack cannot read player inventories correctly unless gamerule keepInventory is true.","color":"red"}
-	scoreboard players operation #prevNetherKeepInventory graves.dummy = #keepInventory graves.dummy
-	execute in minecraft:the_end store result score #keepInventory graves.dummy run gamerule keepInventory
-	execute if score #keepInventory graves.dummy matches 0 if score #prevEndKeepInventory graves.dummy matches 1 run tellraw @a {"text":"The Graves data pack cannot read player inventories correctly unless gamerule keepInventory is true.","color":"red"}
-	scoreboard players operation #prevEndKeepInventory graves.dummy = #keepInventory graves.dummy
-	execute in minecraft:the_nether store result score #doImmediateRespawn graves.dummy run gamerule doImmediateRespawn
-	execute if score #doImmediateRespawn graves.dummy matches 1 if score #prevNetherDoImmediateRespawn graves.dummy matches 0 run tellraw @a {"text":"The Graves data pack cannot position graves correctly unless gamerule doImmediateRespawn is false.","color":"red"}
-	scoreboard players operation #prevNetherDoImmediateRespawn graves.dummy = #doImmediateRespawn graves.dummy
-	execute in minecraft:the_end store result score #doImmediateRespawn graves.dummy run gamerule doImmediateRespawn
-	execute if score #doImmediateRespawn graves.dummy matches 1 if score #prevEndDoImmediateRespawn graves.dummy matches 0 run tellraw @a {"text":"The Graves data pack cannot position graves correctly unless gamerule doImmediateRespawn is false.","color":"red"}
-	scoreboard players operation #prevEndDoImmediateRespawn graves.dummy = #doImmediateRespawn graves.dummy
-}
-function add_player {
-	data modify storage graves:storage players append value {graves:[]}
-	data modify storage graves:storage players[-1].uuidMost set from entity @s UUIDMost
-	data modify storage graves:storage players[-1].uuidLeast set from entity @s UUIDLeast
-}
-function activate_grave {
-	tag @s add graves.subject
-	advancement revoke @s only graves:activate_grave
-	execute store result score #activated graves.dummy run data get entity @s SelectedItem.tag.gravesData.id
-	execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] run function graves:check_hitbox
-	execute if score #robbing graves.config matches 0 unless data entity @e[type=minecraft:armor_stand,tag=graves.activated,limit=1] ArmorItems[{tag:{gravesKey:1b}}] run function graves:check_owner
-	execute as @e[type=minecraft:armor_stand,tag=graves.activated] run function graves:fix_equipment/all
-	execute as @e[type=minecraft:armor_stand,tag=graves.activated] at @s run function graves:open_grave
-	clear @s minecraft:stone_button{gravesData:{}}
-	tag @s remove graves.subject
 }

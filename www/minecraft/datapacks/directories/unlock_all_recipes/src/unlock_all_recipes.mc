@@ -1,7 +1,7 @@
 function uninstall {
-	schedule clear unlock_all_recipes:schedule
+	schedule clear unlock_all_recipes:unlock_recipes
 }
 clock 5s {
-	name schedule
+	name unlock_recipes
 	recipe give @a *
 }
