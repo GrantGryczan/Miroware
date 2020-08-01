@@ -236,14 +236,16 @@ clock 1t {
 						execute store result score #id homes.dummy run data get entity @s Item.tag.homesData.id
 						execute if score #id homes.dummy = #dimension homes.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["homes.destination"]}
 					}
+					execute at @s run function back:set_back
+					tag @s add homes.subject
 					execute as @e[type=minecraft:area_effect_cloud,tag=homes.destination] run {
 						name set_destination
 						data modify entity @s Pos set from storage homes:storage players[-1].homes[-1].pos
 						data modify entity @s Rotation set from storage homes:storage players[-1].homes[-1].rot
+						tp @a[tag=homes.subject] @s
+						kill @s
 					}
-					execute at @s run function back:set_back
-					tp @s @e[type=minecraft:area_effect_cloud,tag=homes.destination,limit=1]
-					kill @e[type=minecraft:area_effect_cloud,tag=homes.destination]
+					tag @s remove homes.subject
 				}
 			}
 			scoreboard players reset @s homes.delay

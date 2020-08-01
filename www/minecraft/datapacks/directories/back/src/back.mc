@@ -70,14 +70,16 @@ clock 1t {
 						execute store result score #id back.dummy run data get entity @s Item.tag.backData.id
 						execute if score #id back.dummy = #dimension back.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["back.destination"]}
 					}
+					tag @s add back.subject
 					execute as @e[type=minecraft:area_effect_cloud,tag=back.destination] run {
 						name set_destination
 						data modify entity @s Pos set from storage back:storage players[-1].back.pos
 						data modify entity @s Rotation set from storage back:storage players[-1].back.rot
+						execute as @a[tag=back.subject] at @s run function back:set_back
+						tp @a[tag=back.subject] @s
+						kill @s
 					}
-					execute at @s run function back:set_back
-					tp @s @e[type=minecraft:area_effect_cloud,tag=back.destination,limit=1]
-					kill @e[type=minecraft:area_effect_cloud,tag=back.destination]
+					tag @s remove back.subject
 				}
 			}
 			scoreboard players reset @s back.delay
