@@ -257,8 +257,18 @@ function create_grave {
 		execute store result score #y graves.dummy run data get entity @s Pos[1]
 		execute if score #y graves.dummy matches ..0 run tp @s ~ 1 ~
 		execute at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["graves.start"]}
-		execute at @s run function graves:offset_up
-		execute at @s if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function graves:offset_down
+		execute at @s run {
+			name offset_up
+			tp ~ ~ ~
+			execute unless predicate graves:valid positioned ~ ~1 ~ run function $block
+			execute if predicate graves:valid if entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] positioned ~ ~1 ~ run function $block
+		}
+		execute at @s if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run {
+			name offset_down
+			tp ~ ~ ~
+			execute unless entity @s[y=0,dy=0] positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function $block
+			execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=graves.start] run tp ~ ~ ~
+		}
 		kill @e[type=minecraft:area_effect_cloud,tag=graves.start]
 		execute at @s positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run setblock ~ ~ ~ minecraft:grass_block
 		tag @s remove graves.new
@@ -304,7 +314,7 @@ function drop_xp {
 	execute store result entity @e[type=minecraft:experience_orb,tag=graves.xp,limit=1] Value short 1 run scoreboard players get #xp graves.dummy
 	tag @e[type=minecraft:experience_orb] remove graves.xp
 }
-namespace fix_equipment {
+dir fix_equipment {
 	function drop_0 {
 		summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
 		data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[0]
@@ -333,21 +343,11 @@ namespace fix_equipment {
 function give_grave_key {
 	give @s minecraft:player_head{gravesKey:1b,display:{Name:'["",{"text":"Grave Key","italic":false,"color":"yellow"}]',Lore:['"Right-click a grave with this to forcibly open it."','"Placing this down will disable its functionality."']},SkullOwner:{Id:[I;0,0,0,0],Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWVjNzA3NjllMzYzN2E3ZWRiNTcwMmJjYzQzM2NjMjQyYzJmMjIzNWNiNzNiOTQwODBmYjVmYWZmNDdiNzU0ZSJ9fX0="}]}}}
 }
-function offset_down {
-	tp ~ ~ ~
-	execute unless entity @s[y=0,dy=0] positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function graves:offset_down
-	execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=graves.start] run tp ~ ~ ~
-}
-function offset_up {
-	tp ~ ~ ~
-	execute unless predicate graves:valid positioned ~ ~1 ~ run function graves:offset_up
-	execute if predicate graves:valid if entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] positioned ~ ~1 ~ run function graves:offset_up
-}
 function remove_vanishing_item {
 	data remove entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}]
 	execute if data entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}] run function graves:remove_vanishing_item
 }
-namespace rotate {
+dir rotate {
 	function players {
 		execute store result score #remaining graves.dummy run data get storage graves:storage players
 		data modify storage graves:storage temp set from entity @s UUID

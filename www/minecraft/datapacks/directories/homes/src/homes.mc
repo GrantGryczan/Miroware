@@ -273,7 +273,7 @@ function bubble {
 	scoreboard players remove #remaining homes.dummy 1
 	execute unless score #remaining homes.dummy matches 1 run function $block
 }
-namespace rotate {
+dir rotate {
 	function homes {
 		execute store result score #homes homes.dummy run data get storage homes:storage players[-1].homes
 		scoreboard players operation #remaining homes.dummy = #homes homes.dummy

@@ -87,7 +87,7 @@ clock 1t {
 		execute unless score @s back.delay matches 0 run scoreboard players remove @s back.delay 1
 	}
 }
-namespace rotate {
+dir rotate {
 	function players {
 		execute store result score #remaining back.dummy run data get storage back:storage players
 		data modify storage back:storage temp set from entity @s UUID

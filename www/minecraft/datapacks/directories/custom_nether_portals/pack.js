@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "custom_nether_portals",
-	version: "1.2.0",
+	version: "1.2.1",
 	name: "Custom Nether Portals",
 	compatibility: ["1.15"],
 	description: `
