@@ -6,7 +6,7 @@
 			"entries": [
 				{
 					"type": "minecraft:item",
-					"name": "minecraft:name_tag",
+					"name": "minecraft:stone_button",
 					"functions": [
 						{
 							"function": "minecraft:set_name",
