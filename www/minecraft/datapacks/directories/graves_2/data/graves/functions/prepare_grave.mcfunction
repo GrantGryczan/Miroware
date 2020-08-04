@@ -1,4 +1,4 @@
-execute if data entity @s HandItems[0].tag.gravesData.items[{tag:{Enchantments:[{id:"minecraft:vanishing_curse"}]}}] run function graves:remove_vanishing_item
+function graves:remove_vanishing_item
 execute if score #xp graves.config matches 1 if score #xp graves.dummy matches 1.. run function graves:store_xp
 data modify entity @s HandItems[1].tag.gravesData.uuid set from entity @a[tag=graves.player,limit=1] UUID
 execute store result entity @s HandItems[1].tag.gravesData.id int 1 run scoreboard players get #id graves.dummy

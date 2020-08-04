@@ -21,6 +21,6 @@
 		}
 	},
 	"rewards": {
-		"function": "graves:activate_grave"
+		"function": "graves:interact_with_grave"
 	}
 }

@@ -37,10 +37,6 @@ function activate_item_frame {
 		}
 	}
 }
-function mark {
-	tag @s add invIteFra.itemFrame
-	summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["invIteFra.marker"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
-}
 function use_item_frame {
 	advancement revoke @s only invisible_item_frames:use_item_frame
 	execute as @e[type=minecraft:item_frame,tag=invIteFra.placed,distance=..7] at @s run {
@@ -48,4 +44,8 @@ function use_item_frame {
 		tag @s remove invIteFra.placed
 		function invisible_item_frames:mark
 	}
+}
+function mark {
+	tag @s add invIteFra.itemFrame
+	summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["invIteFra.marker"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
 }
