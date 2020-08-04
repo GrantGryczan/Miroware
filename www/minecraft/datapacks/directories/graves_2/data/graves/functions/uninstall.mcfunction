@@ -1,7 +1,6 @@
 scoreboard objectives remove graves.config
 scoreboard objectives remove graves.deaths
 scoreboard objectives remove graves.id
-scoreboard objectives remove graves.sneak
 scoreboard objectives remove graves.dummy
 scoreboard objectives remove grave
 data remove storage graves:storage players

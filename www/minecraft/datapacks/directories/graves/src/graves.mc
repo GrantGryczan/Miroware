@@ -2,7 +2,6 @@ function load {
 	scoreboard objectives add graves.config dummy "Graves Config"
 	scoreboard objectives add graves.deaths deathCount
 	scoreboard objectives add graves.id dummy
-	scoreboard objectives add graves.sneak minecraft.custom:minecraft.sneak_time
 	scoreboard objectives add graves.dummy dummy
 	scoreboard objectives add grave trigger "Locate Last Grave"
 	execute unless score #robbing graves.config matches 0..1 run scoreboard players set #robbing graves.config 0
@@ -18,7 +17,6 @@ function load {
 	execute in minecraft:the_nether run gamerule keepInventory true
 	execute in minecraft:the_end run gamerule keepInventory true
 	scoreboard players reset * graves.deaths
-	scoreboard players reset * graves.sneak
 	execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] run {
 		name load_hitbox
 		execute store result score @s graves.id run data get entity @s HandItems[1].tag.gravesData.id
@@ -33,7 +31,6 @@ function uninstall {
 	scoreboard objectives remove graves.config
 	scoreboard objectives remove graves.deaths
 	scoreboard objectives remove graves.id
-	scoreboard objectives remove graves.sneak
 	scoreboard objectives remove graves.dummy
 	scoreboard objectives remove grave
 	data remove storage graves:storage players
@@ -125,7 +122,7 @@ clock 1t {
 				name drop_item
 				summon minecraft:item ~ ~0.2 ~ {Tags:["graves.item"],Item:{id:"minecraft:bone",Count:1b}}
 				data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s HandItems[0].tag.gravesData.items[0]
-				execute as @a[tag=graves.subject,limit=1] if score @s graves.sneak matches 1.. run function graves:set_owner
+				execute as @a[tag=graves.subject,predicate=graves:sneaking,limit=1] run function graves:set_owner
 				tag @e[type=minecraft:item,tag=graves.item] remove graves.item
 				data remove entity @s HandItems[0].tag.gravesData.items[0]
 				execute if data entity @s HandItems[0].tag.gravesData.items[0] run function $block
@@ -167,7 +164,6 @@ clock 1t {
 		}
 		scoreboard players set @a grave 0
 	}
-	scoreboard players reset @a graves.sneak
 }
 clock 2s {
 	name check_game_rules
