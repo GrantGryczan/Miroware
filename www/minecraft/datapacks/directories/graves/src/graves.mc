@@ -60,12 +60,6 @@ clock 1t {
 		}
 		scoreboard players reset @s graves.deaths
 	}
-	execute as @e[type=minecraft:armor_stand,tag=graves.model] at @s run {
-		name tick_model
-		tag @s add graves.subject
-		execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] if score @s graves.id = @e[type=minecraft:armor_stand,tag=graves.subject,limit=1] graves.id run tp ~ ~1.375 ~
-		tag @s remove graves.subject
-	}
 	execute as @a[predicate=graves:interacted_with_grave] at @s run {
 		name activate_grave
 		tag @s add graves.subject
@@ -143,6 +137,12 @@ clock 1t {
 			kill @s
 		}
 		clear @s minecraft:stone_button{gravesData:{}}
+		tag @s remove graves.subject
+	}
+	execute as @e[type=minecraft:armor_stand,tag=graves.model] at @s run {
+		name tick_model
+		tag @s add graves.subject
+		execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] if score @s graves.id = @e[type=minecraft:armor_stand,tag=graves.subject,limit=1] graves.id run tp ~ ~1.375 ~
 		tag @s remove graves.subject
 	}
 	execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] at @s if entity @a[gamemode=!spectator,distance=..2] align xz run {
