@@ -167,7 +167,7 @@ clock 1t {
 		}
 		scoreboard players set @a grave 0
 	}
-	scoreboard players reset * graves.sneak
+	scoreboard players reset @a graves.sneak
 }
 clock 2s {
 	name check_game_rules
