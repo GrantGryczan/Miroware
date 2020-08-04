@@ -18,6 +18,7 @@ function load {
 	execute in minecraft:the_nether run gamerule keepInventory true
 	execute in minecraft:the_end run gamerule keepInventory true
 	scoreboard players reset * graves.deaths
+	scoreboard players reset * graves.sneak
 	execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] run {
 		name load_hitbox
 		execute store result score @s graves.id run data get entity @s HandItems[1].tag.gravesData.id
@@ -27,7 +28,6 @@ function load {
 		data modify entity @s ArmorItems[3] set from entity @s HandItems[1]
 	}
 	execute as @e[type=minecraft:armor_stand,tag=graves.model] store result score @s graves.id run data get entity @s ArmorItems[3].tag.gravesData.id
-	advancement revoke @a only graves:activate_grave
 }
 function uninstall {
 	scoreboard objectives remove graves.config
@@ -69,7 +69,6 @@ clock 1t {
 	execute as @a[predicate=graves:interacted_with_grave] at @s run {
 		name activate_grave
 		tag @s add graves.subject
-		advancement revoke @s only graves:activate_grave
 		execute store result score #activated graves.dummy run data get entity @s SelectedItem.tag.gravesData.id
 		execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] run {
 			name check_hitbox
@@ -168,7 +167,7 @@ clock 1t {
 		}
 		scoreboard players set @a grave 0
 	}
-	scoreboard players reset @a graves.sneak
+	scoreboard players reset * graves.sneak
 }
 clock 2s {
 	name check_game_rules
