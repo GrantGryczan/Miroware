@@ -37,6 +37,7 @@ function uninstall {
 	scoreboard objectives remove back.y
 	scoreboard objectives remove back.z
 	schedule clear back:tick
+	schedule clear back:check_game_rules
 }
 clock 1t {
 	name tick
