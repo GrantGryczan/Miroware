@@ -1,0 +1,6 @@
+execute in minecraft:the_nether store result score #doImmediateRespawn back.dummy run gamerule doImmediateRespawn
+execute if score #doImmediateRespawn back.dummy matches 1 if score #prevNetherDoImmediateRespawn back.dummy matches 0 run tellraw @a {"text":"The Back data pack cannot detect your death location correctly unless gamerule doImmediateRespawn is false. You may ignore this message if death location saving is disabled.","color":"red"}
+scoreboard players operation #prevNetherDoImmediateRespawn back.dummy = #doImmediateRespawn back.dummy
+execute in minecraft:the_end store result score #doImmediateRespawn back.dummy run gamerule doImmediateRespawn
+execute if score #doImmediateRespawn back.dummy matches 1 if score #prevEndDoImmediateRespawn back.dummy matches 0 run tellraw @a {"text":"The Back data pack cannot detect your death location correctly unless gamerule doImmediateRespawn is false. You may ignore this message if death location saving is disabled.","color":"red"}
+scoreboard players operation #prevEndDoImmediateRespawn back.dummy = #doImmediateRespawn back.dummy

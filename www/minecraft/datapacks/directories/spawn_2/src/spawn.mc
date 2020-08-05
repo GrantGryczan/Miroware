@@ -45,6 +45,9 @@ clock 1t {
 					execute store success score #success spawn.dummy if score #value spawn.dummy = @s spawn.z
 				}
 			}
+			scoreboard players reset @s spawn.x
+			scoreboard players reset @s spawn.y
+			scoreboard players reset @s spawn.z
 			execute if score #success spawn.dummy matches 0 run tellraw @s [{"text":"You must stand still to teleport.","color":"red"}]
 			execute unless score #success spawn.dummy matches 0 run {
 				name go_to_spawn

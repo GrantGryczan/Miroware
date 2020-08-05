@@ -1,12 +1,26 @@
 function load {
 	scoreboard objectives add back trigger "Back"
-	scoreboard objectives add back.delay dummy
-	scoreboard objectives add back.dummy dummy
 	scoreboard objectives add back.config dummy "Back Config"
+	scoreboard objectives add back.dummy dummy
+	scoreboard objectives add back.delay dummy
+	scoreboard objectives add back.deaths deathCount
 	scoreboard objectives add back.x dummy
 	scoreboard objectives add back.y dummy
 	scoreboard objectives add back.z dummy
 	execute unless score #delay back.config matches 0.. run scoreboard players set #delay back.config 0
+	execute unless score #death back.config matches 0..1 run scoreboard players set #death back.config 0
+	execute in minecraft:overworld store result score #prevOverworldDoImmediateRespawn back.dummy run gamerule doImmediateRespawn
+	execute in minecraft:the_nether store result score #prevNetherDoImmediateRespawn back.dummy run gamerule doImmediateRespawn
+	execute in minecraft:overworld run gamerule doImmediateRespawn true
+	execute in minecraft:the_nether run gamerule doImmediateRespawn false
+	execute in minecraft:overworld store result score #universalGameRules back.dummy run gamerule doImmediateRespawn
+	execute if score #prevOverworldDoImmediateRespawn back.dummy matches 0 in minecraft:overworld run gamerule doImmediateRespawn false
+	execute if score #prevOverworldDoImmediateRespawn back.dummy matches 1 in minecraft:overworld run gamerule doImmediateRespawn true
+	execute if score #prevNetherDoImmediateRespawn back.dummy matches 1 in minecraft:the_nether run gamerule doImmediateRespawn true
+	scoreboard players set #prevOverworldDoImmediateRespawn back.dummy 0
+	scoreboard players set #prevNetherDoImmediateRespawn back.dummy 0
+	scoreboard players set #prevEndDoImmediateRespawn back.dummy 0
+	scoreboard players reset * back.deaths
 }
 function uninstall {
 	execute at @e[type=minecraft:item_frame,tag=back.dimension] run forceload remove ~ ~
@@ -15,9 +29,10 @@ function uninstall {
 	data remove storage back:storage lastDimension
 	data remove storage back:storage temp
 	scoreboard objectives remove back
-	scoreboard objectives remove back.delay
-	scoreboard objectives remove back.dummy
 	scoreboard objectives remove back.config
+	scoreboard objectives remove back.dummy
+	scoreboard objectives remove back.delay
+	scoreboard objectives remove back.deaths
 	scoreboard objectives remove back.x
 	scoreboard objectives remove back.y
 	scoreboard objectives remove back.z
@@ -57,6 +72,9 @@ clock 1t {
 					execute store success score #success back.dummy if score #value back.dummy = @s back.z
 				}
 			}
+			scoreboard players reset @s back.x
+			scoreboard players reset @s back.y
+			scoreboard players reset @s back.z
 			execute if score #success back.dummy matches 0 run tellraw @s [{"text":"You must stand still to teleport.","color":"red"}]
 			execute unless score #success back.dummy matches 0 run {
 				name try_to_go_back
@@ -85,6 +103,26 @@ clock 1t {
 			scoreboard players reset @s back.delay
 		}
 		execute unless score @s back.delay matches 0 run scoreboard players remove @s back.delay 1
+	}
+	execute as @a[scores={back.deaths=1..}] run {
+		name death
+		execute if score #death back.config matches 1 at @s run function back:set_back
+		scoreboard players reset @s back.deaths
+	}
+}
+clock 5s {
+	name check_game_rules
+	execute in minecraft:overworld store result score #doImmediateRespawn back.dummy run gamerule doImmediateRespawn
+	execute if score #doImmediateRespawn back.dummy matches 1 if score #prevOverworldDoImmediateRespawn back.dummy matches 0 run tellraw @a {"text":"The Back data pack cannot detect your death location correctly unless gamerule doImmediateRespawn is false. You may ignore this message if death location saving is disabled.","color":"red"}
+	scoreboard players operation #prevOverworldDoImmediateRespawn back.dummy = #doImmediateRespawn back.dummy
+	execute if score #universalGameRules back.dummy matches 0 run {
+		name check_dimensional_game_rules
+		execute in minecraft:the_nether store result score #doImmediateRespawn back.dummy run gamerule doImmediateRespawn
+		execute if score #doImmediateRespawn back.dummy matches 1 if score #prevNetherDoImmediateRespawn back.dummy matches 0 run tellraw @a {"text":"The Back data pack cannot detect your death location correctly unless gamerule doImmediateRespawn is false. You may ignore this message if death location saving is disabled.","color":"red"}
+		scoreboard players operation #prevNetherDoImmediateRespawn back.dummy = #doImmediateRespawn back.dummy
+		execute in minecraft:the_end store result score #doImmediateRespawn back.dummy run gamerule doImmediateRespawn
+		execute if score #doImmediateRespawn back.dummy matches 1 if score #prevEndDoImmediateRespawn back.dummy matches 0 run tellraw @a {"text":"The Back data pack cannot detect your death location correctly unless gamerule doImmediateRespawn is false. You may ignore this message if death location saving is disabled.","color":"red"}
+		scoreboard players operation #prevEndDoImmediateRespawn back.dummy = #doImmediateRespawn back.dummy
 	}
 }
 dir rotate {
@@ -126,4 +164,5 @@ function set_back {
 }
 function config {
 	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #delay back.config <number>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #delay back.config "},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #delay back.config","color":"aqua"},{"text":".\nEnter the number after clicking.","color":"dark_aqua"}]}},{"text":" to set the number of ticks for which the player must stand still before teleporting after running the back command. (1 second = 20 ticks.) The default is ","color":"dark_aqua"},{"text":"0","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #delay back.config 0"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #delay back.config 0","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#delay","objective":"back.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
+	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #death back.config <0 or 1>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #death back.config "},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #death back.config","color":"aqua"},{"text":".\nEnter 0 or 1 after clicking.","color":"dark_aqua"}]}},{"text":" to (0) disable or (1) enable saving your death location in the back command. The default is ","color":"dark_aqua"},{"text":"0","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #death back.config 0"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #death back.config 0","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#death","objective":"back.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
 }

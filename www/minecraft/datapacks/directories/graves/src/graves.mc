@@ -11,8 +11,8 @@ function load {
 	scoreboard players set #prevOverworldDoImmediateRespawn graves.dummy 0
 	scoreboard players set #prevNetherDoImmediateRespawn graves.dummy 0
 	scoreboard players set #prevEndDoImmediateRespawn graves.dummy 0
-	execute in minecraft:the_nether run gamerule keepInventory false
 	execute in minecraft:overworld run gamerule keepInventory true
+	execute in minecraft:the_nether run gamerule keepInventory false
 	execute in minecraft:overworld store result score #universalGameRules graves.dummy run gamerule keepInventory
 	execute in minecraft:the_nether run gamerule keepInventory true
 	execute in minecraft:the_end run gamerule keepInventory true

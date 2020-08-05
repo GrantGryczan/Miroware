@@ -223,6 +223,9 @@ clock 1t {
 					execute store success score #success homes.dummy if score #value homes.dummy = @s homes.z
 				}
 			}
+			scoreboard players reset @s homes.x
+			scoreboard players reset @s homes.y
+			scoreboard players reset @s homes.z
 			execute if score #success homes.dummy matches 0 run tellraw @s [{"text":"You must stand still to teleport.","color":"red"}]
 			execute unless score #success homes.dummy matches 0 run {
 				name try_to_go_home
