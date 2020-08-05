@@ -1256,7 +1256,7 @@ fileInput.addEventListener("change", () => {
 form.elements.import.addEventListener("click", fileInput.click.bind(fileInput));
 form.addEventListener("submit", evt => {
 	evt.preventDefault();
-	html`<a href="$${URL.createObjectURL(new Blob([`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${html.escape(form.elements.title.value)}</title></head><body></body></html>`], {
+	html`<a href="$${URL.createObjectURL(new Blob([`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${html.escape(form.elements.title.value)}</title></head><body></body></html>`], {
 		type: "text/html"
 	}))}" download="$${form.elements.title.value}.html"></a>`.click();
 });
