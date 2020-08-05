@@ -4,5 +4,5 @@ scoreboard players operation #prevOverworldKeepInventory graves.dummy = #keepInv
 execute in minecraft:overworld store result score #doImmediateRespawn graves.dummy run gamerule doImmediateRespawn
 execute if score #doImmediateRespawn graves.dummy matches 1 if score #prevOverworldDoImmediateRespawn graves.dummy matches 0 run tellraw @a {"text":"The Graves data pack cannot position graves correctly unless gamerule doImmediateRespawn is false.","color":"red"}
 scoreboard players operation #prevOverworldDoImmediateRespawn graves.dummy = #doImmediateRespawn graves.dummy
-execute if score #universalGameRules graves.dummy matches 0 run function graves:check_dimensional_game_rules
+execute if score #dimGameRules graves.dummy matches 1 run function graves:check_dimensional_game_rules
 schedule function graves:check_game_rules 2s

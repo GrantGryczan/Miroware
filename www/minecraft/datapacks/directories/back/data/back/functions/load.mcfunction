@@ -12,7 +12,7 @@ execute in minecraft:overworld store result score #prevOverworldDoImmediateRespa
 execute in minecraft:the_nether store result score #prevNetherDoImmediateRespawn back.dummy run gamerule doImmediateRespawn
 execute in minecraft:overworld run gamerule doImmediateRespawn true
 execute in minecraft:the_nether run gamerule doImmediateRespawn false
-execute in minecraft:overworld store result score #universalGameRules back.dummy run gamerule doImmediateRespawn
+execute in minecraft:overworld store result score #dimGameRules back.dummy run gamerule doImmediateRespawn
 execute if score #prevOverworldDoImmediateRespawn back.dummy matches 0 in minecraft:overworld run gamerule doImmediateRespawn false
 execute if score #prevOverworldDoImmediateRespawn back.dummy matches 1 in minecraft:overworld run gamerule doImmediateRespawn true
 execute if score #prevNetherDoImmediateRespawn back.dummy matches 1 in minecraft:the_nether run gamerule doImmediateRespawn true

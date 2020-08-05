@@ -13,7 +13,7 @@ function load {
 	scoreboard players set #prevEndDoImmediateRespawn graves.dummy 0
 	execute in minecraft:overworld run gamerule keepInventory true
 	execute in minecraft:the_nether run gamerule keepInventory false
-	execute in minecraft:overworld store result score #universalGameRules graves.dummy run gamerule keepInventory
+	execute in minecraft:overworld store result score #dimGameRules graves.dummy run gamerule keepInventory
 	execute in minecraft:the_nether run gamerule keepInventory true
 	execute in minecraft:the_end run gamerule keepInventory true
 	scoreboard players reset * graves.deaths
@@ -173,7 +173,7 @@ clock 2s {
 	execute in minecraft:overworld store result score #doImmediateRespawn graves.dummy run gamerule doImmediateRespawn
 	execute if score #doImmediateRespawn graves.dummy matches 1 if score #prevOverworldDoImmediateRespawn graves.dummy matches 0 run tellraw @a {"text":"The Graves data pack cannot position graves correctly unless gamerule doImmediateRespawn is false.","color":"red"}
 	scoreboard players operation #prevOverworldDoImmediateRespawn graves.dummy = #doImmediateRespawn graves.dummy
-	execute if score #universalGameRules graves.dummy matches 0 run {
+	execute if score #dimGameRules graves.dummy matches 1 run {
 		name check_dimensional_game_rules
 		execute in minecraft:the_nether store result score #keepInventory graves.dummy run gamerule keepInventory
 		execute if score #keepInventory graves.dummy matches 0 if score #prevNetherKeepInventory graves.dummy matches 1 run tellraw @a {"text":"The Graves data pack cannot read player inventories correctly unless gamerule keepInventory is true.","color":"red"}

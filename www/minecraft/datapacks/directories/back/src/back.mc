@@ -13,7 +13,7 @@ function load {
 	execute in minecraft:the_nether store result score #prevNetherDoImmediateRespawn back.dummy run gamerule doImmediateRespawn
 	execute in minecraft:overworld run gamerule doImmediateRespawn true
 	execute in minecraft:the_nether run gamerule doImmediateRespawn false
-	execute in minecraft:overworld store result score #universalGameRules back.dummy run gamerule doImmediateRespawn
+	execute in minecraft:overworld store result score #dimGameRules back.dummy run gamerule doImmediateRespawn
 	execute if score #prevOverworldDoImmediateRespawn back.dummy matches 0 in minecraft:overworld run gamerule doImmediateRespawn false
 	execute if score #prevOverworldDoImmediateRespawn back.dummy matches 1 in minecraft:overworld run gamerule doImmediateRespawn true
 	execute if score #prevNetherDoImmediateRespawn back.dummy matches 1 in minecraft:the_nether run gamerule doImmediateRespawn true
@@ -115,7 +115,7 @@ clock 5s {
 	execute in minecraft:overworld store result score #doImmediateRespawn back.dummy run gamerule doImmediateRespawn
 	execute if score #doImmediateRespawn back.dummy matches 1 if score #prevOverworldDoImmediateRespawn back.dummy matches 0 run tellraw @a {"text":"The Back data pack cannot detect your death location correctly unless gamerule doImmediateRespawn is false. You may ignore this message if death location saving is disabled.","color":"red"}
 	scoreboard players operation #prevOverworldDoImmediateRespawn back.dummy = #doImmediateRespawn back.dummy
-	execute if score #universalGameRules back.dummy matches 0 run {
+	execute if score #dimGameRules back.dummy matches 1 run {
 		name check_dimensional_game_rules
 		execute in minecraft:the_nether store result score #doImmediateRespawn back.dummy run gamerule doImmediateRespawn
 		execute if score #doImmediateRespawn back.dummy matches 1 if score #prevNetherDoImmediateRespawn back.dummy matches 0 run tellraw @a {"text":"The Back data pack cannot detect your death location correctly unless gamerule doImmediateRespawn is false. You may ignore this message if death location saving is disabled.","color":"red"}
