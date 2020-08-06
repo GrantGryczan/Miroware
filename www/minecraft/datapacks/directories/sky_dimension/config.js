@@ -4,7 +4,6 @@ module.exports = {
 	mc: {
 		dev: false,
 		header: "",
-		internalScoreboard: "skyDim.dummy",
 		rootNamespace: null
 	},
 	global: {

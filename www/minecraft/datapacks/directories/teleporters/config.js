@@ -4,7 +4,6 @@ module.exports = {
 	mc: {
 		dev: false,
 		header: "",
-		internalScoreboard: "tpers.dummy",
 		rootNamespace: null
 	},
 	global: {

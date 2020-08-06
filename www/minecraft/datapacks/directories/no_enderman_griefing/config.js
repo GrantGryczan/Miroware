@@ -4,7 +4,6 @@ module.exports = {
 	mc: {
 		dev: false,
 		header: "",
-		internalScoreboard: "noEndGri.dummy",
 		rootNamespace: null
 	},
 	global: {

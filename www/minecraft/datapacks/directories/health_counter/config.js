@@ -4,7 +4,6 @@ module.exports = {
 	mc: {
 		dev: false,
 		header: "",
-		internalScoreboard: "heaCou.dummy",
 		rootNamespace: null
 	},
 	global: {

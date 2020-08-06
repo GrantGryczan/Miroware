@@ -54,14 +54,14 @@ clock 1t {
 				summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["spawn.destination"]}
 				block {
 					name offset_up
-					tp ~ ~ ~
+					tp @s ~ ~ ~
 					execute unless block ~ ~ ~ #spawn:passable if entity @s[y=0,dy=255] positioned ~ ~1 ~ run function $block
 				}
 				execute if block ~ ~ ~ #spawn:passable run {
 					name offset_down
-					tp ~ ~ ~
+					tp @s ~ ~ ~
 					execute positioned ~ ~-1 ~ if block ~ ~ ~ #spawn:passable run function $block
-					execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=spawn.destination] run tp ~ ~ ~
+					execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=spawn.destination] run tp @s ~ ~ ~
 				}
 				kill @e[type=minecraft:area_effect_cloud,tag=spawn.destination]
 			}

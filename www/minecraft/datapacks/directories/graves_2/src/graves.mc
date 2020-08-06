@@ -61,7 +61,7 @@ clock 1t {
 	execute as @e[type=minecraft:armor_stand,tag=graves.model] at @s run {
 		name tick_model
 		tag @s add graves.subject
-		execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] if score @s graves.id = @e[type=minecraft:armor_stand,tag=graves.subject,limit=1] graves.id run tp ~ ~1.375 ~
+		execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] if score @s graves.id = @e[type=minecraft:armor_stand,tag=graves.subject,limit=1] graves.id run tp @s ~ ~1.375 ~
 		tag @s remove graves.subject
 	}
 	execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] at @s if entity @a[gamemode=!spectator,distance=..2] align xz run {
@@ -270,20 +270,20 @@ function create_grave {
 		execute at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["graves.start"]}
 		execute at @s run {
 			name offset_up
-			tp ~ ~ ~
+			tp @s ~ ~ ~
 			execute unless predicate graves:valid positioned ~ ~1 ~ run function $block
 			execute if predicate graves:valid if entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] positioned ~ ~1 ~ run function $block
 		}
 		execute at @s if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run {
 			name offset_down
-			tp ~ ~ ~
+			tp @s ~ ~ ~
 			execute unless entity @s[y=0,dy=0] positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function $block
-			execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=graves.start] run tp ~ ~ ~
+			execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=graves.start] run tp @s ~ ~ ~
 		}
 		kill @e[type=minecraft:area_effect_cloud,tag=graves.start]
 		execute at @s positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run setblock ~ ~ ~ minecraft:grass_block
 		tag @s remove graves.new
-		execute at @s run tp ~0.5 ~ ~0.5
+		execute at @s run tp @s ~0.5 ~ ~0.5
 		execute store result storage graves:storage players[-1].graves[-1].x int 1 run data get entity @s Pos[0]
 		execute store result storage graves:storage players[-1].graves[-1].y int 1 run data get entity @s Pos[1]
 		execute store result storage graves:storage players[-1].graves[-1].z int 1 run data get entity @s Pos[2]
