@@ -13,6 +13,7 @@ function uninstall {
 	scoreboard objectives remove elevs.sneak
 	scoreboard objectives remove elevs.prevSneak
 	schedule clear elevators:tick
+	schedule clear elevators:create_particles
 }
 clock 1t {
 	name tick
