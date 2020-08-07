@@ -102,6 +102,7 @@ clock 1t {
 		execute if score #homes homes.dummy matches 0 run tellraw @s {"text":"You are homeless.","color":"red"}
 		execute unless score #homes homes.dummy matches 0 run {
 			name list_homes
+			execute store result score #reducedDebugInfo homes.dummy run gamerule reducedDebugInfo
 			data modify storage homes:storage temp set from storage homes:storage players[-1].homes
 			execute store result score #remaining homes.dummy store result score #homes homes.dummy run data get storage homes:storage temp
 			block {
@@ -116,13 +117,22 @@ clock 1t {
 					execute if score #id homes.dummy = #dimension homes.dummy run tag @s add homes.target
 				}
 				execute store result score #id homes.dummy run data get storage homes:storage temp[0].id
-				execute store result score #x homes.dummy run data get storage homes:storage temp[0].pos[0]
-				execute store result score #y homes.dummy run data get storage homes:storage temp[0].pos[1]
-				execute store result score #z homes.dummy run data get storage homes:storage temp[0].pos[2]
 				execute if data storage homes:storage temp[0].name run tag @s add homes.nameSet
-				execute if entity @s[tag=homes.nameSet] run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"storage":"homes:storage","nbt":"temp[0].name","interpret":true,"color":"aqua"},{"text":" at (","color":"dark_aqua"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"dark_aqua"},{"text":") in ","color":"dark_aqua"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"dark_aqua"}]
-				execute unless entity @s[tag=homes.nameSet] if score #id homes.dummy matches 1 run tellraw @s [{"text":"1. ","color":"dark_aqua"},{"text":"Home","color":"aqua"},{"text":" at (","color":"dark_aqua"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"dark_aqua"},{"text":") in ","color":"dark_aqua"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"dark_aqua"}]
-				execute unless entity @s[tag=homes.nameSet] unless score #id homes.dummy matches 1 run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"text":"Home ","color":"aqua"},{"score":{"name":"#id","objective":"homes.dummy"},"color":"aqua"},{"text":" at (","color":"dark_aqua"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"dark_aqua"},{"text":") in ","color":"dark_aqua"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"dark_aqua"}]
+				execute if score #reducedDebugInfo homes.dummy matches 1 run {
+					name display_home_with_reduced_info
+					execute if entity @s[tag=homes.nameSet] run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"storage":"homes:storage","nbt":"temp[0].name","interpret":true,"color":"aqua"}]
+					execute unless entity @s[tag=homes.nameSet] if score #id homes.dummy matches 1 run tellraw @s [{"text":"1. ","color":"dark_aqua"},{"text":"Home","color":"aqua"}]
+					execute unless entity @s[tag=homes.nameSet] unless score #id homes.dummy matches 1 run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"text":"Home ","color":"aqua"},{"score":{"name":"#id","objective":"homes.dummy"},"color":"aqua"}]
+				}
+				execute unless score #reducedDebugInfo homes.dummy matches 1 run {
+					name display_home_with_all_info
+					execute store result score #x homes.dummy run data get storage homes:storage temp[0].pos[0]
+					execute store result score #y homes.dummy run data get storage homes:storage temp[0].pos[1]
+					execute store result score #z homes.dummy run data get storage homes:storage temp[0].pos[2]
+					execute if entity @s[tag=homes.nameSet] run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"storage":"homes:storage","nbt":"temp[0].name","interpret":true,"color":"aqua"},{"text":" at (","color":"dark_aqua"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"dark_aqua"},{"text":") in ","color":"dark_aqua"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"dark_aqua"}]
+					execute unless entity @s[tag=homes.nameSet] if score #id homes.dummy matches 1 run tellraw @s [{"text":"1. ","color":"dark_aqua"},{"text":"Home","color":"aqua"},{"text":" at (","color":"dark_aqua"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"dark_aqua"},{"text":") in ","color":"dark_aqua"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"dark_aqua"}]
+					execute unless entity @s[tag=homes.nameSet] unless score #id homes.dummy matches 1 run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"text":"Home ","color":"aqua"},{"score":{"name":"#id","objective":"homes.dummy"},"color":"aqua"},{"text":" at (","color":"dark_aqua"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"dark_aqua"},{"text":") in ","color":"dark_aqua"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"dark_aqua"}]
+				}
 				tag @s remove homes.nameSet
 				tag @e[type=minecraft:item_frame,tag=homes.dimension] remove homes.target
 				data remove storage homes:storage temp[0]

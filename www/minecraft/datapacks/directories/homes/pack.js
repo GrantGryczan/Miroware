@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "homes",
-	version: "1.3.3",
+	version: "1.3.4",
 	name: "Homes",
 	compatibility: ["1.16"],
 	description: `
