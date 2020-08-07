@@ -1,2 +1,2 @@
-scoreboard players set #delay mulSle.dummy 0
+scoreboard players reset * mulSle.sleepTime
 bossbar set multiplayer_sleep:progress visible false

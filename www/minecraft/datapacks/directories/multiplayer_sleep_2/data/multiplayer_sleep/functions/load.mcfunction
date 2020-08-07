@@ -1,21 +1,14 @@
-scoreboard objectives add mulSle.config dummy "Multiplayer Sleep Config"
+scoreboard objectives add mulSle.config trigger "Multiplayer Sleep Config"
 scoreboard objectives add mulSle trigger "Multiplayer Sleep"
 scoreboard objectives add mulSle.dummy dummy
+scoreboard objectives add mulSle.sleepTime dummy
 scoreboard players set #total mulSle.config 100
-execute unless score #percent mulSle.config matches 0..100 run scoreboard players set #percent mulSle.config 50
-scoreboard players set #bit0 mulSle.dummy 1
-scoreboard players set #bit1 mulSle.dummy 2
-scoreboard players set #bit2 mulSle.dummy 4
-scoreboard players set #bit3 mulSle.dummy 8
-scoreboard players set #bit4 mulSle.dummy 16
-scoreboard players set #bit5 mulSle.dummy 32
-scoreboard players set #bit6 mulSle.dummy 64
-scoreboard players set #bit7 mulSle.dummy 128
-scoreboard players set #bit8 mulSle.dummy 256
-scoreboard players set #bit9 mulSle.dummy 512
-scoreboard players set #bit10 mulSle.dummy 1024
-scoreboard players set #bit11 mulSle.dummy 2048
-scoreboard players set #bit12 mulSle.dummy 4096
-scoreboard players set #bit13 mulSle.dummy 8192
-scoreboard players set #bit14 mulSle.dummy 16384
+execute unless score #percent mulSle.config matches 0..100 run scoreboard players set #percent mulSle.config 0
+execute unless score #display mulSle.config matches 1..3 run scoreboard players set #display mulSle.config 1
 bossbar add multiplayer_sleep:progress "Multiplayer Sleep Progress"
+bossbar add multiplayer_sleep:preview "Multiplayer Sleep Progress"
+bossbar set multiplayer_sleep:preview name "1 of 2 player(s) asleep"
+bossbar set multiplayer_sleep:preview visible true
+bossbar set multiplayer_sleep:preview value 1
+bossbar set multiplayer_sleep:preview max 2
+bossbar set multiplayer_sleep:preview players

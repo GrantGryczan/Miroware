@@ -1,0 +1,3 @@
+scoreboard players add #asleep mulSle.dummy 1
+execute if score #asleep mulSle.dummy = #total mulSle.dummy run tellraw @a[tag=mulSle.display3] ["",{"selector":"@s","color":"aqua"},{"text":" is now sleeping. Sweet dreams!","color":"dark_aqua"}]
+execute unless score #asleep mulSle.dummy = #total mulSle.dummy unless score #asleep mulSle.dummy > #total mulSle.dummy run tellraw @a[tag=mulSle.display3] ["",{"selector":"@s","color":"aqua"},{"text":" is now sleeping. ","color":"dark_aqua"},{"score":{"name":"#asleep","objective":"mulSle.dummy"},"color":"aqua"},{"text":" of ","color":"aqua"},{"score":{"name":"#total","objective":"mulSle.dummy"},"color":"aqua"},{"text":" player(s) asleep","color":"dark_aqua"}]
