@@ -6,8 +6,8 @@ module.exports = {
 	description: `
 		Only a fraction of players in the overworld must sleep to skip the night and the rain.<br>
 		<span class="more">
-			Enter "/trigger mulSle" for details.<br>
-			Enter "/function multiplayer_sleep:config" to configure the percent of players required to sleep or the color of the sleep progress bar.
+			Enter "/trigger mulSle" for details and settings.<br>
+			Enter "/function multiplayer_sleep:config" to configure the percent of players required to sleep or the color of the sleep progress boss bar.
 		</span>
 	`,
 	tags: []
