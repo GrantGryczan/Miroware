@@ -307,7 +307,7 @@ function create_grave {
 				tp @s ~ ~-1.375 ~
 				tag @s remove graves.new
 			}
-			loot spawn ~ ~ ~ loot graves:name_tag
+			loot spawn ~ 1000 ~ loot graves:name_tag
 			tag @e[type=minecraft:item,nbt={Item:{tag:{gravesNameTag:1b}}}] add graves.nameTag
 			data modify entity @s CustomName set from entity @e[type=minecraft:item,tag=graves.nameTag,limit=1] Item.tag.display.Name
 			execute as @e[type=minecraft:item,tag=graves.nameTag,limit=1] run {
