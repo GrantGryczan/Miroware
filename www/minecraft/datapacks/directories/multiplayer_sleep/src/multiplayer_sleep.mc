@@ -105,7 +105,7 @@ clock 1t {
 				scoreboard players set #remaining mulSle.dummy 24000
 				execute store result score #time mulSle.dummy run time query daytime
 				scoreboard players operation #remaining mulSle.dummy -= #time mulSle.dummy
-				LOOP(15, i){
+				LOOP (15, i) {
 					execute if score #remaining mulSle.dummy matches <%2 ** (14 - this.i)%>.. run {
 						name add_time/bit_<%14 - this.i%>
 						time add <%2 ** (14 - this.i)%>

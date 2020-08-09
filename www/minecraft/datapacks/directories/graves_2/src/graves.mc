@@ -140,7 +140,7 @@ function interact_with_grave {
 			}
 			execute as @e[type=minecraft:armor_stand,tag=graves.activated] run {
 				name fix_equipment/all
-				LOOP(4, i){
+				LOOP (4, i) {
 					execute store result score #count graves.dummy run data get entity @s ArmorItems[<%this.i%>].Count
 					execute if score #count graves.dummy matches 1 run {
 						name fix_equipment/check_<%this.i%>
