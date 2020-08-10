@@ -1,0 +1,18 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:potion",
+			"nbt": "{Potion:'minecraft:healing'}"
+		},
+		"title": "Health Counter",
+		"description": ["",{"text":"Display each player's health below their nametag.","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}
