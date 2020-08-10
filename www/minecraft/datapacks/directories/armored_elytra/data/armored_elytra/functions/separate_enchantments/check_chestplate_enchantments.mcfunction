@@ -1,0 +1,2 @@
+scoreboard players operation #chestplateRemaining armEly.dummy = #chestplateTotal armEly.dummy
+function armored_elytra:separate_enchantments/check_chestplate_enchantment

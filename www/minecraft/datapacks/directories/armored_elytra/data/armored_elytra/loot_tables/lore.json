@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:command",
+	"pools": [
+		{
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "minecraft:item",
+					"name": "minecraft:stone_button",
+					"functions": [
+						{
+							"function": "minecraft:set_lore",
+							"entity": "this",
+							"lore": [
+								["",{"text":"+ ","color":"dark_aqua","italic":false},{"selector":"@e[type=minecraft:item,tag=armEly.chestplate]","color":"dark_aqua","italic":false}]
+							]
+						},
+						{
+							"function": "minecraft:set_nbt",
+							"tag": "{armElyLore:1b}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
