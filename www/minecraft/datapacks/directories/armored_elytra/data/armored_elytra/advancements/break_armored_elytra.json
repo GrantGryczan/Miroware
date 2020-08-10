@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:air"
+		},
+		"title": "",
+		"description": "",
+		"show_toast": false,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"item_durability_changed": {
+			"trigger": "minecraft:item_durability_changed",
+			"conditions": {
+				"durability": {
+					"max": 1
+				},
+				"item": {
+					"item": "minecraft:elytra",
+					"nbt": "{armElyData:{armored:1b}}"
+				}
+			}
+		}
+	},
+	"rewards": {
+		"function": "armored_elytra:break_armored_elytra"
+	}
+}

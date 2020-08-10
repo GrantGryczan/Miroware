@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "armored_elytra",
-	version: "1.0.0",
+	version: "1.0.1",
 	name: "Armored Elytra",
 	compatibility: ["1.16"],
 	description: `
