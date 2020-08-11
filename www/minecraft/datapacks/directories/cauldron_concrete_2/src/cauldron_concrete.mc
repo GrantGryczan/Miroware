@@ -8,10 +8,10 @@ function load {
 function uninstall {
 	kill a093751a-2c77-4658-9d5f-62ab4494bdaf
 	forceload remove 16562064 -22242912
-	schedule clear cauldron_concrete:tick
+	schedule clear cauldron_concrete:check_for_items_in_filled_cauldrons
 }
-clock 1t {
-	name tick
+clock 1s {
+	name check_for_items_in_filled_cauldrons
 	execute as @e[type=minecraft:item] at @s if block ~ ~ ~ minecraft:cauldron unless block ~ ~ ~ minecraft:cauldron[level=0] run {
 		name check_item
 		tag @s add cauCon.subject

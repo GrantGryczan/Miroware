@@ -1,3 +1,3 @@
 kill a093751a-2c77-4658-9d5f-62ab4494bdaf
 forceload remove 16562064 -22242912
-schedule clear cauldron_concrete:tick
+schedule clear cauldron_concrete:check_for_items_in_filled_cauldrons

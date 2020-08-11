@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "cauldron_concrete",
-	version: "2.0.2",
+	version: "2.0.3",
 	name: "Cauldron Concrete",
 	compatibility: ["1.16"],
 	description: `

@@ -1,1 +1,1 @@
-{"replace":false,"values":["cauldron_concrete:load","cauldron_concrete:tick"]}
+{"replace":false,"values":["cauldron_concrete:load","cauldron_concrete:check_for_items_in_filled_cauldrons"]}
