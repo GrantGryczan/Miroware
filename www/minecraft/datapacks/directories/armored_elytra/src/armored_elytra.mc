@@ -62,33 +62,33 @@ clock 1s {
 					data modify entity @s Item.tag.armElyData.elytra set from entity @s Item
 					scoreboard players set #found armEly.dummy 0
 					execute if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:netherite_chestplate"}}] run {
-						name armor_with_netherite
-						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:6},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Slot:"chest",Operation:0,Amount:8.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]},{AttributeName:"minecraft:generic.armor_toughness",Slot:"chest",Operation:0,Amount:3.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]},{AttributeName:"minecraft:generic.knockback_resistance",Slot:"chest",Operation:0,Amount:0.1d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522556}}}
+						name armor/netherite
+						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:6},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Name:"Armor",Slot:"chest",Operation:0,Amount:8.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]},{AttributeName:"minecraft:generic.armor_toughness",Name:"Armor Toughness",Slot:"chest",Operation:0,Amount:3.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]},{AttributeName:"minecraft:generic.knockback_resistance",Name:"Knockback Resistance",Slot:"chest",Operation:0,Amount:0.1d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522556}}}
 						scoreboard players set #found armEly.dummy 1
 					}
 					execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:diamond_chestplate"}}] run {
-						name armor_with_diamond
-						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:5},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Slot:"chest",Operation:0,Amount:8.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]},{AttributeName:"minecraft:generic.armor_toughness",Slot:"chest",Operation:0,Amount:2.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522555}}}
+						name armor/diamond
+						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:5},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Name:"Armor",Slot:"chest",Operation:0,Amount:8.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]},{AttributeName:"minecraft:generic.armor_toughness",Name:"Armor Toughness",Slot:"chest",Operation:0,Amount:2.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522555}}}
 						scoreboard players set #found armEly.dummy 1
 					}
 					execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:iron_chestplate"}}] run {
-						name armor_with_iron
-						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:4},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Slot:"chest",Operation:0,Amount:6.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522554}}}
+						name armor/iron
+						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:4},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Name:"Armor",Slot:"chest",Operation:0,Amount:6.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522554}}}
 						scoreboard players set #found armEly.dummy 1
 					}
 					execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:golden_chestplate"}}] run {
-						name armor_with_gold
-						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:3},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Slot:"chest",Operation:0,Amount:5.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522553}}}
+						name armor/gold
+						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:3},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Name:"Armor",Slot:"chest",Operation:0,Amount:5.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522553}}}
 						scoreboard players set #found armEly.dummy 1
 					}
 					execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:chainmail_chestplate"}}] run {
-						name armor_with_chain
-						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:2},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Slot:"chest",Operation:0,Amount:5.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522552}}}
+						name armor/chain
+						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:2},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Name:"Armor",Slot:"chest",Operation:0,Amount:5.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522552}}}
 						scoreboard players set #found armEly.dummy 1
 					}
 					execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:leather_chestplate"}}] run {
-						name armor_with_leather
-						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:1},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Slot:"chest",Operation:0,Amount:3.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522551}}}
+						name armor/leather
+						data merge entity @s {PickupDelay:0s,Item:{tag:{armElyData:{armored:1b,material:1},AttributeModifiers:[{AttributeName:"minecraft:generic.armor",Name:"Armor",Slot:"chest",Operation:0,Amount:3.0d,UUID:[I;-1623373971,-1055374012,-2090507132,1761916046]}],CustomModelData:13522551}}}
 						scoreboard players set #found armEly.dummy 1
 					}
 					data modify entity @s Item.tag.armElyData.chestplate set from entity @e[type=minecraft:item,tag=armEly.chestplate,limit=1] Item

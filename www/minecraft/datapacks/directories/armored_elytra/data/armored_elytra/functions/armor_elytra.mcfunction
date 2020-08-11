@@ -1,11 +1,11 @@
 data modify entity @s Item.tag.armElyData.elytra set from entity @s Item
 scoreboard players set #found armEly.dummy 0
-execute if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:netherite_chestplate"}}] run function armored_elytra:armor_with_netherite
-execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:diamond_chestplate"}}] run function armored_elytra:armor_with_diamond
-execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:iron_chestplate"}}] run function armored_elytra:armor_with_iron
-execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:golden_chestplate"}}] run function armored_elytra:armor_with_gold
-execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:chainmail_chestplate"}}] run function armored_elytra:armor_with_chain
-execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:leather_chestplate"}}] run function armored_elytra:armor_with_leather
+execute if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:netherite_chestplate"}}] run function armored_elytra:armor/netherite
+execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:diamond_chestplate"}}] run function armored_elytra:armor/diamond
+execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:iron_chestplate"}}] run function armored_elytra:armor/iron
+execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:golden_chestplate"}}] run function armored_elytra:armor/gold
+execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:chainmail_chestplate"}}] run function armored_elytra:armor/chain
+execute if score #found armEly.dummy matches 0 if entity @e[type=minecraft:item,tag=armEly.chestplate,nbt={Item:{id:"minecraft:leather_chestplate"}}] run function armored_elytra:armor/leather
 data modify entity @s Item.tag.armElyData.chestplate set from entity @e[type=minecraft:item,tag=armEly.chestplate,limit=1] Item
 execute store success score #success armEly.dummy if data entity @e[type=minecraft:item,tag=armEly.chestplate,limit=1] Item.tag.display.Name
 execute if score #success armEly.dummy matches 1 run loot spawn ~ 1000 ~ loot armored_elytra:named_lore
