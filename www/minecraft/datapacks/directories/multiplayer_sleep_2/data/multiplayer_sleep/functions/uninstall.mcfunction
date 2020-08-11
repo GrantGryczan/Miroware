@@ -1,7 +1,7 @@
-scoreboard objectives remove mulSle.config
-scoreboard objectives remove mulSle
-scoreboard objectives remove mulSle.dummy
-scoreboard objectives remove mulSle.sleepTime
+scoreboard objectives remove mpSleep.config
+scoreboard objectives remove mpSleep
+scoreboard objectives remove mpSleep.dummy
+scoreboard objectives remove mpSleep.sleep
 bossbar remove multiplayer_sleep:progress
 bossbar remove multiplayer_sleep:preview
 schedule clear multiplayer_sleep:tick

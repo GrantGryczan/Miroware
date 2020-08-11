@@ -1,2 +1,2 @@
 time add 2
-scoreboard players remove #remaining mulSle.dummy 2
+scoreboard players remove #remaining mpSleep.dummy 2

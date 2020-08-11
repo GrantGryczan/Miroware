@@ -1,2 +1,2 @@
 time add 16
-scoreboard players remove #remaining mulSle.dummy 16
+scoreboard players remove #remaining mpSleep.dummy 16
