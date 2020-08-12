@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "sky_dimension",
-	version: "1.0.1",
+	version: "1.0.2",
 	name: "Sky Dimension",
 	compatibility: ["1.16"],
 	description: `

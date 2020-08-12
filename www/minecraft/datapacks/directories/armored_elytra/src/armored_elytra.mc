@@ -92,11 +92,11 @@ clock 1s {
 						scoreboard players set #found armEly.dummy 1
 					}
 					data modify entity @s Item.tag.armElyData.chestplate set from entity @e[type=minecraft:item,tag=armEly.chestplate,limit=1] Item
-					execute store success score #success armEly.dummy if data entity @e[type=minecraft:item,tag=armEly.chestplate,limit=1] Item.tag.display.Name
+					execute store success score #success armEly.dummy if data entity @s Item.tag.armElyData.chestplate.tag.display.Name
 					execute if score #success armEly.dummy matches 1 run loot spawn ~ 1000 ~ loot armored_elytra:named_lore
 					execute unless score #success armEly.dummy matches 1 run loot spawn ~ 1000 ~ loot armored_elytra:lore
 					tag @e[type=minecraft:item,nbt={Item:{tag:{armElyLore:1b}}}] add armEly.lore
-					data modify entity @s Item.tag.display.Lore set from entity @e[type=minecraft:item,tag=armEly.lore,limit=1] Item.tag.display.Lore
+					data modify entity @s Item.tag.display.Lore append from entity @e[type=minecraft:item,tag=armEly.lore,limit=1] Item.tag.display.Lore[0]
 					kill @e[type=minecraft:item,tag=armEly.lore]
 					execute store result score #elytraValue armEly.dummy run data get entity @s Item.tag.RepairCost
 					data modify storage armored_elytra:storage elytraEnch set value []

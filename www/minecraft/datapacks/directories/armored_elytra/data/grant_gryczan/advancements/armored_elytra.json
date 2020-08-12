@@ -5,7 +5,7 @@
 			"nbt": "{CustomModelData:13522556}"
 		},
 		"title": "Armored Elytra      ",
-		"description": ["",{"text":"Drop","color":"gold"},{"text":" elytra and a chestplate on an anvil to merge them into one item.\n","color":"dark_aqua"},{"text":"Drop","color":"gold"},{"text":" the merged item on a grindstone to separate them again.\n","color":"dark_aqua"},{"text":"Enchantments","color":"gold"},{"text":" are kept safely between merging and separating.","color":"dark_aqua"}],
+		"description": ["",{"text":"Drop","color":"gold"},{"text":" elytra and a chestplate on an anvil to merge them into one item.\n","color":"dark_aqua"},{"text":"Drop","color":"gold"},{"text":" the merged item on a grindstone to separate them again.\n","color":"dark_aqua"},{"text":"Enchantments","color":"gold"},{"text":" are kept safely between merging and separating.\n","color":"dark_aqua"},{"text":"Burning","color":"gold"},{"text":" a netherite armored elytra will keep the chestplate but burn off the elytra.","color":"dark_aqua"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

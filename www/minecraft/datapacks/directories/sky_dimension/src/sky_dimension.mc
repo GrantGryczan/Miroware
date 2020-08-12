@@ -1,6 +1,3 @@
-function load {
-	
-}
 function uninstall {
 	schedule clear sky_dimension:tick
 }
