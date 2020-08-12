@@ -1,4 +1,4 @@
 function graves:rotate/players
-execute store success score #success graves.dummy run data get storage graves:storage players[-1].graves[-1]
+execute store success score #success graves.dummy if data storage graves:storage players[-1].graves[-1]
 execute if score #success graves.dummy matches 1 run tellraw @s [{"text":"Your last grave is at ","color":"dark_aqua"},{"text":"(","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"aqua"},{"text":", ","color":"aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"aqua"},{"text":")","color":"aqua"},{"text":" in ","color":"dark_aqua"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].dim"},{"text":".","color":"dark_aqua"}]
 execute unless score #success graves.dummy matches 1 run tellraw @s {"text":"You do not have a last grave.","color":"red"}

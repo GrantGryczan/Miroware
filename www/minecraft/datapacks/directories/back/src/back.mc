@@ -45,7 +45,7 @@ clock 1t {
 	execute as @a[scores={back=1..}] at @s run {
 		name trigger_back
 		function back:rotate/players
-		execute store success score #success back.dummy run data get storage back:storage players[-1].back
+		execute store success score #success back.dummy if data storage back:storage players[-1].back
 		execute if score #success back.dummy matches 0 run tellraw @s [{"text":"You have nowhere to go back to.","color":"red"}]
 		execute unless score #success back.dummy matches 0 run {
 			name start_to_go_back
@@ -79,14 +79,14 @@ clock 1t {
 			execute if score #success back.dummy matches 0 run tellraw @s [{"text":"You must stand still to teleport.","color":"red"}]
 			execute unless score #success back.dummy matches 0 run {
 				name try_to_go_back
-				execute store success score #success back.dummy run data get storage back:storage players[-1].back
+				execute store success score #success back.dummy if data storage back:storage players[-1].back
 				execute if score #success back.dummy matches 0 run tellraw @s [{"text":"You have nowhere to go back to.","color":"red"}]
 				execute unless score #success back.dummy matches 0 run {
 					name go_back
-					execute store result score #dimension back.dummy run data get storage back:storage players[-1].back.dim
+					execute store result score #dimension back.dummy if data storage back:storage players[-1].back.dim
 					execute as @e[type=minecraft:item_frame,tag=back.dimension] run {
 						name try_to_summon_destination
-						execute store result score #id back.dummy run data get entity @s Item.tag.backData.id
+						execute store result score #id back.dummy if data entity @s Item.tag.backData.id
 						execute if score #id back.dummy = #dimension back.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["back.destination"]}
 					}
 					tag @s add back.subject

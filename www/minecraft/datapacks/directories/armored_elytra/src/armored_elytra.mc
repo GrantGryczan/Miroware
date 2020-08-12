@@ -235,8 +235,7 @@ dir separate_enchantments {
 				}
 			}
 		}
-		data modify storage armored_elytra:storage ench set from storage armored_elytra:storage item.tag.Enchantments
-		execute store result score #remaining armEly.dummy run data get storage armored_elytra:storage ench
+		execute store result score #remaining armEly.dummy run data get storage armored_elytra:storage item.tag.Enchantments
 		execute unless score #remaining armEly.dummy matches 0 run {
 			name shift_enchantment
 			scoreboard players set #found armEly.dummy 0
@@ -245,12 +244,12 @@ dir separate_enchantments {
 				scoreboard players operation #chestplateRemaining armEly.dummy = #chestplateTotal armEly.dummy
 				block {
 					name check_chestplate_enchantment
-					data modify storage armored_elytra:storage temp set from storage armored_elytra:storage ench[0].id
+					data modify storage armored_elytra:storage temp set from storage armored_elytra:storage item.tag.Enchantments[0].id
 					execute store success score #success armEly.dummy run data modify storage armored_elytra:storage temp set from storage armored_elytra:storage chestplateEnch[0].id
 					execute if score #success armEly.dummy matches 0 run {
 						name add_enchantment_to_chestplate
 						scoreboard players set #found armEly.dummy 1
-						data modify storage armored_elytra:storage chestplateFinalEnch append from storage armored_elytra:storage ench[0]
+						data modify storage armored_elytra:storage chestplateFinalEnch append from storage armored_elytra:storage item.tag.Enchantments[0]
 						data remove storage armored_elytra:storage chestplateEnch[0]
 						scoreboard players remove #chestplateTotal armEly.dummy 1
 					}
@@ -263,17 +262,23 @@ dir separate_enchantments {
 					}
 				}
 			}
-			execute if score #found armEly.dummy matches 0 run data modify storage armored_elytra:storage elytraFinalEnch append from storage armored_elytra:storage ench[0]
-			data remove storage armored_elytra:storage ench[0]
+			execute if score #found armEly.dummy matches 0 run data modify storage armored_elytra:storage elytraFinalEnch append from storage armored_elytra:storage item.tag.Enchantments[0]
+			data remove storage armored_elytra:storage item.tag.Enchantments[0]
 			scoreboard players remove #remaining armEly.dummy 1
 			execute unless score #remaining armEly.dummy matches 0 run function $block
 		}
-		data modify storage armored_elytra:storage item.tag.armElyData.elytra.tag.Enchantments set from storage armored_elytra:storage elytraFinalEnch
-		execute unless data storage armored_elytra:storage elytraFinalEnch run data remove storage armored_elytra:storage item.tag.armElyData.elytra.tag.Enchantments
-		data modify storage armored_elytra:storage item.tag.armElyData.chestplate.tag.Enchantments set from storage armored_elytra:storage chestplateFinalEnch
-		execute unless data storage armored_elytra:storage chestplateFinalEnch run data remove storage armored_elytra:storage item.tag.armElyData.chestplate.tag.Enchantments
-		data modify storage armored_elytra:storage item.tag.armElyData.elytra.tag.Damage set from storage armored_elytra:storage item.tag.Damage
-		data modify storage armored_elytra:storage item.tag.armElyData.elytra.tag.display.Name set from storage armored_elytra:storage item.tag.display.Name
+		execute store success score #success armEly.dummy if data storage armored_elytra:storage elytraFinalEnch
+		execute if score #success armEly.dummy matches 1 run data modify storage armored_elytra:storage item.tag.armElyData.elytra.tag.Enchantments set from storage armored_elytra:storage elytraFinalEnch
+		execute unless score #success armEly.dummy matches 1 run data remove storage armored_elytra:storage item.tag.armElyData.elytra.tag.Enchantments
+		execute store success score #success armEly.dummy if data storage armored_elytra:storage chestplateFinalEnch
+		execute if score #success armEly.dummy matches 1 run data modify storage armored_elytra:storage item.tag.armElyData.chestplate.tag.Enchantments set from storage armored_elytra:storage chestplateFinalEnch
+		execute unless score #success armEly.dummy matches 1 run data remove storage armored_elytra:storage item.tag.armElyData.chestplate.tag.Enchantments
+		execute store success score #success armEly.dummy if data storage armored_elytra:storage item.tag.Damage
+		execute if score #success armEly.dummy matches 1 run data modify storage armored_elytra:storage item.tag.armElyData.elytra.tag.Damage set from storage armored_elytra:storage item.tag.Damage
+		execute unless score #success armEly.dummy matches 1 run data remove storage armored_elytra:storage item.tag.armElyData.elytra.tag.Damage
+		execute store success score #success armEly.dummy if data storage armored_elytra:storage item.tag.display.Name
+		execute if score #success armEly.dummy matches 1 run data modify storage armored_elytra:storage item.tag.armElyData.elytra.tag.display.Name set from storage armored_elytra:storage item.tag.display.Name
+		execute unless score #success armEly.dummy matches 1 run data remove storage armored_elytra:storage item.tag.armElyData.elytra.tag.display.Name
 		data modify entity @e[type=minecraft:item,tag=armEly.elytra,limit=1] Item set from storage armored_elytra:storage item.tag.armElyData.elytra
 		data modify entity @e[type=minecraft:item,tag=armEly.chestplate,limit=1] Item set from storage armored_elytra:storage item.tag.armElyData.chestplate
 		data remove storage armored_elytra:storage elytraFinalEnch
