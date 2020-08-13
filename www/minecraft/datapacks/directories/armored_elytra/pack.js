@@ -8,7 +8,7 @@ module.exports = {
 		Drop the merged item on a grindstone to separate them again.<br>
 		<span class="more">
 			Enchantments are kept safely between merging and separating.<br>
-			Burning a netherite armored elytra will keep the chestplate but burn off the elytra.
+			Burning netherite armored elytra will keep the chestplate but burn off the elytra.
 		</span>
 	`,
 	tags: []
