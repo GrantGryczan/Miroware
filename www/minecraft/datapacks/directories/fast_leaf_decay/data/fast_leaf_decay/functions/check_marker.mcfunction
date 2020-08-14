@@ -1,0 +1,2 @@
+execute unless block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] run kill @s
+execute if predicate fast_leaf_decay:should_decay if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] align xyz run function fast_leaf_decay:decay

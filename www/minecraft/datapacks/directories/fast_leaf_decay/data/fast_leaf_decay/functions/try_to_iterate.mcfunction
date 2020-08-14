@@ -1,0 +1,8 @@
+particle soul_fire_flame ~0.5 ~0.5 ~0.5
+execute if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run summon minecraft:item_frame ~ ~ ~ {Tags:["leafDec.marker","leafDec.new"],Fixed:1b,Invisible:1b}
+execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
