@@ -11,5 +11,6 @@ module.exports = {
 			Burning netherite armored elytra will keep the chestplate but burn off the elytra.
 		</span>
 	`,
-	tags: []
+	tags: ["armored", "elytra", "colytra", "plated", "chestplate", "chestplates", "chest", "plate", "plates", "wings", "anvil", "grindstone", "merge", "combine", "wear", "both", "at once", "at the same time", "add", "craft", "together", "slot"],
+	video: "UCUivDpVDhE"
 };
