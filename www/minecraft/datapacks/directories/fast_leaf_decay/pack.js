@@ -6,6 +6,5 @@ module.exports = {
 	description: `
 		Leaves decay much faster.
 	`,
-	tags: [],
-	hidden: true
+	tags: []
 };
