@@ -57,7 +57,7 @@ clock 1t {
 			execute if score @s leafDec.dummy matches 7.. unless entity @s[tag=leafDec.front] run {
 				name check_marker
 				execute unless block ~ ~ ~ #minecraft:leaves[distance=7] run function fast_leaf_decay:destroy_marker
-				execute if score #continue leafDec.dummy matches 1 if predicate fast_leaf_decay:should_decay align xyz run {
+				execute if score #continue leafDec.dummy matches 1 if predicate fast_leaf_decay:should_decay run {
 					name decay
 					execute store result score #doTileDrops leafDec.dummy run gamerule doTileDrops
 					execute if score #doTileDrops leafDec.dummy matches 1 run loot spawn ~0.5 ~0.5 ~0.5 mine ~ ~ ~
