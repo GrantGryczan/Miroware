@@ -1,0 +1,125 @@
+{
+	"condition": "minecraft:alternative",
+	"terms": [
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.oakL": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.spruceL": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.birchL": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.jungleL": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.acaciaL": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.darkOakL": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.oakS": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.spruceS": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.birchS": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.jungleS": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.acaciaS": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		},
+		{
+			"condition": "minecraft:entity_scores",
+			"entity": "this",
+			"scores": {
+				"leafDec.darkOakS": {
+					"min": 1,
+					"max": 2147483647
+				}
+			}
+		}
+	]
+}

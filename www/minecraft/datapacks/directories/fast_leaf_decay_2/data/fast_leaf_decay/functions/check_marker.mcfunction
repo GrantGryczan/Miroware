@@ -1,0 +1,2 @@
+execute unless block ~ ~ ~ #minecraft:leaves[distance=7] run function fast_leaf_decay:destroy_marker
+execute if score #continue leafDec.dummy matches 1 if predicate fast_leaf_decay:should_decay align xyz run function fast_leaf_decay:decay
