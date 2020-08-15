@@ -1,6 +1,6 @@
-execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+execute if block ~ ~ ~ #minecraft:leaves[distance=0] run function fast_leaf_decay:check_leaves/0
+execute if block ~ ~ ~ #minecraft:leaves[distance=1] run function fast_leaf_decay:check_leaves/1
+execute if block ~ ~ ~ #minecraft:leaves[distance=2] run function fast_leaf_decay:check_leaves/2
+execute if block ~ ~ ~ #minecraft:leaves[distance=3] run function fast_leaf_decay:check_leaves/3
+execute if block ~ ~ ~ #minecraft:leaves[distance=4] run function fast_leaf_decay:check_leaves/4
+execute if predicate fast_leaf_decay:leaves/5 run function fast_leaf_decay:check_leaves/6

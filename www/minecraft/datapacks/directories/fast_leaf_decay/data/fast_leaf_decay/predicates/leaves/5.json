@@ -1,0 +1,14 @@
+{
+	"condition": "minecraft:location_check",
+	"predicate": {
+		"block": {
+			"tag": "minecraft:leaves",
+			"state": {
+				"persistent": false,
+				"distance": {
+					"min": 6
+				}
+			}
+		}
+	}
+}

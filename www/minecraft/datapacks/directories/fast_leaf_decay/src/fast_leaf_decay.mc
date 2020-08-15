@@ -45,6 +45,7 @@ clock 1t {
 	name tick
 	execute as @e[type=minecraft:item_frame,tag=leafDec.marker] at @s run {
 		name tick_marker
+		particle flame ~ ~-0.5 ~
 		scoreboard players add @s leafDec.dummy 1
 		execute if score @s leafDec.dummy matches 7.. run {
 			name check_marker
@@ -76,10 +77,9 @@ clock 1t {
 		block {
 			name raycast
 			scoreboard players remove #steps leafDec.dummy 1
-			execute align xyz run {
+			execute align xyz unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run {
 				name try_to_iterate
-				particle soul_fire_flame ~0.5 ~0.5 ~0.5
-				execute if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run summon minecraft:item_frame ~ ~ ~ {Tags:["leafDec.marker","leafDec.new"],Fixed:1b,Invisible:1b}
+				execute if block ~ ~ ~ #minecraft:leaves[persistent=false] run summon minecraft:item_frame ~ ~ ~ {Tags:["leafDec.marker","leafDec.new"],Fixed:1b,Invisible:1b}
 				execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
 				execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
 				execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
@@ -92,22 +92,36 @@ clock 1t {
 	}
 }
 function iterate {
-	particle flame ~0.5 ~0.5 ~0.5
 	summon minecraft:item_frame ~ ~ ~ {Tags:["leafDec.marker","leafDec.new"],Fixed:1b,Invisible:1b}
 	scoreboard players operation @e[type=minecraft:item_frame,tag=leafDec.new] leafDec.dummy = @s[type=minecraft:item_frame] leafDec.dummy
 	execute as @e[type=minecraft:item_frame,tag=leafDec.new] run {
 		name try_to_check_surroundings
-		scoreboard players add @s leafDec.dummy 1
 		tag @s remove leafDec.new
-		execute if score @s leafDec.dummy matches ..50 run {
+		scoreboard players add @s leafDec.dummy 1
+		execute if score @s leafDec.dummy matches ..1000 run {
 			name check_surroundings
-			execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-			execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-			execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-			execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-			execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-			execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+			LOOP (5, i) {
+				execute if block ~ ~ ~ #minecraft:leaves[distance=<%this.i%>] run {
+					name check_leaves/<%this.i%>
+					execute positioned ~ ~-1 ~ if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+					execute positioned ~ ~1 ~ if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+					execute positioned ~-1 ~ ~ if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+					execute positioned ~1 ~ ~ if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+					execute positioned ~ ~ ~-1 if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+					execute positioned ~ ~ ~1 if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+				}
+			}
+			execute if predicate fast_leaf_decay:leaves/5 run {
+				name check_leaves/6
+				execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+				execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+				execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+				execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+				execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+				execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+			}
 		}
+		scoreboard players set @s leafDec.dummy 0
+		setblock ~ ~ ~ cobweb
 	}
-	scoreboard players set #steps leafDec.dummy 0
 }
