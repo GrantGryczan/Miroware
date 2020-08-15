@@ -1,3 +1,3 @@
-particle flame ~ ~-0.5 ~
-scoreboard players add @s leafDec.dummy 1
-execute if score @s leafDec.dummy matches 7.. run function fast_leaf_decay:check_marker
+scoreboard players set #continue leafDec.dummy 1
+execute unless block ~ ~ ~ #minecraft:leaves[persistent=false] run function fast_leaf_decay:destroy_marker
+execute if score #continue leafDec.dummy matches 1 run function fast_leaf_decay:tick_marker_in_leaves

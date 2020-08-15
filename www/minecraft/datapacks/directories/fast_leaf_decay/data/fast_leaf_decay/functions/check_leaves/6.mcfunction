@@ -1,6 +1,0 @@
-execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate

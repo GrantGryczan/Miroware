@@ -1,6 +1,6 @@
-execute positioned ~ ~-1 ~ if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~ ~1 ~ if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~-1 ~ ~ if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~1 ~ ~ if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~ ~ ~-1 if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
-execute positioned ~ ~ ~1 if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:item_frame,tag=leafDec.marker,dx=0,dy=0,dz=0] run function fast_leaf_decay:iterate
+execute positioned ~ ~-1 ~ if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+execute positioned ~ ~1 ~ if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+execute positioned ~-1 ~ ~ if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+execute positioned ~1 ~ ~ if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+execute positioned ~ ~ ~-1 if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+execute positioned ~ ~ ~1 if predicate fast_leaf_decay:leaves/2 unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate

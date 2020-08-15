@@ -6,7 +6,7 @@
 			"state": {
 				"persistent": false,
 				"distance": {
-					"min": 2
+					"min": 3
 				}
 			}
 		}
