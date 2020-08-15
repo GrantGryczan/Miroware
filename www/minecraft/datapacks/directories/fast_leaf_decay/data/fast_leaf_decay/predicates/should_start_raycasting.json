@@ -5,84 +5,120 @@
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.oakL": 1
+				"leafDec.oakL": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.spruceL": 1
+				"leafDec.spruceL": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.birchL": 1
+				"leafDec.birchL": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.jungleL": 1
+				"leafDec.jungleL": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.acaciaL": 1
+				"leafDec.acaciaL": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.darkOakL": 1
+				"leafDec.darkOakL": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.oakS": 1
+				"leafDec.oakS": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.spruceS": 1
+				"leafDec.spruceS": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.birchS": 1
+				"leafDec.birchS": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.jungleS": 1
+				"leafDec.jungleS": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.acaciaS": 1
+				"leafDec.acaciaS": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		},
 		{
 			"condition": "minecraft:entity_scores",
 			"entity": "this",
 			"scores": {
-				"leafDec.darkOakS": 1
+				"leafDec.darkOakS": {
+					"min": 1,
+					"max": 2147483647
+				}
 			}
 		}
 	]

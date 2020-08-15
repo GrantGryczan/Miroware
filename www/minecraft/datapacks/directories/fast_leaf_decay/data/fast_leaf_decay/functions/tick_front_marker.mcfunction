@@ -1,3 +1,4 @@
+tag @s remove leafDec.front
 execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
 execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
 execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}

@@ -11,5 +11,4 @@ scoreboard players reset @s leafDec.jungleS
 scoreboard players reset @s leafDec.acaciaS
 scoreboard players reset @s leafDec.darkOakS
 scoreboard players set #steps leafDec.dummy 50
-scoreboard players set #count leafDec.dummy 0
 function fast_leaf_decay:raycast
