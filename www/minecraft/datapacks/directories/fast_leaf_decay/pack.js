@@ -4,7 +4,7 @@ module.exports = {
 	name: "Fast Leaf Decay",
 	compatibility: ["1.15"],
 	description: `
-		Leaves decay much faster.
+		Leaves decay much faster when trees are mined in survival mode.
 	`,
 	tags: []
 };

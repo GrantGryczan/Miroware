@@ -4,7 +4,7 @@
 			"item": "minecraft:oak_leaves"
 		},
 		"title": "Fast Leaf Decay",
-		"description": ["",{"text":"Leaves decay much faster.","color":"dark_aqua"}],
+		"description": ["",{"text":"Leaves decay much faster when trees are mined in survival mode.","color":"dark_aqua"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},
