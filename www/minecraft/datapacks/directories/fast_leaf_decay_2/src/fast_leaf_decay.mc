@@ -95,15 +95,18 @@ clock 1t {
 		block {
 			name raycast
 			scoreboard players remove #steps leafDec.dummy 1
-			execute align xyz unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run {
-				name try_to_create_markers
-				execute if block ~ ~ ~ #minecraft:leaves[persistent=false] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker"],Duration:1200}
-				execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
-				execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
-				execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
-				execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
-				execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
-				execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+			block {
+				name check
+				execute align xyz unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run {
+					name try_to_create_markers
+					execute if block ~ ~ ~ #minecraft:leaves[persistent=false] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker"],Duration:1200}
+					execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+					execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+					execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+					execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+					execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+					execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
+				}
 			}
 			execute unless score #steps leafDec.dummy matches 0 positioned ^ ^ ^0.1 run function $block
 		}

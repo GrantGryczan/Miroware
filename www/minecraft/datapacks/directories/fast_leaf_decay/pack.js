@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "fast_leaf_decay",
-	version: "1.0.0",
+	version: "1.0.1",
 	name: "Fast Leaf Decay",
 	compatibility: ["1.15"],
 	description: `
