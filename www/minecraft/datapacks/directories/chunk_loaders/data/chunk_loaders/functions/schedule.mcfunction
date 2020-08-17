@@ -1,0 +1,3 @@
+execute as @e[type=minecraft:item] at @s positioned ~ ~-0.25 ~ if block ~ ~ ~ minecraft:lodestone align xyz unless entity @e[type=minecraft:item_frame,tag=chuLoa.marker,dx=0,dy=0,dz=0] if entity @s[nbt={Item:{id:"minecraft:nether_star",Count:1b}}] run function chunk_loaders:try_to_create_chunk_loader
+execute at @e[type=minecraft:item_frame,tag=chuLoa.marker] align xyz run particle minecraft:smoke ~0.5 ~0.5 ~0.5 0.25 0.25 0.25 0.02 4
+schedule function chunk_loaders:schedule 1s

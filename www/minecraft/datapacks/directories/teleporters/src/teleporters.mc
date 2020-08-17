@@ -30,7 +30,7 @@ clock 1t {
 		data remove entity @s Item.tag.tpersDimension
 		execute unless data entity @s Item.tag.LodestonePos run scoreboard players set @s tpers.dummy 1
 		execute if score @s tpers.dummy matches 1 run {
-			name fail
+			name fail_to_create_gateway
 			data merge entity @s {CustomName:'{"text":"This compass has no lodestone in this dimension.","color":"red"}',CustomNameVisible:1b}
 			tag @s add tpers.done
 		}

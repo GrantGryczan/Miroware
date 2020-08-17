@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:lodestone"
+		},
+		"title": "Chunk Loaders",
+		"description": ["",{"text":"Drop a nether star on a lodestone to make a chunk loader (AKA a loadstone).","color":"dark_aqua"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}

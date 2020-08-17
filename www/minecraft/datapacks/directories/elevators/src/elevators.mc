@@ -21,7 +21,7 @@ clock 1t {
 	execute as @e[type=minecraft:item_frame,tag=elevs.marker] at @s unless block ~ ~ ~ #minecraft:wool run {
 		name destroy_elevator
 		execute store result score #doTileDrops elevs.dummy run gamerule doTileDrops
-		execute if score #doTileDrops elevs.dummy matches 1 run summon minecraft:item ~ ~0.5 ~ {Tags:["elevs.item"],Item:{id:"minecraft:ender_pearl",Count:1b},PickupDelay:10s}
+		execute if score #doTileDrops elevs.dummy matches 1 run summon minecraft:item ~ ~0.5 ~ {Item:{id:"minecraft:ender_pearl",Count:1b},PickupDelay:10s}
 		kill @s
 	}
 	execute as @a[scores={elevs.jump=1..}] at @s run {
@@ -94,10 +94,9 @@ clock 1t {
 }
 clock 1s {
 	name check_items
-	execute as @e[type=minecraft:item] at @s positioned ~ ~-0.25 ~ if block ~ ~ ~ #minecraft:wool if entity @s[nbt={Item:{id:"minecraft:ender_pearl",Count:1b}}] align xyz unless entity @e[type=minecraft:item_frame,tag=elevs.marker,dx=0,dy=0,dz=0] run {
+	execute as @e[type=minecraft:item] at @s positioned ~ ~-0.25 ~ if block ~ ~ ~ #minecraft:wool align xyz unless entity @e[type=minecraft:item_frame,tag=elevs.marker,dx=0,dy=0,dz=0] if entity @s[nbt={Item:{id:"minecraft:ender_pearl",Count:1b}}] run {
 		name create_elevator
-		summon minecraft:item_frame ~ ~ ~ {Tags:["elevs.marker","elevs.new"],Fixed:1b,Invisible:1b,Facing:1b}
-		tag @e[type=minecraft:item_frame] remove elevs.new
+		summon minecraft:item_frame ~ ~ ~ {Tags:["elevs.marker"],Fixed:1b,Invisible:1b,Facing:1b}
 		particle minecraft:portal ~0.5 ~0.5 ~0.5 0.5 0.5 0.5 1 200
 		kill @s
 	}
