@@ -13,17 +13,11 @@ function uninstall {
 	scoreboard objectives remove elevs.sneak
 	scoreboard objectives remove elevs.prevSneak
 	schedule clear elevators:tick
+	schedule clear elevators:check_items
 	schedule clear elevators:create_particles
 }
 clock 1t {
 	name tick
-	execute as @e[type=minecraft:item] at @s positioned ~ ~-0.25 ~ if block ~ ~ ~ #minecraft:wool if entity @s[nbt={Item:{id:"minecraft:ender_pearl",Count:1b}}] align xyz unless entity @e[type=minecraft:item_frame,tag=elevs.marker,dx=0,dy=0,dz=0] run {
-		name create_elevator
-		summon minecraft:item_frame ~ ~ ~ {Tags:["elevs.marker","elevs.new"],Fixed:1b,Invisible:1b,Facing:1b}
-		tag @e[type=minecraft:item_frame] remove elevs.new
-		particle minecraft:portal ~0.5 ~0.5 ~0.5 0.5 0.5 0.5 1 200
-		kill @s
-	}
 	execute as @e[type=minecraft:item_frame,tag=elevs.marker] at @s unless block ~ ~ ~ #minecraft:wool run {
 		name destroy_elevator
 		execute store result score #doTileDrops elevs.dummy run gamerule doTileDrops
@@ -96,6 +90,16 @@ clock 1t {
 			scoreboard players reset @s elevs.sneak
 		}
 		scoreboard players operation @s elevs.prevSneak = @s elevs.sneak
+	}
+}
+clock 1s {
+	name check_items
+	execute as @e[type=minecraft:item] at @s positioned ~ ~-0.25 ~ if block ~ ~ ~ #minecraft:wool if entity @s[nbt={Item:{id:"minecraft:ender_pearl",Count:1b}}] align xyz unless entity @e[type=minecraft:item_frame,tag=elevs.marker,dx=0,dy=0,dz=0] run {
+		name create_elevator
+		summon minecraft:item_frame ~ ~ ~ {Tags:["elevs.marker","elevs.new"],Fixed:1b,Invisible:1b,Facing:1b}
+		tag @e[type=minecraft:item_frame] remove elevs.new
+		particle minecraft:portal ~0.5 ~0.5 ~0.5 0.5 0.5 0.5 1 200
+		kill @s
 	}
 }
 clock 10t {

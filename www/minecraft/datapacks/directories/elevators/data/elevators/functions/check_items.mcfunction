@@ -1,0 +1,2 @@
+execute as @e[type=minecraft:item] at @s positioned ~ ~-0.25 ~ if block ~ ~ ~ #minecraft:wool if entity @s[nbt={Item:{id:"minecraft:ender_pearl",Count:1b}}] align xyz unless entity @e[type=minecraft:item_frame,tag=elevs.marker,dx=0,dy=0,dz=0] run function elevators:create_elevator
+schedule function elevators:check_items 1s

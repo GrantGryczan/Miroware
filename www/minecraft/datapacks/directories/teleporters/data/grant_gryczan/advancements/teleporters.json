@@ -1,7 +1,7 @@
 {
 	"display": {
 		"icon": {
-			"item": "minecraft:lodestone"
+			"item": "minecraft:crying_obsidian"
 		},
 		"title": "Teleporters      ",
 		"description": ["",{"text":"Drop a lodestone compass with crying obsidian placed directly both below and above it to create a teleporter to that compass's lodestone.","color":"dark_aqua"}],
