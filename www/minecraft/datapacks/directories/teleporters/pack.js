@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "teleporters",
-	version: "1.0.1",
+	version: "1.0.2",
 	name: "Teleporters",
 	compatibility: ["1.16"],
 	description: `
