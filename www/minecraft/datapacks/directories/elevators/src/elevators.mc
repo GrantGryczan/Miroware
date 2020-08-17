@@ -123,7 +123,6 @@ function check_color {
 	execute if score #color elevs.dummy matches 13 if block ~ ~ ~ minecraft:green_wool run tag @s remove elevs.continue
 	execute if score #color elevs.dummy matches 14 if block ~ ~ ~ minecraft:red_wool run tag @s remove elevs.continue
 	execute if score #color elevs.dummy matches 15 if block ~ ~ ~ minecraft:black_wool run tag @s remove elevs.continue
-
 }
 function teleport {
 	execute at @s run playsound minecraft:entity.enderman.teleport player @a ~ ~ ~ 0.4
