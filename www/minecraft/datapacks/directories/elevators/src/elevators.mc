@@ -54,7 +54,7 @@ clock 1t {
 			block {
 				name offset_up
 				execute if block ~ ~ ~ #minecraft:wool align xyz if entity @e[type=minecraft:item_frame,tag=elevs.marker,dx=0,dy=0,dz=0] run function elevators:check_color
-				execute unless entity @s[tag=elevs.continue] positioned ~ ~1 ~ run function elevators:teleport
+				execute unless entity @s[tag=elevs.continue] positioned ~ ~1.1 ~ run function elevators:teleport
 				execute if entity @s[tag=elevs.continue] if predicate elevators:loaded positioned ~ ~1 ~ align y run function $block
 			}
 			tag @s remove elevs.continue
@@ -85,7 +85,7 @@ clock 1t {
 			execute positioned ~ ~-2 ~ run {
 				name offset_down
 				execute if block ~ ~ ~ #minecraft:wool align xyz if entity @e[type=minecraft:item_frame,tag=elevs.marker,dx=0,dy=0,dz=0] run function elevators:check_color
-				execute unless entity @s[tag=elevs.continue] positioned ~ ~1 ~ run function elevators:teleport
+				execute unless entity @s[tag=elevs.continue] positioned ~ ~1.1 ~ run function elevators:teleport
 				execute if entity @s[tag=elevs.continue] if predicate elevators:loaded positioned ~ ~-1 ~ align y run function $block
 			}
 			tag @s remove elevs.continue
