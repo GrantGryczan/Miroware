@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "chunk_loaders",
-	version: "1.0.0",
+	version: "1.0.1",
 	name: "Chunk Loaders",
 	compatibility: ["1.16"],
 	description: `
