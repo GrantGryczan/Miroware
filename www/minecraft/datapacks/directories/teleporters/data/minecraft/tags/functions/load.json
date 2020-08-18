@@ -1,1 +1,1 @@
-{"replace":false,"values":["teleporters:load","teleporters:tick"]}
+{"replace":false,"values":["teleporters:load","teleporters:tick","teleporters:check_items"]}

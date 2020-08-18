@@ -23,6 +23,9 @@ clock 1t {
 		}
 		tag @s remove tpers.valid
 	}
+}
+clock 1s {
+	name check_items
 	execute as @e[type=minecraft:item,tag=!tpers.done] at @s if block ~ ~1 ~ minecraft:crying_obsidian if block ~ ~-1 ~ minecraft:crying_obsidian if block ~ ~ ~ #teleporters:air if entity @s[nbt={Item:{id:"minecraft:compass",Count:1b,tag:{LodestoneTracked:1b}}}] run {
 		name test_compass
 		data modify entity @s Item.tag.tpersDimension set from entity @s Item.tag.LodestoneDimension
