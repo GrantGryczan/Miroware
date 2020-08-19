@@ -1,2 +1,2 @@
-execute as @e[type=minecraft:area_effect_cloud,tag=invIteFra.marker] at @s unless entity @e[type=minecraft:item_frame,tag=invIteFra.itemFrame,distance=0] align xyz run function invisible_item_frames:break
 schedule function invisible_item_frames:tick 1t
+execute as @e[type=minecraft:area_effect_cloud,tag=invIteFra.marker] at @s unless entity @e[type=minecraft:item_frame,tag=invIteFra.itemFrame,distance=0] align xyz run function invisible_item_frames:break

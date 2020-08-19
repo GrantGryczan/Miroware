@@ -30,9 +30,11 @@ module.exports = {
 		archive.append(`{\n\t"pack": {\n\t\t"pack_format": ${packFormat},\n\t\t"description": [{"text":${JSON.stringify(`${config.pack.name} ${config.pack.version}`)},"color":"aqua"},{"text":"\\nmc.miro.gg/datapacks","color":"dark_aqua"}]\n\t}\n}\n`, {
 			name: "pack.mcmeta"
 		});
-		archive.file("pack.png", {
-			name: "pack.png"
-		});
+		if (packFormat !== 4 && packFormat !== 5) {
+			archive.file("pack.png", {
+				name: "pack.png"
+			});
+		}
 		await archive.finalize();
 		resolve();
 	})

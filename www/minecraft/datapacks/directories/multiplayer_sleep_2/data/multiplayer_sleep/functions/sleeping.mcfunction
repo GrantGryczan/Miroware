@@ -17,7 +17,8 @@ bossbar set multiplayer_sleep:progress name [{"score":{"name":"#sleeping","objec
 bossbar set multiplayer_sleep:progress players @a[tag=mpSleep.display1]
 bossbar set multiplayer_sleep:progress visible true
 title @a[tag=mpSleep.display2] actionbar [{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" of ","color":"aqua"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" player(s) asleep","color":"aqua"}]
-execute as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=100}] run function multiplayer_sleep:announce_asleep
+execute if score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=1}] run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"aqua"},{"text":" went to sleep. ","color":"dark_aqua"},{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" of ","color":"aqua"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" player(s) asleep","color":"dark_aqua"}]
+execute unless score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=100}] run function multiplayer_sleep:announce_asleep
 tag @a remove mpSleep.display1
 tag @a remove mpSleep.display2
 tag @a remove mpSleep.display3
