@@ -116,6 +116,7 @@ clock 20s {
 	execute as @e[type=minecraft:armor_stand,tag=graves.model] run data merge entity @s {Fire:32767s,Air:32767s}
 }
 function interact_with_grave {
+	function graves:activate_graves
 	schedule 1t replace {
 		name activate_graves
 		execute as @a[advancements={graves:interact_with_grave=true}] at @s run {
