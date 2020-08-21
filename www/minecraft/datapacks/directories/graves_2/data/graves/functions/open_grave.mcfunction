@@ -8,9 +8,9 @@ data remove storage graves:storage players[-1].graves[-1]
 scoreboard players remove #remaining graves.dummy 1
 execute unless score #rotated graves.dummy matches 0 unless score #remaining graves.dummy matches 0 run function graves:rotate/back_grave
 execute as @e[type=minecraft:armor_stand,tag=graves.model] run function graves:check_model
-execute if data entity @s HandItems[0].tag.gravesData.items[0] run function graves:drop_item
-execute store result score #xp graves.dummy run data get entity @s HandItems[0].tag.gravesData.xp
-execute if entity @s[tag=graves.hasXP] run function graves:drop_xp
+execute store result score #remaining graves.dummy run data get entity @s HandItems[0].tag.gravesData.items
+execute if score #remaining graves.dummy matches 1.. run function graves:drop_item
+execute if entity @s[tag=graves.hasXP] run function graves:read_xp
 playsound minecraft:block.stone.break block @a
 particle minecraft:poof ~ ~0.7 ~ 0 0 0 0.05 10
 kill @s

@@ -3,4 +3,5 @@ data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from
 execute as @a[tag=graves.subject,predicate=graves:sneaking,limit=1] run function graves:set_owner
 tag @e[type=minecraft:item,tag=graves.item] remove graves.item
 data remove entity @s HandItems[0].tag.gravesData.items[0]
-execute if data entity @s HandItems[0].tag.gravesData.items[0] run function graves:drop_item
+scoreboard players remove #remaining graves.dummy 1
+execute if score #remaining graves.dummy matches 1.. run function graves:drop_item

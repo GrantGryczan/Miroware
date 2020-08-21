@@ -118,17 +118,22 @@ clock 1t {
 				execute store result score @s graves.id run data get entity @s ArmorItems[3].tag.gravesData.id
 				execute if score @s graves.id = #activated graves.dummy run kill @s
 			}
-			execute if data entity @s HandItems[0].tag.gravesData.items[0] run {
+			execute store result score #remaining graves.dummy run data get entity @s HandItems[0].tag.gravesData.items
+			execute if score #remaining graves.dummy matches 1.. run {
 				name drop_item
 				summon minecraft:item ~ ~0.2 ~ {Tags:["graves.item"],Item:{id:"minecraft:bone",Count:1b}}
 				data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s HandItems[0].tag.gravesData.items[0]
 				execute as @a[tag=graves.subject,predicate=graves:sneaking,limit=1] run function graves:set_owner
 				tag @e[type=minecraft:item,tag=graves.item] remove graves.item
 				data remove entity @s HandItems[0].tag.gravesData.items[0]
-				execute if data entity @s HandItems[0].tag.gravesData.items[0] run function $block
+				scoreboard players remove #remaining graves.dummy 1
+				execute if score #remaining graves.dummy matches 1.. run function $block
 			}
-			execute store result score #xp graves.dummy run data get entity @s HandItems[0].tag.gravesData.xp
-			execute if entity @s[tag=graves.hasXP] run function graves:drop_xp
+			execute if entity @s[tag=graves.hasXP] run {
+				name read_xp
+				execute store result score #xp graves.dummy run data get entity @s HandItems[0].tag.gravesData.xp
+				function graves:drop_xp
+			}
 			playsound minecraft:block.stone.break block @a
 			particle minecraft:poof ~ ~0.7 ~ 0 0 0 0.05 10
 			kill @s
