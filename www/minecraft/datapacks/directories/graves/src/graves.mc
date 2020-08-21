@@ -388,12 +388,54 @@ dir rotate {
 		execute unless score #remaining graves.dummy matches 0 run function $block
 	}
 }
-function give_grave_key {
-	give @s minecraft:player_head{gravesKey:1b,display:{Name:'["",{"text":"Grave Key","italic":false,"color":"yellow"}]',Lore:['"Right-click a grave with this to forcibly open it."','"Placing this down will disable its functionality."']},SkullOwner:{Id:"0-0-0-0-0",Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWVjNzA3NjllMzYzN2E3ZWRiNTcwMmJjYzQzM2NjMjQyYzJmMjIzNWNiNzNiOTQwODBmYjVmYWZmNDdiNzU0ZSJ9fX0="}]}}}
-}
 function config {
-	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #robbing graves.config <0 or 1>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #robbing graves.config "},"hoverEvent":{"action":"show_text","value":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #robbing graves.config","color":"aqua"},{"text":".\nEnter 0 or 1 after clicking.","color":"dark_aqua"}]}},{"text":" to (0) disable or (1) enable grave robbing by allowing players to open graves they do not own. The default is ","color":"dark_aqua"},{"text":"0","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #robbing graves.config 0"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #robbing graves.config 0","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#robbing","objective":"graves.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
-	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #xp graves.config <0 or 1>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #xp graves.config "},"hoverEvent":{"action":"show_text","value":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #xp graves.config","color":"aqua"},{"text":".\nEnter 0 or 1 after clicking.","color":"dark_aqua"}]}},{"text":" to (0) disable or (1) enable graves collecting XP dropped on death. The default is ","color":"dark_aqua"},{"text":"1","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #xp graves.config 1"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #xp graves.config 1","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#xp","objective":"graves.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
-	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #locating graves.config <0 or 1>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #locating graves.config "},"hoverEvent":{"action":"show_text","value":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #locating graves.config","color":"aqua"},{"text":".\nEnter 0 or 1 after clicking.","color":"dark_aqua"}]}},{"text":" to (0) disable or (1) enable the command to locate the coordinates of your last grave. The default is ","color":"dark_aqua"},{"text":"1","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #locating graves.config 1"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #locating graves.config 1","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#locating","objective":"graves.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
-	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/function graves:give_grave_key","color":"aqua","clickEvent":{"action":"run_command","value":"/function graves:give_grave_key"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/function graves:give_grave_key","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":" to receive a grave key which can be used to forcibly remove graves.","color":"dark_aqua"}]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	tellraw @s ["                        Graves",{"text":" / ","color":"gray"},"Global Settings                        "]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	execute if score #robbing graves.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function graves:config/disable_robbing"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to disable ","color":"red"},"Grave Robbing",{"text":".","color":"red"},{"text":"\nWhen enabled, players can open graves they do not own.","color":"gray"},{"text":"\nDefault: Disabled","color":"dark_gray"}]}}," Grave Robbing"]
+	execute unless score #robbing graves.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function graves:config/enable_robbing"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enable ","color":"green"},"Grave Robbing",{"text":".","color":"green"},{"text":"\nWhen enabled, players can open graves they do not own.","color":"gray"},{"text":"\nDefault: Disabled","color":"dark_gray"}]}}," Grave Robbing"]
+	execute if score #xp graves.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function graves:config/disable_xp"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to disable ","color":"red"},"XP Collection",{"text":".","color":"red"},{"text":"\nWhen enabled, graves collect XP dropped on death.\nNote that players do not drop all their XP on death.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," XP Collection"]
+	execute unless score #xp graves.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function graves:config/enable_xp"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enable ","color":"green"},"XP Collection",{"text":".","color":"green"},{"text":"\nWhen enabled, graves collect XP dropped on death.\nNote that players do not drop all their XP on death.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," XP Collection"]
+	execute if score #locating graves.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function graves:config/disable_locating"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to disable ","color":"red"},"Grave Locating",{"text":".","color":"red"},{"text":"\nWhen enabled, players can see the coordinates of their last grave.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Grave Locating"]
+	execute unless score #locating graves.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function graves:config/enable_locating"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enable ","color":"green"},"Grave Locating",{"text":".","color":"green"},{"text":"\nWhen enabled, players can see the coordinates of their last grave.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Grave Locating"]
+	tellraw @s {"text":"[ Receive Grave Key ]","color":"gray","clickEvent":{"action":"run_command","value":"/function graves:give_grave_key"},"hoverEvent":{"action":"show_text","contents":{"text":"Click to receive a grave key which can be used to forcibly open graves.","color":"gray"}}}
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	execute store result score #sendCommandFeedback graves.dummy run gamerule sendCommandFeedback
+	execute if score #sendCommandFeedback graves.dummy matches 1 run {
+		name hide_command_feedback
+		gamerule sendCommandFeedback false
+		schedule 1t replace {
+			name restore_command_feedback
+			gamerule sendCommandFeedback true
+		}
+	}
+}
+dir config {
+	function enable_robbing {
+		scoreboard players set #robbing graves.config 1
+		function graves:config
+	}
+	function disable_robbing {
+		scoreboard players set #robbing graves.config 0
+		function graves:config
+	}
+	function enable_xp {
+		scoreboard players set #xp graves.config 1
+		function graves:config
+	}
+	function disable_xp {
+		scoreboard players set #xp graves.config 0
+		function graves:config
+	}
+	function enable_locating {
+		scoreboard players set #locating graves.config 1
+		function graves:config
+	}
+	function disable_locating {
+		scoreboard players set #locating graves.config 0
+		function graves:config
+	}
+}
+function give_grave_key {
+	give @s minecraft:player_head{gravesKey:1b,display:{Name:'["",{"text":"Grave Key","italic":false,"color":"yellow"}]',Lore:['"Right-click a grave with this to forcibly open it."','"Placing this down will break its functionality."']},SkullOwner:{Id:"0-0-0-0-0",Properties:{textures:[{Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWVjNzA3NjllMzYzN2E3ZWRiNTcwMmJjYzQzM2NjMjQyYzJmMjIzNWNiNzNiOTQwODBmYjVmYWZmNDdiNzU0ZSJ9fX0="}]}}}
 }
