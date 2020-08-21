@@ -7,20 +7,39 @@ function load {
 	execute unless score #nonRectangular cusNetPor.config matches 0..1 run scoreboard players set #nonRectangular cusNetPor.config 1
 	execute unless score #minSize cusNetPor.config matches 0.. run scoreboard players set #minSize cusNetPor.config 10
 	execute unless score #maxSize cusNetPor.config matches 0.. run scoreboard players set #maxSize cusNetPor.config 84
+	scoreboard players reset * cusNetPor.useFAS
+	scoreboard players reset * cusNetPor.useFC
 }
 function uninstall {
 	scoreboard objectives remove cusNetPor
 	scoreboard objectives remove cusNetPor.config
 	scoreboard objectives remove cusNetPor.dummy
 	schedule clear custom_nether_portals:tick
+	schedule clear custom_nether_portals:try_to_trigger
+	schedule clear custom_nether_portals:enable_trigger
 }
 clock 1t {
 	name tick
+	execute as @a[predicate=custom_nether_portals:used_ignition] at @s run function custom_nether_portals:use_ignition
+}
+clock 5t {
+	name try_to_trigger
+	execute as @a[scores={cusNetPor=1}] run {
+		name trigger
+		tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+		tellraw @s ["                     Custom Nether Portals",{"text":" / ","color":"gray"},"Info                     "]
+		tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+		tellraw @s ["",{"text":">>","color":"gold"}," Nether portal frames must use at least ",{"score":{"name":"#minSize","objective":"cusNetPor.config"}}," and at most ",{"score":{"name":"#maxSize","objective":"cusNetPor.config"}}," obsidian blocks."]
+		execute if score #nonRectangular cusNetPor.config matches 1 run tellraw @s ["",{"text":">>","color":"gold"}," Nether portal frames ",{"text":"can","color":"green"}," have non-rectangular shapes."]
+		execute unless score #nonRectangular cusNetPor.config matches 1 run tellraw @s ["",{"text":">>","color":"gold"}," Nether portal frames ",{"text":"cannot","color":"red"}," have non-rectangular shapes."]
+		tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+		scoreboard players set @s cusNetPor 0
+		scoreboard players enable @s cusNetPor
+	}
+}
+clock 1s {
+	name enable_trigger
 	scoreboard players enable @a cusNetPor
-	execute as @a[scores={cusNetPor=1}] run function custom_nether_portals:info
-	scoreboard players set @a cusNetPor 0
-	execute as @a[scores={cusNetPor.useFAS=1..}] at @s run function custom_nether_portals:use_ignition
-	execute as @a[scores={cusNetPor.useFC=1..}] at @s run function custom_nether_portals:use_ignition
 }
 function use_ignition {
 	scoreboard players set @s cusNetPor.useFAS 0
@@ -118,12 +137,32 @@ function check_z_sides {
 	execute positioned ~ ~ ~-1 if block ~ ~ ~ #custom_nether_portals:air if entity @e[type=minecraft:area_effect_cloud,tag=cusNetPor.marker,distance=..0.1] run scoreboard players set #success cusNetPor.dummy -1
 	execute positioned ~ ~ ~1 if block ~ ~ ~ #custom_nether_portals:air if entity @e[type=minecraft:area_effect_cloud,tag=cusNetPor.marker,distance=..0.1] run scoreboard players set #success cusNetPor.dummy -1
 }
-function info {
-	tellraw @s [{"text":"Nether portal frames must use at least ","color":"dark_aqua"},{"score":{"name":"#minSize","objective":"cusNetPor.config"},"color":"aqua"},{"text":" and at most ","color":"dark_aqua"},{"score":{"name":"#maxSize","objective":"cusNetPor.config"},"color":"aqua"},{"text":" obsidian blocks.","color":"dark_aqua"}]
-}
 function config {
-	function custom_nether_portals:info
-	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #nonRectangular cusNetPor.config <0 or 1>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #nonRectangular cusNetPor.config "},"hoverEvent":{"action":"show_text","value":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #nonRectangular cusNetPor.config","color":"aqua"},{"text":".\nEnter 0 or 1 after clicking.","color":"dark_aqua"}]}},{"text":" to (0) disallow or (1) allow non-rectangular nether portal frames. The default is ","color":"dark_aqua"},{"text":"1","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #nonRectangular cusNetPor.config 1"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #nonRectangular cusNetPor.config 1","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#nonRectangular","objective":"cusNetPor.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
-	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #minSize cusNetPor.config <number>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #minSize cusNetPor.config "},"hoverEvent":{"action":"show_text","value":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #minSize cusNetPor.config","color":"aqua"},{"text":".\nEnter the number 10 or less after clicking.","color":"dark_aqua"}]}},{"text":" to set the minimum number of obsidian blocks a nether portal must use. The default is ","color":"dark_aqua"},{"text":"10","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #minSize cusNetPor.config 10"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #minSize cusNetPor.config 10","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":".","color":"dark_aqua"}]
-	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #maxSize cusNetPor.config <number>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #maxSize cusNetPor.config "},"hoverEvent":{"action":"show_text","value":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #maxSize cusNetPor.config","color":"aqua"},{"text":".\nEnter the number 84 or more after clicking.","color":"dark_aqua"}]}},{"text":" to set the maximum number of obsidian blocks a nether portal must use. The default is ","color":"dark_aqua"},{"text":"84","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #maxSize cusNetPor.config 84"},"hoverEvent":{"action":"show_text","value":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #maxSize cusNetPor.config 84","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". ","color":"dark_aqua"},{"text":"Warning: Increasing the maximum may lead to large portals not being broken properly.","color":"red"}]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	tellraw @s ["               Custom Nether Portals",{"text":" / ","color":"gray"},"Global Settings               "]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	execute if score #nonRectangular cusNetPor.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function custom_nether_portals:config/disable_non_rectangular"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Non-Rectangular Frames",{"text":".","color":"red"},{"text":"\nWhen enabled, nether portal frames can have non-rectangular shapes.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Non-Rectangular Frames"]
+	execute unless score #nonRectangular cusNetPor.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function custom_nether_portals:config/enable_non_rectangular"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Non-Rectangular Frames",{"text":".","color":"green"},{"text":"\nWhen enabled, nether portal frames can have non-rectangular shapes.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Non-Rectangular Frames"]
+	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #minSize cusNetPor.config "},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enter the minimum number of obsidian blocks a nether portal frame can have.","color":"gray"},{"text":"\nAccepts: whole numbers 4-10\nDefault: 10","color":"dark_gray"}]}}," Min Frame Size",{"text":" (Current: ","color":"gray"},{"score":{"name":"#minSize","objective":"cusNetPor.config"},"color":"gray"},{"text":")","color":"gray"}]
+	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #maxSize cusNetPor.config "},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enter the maximum number of obsidian blocks a nether portal frame can have.","color":"gray"},{"text":"\nIncreasing this may lead to large portals not being broken properly.","color":"red"},{"text":"\nAccepts: whole numbers 84+\nDefault: 84","color":"dark_gray"}]}}," Max Frame Size",{"text":" (Current: ","color":"gray"},{"score":{"name":"#maxSize","objective":"cusNetPor.config"},"color":"gray"},{"text":")","color":"gray"}]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	execute store result score #sendCommandFeedback cusNetPor.dummy run gamerule sendCommandFeedback
+	execute if score #sendCommandFeedback cusNetPor.dummy matches 1 run {
+		name hide_command_feedback
+		gamerule sendCommandFeedback false
+		schedule 1t replace {
+			name restore_command_feedback
+			gamerule sendCommandFeedback true
+		}
+	}
+}
+dir config {
+	function enable_non_rectangular {
+		scoreboard players set #nonRectangular cusNetPor.config 1
+		function custom_nether_portals:config
+	}
+	function disable_non_rectangular {
+		scoreboard players set #nonRectangular cusNetPor.config 0
+		function custom_nether_portals:config
+	}
 }
