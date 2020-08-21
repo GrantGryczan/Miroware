@@ -1,0 +1,2 @@
+gamerule sendCommandFeedback false
+schedule function durability_ping:restore_command_feedback 1t replace

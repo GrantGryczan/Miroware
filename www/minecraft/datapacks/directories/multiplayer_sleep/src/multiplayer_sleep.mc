@@ -26,8 +26,6 @@ function uninstall {
 }
 clock 1t {
 	name tick
-	scoreboard players enable @a mpSleep
-	scoreboard players enable @a mpSleep.config
 	execute as @a[scores={mpSleep=1..}] run {
 		name trigger
 		execute if score @s mpSleep matches 7.. run {
@@ -62,14 +60,14 @@ clock 1t {
 			tellraw @s ["                Multiplayer Sleep",{"text":" / ","color":"gray"},"Personal Settings                "]
 			tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
 			execute if score @s mpSleep.config matches 0.. run {
-				name trigger/show_disabled_display_mode_default
+				name trigger/show_disabled_display_default
 				execute if score #display mpSleep.config matches 0 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 7"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Display: Default",{"text":".","color":"green"}]}}," Display: Default (Hidden)"]
 				execute if score #display mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 7"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Display: Default",{"text":".","color":"green"}]}}," Display: Default (Boss Bar)"]
 				execute if score #display mpSleep.config matches 2 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 7"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Display: Default",{"text":".","color":"green"}]}}," Display: Default (Action Bar)"]
 				execute if score #display mpSleep.config matches 3 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 7"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Display: Default",{"text":".","color":"green"}]}}," Display: Default (Chat)"]
 			}
 			execute unless score @s mpSleep.config matches 0.. run {
-				name trigger/show_enabled_display_mode_default
+				name trigger/show_enabled_display_default
 				execute if score #display mpSleep.config matches 0 run tellraw @s ["",{"text":"[ ✔ ]","color":"green"}," Display: Default (Hidden)"]
 				execute if score #display mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green"}," Display: Default (Boss Bar)"]
 				execute if score #display mpSleep.config matches 2 run tellraw @s ["",{"text":"[ ✔ ]","color":"green"}," Display: Default (Action Bar)"]
@@ -84,16 +82,17 @@ clock 1t {
 			tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
 		}
 		execute if score @s mpSleep matches 4 run {
-			name trigger/preview_display_mode_boss_bar
+			name trigger/preview_display_boss_bar
 			bossbar set multiplayer_sleep:preview players @s
 			schedule 5s replace {
-				name trigger/undo_preview_display_mode_boss_bar
+				name trigger/undo_preview_display_boss_bar
 				bossbar set multiplayer_sleep:preview players
 			}
 		}
 		title @s[scores={mpSleep=5}] actionbar {"text":"1 of 2 player(s) asleep","color":"aqua"}
 		tellraw @s[scores={mpSleep=6}] [{"text":"Player","color":"aqua"},{"text":" went to sleep. 1 of 2 player(s) asleep","color":"dark_aqua"}]
 		scoreboard players set @s mpSleep 0
+		scoreboard players enable @s mpSleep
 	}
 	execute if score #sleeping mpSleep.dummy matches 1.. run {
 		name check_sleeping
@@ -156,6 +155,10 @@ clock 1t {
 	}
 	execute if score #sleeping mpSleep.dummy matches -1 if predicate multiplayer_sleep:clear_day run scoreboard players set #sleeping mpSleep.dummy 0
 }
+clock 1s {
+	name enable_trigger
+	scoreboard players enable @a mpSleep
+}
 function start_sleeping {
 	advancement revoke @s only multiplayer_sleep:slept_in_bed
 	execute if predicate multiplayer_sleep:overworld unless score #sleeping mpSleep.dummy matches -1 run scoreboard players set #sleeping mpSleep.dummy 1
@@ -169,16 +172,16 @@ function config {
 	tellraw @s ["                  Multiplayer Sleep",{"text":" / ","color":"gray"},"Global Settings                  "]
 	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
 	execute if score #display mpSleep.config matches 0 run tellraw @s ["",{"text":"[ ✔ ]","color":"green"}," Default Display: Hidden"]
-	execute unless score #display mpSleep.config matches 0 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_mode_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Hidden",{"text":".","color":"green"}]}}," Default Display: Hidden"]
-	execute if score #display mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_mode_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Display: Boss Bar",{"text":".","color":"red"},{"text":"\nDefault","color":"dark_gray"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 4"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Boss Bar",{"text":".\nThe boss bar preview's color may not be accurate.","color":"dark_gray"}]}}," Default Display: Boss Bar"]
-	execute unless score #display mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_mode_boss_bar"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Boss Bar",{"text":".","color":"green"},{"text":"\nDefault","color":"dark_gray"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 4"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Boss Bar",{"text":".\nThe boss bar preview's color may not be accurate.","color":"dark_gray"}]}}," Default Display: Boss Bar"]
-	execute if score #display mpSleep.config matches 2 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_mode_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Display: Action Bar",{"text":".","color":"red"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 5"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Action Bar",{"text":".","color":"gray"}]}}," Default Display: Action Bar"]
-	execute unless score #display mpSleep.config matches 2 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_mode_action_bar"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Action Bar",{"text":".","color":"green"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 5"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Action Bar",{"text":".","color":"gray"}]}}," Default Display: Action Bar"]
-	execute if score #display mpSleep.config matches 3 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_mode_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Display: Chat",{"text":".","color":"red"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 6"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Chat",{"text":".","color":"gray"}]}}," Default Display: Chat"]
-	execute unless score #display mpSleep.config matches 3 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_mode_chat"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Chat",{"text":".","color":"green"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 6"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Chat",{"text":".","color":"gray"}]}}," Default Display: Chat"]
+	execute unless score #display mpSleep.config matches 0 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Hidden",{"text":".","color":"green"}]}}," Default Display: Hidden"]
+	execute if score #display mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Display: Boss Bar",{"text":".","color":"red"},{"text":"\nDefault","color":"dark_gray"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 4"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Boss Bar",{"text":".\nThe boss bar preview's color may not be accurate.","color":"dark_gray"}]}}," Default Display: Boss Bar"]
+	execute unless score #display mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_boss_bar"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Boss Bar",{"text":".","color":"green"},{"text":"\nDefault","color":"dark_gray"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 4"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Boss Bar",{"text":".\nThe boss bar preview's color may not be accurate.","color":"dark_gray"}]}}," Default Display: Boss Bar"]
+	execute if score #display mpSleep.config matches 2 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Display: Action Bar",{"text":".","color":"red"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 5"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Action Bar",{"text":".","color":"gray"}]}}," Default Display: Action Bar"]
+	execute unless score #display mpSleep.config matches 2 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_action_bar"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Action Bar",{"text":".","color":"green"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 5"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Action Bar",{"text":".","color":"gray"}]}}," Default Display: Action Bar"]
+	execute if score #display mpSleep.config matches 3 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Display: Chat",{"text":".","color":"red"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 6"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Chat",{"text":".","color":"gray"}]}}," Default Display: Chat"]
+	execute unless score #display mpSleep.config matches 3 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_default_display_chat"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Chat",{"text":".","color":"green"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger mpSleep set 6"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Chat",{"text":".","color":"gray"}]}}," Default Display: Chat"]
 	execute if score #immediateChat mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/disable_immediate_chat"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Immediate Chat Display",{"text":".","color":"red"},{"text":"\nWhen enabled, this sends Chat Display messages at the time the player enters the bed rather than after 5 seconds of sleeping.","color":"gray"},{"text":"\nDefault: Disabled","color":"dark_gray"}]}}," Immediate Chat Display"]
 	execute unless score #immediateChat mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_immediate_chat"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Immediate Chat Display",{"text":".","color":"green"},{"text":"\nWhen enabled, this sends Chat Display messages at the time the player enters the bed rather than after 5 seconds of sleeping.","color":"gray"},{"text":"\nDefault: Disabled","color":"dark_gray"}]}}," Immediate Chat Display"]
-	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #percent mpSleep.config "},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enter the percentage of players required to sleep.\nEnter ","color":"gray"},"0",{"text":" to require only one player.","color":"gray"},{"text":"\nAccepts: whole numbers 0-100\nDefault: 0","color":"dark_gray"}]}}," Players Required to Sleep",{"text":" (Current: ","color":"gray"},{"score":{"name":"#percent","objective":"mpSleep.config"},"color":"gray"},{"text":")","color":"gray"}]
+	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #percent mpSleep.config "},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enter the percentage of players required to sleep.\nEnter ","color":"gray"},"0",{"text":" to require only one player.","color":"gray"},{"text":"\nAccepts: whole numbers 0-100\nDefault: 0","color":"dark_gray"}]}}," Players Required to Sleep",{"text":" (Current: ","color":"gray"},{"score":{"name":"#percent","objective":"mpSleep.config"},"color":"gray"},{"text":"%)","color":"gray"}]
 	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/bossbar set multiplayer_sleep:progress color "},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enter a color for the boss bar display.","color":"gray"},{"text":"\nAccepts: blue, green, pink, purple, red, white, yellow\nDefault: white","color":"dark_gray"}]}}," Boss Bar Color"]
 	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
 	execute store result score #sendCommandFeedback mpSleep.dummy run gamerule sendCommandFeedback
@@ -189,22 +192,22 @@ function config {
 			name restore_command_feedback
 			gamerule sendCommandFeedback true
 		}
-	}	
+	}
 }
 dir config {
-	function enable_default_display_mode_hidden {
+	function enable_default_display_hidden {
 		scoreboard players set #display mpSleep.config 0
 		function multiplayer_sleep:config
 	}
-	function enable_default_display_mode_boss_bar {
+	function enable_default_display_boss_bar {
 		scoreboard players set #display mpSleep.config 1
 		function multiplayer_sleep:config
 	}
-	function enable_default_display_mode_action_bar {
+	function enable_default_display_action_bar {
 		scoreboard players set #display mpSleep.config 2
 		function multiplayer_sleep:config
 	}
-	function enable_default_display_mode_chat {
+	function enable_default_display_chat {
 		scoreboard players set #display mpSleep.config 3
 		function multiplayer_sleep:config
 	}

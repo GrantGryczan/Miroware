@@ -1,0 +1,57 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:air"
+		},
+		"title": "",
+		"description": "",
+		"show_toast": false,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"item_durability_changed": {
+			"trigger": "minecraft:item_durability_changed",
+			"conditions": {
+				"durability": {
+					"min": 1,
+					"max": 8
+				},
+				"item": {
+					"item": "minecraft:golden_helmet"
+				},
+				"player": [
+					{
+						"condition": "minecraft:inverted",
+						"term": {
+							"condition": "minecraft:entity_scores",
+							"entity": "this",
+							"scores": {
+								"duraPing.armor": {
+									"min": 1,
+									"max": 2147483647
+								}
+							}
+						}
+					},
+					{
+						"condition": "minecraft:inverted",
+						"term": {
+							"condition": "minecraft:entity_scores",
+							"entity": "this",
+							"scores": {
+								"duraPing.config": {
+									"min": 200,
+									"max": 399
+								}
+							}
+						}
+					}
+				]
+			}
+		}
+	},
+	"rewards": {
+		"function": "durability_ping:damage"
+	}
+}

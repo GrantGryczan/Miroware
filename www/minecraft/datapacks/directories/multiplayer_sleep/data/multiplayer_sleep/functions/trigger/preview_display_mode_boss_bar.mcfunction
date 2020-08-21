@@ -1,2 +1,0 @@
-bossbar set multiplayer_sleep:preview players @s
-schedule function multiplayer_sleep:trigger/undo_preview_display_mode_boss_bar 5s replace

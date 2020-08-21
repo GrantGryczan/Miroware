@@ -1,0 +1,2 @@
+execute if score @s duraPing.config matches ..99 run scoreboard players add @s duraPing.config 100
+execute if score @s duraPing.config matches 300..399 run scoreboard players remove @s duraPing.config 100
