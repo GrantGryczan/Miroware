@@ -27,27 +27,27 @@ clock 1t {
 			name trigger/use_config
 			execute unless score @s duraPing.config matches 0.. run scoreboard players operation @s duraPing.config = #default duraPing.config
 			execute if score @s duraPing matches 8 run {
-				name trigger/enable_ping_for_hand_items
+				name trigger/enable_weapon
 				execute if score @s duraPing.config matches 100..199 run scoreboard players remove @s duraPing.config 100
 				execute if score @s duraPing.config matches 200..299 run scoreboard players add @s duraPing.config 100
 			}
 			execute if score @s duraPing matches 7 run {
-				name trigger/disable_ping_for_hand_items
+				name trigger/disable_weapon
 				execute if score @s duraPing.config matches ..99 run scoreboard players add @s duraPing.config 100
 				execute if score @s duraPing.config matches 300..399 run scoreboard players remove @s duraPing.config 100
 			}
 			execute if score @s duraPing matches 10 run {
-				name trigger/enable_ping_for_armor_items
+				name trigger/enable_armor
 				execute if score @s duraPing.config matches 200..299 run scoreboard players remove @s duraPing.config 100
 				execute if score @s duraPing.config matches 300..399 run scoreboard players remove @s duraPing.config 300
 			}
 			execute if score @s duraPing matches 9 run {
-				name trigger/disable_ping_for_armor_items
+				name trigger/disable_armor
 				execute if score @s duraPing.config matches ..99 run scoreboard players add @s duraPing.config 300
 				execute if score @s duraPing.config matches 100..199 run scoreboard players add @s duraPing.config 100
 			}
 			execute if score @s duraPing matches 11 run {
-				name trigger/toggle_ping_with_sound
+				name trigger/toggle_sound
 				scoreboard players operation #config duraPing.dummy = @s duraPing.config
 				scoreboard players operation #config duraPing.dummy %= #100 duraPing.dummy
 				execute if score #config duraPing.dummy matches 10.. run scoreboard players remove @s duraPing.config 10
@@ -167,13 +167,13 @@ function config {
 	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
 	tellraw @s ["                    Durability Ping",{"text":" / ","color":"gray"},"Global Settings                    "]
 	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
-	execute if score #config duraPing.dummy matches 100..299 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function durability_ping:config/enable_default_ping_for_hand_items"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Ping for Hand Items",{"text":".","color":"green"},{"text":"\nIncludes any item with durability in the mainhand or offhand slots","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Default Ping for Hand Items"]
-	execute unless score #config duraPing.dummy matches 100..299 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function durability_ping:config/disable_default_ping_for_hand_items"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Ping for Hand Items",{"text":".","color":"red"},{"text":"\nIncludes any item with durability in the mainhand or offhand slots","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Default Ping for Hand Items"]
-	execute if score #config duraPing.dummy matches 200.. run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function durability_ping:config/enable_default_ping_for_armor_items"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Ping for Armor Items",{"text":".","color":"green"},{"text":"\nIncludes any item with durability in the armor slots","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Default Ping for Armor Items"]
-	execute unless score #config duraPing.dummy matches 200.. run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function durability_ping:config/disable_default_ping_for_armor_items"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Ping for Armor Items",{"text":".","color":"red"},{"text":"\nIncludes any item with durability in the armor slots","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Default Ping for Armor Items"]
+	execute if score #config duraPing.dummy matches 100..299 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function durability_ping:config/enable_default_weapon"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Ping for Hand Items",{"text":".","color":"green"},{"text":"\nIncludes any item with durability in the mainhand or offhand slots","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Default Ping for Hand Items"]
+	execute unless score #config duraPing.dummy matches 100..299 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function durability_ping:config/disable_default_weapon"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Ping for Hand Items",{"text":".","color":"red"},{"text":"\nIncludes any item with durability in the mainhand or offhand slots","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Default Ping for Hand Items"]
+	execute if score #config duraPing.dummy matches 200.. run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function durability_ping:config/enable_default_armor"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Ping for Armor Items",{"text":".","color":"green"},{"text":"\nIncludes any item with durability in the armor slots","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Default Ping for Armor Items"]
+	execute unless score #config duraPing.dummy matches 200.. run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function durability_ping:config/disable_default_armor"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Ping for Armor Items",{"text":".","color":"red"},{"text":"\nIncludes any item with durability in the armor slots","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Default Ping for Armor Items"]
 	scoreboard players operation #config duraPing.dummy %= #100 duraPing.dummy
-	execute if score #config duraPing.dummy matches ..9 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function durability_ping:config/toggle_default_ping_with_sound"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Ping with Sound",{"text":".","color":"green"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger duraPing set 2"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Ping with Sound",{"text":".","color":"dark_gray"}]}}," Default Ping with Sound"]
-	execute unless score #config duraPing.dummy matches ..9 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function durability_ping:config/toggle_default_ping_with_sound"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Ping with Sound",{"text":".","color":"red"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger duraPing set 2"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Ping with Sound",{"text":".","color":"dark_gray"}]}}," Default Ping with Sound"]
+	execute if score #config duraPing.dummy matches ..9 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function durability_ping:config/toggle_default_sound"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Ping with Sound",{"text":".","color":"green"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger duraPing set 2"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Ping with Sound",{"text":".","color":"dark_gray"}]}}," Default Ping with Sound"]
+	execute unless score #config duraPing.dummy matches ..9 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function durability_ping:config/toggle_default_sound"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Ping with Sound",{"text":".","color":"red"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger duraPing set 2"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Ping with Sound",{"text":".","color":"dark_gray"}]}}," Default Ping with Sound"]
 	scoreboard players operation #config duraPing.dummy %= #10 duraPing.dummy
 	execute if score #config duraPing.dummy matches 0 run tellraw @s ["",{"text":"[ ✔ ]","color":"green"}," Default Display: Hidden"]
 	execute unless score #config duraPing.dummy matches 0 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function durability_ping:config/enable_default_display_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Hidden",{"text":".","color":"green"}]}}," Default Display: Hidden"]
@@ -197,27 +197,27 @@ function config {
 	}
 }
 dir config {
-	function enable_default_ping_for_hand_items {
+	function enable_default_weapon {
 		execute if score #default duraPing.config matches 100..199 run scoreboard players remove #default duraPing.config 100
 		execute if score #default duraPing.config matches 200..299 run scoreboard players add #default duraPing.config 100
 		function durability_ping:config
 	}
-	function disable_default_ping_for_hand_items {
+	function disable_default_weapon {
 		execute if score #default duraPing.config matches ..99 run scoreboard players add #default duraPing.config 100
 		execute if score #default duraPing.config matches 300..399 run scoreboard players remove #default duraPing.config 100
 		function durability_ping:config
 	}
-	function enable_default_ping_for_armor_items {
+	function enable_default_armor {
 		execute if score #default duraPing.config matches 200..299 run scoreboard players remove #default duraPing.config 100
 		execute if score #default duraPing.config matches 300..399 run scoreboard players remove #default duraPing.config 300
 		function durability_ping:config
 	}
-	function disable_default_ping_for_armor_items {
+	function disable_default_armor {
 		execute if score #default duraPing.config matches ..99 run scoreboard players add #default duraPing.config 300
 		execute if score #default duraPing.config matches 100..199 run scoreboard players add #default duraPing.config 100
 		function durability_ping:config
 	}
-	function toggle_default_ping_with_sound {
+	function toggle_default_sound {
 		scoreboard players operation #config duraPing.dummy = #default duraPing.config
 		scoreboard players operation #config duraPing.dummy %= #100 duraPing.dummy
 		execute if score #config duraPing.dummy matches 10.. run scoreboard players remove #default duraPing.config 10
