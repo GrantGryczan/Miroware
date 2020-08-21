@@ -258,7 +258,8 @@ module.exports = {
 			}, {
 				id: "elytra",
 				durability: 432,
-				slot: "armor.chest"
+				slot: "armor.chest",
+				minDurability: 2
 			}, {
 				id: "trident",
 				durability: 250,
@@ -296,7 +297,7 @@ module.exports = {
 			"trigger": "minecraft:item_durability_changed",
 			"conditions": {
 				"durability": {
-					"min": 1,
+					"min": ${item.minDurability || 1},
 					"max": ${Math.round(item.durability / 10)}
 				},
 				"item": {

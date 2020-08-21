@@ -14,7 +14,7 @@
 			"trigger": "minecraft:item_durability_changed",
 			"conditions": {
 				"durability": {
-					"min": 1,
+					"min": 2,
 					"max": 43
 				},
 				"item": {
