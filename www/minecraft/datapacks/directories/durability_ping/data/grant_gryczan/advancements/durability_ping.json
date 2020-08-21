@@ -1,7 +1,8 @@
 {
 	"display": {
 		"icon": {
-			"item": "minecraft:netherite_pickaxe"
+			"item": "minecraft:diamond_pickaxe",
+			"nbt": "{Damage:1405}"
 		},
 		"title": "Durability Ping       ",
 		"description": ["",{"text":"Get notified when you damage an item with 10% or less durability.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger duraPing","color":"aqua"},{"text":" for personal settings.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function durability_ping:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
