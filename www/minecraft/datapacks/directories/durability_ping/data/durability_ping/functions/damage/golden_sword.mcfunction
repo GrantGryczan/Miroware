@@ -1,7 +1,7 @@
 advancement revoke @s only durability_ping:damage/golden_sword
 scoreboard players set #durability duraPing.dummy 32
 data modify storage durability_ping:storage name set value '{"translate":"item.minecraft.golden_sword","color":"gold"}'
-scoreboard players set @s duraPing.weapon 60
+scoreboard players set @s duraPing.weapon 1
 execute store success score #mainhand duraPing.dummy if entity @s[nbt={SelectedItem:{id:"minecraft:golden_sword"}}]
 execute if score #mainhand duraPing.dummy matches 1 run data modify storage durability_ping:storage itemTag set from entity @s SelectedItem.tag
 execute unless score #mainhand duraPing.dummy matches 1 run data modify storage durability_ping:storage itemTag set from entity @s Inventory[{Slot:-106b}].tag
@@ -15,8 +15,12 @@ execute if score #config duraPing.dummy matches 10.. at @s run playsound minecra
 scoreboard players operation #config duraPing.dummy %= #10 duraPing.dummy
 execute if score #config duraPing.dummy matches 1..2 run title @s reset
 execute if score #config duraPing.dummy matches 1 run title @s title ""
-execute if score #config duraPing.dummy matches 1 run title @s subtitle ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low! ","color":"red"},{"score":{"name":"#durability","objective":"duraPing.dummy"},"color":"gold"},{"text":" of 32 remaining.","color":"red"}]
+execute if score #damage duraPing.dummy matches 0 if score #config duraPing.dummy matches 1 run title @s subtitle ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low!","color":"red"}]
+execute unless score #damage duraPing.dummy matches 0 if score #config duraPing.dummy matches 1 run title @s subtitle ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low! ","color":"red"},{"score":{"name":"#durability","objective":"duraPing.dummy"},"color":"gold"},{"text":" of 32 remaining.","color":"red"}]
 execute if score #config duraPing.dummy matches 2 run title @s title ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low!","color":"red"}]
-execute if score #config duraPing.dummy matches 2 run title @s subtitle [{"score":{"name":"#durability","objective":"duraPing.dummy"},"color":"gold"},{"text":" of 32 remaining.","color":"red"}]
-execute if score #config duraPing.dummy matches 3 run tellraw @s ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low! ","color":"red"},{"score":{"name":"#durability","objective":"duraPing.dummy"},"color":"gold"},{"text":" of 32 remaining.","color":"red"}]
-execute if score #config duraPing.dummy matches 4 run title @s actionbar ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low! ","color":"red"},{"score":{"name":"#durability","objective":"duraPing.dummy"},"color":"gold"},{"text":" of 32 remaining.","color":"red"}]
+execute unless score #damage duraPing.dummy matches 0 if score #config duraPing.dummy matches 2 run title @s subtitle [{"score":{"name":"#durability","objective":"duraPing.dummy"},"color":"gold"},{"text":" of 32 remaining.","color":"red"}]
+execute if score #damage duraPing.dummy matches 0 if score #config duraPing.dummy matches 3 run tellraw @s ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low!","color":"red"}]
+execute unless score #damage duraPing.dummy matches 0 if score #config duraPing.dummy matches 3 run tellraw @s ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low! ","color":"red"},{"score":{"name":"#durability","objective":"duraPing.dummy"},"color":"gold"},{"text":" of 32 remaining.","color":"red"}]
+execute if score #damage duraPing.dummy matches 0 if score #config duraPing.dummy matches 4 run title @s actionbar ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low!","color":"red"}]
+execute unless score #damage duraPing.dummy matches 0 if score #config duraPing.dummy matches 4 run title @s actionbar ["",{"storage":"durability_ping:storage","nbt":"name","interpret":true,"color":"gold"},{"text":" durability low! ","color":"red"},{"score":{"name":"#durability","objective":"duraPing.dummy"},"color":"gold"},{"text":" of 32 remaining.","color":"red"}]
+data remove storage durability_ping:storage itemTag
