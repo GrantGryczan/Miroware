@@ -137,7 +137,7 @@ function check_damage {
 			scoreboard players set #durability duraPing.dummy <%this.item.durability%>
 			data modify storage durability_ping:storage name set value '{"translate":"item.minecraft.<%this.item.id%>","color":"gold"}'
 			!IF(this.item.slot === "weapon") {
-				scoreboard players set @s duraPing.weapon 1
+				scoreboard players set @s duraPing.weapon 60
 				execute store success score #mainhand duraPing.dummy if entity @s[nbt={SelectedItem:{id:"minecraft:<%this.item.id%>"}}]
 				execute if score #mainhand duraPing.dummy matches 1 run data modify storage durability_ping:storage itemTag set from entity @s SelectedItem.tag
 				execute unless score #mainhand duraPing.dummy matches 1 run data modify storage durability_ping:storage itemTag set from entity @s Inventory[{Slot:-106b}].tag

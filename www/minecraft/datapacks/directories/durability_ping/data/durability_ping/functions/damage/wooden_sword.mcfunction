@@ -1,7 +1,7 @@
 advancement revoke @s only durability_ping:damage/wooden_sword
 scoreboard players set #durability duraPing.dummy 59
 data modify storage durability_ping:storage name set value '{"translate":"item.minecraft.wooden_sword","color":"gold"}'
-scoreboard players set @s duraPing.weapon 1
+scoreboard players set @s duraPing.weapon 60
 execute store success score #mainhand duraPing.dummy if entity @s[nbt={SelectedItem:{id:"minecraft:wooden_sword"}}]
 execute if score #mainhand duraPing.dummy matches 1 run data modify storage durability_ping:storage itemTag set from entity @s SelectedItem.tag
 execute unless score #mainhand duraPing.dummy matches 1 run data modify storage durability_ping:storage itemTag set from entity @s Inventory[{Slot:-106b}].tag
