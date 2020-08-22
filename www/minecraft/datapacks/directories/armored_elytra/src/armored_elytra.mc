@@ -30,10 +30,11 @@ clock 1t {
 			function armored_elytra:separate_enchantments/start
 			execute as @e[type=minecraft:item,tag=armEly.separated] run {
 				name copy_burning_elytra_tags
-				data modify entity @s Motion set from entity @e[type=minecraft:item,tag=armEly.subject,limit=1] Motion
-				data modify entity @s Fire set from entity @e[type=minecraft:item,tag=armEly.subject,limit=1] Fire
-				data modify entity @s PickupDelay set from entity @e[type=minecraft:item,tag=armEly.subject,limit=1] PickupDelay
-				data modify entity @s Owner set from entity @e[type=minecraft:item,tag=armEly.subject,limit=1] Owner
+				data modify storage armored_elytra:storage temp set from entity @e[type=minecraft:item,tag=armEly.subject,limit=1] {}
+				data modify entity @s Motion set from storage armored_elytra:storage temp.Motion
+				data modify entity @s Fire set from storage armored_elytra:storage temp.Fire
+				data modify entity @s PickupDelay set from storage armored_elytra:storage temp.PickupDelay
+				data modify entity @s Owner set from storage armored_elytra:storage temp.Owner
 				tag @s remove armEly.separated
 			}
 			kill @s

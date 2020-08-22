@@ -7,5 +7,5 @@ data remove storage graves:storage players
 data remove storage graves:storage lastGrave
 data remove storage graves:storage temp
 schedule clear graves:tick
+schedule clear graves:schedule
 schedule clear graves:update_model
-schedule clear graves:check_game_rules

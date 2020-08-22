@@ -1,0 +1,3 @@
+scoreboard players operation #id graves.dummy = @s graves.id
+execute as @e[type=minecraft:armor_stand,tag=graves.hitbox,distance=..0.01] unless score @s graves.id = #id graves.dummy as @e[type=minecraft:armor_stand,tag=graves.hitbox,distance=0.01..] if score @s graves.id = #id graves.dummy run tp @s ~ ~ ~
+execute unless entity @e[type=minecraft:armor_stand,tag=graves.hitbox,distance=..0.01] as @e[type=minecraft:armor_stand,tag=graves.hitbox,distance=0.01..] if score @s graves.id = #id graves.dummy run tp @s ~ ~ ~

@@ -37,8 +37,8 @@ function uninstall {
 	data remove storage graves:storage lastGrave
 	data remove storage graves:storage temp
 	schedule clear graves:tick
+	schedule clear graves:schedule
 	schedule clear graves:update_model
-	schedule clear graves:check_game_rules
 }
 clock 1t {
 	name tick
@@ -141,12 +141,6 @@ clock 1t {
 		clear @s minecraft:stone_button{gravesData:{}}
 		tag @s remove graves.subject
 	}
-	execute as @e[type=minecraft:armor_stand,tag=graves.model] at @s run {
-		name tick_model
-		tag @s add graves.subject
-		execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] if score @s graves.id = @e[type=minecraft:armor_stand,tag=graves.subject,limit=1] graves.id run tp @s ~ ~1.375 ~
-		tag @s remove graves.subject
-	}
 	execute as @e[type=minecraft:armor_stand,tag=graves.hitbox] at @s if entity @a[gamemode=!spectator,distance=..2] align xz run {
 		name show_name
 		execute unless entity @e[dx=0,dy=0,dz=0,type=minecraft:area_effect_cloud,tag=graves.name,limit=1] run {
@@ -171,7 +165,13 @@ clock 1t {
 	}
 }
 clock 2s {
-	name check_game_rules
+	name schedule
+	execute as @e[type=minecraft:armor_stand,tag=graves.model] at @s positioned ~ ~1.375 ~ run {
+		name fix_hitbox_position
+		scoreboard players operation #id graves.dummy = @s graves.id
+		execute as @e[type=minecraft:armor_stand,tag=graves.hitbox,distance=..0.01] unless score @s graves.id = #id graves.dummy as @e[type=minecraft:armor_stand,tag=graves.hitbox,distance=0.01..] if score @s graves.id = #id graves.dummy run tp @s ~ ~ ~
+		execute unless entity @e[type=minecraft:armor_stand,tag=graves.hitbox,distance=..0.01] as @e[type=minecraft:armor_stand,tag=graves.hitbox,distance=0.01..] if score @s graves.id = #id graves.dummy run tp @s ~ ~ ~
+	}
 	execute in minecraft:overworld store result score #keepInventory graves.dummy run gamerule keepInventory
 	execute if score #keepInventory graves.dummy matches 0 if score #prevOverworldKeepInventory graves.dummy matches 1 run tellraw @a {"text":"The Graves data pack cannot read player inventories correctly unless gamerule keepInventory is true.","color":"red"}
 	scoreboard players operation #prevOverworldKeepInventory graves.dummy = #keepInventory graves.dummy
