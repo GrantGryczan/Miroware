@@ -246,7 +246,8 @@ module.exports = {
 			}, {
 				id: "carrot_on_a_stick",
 				durability: 25,
-				slot: "weapon"
+				slot: "weapon",
+				maxDurability: 7
 			}, {
 				id: "warped_fungus_on_a_stick",
 				durability: 100,
@@ -298,7 +299,7 @@ module.exports = {
 			"conditions": {
 				"durability": {
 					"min": ${item.minDurability || 1},
-					"max": ${Math.round(item.durability / 10)}
+					"max": ${item.maxDurability || Math.round(item.durability / 10)}
 				},
 				"item": {
 					"item": "minecraft:${item.id}"
