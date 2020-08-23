@@ -113,7 +113,7 @@ clock 2s {
 }
 clock 20s {
 	name update_model
-	execute as @e[type=minecraft:armor_stand,tag=graves.model] run data merge entity @s {Fire:32767s,Air:32767s}
+	execute as @e[type=minecraft:armor_stand,tag=graves.model] run data merge entity @s {Air:32767s}
 }
 function interact_with_grave {
 	function graves:activate_graves
@@ -295,7 +295,7 @@ function create_grave {
 		execute store result storage graves:storage players[-1].graves[-1].z int 1 run data get entity @s Pos[2]
 		execute at @s run {
 			name create_model
-			summon minecraft:armor_stand ~ ~ ~ {Tags:["graves.marker","graves.model","graves.new"],Marker:1b,Invisible:1b,NoGravity:1b,Invulnerable:1b,ArmorItems:[{},{},{},{id:"minecraft:stone_brick_wall",Count:1b,tag:{gravesData:{}}}],Fire:32767s,Air:32767s}
+			summon minecraft:armor_stand ~ ~ ~ {Tags:["graves.marker","graves.model","graves.new"],Marker:1b,Invisible:1b,NoGravity:1b,Invulnerable:1b,ArmorItems:[{},{},{},{id:"minecraft:stone_brick_wall",Count:1b,tag:{gravesData:{}}}],Air:32767s}
 			execute as @e[type=minecraft:armor_stand,tag=graves.new] run {
 				name prepare_model
 				execute store result entity @s ArmorItems[3].tag.gravesData.id int 1 run scoreboard players get #id graves.dummy
