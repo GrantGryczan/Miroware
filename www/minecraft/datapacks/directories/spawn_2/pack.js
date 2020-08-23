@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "spawn",
-	version: "2.2.2",
+	version: "2.3.0",
 	name: "Spawn",
 	compatibility: ["1.16"],
 	description: `

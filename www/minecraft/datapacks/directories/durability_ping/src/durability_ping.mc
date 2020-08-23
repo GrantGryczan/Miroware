@@ -116,12 +116,12 @@ clock 1s {
 	name schedule
 	scoreboard players enable @a duraPing
 	execute as @a[scores={duraPing.weapon=1..}] run {
-		name decrement_weapon_timer
+		name decrement_weapon_cooldown
 		scoreboard players remove @s duraPing.weapon 1
 		execute if score @s duraPing.weapon matches 0 run scoreboard players reset @s duraPing.weapon
 	}
 	execute as @a[scores={duraPing.armor=1..}] run {
-		name decrement_armor_timer
+		name decrement_armor_cooldown
 		scoreboard players remove @s duraPing.armor 1
 		execute if score @s duraPing.armor matches 0 run scoreboard players reset @s duraPing.armor
 	}
@@ -192,8 +192,8 @@ function config {
 	execute if score #config duraPing.dummy matches 4 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function durability_ping:config/enable_default_display_hidden"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to disable ","color":"red"},"Default Display: Action Bar",{"text":".","color":"red"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger duraPing set 6"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Action Bar",{"text":".","color":"gray"}]}}," Default Display: Action Bar"]
 	execute unless score #config duraPing.dummy matches 4 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function durability_ping:config/enable_default_display_action_bar"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Default Display: Action Bar",{"text":".","color":"green"}]}}," ",{"text":"[ ℹ ]","color":"gray","clickEvent":{"action":"run_command","value":"/trigger duraPing set 6"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to preview ","color":"gray"},"Default Display: Action Bar",{"text":".","color":"gray"}]}}," Default Display: Action Bar"]
 	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
-	execute store result score #sendCommandFeedback duraPing.dummy run gamerule sendCommandFeedback
-	execute if score #sendCommandFeedback duraPing.dummy matches 1 run {
+	execute store result score #sendCommandFeedback duraPing.config run gamerule sendCommandFeedback
+	execute if score #sendCommandFeedback duraPing.config matches 1 run {
 		name hide_command_feedback
 		gamerule sendCommandFeedback false
 		schedule 1t replace {

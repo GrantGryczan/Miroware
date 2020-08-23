@@ -1,6 +1,3 @@
-tellraw @s {"text":"Teleporting to world spawn...","color":"dark_aqua"}
-scoreboard players operation @s spawn.delay = #delay spawn.config
-execute store result score @s spawn.x run data get entity @s Pos[0] 10
-execute store result score @s spawn.y run data get entity @s Pos[1] 10
-execute store result score @s spawn.z run data get entity @s Pos[2] 10
+execute if score @s spawn.cooldown matches 1.. run tellraw @s [{"text":"Your Spawn cooldown will end in ","color":"red"},{"score":{"name":"@s","objective":"spawn.cooldown"},"color":"red"},{"text":" seconds.","color":"red"}]
+execute unless score @s spawn.cooldown matches 1.. run function spawn:start_to_go_to_spawn
 scoreboard players set @s spawn 0

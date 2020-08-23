@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "tpa",
-	version: "1.2.0",
+	version: "1.3.0",
 	name: "TPA",
 	compatibility: ["1.15"],
 	description: `

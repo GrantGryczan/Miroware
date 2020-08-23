@@ -9,5 +9,5 @@ execute if score #locating graves.config matches 1 run tellraw @s ["",{"text":"[
 execute unless score #locating graves.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function graves:config/enable_locating"},"hoverEvent":{"action":"show_text","value":["",{"text":"Click to enable ","color":"green"},"Grave Locating",{"text":".","color":"green"},{"text":"\nWhen enabled, players can see the coordinates of their last grave.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Grave Locating"]
 tellraw @s ["",{"text":">> ","color":"gold"},{"text":"[ Receive Grave Key ]","clickEvent":{"action":"run_command","value":"/function graves:give_grave_key"},"hoverEvent":{"action":"show_text","value":{"text":"Click to receive a grave key which can be used to forcibly open graves.","color":"gray"}}}]
 tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
-execute store result score #sendCommandFeedback graves.dummy run gamerule sendCommandFeedback
-execute if score #sendCommandFeedback graves.dummy matches 1 run function graves:hide_command_feedback
+execute store result score #sendCommandFeedback graves.config run gamerule sendCommandFeedback
+execute if score #sendCommandFeedback graves.config matches 1 run function graves:hide_command_feedback

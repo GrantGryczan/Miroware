@@ -1,0 +1,2 @@
+gamerule sendCommandFeedback false
+schedule function tpa:restore_command_feedback 1t replace

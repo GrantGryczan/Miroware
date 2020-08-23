@@ -1,1 +1,1 @@
-{"replace":false,"values":["homes:load","homes:tick"]}
+{"replace":false,"values":["homes:load","homes:tick","homes:decrement_cooldowns"]}

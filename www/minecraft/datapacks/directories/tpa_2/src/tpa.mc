@@ -1,22 +1,28 @@
 function load {
+	scoreboard objectives add tpa.config dummy "TPA Config"
 	scoreboard objectives add tpa.pid dummy "Player ID"
 	scoreboard objectives setdisplay list tpa.pid
 	scoreboard objectives add tpa.target dummy
 	scoreboard objectives add tpa.timeout dummy
+	scoreboard objectives add tpa.cooldown dummy
 	scoreboard objectives add tpa trigger
 	scoreboard objectives add tpcancel trigger
 	scoreboard objectives add tpaccept trigger
 	scoreboard objectives add tpdeny trigger
+	execute unless score #cooldown tpa.config matches 0.. run scoreboard players set #cooldown tpa.config 0
 }
 function uninstall {
+	scoreboard objectives remove tpa.config
 	scoreboard objectives remove tpa.pid
 	scoreboard objectives remove tpa.target
 	scoreboard objectives remove tpa.timeout
+	scoreboard objectives remove tpa.cooldown
 	scoreboard objectives remove tpa
 	scoreboard objectives remove tpcancel
 	scoreboard objectives remove tpaccept
 	scoreboard objectives remove tpdeny
 	schedule clear tpa:tick
+	schedule clear tpa:decrement_cooldowns
 }
 clock 1t {
 	name tick
@@ -33,22 +39,26 @@ clock 1t {
 	}
 	execute as @a[scores={tpa=1..}] run {
 		name trigger_tpa
-		tag @s add tpa.sender
-		execute as @a if score @s tpa.pid = @a[tag=tpa.sender,limit=1] tpa run tag @s add tpa.target
-		execute unless entity @a[tag=tpa.target] run tellraw @s [{"text":"No player with PID ","color":"red"},{"score":{"name":"@s","objective":"tpa"},"color":"red"},{"text":" was found.","color":"red"}]
-		execute if entity @s[tag=tpa.target] run tellraw @s {"text":"You cannot send a teleport request to yourself.","color":"red"}
-		execute as @a[tag=!tpa.sender,tag=tpa.target,limit=1] run {
-			name receive_tpa
-			execute as @a[tag=tpa.sender] if score @s tpa.target matches 1.. run function tpa:cancel_tpa
-			scoreboard players operation @a[tag=tpa.sender] tpa.target = @a[tag=tpa.sender] tpa
-			tellraw @a[tag=tpa.sender] [{"text":"You have requested to teleport to ","color":"dark_aqua"},{"selector":"@s","color":"aqua"},{"text":".\nTo cancel, ","color":"dark_aqua"},{"text":"enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/trigger tpcancel","color":"aqua","clickEvent":{"action":"run_command","value":"/trigger tpcancel"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/trigger tpcancel","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":".","color":"dark_aqua"}]
-			tellraw @s ["",{"selector":"@a[tag=tpa.sender]","color":"aqua"},{"text":" has requested to teleport to you.\nTo accept, ","color":"dark_aqua"},{"text":"enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/trigger tpaccept","color":"aqua","clickEvent":{"action":"run_command","value":"/trigger tpaccept"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/trigger tpaccept","color":"aqua"},{"text":".\nThe ","color":"dark_aqua"},{"text":"most recent","color":"red"},{"text":" active teleport request will be accepted.\nEnter ","color":"dark_aqua"},{"text":"/trigger tpaccept set <PID>","color":"aqua"},{"text":" instead if this player's request is not the most recent.","color":"dark_aqua"}]}},{"text":".\nTo deny, ","color":"dark_aqua"},{"text":"enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/trigger tpdeny","color":"aqua","clickEvent":{"action":"run_command","value":"/trigger tpdeny"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/trigger tpdeny","color":"aqua"},{"text":".\nThe ","color":"dark_aqua"},{"text":"most recent","color":"red"},{"text":" active teleport request will be denied.\nEnter ","color":"dark_aqua"},{"text":"/trigger tpdeny set <PID>","color":"aqua"},{"text":" instead if this player's request is not the most recent.","color":"dark_aqua"}]}},{"text":".","color":"dark_aqua"}]
+		execute if score @s tpa.cooldown matches 1.. run tellraw @s [{"text":"Your TPA cooldown will end in ","color":"red"},{"score":{"name":"@s","objective":"tpa.cooldown"},"color":"red"},{"text":" seconds.","color":"red"}]
+		execute unless score @s tpa.cooldown matches 1.. run {
+			name send_tpa
+			tag @s add tpa.sender
+			execute as @a if score @s tpa.pid = @a[tag=tpa.sender,limit=1] tpa run tag @s add tpa.target
+			execute unless entity @a[tag=tpa.target] run tellraw @s [{"text":"No player with PID ","color":"red"},{"score":{"name":"@s","objective":"tpa"},"color":"red"},{"text":" was found.","color":"red"}]
+			execute if entity @s[tag=tpa.target] run tellraw @s {"text":"You cannot send a teleport request to yourself.","color":"red"}
+			execute as @a[tag=!tpa.sender,tag=tpa.target,limit=1] run {
+				name receive_tpa
+				execute as @a[tag=tpa.sender] if score @s tpa.target matches 1.. run function tpa:cancel_tpa
+				scoreboard players operation @a[tag=tpa.sender] tpa.target = @a[tag=tpa.sender] tpa
+				tellraw @a[tag=tpa.sender] [{"text":"You have requested to teleport to ","color":"dark_aqua"},{"selector":"@s","color":"aqua"},{"text":".\nTo cancel, ","color":"dark_aqua"},{"text":"enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/trigger tpcancel","color":"aqua","clickEvent":{"action":"run_command","value":"/trigger tpcancel"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/trigger tpcancel","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":".","color":"dark_aqua"}]
+				tellraw @s ["",{"selector":"@a[tag=tpa.sender]","color":"aqua"},{"text":" has requested to teleport to you.\nTo accept, ","color":"dark_aqua"},{"text":"enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/trigger tpaccept","color":"aqua","clickEvent":{"action":"run_command","value":"/trigger tpaccept"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/trigger tpaccept","color":"aqua"},{"text":".\nThe ","color":"dark_aqua"},{"text":"most recent","color":"red"},{"text":" active teleport request will be accepted.\nEnter ","color":"dark_aqua"},{"text":"/trigger tpaccept set <PID>","color":"aqua"},{"text":" instead if this player's request is not the most recent.","color":"dark_aqua"}]}},{"text":".\nTo deny, ","color":"dark_aqua"},{"text":"enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/trigger tpdeny","color":"aqua","clickEvent":{"action":"run_command","value":"/trigger tpdeny"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/trigger tpdeny","color":"aqua"},{"text":".\nThe ","color":"dark_aqua"},{"text":"most recent","color":"red"},{"text":" active teleport request will be denied.\nEnter ","color":"dark_aqua"},{"text":"/trigger tpdeny set <PID>","color":"aqua"},{"text":" instead if this player's request is not the most recent.","color":"dark_aqua"}]}},{"text":".","color":"dark_aqua"}]
+			}
+			tag @s remove tpa.sender
+			tag @a[tag=tpa.target] remove tpa.target
 		}
-		tag @s remove tpa.sender
-		tag @a[tag=tpa.target] remove tpa.target
+		scoreboard players set @s tpa 0
 	}
 	scoreboard players enable @a tpa
-	scoreboard players set @a tpa 0
 	execute as @a[scores={tpcancel=1}] run {
 		name trigger_tpcancel
 		execute unless score @s tpa.target matches 1.. run tellraw @s {"text":"You have no active teleport requests to cancel.","color":"red"}
@@ -68,6 +78,7 @@ clock 1t {
 			name accept_tpa
 			tellraw @a[tag=tpa.target] [{"text":"You have accepted ","color":"dark_aqua"},{"selector":"@s","color":"aqua"},{"text":"'s teleport request.","color":"dark_aqua"}]
 			tellraw @s ["",{"selector":"@a[tag=tpa.target]","color":"aqua"},{"text":" has accepted your teleport request.","color":"dark_aqua"}]
+			execute unless score #cooldown tpa.config matches 0 run scoreboard players operation @s tpa.cooldown = #cooldown tpa.config
 			execute at @s run function back:set_back
 			tp @s @a[tag=tpa.target,limit=1]
 			scoreboard players reset @s tpa.target
@@ -99,6 +110,14 @@ clock 1t {
 	scoreboard players enable @a tpdeny
 	scoreboard players set @a tpdeny -1
 }
+clock 1s {
+	name decrement_cooldowns
+	execute as @a[scores={tpa.cooldown=1..}] run {
+		name decrement_cooldown
+		scoreboard players remove @s tpa.cooldown 1
+		execute if score @s tpa.cooldown matches 0 run scoreboard players reset @s tpa.cooldown
+	}
+}
 function untag_older_senders {
 	tag @s add tpa.self
 	execute as @a[tag=tpa.sender] if score @s tpa.timeout > @a[tag=tpa.self,limit=1] tpa.timeout run tag @s remove tpa.sender
@@ -112,4 +131,20 @@ function cancel_tpa {
 	scoreboard players reset @s tpa.target
 	scoreboard players reset @s tpa.timeout
 	tag @s remove tpa.cancelSender
+}
+function config {
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	tellraw @s ["                           TPA",{"text":" / ","color":"gray"},"Global Settings                           "]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #cooldown tpa.config "},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enter the number of seconds required to wait between uses of the TPA command.","color":"gray"},{"text":"\nAccepts: whole numbers 0+\nDefault: 0","color":"dark_gray"}]}}," Cooldown ",{"text":"(Current: ","color":"gray"},{"score":{"name":"#cooldown","objective":"tpa.config"},"color":"gray"},{"text":")","color":"gray"}]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	execute store result score #sendCommandFeedback tpa.config run gamerule sendCommandFeedback
+	execute if score #sendCommandFeedback tpa.config matches 1 run {
+		name hide_command_feedback
+		gamerule sendCommandFeedback false
+		schedule 1t replace {
+			name restore_command_feedback
+			gamerule sendCommandFeedback true
+		}
+	}
 }

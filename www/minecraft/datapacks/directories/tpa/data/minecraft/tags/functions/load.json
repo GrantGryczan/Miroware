@@ -1,1 +1,1 @@
-{"replace":false,"values":["tpa:load","tpa:tick"]}
+{"replace":false,"values":["tpa:load","tpa:tick","tpa:decrement_cooldowns"]}

@@ -1,0 +1,7 @@
+tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+tellraw @s ["                           TPA",{"text":" / ","color":"gray"},"Global Settings                           "]
+tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #cooldown tpa.config "},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enter the number of seconds required to wait between uses of the TPA command.","color":"gray"},{"text":"\nAccepts: whole numbers 0+\nDefault: 0","color":"dark_gray"}]}}," Cooldown ",{"text":"(Current: ","color":"gray"},{"score":{"name":"#cooldown","objective":"tpa.config"},"color":"gray"},{"text":")","color":"gray"}]
+tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+execute store result score #sendCommandFeedback tpa.config run gamerule sendCommandFeedback
+execute if score #sendCommandFeedback tpa.config matches 1 run function tpa:hide_command_feedback

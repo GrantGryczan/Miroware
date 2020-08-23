@@ -1,1 +1,1 @@
-{"replace":false,"values":["back:load","back:tick","back:check_game_rules"]}
+{"replace":false,"values":["back:load","back:tick","back:decrement_cooldowns","back:check_game_rules"]}

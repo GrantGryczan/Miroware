@@ -1,3 +1,4 @@
+execute unless score #cooldown spawn.config matches 0 run scoreboard players operation @s spawn.cooldown = #cooldown spawn.config
 execute at @s run function back:set_back
 summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["spawn.destination"]}
 function spawn:offset_up

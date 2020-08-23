@@ -4,7 +4,6 @@ scoreboard players add @a[scores={tpa.target=1..}] tpa.timeout 1
 execute as @a[scores={tpa.timeout=6000..}] run function tpa:time_out_tpa
 execute as @a[scores={tpa=1..}] run function tpa:trigger_tpa
 scoreboard players enable @a tpa
-scoreboard players set @a tpa 0
 execute as @a[scores={tpcancel=1}] run function tpa:trigger_tpcancel
 scoreboard players enable @a tpcancel
 scoreboard players set @a tpcancel 0

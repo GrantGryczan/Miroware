@@ -1,1 +1,1 @@
-{"replace":false,"values":["spawn:load","spawn:tick"]}
+{"replace":false,"values":["spawn:load","spawn:tick","spawn:decrement_cooldowns"]}

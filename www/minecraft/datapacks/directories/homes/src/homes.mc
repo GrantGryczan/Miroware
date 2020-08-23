@@ -6,6 +6,7 @@ function load {
 	scoreboard objectives add delhome trigger "Delete Home"
 	scoreboard objectives add homes.target dummy
 	scoreboard objectives add homes.delay dummy
+	scoreboard objectives add homes.cooldown dummy
 	scoreboard objectives add homes.dummy dummy
 	scoreboard objectives add homes.config dummy "Homes Config"
 	scoreboard objectives add homes.x dummy
@@ -13,6 +14,7 @@ function load {
 	scoreboard objectives add homes.z dummy
 	execute unless score #limit homes.config matches 0.. run scoreboard players set #limit homes.config 1
 	execute unless score #delay homes.config matches 0.. run scoreboard players set #delay homes.config 0
+	execute unless score #cooldown homes.config matches 0.. run scoreboard players set #cooldown homes.config 0
 }
 function uninstall {
 	execute at @e[type=minecraft:item_frame,tag=homes.dimension] run forceload remove ~ ~
@@ -28,12 +30,14 @@ function uninstall {
 	scoreboard objectives remove delhome
 	scoreboard objectives remove homes.target
 	scoreboard objectives remove homes.delay
+	scoreboard objectives remove homes.cooldown
 	scoreboard objectives remove homes.dummy
 	scoreboard objectives remove homes.config
 	scoreboard objectives remove homes.x
 	scoreboard objectives remove homes.y
 	scoreboard objectives remove homes.z
 	schedule clear homes:tick
+	schedule clear homes:decrement_cooldowns
 }
 clock 1t {
 	name tick
@@ -147,22 +151,26 @@ clock 1t {
 	scoreboard players enable @a home
 	execute as @a[scores={home=1..}] run {
 		name trigger_home
-		function homes:rotate/players
-		scoreboard players operation #home homes.dummy = @s home
-		function homes:rotate/homes
-		execute if score #remaining homes.dummy matches 0 run tellraw @s [{"text":"Home ","color":"red"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"red"},{"text":" not found.","color":"red"}]
-		execute unless score #remaining homes.dummy matches 0 run {
-			name start_to_go_home
-			scoreboard players operation @s homes.target = #home homes.dummy
-			scoreboard players operation @s homes.delay = #delay homes.config
-			execute store result score @s homes.x run data get entity @s Pos[0] 10
-			execute store result score @s homes.y run data get entity @s Pos[1] 10
-			execute store result score @s homes.z run data get entity @s Pos[2] 10
-			execute if data storage homes:storage players[-1].homes[-1].name run tag @s add homes.nameSet
-			execute if entity @s[tag=homes.nameSet] run tellraw @s [{"text":"Teleporting to ","color":"dark_aqua"},{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"aqua"},{"text":"...","color":"dark_aqua"}]
-			execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Teleporting to ","color":"dark_aqua"},{"text":"Home","color":"aqua"},{"text":"...","color":"dark_aqua"}]
-			execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Teleporting to ","color":"dark_aqua"},{"text":"Home ","color":"aqua"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"aqua"},{"text":"...","color":"dark_aqua"}]
-			tag @s remove homes.nameSet
+		execute if score @s homes.cooldown matches 1.. run tellraw @s [{"text":"Your Homes cooldown will end in ","color":"red"},{"score":{"name":"@s","objective":"homes.cooldown"},"color":"red"},{"text":" seconds.","color":"red"}]
+		execute unless score @s homes.cooldown matches 1.. run {
+			name try_to_start_to_go_home
+			function homes:rotate/players
+			scoreboard players operation #home homes.dummy = @s home
+			function homes:rotate/homes
+			execute if score #remaining homes.dummy matches 0 run tellraw @s [{"text":"Home ","color":"red"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"red"},{"text":" not found.","color":"red"}]
+			execute unless score #remaining homes.dummy matches 0 run {
+				name start_to_go_home
+				scoreboard players operation @s homes.target = #home homes.dummy
+				scoreboard players operation @s homes.delay = #delay homes.config
+				execute store result score @s homes.x run data get entity @s Pos[0] 10
+				execute store result score @s homes.y run data get entity @s Pos[1] 10
+				execute store result score @s homes.z run data get entity @s Pos[2] 10
+				execute if data storage homes:storage players[-1].homes[-1].name run tag @s add homes.nameSet
+				execute if entity @s[tag=homes.nameSet] run tellraw @s [{"text":"Teleporting to ","color":"dark_aqua"},{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"aqua"},{"text":"...","color":"dark_aqua"}]
+				execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Teleporting to ","color":"dark_aqua"},{"text":"Home","color":"aqua"},{"text":"...","color":"dark_aqua"}]
+				execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Teleporting to ","color":"dark_aqua"},{"text":"Home ","color":"aqua"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"aqua"},{"text":"...","color":"dark_aqua"}]
+				tag @s remove homes.nameSet
+			}
 		}
 		scoreboard players set @s home 0
 	}
@@ -249,6 +257,7 @@ clock 1t {
 						execute store result score #id homes.dummy run data get entity @s Item.tag.homesData.id
 						execute if score #id homes.dummy = #dimension homes.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["homes.destination"]}
 					}
+					execute unless score #cooldown homes.config matches 0 run scoreboard players operation @s homes.cooldown = #cooldown homes.config
 					execute at @s run function back:set_back
 					tag @s add homes.subject
 					execute as @e[type=minecraft:area_effect_cloud,tag=homes.destination] run {
@@ -265,6 +274,14 @@ clock 1t {
 			scoreboard players reset @s homes.target
 		}
 		execute unless score @s homes.delay matches 0 run scoreboard players remove @s homes.delay 1
+	}
+}
+clock 1s {
+	name decrement_cooldowns
+	execute as @a[scores={homes.cooldown=1..}] run {
+		name decrement_cooldown
+		scoreboard players remove @s homes.cooldown 1
+		execute if score @s homes.cooldown matches 0 run scoreboard players reset @s homes.cooldown
 	}
 }
 function bubble {
@@ -321,6 +338,20 @@ dir rotate {
 	}
 }
 function config {
-	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #limit homes.config <number>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #limit homes.config "},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #limit homes.config","color":"aqua"},{"text":".\nEnter the number after clicking.","color":"dark_aqua"}]}},{"text":" to set the maximum number of homes allowed per player. The default is ","color":"dark_aqua"},{"text":"1","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #limit homes.config 1"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #limit homes.config 1","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#limit","objective":"homes.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
-	tellraw @s [{"text":"Enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/scoreboard players set #delay homes.config <number>","color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #delay homes.config "},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to write ","color":"dark_aqua"},{"text":"/scoreboard players set #delay homes.config","color":"aqua"},{"text":".\nEnter the number after clicking.","color":"dark_aqua"}]}},{"text":" to set the number of ticks for which the player must stand still before teleporting after running the home command. (1 second = 20 ticks.) The default is ","color":"dark_aqua"},{"text":"0","color":"aqua","clickEvent":{"action":"run_command","value":"/scoreboard players set #delay homes.config 0"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/scoreboard players set #delay homes.config 0","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":". The current value is ","color":"dark_aqua"},{"score":{"name":"#delay","objective":"homes.config"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	tellraw @s ["                         Homes",{"text":" / ","color":"gray"},"Global Settings                         "]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #limit homes.config "},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enter the maximum number of homes allowed per player.","color":"gray"},{"text":"\nAccepts: whole numbers 0+\nDefault: 1","color":"dark_gray"}]}}," Max Home Limit ",{"text":"(Current: ","color":"gray"},{"score":{"name":"#limit","objective":"homes.config"},"color":"gray"},{"text":")","color":"gray"}]
+	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #delay homes.config "},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enter the number of ticks required to stand still after running the home command.\n1 second = 20 ticks","color":"gray"},{"text":"\nAccepts: whole numbers 0+\nDefault: 0","color":"dark_gray"}]}}," Delay ",{"text":"(Current: ","color":"gray"},{"score":{"name":"#delay","objective":"homes.config"},"color":"gray"},{"text":")","color":"gray"}]
+	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #cooldown homes.config "},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enter the number of seconds required to wait between uses of the home command.","color":"gray"},{"text":"\nAccepts: whole numbers 0+\nDefault: 0","color":"dark_gray"}]}}," Cooldown ",{"text":"(Current: ","color":"gray"},{"score":{"name":"#cooldown","objective":"homes.config"},"color":"gray"},{"text":")","color":"gray"}]
+	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
+	execute store result score #sendCommandFeedback homes.config run gamerule sendCommandFeedback
+	execute if score #sendCommandFeedback homes.config matches 1 run {
+		name hide_command_feedback
+		gamerule sendCommandFeedback false
+		schedule 1t replace {
+			name restore_command_feedback
+			gamerule sendCommandFeedback true
+		}
+	}
 }

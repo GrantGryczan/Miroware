@@ -1,2 +1,2 @@
-execute store result score #id back.dummy if data entity @s Item.tag.backData.id
+execute store result score #id back.dummy run data get entity @s Item.tag.backData.id
 execute if score #id back.dummy = #dimension back.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["back.destination"]}
