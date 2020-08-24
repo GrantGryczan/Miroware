@@ -54,7 +54,7 @@ clock 1t {
 		execute if score #continue leafDec.dummy matches 1 run {
 			name tick_marker_in_leaves
 			scoreboard players add @s leafDec.dummy 1
-			execute if score @s leafDec.dummy matches 7.. unless entity @s[tag=leafDec.front] run {
+			execute if score @s leafDec.dummy matches 8.. unless entity @s[tag=leafDec.front] run {
 				name check_marker
 				execute unless block ~ ~ ~ #minecraft:leaves[distance=7] run function fast_leaf_decay:destroy_marker
 				execute if score #continue leafDec.dummy matches 1 if predicate fast_leaf_decay:should_decay run {
@@ -70,12 +70,12 @@ clock 1t {
 	execute as @e[type=minecraft:area_effect_cloud,tag=leafDec.front,limit=24] at @s run {
 		name tick_front_marker
 		tag @s remove leafDec.front
-		execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-		execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-		execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-		execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-		execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-		execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
+		execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+		execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+		execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+		execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+		execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+		execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
 	}
 	execute as @a[predicate=fast_leaf_decay:should_start_raycasting] at @s anchored eyes positioned ^ ^ ^ run {
 		name start_raycasting
@@ -97,9 +97,8 @@ clock 1t {
 			scoreboard players remove #steps leafDec.dummy 1
 			block {
 				name check
-				execute align xyz unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run {
+				execute align xyz run {
 					name try_to_create_markers
-					execute if block ~ ~ ~ #minecraft:leaves[persistent=false] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker"],Duration:1200}
 					execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
 					execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
 					execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:iterate
@@ -113,7 +112,7 @@ clock 1t {
 	}
 }
 function iterate {
-	summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.new"],Duration:1200}
+	summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.new"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
 	execute as @e[type=minecraft:area_effect_cloud,tag=leafDec.new] run {
 		name try_to_iterate
 		tag @s remove leafDec.new
@@ -130,12 +129,12 @@ function iterate {
 		}
 		execute if predicate fast_leaf_decay:leaves/4 run {
 			name check_leaves/5
-			execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-			execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-			execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-			execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-			execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
-			execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Duration:1200}
+			execute positioned ~ ~-1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+			execute positioned ~ ~1 ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+			execute positioned ~-1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+			execute positioned ~1 ~ ~ if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+			execute positioned ~ ~ ~-1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
+			execute positioned ~ ~ ~1 if block ~ ~ ~ #minecraft:leaves[persistent=false,distance=7] unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.front"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
 		}
 	}
 }

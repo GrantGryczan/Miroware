@@ -1,1 +1,1 @@
-execute align xyz unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.marker,distance=..0.1] run function fast_leaf_decay:try_to_create_markers
+execute align xyz run function fast_leaf_decay:try_to_create_markers
