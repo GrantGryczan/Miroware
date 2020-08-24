@@ -2,8 +2,8 @@ function load {
 	scoreboard objectives add tpers.dummy dummy
 }
 function uninstall {
-	scoreboard objectives remove tpers.dummy
 	schedule clear teleporters:tick
+	scoreboard objectives remove tpers.dummy
 }
 clock 1t {
 	name tick

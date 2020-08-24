@@ -6,9 +6,9 @@ function load {
 	}
 }
 function uninstall {
+	schedule clear cauldron_concrete:check_for_items_in_filled_cauldrons
 	kill a093751a-2c77-4658-9d5f-62ab4494bdaf
 	forceload remove 16562064 -22242912
-	schedule clear cauldron_concrete:check_for_items_in_filled_cauldrons
 }
 clock 1s {
 	name check_for_items_in_filled_cauldrons

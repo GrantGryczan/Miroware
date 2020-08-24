@@ -26,6 +26,7 @@ function load {
 	scoreboard players reset * leafDec.darkOakS
 }
 function uninstall {
+	schedule clear fast_leaf_decay:tick
 	scoreboard objectives remove leafDec.dummy
 	scoreboard objectives remove leafDec.oakL
 	scoreboard objectives remove leafDec.spruceL
@@ -39,7 +40,6 @@ function uninstall {
 	scoreboard objectives remove leafDec.jungleS
 	scoreboard objectives remove leafDec.acaciaS
 	scoreboard objectives remove leafDec.darkOakS
-	schedule clear fast_leaf_decay:tick
 }
 clock 1t {
 	name tick

@@ -25,6 +25,9 @@ function load {
 	scoreboard players reset * back.deaths
 }
 function uninstall {
+	schedule clear back:tick
+	schedule clear back:decrement_cooldowns
+	schedule clear back:check_game_rules
 	execute at @e[type=minecraft:item_frame,tag=back.dimension] run forceload remove ~ ~
 	kill @e[type=minecraft:item_frame,tag=back.dimension]
 	data remove storage back:storage players
@@ -39,9 +42,6 @@ function uninstall {
 	scoreboard objectives remove back.x
 	scoreboard objectives remove back.y
 	scoreboard objectives remove back.z
-	schedule clear back:tick
-	schedule clear back:decrement_cooldowns
-	schedule clear back:check_game_rules
 }
 clock 1t {
 	name tick

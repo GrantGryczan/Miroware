@@ -1,3 +1,5 @@
+schedule clear homes:tick
+schedule clear homes:decrement_cooldowns
 execute at @e[type=minecraft:item_frame,tag=homes.dimension] run forceload remove ~ ~
 kill @e[type=minecraft:item_frame,tag=homes.dimension]
 data remove storage homes:storage players
@@ -17,5 +19,3 @@ scoreboard objectives remove homes.config
 scoreboard objectives remove homes.x
 scoreboard objectives remove homes.y
 scoreboard objectives remove homes.z
-schedule clear homes:tick
-schedule clear homes:decrement_cooldowns

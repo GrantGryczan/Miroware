@@ -12,6 +12,8 @@ function load {
 	execute unless score #cooldown tpa.config matches 0.. run scoreboard players set #cooldown tpa.config 0
 }
 function uninstall {
+	schedule clear tpa:tick
+	schedule clear tpa:decrement_cooldowns
 	scoreboard objectives remove tpa.config
 	scoreboard objectives remove tpa.pid
 	scoreboard objectives remove tpa.target
@@ -21,8 +23,6 @@ function uninstall {
 	scoreboard objectives remove tpcancel
 	scoreboard objectives remove tpaccept
 	scoreboard objectives remove tpdeny
-	schedule clear tpa:tick
-	schedule clear tpa:decrement_cooldowns
 }
 clock 1t {
 	name tick

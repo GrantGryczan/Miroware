@@ -34,6 +34,7 @@ function load {
 	team modify namCol.white color white
 }
 function uninstall {
+	schedule clear name_colors:tick
 	scoreboard objectives remove color
 	team remove namCol.black
 	team remove namCol.dBlue
@@ -51,7 +52,6 @@ function uninstall {
 	team remove namCol.lPurple
 	team remove namCol.yellow
 	team remove namCol.white
-	schedule clear name_colors:tick
 }
 clock 1t {
 	name tick

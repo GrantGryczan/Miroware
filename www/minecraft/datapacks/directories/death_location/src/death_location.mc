@@ -3,9 +3,9 @@ function load {
 	scoreboard objectives add deaLoc.deaths deathCount
 }
 function uninstall {
+	schedule clear death_location:tick
 	scoreboard objectives remove deaLoc.dummy
 	scoreboard objectives remove deaLoc.deaths
-	schedule clear death_location:tick
 }
 clock 1t {
 	name tick

@@ -8,11 +8,11 @@ function load {
 	execute unless score #maxSize cusNetPor.config matches 0.. run scoreboard players set #maxSize cusNetPor.config 84
 }
 function uninstall {
+	schedule clear custom_nether_portals:try_to_trigger
+	schedule clear custom_nether_portals:enable_trigger
 	scoreboard objectives remove cusNetPor
 	scoreboard objectives remove cusNetPor.config
 	scoreboard objectives remove cusNetPor.dummy
-	schedule clear custom_nether_portals:try_to_trigger
-	schedule clear custom_nether_portals:enable_trigger
 }
 clock 5t {
 	name try_to_trigger

@@ -11,6 +11,8 @@ function load {
 	execute unless score #cooldown spawn.config matches 0.. run scoreboard players set #cooldown spawn.config 0
 }
 function uninstall {
+	schedule clear spawn:tick
+	schedule clear spawn:decrement_cooldowns
 	scoreboard objectives remove spawn
 	scoreboard objectives remove spawn.config
 	scoreboard objectives remove spawn.dummy
@@ -19,8 +21,6 @@ function uninstall {
 	scoreboard objectives remove spawn.x
 	scoreboard objectives remove spawn.y
 	scoreboard objectives remove spawn.z
-	schedule clear spawn:tick
-	schedule clear spawn:decrement_cooldowns
 }
 clock 1t {
 	name tick

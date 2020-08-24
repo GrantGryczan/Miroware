@@ -17,6 +17,8 @@ function load {
 	execute unless score #cooldown homes.config matches 0.. run scoreboard players set #cooldown homes.config 0
 }
 function uninstall {
+	schedule clear homes:tick
+	schedule clear homes:decrement_cooldowns
 	execute at @e[type=minecraft:item_frame,tag=homes.dimension] run forceload remove ~ ~
 	kill @e[type=minecraft:item_frame,tag=homes.dimension]
 	data remove storage homes:storage players
@@ -36,8 +38,6 @@ function uninstall {
 	scoreboard objectives remove homes.x
 	scoreboard objectives remove homes.y
 	scoreboard objectives remove homes.z
-	schedule clear homes:tick
-	schedule clear homes:decrement_cooldowns
 }
 clock 1t {
 	name tick

@@ -6,10 +6,10 @@ function load {
 	execute unless score #chance conCre.config matches 0..100 run scoreboard players set #chance conCre.config 100
 }
 function uninstall {
+	schedule clear confetti_creepers:tick
 	scoreboard objectives remove conCre
 	scoreboard objectives remove conCre.dummy
 	scoreboard objectives remove conCre.config
-	schedule clear confetti_creepers:tick
 }
 clock 1t {
 	name tick

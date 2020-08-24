@@ -7,11 +7,11 @@ function load {
 	execute unless score #levels nevTooExp.config matches 1.. run scoreboard players set #levels nevTooExp.config 40
 }
 function uninstall {
+	schedule clear never_too_expensive:tick
 	scoreboard objectives remove nevTooExp
 	scoreboard objectives remove nevTooExp.config
 	scoreboard objectives remove nevTooExp.count
 	scoreboard objectives remove nevTooExp.cost
-	schedule clear never_too_expensive:tick
 }
 clock 1t {
 	name tick

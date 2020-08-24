@@ -4,10 +4,10 @@ function load {
 	scoreboard objectives add craEncBoo trigger
 }
 function uninstall {
+	schedule clear craftable_enchanted_books:tick
 	scoreboard objectives remove craEncBoo.count
 	scoreboard objectives remove craEncBoo.dummy
 	scoreboard objectives remove craEncBoo
-	schedule clear craftable_enchanted_books:tick
 }
 clock 1t {
 	name tick
