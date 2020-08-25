@@ -51,7 +51,7 @@ clock 1t {
 			name trigger/list_sleeping_players
 			execute store success score #sleeping mpSleep.dummy as @a[gamemode=!spectator,predicate=multiplayer_sleep:overworld] if data entity @s SleepingX run tag @s add mpSleep.sleeping
 			execute if score #sleeping mpSleep.dummy matches 0 run tellraw @s {"text":"There are no sleeping players.","color":"red"}
-			execute unless score #sleeping mpSleep.dummy matches 0 run tellraw @s [{"text":"Sleeping players: ","color":"dark_aqua"},{"selector":"@a[tag=mpSleep.sleeping]","color":"aqua"}]
+			execute unless score #sleeping mpSleep.dummy matches 0 run tellraw @s [{"text":"Sleeping players: ","color":"COLOR_1"},{"selector":"@a[tag=mpSleep.sleeping]","color":"COLOR_2"}]
 			tag @a remove mpSleep.sleeping
 		}
 		execute if score @s mpSleep matches 3 run {
@@ -89,8 +89,8 @@ clock 1t {
 				bossbar set multiplayer_sleep:preview players
 			}
 		}
-		title @s[scores={mpSleep=5}] actionbar {"text":"1 of 2 player(s) asleep","color":"aqua"}
-		tellraw @s[scores={mpSleep=6}] [{"text":"Player","color":"aqua"},{"text":" went to sleep. 1 of 2 player(s) asleep","color":"dark_aqua"}]
+		title @s[scores={mpSleep=5}] actionbar {"text":"1 of 2 player(s) asleep","color":"COLOR_2"}
+		tellraw @s[scores={mpSleep=6}] [{"text":"Player","color":"COLOR_2"},{"text":" went to sleep. 1 of 2 player(s) asleep","color":"COLOR_1"}]
 		scoreboard players set @s mpSleep 0
 		scoreboard players enable @s mpSleep
 	}
@@ -121,13 +121,13 @@ clock 1t {
 			bossbar set multiplayer_sleep:progress name [{"score":{"name":"#sleeping","objective":"mpSleep.dummy"}}," of ",{"score":{"name":"#total","objective":"mpSleep.dummy"}}," player(s) asleep"]
 			bossbar set multiplayer_sleep:progress players @a[tag=mpSleep.display1]
 			bossbar set multiplayer_sleep:progress visible true
-			title @a[tag=mpSleep.display2] actionbar [{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" of ","color":"aqua"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" player(s) asleep","color":"aqua"}]
-			execute if score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=1}] run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"aqua"},{"text":" went to sleep. ","color":"dark_aqua"},{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" of ","color":"aqua"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" player(s) asleep","color":"dark_aqua"}]
+			title @a[tag=mpSleep.display2] actionbar [{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" of ","color":"COLOR_2"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" player(s) asleep","color":"COLOR_2"}]
+			execute if score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=1}] run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"COLOR_2"},{"text":" went to sleep. ","color":"COLOR_1"},{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" of ","color":"COLOR_2"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" player(s) asleep","color":"COLOR_1"}]
 			execute unless score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=100}] run {
 				name announce_asleep
 				scoreboard players add #asleep mpSleep.dummy 1
-				execute if score #asleep mpSleep.dummy = #total mpSleep.dummy run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"aqua"},{"text":" went to sleep. Sweet dreams!","color":"dark_aqua"}]
-				execute unless score #asleep mpSleep.dummy = #total mpSleep.dummy unless score #asleep mpSleep.dummy > #total mpSleep.dummy run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"aqua"},{"text":" went to sleep. ","color":"dark_aqua"},{"score":{"name":"#asleep","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" of ","color":"aqua"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" player(s) asleep","color":"dark_aqua"}]
+				execute if score #asleep mpSleep.dummy = #total mpSleep.dummy run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"COLOR_2"},{"text":" went to sleep. Sweet dreams!","color":"COLOR_1"}]
+				execute unless score #asleep mpSleep.dummy = #total mpSleep.dummy unless score #asleep mpSleep.dummy > #total mpSleep.dummy run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"COLOR_2"},{"text":" went to sleep. ","color":"COLOR_1"},{"score":{"name":"#asleep","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" of ","color":"COLOR_2"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" player(s) asleep","color":"COLOR_1"}]
 			}
 			tag @a remove mpSleep.display1
 			tag @a remove mpSleep.display2

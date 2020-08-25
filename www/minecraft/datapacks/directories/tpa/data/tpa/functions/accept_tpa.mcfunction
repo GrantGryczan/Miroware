@@ -1,5 +1,5 @@
-tellraw @a[tag=tpa.target] [{"text":"You have accepted ","color":"dark_aqua"},{"selector":"@s","color":"aqua"},{"text":"'s teleport request.","color":"dark_aqua"}]
-tellraw @s ["",{"selector":"@a[tag=tpa.target]","color":"aqua"},{"text":" has accepted your teleport request.","color":"dark_aqua"}]
+tellraw @a[tag=tpa.target] [{"text":"You have accepted ","color":"COLOR_1"},{"selector":"@s","color":"COLOR_2"},{"text":"'s teleport request.","color":"COLOR_1"}]
+tellraw @s ["",{"selector":"@a[tag=tpa.target]","color":"COLOR_2"},{"text":" has accepted your teleport request.","color":"COLOR_1"}]
 execute unless score #cooldown tpa.config matches 0 run scoreboard players operation @s tpa.cooldown = #cooldown tpa.config
 tp @s @a[tag=tpa.target,limit=1]
 scoreboard players reset @s tpa.target

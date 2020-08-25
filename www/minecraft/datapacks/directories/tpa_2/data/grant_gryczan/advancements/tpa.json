@@ -4,7 +4,7 @@
 			"item": "minecraft:ender_pearl"
 		},
 		"title": "TPA                          ",
-		"description": ["",{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger tpa set <PID>","color":"aqua"},{"text":" to request to teleport to another player.\nEach player's ","color":"dark_aqua"},{"text":"PID","color":"aqua"},{"text":" (player ID) number can be found in the player list by pressing ","color":"dark_aqua"},{"keybind":"key.playerlist","color":"dark_aqua"},{"text":".","color":"dark_aqua"}],
+		"description": ["",{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger tpa set <PID>","color":"COLOR_2"},{"text":" to request to teleport to another player.\nEach player's ","color":"COLOR_1"},{"text":"PID","color":"COLOR_2"},{"text":" (player ID) number can be found in the player list by pressing ","color":"COLOR_1"},{"keybind":"key.playerlist","color":"COLOR_1"},{"text":".","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

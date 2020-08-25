@@ -9,5 +9,6 @@ module.exports = {
 			Enter "/function spawn:config" to configure the time players must stand still before teleportation after running the spawn command.
 		</span>
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

@@ -5,7 +5,7 @@
 			"nbt": "{Damage:1405}"
 		},
 		"title": "Durability Ping       ",
-		"description": ["",{"text":"Get notified when you damage an item with 10% or less durability.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger duraPing","color":"aqua"},{"text":" for personal settings.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function durability_ping:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"description": ["",{"text":"Get notified when you damage an item with 10% or less durability.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger duraPing","color":"COLOR_2"},{"text":" for personal settings.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function durability_ping:config","color":"COLOR_2"},{"text":" for config options.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

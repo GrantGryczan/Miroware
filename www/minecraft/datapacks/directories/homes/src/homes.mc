@@ -73,9 +73,9 @@ clock 1t {
 			data modify storage homes:storage players[-1].homes[-1].pos set from entity @s Pos
 			data modify storage homes:storage players[-1].homes[-1].rot set from entity @s Rotation
 			execute if data storage homes:storage players[-1].homes[-1].name run tag @s add homes.nameSet
-			execute if entity @s[tag=homes.nameSet] run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"aqua"},{"text":" set.","color":"dark_aqua"}]
-			execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Home","color":"aqua"},{"text":" set.","color":"dark_aqua"}]
-			execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Home ","color":"aqua"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"aqua"},{"text":" set.","color":"dark_aqua"}]
+			execute if entity @s[tag=homes.nameSet] run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"COLOR_2"},{"text":" set.","color":"COLOR_1"}]
+			execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Home","color":"COLOR_2"},{"text":" set.","color":"COLOR_1"}]
+			execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"COLOR_2"},{"text":" set.","color":"COLOR_1"}]
 			tag @s remove homes.nameSet
 		}
 		scoreboard players set @s sethome 0
@@ -90,9 +90,9 @@ clock 1t {
 		execute unless score #remaining homes.dummy matches 0 run {
 			name delete_home
 			execute if data storage homes:storage players[-1].homes[-1].name run tag @s add homes.nameSet
-			execute if entity @s[tag=homes.nameSet] run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"aqua"},{"text":" deleted.","color":"dark_aqua"}]
-			execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Home","color":"aqua"},{"text":" deleted.","color":"dark_aqua"}]
-			execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Home ","color":"aqua"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"aqua"},{"text":" deleted.","color":"dark_aqua"}]
+			execute if entity @s[tag=homes.nameSet] run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"COLOR_2"},{"text":" deleted.","color":"COLOR_1"}]
+			execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Home","color":"COLOR_2"},{"text":" deleted.","color":"COLOR_1"}]
+			execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"COLOR_2"},{"text":" deleted.","color":"COLOR_1"}]
 			tag @s remove homes.nameSet
 			data remove storage homes:storage players[-1].homes[-1]
 		}
@@ -124,18 +124,18 @@ clock 1t {
 				execute if data storage homes:storage temp[0].name run tag @s add homes.nameSet
 				execute if score #reducedDebugInfo homes.dummy matches 1 run {
 					name display_home_with_reduced_info
-					execute if entity @s[tag=homes.nameSet] run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"storage":"homes:storage","nbt":"temp[0].name","interpret":true,"color":"aqua"}]
-					execute unless entity @s[tag=homes.nameSet] if score #id homes.dummy matches 1 run tellraw @s [{"text":"1. ","color":"dark_aqua"},{"text":"Home","color":"aqua"}]
-					execute unless entity @s[tag=homes.nameSet] unless score #id homes.dummy matches 1 run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"text":"Home ","color":"aqua"},{"score":{"name":"#id","objective":"homes.dummy"},"color":"aqua"}]
+					execute if entity @s[tag=homes.nameSet] run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_1"},{"text":". ","color":"COLOR_1"},{"storage":"homes:storage","nbt":"temp[0].name","interpret":true,"color":"COLOR_2"}]
+					execute unless entity @s[tag=homes.nameSet] if score #id homes.dummy matches 1 run tellraw @s [{"text":"1. ","color":"COLOR_1"},{"text":"Home","color":"COLOR_2"}]
+					execute unless entity @s[tag=homes.nameSet] unless score #id homes.dummy matches 1 run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_1"},{"text":". ","color":"COLOR_1"},{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_2"}]
 				}
 				execute unless score #reducedDebugInfo homes.dummy matches 1 run {
 					name display_home_with_all_info
 					execute store result score #x homes.dummy run data get storage homes:storage temp[0].pos[0]
 					execute store result score #y homes.dummy run data get storage homes:storage temp[0].pos[1]
 					execute store result score #z homes.dummy run data get storage homes:storage temp[0].pos[2]
-					execute if entity @s[tag=homes.nameSet] run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"storage":"homes:storage","nbt":"temp[0].name","interpret":true,"color":"aqua"},{"text":" at (","color":"dark_aqua"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"dark_aqua"},{"text":") in ","color":"dark_aqua"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"dark_aqua"}]
-					execute unless entity @s[tag=homes.nameSet] if score #id homes.dummy matches 1 run tellraw @s [{"text":"1. ","color":"dark_aqua"},{"text":"Home","color":"aqua"},{"text":" at (","color":"dark_aqua"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"dark_aqua"},{"text":") in ","color":"dark_aqua"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"dark_aqua"}]
-					execute unless entity @s[tag=homes.nameSet] unless score #id homes.dummy matches 1 run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"dark_aqua"},{"text":". ","color":"dark_aqua"},{"text":"Home ","color":"aqua"},{"score":{"name":"#id","objective":"homes.dummy"},"color":"aqua"},{"text":" at (","color":"dark_aqua"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"dark_aqua"},{"text":", ","color":"dark_aqua"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"dark_aqua"},{"text":") in ","color":"dark_aqua"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"dark_aqua"}]
+					execute if entity @s[tag=homes.nameSet] run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_1"},{"text":". ","color":"COLOR_1"},{"storage":"homes:storage","nbt":"temp[0].name","interpret":true,"color":"COLOR_2"},{"text":" at (","color":"COLOR_1"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"COLOR_1"},{"text":") in ","color":"COLOR_1"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"COLOR_1"}]
+					execute unless entity @s[tag=homes.nameSet] if score #id homes.dummy matches 1 run tellraw @s [{"text":"1. ","color":"COLOR_1"},{"text":"Home","color":"COLOR_2"},{"text":" at (","color":"COLOR_1"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"COLOR_1"},{"text":") in ","color":"COLOR_1"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"COLOR_1"}]
+					execute unless entity @s[tag=homes.nameSet] unless score #id homes.dummy matches 1 run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_1"},{"text":". ","color":"COLOR_1"},{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_2"},{"text":" at (","color":"COLOR_1"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"COLOR_1"},{"text":") in ","color":"COLOR_1"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"COLOR_1"}]
 				}
 				tag @s remove homes.nameSet
 				tag @e[type=minecraft:item_frame,tag=homes.dimension] remove homes.target
@@ -166,9 +166,9 @@ clock 1t {
 				execute store result score @s homes.y run data get entity @s Pos[1] 10
 				execute store result score @s homes.z run data get entity @s Pos[2] 10
 				execute if data storage homes:storage players[-1].homes[-1].name run tag @s add homes.nameSet
-				execute if entity @s[tag=homes.nameSet] run tellraw @s [{"text":"Teleporting to ","color":"dark_aqua"},{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"aqua"},{"text":"...","color":"dark_aqua"}]
-				execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Teleporting to ","color":"dark_aqua"},{"text":"Home","color":"aqua"},{"text":"...","color":"dark_aqua"}]
-				execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Teleporting to ","color":"dark_aqua"},{"text":"Home ","color":"aqua"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"aqua"},{"text":"...","color":"dark_aqua"}]
+				execute if entity @s[tag=homes.nameSet] run tellraw @s [{"text":"Teleporting to ","color":"COLOR_1"},{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"COLOR_2"},{"text":"...","color":"COLOR_1"}]
+				execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Teleporting to ","color":"COLOR_1"},{"text":"Home","color":"COLOR_2"},{"text":"...","color":"COLOR_1"}]
+				execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Teleporting to ","color":"COLOR_1"},{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"COLOR_2"},{"text":"...","color":"COLOR_1"}]
 				tag @s remove homes.nameSet
 			}
 		}
@@ -195,9 +195,9 @@ clock 1t {
 					execute if score #success homes.dummy matches 1 run {
 						name set_home_name
 						execute if data storage homes:storage players[-1].homes[-1].name run tag @s add homes.nameSet
-						execute if entity @s[tag=homes.nameSet] run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"aqua"},{"text":" name set to ","color":"dark_aqua"},{"entity":"@s","nbt":"SelectedItem.tag.display.Name","interpret":true,"color":"aqua"},{"text":".","color":"dark_aqua"}]
-						execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Home","color":"aqua"},{"text":" name set to ","color":"dark_aqua"},{"entity":"@s","nbt":"SelectedItem.tag.display.Name","interpret":true,"color":"aqua"},{"text":".","color":"dark_aqua"}]
-						execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Home ","color":"aqua"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"aqua"},{"text":" name set to ","color":"dark_aqua"},{"entity":"@s","nbt":"SelectedItem.tag.display.Name","interpret":true,"color":"aqua"},{"text":".","color":"dark_aqua"}]
+						execute if entity @s[tag=homes.nameSet] run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"COLOR_2"},{"text":" name set to ","color":"COLOR_1"},{"entity":"@s","nbt":"SelectedItem.tag.display.Name","interpret":true,"color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
+						execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Home","color":"COLOR_2"},{"text":" name set to ","color":"COLOR_1"},{"entity":"@s","nbt":"SelectedItem.tag.display.Name","interpret":true,"color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
+						execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"COLOR_2"},{"text":" name set to ","color":"COLOR_1"},{"entity":"@s","nbt":"SelectedItem.tag.display.Name","interpret":true,"color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
 						tag @s remove homes.nameSet
 						data modify storage homes:storage players[-1].homes[-1].name set from entity @s SelectedItem.tag.display.Name
 						replaceitem entity @s weapon.mainhand minecraft:air
@@ -208,9 +208,9 @@ clock 1t {
 					name try_to_reset_home_name
 					execute if entity @s[tag=homes.nameSet] run {
 						name reset_home_name
-						execute if entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"aqua"},{"text":" name reset to ","color":"dark_aqua"},{"text":"Home","color":"aqua"},{"text":".","color":"dark_aqua"}]
-						execute if entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"aqua"},{"text":" name reset to ","color":"dark_aqua"},{"text":"Home ","color":"aqua"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"aqua"},{"text":".","color":"dark_aqua"}]
-						execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Home","color":"aqua"},{"text":" name reset to ","color":"dark_aqua"},{"text":"Home","color":"aqua"},{"text":".","color":"dark_aqua"}]
+						execute if entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"COLOR_2"},{"text":" name reset to ","color":"COLOR_1"},{"text":"Home","color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
+						execute if entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"COLOR_2"},{"text":" name reset to ","color":"COLOR_1"},{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
+						execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Home","color":"COLOR_2"},{"text":" name reset to ","color":"COLOR_1"},{"text":"Home","color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
 						data remove storage homes:storage players[-1].homes[-1].name
 						replaceitem entity @s weapon.mainhand minecraft:air
 					}
@@ -281,7 +281,7 @@ clock 1s {
 	execute as @a[scores={homes.cooldown=1..}] run {
 		name decrement_cooldown
 		scoreboard players remove @s homes.cooldown 1
-		execute if score @s homes.cooldown matches 0 run scoreboard players reset @s homes.cooldown
+		scoreboard players reset @s[scores={homes.cooldown=0}] homes.cooldown
 	}
 }
 function bubble {

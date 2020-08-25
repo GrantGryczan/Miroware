@@ -4,7 +4,7 @@
 			"item": "minecraft:skeleton_skull"
 		},
 		"title": "Death Location",
-		"description": ["",{"text":"just for you <3","color":"dark_aqua"}],
+		"description": ["",{"text":"just for you <3","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

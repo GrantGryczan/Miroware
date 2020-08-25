@@ -8,5 +8,6 @@ module.exports = {
 		Jump on it to warp onto an elevator of the same color directly above.<br>
 		Crouch on it to warp onto an elevator of the same color directly below.
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

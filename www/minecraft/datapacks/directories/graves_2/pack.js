@@ -11,5 +11,6 @@ module.exports = {
 		</span>
 	`,
 	tags: ["graves", "grave", "gravestones", "gravestone", "stones", "stone", "player", "keepinventory", "keep", "inventory", "die", "death", "item", "items", "drop", "drops", "get", "back", "lava", "burn", "xisumavoid", "xisuma", "vanillatweaks", "vanilla", "tweaks"],
-	video: "DWEVYImenj4"
+	video: "DWEVYImenj4",
+	vt: true
 };

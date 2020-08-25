@@ -16,8 +16,8 @@ execute store result bossbar multiplayer_sleep:progress value run scoreboard pla
 bossbar set multiplayer_sleep:progress name [{"score":{"name":"#sleeping","objective":"mpSleep.dummy"}}," of ",{"score":{"name":"#total","objective":"mpSleep.dummy"}}," player(s) asleep"]
 bossbar set multiplayer_sleep:progress players @a[tag=mpSleep.display1]
 bossbar set multiplayer_sleep:progress visible true
-title @a[tag=mpSleep.display2] actionbar [{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" of ","color":"aqua"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" player(s) asleep","color":"aqua"}]
-execute if score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=1}] run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"aqua"},{"text":" went to sleep. ","color":"dark_aqua"},{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" of ","color":"aqua"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"aqua"},{"text":" player(s) asleep","color":"dark_aqua"}]
+title @a[tag=mpSleep.display2] actionbar [{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" of ","color":"COLOR_2"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" player(s) asleep","color":"COLOR_2"}]
+execute if score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=1}] run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"COLOR_2"},{"text":" went to sleep. ","color":"COLOR_1"},{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" of ","color":"COLOR_2"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" player(s) asleep","color":"COLOR_1"}]
 execute unless score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=100}] run function multiplayer_sleep:announce_asleep
 tag @a remove mpSleep.display1
 tag @a remove mpSleep.display2

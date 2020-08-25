@@ -4,7 +4,7 @@
 			"item": "minecraft:phantom_membrane"
 		},
 		"title": "Bat Membranes",
-		"description": ["",{"text":"Disable phantoms and get membranes from bats instead.","color":"dark_aqua"}],
+		"description": ["",{"text":"Disable phantoms and get membranes from bats instead.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

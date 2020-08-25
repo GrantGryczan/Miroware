@@ -6,5 +6,6 @@ module.exports = {
 	description: `
 		Automatically unlock all recipes as soon as you start playing.
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

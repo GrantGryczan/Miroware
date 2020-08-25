@@ -12,5 +12,6 @@ module.exports = {
 		</span>
 	`,
 	tags: ["armored", "elytra", "colytra", "plated", "chestplate", "chestplates", "chest", "plate", "plates", "wings", "anvil", "grindstone", "merge", "combine", "wear", "both", "at once", "at the same time", "add", "craft", "together", "slot"],
-	video: "UCUivDpVDhE"
+	video: "UCUivDpVDhE",
+	vt: true
 };

@@ -4,7 +4,7 @@
 			"item": "minecraft:red_bed"
 		},
 		"title": "Multiplayer Sleep  ",
-		"description": ["",{"text":"Not all players in the overworld must sleep to skip the night and the rain.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger mpSleep","color":"aqua"},{"text":" for details and personal settings.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function multiplayer_sleep:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"description": ["",{"text":"Not all players in the overworld must sleep to skip the night and the rain.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger mpSleep","color":"COLOR_2"},{"text":" for details and personal settings.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function multiplayer_sleep:config","color":"COLOR_2"},{"text":" for config options.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

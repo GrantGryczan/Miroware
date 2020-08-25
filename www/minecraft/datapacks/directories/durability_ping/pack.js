@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "durability_ping",
-	version: "1.0.1",
+	version: "1.1.0",
 	name: "Durability Ping",
 	compatibility: ["1.16"],
 	description: `
@@ -10,5 +10,6 @@ module.exports = {
 			Enter "/function durability_ping:config" for config options.
 		</span>
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

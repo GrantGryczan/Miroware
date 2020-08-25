@@ -4,7 +4,7 @@
 			"item": "minecraft:potion"
 		},
 		"title": "Pocket Dimensions",
-		"description": ["",{"text":"fuck","color":"dark_aqua"}],
+		"description": ["",{"text":"fuck","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

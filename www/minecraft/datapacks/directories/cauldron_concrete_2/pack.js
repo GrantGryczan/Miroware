@@ -6,5 +6,6 @@ module.exports = {
 	description: `
 		Drop concrete powder into a cauldron filled with water to instantly harden all of it.
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

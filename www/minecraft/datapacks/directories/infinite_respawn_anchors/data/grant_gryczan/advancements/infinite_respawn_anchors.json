@@ -4,7 +4,7 @@
 			"item": "minecraft:respawn_anchor"
 		},
 		"title": "Infinite Respawn Anchors",
-		"description": ["",{"text":"If a respawn anchor has crying obsidian beneath it and an end crystal above it, it will never lose charge.","color":"dark_aqua"}],
+		"description": ["",{"text":"If a respawn anchor has crying obsidian beneath it and an end crystal above it, it will never lose charge.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

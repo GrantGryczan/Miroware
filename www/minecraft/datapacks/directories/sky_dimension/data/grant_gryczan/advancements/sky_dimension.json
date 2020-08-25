@@ -4,7 +4,7 @@
 			"item": "minecraft:grass_block"
 		},
 		"title": "Sky Dimension        ",
-		"description": ["",{"text":"Reach y=257 in the overworld to go to y=4 in the sky dimension. Reach y=-16 in the sky dimension to go to y=256 in the overworld.","color":"dark_aqua"}],
+		"description": ["",{"text":"Reach y=257 in the overworld to go to y=4 in the sky dimension. Reach y=-16 in the sky dimension to go to y=256 in the overworld.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

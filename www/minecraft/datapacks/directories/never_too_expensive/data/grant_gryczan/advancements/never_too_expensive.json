@@ -4,7 +4,7 @@
 			"item": "minecraft:anvil"
 		},
 		"title": "Never Too Expensive   ",
-		"description": ["",{"text":"Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger nevTooExp","color":"aqua"},{"text":" for details.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function never_too_expensive:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"description": ["",{"text":"Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger nevTooExp","color":"COLOR_2"},{"text":" for details.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function never_too_expensive:config","color":"COLOR_2"},{"text":" for config options.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

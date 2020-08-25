@@ -12,7 +12,7 @@
 							"function": "minecraft:set_lore",
 							"entity": "this",
 							"lore": [
-								["",{"text":"+ ","color":"dark_aqua","italic":false},{"selector":"@e[type=minecraft:item,tag=armEly.chestplate]","color":"dark_aqua","italic":false}]
+								["",{"text":"+ ","color":"COLOR_1","italic":false},{"selector":"@e[type=minecraft:item,tag=armEly.chestplate]","color":"COLOR_1","italic":false}]
 							]
 						},
 						{

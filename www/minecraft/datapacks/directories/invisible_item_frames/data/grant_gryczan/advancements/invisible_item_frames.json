@@ -4,7 +4,7 @@
 			"item": "minecraft:item_frame"
 		},
 		"title": "Invisible Item Frames  ",
-		"description": ["",{"text":"Place an extended potion of invisibility into an item frame to make it invisible whenever it holds an item.","color":"dark_aqua"}],
+		"description": ["",{"text":"Place an extended potion of invisibility into an item frame to make it invisible whenever it holds an item.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

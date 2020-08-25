@@ -11,5 +11,6 @@ module.exports = {
 		</span>
 	`,
 	tags: ["custom", "customizable", "customized", "customizer", "nether", "portal", "portals", "shape", "shapes", "shaped", "size", "sizes", "sized", "crying", "obsidian", "light", "ignite", "min", "minimum", "max", "maximum", "rectangle", "rectangular", "circle", "circular", "dynamic", "big", "bigger", "large", "larger", "giant", "huge", "small", "smaller", "tiny"],
-	video: "WfqUtUhI7qM"
+	video: "WfqUtUhI7qM",
+	vt: true
 };

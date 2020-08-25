@@ -4,7 +4,7 @@
 			"item": "minecraft:light_gray_concrete_powder"
 		},
 		"title": "Cauldron Concrete",
-		"description": ["",{"text":"Drop concrete powder into a cauldron filled with water to instantly harden all of it.","color":"dark_aqua"}],
+		"description": ["",{"text":"Drop concrete powder into a cauldron filled with water to instantly harden all of it.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

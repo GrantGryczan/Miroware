@@ -13,5 +13,6 @@ module.exports = {
 			Enter "/function homes:config" to configure the maximum number of homes allowed per player or the time players must stand still before teleporting after running the home command.
 		</span>
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

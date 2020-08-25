@@ -4,7 +4,7 @@
 			"item": "minecraft:enchanted_book"
 		},
 		"title": "Craftable Enchanted Books",
-		"description": ["",{"text":"To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger craEncBoo","color":"aqua"},{"text":" to get the recipe book.","color":"dark_aqua"}],
+		"description": ["",{"text":"To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger craEncBoo","color":"COLOR_2"},{"text":" to get the recipe book.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

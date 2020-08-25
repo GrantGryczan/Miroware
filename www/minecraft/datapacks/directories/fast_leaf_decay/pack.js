@@ -6,5 +6,6 @@ module.exports = {
 	description: `
 		Leaves decay much faster when trees are mined in survival mode.
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

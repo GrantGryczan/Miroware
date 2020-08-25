@@ -5,7 +5,7 @@
 			"nbt": "{Potion:'minecraft:healing'}"
 		},
 		"title": "Health Counter",
-		"description": ["",{"text":"Display each player's health below their nametag.","color":"dark_aqua"}],
+		"description": ["",{"text":"Display each player's health below their nametag.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

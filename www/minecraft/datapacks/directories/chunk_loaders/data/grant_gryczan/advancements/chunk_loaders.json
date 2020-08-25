@@ -4,7 +4,7 @@
 			"item": "minecraft:lodestone"
 		},
 		"title": "Chunk Loaders",
-		"description": ["",{"text":"Drop a nether star on a lodestone to make a chunk loader (AKA a loadstone).","color":"dark_aqua"}],
+		"description": ["",{"text":"Drop a nether star on a lodestone to make a chunk loader (AKA a loadstone).","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

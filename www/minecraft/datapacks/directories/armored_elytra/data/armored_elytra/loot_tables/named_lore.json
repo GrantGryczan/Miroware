@@ -12,7 +12,7 @@
 							"function": "minecraft:set_lore",
 							"entity": "this",
 							"lore": [
-								["",{"text":"+ ","color":"dark_aqua","italic":false},{"entity":"@e[type=minecraft:item,tag=armEly.chestplate,limit=1]","nbt":"Item.tag.display.Name","interpret":true,"color":"dark_aqua","italic":true}]
+								["",{"text":"+ ","color":"COLOR_1","italic":false},{"entity":"@e[type=minecraft:item,tag=armEly.chestplate,limit=1]","nbt":"Item.tag.display.Name","interpret":true,"color":"COLOR_1","italic":true}]
 							]
 						},
 						{

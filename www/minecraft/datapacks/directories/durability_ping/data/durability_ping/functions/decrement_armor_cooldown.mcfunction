@@ -1,2 +1,2 @@
 scoreboard players remove @s duraPing.armor 1
-execute if score @s duraPing.armor matches 0 run scoreboard players reset @s duraPing.armor
+scoreboard players reset @s[scores={duraPing.armor=0}] duraPing.armor

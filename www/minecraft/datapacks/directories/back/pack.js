@@ -9,5 +9,6 @@ module.exports = {
 			Enter "/function back:config" to configure the time players must stand still before teleporting after running the back command or whether to save death locations in the back command.
 		</span>
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

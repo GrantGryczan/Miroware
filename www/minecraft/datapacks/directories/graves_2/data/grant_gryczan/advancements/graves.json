@@ -4,7 +4,7 @@
 			"item": "minecraft:stone_brick_wall"
 		},
 		"title": "Graves                      ",
-		"description": ["",{"text":"Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.\nHold crouch when you right-click to make it so only you can pick up the items.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function graves:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"description": ["",{"text":"Retrieve your items and/or XP dropped on death from your grave by right-clicking it with an empty hand.\nHold crouch when you right-click to make it so only you can pick up the items.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function graves:config","color":"COLOR_2"},{"text":" for config options.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

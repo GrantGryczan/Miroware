@@ -4,7 +4,7 @@
 			"item": "minecraft:knowledge_book"
 		},
 		"title": "Unlock All Recipes",
-		"description": ["",{"text":"Automatically unlock all recipes as soon as you start playing.","color":"dark_aqua"}],
+		"description": ["",{"text":"Automatically unlock all recipes as soon as you start playing.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

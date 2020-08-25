@@ -4,7 +4,7 @@
 			"item": "minecraft:shulker_shell"
 		},
 		"title": "More Shulker Shells",
-		"description": ["",{"text":"Shulkers drop 1-2 shells instead of 0-1, and they always drop 2 shells with Looting II.","color":"dark_aqua"}],
+		"description": ["",{"text":"Shulkers drop 1-2 shells instead of 0-1, and they always drop 2 shells with Looting II.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

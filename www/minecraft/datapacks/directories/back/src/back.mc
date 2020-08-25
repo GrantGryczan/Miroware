@@ -60,7 +60,7 @@ clock 1t {
 				execute store result score @s back.x run data get entity @s Pos[0] 10
 				execute store result score @s back.y run data get entity @s Pos[1] 10
 				execute store result score @s back.z run data get entity @s Pos[2] 10
-				tellraw @s [{"text":"Teleporting back...","color":"dark_aqua"}]
+				tellraw @s [{"text":"Teleporting back...","color":"COLOR_1"}]
 			}
 		}
 		scoreboard players set @s back 0
@@ -125,7 +125,7 @@ clock 1s {
 	execute as @a[scores={back.cooldown=1..}] run {
 		name decrement_cooldown
 		scoreboard players remove @s back.cooldown 1
-		execute if score @s back.cooldown matches 0 run scoreboard players reset @s back.cooldown
+		scoreboard players reset @s[scores={back.cooldown=0}] back.cooldown
 	}
 }
 clock 5s {

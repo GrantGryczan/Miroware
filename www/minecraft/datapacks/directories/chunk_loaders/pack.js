@@ -6,5 +6,6 @@ module.exports = {
 	description: `
 		Drop a nether star on a lodestone to make a chunk loader (AKA a loadstone).
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

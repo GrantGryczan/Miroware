@@ -30,7 +30,7 @@ clock 1t {
 		execute if score @s spawn.cooldown matches 1.. run tellraw @s [{"text":"Your Spawn cooldown will end in ","color":"red"},{"score":{"name":"@s","objective":"spawn.cooldown"},"color":"red"},{"text":" seconds.","color":"red"}]
 		execute unless score @s spawn.cooldown matches 1.. run {
 			name start_to_go_to_spawn
-			tellraw @s {"text":"Teleporting to world spawn...","color":"dark_aqua"}
+			tellraw @s {"text":"Teleporting to world spawn...","color":"COLOR_1"}
 			scoreboard players operation @s spawn.delay = #delay spawn.config
 			execute store result score @s spawn.x run data get entity @s Pos[0] 10
 			execute store result score @s spawn.y run data get entity @s Pos[1] 10
@@ -84,7 +84,7 @@ clock 1s {
 	execute as @a[scores={spawn.cooldown=1..}] run {
 		name decrement_cooldown
 		scoreboard players remove @s spawn.cooldown 1
-		execute if score @s spawn.cooldown matches 0 run scoreboard players reset @s spawn.cooldown
+		scoreboard players reset @s[scores={spawn.cooldown=0}] spawn.cooldown
 	}
 }
 function config {

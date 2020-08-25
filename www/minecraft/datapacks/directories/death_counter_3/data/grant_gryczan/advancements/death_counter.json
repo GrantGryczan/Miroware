@@ -4,7 +4,7 @@
 			"item": "minecraft:skeleton_skull"
 		},
 		"title": "Death Counter  ",
-		"description": ["",{"text":"Display each player's death count in the player list.","color":"dark_aqua"}],
+		"description": ["",{"text":"Display each player's death count in the player list.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

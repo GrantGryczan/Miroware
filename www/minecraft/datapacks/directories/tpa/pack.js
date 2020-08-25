@@ -8,5 +8,6 @@ module.exports = {
 		Each player's PID (player ID) number can be found in the player list by pressing Tab by default.<br>
 		<b>Incompatible with Death Counter</b>
 	`,
-	tags: []
+	tags: [],
+	vt: true
 };

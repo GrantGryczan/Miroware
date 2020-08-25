@@ -4,7 +4,7 @@
 			"item": "minecraft:obsidian"
 		},
 		"title": "Custom Nether Portals   ",
-		"description": ["",{"text":"Ignite nether portals of any shape or size you like, or use crying obsidian in the portal frame. All features are configurable.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger cusNetPor","color":"aqua"},{"text":" for details.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function custom_nether_portals:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"description": ["",{"text":"Ignite nether portals of any shape or size you like, or use crying obsidian in the portal frame. All features are configurable.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger cusNetPor","color":"COLOR_2"},{"text":" for details.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function custom_nether_portals:config","color":"COLOR_2"},{"text":" for config options.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

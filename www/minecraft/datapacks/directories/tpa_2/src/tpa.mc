@@ -50,8 +50,8 @@ clock 1t {
 				name receive_tpa
 				execute as @a[tag=tpa.sender] if score @s tpa.target matches 1.. run function tpa:cancel_tpa
 				scoreboard players operation @a[tag=tpa.sender] tpa.target = @a[tag=tpa.sender] tpa
-				tellraw @a[tag=tpa.sender] [{"text":"You have requested to teleport to ","color":"dark_aqua"},{"selector":"@s","color":"aqua"},{"text":".\nTo cancel, ","color":"dark_aqua"},{"text":"enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/trigger tpcancel","color":"aqua","clickEvent":{"action":"run_command","value":"/trigger tpcancel"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/trigger tpcancel","color":"aqua"},{"text":".","color":"dark_aqua"}]}},{"text":".","color":"dark_aqua"}]
-				tellraw @s ["",{"selector":"@a[tag=tpa.sender]","color":"aqua"},{"text":" has requested to teleport to you.\nTo accept, ","color":"dark_aqua"},{"text":"enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/trigger tpaccept","color":"aqua","clickEvent":{"action":"run_command","value":"/trigger tpaccept"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/trigger tpaccept","color":"aqua"},{"text":".\nThe ","color":"dark_aqua"},{"text":"most recent","color":"red"},{"text":" active teleport request will be accepted.\nEnter ","color":"dark_aqua"},{"text":"/trigger tpaccept set <PID>","color":"aqua"},{"text":" instead if this player's request is not the most recent.","color":"dark_aqua"}]}},{"text":".\nTo deny, ","color":"dark_aqua"},{"text":"enter","color":"gold"},{"text":" or ","color":"dark_aqua"},{"text":"click","color":"gold"},{"text":" on ","color":"dark_aqua"},{"text":"/trigger tpdeny","color":"aqua","clickEvent":{"action":"run_command","value":"/trigger tpdeny"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"dark_aqua"},{"text":"/trigger tpdeny","color":"aqua"},{"text":".\nThe ","color":"dark_aqua"},{"text":"most recent","color":"red"},{"text":" active teleport request will be denied.\nEnter ","color":"dark_aqua"},{"text":"/trigger tpdeny set <PID>","color":"aqua"},{"text":" instead if this player's request is not the most recent.","color":"dark_aqua"}]}},{"text":".","color":"dark_aqua"}]
+				tellraw @a[tag=tpa.sender] [{"text":"You have requested to teleport to ","color":"COLOR_1"},{"selector":"@s","color":"COLOR_2"},{"text":".\nTo cancel, ","color":"COLOR_1"},{"text":"enter","color":"COLOR_3"},{"text":" or ","color":"COLOR_1"},{"text":"click","color":"COLOR_3"},{"text":" on ","color":"COLOR_1"},{"text":"/trigger tpcancel","color":"COLOR_2","clickEvent":{"action":"run_command","value":"/trigger tpcancel"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"COLOR_1"},{"text":"/trigger tpcancel","color":"COLOR_2"},{"text":".","color":"COLOR_1"}]}},{"text":".","color":"COLOR_1"}]
+				tellraw @s ["",{"selector":"@a[tag=tpa.sender]","color":"COLOR_2"},{"text":" has requested to teleport to you.\nTo accept, ","color":"COLOR_1"},{"text":"enter","color":"COLOR_3"},{"text":" or ","color":"COLOR_1"},{"text":"click","color":"COLOR_3"},{"text":" on ","color":"COLOR_1"},{"text":"/trigger tpaccept","color":"COLOR_2","clickEvent":{"action":"run_command","value":"/trigger tpaccept"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"COLOR_1"},{"text":"/trigger tpaccept","color":"COLOR_2"},{"text":".\nThe ","color":"COLOR_1"},{"text":"most recent","color":"red"},{"text":" active teleport request will be accepted.\nEnter ","color":"COLOR_1"},{"text":"/trigger tpaccept set <PID>","color":"COLOR_2"},{"text":" instead if this player's request is not the most recent.","color":"COLOR_1"}]}},{"text":".\nTo deny, ","color":"COLOR_1"},{"text":"enter","color":"COLOR_3"},{"text":" or ","color":"COLOR_1"},{"text":"click","color":"COLOR_3"},{"text":" on ","color":"COLOR_1"},{"text":"/trigger tpdeny","color":"COLOR_2","clickEvent":{"action":"run_command","value":"/trigger tpdeny"},"hoverEvent":{"action":"show_text","contents":[{"text":"Click to run ","color":"COLOR_1"},{"text":"/trigger tpdeny","color":"COLOR_2"},{"text":".\nThe ","color":"COLOR_1"},{"text":"most recent","color":"red"},{"text":" active teleport request will be denied.\nEnter ","color":"COLOR_1"},{"text":"/trigger tpdeny set <PID>","color":"COLOR_2"},{"text":" instead if this player's request is not the most recent.","color":"COLOR_1"}]}},{"text":".","color":"COLOR_1"}]
 			}
 			tag @s remove tpa.sender
 			tag @a[tag=tpa.target] remove tpa.target
@@ -76,8 +76,8 @@ clock 1t {
 		execute if score @s tpaccept matches 0 as @a[tag=tpa.sender] run function tpa:untag_older_senders
 		execute as @a[tag=tpa.sender] run {
 			name accept_tpa
-			tellraw @a[tag=tpa.target] [{"text":"You have accepted ","color":"dark_aqua"},{"selector":"@s","color":"aqua"},{"text":"'s teleport request.","color":"dark_aqua"}]
-			tellraw @s ["",{"selector":"@a[tag=tpa.target]","color":"aqua"},{"text":" has accepted your teleport request.","color":"dark_aqua"}]
+			tellraw @a[tag=tpa.target] [{"text":"You have accepted ","color":"COLOR_1"},{"selector":"@s","color":"COLOR_2"},{"text":"'s teleport request.","color":"COLOR_1"}]
+			tellraw @s ["",{"selector":"@a[tag=tpa.target]","color":"COLOR_2"},{"text":" has accepted your teleport request.","color":"COLOR_1"}]
 			execute unless score #cooldown tpa.config matches 0 run scoreboard players operation @s tpa.cooldown = #cooldown tpa.config
 			execute at @s run function back:set_back
 			tp @s @a[tag=tpa.target,limit=1]
@@ -99,7 +99,7 @@ clock 1t {
 		execute if score @s tpdeny matches 0 as @a[tag=tpa.sender] run function tpa:untag_older_senders
 		execute as @a[tag=tpa.sender] run {
 			name deny_tpa
-			tellraw @a[tag=tpa.target] [{"text":"You have denied ","color":"dark_aqua"},{"selector":"@s","color":"aqua"},{"text":"'s teleport request.","color":"dark_aqua"}]
+			tellraw @a[tag=tpa.target] [{"text":"You have denied ","color":"COLOR_1"},{"selector":"@s","color":"COLOR_2"},{"text":"'s teleport request.","color":"COLOR_1"}]
 			tellraw @s ["",{"selector":"@a[tag=tpa.target]","color":"red"},{"text":" has denied your teleport request.","color":"red"}]
 			scoreboard players reset @s tpa.target
 			scoreboard players reset @s tpa.timeout
@@ -115,7 +115,7 @@ clock 1s {
 	execute as @a[scores={tpa.cooldown=1..}] run {
 		name decrement_cooldown
 		scoreboard players remove @s tpa.cooldown 1
-		execute if score @s tpa.cooldown matches 0 run scoreboard players reset @s tpa.cooldown
+		scoreboard players reset @s[scores={tpa.cooldown=0}] tpa.cooldown
 	}
 }
 function untag_older_senders {
@@ -126,7 +126,7 @@ function untag_older_senders {
 function cancel_tpa {
 	tag @s add tpa.cancelSender
 	execute if entity @s[tag=tpa.sender] run tellraw @s {"text":"You have cancelled your previous teleport request.","color":"red"}
-	execute unless entity @s[tag=tpa.sender] run tellraw @s {"text":"You have cancelled your teleport request.","color":"dark_aqua"}
+	execute unless entity @s[tag=tpa.sender] run tellraw @s {"text":"You have cancelled your teleport request.","color":"COLOR_1"}
 	execute as @a if score @s tpa.pid = @a[tag=tpa.cancelSender,limit=1] tpa.target run tellraw @s ["",{"selector":"@a[tag=tpa.cancelSender]","color":"red"},{"text":" has cancelled their teleport request.","color":"red"}]
 	scoreboard players reset @s tpa.target
 	scoreboard players reset @s tpa.timeout

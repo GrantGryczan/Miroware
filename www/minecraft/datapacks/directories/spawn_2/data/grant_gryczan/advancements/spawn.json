@@ -4,7 +4,7 @@
 			"item": "minecraft:compass"
 		},
 		"title": "Spawn             ",
-		"description": ["",{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/trigger spawn","color":"aqua"},{"text":" to teleport to the world spawn point.\n","color":"dark_aqua"},{"text":"Enter","color":"gold"},{"text":" ","color":"dark_aqua"},{"text":"/function spawn:config","color":"aqua"},{"text":" for config options.","color":"dark_aqua"}],
+		"description": ["",{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger spawn","color":"COLOR_2"},{"text":" to teleport to the world spawn point.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function spawn:config","color":"COLOR_2"},{"text":" for config options.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

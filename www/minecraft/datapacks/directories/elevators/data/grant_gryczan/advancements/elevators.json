@@ -4,7 +4,7 @@
 			"item": "minecraft:magenta_wool"
 		},
 		"title": "Elevators            ",
-		"description": ["",{"text":"Drop","color":"gold"},{"text":" an ender pearl onto a wool block to make it into an elevator.\n","color":"dark_aqua"},{"text":"Jump","color":"gold"},{"text":" on it to warp onto an elevator of the same color directly above.\n","color":"dark_aqua"},{"text":"Crouch","color":"gold"},{"text":" on it to warp onto an elevator of the same color directly below.","color":"dark_aqua"}],
+		"description": ["",{"text":"Drop","color":"COLOR_3"},{"text":" an ender pearl onto a wool block to make it into an elevator.\n","color":"COLOR_1"},{"text":"Jump","color":"COLOR_3"},{"text":" on it to warp onto an elevator of the same color directly above.\n","color":"COLOR_1"},{"text":"Crouch","color":"COLOR_3"},{"text":" on it to warp onto an elevator of the same color directly below.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},
