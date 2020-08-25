@@ -3,7 +3,7 @@
 		"icon": {
 			"item": "minecraft:experience_bottle"
 		},
-		"title": "Craftable XP Bottles",
+		"title": "XP Management       ",
 		"description": ["",{"text":"Right-click","color":"COLOR_3"},{"text":" an enchanting table with an empty bottle to fill it with some of your XP.\n","color":"COLOR_1"},{"text":"Smelt","color":"COLOR_3"},{"text":" an XP bottle in a furnace to losslessly get your XP back.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false

@@ -1,0 +1,1 @@
+execute as @e[type=minecraft:item_frame,tag=craXPBot.enchTable] at @s positioned ~ ~-1000 ~ run function xp_management:restore_enchanting_table

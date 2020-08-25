@@ -8,7 +8,7 @@
 		"show_toast": false,
 		"announce_to_chat": false
 	},
-    "parent": "grant_gryczan:craftable_xp_bottles",
+    "parent": "grant_gryczan:xp_management",
 	"criteria": {
 		"tick": {
 			"trigger": "minecraft:tick"

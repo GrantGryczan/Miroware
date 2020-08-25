@@ -1,11 +1,12 @@
 function load {
 	scoreboard objectives add craXPBot.dummy dummy
+	advancement revoke @a only xp_management:try_to_bottle_xp
 }
 function uninstall {
 	scoreboard objectives remove craXPBot.dummy
 }
 function try_to_bottle_xp {
-	advancement revoke @s only craftable_xp_bottles:try_to_bottle_xp
+	advancement revoke @s only xp_management:try_to_bottle_xp
 	tag @s add craXPBot.continue
 	execute store result score #points craXPBot.dummy run xp query @s points
 	execute if score #points craXPBot.dummy matches ..4 if entity @s[level=1] run tag @s remove craXPBot.continue

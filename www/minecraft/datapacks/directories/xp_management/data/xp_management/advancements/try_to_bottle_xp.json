@@ -38,6 +38,6 @@
 		}
 	},
 	"rewards": {
-		"function": "craftable_xp_bottles:try_to_bottle_xp"
+		"function": "xp_management:try_to_bottle_xp"
 	}
 }
