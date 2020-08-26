@@ -9,7 +9,7 @@ scoreboard objectives add back.y dummy
 scoreboard objectives add back.z dummy
 execute unless score #death back.config matches 0..1 run scoreboard players set #death back.config 0
 execute unless score #delay back.config matches 0.. run scoreboard players set #delay back.config 0
-execute unless score #cooldown spawn.config matches 0.. run scoreboard players set #cooldown spawn.config 0
+execute unless score #cooldown back.config matches 0.. run scoreboard players set #cooldown back.config 0
 execute in minecraft:overworld store result score #prevOverworldDoImmediateRespawn back.dummy run gamerule doImmediateRespawn
 execute in minecraft:the_nether store result score #prevNetherDoImmediateRespawn back.dummy run gamerule doImmediateRespawn
 execute in minecraft:overworld run gamerule doImmediateRespawn true
