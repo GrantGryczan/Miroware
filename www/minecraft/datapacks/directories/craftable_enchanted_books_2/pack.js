@@ -6,7 +6,7 @@ module.exports = {
 	description: `
 		To craft an enchanted book, drop one book, one ingredient, and a certain number of bottles o' enchanting into a cauldron.<br>
 		Enter "/trigger craEncBoo" to get the recipe book.<br>
-		<b>Requires Craftable XP Bottles</b>
+		<b>Requires XP Management</b>
 	`,
 	tags: []
 };
