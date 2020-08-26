@@ -4,8 +4,8 @@ module.exports = {
 	name: "Armored Elytra",
 	compatibility: ["1.16"],
 	description: `
-		Drop elytra and a chestplate on an anvil to merge them into one item.<br>
-		Drop the merged item on a grindstone to separate them again.<br>
+		Drop elytra and a chestplate above an anvil to merge them into one item.<br>
+		Drop the merged item above a grindstone to separate them again.<br>
 		<span class="more">
 			Enchantments are kept safely between merging and separating.<br>
 			Burning netherite armored elytra will keep the chestplate but burn off the elytra.

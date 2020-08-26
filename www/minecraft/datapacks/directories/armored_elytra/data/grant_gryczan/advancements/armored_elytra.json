@@ -4,8 +4,8 @@
 			"item": "minecraft:elytra",
 			"nbt": "{CustomModelData:13522556}"
 		},
-		"title": "Armored Elytra      ",
-		"description": ["",{"text":"Drop","color":"COLOR_3"},{"text":" elytra and a chestplate on an anvil to merge them into one item.\n","color":"COLOR_1"},{"text":"Drop","color":"COLOR_3"},{"text":" the merged item on a grindstone to separate them again.\n","color":"COLOR_1"},{"text":"Enchantments","color":"COLOR_3"},{"text":" are kept safely between merging and separating.\n","color":"COLOR_1"},{"text":"Burning","color":"COLOR_3"},{"text":" netherite armored elytra will keep the chestplate but burn off the elytra.","color":"COLOR_1"}],
+		"title": "Armored Elytra            ",
+		"description": ["",{"text":"Drop","color":"COLOR_3"},{"text":" elytra and a chestplate above an anvil to merge them into one item.\n","color":"COLOR_1"},{"text":"Drop","color":"COLOR_3"},{"text":" the merged item above a grindstone to separate them again.\n","color":"COLOR_1"},{"text":"Enchantments","color":"COLOR_3"},{"text":" are kept safely between merging and separating.\n","color":"COLOR_1"},{"text":"Burning","color":"COLOR_3"},{"text":" netherite armored elytra will keep the chestplate but burn off the elytra.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

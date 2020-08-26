@@ -3,8 +3,8 @@
 		"icon": {
 			"item": "minecraft:lodestone"
 		},
-		"title": "Chunk Loaders    ",
-		"description": ["",{"text":"Drop a nether star on a lodestone to make a chunk loader (AKA a loadstone) which keeps the chunk it's in loaded until it is broken.","color":"COLOR_1"}],
+		"title": "Chunk Loaders     ",
+		"description": ["",{"text":"Drop a nether star above a lodestone to make a chunk loader (AKA a loadstone) which keeps the chunk it's in loaded until it is broken.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},
