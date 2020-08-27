@@ -1,0 +1,1 @@
+schedule function lectern_stats:update_stats 300s
