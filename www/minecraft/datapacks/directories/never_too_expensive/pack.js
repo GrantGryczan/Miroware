@@ -7,7 +7,7 @@ module.exports = {
 		Drop an item into a cauldron with one or more XP bottles to reduce the item's repair cost.<br>
 		<span class="more">
 			Enter "/trigger nevTooExp" for details.<br>
-			Enter "/function never_too_expensive:config" to configure the number of XP bottles required or the repair cost reduced.
+			Enter "/function never_too_expensive:config" for global settings.
 		</span>
 	`,
 	tags: []

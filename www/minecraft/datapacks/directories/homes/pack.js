@@ -10,7 +10,7 @@ module.exports = {
 			Enter "/trigger homes" to list your homes.<br>
 			Enter "/trigger namehome" or "/trigger namehome set &lt;ID&gt;" to name a home.<br>
 			Enter "/trigger delhome" or "/trigger delhome set &lt;ID&gt;" to delete a home.<br>
-			Enter "/function homes:config" to configure the maximum number of homes allowed per player or the time players must stand still before teleporting after running the home command.
+			Enter "/function homes:config" for global settings.
 		</span>
 	`,
 	tags: [],

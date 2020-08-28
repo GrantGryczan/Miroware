@@ -6,7 +6,7 @@ module.exports = {
 	description: `
 		Enter "/trigger spawn" to teleport to the world spawn point.<br><br>
 		<span class="more">
-			Enter "/function spawn:config" to configure the time players must stand still before teleporting after running the spawn command.
+			Enter "/function spawn:config" for global settings.
 		</span>
 	`,
 	tags: [],

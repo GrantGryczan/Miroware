@@ -7,7 +7,7 @@ module.exports = {
 		There is a chance each creeper will explode into confetti and do no damage to blocks.<br>
 		<span class="more">
 			Enter "/trigger conCre" for details.<br>
-			Enter "/function confetti_creepers:config" to configure that chance.
+			Enter "/function confetti_creepers:config" for global settings.
 		</span>
 	`,
 	tags: ["confetti", "creepers", "creeper", "explode", "explosion", "explosions", "mobgriefing", "mob", "griefing", "disable"],

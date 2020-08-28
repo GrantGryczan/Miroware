@@ -7,7 +7,7 @@ module.exports = {
 		Not all players in the overworld must sleep to skip the night and the rain.<br>
 		<span class="more">
 			Enter "/trigger mpSleep" for details and personal settings.<br>
-			Enter "/function multiplayer_sleep:config" to configure the percent of players required to sleep or the color of the sleep progress boss bar.
+			Enter "/function multiplayer_sleep:config" for global settings.
 		</span>
 	`,
 	tags: [],
