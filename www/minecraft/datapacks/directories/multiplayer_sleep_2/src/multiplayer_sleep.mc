@@ -14,6 +14,7 @@ function load {
 	bossbar set multiplayer_sleep:preview value 1
 	bossbar set multiplayer_sleep:preview max 2
 	bossbar set multiplayer_sleep:preview players
+	advancement revoke @a only multiplayer_sleep:slept_in_bed
 }
 function uninstall {
 	schedule clear multiplayer_sleep:tick

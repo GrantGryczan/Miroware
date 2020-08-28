@@ -13,3 +13,4 @@ bossbar set multiplayer_sleep:preview visible true
 bossbar set multiplayer_sleep:preview value 1
 bossbar set multiplayer_sleep:preview max 2
 bossbar set multiplayer_sleep:preview players
+advancement revoke @a only multiplayer_sleep:slept_in_bed
