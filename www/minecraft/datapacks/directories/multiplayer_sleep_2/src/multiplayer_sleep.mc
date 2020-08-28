@@ -108,7 +108,6 @@ clock 1t {
 			execute if score #total mpSleep.dummy matches 0 run scoreboard players set #total mpSleep.dummy 1
 			scoreboard players reset @a[tag=!mpSleep.sleeping] mpSleep.sleep
 			scoreboard players add @a[tag=mpSleep.sleeping] mpSleep.sleep 1
-			execute store result score #asleep mpSleep.dummy if entity @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=101..}]
 			execute if score #display mpSleep.config matches 1 as @a[tag=mpSleep.total] unless score @s mpSleep.config matches 1.. run tag @s add mpSleep.display1
 			execute if score #display mpSleep.config matches 2 as @a[tag=mpSleep.total] unless score @s mpSleep.config matches 1.. run tag @s add mpSleep.display2
 			execute if score #display mpSleep.config matches 3 as @a[tag=mpSleep.total] unless score @s mpSleep.config matches 1.. run tag @s add mpSleep.display3
@@ -122,16 +121,22 @@ clock 1t {
 			bossbar set multiplayer_sleep:progress players @a[tag=mpSleep.display1]
 			bossbar set multiplayer_sleep:progress visible true
 			title @a[tag=mpSleep.display2] actionbar [{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" of ","color":"COLOR_2"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" player(s) asleep","color":"COLOR_2"}]
-			execute if score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=1}] run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"COLOR_2"},{"text":" went to sleep. ","color":"COLOR_1"},{"score":{"name":"#sleeping","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" of ","color":"COLOR_2"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" player(s) asleep","color":"COLOR_1"}]
-			execute unless score #immediateChat mpSleep.config matches 1 as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=100}] run {
-				name announce_asleep
-				scoreboard players add #asleep mpSleep.dummy 1
-				execute if score #asleep mpSleep.dummy = #total mpSleep.dummy run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"COLOR_2"},{"text":" went to sleep. Sweet dreams!","color":"COLOR_1"}]
-				execute unless score #asleep mpSleep.dummy = #total mpSleep.dummy unless score #asleep mpSleep.dummy > #total mpSleep.dummy run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"COLOR_2"},{"text":" went to sleep. ","color":"COLOR_1"},{"score":{"name":"#asleep","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" of ","color":"COLOR_2"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" player(s) asleep","color":"COLOR_1"}]
+			execute if score #immediateChat mpSleep.config matches 1 run {
+				name try_to_announce_asleep_immediately
+				execute store result score #asleep mpSleep.dummy if entity @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=2..}]
+				execute as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=1}] run {
+					name announce_asleep
+					scoreboard players add #asleep mpSleep.dummy 1
+					execute if score #asleep mpSleep.dummy = #total mpSleep.dummy run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"COLOR_2"},{"text":" went to sleep. Sweet dreams!","color":"COLOR_1"}]
+					execute unless score #asleep mpSleep.dummy = #total mpSleep.dummy unless score #asleep mpSleep.dummy > #total mpSleep.dummy run tellraw @a[tag=mpSleep.display3] ["",{"selector":"@s","color":"COLOR_2"},{"text":" went to sleep. ","color":"COLOR_1"},{"score":{"name":"#asleep","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" of ","color":"COLOR_2"},{"score":{"name":"#total","objective":"mpSleep.dummy"},"color":"COLOR_2"},{"text":" player(s) asleep","color":"COLOR_1"}]
+				}
+				execute store result score #asleep mpSleep.dummy if entity @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=100..}]
 			}
-			tag @a remove mpSleep.display1
-			tag @a remove mpSleep.display2
-			tag @a remove mpSleep.display3
+			execute unless score #immediateChat mpSleep.config matches 1 run {
+				name try_to_announce_asleep
+				execute store result score #asleep mpSleep.dummy if entity @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=101..}]
+				execute as @a[tag=mpSleep.sleeping,scores={mpSleep.sleep=100}] run function multiplayer_sleep:announce_asleep
+			}
 			execute unless score #asleep mpSleep.dummy < #total mpSleep.dummy run {
 				name sufficient_sleeping
 				function multiplayer_sleep:reset_progress
@@ -141,7 +146,7 @@ clock 1t {
 				scoreboard players operation #remaining mpSleep.dummy -= #time mpSleep.dummy
 				LOOP (15, i) {
 					execute if score #remaining mpSleep.dummy matches <%2 ** (14 - this.i)%>.. run {
-						name add_time/bit_<%14 - this.i%>
+						name increment_time/bit_<%14 - this.i%>
 						time add <%2 ** (14 - this.i)%>
 						scoreboard players remove #remaining mpSleep.dummy <%2 ** (14 - this.i)%>
 					}
@@ -149,6 +154,9 @@ clock 1t {
 				execute if predicate multiplayer_sleep:raining run weather rain 1
 				execute if predicate multiplayer_sleep:thundering run weather thunder 1
 			}
+			tag @a remove mpSleep.display1
+			tag @a remove mpSleep.display2
+			tag @a remove mpSleep.display3
 			tag @a remove mpSleep.sleeping
 		}
 		tag @a remove mpSleep.total
