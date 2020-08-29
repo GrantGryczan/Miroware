@@ -8,6 +8,7 @@ function load {
 	scoreboard players set #offsetScale pocDim.dummy 4
 	execute unless score #last pocDim.dummy matches 0.. run scoreboard players set #last pocDim.dummy 0
 	execute in pocket_dimensions:dimension run forceload add 0 1024
+	advancement revoke @a only pocket_dimensions:drink_potion
 }
 function uninstall {
 	scoreboard objectives remove pocDim.give

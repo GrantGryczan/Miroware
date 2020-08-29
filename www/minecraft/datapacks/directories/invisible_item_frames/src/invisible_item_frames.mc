@@ -1,3 +1,7 @@
+function load {
+	advancement revoke @a only invisible_item_frames:activate_item_frame
+	advancement revoke @a only invisible_item_frames:use_item_frame
+}
 function uninstall {
 	schedule clear invisible_item_frames:tick
 	schedule clear invisible_item_frames:schedule
@@ -32,7 +36,8 @@ function activate_item_frame {
 			name consume_invisibility
 			playsound minecraft:entity.generic.drink block @a
 			data modify entity @s Item set value {id:"minecraft:glass_bottle",Count:1b}
-			function invisible_item_frames:mark
+			tag @s add invIteFra.itemFrame
+			summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["invIteFra.marker"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
 			function invisible_item_frames:set_invisible
 		}
 	}
@@ -42,10 +47,7 @@ function use_item_frame {
 	execute as @e[type=minecraft:item_frame,tag=invIteFra.placed,distance=..7] at @s run {
 		name place
 		tag @s remove invIteFra.placed
-		function invisible_item_frames:mark
+		tag @s add invIteFra.itemFrame
+		summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["invIteFra.marker"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
 	}
-}
-function mark {
-	tag @s add invIteFra.itemFrame
-	summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["invIteFra.marker"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
 }

@@ -112,7 +112,6 @@ clock 1t {
 			execute if score #display mpSleep.config matches 1 as @a[tag=mpSleep.total] unless score @s mpSleep.config matches 1.. run tag @s add mpSleep.display1
 			execute if score #display mpSleep.config matches 2 as @a[tag=mpSleep.total] unless score @s mpSleep.config matches 1.. run tag @s add mpSleep.display2
 			execute if score #display mpSleep.config matches 3 as @a[tag=mpSleep.total] unless score @s mpSleep.config matches 1.. run tag @s add mpSleep.display3
-			execute as @a unless score @s mpSleep.config matches 1..3 run scoreboard players set @s mpSleep.config 0
 			tag @a[scores={mpSleep.config=1}] add mpSleep.display1
 			tag @a[scores={mpSleep.config=2}] add mpSleep.display2
 			tag @a[scores={mpSleep.config=3}] add mpSleep.display3
