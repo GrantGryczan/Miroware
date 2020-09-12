@@ -1,1 +1,0 @@
-scoreboard objectives remove deaCou.deaths
