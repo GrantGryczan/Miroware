@@ -1,5 +1,4 @@
-execute store result score @s conCre.dummy run data get entity @s UUIDLeast 0.0000000001
-scoreboard players operation @s conCre.dummy %= #total conCre.config
-execute if score @s conCre.dummy < #chance conCre.config run tag @s add conCre.lucky
-data modify entity @s[tag=conCre.lucky] ExplosionRadius set value 0b
-tag @s add conCre.ready
+tag @s add cftCreep.done
+execute store result score #value cftCreep.config run data get entity @s UUIDLeast 0.0000000001
+scoreboard players operation #value cftCreep.config %= #total cftCreep.config
+execute if score #value cftCreep.config < #chance cftCreep.config run function confetti_creepers:set_confetti

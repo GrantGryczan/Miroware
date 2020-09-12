@@ -3,8 +3,8 @@
 		"icon": {
 			"item": "minecraft:creeper_head"
 		},
-		"title": "Confetti Creepers    ",
-		"description": ["",{"text":"There is a chance each creeper will explode into confetti and do no damage to blocks.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger conCre","color":"COLOR_2"},{"text":" for details.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function confetti_creepers:config","color":"COLOR_2"},{"text":" for config options.","color":"COLOR_1"}],
+		"title": "Confetti Creepers  ",
+		"description": ["",{"text":"There is a chance each creeper will explode into confetti and do no damage to blocks.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger cftCreep","color":"COLOR_2"},{"text":" for details.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function confetti_creepers:config","color":"COLOR_2"},{"text":" for config options.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},

@@ -1,1 +1,0 @@
-tellraw @s [{"text":"There is a ","color":"COLOR_1"},{"score":{"name":"#chance","objective":"conCre.config"},"color":"COLOR_2"},{"text":"%","color":"COLOR_2"},{"text":" chance each creeper will explode into confetti and do no damage to blocks.","color":"COLOR_1"}]
