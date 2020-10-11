@@ -20,3 +20,4 @@ execute if score #remaining mpSleep.dummy matches 2.. run function multiplayer_s
 execute if score #remaining mpSleep.dummy matches 1.. run function multiplayer_sleep:increment_time/bit_0
 execute if predicate multiplayer_sleep:raining run weather rain 1
 execute if predicate multiplayer_sleep:thundering run weather thunder 1
+execute unless predicate multiplayer_sleep:raining_or_thundering if score #alwaysClear mpSleep.config matches 1 run weather rain 1

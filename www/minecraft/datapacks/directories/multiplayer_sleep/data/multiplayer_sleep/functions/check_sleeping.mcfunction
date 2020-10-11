@@ -1,4 +1,4 @@
-execute as @a[predicate=multiplayer_sleep:overworld] at @s run tag @s add mpSleep.total
+tag @a[predicate=multiplayer_sleep:overworld] add mpSleep.total
 execute store result score #total mpSleep.dummy if entity @a[tag=mpSleep.total,gamemode=!spectator]
 execute as @a[tag=mpSleep.total,gamemode=!spectator] if data entity @s SleepingX run tag @s add mpSleep.sleeping
 execute store result score #sleeping mpSleep.dummy if entity @a[tag=mpSleep.sleeping]

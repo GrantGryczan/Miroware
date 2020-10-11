@@ -7,6 +7,7 @@ function load {
 	execute unless score #percent mpSleep.config matches 0..100 run scoreboard players set #percent mpSleep.config 0
 	execute unless score #display mpSleep.config matches 0..3 run scoreboard players set #display mpSleep.config 0
 	execute unless score #immediateChat mpSleep.config matches 0..1 run scoreboard players set #immediateChat mpSleep.config 0
+	execute unless score #alwaysClear mpSleep.config matches 0..1 run scoreboard players set #alwaysClear mpSleep.config 0
 	bossbar add multiplayer_sleep:progress "Multiplayer Sleep Progress"
 	bossbar add multiplayer_sleep:preview "Multiplayer Sleep Progress"
 	bossbar set multiplayer_sleep:preview name "1 of 2 player(s) asleep"
@@ -50,7 +51,8 @@ clock 1t {
 		}
 		execute if score @s mpSleep matches 2 run {
 			name trigger/list_sleeping_players
-			execute store success score #sleeping mpSleep.dummy as @a[gamemode=!spectator,predicate=multiplayer_sleep:overworld] if data entity @s SleepingX run tag @s add mpSleep.sleeping
+			execute as @a[gamemode=!spectator,predicate=multiplayer_sleep:overworld] if data entity @s SleepingX run tag @s add mpSleep.sleeping
+			execute store success score #sleeping mpSleep.dummy if entity @a[tag=mpSleep.sleeping]
 			execute if score #sleeping mpSleep.dummy matches 0 run tellraw @s {"text":"There are no sleeping players.","color":"red"}
 			execute unless score #sleeping mpSleep.dummy matches 0 run tellraw @s [{"text":"Sleeping players: ","color":"COLOR_1"},{"selector":"@a[tag=mpSleep.sleeping]","color":"COLOR_2"}]
 			tag @a remove mpSleep.sleeping
@@ -97,7 +99,7 @@ clock 1t {
 	}
 	execute if score #sleeping mpSleep.dummy matches 1.. run {
 		name check_sleeping
-		execute as @a[predicate=multiplayer_sleep:overworld] at @s run tag @s add mpSleep.total
+		tag @a[predicate=multiplayer_sleep:overworld] add mpSleep.total
 		execute store result score #total mpSleep.dummy if entity @a[tag=mpSleep.total,gamemode=!spectator]
 		execute as @a[tag=mpSleep.total,gamemode=!spectator] if data entity @s SleepingX run tag @s add mpSleep.sleeping
 		execute store result score #sleeping mpSleep.dummy if entity @a[tag=mpSleep.sleeping]
@@ -153,6 +155,7 @@ clock 1t {
 				}
 				execute if predicate multiplayer_sleep:raining run weather rain 1
 				execute if predicate multiplayer_sleep:thundering run weather thunder 1
+				execute unless predicate multiplayer_sleep:raining_or_thundering if score #alwaysClear mpSleep.config matches 1 run weather rain 1
 			}
 			tag @a remove mpSleep.display1
 			tag @a remove mpSleep.display2
@@ -191,6 +194,8 @@ function config {
 	execute unless score #immediateChat mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_immediate_chat"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enable ","color":"green"},"Immediate Chat Display",{"text":".","color":"green"},{"text":"\nWhen enabled, this sends Chat Display messages at the time the player enters the bed rather than after 5 seconds of sleeping.","color":"gray"},{"text":"\nDefault: Disabled","color":"dark_gray"}]}}," Immediate Chat Display"]
 	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #percent mpSleep.config "},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enter the percentage of players required to sleep.\nEnter ","color":"gray"},"0",{"text":" to require only one player.","color":"gray"},{"text":"\nAccepts: whole numbers 0-100\nDefault: 0","color":"dark_gray"}]}}," Players Required to Sleep ",{"text":"(Current: ","color":"gray"},{"score":{"name":"#percent","objective":"mpSleep.config"},"color":"gray"},{"text":"%)","color":"gray"}]
 	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/bossbar set multiplayer_sleep:progress color "},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enter a color for the boss bar display.","color":"gray"},{"text":"\nAccepts: blue, green, pink, purple, red, white, yellow\nDefault: white","color":"dark_gray"}]}}," Boss Bar Color"]
+	execute if score #alwaysClear mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/disable_always_clear"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to disable ","color":"red"},"Always Reset Weather Cycle",{"text":".","color":"red"},{"text":"\nWhen enabled, the weather cycle will reset to clear upon sleeping, whether or not the weather is clear already.","color":"gray"},{"text":"\nWhen sleeping occurs, this may cause rain to briefly appear, and the weather will not rain for a while afterward. This setting is incompatible with gamerule doWeatherCycle false.","color":"red"},{"text":"\nWhen disabled, the weather cycle will only reset to clear upon sleeping if it's already raining, just like in vanilla.","color":"gray"},{"text":"\nDefault: Disabled","color":"dark_gray"}]}}," Always Reset Weather Cycle"]
+	execute unless score #alwaysClear mpSleep.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function multiplayer_sleep:config/enable_always_clear"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enable ","color":"green"},"Always Reset Weather Cycle",{"text":".","color":"green"},{"text":"\nWhen enabled, the weather cycle will reset to clear upon sleeping, whether or not the weather is clear already.","color":"gray"},{"text":"\nWhen sleeping occurs, this may cause rain to briefly appear, and the weather will not rain for a while afterward. This setting is incompatible with gamerule doWeatherCycle false.","color":"red"},{"text":"\nWhen disabled, the weather cycle will only reset to clear upon sleeping if it's already raining, just like in vanilla.","color":"gray"},{"text":"\nDefault: Disabled","color":"dark_gray"}]}}," Always Reset Weather Cycle"]
 	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
 	execute store result score #sendCommandFeedback mpSleep.config run gamerule sendCommandFeedback
 	execute if score #sendCommandFeedback mpSleep.config matches 1 run {
@@ -225,6 +230,14 @@ dir config {
 	}
 	function disable_immediate_chat {
 		scoreboard players set #immediateChat mpSleep.config 0
+		function multiplayer_sleep:config
+	}
+	function enable_always_clear {
+		scoreboard players set #alwaysClear mpSleep.config 1
+		function multiplayer_sleep:config
+	}
+	function disable_always_clear {
+		scoreboard players set #alwaysClear mpSleep.config 0
 		function multiplayer_sleep:config
 	}
 }

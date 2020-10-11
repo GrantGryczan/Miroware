@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "multiplayer_sleep",
-	version: "2.4.3",
+	version: "2.5.0",
 	name: "Multiplayer Sleep",
 	compatibility: ["1.16"],
 	description: `
