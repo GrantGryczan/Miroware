@@ -1,0 +1,8 @@
+{
+	"replace": true,
+	"values": [
+		"#capture_eggs:spawn_eggs",
+		"minecraft:iron_golem",
+		"minecraft:snow_golem"
+	]
+}

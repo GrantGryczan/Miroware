@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:egg"
+		},
+		"title": "Capture Eggs",
+		"description": ["",{"text":"Throw an egg at a mob to capture it in a spawn egg.","color":"COLOR_1"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}
