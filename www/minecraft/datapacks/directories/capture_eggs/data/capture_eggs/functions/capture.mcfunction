@@ -69,7 +69,7 @@ data remove storage capture_eggs:storage temp.UUID
 data remove storage capture_eggs:storage temp.Pos
 data remove storage capture_eggs:storage temp.Rotation
 execute as @e[type=minecraft:item,tag=capEgg.drop,distance=..0.01] run function capture_eggs:set_drop
-tp @s ~ ~-512 ~
+tp @s ~ -512 ~
 data merge entity @s {DeathTime:19s,Health:0.0f}
 kill @e[type=minecraft:egg,tag=capEgg.egg,distance=..8]
 scoreboard players set #steps capEgg.dummy 0

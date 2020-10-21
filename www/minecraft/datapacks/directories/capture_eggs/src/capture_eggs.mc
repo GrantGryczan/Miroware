@@ -43,7 +43,7 @@ clock 1t {
 					data modify entity @s Item.tag.display.Name set from storage capture_eggs:storage temp.CustomName
 					data modify entity @s Item.tag.EntityTag merge from storage capture_eggs:storage temp
 				}
-				tp @s ~ ~-512 ~
+				tp @s ~ -512 ~
 				data merge entity @s {DeathTime:19s,Health:0.0f}
 				kill @e[type=minecraft:egg,tag=capEgg.egg,distance=..8]
 				scoreboard players set #steps capEgg.dummy 0
