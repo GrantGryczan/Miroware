@@ -62,8 +62,8 @@ execute if entity @s[type=minecraft:zombie] run summon minecraft:item ~ ~ ~ {Tag
 execute if entity @s[type=minecraft:zombie_horse] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"minecraft:zombie_horse_spawn_egg",Count:1b}}
 execute if entity @s[type=minecraft:zombie_villager] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"minecraft:zombie_villager_spawn_egg",Count:1b}}
 execute if entity @s[type=minecraft:zombified_piglin] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"minecraft:zombified_piglin_spawn_egg",Count:1b}}
-execute if entity @s[type=minecraft:iron_golem] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"minecraft:wolf_spawn_egg",Count:1b,tag:{capEggData:1b,display:{Name:'["",{"text":"Iron Golem Spawn Egg","italic":false}]'},EntityTag:{id:"minecraft:iron_golem",CustomName:''}}}}
-execute if entity @s[type=minecraft:snow_golem] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"minecraft:polar_bear_spawn_egg",Count:1b,tag:{capEggData:1b,display:{Name:'["",{"text":"Snow Golem Spawn Egg","italic":false}]'},EntityTag:{id:"minecraft:snow_golem",CustomName:''}}}}
+execute if entity @s[type=minecraft:iron_golem] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"minecraft:wolf_spawn_egg",Count:1b,tag:{capEggData:1b,display:{Name:'["",{"text":"Iron Golem Spawn Egg","italic":false}]'},EntityTag:{id:"minecraft:iron_golem",CustomName:"[]"}}}}
+execute if entity @s[type=minecraft:snow_golem] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"minecraft:polar_bear_spawn_egg",Count:1b,tag:{capEggData:1b,display:{Name:'["",{"text":"Snow Golem Spawn Egg","italic":false}]'},EntityTag:{id:"minecraft:snow_golem",CustomName:"[]"}}}}
 data modify storage capture_eggs:storage temp set from entity @s {}
 data remove storage capture_eggs:storage temp.UUID
 data remove storage capture_eggs:storage temp.Pos
