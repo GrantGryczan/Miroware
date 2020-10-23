@@ -1,0 +1,16 @@
+[
+  [
+    "lastUpdate",
+    "Fri Oct 23 2020 04:11:39 GMT-0400 (Eastern Daylight Time)"
+  ],
+  [
+    "INTERNAL/VIRTUAL_FILE_SYSTEM",
+    {
+      "src\\unlock_all_recipes.mc": {
+        "data\\unlock_all_recipes\\functions\\uninstall.mcfunction": "schedule clear unlock_all_recipes:unlock_recipes",
+        "data\\unlock_all_recipes\\functions\\unlock_recipes.mcfunction": "schedule function unlock_all_recipes:unlock_recipes 5s\nrecipe give @a *",
+        "data\\minecraft\\tags\\functions\\load.json": "{\"replace\":false,\"values\":[\"unlock_all_recipes:unlock_recipes\"]}"
+      }
+    }
+  ]
+]

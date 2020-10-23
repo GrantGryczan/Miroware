@@ -127,14 +127,14 @@ function iterate {
 	}
 	execute if score #continue leafDec.dummy matches 1 run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["leafDec.marker","leafDec.new"],Age:-2147483648,Duration:-1,WaitTime:-2147483648}
 	LOOP (5, i) {
-		execute if block ~ ~ ~ #minecraft:leaves[distance=<%this.i + 1%>] run {
-			name check_leaves/<%this.i%>
-			execute positioned ~ ~-1 ~ if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
-			execute positioned ~ ~1 ~ if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
-			execute positioned ~-1 ~ ~ if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
-			execute positioned ~1 ~ ~ if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
-			execute positioned ~ ~ ~-1 if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
-			execute positioned ~ ~ ~1 if predicate fast_leaf_decay:leaves/<%this.i%> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
+		execute if block ~ ~ ~ #minecraft:leaves[distance=<% i + 1 %>] run {
+			name check_leaves/<% i %>
+			execute positioned ~ ~-1 ~ if predicate fast_leaf_decay:leaves/<% i %> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
+			execute positioned ~ ~1 ~ if predicate fast_leaf_decay:leaves/<% i %> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
+			execute positioned ~-1 ~ ~ if predicate fast_leaf_decay:leaves/<% i %> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
+			execute positioned ~1 ~ ~ if predicate fast_leaf_decay:leaves/<% i %> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
+			execute positioned ~ ~ ~-1 if predicate fast_leaf_decay:leaves/<% i %> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
+			execute positioned ~ ~ ~1 if predicate fast_leaf_decay:leaves/<% i %> unless entity @e[type=minecraft:area_effect_cloud,tag=leafDec.new,distance=..0.01] run function fast_leaf_decay:iterate
 		}
 	}
 	execute if predicate fast_leaf_decay:leaves/4 run {

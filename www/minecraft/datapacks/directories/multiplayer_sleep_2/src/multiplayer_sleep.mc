@@ -147,10 +147,10 @@ clock 1t {
 				execute store result score #time mpSleep.dummy run time query daytime
 				scoreboard players operation #remaining mpSleep.dummy -= #time mpSleep.dummy
 				LOOP (15, i) {
-					execute if score #remaining mpSleep.dummy matches <%2 ** (14 - this.i)%>.. run {
-						name increment_time/bit_<%14 - this.i%>
-						time add <%2 ** (14 - this.i)%>
-						scoreboard players remove #remaining mpSleep.dummy <%2 ** (14 - this.i)%>
+					execute if score #remaining mpSleep.dummy matches <% 2 ** (14 - i) %>.. run {
+						name increment_time/bit_<% 14 - i %>
+						time add <% 2 ** (14 - i) %>
+						scoreboard players remove #remaining mpSleep.dummy <% 2 ** (14 - i) %>
 					}
 				}
 				execute if predicate multiplayer_sleep:raining run weather rain 1

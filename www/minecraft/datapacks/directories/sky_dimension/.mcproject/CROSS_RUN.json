@@ -1,0 +1,17 @@
+[
+  [
+    "lastUpdate",
+    "Fri Oct 23 2020 04:11:36 GMT-0400 (Eastern Daylight Time)"
+  ],
+  [
+    "INTERNAL/VIRTUAL_FILE_SYSTEM",
+    {
+      "src\\sky_dimension.mc": {
+        "data\\sky_dimension\\functions\\uninstall.mcfunction": "schedule clear sky_dimension:tick",
+        "data\\sky_dimension\\functions\\tick_entity.mcfunction": "execute if predicate sky_dimension:overworld_sky in sky_dimension:dimension run tp @s ~ 4 ~\nexecute if predicate sky_dimension:sky_dimension_void in minecraft:overworld run tp @s ~ 256 ~",
+        "data\\sky_dimension\\functions\\tick.mcfunction": "schedule function sky_dimension:tick 1t\nexecute as @e[type=#sky_dimension:teleportable] at @s run function sky_dimension:tick_entity",
+        "data\\minecraft\\tags\\functions\\load.json": "{\"replace\":false,\"values\":[\"sky_dimension:tick\"]}"
+      }
+    }
+  ]
+]

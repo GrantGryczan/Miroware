@@ -1,0 +1,21 @@
+[
+  [
+    "lastUpdate",
+    "Fri Oct 23 2020 04:11:17 GMT-0400 (Eastern Daylight Time)"
+  ],
+  [
+    "INTERNAL/VIRTUAL_FILE_SYSTEM",
+    {
+      "src\\chunk_loaders.mc": {
+        "data\\chunk_loaders\\functions\\load.mcfunction": "scoreboard objectives add chuLoa.dummy dummy",
+        "data\\chunk_loaders\\functions\\uninstall.mcfunction": "scoreboard objectives remove chuLoa.dummy\nschedule clear chunk_loaders:tick\nschedule clear chunk_loaders:schedule\nexecute as @e[type=minecraft:item_frame,tag=chuLoa.marker] at @s run function chunk_loaders:destroy_chunk_loader",
+        "data\\chunk_loaders\\functions\\destroy_chunk_loader.mcfunction": "forceload remove ~ ~\nexecute store result score #doTileDrops chuLoa.dummy run gamerule doTileDrops\nexecute if score #doTileDrops chuLoa.dummy matches 1 run summon minecraft:item ~ ~0.5 ~ {Item:{id:\"minecraft:nether_star\",Count:1b},PickupDelay:10s}\nparticle minecraft:smoke ~ ~0.5 ~ 0.25 0.25 0.25 0.02 150\nplaysound minecraft:block.respawn_anchor.deplete block @a ~ ~ ~ 1 0.5\nkill @s",
+        "data\\chunk_loaders\\functions\\tick.mcfunction": "schedule function chunk_loaders:tick 1t\nexecute as @e[type=minecraft:item_frame,tag=chuLoa.marker] at @s unless block ~ ~ ~ minecraft:lodestone run function chunk_loaders:destroy_chunk_loader",
+        "data\\chunk_loaders\\functions\\create_chunk_loader.mcfunction": "summon minecraft:item_frame ~ ~ ~ {Tags:[\"chuLoa.marker\"],Fixed:1b,Invisible:1b,Facing:1b}\nparticle minecraft:smoke ~0.5 ~0.5 ~0.5 0.4 0.4 0.4 0.02 150\nplaysound minecraft:block.respawn_anchor.charge block @a ~ ~ ~ 1 0.5\nkill @s",
+        "data\\chunk_loaders\\functions\\try_to_create_chunk_loader.mcfunction": "execute store success score #success chuLoa.dummy run forceload add ~ ~\nexecute if score #success chuLoa.dummy matches 1 run function chunk_loaders:create_chunk_loader\nexecute unless score #success chuLoa.dummy matches 1 run data merge entity @s {CustomName:'{\"text\":\"This chunk is already force-loaded.\",\"color\":\"red\"}',CustomNameVisible:1b}",
+        "data\\chunk_loaders\\functions\\schedule.mcfunction": "schedule function chunk_loaders:schedule 1s\nexecute as @e[type=minecraft:item] at @s positioned ~ ~-0.25 ~ if block ~ ~ ~ minecraft:lodestone align xyz unless entity @e[type=minecraft:item_frame,tag=chuLoa.marker,dx=0,dy=0,dz=0] if entity @s[nbt={Item:{id:\"minecraft:nether_star\",Count:1b}}] run function chunk_loaders:try_to_create_chunk_loader\nexecute at @e[type=minecraft:item_frame,tag=chuLoa.marker] align xyz run particle minecraft:smoke ~0.5 ~0.5 ~0.5 0.25 0.25 0.25 0.02 4",
+        "data\\minecraft\\tags\\functions\\load.json": "{\"replace\":false,\"values\":[\"chunk_loaders:load\",\"chunk_loaders:tick\",\"chunk_loaders:schedule\"]}"
+      }
+    }
+  ]
+]

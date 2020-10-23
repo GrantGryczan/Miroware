@@ -1,0 +1,20 @@
+[
+  [
+    "lastUpdate",
+    "Fri Oct 23 2020 04:11:16 GMT-0400 (Eastern Daylight Time)"
+  ],
+  [
+    "INTERNAL/VIRTUAL_FILE_SYSTEM",
+    {
+      "src\\cauldron_concrete.mc": {
+        "data\\cauldron_concrete\\functions\\summon_marker.mcfunction": "forceload add ~ ~\nsummon minecraft:armor_stand ~ ~ ~ {Marker:1b,NoGravity:1b,Invulnerable:1b,Invisible:1b,UUIDMost:-6876023450789001640L,UUIDLeast:-7106853199237825105L}",
+        "data\\cauldron_concrete\\functions\\load.mcfunction": "execute unless entity a093751a-2c77-4658-9d5f-62ab4494bdaf positioned 16562064 1000 -22242912 run function cauldron_concrete:summon_marker",
+        "data\\cauldron_concrete\\functions\\uninstall.mcfunction": "schedule clear cauldron_concrete:check_for_items_in_filled_cauldrons\nkill a093751a-2c77-4658-9d5f-62ab4494bdaf\nforceload remove 16562064 -22242912",
+        "data\\cauldron_concrete\\functions\\harden.mcfunction": "data modify entity @s[nbt={Item:{id:\"minecraft:white_concrete_powder\"}}] Item.id set value \"minecraft:white_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:orange_concrete_powder\"}}] Item.id set value \"minecraft:orange_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:magenta_concrete_powder\"}}] Item.id set value \"minecraft:magenta_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:light_blue_concrete_powder\"}}] Item.id set value \"minecraft:light_blue_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:yellow_concrete_powder\"}}] Item.id set value \"minecraft:yellow_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:lime_concrete_powder\"}}] Item.id set value \"minecraft:lime_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:pink_concrete_powder\"}}] Item.id set value \"minecraft:pink_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:gray_concrete_powder\"}}] Item.id set value \"minecraft:gray_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:light_gray_concrete_powder\"}}] Item.id set value \"minecraft:light_gray_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:cyan_concrete_powder\"}}] Item.id set value \"minecraft:cyan_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:purple_concrete_powder\"}}] Item.id set value \"minecraft:purple_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:blue_concrete_powder\"}}] Item.id set value \"minecraft:blue_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:brown_concrete_powder\"}}] Item.id set value \"minecraft:brown_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:green_concrete_powder\"}}] Item.id set value \"minecraft:green_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:red_concrete_powder\"}}] Item.id set value \"minecraft:red_concrete\"\ndata modify entity @s[nbt={Item:{id:\"minecraft:black_concrete_powder\"}}] Item.id set value \"minecraft:black_concrete\"",
+        "data\\cauldron_concrete\\functions\\check_item.mcfunction": "tag @s add cauCon.subject\ndata modify entity a093751a-2c77-4658-9d5f-62ab4494bdaf HandItems[0] set from entity @s Item\nexecute as a093751a-2c77-4658-9d5f-62ab4494bdaf if predicate cauldron_concrete:concrete_powder as @e[type=minecraft:item,tag=cauCon.subject] run function cauldron_concrete:harden\ntag @s remove cauCon.subject",
+        "data\\cauldron_concrete\\functions\\check_for_items_in_filled_cauldrons.mcfunction": "schedule function cauldron_concrete:check_for_items_in_filled_cauldrons 1s\nexecute as @e[type=minecraft:item] at @s if block ~ ~ ~ minecraft:cauldron unless block ~ ~ ~ minecraft:cauldron[level=0] run function cauldron_concrete:check_item",
+        "data\\minecraft\\tags\\functions\\load.json": "{\"replace\":false,\"values\":[\"cauldron_concrete:load\",\"cauldron_concrete:check_for_items_in_filled_cauldrons\"]}"
+      }
+    }
+  ]
+]

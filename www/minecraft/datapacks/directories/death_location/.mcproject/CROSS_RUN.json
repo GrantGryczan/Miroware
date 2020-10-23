@@ -1,0 +1,18 @@
+[
+  [
+    "lastUpdate",
+    "Fri Oct 23 2020 04:11:21 GMT-0400 (Eastern Daylight Time)"
+  ],
+  [
+    "INTERNAL/VIRTUAL_FILE_SYSTEM",
+    {
+      "src\\death_location.mc": {
+        "data\\death_location\\functions\\load.mcfunction": "scoreboard objectives add deaLoc.dummy dummy\nscoreboard objectives add deaLoc.deaths deathCount",
+        "data\\death_location\\functions\\uninstall.mcfunction": "schedule clear death_location:tick\nscoreboard objectives remove deaLoc.dummy\nscoreboard objectives remove deaLoc.deaths",
+        "data\\death_location\\functions\\death.mcfunction": "execute store result score #x deaLoc.dummy run data get entity @s Pos[0]\nexecute store result score #y deaLoc.dummy run data get entity @s Pos[1]\nexecute store result score #z deaLoc.dummy run data get entity @s Pos[2]\ntellraw @s [{\"text\":\"Death location: \",\"color\":\"COLOR_1\"},{\"text\":\"(\",\"color\":\"COLOR_2\"},{\"score\":{\"name\":\"#x\",\"objective\":\"deaLoc.dummy\"},\"color\":\"COLOR_2\"},{\"text\":\", \",\"color\":\"COLOR_2\"},{\"score\":{\"name\":\"#y\",\"objective\":\"deaLoc.dummy\"},\"color\":\"COLOR_2\"},{\"text\":\", \",\"color\":\"COLOR_2\"},{\"score\":{\"name\":\"#z\",\"objective\":\"deaLoc.dummy\"},\"color\":\"COLOR_2\"},{\"text\":\")\",\"color\":\"COLOR_2\"},{\"text\":\" in \",\"color\":\"COLOR_1\"},{\"entity\":\"@s\",\"nbt\":\"Dimension\",\"color\":\"COLOR_1\"}]\nscoreboard players reset @s deaLoc.deaths",
+        "data\\death_location\\functions\\tick.mcfunction": "schedule function death_location:tick 1t\nexecute as @a[scores={deaLoc.deaths=1..}] run function death_location:death",
+        "data\\minecraft\\tags\\functions\\load.json": "{\"replace\":false,\"values\":[\"death_location:load\",\"death_location:tick\"]}"
+      }
+    }
+  ]
+]

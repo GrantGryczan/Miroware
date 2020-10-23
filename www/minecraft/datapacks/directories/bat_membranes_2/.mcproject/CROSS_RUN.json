@@ -1,0 +1,16 @@
+[
+  [
+    "lastUpdate",
+    "Fri Oct 23 2020 04:11:15 GMT-0400 (Eastern Daylight Time)"
+  ],
+  [
+    "INTERNAL/VIRTUAL_FILE_SYSTEM",
+    {
+      "src\\bat_membranes.mc": {
+        "data\\bat_membranes\\functions\\load.mcfunction": "gamerule doInsomnia false",
+        "data\\bat_membranes\\functions\\uninstall.mcfunction": "gamerule doInsomnia true",
+        "data\\minecraft\\tags\\functions\\load.json": "{\"replace\":false,\"values\":[\"bat_membranes:load\"]}"
+      }
+    }
+  ]
+]

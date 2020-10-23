@@ -84,19 +84,19 @@ clock 1t {
 		execute as @e[type=minecraft:armor_stand,tag=graves.activated] run {
 			name fix_equipment/all
 			LOOP (4, i) {
-				execute store result score #count graves.dummy run data get entity @s ArmorItems[<%this.i%>].Count
+				execute store result score #count graves.dummy run data get entity @s ArmorItems[<% i %>].Count
 				execute if score #count graves.dummy matches 1 run {
-					name fix_equipment/check_<%this.i%>
+					name fix_equipment/check_<% i %>
 					execute if entity @a[tag=graves.subject,gamemode=creative] run {
-						name fix_equipment/drop_<%this.i%>
+						name fix_equipment/drop_<% i %>
 						summon minecraft:item ~ ~ ~ {Tags:["graves.item"],Item:{id:"minecraft:stone_button",Count:1b}}
-						data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[<%this.i%>]
+						data modify entity @e[type=minecraft:item,tag=graves.item,limit=1] Item set from entity @s ArmorItems[<% i %>]
 						execute as @a[tag=graves.subject] run function graves:set_owner
 						tag @e[type=minecraft:item] remove graves.item
 					}
-					execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[<%this.i%>].tag.gravesKey run function graves:fix_equipment/drop_<%this.i%>
+					execute unless entity @a[tag=graves.subject,gamemode=creative] unless data entity @s ArmorItems[<% i %>].tag.gravesKey run function graves:fix_equipment/drop_<% i %>
 				}
-				execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[<%this.i%>] set from entity @s HandItems[1]
+				execute unless score #count graves.dummy matches 2 run data modify entity @s ArmorItems[<% i %>] set from entity @s HandItems[1]
 			}
 			execute if score #failed graves.dummy matches 1 run tag @s remove graves.activated
 			scoreboard players set #failed graves.dummy 0

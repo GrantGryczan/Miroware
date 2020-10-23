@@ -1,12 +1,12 @@
 function load {
-	LOOP (this.data.criteria.length, i) {
-		scoreboard objectives add lecStat.<%this.i%> <%this.data.criteria[this.i]%>
+	LOOP (config.data.criteria.length, i) {
+		scoreboard objectives add lecStat.<% i %> <% config.data.criteria[i] %>
 	}
 }
 function uninstall {
 	schedule clear lectern_stats:update_stats
-	LOOP (this.data.criteria.length, i) {
-		scoreboard objectives remove lecStat.<%this.i%>
+	LOOP (config.data.criteria.length, i) {
+		scoreboard objectives remove lecStat.<% i %>
 	}
 }
 clock 300s {

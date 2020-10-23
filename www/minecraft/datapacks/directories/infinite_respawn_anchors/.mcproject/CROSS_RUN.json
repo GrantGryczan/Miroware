@@ -1,0 +1,15 @@
+[
+  [
+    "lastUpdate",
+    "Fri Oct 23 2020 04:11:26 GMT-0400 (Eastern Daylight Time)"
+  ],
+  [
+    "INTERNAL/VIRTUAL_FILE_SYSTEM",
+    {
+      "src\\infinite_respawn_anchors.mc": {
+        "data\\infinite_respawn_anchors\\functions\\tick.mcfunction": "schedule function infinite_respawn_anchors:tick 1t\nexecute at @e[type=minecraft:end_crystal] if block ~ ~-1 ~ minecraft:respawn_anchor if block ~ ~-2 ~ minecraft:crying_obsidian run setblock ~ ~-1 ~ minecraft:respawn_anchor[charges=4]",
+        "data\\minecraft\\tags\\functions\\load.json": "{\"replace\":false,\"values\":[\"infinite_respawn_anchors:tick\"]}"
+      }
+    }
+  ]
+]

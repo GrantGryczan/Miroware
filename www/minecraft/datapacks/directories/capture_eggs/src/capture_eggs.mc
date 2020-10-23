@@ -28,11 +28,11 @@ clock 1t {
 			name check
 			execute positioned ~-0.5 ~-0.5 ~-0.5 as @e[type=#capture_eggs:capturable,dx=0,dy=0,dz=0,sort=nearest,limit=1] at @s run {
 				name capture
-				LOOP (this.data.spawnEggs, id) {
-					execute if entity @s[type=<%this.id%>] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"<%this.id%>_spawn_egg",Count:1b}}
+				LOOP (config.data.spawnEggs, id) {
+					execute if entity @s[type=<% id %>] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"<% id %>_spawn_egg",Count:1b}}
 				}
-				LOOP (this.data.notSpawnEggs, entity) {
-					execute if entity @s[type=<%this.entity.id%>] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"<%this.entity.spawnEgg%>",Count:1b,tag:{capEggData:1b,display:{Name:'["",{"text":"<%this.entity.name%> Spawn Egg","italic":false}]'},EntityTag:{id:"<%this.entity.id%>",CustomName:"[]"}}}}
+				LOOP (config.data.notSpawnEggs, entity) {
+					execute if entity @s[type=<% entity.id %>] run summon minecraft:item ~ ~ ~ {Tags:["capEgg.drop"],Item:{id:"<% entity.spawnEgg %>",Count:1b,tag:{capEggData:1b,display:{Name:'["",{"text":"<% entity.name %> Spawn Egg","italic":false}]'},EntityTag:{id:"<% entity.id %>",CustomName:"[]"}}}}
 				}
 				data modify storage capture_eggs:storage temp set from entity @s {}
 				data remove storage capture_eggs:storage temp.UUID
