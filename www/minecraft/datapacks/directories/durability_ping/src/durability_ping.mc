@@ -1,3 +1,59 @@
+LOOP (config.data.items, item) {
+	advancement damage/<% item.id %> {
+		"display": {
+			"icon": {
+				"item": "minecraft:air"
+			},
+			"title": "",
+			"description": "",
+			"show_toast": false,
+			"announce_to_chat": false,
+			"hidden": true
+		},
+		"criteria": {
+			"item_durability_changed": {
+				"trigger": "minecraft:item_durability_changed",
+				"conditions": {
+					"durability": {
+						"min": <% item.minDurability || 1 %>,
+						"max": <% item.maxDurability || Math.round(item.durability / 10) %>
+					},
+					"item": {
+						"item": "minecraft:<% item.id %>"
+					},
+					"player": [
+						{
+							"condition": "minecraft:inverted",
+							"term": {
+								"condition": "minecraft:entity_scores",
+								"entity": "this",
+								"scores": {
+									"duraPing.<% item.slot === "weapon" ? "weapon" : "armor" %>": {
+										"min": 1,
+										"max": 2147483647
+									}
+								}
+							}
+						},
+						{
+							"condition": "minecraft:inverted",
+							"term": {
+								"condition": "minecraft:entity_scores",
+								"entity": "this",
+								"scores": {
+									"duraPing.config": <% item.slot === "weapon" ? '{"min": 100, "max": 299}' : '{"min": 200, "max": 399}' %>
+								}
+							}
+						}
+					]
+				}
+			}
+		},
+		"rewards": {
+			"function": "durability_ping:damage"
+		}
+	}
+}
 function load {
 	scoreboard objectives add duraPing.config dummy "Durability Ping Config"
 	scoreboard objectives add duraPing.dummy dummy
