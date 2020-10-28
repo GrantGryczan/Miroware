@@ -60,22 +60,22 @@ window.setDistinctSides = () => {
 	frames = 256;
 	cube.material = [
 		new THREE.MeshLambertMaterial({
-			color: 0xff0000
+			color: 0xff0000 // red
 		}),
 		new THREE.MeshLambertMaterial({
-			color: 0xffff00
+			color: 0xffff00 // yellow
 		}),
 		new THREE.MeshLambertMaterial({
-			color: 0x00ff00
+			color: 0x00ff00 // green
 		}),
 		new THREE.MeshLambertMaterial({
-			color: 0x00ffff
+			color: 0x00ffff // cyan
 		}),
 		new THREE.MeshLambertMaterial({
-			color: 0x0000ff
+			color: 0x0000ff // blue
 		}),
 		new THREE.MeshLambertMaterial({
-			color: 0xff00ff
+			color: 0xff00ff // magenta
 		})
 	];
 };
