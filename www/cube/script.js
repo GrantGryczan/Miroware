@@ -57,6 +57,7 @@ window.addRibbons = () => {
 	cube.add(ribbon2);
 };
 window.setDistinctSides = () => {
+	frames = 256;
 	cube.material = [
 		new THREE.MeshLambertMaterial({
 			color: 0xff0000
