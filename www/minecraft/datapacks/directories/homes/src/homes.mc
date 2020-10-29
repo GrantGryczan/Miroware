@@ -12,6 +12,7 @@ function load {
 	scoreboard objectives add homes.x dummy
 	scoreboard objectives add homes.y dummy
 	scoreboard objectives add homes.z dummy
+	scoreboard objectives add homes.limit dummy "Max Home Limit"
 	execute unless score #limit homes.config matches 0.. run scoreboard players set #limit homes.config 1
 	execute unless score #delay homes.config matches 0.. run scoreboard players set #delay homes.config 0
 	execute unless score #cooldown homes.config matches 0.. run scoreboard players set #cooldown homes.config 0
@@ -59,12 +60,14 @@ clock 1t {
 		function homes:rotate/homes
 		execute if score #remaining homes.dummy matches 0 run {
 			name try_to_add_home
-			execute if score #homes homes.dummy < #limit homes.config run {
+			execute if score @s homes.limit matches 0.. run scoreboard players operation #limit homes.dummy = @s homes.limit
+			execute unless score @s homes.limit matches 0.. run scoreboard players operation #limit homes.dummy = #limit homes.config
+			execute if score #homes homes.dummy < #limit homes.dummy run {
 				name add_home
 				data modify storage homes:storage players[-1].homes append value {}
 				function homes:set_home
 			}
-			execute unless score #homes homes.dummy < #limit homes.config run tellraw @s [{"text":"You can only set a maximum of ","color":"red"},{"score":{"name":"#limit","objective":"homes.config"},"color":"red"},{"text":" home(s).","color":"red"}]
+			execute unless score #homes homes.dummy < #limit homes.dummy run tellraw @s [{"text":"You can only set a maximum of ","color":"red"},{"score":{"name":"#limit","objective":"homes.dummy"},"color":"red"},{"text":" home(s).","color":"red"}]
 		}
 		execute unless score #remaining homes.dummy matches 0 run {
 			name set_home

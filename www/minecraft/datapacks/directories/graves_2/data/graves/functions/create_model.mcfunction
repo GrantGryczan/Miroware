@@ -3,4 +3,4 @@ execute as @e[type=minecraft:armor_stand,tag=graves.new] run function graves:pre
 loot spawn ~ 1000 ~ loot graves:name_tag
 tag @e[type=minecraft:item,nbt={Item:{tag:{gravesNameTag:1b}}}] add graves.nameTag
 data modify entity @s CustomName set from entity @e[type=minecraft:item,tag=graves.nameTag,limit=1] Item.tag.display.Name
-execute as @e[type=minecraft:item,tag=graves.nameTag,limit=1] run function graves:kill_item
+kill @e[type=minecraft:item,tag=graves.nameTag,limit=1]

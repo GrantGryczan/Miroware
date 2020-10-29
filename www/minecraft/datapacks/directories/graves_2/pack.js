@@ -1,6 +1,6 @@
 module.exports = {
 	namespace: "graves",
-	version: "2.7.4",
+	version: "2.8.0",
 	name: "Graves",
 	compatibility: ["1.16"],
 	description: `

@@ -3,10 +3,12 @@ function load {
 	scoreboard objectives add graves.deaths deathCount
 	scoreboard objectives add graves.id dummy
 	scoreboard objectives add graves.dummy dummy
+	scoreboard objectives add graves.age dummy
 	scoreboard objectives add grave trigger "Locate Last Grave"
 	execute unless score #robbing graves.config matches 0..1 run scoreboard players set #robbing graves.config 0
 	execute unless score #xp graves.config matches 0..1 run scoreboard players set #xp graves.config 1
 	execute unless score #locating graves.config matches 0..1 run scoreboard players set #locating graves.config 1
+	execute unless score #despawn graves.config matches 0.. run scoreboard players set #despawn graves.config 0
 	scoreboard players set #pointsPerLevel graves.dummy 7
 	scoreboard players set #prevOverworldDoImmediateRespawn graves.dummy 0
 	scoreboard players set #prevNetherDoImmediateRespawn graves.dummy 0
@@ -79,6 +81,30 @@ clock 1t {
 			execute unless score #success graves.dummy matches 1 run tellraw @s {"text":"You do not have a last grave.","color":"red"}
 		}
 		scoreboard players set @a grave 0
+	}
+}
+clock 1s {
+	name age_graves
+	execute unless score #despawn graves.config matches 0 as @e[type=minecraft:armor_stand,tag=graves.hitbox] run {
+		name age_grave
+		scoreboard players add @s graves.age 1
+		execute if score @s graves.age > #despawn graves.config at @s run {
+			name despawn_grave
+			execute store result score #remaining graves.dummy run data get storage graves:storage players
+			data modify storage graves:storage temp set from entity @s HandItems[1].tag.gravesData.uuid
+			execute store success score #success graves.dummy run data modify storage graves:storage temp set from storage graves:storage players[-1].uuid
+			execute if score #success graves.dummy matches 1 run function graves:rotate/player_as_grave
+			scoreboard players set #rotated graves.dummy 0
+			function graves:rotate/graves
+			data remove storage graves:storage players[-1].graves[-1]
+			scoreboard players remove #remaining graves.dummy 1
+			execute unless score #rotated graves.dummy matches 0 unless score #remaining graves.dummy matches 0 run function graves:rotate/back_grave
+			execute store result score #activated graves.dummy run data get entity @s HandItems[1].tag.gravesData.id
+			execute as @e[type=minecraft:armor_stand,tag=graves.model] run function graves:kill_model
+			playsound minecraft:block.stone.break block @a
+			particle minecraft:poof ~ ~0.7 ~ 0 0 0 0.05 10
+			kill @s
+		}
 	}
 }
 clock 2s {
@@ -171,7 +197,7 @@ function interact_with_grave {
 				scoreboard players remove #remaining graves.dummy 1
 				execute unless score #rotated graves.dummy matches 0 unless score #remaining graves.dummy matches 0 run function graves:rotate/back_grave
 				execute as @e[type=minecraft:armor_stand,tag=graves.model] run {
-					name check_model
+					name kill_model
 					execute store result score @s graves.id run data get entity @s ArmorItems[3].tag.gravesData.id
 					execute if score @s graves.id = #activated graves.dummy run kill @s
 				}
@@ -308,11 +334,7 @@ function create_grave {
 			loot spawn ~ 1000 ~ loot graves:name_tag
 			tag @e[type=minecraft:item,nbt={Item:{tag:{gravesNameTag:1b}}}] add graves.nameTag
 			data modify entity @s CustomName set from entity @e[type=minecraft:item,tag=graves.nameTag,limit=1] Item.tag.display.Name
-			execute as @e[type=minecraft:item,tag=graves.nameTag,limit=1] run {
-				name kill_item
-				data modify entity @s Item.Count set value 0b
-				kill @s
-			}
+			kill @e[type=minecraft:item,tag=graves.nameTag,limit=1]
 		}
 		execute if score #locating graves.config matches 1 as @a[tag=graves.player] run tellraw @s [{"text":"Your last grave is at ","color":"COLOR_1"},{"text":"(","color":"COLOR_2"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].x","color":"COLOR_2"},{"text":", ","color":"COLOR_2"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].y","color":"COLOR_2"},{"text":", ","color":"COLOR_2"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].z","color":"COLOR_2"},{"text":")","color":"COLOR_2"},{"text":" in ","color":"COLOR_1"},{"storage":"graves:storage","nbt":"players[-1].graves[-1].dim"},{"text":".","color":"COLOR_1"}]
 	}
@@ -381,6 +403,7 @@ function config {
 	execute unless score #xp graves.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function graves:config/enable_xp"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enable ","color":"green"},"XP Collection",{"text":".","color":"green"},{"text":"\nWhen enabled, graves collect XP dropped on death.\nNote that players do not drop all their XP on death.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," XP Collection"]
 	execute if score #locating graves.config matches 1 run tellraw @s ["",{"text":"[ ✔ ]","color":"green","clickEvent":{"action":"run_command","value":"/function graves:config/disable_locating"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to disable ","color":"red"},"Grave Locating",{"text":".","color":"red"},{"text":"\nWhen enabled, players can see the coordinates of their last grave.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Grave Locating"]
 	execute unless score #locating graves.config matches 1 run tellraw @s ["",{"text":"[ ❌ ]","color":"red","clickEvent":{"action":"run_command","value":"/function graves:config/enable_locating"},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enable ","color":"green"},"Grave Locating",{"text":".","color":"green"},{"text":"\nWhen enabled, players can see the coordinates of their last grave.","color":"gray"},{"text":"\nDefault: Enabled","color":"dark_gray"}]}}," Grave Locating"]
+	tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #despawn graves.config "},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enter the number of seconds it takes for a grave to despawn after it is created.\nEnter ","color":"gray"},"0",{"text":" to disable grave despawning.\nItems normally take 300 seconds (5 minutes) to despawn.","color":"gray"},{"text":"\nAccepts: whole numbers 0+\nDefault: 0","color":"dark_gray"}]}}," Grave Despawn Time ",{"text":"(Current: ","color":"gray"},{"score":{"name":"#despawn","objective":"graves.config"},"color":"gray"},{"text":")","color":"gray"}]
 	tellraw @s ["",{"text":">> ","color":"gold"},{"text":"[ Receive Grave Key ]","clickEvent":{"action":"run_command","value":"/function graves:give_grave_key"},"hoverEvent":{"action":"show_text","contents":{"text":"Click to receive a grave key which can be used to forcibly open graves.","color":"gray"}}}]
 	tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
 	execute store result score #sendCommandFeedback graves.config run gamerule sendCommandFeedback
