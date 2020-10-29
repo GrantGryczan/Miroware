@@ -1,3 +1,4 @@
+scoreboard players operation #canSleep mpSleep.dummy = #total mpSleep.dummy
 scoreboard players operation #total mpSleep.dummy *= #percent mpSleep.config
 scoreboard players operation #total mpSleep.dummy /= #total mpSleep.config
 execute if score #total mpSleep.dummy matches 0 run scoreboard players set #total mpSleep.dummy 1

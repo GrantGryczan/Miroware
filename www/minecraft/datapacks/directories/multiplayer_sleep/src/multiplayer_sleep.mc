@@ -106,6 +106,7 @@ clock 1t {
 		execute if score #sleeping mpSleep.dummy matches 0 run function multiplayer_sleep:reset_progress
 		execute unless score #sleeping mpSleep.dummy matches 0 run {
 			name sleeping
+			scoreboard players operation #canSleep mpSleep.dummy = #total mpSleep.dummy
 			scoreboard players operation #total mpSleep.dummy *= #percent mpSleep.config
 			scoreboard players operation #total mpSleep.dummy /= #total mpSleep.config
 			execute if score #total mpSleep.dummy matches 0 run scoreboard players set #total mpSleep.dummy 1
@@ -143,14 +144,17 @@ clock 1t {
 				name sufficient_sleeping
 				function multiplayer_sleep:reset_progress
 				scoreboard players set #sleeping mpSleep.dummy 0
-				scoreboard players set #remaining mpSleep.dummy 24000
-				execute store result score #time mpSleep.dummy run time query daytime
-				scoreboard players operation #remaining mpSleep.dummy -= #time mpSleep.dummy
-				LOOP (15, i) {
-					execute if score #remaining mpSleep.dummy matches <% 2 ** (14 - i) %>.. run {
-						name increment_time/bit_<% 14 - i %>
-						time add <% 2 ** (14 - i) %>
-						scoreboard players remove #remaining mpSleep.dummy <% 2 ** (14 - i) %>
+				execute unless score #asleep mpSleep.dummy = #canSleep mpSleep.dummy run {
+					name handle_skip
+					scoreboard players set #remaining mpSleep.dummy 24000
+					execute store result score #time mpSleep.dummy run time query daytime
+					scoreboard players operation #remaining mpSleep.dummy -= #time mpSleep.dummy
+					LOOP (15, i) {
+						execute if score #remaining mpSleep.dummy matches <% 2 ** (14 - i) %>.. run {
+							name increment_time/bit_<% 14 - i %>
+							time add <% 2 ** (14 - i) %>
+							scoreboard players remove #remaining mpSleep.dummy <% 2 ** (14 - i) %>
+						}
 					}
 				}
 				execute if predicate multiplayer_sleep:raining run weather rain 1
