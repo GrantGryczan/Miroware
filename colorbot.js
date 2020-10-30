@@ -127,7 +127,7 @@ client.on("guildMemberRemove", member => {
 	}
 });
 client.on("roleDelete", role => {
-	if (role.guild.available) {
+	if (role.guild.available && data.guilds[role.guild.id]) { // The check for `data.guilds[role.guild.id]` is necessary because not including it can throw `TypeError: Cannot read property '1' of undefined`.
 		for (const [, roles] of Object.values(data.guilds[role.guild.id][1])) {
 			const roleIndex = roles.indexOf(role.id);
 			if (roleIndex !== -1) {
