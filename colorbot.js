@@ -29,24 +29,26 @@ client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
 const inform = (guild, string1, string2) => {
 	if (guild.available) {
-		guild.owner.send(string1).catch(() => {
-			const channels = guild.channels.cache.filter(byTextChannels);
-			let i = -1;
-			const testChannel = () => {
-				i++;
-				if (channels[i]) {
-					channels[i].send(string2).catch(testChannel);
-				}
-			};
-			testChannel();
-		});
+		guild.members.fetch(guild.ownerID).then(owner => {
+			owner.send(string1).catch(() => {
+				const channels = guild.channels.cache.filter(byTextChannels);
+				let i = -1;
+				const testChannel = () => {
+					i++;
+					if (channels[i]) {
+						channels[i].send(string2).catch(testChannel);
+					}
+				};
+				testChannel();
+			});
+		}).catch(console.error);
 	}
 };
 const broadcast = string => {
 	const sentRecipients = [];
 	for (const [, guild] of client.guilds.cache) {
 		if (guild.available && !sentRecipients.includes(guild.ownerID)) {
-			inform(guild, string, `${guild.owner} ${string}`);
+			inform(guild, string, `<@${guild.ownerID}> ${string}`);
 			sentRecipients.push(guild.ownerID);
 		}
 	}
@@ -57,7 +59,7 @@ const guildCreate = guild => {
 };
 const permWarn = (guild, perms) => {
 	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
-	inform(guild, `An error occured on ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
+	inform(guild, `An error occured on ${italicize(guild.name) + warning}`, `<@${guild.ownerID}> An error occured${warning}`);
 };
 const errSendMessages = msg => () => {
 	permWarn(msg.guild, `send messages, in the ${msg.channel} channel or otherwise`);
@@ -95,15 +97,18 @@ client.once("ready", () => {
 	}
 	for (const id of Object.keys(data.guilds)) {
 		const guild = client.guilds.resolve(id);
-		if (guild) {
+		if (guild && guild.available) {
 			for (const group of Object.keys(data.guilds[id][1])) {
 				data.guilds[id][1][group][1] = data.guilds[id][1][group][1].filter(roleID => guild.roles.resolve(roleID));
 			}
-			for (const [, role] of guild.roles.cache) {
-				if (properColorTest.test(role.name) && role.members.size === 0) {
-					role.delete().catch(errManageRoles(guild));
+			// TODO: bot verification required
+			/*guild.members.fetch().then(() => {
+				for (const [, role] of guild.roles.cache) {
+					if (properColorTest.test(role.name) && role.members.size === 0) {
+						role.delete().catch(errManageRoles(guild));
+					}
 				}
-			}
+			});*/
 		}
 	}
 	save();
