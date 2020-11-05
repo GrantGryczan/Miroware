@@ -203,7 +203,7 @@ function check_damage {
 				data modify storage durability_ping:storage itemTag set from entity @s Inventory[{Slot:<% config.data.slots[item.slot] %>b}].tag
 			}
 			execute store result score #damage duraPing.dummy run data get storage durability_ping:storage itemTag.Damage
-			execute if data storage durability_ping:storage itemTag.display.Name run data modify storage durability_ping:storage name set value '{"storage":"durability_ping:storage","nbt":"itemTag.display.Name","interpret":true,"italic":true}'
+			execute if data storage durability_ping:storage itemTag.display.Name run data modify storage durability_ping:storage name set value '{"text":"","italic":true,"extra":[{"storage":"durability_ping:storage","nbt":"itemTag.display.Name","interpret":true}]}'
 			scoreboard players operation #durability duraPing.dummy -= #damage duraPing.dummy
 			scoreboard players operation #config duraPing.dummy = #default duraPing.config
 			execute if score @s duraPing.config matches 0.. run scoreboard players operation #config duraPing.dummy = @s duraPing.config
