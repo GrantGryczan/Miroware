@@ -10,7 +10,7 @@ clock 1t {
 	name tick
 	execute as @e[type=minecraft:area_effect_cloud,tag=invIteFra.marker] at @s unless entity @e[type=minecraft:item_frame,tag=invIteFra.itemFrame,distance=0] align xyz run {
 		name break
-		data merge entity @e[dx=0,dy=0,dz=0,type=minecraft:item,nbt={PickupDelay:10s,Item:{id:"minecraft:item_frame",Count:1b}},nbt=!{Item:{tag:{EntityTag:{}}}},limit=1] {Item:{tag:{display:{Name:'[{"text":"Invisible ","italic":false},{"translate":"item.minecraft.item_frame","italic":false}]'},EntityTag:{Tags:["invIteFra.placed"]}}}}
+		data merge entity @e[dx=0,dy=0,dz=0,type=minecraft:item,nbt={PickupDelay:10s,Item:{id:"minecraft:item_frame",Count:1b}},nbt=!{Item:{tag:{EntityTag:{}}}},limit=1] {Item:{tag:{display:{Name:'["",{"text":"Invisible ","italic":false},{"translate":"item.minecraft.item_frame","italic":false}]'},EntityTag:{Tags:["invIteFra.placed"]}}}}
 		kill @s
 	}
 }

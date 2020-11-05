@@ -1,7 +1,7 @@
 [
   [
     "lastUpdate",
-    "Fri Oct 23 2020 04:11:26 GMT-0400 (Eastern Daylight Time)"
+    "Thu Nov 05 2020 06:11:19 GMT-0500 (Eastern Standard Time)"
   ],
   [
     "INTERNAL/VIRTUAL_FILE_SYSTEM",
@@ -9,7 +9,7 @@
       "src\\invisible_item_frames.mc": {
         "data\\invisible_item_frames\\functions\\load.mcfunction": "advancement revoke @a only invisible_item_frames:activate_item_frame\nadvancement revoke @a only invisible_item_frames:use_item_frame",
         "data\\invisible_item_frames\\functions\\uninstall.mcfunction": "schedule clear invisible_item_frames:tick\nschedule clear invisible_item_frames:schedule",
-        "data\\invisible_item_frames\\functions\\break.mcfunction": "data merge entity @e[dx=0,dy=0,dz=0,type=minecraft:item,nbt={PickupDelay:10s,Item:{id:\"minecraft:item_frame\",Count:1b}},nbt=!{Item:{tag:{EntityTag:{}}}},limit=1] {Item:{tag:{display:{Name:'[{\"text\":\"Invisible \",\"italic\":false},{\"translate\":\"item.minecraft.item_frame\",\"italic\":false}]'},EntityTag:{Tags:[\"invIteFra.placed\"]}}}}\nkill @s",
+        "data\\invisible_item_frames\\functions\\break.mcfunction": "data merge entity @e[dx=0,dy=0,dz=0,type=minecraft:item,nbt={PickupDelay:10s,Item:{id:\"minecraft:item_frame\",Count:1b}},nbt=!{Item:{tag:{EntityTag:{}}}},limit=1] {Item:{tag:{display:{Name:'[\"\",{\"text\":\"Invisible \",\"italic\":false},{\"translate\":\"item.minecraft.item_frame\",\"italic\":false}]'},EntityTag:{Tags:[\"invIteFra.placed\"]}}}}\nkill @s",
         "data\\invisible_item_frames\\functions\\tick.mcfunction": "schedule function invisible_item_frames:tick 1t\nexecute as @e[type=minecraft:area_effect_cloud,tag=invIteFra.marker] at @s unless entity @e[type=minecraft:item_frame,tag=invIteFra.itemFrame,distance=0] align xyz run function invisible_item_frames:break",
         "data\\invisible_item_frames\\functions\\set_visible.mcfunction": "data modify entity @s Invisible set value 0b\ntag @s remove invIteFra.invisible",
         "data\\invisible_item_frames\\functions\\schedule.mcfunction": "schedule function invisible_item_frames:schedule 1s\nexecute as @e[type=minecraft:area_effect_cloud,tag=invIteFra.marker] run data modify entity @s Age set value -2147483648\nexecute as @e[type=minecraft:item_frame,tag=invIteFra.invisible,nbt=!{Item:{}}] run function invisible_item_frames:set_visible",
