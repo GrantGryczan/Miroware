@@ -29,7 +29,7 @@ function try_to_bottle_xp {
 					data modify entity @e[type=minecraft:item_frame,tag=craXPBot.new,limit=1] Item.tag.craXPBotData set from block ~ ~ ~ {}
 					setblock ~ ~ ~ minecraft:snow[layers=6]
 					scoreboard players set #steps craXPBot.dummy 0
-					schedule 2t replace {
+					schedule 2t append {
 						name restore_enchanting_tables
 						execute as @e[type=minecraft:item_frame,tag=craXPBot.enchTable] at @s positioned ~ ~-1000 ~ run {
 							name restore_enchanting_table

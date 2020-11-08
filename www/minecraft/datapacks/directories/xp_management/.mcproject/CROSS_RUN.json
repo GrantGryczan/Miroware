@@ -1,7 +1,7 @@
 [
   [
     "lastUpdate",
-    "Fri Oct 23 2020 04:11:40 GMT-0400 (Eastern Daylight Time)"
+    "Sun Nov 08 2020 12:48:38 GMT-0500 (Eastern Standard Time)"
   ],
   [
     "INTERNAL/VIRTUAL_FILE_SYSTEM",
@@ -11,7 +11,7 @@
         "data\\xp_management\\functions\\uninstall.mcfunction": "scoreboard objectives remove craXPBot.dummy",
         "data\\xp_management\\functions\\restore_enchanting_table.mcfunction": "setblock ~ ~ ~ minecraft:enchanting_table\ndata modify block ~ ~ ~ {} set from entity @s Item.tag.craXPBotData\nkill @s",
         "data\\xp_management\\functions\\restore_enchanting_tables.mcfunction": "execute as @e[type=minecraft:item_frame,tag=craXPBot.enchTable] at @s positioned ~ ~-1000 ~ run function xp_management:restore_enchanting_table",
-        "data\\xp_management\\functions\\replace_enchanting_table.mcfunction": "summon minecraft:item_frame ~ ~1000 ~ {Tags:[\"craXPBot.enchTable\",\"craXPBot.new\"],Fixed:1b,Invisible:1b,Item:{id:\"minecraft:enchanting_table\",Count:1b,tag:{craXPBotData:{}}}}\ndata modify entity @e[type=minecraft:item_frame,tag=craXPBot.new,limit=1] Item.tag.craXPBotData set from block ~ ~ ~ {}\nsetblock ~ ~ ~ minecraft:snow[layers=6]\nscoreboard players set #steps craXPBot.dummy 0\nschedule function xp_management:restore_enchanting_tables 2t replace",
+        "data\\xp_management\\functions\\replace_enchanting_table.mcfunction": "summon minecraft:item_frame ~ ~1000 ~ {Tags:[\"craXPBot.enchTable\",\"craXPBot.new\"],Fixed:1b,Invisible:1b,Item:{id:\"minecraft:enchanting_table\",Count:1b,tag:{craXPBotData:{}}}}\ndata modify entity @e[type=minecraft:item_frame,tag=craXPBot.new,limit=1] Item.tag.craXPBotData set from block ~ ~ ~ {}\nsetblock ~ ~ ~ minecraft:snow[layers=6]\nscoreboard players set #steps craXPBot.dummy 0\nschedule function xp_management:restore_enchanting_tables 2t append",
         "data\\xp_management\\functions\\check_enchanting_table.mcfunction": "summon minecraft:area_effect_cloud ~ ~ ~ {Tags:[\"craXPBot.marker\"]}\nexecute align y if entity @e[type=minecraft:area_effect_cloud,tag=craXPBot.marker,distance=..0.75] run function xp_management:replace_enchanting_table\nkill @e[type=minecraft:area_effect_cloud,tag=craXPBot.marker]",
         "data\\xp_management\\functions\\raycast.mcfunction": "scoreboard players remove #steps craXPBot.dummy 1\nexecute if block ~ ~ ~ minecraft:enchanting_table run function xp_management:check_enchanting_table\nexecute unless score #steps craXPBot.dummy matches 0 positioned ^ ^ ^0.1 run function xp_management:raycast",
         "data\\xp_management\\functions\\bottle_xp.mcfunction": "clear @s minecraft:glass_bottle 1\ngive @s minecraft:experience_bottle\nxp add @s -12 points\nplaysound minecraft:item.bottle.fill_dragonbreath player @a ~ ~ ~ 1 1.25\nscoreboard players set #steps craXPBot.dummy 50\nexecute anchored eyes positioned ^ ^ ^ run function xp_management:raycast\ntag @s remove craXPBot.continue",
