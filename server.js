@@ -35,7 +35,8 @@ const byS3Object = item => ({
 const byID = ({id}) => id;
 const pipeFiles = item => item.type !== "/";
 const encodedSlashes = /%2F/g;
-const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
+const encodedAts = /%40/g;
+const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/").replace(encodedAts, "@");
 const wait = delay => new Promise(resolve => {
 	setTimeout(resolve, delay);
 });

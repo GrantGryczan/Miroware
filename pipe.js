@@ -13,7 +13,8 @@ const s3 = new AWS.S3({
 	sslEnabled: true
 });
 const encodedSlashes = /%2F/g;
-const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/");
+const encodedAts = /%40/g;
+const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/").replace(encodedAts, "@");
 (async () => {
 	require("replthis")(v => eval(v));
 	const db = (await MongoClient.connect(youKnow.db, {
@@ -24,7 +25,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 	app.disable("X-Powered-By");
 	const userAgents = [];
 	const request = path => new Promise(resolve => {
-		const userAgent = `MirowarePipe (${Math.random()})`;
+		const userAgent = `Pipe (${Math.random()})`;
 		userAgents.push(userAgent);
 		if (path.endsWith("/")) {
 			path += "index.html";
