@@ -1,0 +1,17 @@
+{
+	"display": {
+		"icon": {
+			"item": "minecraft:filled_map"
+		},
+		"title": "Chunk Pre-Generator",
+		"description": ["",{"text":"Generate a custom large area of chunks in your world to avoid world generation lag later during gameplay. Works in any dimension.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function chunk_pregenerator:setup","color":"COLOR_2"},{"text":" to set up.\n","color":"COLOR_1"},{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/function chunk_pregenerator:stop","color":"COLOR_2"},{"text":" to cancel.","color":"COLOR_1"}],
+		"show_toast": false,
+		"announce_to_chat": false
+	},
+    "parent": "grant_gryczan:root",
+	"criteria": {
+		"tick": {
+			"trigger": "minecraft:tick"
+		}
+	}
+}
