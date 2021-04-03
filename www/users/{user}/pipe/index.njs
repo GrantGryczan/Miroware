@@ -47,7 +47,7 @@ this.value += html`
 							<button id="addURL" class="mdc-icon-button mdc-button--raised material-icons mdc-ripple" title="Upload from URL">link</button>
 							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons mdc-ripple" title="Create directory">create_new_folder</button>
 						</div>
-						<div id="queuedItems" class="items"></div>${this.req.cookies.hidesurvey1 ? "" : html`
+						<div id="queuedItems" class="items"></div>${true || this.req.cookies.hidesurvey1 ? "" : html`
 						<div style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12);">
 							Hey, would you mind answering a one-minute poll about your interest in Pipe?
 							<a href="https://forms.gle/UtYpPXPrVFEHkKer6" target="_blank">Click here.</a><br>
