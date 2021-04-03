@@ -201,6 +201,7 @@ if (isMe) {
 		const id = String(ObjectID());
 		s3.putObject({
 			Bucket: "miroware-pipe",
+			StorageClass: 'INTELLIGENT_TIERING',
 			Key: id,
 			ContentLength: body.length,
 			Body: body,
