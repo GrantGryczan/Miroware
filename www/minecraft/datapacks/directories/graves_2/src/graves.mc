@@ -254,7 +254,7 @@ function create_grave {
 	replaceitem entity @s hotbar.7 minecraft:air
 	data modify entity @e[type=minecraft:armor_stand,tag=graves.new,limit=1] HandItems[0].tag.gravesData.items append from entity @s Inventory[{Slot:8b}]
 	replaceitem entity @s hotbar.8 minecraft:air
-	data modify entity @e[type=minecraft:armor_stand,tag=graves.new,limit=1] HandItems[0].tag.gravesData.items append from entity @s Inventory[{Slot:106b}]
+	data modify entity @e[type=minecraft:armor_stand,tag=graves.new,limit=1] HandItems[0].tag.gravesData.items append from entity @s Inventory[{Slot:-106b}]
 	replaceitem entity @s weapon.offhand minecraft:air
 	data modify entity @e[type=minecraft:armor_stand,tag=graves.new,limit=1] HandItems[0].tag.gravesData.items append from entity @s Inventory[{Slot:9b}]
 	replaceitem entity @s inventory.0 minecraft:air
