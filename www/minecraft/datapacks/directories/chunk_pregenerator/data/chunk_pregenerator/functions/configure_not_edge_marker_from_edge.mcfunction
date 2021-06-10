@@ -1,4 +1,4 @@
-scoreboard players set @e[type=minecraft:area_effect_cloud,tag=chunkPre.notEdge,distance=..0.01,limit=1] chunkPre.config 2
+scoreboard players set @e[type=minecraft:marker,tag=chunkPre.notEdge,distance=..0.01,limit=1] chunkPre.config 2
 execute store result bossbar chunk_pregenerator:progress value run scoreboard players add #done chunkPre.config 1
 scoreboard players operation #percent chunkPre.config = #done chunkPre.config
 scoreboard players operation #percent chunkPre.config *= #100 chunkPre.config

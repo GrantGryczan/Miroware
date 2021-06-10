@@ -1,9 +1,0 @@
-execute if score #done chunkPre.config matches 0.. run function chunk_pregenerator:really_stop
-tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
-tellraw @s ["                     Chunk Pre-Generator",{"text":" / ","color":"gray"},"Setup                     "]
-tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
-tellraw @s ["",{"text":"[ ✎ ]","color":"gray","clickEvent":{"action":"suggest_command","value":"/scoreboard players set #radius chunkPre.config "},"hoverEvent":{"action":"show_text","contents":["",{"text":"Click to enter the chunk radius of the square area in which the chunks will be pre-generated.\n","color":"gray"},"0",{"text":" = 1 x 1 = 1 chunk\n","color":"gray"},"1",{"text":" = 3 x 3 = 9 chunks\n","color":"gray"},"2",{"text":" = 5 x 5 = 25 chunks\netc.","color":"gray"},{"text":"\nAccepts: whole numbers 0-9999\nDefault: 128 = 257 x 257 = 66049 chunks","color":"dark_gray"}]}}," Radius ",{"text":"(Current: ","color":"gray"},{"score":{"name":"#radius","objective":"chunkPre.config"},"color":"gray"},{"text":")","color":"gray"}]
-tellraw @s ["\n                                ",{"text":"[ Continue ]","clickEvent":{"action":"run_command","value":"/function chunk_pregenerator:continue"},"hoverEvent":{"action":"show_text","contents":{"text":"Click to continue setup with the current configuration.","color":"gray"}},"color":"gold"},"                                "]
-tellraw @s {"text":"                                                                                ","color":"dark_gray","strikethrough":true}
-execute store result score #sendCommandFeedback chunkPre.config run gamerule sendCommandFeedback
-execute if score #sendCommandFeedback chunkPre.config matches 1 run function chunk_pregenerator:hide_command_feedback
