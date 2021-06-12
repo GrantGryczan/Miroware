@@ -83,7 +83,7 @@ const logIn = async (service, code) => Miro.request("POST", "/token", {}, {
 	email: loginForm.elements.email.value
 });
 const loginFail = xhr => {
-	if (!xhr.response.verified) {
+	if (xhr.response.unverified) {
 		verificationSent();
 		return true;
 	}
