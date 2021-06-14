@@ -4,6 +4,10 @@ let id = process.cwd().replace(/\\/g, "/");
 id = id.slice(id.lastIndexOf("/") + 1);
 const packFormats = [
 	{
+		id: 7,
+		versions: ["1.17"]
+	},
+	{
 		id: 6,
 		versions: ["1.16"]
 	},
@@ -26,6 +30,10 @@ module.exports = {
 				const promises = [];
 				for (const child of await fs.readdir(parent)) {
 					const childPath = `${parent}/${child}`;
+					if (child === 'tick.json') {
+						await fs.unlink(childPath); // A quick fix for an MC-Build bug.
+						continue;
+					}
 					promises.push(
 						(await fs.stat(childPath)).isDirectory()
 							? scanDirectory(childPath)
