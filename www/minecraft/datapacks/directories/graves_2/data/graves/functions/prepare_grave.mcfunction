@@ -13,7 +13,7 @@ execute at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["graves.start"
 execute at @s run function graves:offset_up
 execute at @s if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function graves:offset_down
 kill @e[type=minecraft:area_effect_cloud,tag=graves.start]
-execute at @s positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run setblock ~ ~ ~ minecraft:grass_block
+execute at @s positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run setblock ~ ~ ~ minecraft:grass_block destroy
 tag @s remove graves.new
 execute at @s run tp @s ~0.5 ~ ~0.5
 execute store result storage graves:storage players[-1].graves[-1].x int 1 run data get entity @s Pos[0]

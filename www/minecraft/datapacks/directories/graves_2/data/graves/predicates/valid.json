@@ -23,7 +23,9 @@
 			"condition": "minecraft:location_check",
 			"predicate": {
 				"block": {
-					"block": "minecraft:snow",
+					"blocks": [
+						"minecraft:snow"
+					],
 					"state": {
 						"layers": 1
 					}
@@ -42,7 +44,9 @@
 			"condition": "minecraft:location_check",
 			"predicate": {
 				"block": {
-					"block": "minecraft:bubble_column",
+					"blocks": [
+						"minecraft:bubble_column"
+					],
 					"state": {
 						"drag": true
 					}
