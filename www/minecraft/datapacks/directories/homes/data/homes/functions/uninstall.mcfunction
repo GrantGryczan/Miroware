@@ -1,9 +1,8 @@
 schedule clear homes:tick
 schedule clear homes:decrement_cooldowns
-execute at @e[type=minecraft:item_frame,tag=homes.dimension] run forceload remove ~ ~
-kill @e[type=minecraft:item_frame,tag=homes.dimension]
+schedule clear homes:try_to_mark_dimension
+execute as @e[type=minecraft:marker,tag=homes.dimension] at @s run function homes:remove_dimension_marker
 data remove storage homes:storage players
-data remove storage homes:storage lastDimension
 data remove storage homes:storage temp
 data remove storage homes:storage temp2
 scoreboard objectives remove sethome

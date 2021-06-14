@@ -1,2 +1,3 @@
-execute store result score #id back.dummy run data get entity @s Item.tag.backData.id
-execute if score #id back.dummy = #dimension back.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["back.destination"]}
+data modify storage back:storage temp set from storage back:storage players[-1].back.dim
+execute store success score #success back.dummy run data modify storage back:storage temp set from entity @s data.Dimension
+execute if score #success back.dummy matches 0 at @s run summon minecraft:marker ~ ~ ~ {Tags:["back.destination"]}

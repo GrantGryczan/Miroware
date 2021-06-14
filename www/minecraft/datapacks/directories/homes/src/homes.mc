@@ -20,10 +20,13 @@ function load {
 function uninstall {
 	schedule clear homes:tick
 	schedule clear homes:decrement_cooldowns
-	execute at @e[type=minecraft:item_frame,tag=homes.dimension] run forceload remove ~ ~
-	kill @e[type=minecraft:item_frame,tag=homes.dimension]
+	schedule clear homes:try_to_mark_dimension
+	execute as @e[type=minecraft:marker,tag=homes.dimension] at @s run {
+		name remove_dimension_marker
+		forceload remove ~ ~
+		kill @s
+	}
 	data remove storage homes:storage players
-	data remove storage homes:storage lastDimension
 	data remove storage homes:storage temp
 	data remove storage homes:storage temp2
 	scoreboard objectives remove sethome
@@ -45,15 +48,32 @@ clock 1t {
 	scoreboard players enable @a sethome
 	execute as @a[scores={sethome=1..}] at @s run {
 		name trigger_sethome
-		execute unless entity @e[type=minecraft:item_frame,tag=homes.dimension,distance=0..] positioned 12104128 1000 -8245808 run {
-			name summon_dimension_marker
-			forceload add ~ ~
-			summon minecraft:item_frame ~ ~ ~ {Tags:["homes.dimension","homes.new"],Fixed:1b,Invisible:1b,Item:{id:"minecraft:stone_button",Count:1b,tag:{homesData:{}}}}
-			execute store result score #id homes.dummy run data get storage homes:storage lastDimension
-			execute store result entity @e[type=minecraft:item_frame,tag=homes.new,limit=1] Item.tag.homesData.id int 1 run scoreboard players add #id homes.dummy 1
-			execute store result storage homes:storage lastDimension int 1 run scoreboard players get #id homes.dummy
-			data modify entity @e[type=minecraft:item_frame,tag=homes.new,limit=1] Item.tag.homesData.name set from entity @s Dimension
-			tag @e[type=minecraft:item_frame] remove homes.new
+		execute unless entity @e[type=minecraft:marker,tag=homes.dimension,limit=1,distance=0..] positioned 12104128 1000 -8245808 run {
+			name try_to_start_to_mark_dimension
+			execute store success score #success homes.dummy run forceload add ~ ~
+			execute if score #success homes.dummy matches 1 run {
+				name start_to_mark_dimension
+				loot spawn ~ ~ ~ loot homes:create_dimension_marker
+				block {
+					name try_to_mark_dimension
+					execute as @e[type=minecraft:item,tag=!homes.notDimensionMarker] unless data entity @s Item.tag.homesData.markDimension run tag @s add homes.notDimensionMarker
+					scoreboard players set #marked homes.dummy 0
+					execute as @e[type=minecraft:item,tag=!homes.notDimensionMarker,limit=1] at @s run {
+						name mark_dimension
+						summon minecraft:marker ~ ~ ~ {Tags:["homes.dimension","homes.newDimension"]}
+						data modify entity @e[type=minecraft:marker,tag=homes.newDimension,limit=1,distance=..0.01] data.Dimension set from entity @s Item.tag.homesData.markDimension
+						tag @e[type=minecraft:marker,tag=homes.newDimension,limit=1,distance=..0.01] remove homes.newDimension
+						kill @s
+						scoreboard players set #marked homes.dummy 1
+					}
+					execute if score #marked homes.dummy matches 0 run schedule function $block 1t append
+				}
+			}
+			execute unless score #success homes.dummy matches 1 run {
+				name check_chunk_fully_loaded
+				summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["homes.checkChunkFullyLoaded"]}
+				execute if entity @e[type=minecraft:area_effect_cloud,tag=homes.checkChunkFullyLoaded,limit=1,distance=..0.01] run function homes:start_to_mark_dimension
+			}
 		}
 		function homes:rotate/players
 		scoreboard players operation #home homes.dummy = @s sethome
@@ -72,7 +92,7 @@ clock 1t {
 		execute unless score #remaining homes.dummy matches 0 run {
 			name set_home
 			execute store result storage homes:storage players[-1].homes[-1].id int 1 run scoreboard players get #home homes.dummy
-			data modify storage homes:storage players[-1].homes[-1].dim set from entity @e[type=minecraft:item_frame,tag=homes.dimension,distance=0..,limit=1] Item.tag.homesData.id
+			data modify storage homes:storage players[-1].homes[-1].dim set from entity @s Dimension
 			data modify storage homes:storage players[-1].homes[-1].pos set from entity @s Pos
 			data modify storage homes:storage players[-1].homes[-1].rot set from entity @s Rotation
 			execute if data storage homes:storage players[-1].homes[-1].name run tag @s add homes.nameSet
@@ -117,12 +137,6 @@ clock 1t {
 				scoreboard players set #id1 homes.dummy 0
 				scoreboard players set #id2 homes.dummy 0
 				execute unless score #remaining homes.dummy matches 1 run function homes:bubble
-				execute store result score #dimension homes.dummy run data get storage homes:storage temp[0].dim
-				execute as @e[type=minecraft:item_frame,tag=homes.dimension] run {
-					name check_dimension_marker
-					execute store result score #id homes.dummy run data get entity @s Item.tag.homesData.id
-					execute if score #id homes.dummy = #dimension homes.dummy run tag @s add homes.target
-				}
 				execute store result score #id homes.dummy run data get storage homes:storage temp[0].id
 				execute if data storage homes:storage temp[0].name run tag @s add homes.nameSet
 				execute if score #reducedDebugInfo homes.dummy matches 1 run {
@@ -136,12 +150,12 @@ clock 1t {
 					execute store result score #x homes.dummy run data get storage homes:storage temp[0].pos[0]
 					execute store result score #y homes.dummy run data get storage homes:storage temp[0].pos[1]
 					execute store result score #z homes.dummy run data get storage homes:storage temp[0].pos[2]
-					execute if entity @s[tag=homes.nameSet] run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_1"},{"text":". ","color":"COLOR_1"},{"storage":"homes:storage","nbt":"temp[0].name","interpret":true,"color":"COLOR_2"},{"text":" at (","color":"COLOR_1"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"COLOR_1"},{"text":") in ","color":"COLOR_1"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"COLOR_1"}]
-					execute unless entity @s[tag=homes.nameSet] if score #id homes.dummy matches 1 run tellraw @s [{"text":"1. ","color":"COLOR_1"},{"text":"Home","color":"COLOR_2"},{"text":" at (","color":"COLOR_1"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"COLOR_1"},{"text":") in ","color":"COLOR_1"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"COLOR_1"}]
-					execute unless entity @s[tag=homes.nameSet] unless score #id homes.dummy matches 1 run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_1"},{"text":". ","color":"COLOR_1"},{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_2"},{"text":" at (","color":"COLOR_1"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"COLOR_1"},{"text":") in ","color":"COLOR_1"},{"entity":"@e[type=minecraft:item_frame,tag=homes.target,limit=1]","nbt":"Item.tag.homesData.name","color":"COLOR_1"}]
+					execute if entity @s[tag=homes.nameSet] run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_1"},{"text":". ","color":"COLOR_1"},{"storage":"homes:storage","nbt":"temp[0].name","interpret":true,"color":"COLOR_2"},{"text":" at (","color":"COLOR_1"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"COLOR_1"},{"text":") in ","color":"COLOR_1"},{"storage":"homes:storage","nbt":"temp[0].dim","color":"COLOR_1"}]
+					execute unless entity @s[tag=homes.nameSet] if score #id homes.dummy matches 1 run tellraw @s [{"text":"1. ","color":"COLOR_1"},{"text":"Home","color":"COLOR_2"},{"text":" at (","color":"COLOR_1"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"COLOR_1"},{"text":") in ","color":"COLOR_1"},{"storage":"homes:storage","nbt":"temp[0].dim","color":"COLOR_1"}]
+					execute unless entity @s[tag=homes.nameSet] unless score #id homes.dummy matches 1 run tellraw @s [{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_1"},{"text":". ","color":"COLOR_1"},{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#id","objective":"homes.dummy"},"color":"COLOR_2"},{"text":" at (","color":"COLOR_1"},{"score":{"name":"#x","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#y","objective":"homes.dummy"},"color":"COLOR_1"},{"text":", ","color":"COLOR_1"},{"score":{"name":"#z","objective":"homes.dummy"},"color":"COLOR_1"},{"text":") in ","color":"COLOR_1"},{"storage":"homes:storage","nbt":"temp[0].dim","color":"COLOR_1"}]
 				}
 				tag @s remove homes.nameSet
-				tag @e[type=minecraft:item_frame,tag=homes.dimension] remove homes.target
+				tag @e[type=minecraft:marker,tag=homes.target,limit=1] remove homes.target
 				data remove storage homes:storage temp[0]
 				execute store result score #remaining homes.dummy run scoreboard players remove #homes homes.dummy 1
 				data modify storage homes:storage temp set from storage homes:storage temp2
@@ -180,7 +194,7 @@ clock 1t {
 	scoreboard players enable @a namehome
 	execute as @a[scores={namehome=1..}] run {
 		name trigger_namehome
-		tag @s[nbt={SelectedItem:{id:"minecraft:name_tag",Count:1b}}] add homes.hasNameTag
+		tag @s[nbt={SelectedItem:{id:"minecraft:name_tag"}}] add homes.hasNameTag
 		execute if entity @s[tag=homes.hasNameTag] run {
 			name try_to_name_home
 			function homes:rotate/players
@@ -203,7 +217,6 @@ clock 1t {
 						execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"COLOR_2"},{"text":" name set to ","color":"COLOR_1"},{"entity":"@s","nbt":"SelectedItem.tag.display.Name","interpret":true,"color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
 						tag @s remove homes.nameSet
 						data modify storage homes:storage players[-1].homes[-1].name set from entity @s SelectedItem.tag.display.Name
-						replaceitem entity @s weapon.mainhand minecraft:air
 					}
 					execute unless score #success homes.dummy matches 1 run tellraw @s {"text":"Your home is already named that.","color":"red"}
 				}
@@ -215,7 +228,6 @@ clock 1t {
 						execute if entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"storage":"homes:storage","nbt":"players[-1].homes[-1].name","interpret":true,"color":"COLOR_2"},{"text":" name reset to ","color":"COLOR_1"},{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
 						execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1 run tellraw @s [{"text":"Home","color":"COLOR_2"},{"text":" name reset to ","color":"COLOR_1"},{"text":"Home","color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
 						data remove storage homes:storage players[-1].homes[-1].name
-						replaceitem entity @s weapon.mainhand minecraft:air
 					}
 					tellraw @s[tag=!homes.nameSet] {"text":"You must rename the name tag to name your home.","color":"red"}
 				}
@@ -223,7 +235,7 @@ clock 1t {
 				tag @s remove homes.nameTagSet
 			}
 		}
-		tellraw @s[tag=!homes.hasNameTag] {"text":"You must be holding exactly one name tag in your main hand to name a home.","color":"red"}
+		tellraw @s[tag=!homes.hasNameTag] {"text":"You must be holding a name tag in your main hand to name a home.","color":"red"}
 		tag @s remove homes.hasNameTag
 		scoreboard players set @s namehome 0
 	}
@@ -254,20 +266,21 @@ clock 1t {
 				execute if score #remaining homes.dummy matches 0 run tellraw @s [{"text":"Home ","color":"red"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"red"},{"text":" not found.","color":"red"}]
 				execute unless score #remaining homes.dummy matches 0 run {
 					name go_home
-					execute store result score #dimension homes.dummy run data get storage homes:storage players[-1].homes[-1].dim
-					execute as @e[type=minecraft:item_frame,tag=homes.dimension] run {
-						name try_to_summon_destination
-						execute store result score #id homes.dummy run data get entity @s Item.tag.homesData.id
-						execute if score #id homes.dummy = #dimension homes.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["homes.destination"]}
-					}
-					execute unless score #cooldown homes.config matches 0 run scoreboard players operation @s homes.cooldown = #cooldown homes.config
-					execute at @s run function back:set_back
 					tag @s add homes.subject
-					execute as @e[type=minecraft:area_effect_cloud,tag=homes.destination] run {
+					execute as @e[type=minecraft:marker,tag=homes.dimension] run {
+						name try_to_summon_destination
+						data modify storage homes:storage temp set from storage homes:storage players[-1].homes[-1].dim
+						execute store success score #success homes.dummy run data modify storage homes:storage temp set from entity @s data.Dimension
+						execute if score #success homes.dummy matches 0 at @s run summon minecraft:marker ~ ~ ~ {Tags:["homes.destination"]}
+					}
+					execute unless entity @e[type=minecraft:marker,tag=homes.destination,limit=1] run tellraw @s {"text":"The destination has not loaded yet. Try again.","color":"red"}
+					execute as @e[type=minecraft:marker,tag=homes.destination,limit=1] run {
 						name set_destination
+						execute unless score #cooldown homes.config matches 0 run scoreboard players operation @a[tag=homes.subject,limit=1] homes.cooldown = #cooldown homes.config
+						execute as @a[tag=homes.subject,limit=1] run function back:set_back
 						data modify entity @s Pos set from storage homes:storage players[-1].homes[-1].pos
 						data modify entity @s Rotation set from storage homes:storage players[-1].homes[-1].rot
-						tp @a[tag=homes.subject] @s
+						tp @a[tag=homes.subject,limit=1] @s
 						kill @s
 					}
 					tag @s remove homes.subject

@@ -1,8 +1,8 @@
 module.exports = {
 	namespace: "homes",
-	version: "1.4.1",
+	version: "1.5.0",
 	name: "Homes",
-	compatibility: ["1.16"],
+	compatibility: ["1.17"],
 	description: `
 		Enter "/trigger sethome" or "/trigger sethome set &lt;ID&gt;" to set a home.<br>
 		Enter "/trigger home" or "/trigger home set &lt;ID&gt;" to teleport there at any time.<br>

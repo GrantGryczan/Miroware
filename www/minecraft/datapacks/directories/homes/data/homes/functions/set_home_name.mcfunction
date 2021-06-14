@@ -4,4 +4,3 @@ execute unless entity @s[tag=homes.nameSet] if score #home homes.dummy matches 1
 execute unless entity @s[tag=homes.nameSet] unless score #home homes.dummy matches 1 run tellraw @s [{"text":"Home ","color":"COLOR_2"},{"score":{"name":"#home","objective":"homes.dummy"},"color":"COLOR_2"},{"text":" name set to ","color":"COLOR_1"},{"entity":"@s","nbt":"SelectedItem.tag.display.Name","interpret":true,"color":"COLOR_2"},{"text":".","color":"COLOR_1"}]
 tag @s remove homes.nameSet
 data modify storage homes:storage players[-1].homes[-1].name set from entity @s SelectedItem.tag.display.Name
-replaceitem entity @s weapon.mainhand minecraft:air

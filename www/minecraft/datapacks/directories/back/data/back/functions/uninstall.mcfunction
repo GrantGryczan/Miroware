@@ -1,10 +1,9 @@
 schedule clear back:tick
 schedule clear back:decrement_cooldowns
 schedule clear back:check_game_rules
-execute at @e[type=minecraft:item_frame,tag=back.dimension] run forceload remove ~ ~
-kill @e[type=minecraft:item_frame,tag=back.dimension]
+schedule clear back:try_to_mark_dimension
+execute as @e[type=minecraft:marker,tag=back.dimension] at @s run function back:remove_dimension_marker
 data remove storage back:storage players
-data remove storage back:storage lastDimension
 data remove storage back:storage temp
 scoreboard objectives remove back
 scoreboard objectives remove back.config

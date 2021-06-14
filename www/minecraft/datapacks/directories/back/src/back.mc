@@ -28,10 +28,13 @@ function uninstall {
 	schedule clear back:tick
 	schedule clear back:decrement_cooldowns
 	schedule clear back:check_game_rules
-	execute at @e[type=minecraft:item_frame,tag=back.dimension] run forceload remove ~ ~
-	kill @e[type=minecraft:item_frame,tag=back.dimension]
+	schedule clear back:try_to_mark_dimension
+	execute as @e[type=minecraft:marker,tag=back.dimension] at @s run {
+		name remove_dimension_marker
+		forceload remove ~ ~
+		kill @s
+	}
 	data remove storage back:storage players
-	data remove storage back:storage lastDimension
 	data remove storage back:storage temp
 	scoreboard objectives remove back
 	scoreboard objectives remove back.config
@@ -91,20 +94,21 @@ clock 1t {
 				execute if score #success back.dummy matches 0 run tellraw @s [{"text":"You have nowhere to go back to.","color":"red"}]
 				execute unless score #success back.dummy matches 0 run {
 					name go_back
-					execute store result score #dimension back.dummy run data get storage back:storage players[-1].back.dim
-					execute as @e[type=minecraft:item_frame,tag=back.dimension] run {
-						name try_to_summon_destination
-						execute store result score #id back.dummy run data get entity @s Item.tag.backData.id
-						execute if score #id back.dummy = #dimension back.dummy at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["back.destination"]}
-					}
-					execute unless score #cooldown back.config matches 0 run scoreboard players operation @s back.cooldown = #cooldown back.config
 					tag @s add back.subject
-					execute as @e[type=minecraft:area_effect_cloud,tag=back.destination] run {
+					execute as @e[type=minecraft:marker,tag=back.dimension] run {
+						name try_to_summon_destination
+						data modify storage back:storage temp set from storage back:storage players[-1].back.dim
+						execute store success score #success back.dummy run data modify storage back:storage temp set from entity @s data.Dimension
+						execute if score #success back.dummy matches 0 at @s run summon minecraft:marker ~ ~ ~ {Tags:["back.destination"]}
+					}
+					execute unless entity @e[type=minecraft:marker,tag=back.destination,limit=1] run tellraw @s {"text":"The destination has not loaded yet. Try again.","color":"red"}
+					execute as @e[type=minecraft:marker,tag=back.destination,limit=1] run {
 						name set_destination
+						execute unless score #cooldown back.config matches 0 run scoreboard players operation @a[tag=back.subject,limit=1] back.cooldown = #cooldown back.config
 						data modify entity @s Pos set from storage back:storage players[-1].back.pos
 						data modify entity @s Rotation set from storage back:storage players[-1].back.rot
-						execute as @a[tag=back.subject] at @s run function back:set_back
-						tp @a[tag=back.subject] @s
+						execute as @a[tag=back.subject,limit=1] at @s run function back:set_back
+						tp @a[tag=back.subject,limit=1] @s
 						kill @s
 					}
 					tag @s remove back.subject
@@ -165,18 +169,35 @@ dir rotate {
 	}
 }
 function set_back {
-	execute unless entity @e[type=minecraft:item_frame,tag=back.dimension,distance=0..] positioned 12940016 1000 17249568 run {
-		name summon_dimension_marker
-		forceload add ~ ~
-		summon minecraft:item_frame ~ ~ ~ {Tags:["back.dimension","back.new"],Fixed:1b,Invisible:1b,Item:{id:"minecraft:stone_button",Count:1b,tag:{backData:{}}}}
-		execute store result score #id back.dummy run data get storage back:storage lastDimension
-		execute store result entity @e[type=minecraft:item_frame,tag=back.new,limit=1] Item.tag.backData.id int 1 run scoreboard players add #id back.dummy 1
-		execute store result storage back:storage lastDimension int 1 run scoreboard players get #id back.dummy
-		data modify entity @e[type=minecraft:item_frame,tag=back.new,limit=1] Item.tag.backData.name set from entity @s Dimension
-		tag @e[type=minecraft:item_frame] remove back.new
+	execute unless entity @e[type=minecraft:marker,tag=back.dimension,limit=1,distance=0..] positioned 12940016 1000 17249568 run {
+		name try_to_start_to_mark_dimension
+		execute store success score #success back.dummy run forceload add ~ ~
+		execute if score #success back.dummy matches 1 run {
+			name start_to_mark_dimension
+			loot spawn ~ ~ ~ loot back:create_dimension_marker
+			block {
+				name try_to_mark_dimension
+				execute as @e[type=minecraft:item,tag=!back.notDimensionMarker] unless data entity @s Item.tag.backData.markDimension run tag @s add back.notDimensionMarker
+				scoreboard players set #marked back.dummy 0
+				execute as @e[type=minecraft:item,tag=!back.notDimensionMarker,limit=1] at @s run {
+					name mark_dimension
+					summon minecraft:marker ~ ~ ~ {Tags:["back.dimension","back.newDimension"]}
+					data modify entity @e[type=minecraft:marker,tag=back.newDimension,limit=1,distance=..0.01] data.Dimension set from entity @s Item.tag.backData.markDimension
+					tag @e[type=minecraft:marker,tag=back.newDimension,limit=1,distance=..0.01] remove back.newDimension
+					kill @s
+					scoreboard players set #marked back.dummy 1
+				}
+				execute if score #marked back.dummy matches 0 run schedule function $block 1t append
+			}
+		}
+		execute unless score #success back.dummy matches 1 run {
+			name check_chunk_fully_loaded
+			summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["back.checkChunkFullyLoaded"]}
+			execute if entity @e[type=minecraft:area_effect_cloud,tag=back.checkChunkFullyLoaded,limit=1,distance=..0.01] run function back:start_to_mark_dimension
+		}
 	}
 	function back:rotate/players
-	data modify storage back:storage players[-1].back.dim set from entity @e[type=minecraft:item_frame,tag=back.dimension,distance=0..,limit=1] Item.tag.backData.id
+	data modify storage back:storage players[-1].back.dim set from entity @s Dimension
 	data modify storage back:storage players[-1].back.pos set from entity @s Pos
 	data modify storage back:storage players[-1].back.rot set from entity @s Rotation
 }
