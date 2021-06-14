@@ -36,6 +36,7 @@ module.exports = {
 								if (child.endsWith(".json") || child.endsWith(".mcfunction")) {
 									archive.append(
 										(await fs.readFile(childPath, "utf8"))
+											.replace(/run _command/g, "run_command") // A quick fix for an MC-Build bug.
 											.replace(/COLOR_1/g, "dark_aqua")
 											.replace(/COLOR_2/g, "aqua")
 											.replace(/COLOR_3/g, "gold"),
@@ -101,6 +102,7 @@ module.exports = {
 									await fs.writeFile(
 										targetPath,
 										(await fs.readFile(childPath, "utf8"))
+											.replace(/run _command/g, "run_command") // A quick fix for an MC-Build bug.
 											.replace(/grant_gryczan/g, "vanillatweaks")
 											.replace(/COLOR_1/g, "gold")
 											.replace(/COLOR_2/g, "yellow")
