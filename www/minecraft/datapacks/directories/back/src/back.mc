@@ -95,6 +95,7 @@ clock 1t {
 				execute unless score #success back.dummy matches 0 run {
 					name go_back
 					tag @s add back.subject
+					kill @e[type=minecraft:marker,tag=back.destination]
 					execute as @e[type=minecraft:marker,tag=back.dimension] run {
 						name try_to_summon_destination
 						data modify storage back:storage temp set from storage back:storage players[-1].back.dim

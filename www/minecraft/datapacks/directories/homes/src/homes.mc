@@ -267,6 +267,7 @@ clock 1t {
 				execute unless score #remaining homes.dummy matches 0 run {
 					name go_home
 					tag @s add homes.subject
+					kill @e[type=minecraft:marker,tag=homes.destination]
 					execute as @e[type=minecraft:marker,tag=homes.dimension] run {
 						name try_to_summon_destination
 						data modify storage homes:storage temp set from storage homes:storage players[-1].homes[-1].dim
