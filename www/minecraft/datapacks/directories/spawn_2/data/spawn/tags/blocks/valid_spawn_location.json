@@ -71,6 +71,12 @@
 		"minecraft:warped_roots",
 		"minecraft:water",
 		"minecraft:weeping_vines",
-		"minecraft:weeping_vines_plant"
+		"minecraft:weeping_vines_plant",
+		"minecraft:small_dripleaf",
+		"minecraft:glow_lichen",
+		"minecraft:moss_carpet",
+		"minecraft:spore_blossom",
+		"minecraft:hanging_roots",
+		"minecraft:light"
 	]
 }

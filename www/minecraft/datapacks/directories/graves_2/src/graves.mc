@@ -235,7 +235,7 @@ function create_grave {
 	data modify storage graves:storage players[-1].graves[-1].dim set from entity @s Dimension
 	execute store result storage graves:storage lastGrave int 1 run scoreboard players get #id graves.dummy
 	summon minecraft:armor_stand ~ ~ ~ {Tags:["graves.marker","graves.hitbox","graves.new"],Invisible:1b,NoGravity:1b,Invulnerable:1b,Small:1b,DisabledSlots:256,HandItems:[{id:"minecraft:stone_button",Count:1b,tag:{gravesData:{items:[]}}},{id:"minecraft:stone_button",Count:2b,tag:{gravesData:{}}}],Pose:{RightArm:[0.0f,-90.0f,0.0f],LeftArm:[0.0f,90.0f,0.0f],Head:[180.0f,0.0f,0.0f]},Silent:1b}
-	#data modify entity @e[type=minecraft:armor_stand,tag=graves.new,limit=1] HandItems[0].tag.gravesData.items set from entity @s Inventory
+	# data modify entity @e[type=minecraft:armor_stand,tag=graves.new,limit=1] HandItems[0].tag.gravesData.items set from entity @s Inventory
 	data modify entity @e[type=minecraft:armor_stand,tag=graves.new,limit=1] HandItems[0].tag.gravesData.items append from entity @s Inventory[{Slot:0b}]
 	item replace entity @s hotbar.0 with minecraft:air
 	data modify entity @e[type=minecraft:armor_stand,tag=graves.new,limit=1] HandItems[0].tag.gravesData.items append from entity @s Inventory[{Slot:1b}]
@@ -338,23 +338,69 @@ function create_grave {
 		data modify entity @s ArmorItems[1] set from entity @s HandItems[1]
 		data modify entity @s ArmorItems[2] set from entity @s HandItems[1]
 		data modify entity @s ArmorItems[3] set from entity @s HandItems[1]
-		execute store result score #y graves.dummy run data get entity @s Pos[1]
-		execute if score #y graves.dummy matches ..0 run tp @s ~ 1 ~
-		execute at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["graves.start"]}
+		execute store success score #forceloadSuccess graves.dummy run forceload add ~ ~
+		execute store result score #graveY graves.dummy run data get entity @s Pos[1]
+		scoreboard players set #y graves.dummy -2048
+		scoreboard players set #foundBottom graves.dummy 0
+		scoreboard players set #bottomY graves.dummy 0
+		scoreboard players set #foundTop graves.dummy 0
+		execute positioned ~ -2048 ~ run {
+			name check_for_world_bottom
+			execute if predicate graves:loaded run {
+				name found_world_bottom
+				scoreboard players set #foundBottom graves.dummy 1
+				scoreboard players operation #bottomY graves.dummy = #y graves.dummy
+				execute if score #graveY graves.dummy <= #y graves.dummy run {
+					name clamp_grave_to_world_bottom
+					tp @s ~ ~1 ~
+					scoreboard players operation #graveY graves.dummy = #y graves.dummy
+					scoreboard players add #graveY graves.dummy 1
+				}
+				execute if score #graveY graves.dummy > #y graves.dummy positioned ~ ~16 ~ run {
+					name check_for_world_top
+					scoreboard players add #y graves.dummy 16
+					execute unless predicate graves:loaded run {
+						name found_world_top
+						scoreboard players set #foundTop graves.dummy 1
+						execute if score #graveY graves.dummy > #y graves.dummy run {
+							name clamp_grave_to_world_top
+							tp @s ~ ~ ~
+							scoreboard players operation #graveY graves.dummy = #y graves.dummy
+						}
+					}
+					execute if score #foundTop graves.dummy matches 0 positioned ~ ~16 ~ run function graves:check_for_world_top
+				}
+			}
+			execute if score #foundBottom graves.dummy matches 0 run {
+				name check_for_world_bottom_above
+				scoreboard players add #y graves.dummy 16
+				execute unless score #y graves.dummy matches 2048.. positioned ~ ~16 ~ run function graves:check_for_world_bottom
+			}
+		}
+		execute at @s run summon minecraft:marker ~ ~ ~ {Tags:["graves.start"]}
 		execute at @s run {
-			name offset_up
-			tp @s ~ ~ ~
-			execute unless predicate graves:valid positioned ~ ~1 ~ run function $block
-			execute if predicate graves:valid if entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] positioned ~ ~1 ~ run function $block
+			name try_to_offset_up
+			execute unless predicate graves:valid_grave_location positioned ~ ~1 ~ run {
+				name offset_up
+				tp @s ~ ~ ~
+				scoreboard players add #graveY graves.dummy 1
+				function graves:try_to_offset_up
+			}
+			execute if predicate graves:valid_grave_location if entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] positioned ~ ~1 ~ run function graves:offset_up
 		}
-		execute at @s if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run {
-			name offset_down
-			tp @s ~ ~ ~
-			execute unless entity @s[y=0,dy=0] positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function $block
-			execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=graves.start] run tp @s ~ ~ ~
+		execute at @s if predicate graves:valid_grave_location unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run {
+			name try_to_offset_down
+			execute if score #graveY graves.dummy > #bottomY graves.dummy positioned ~ ~-1 ~ if predicate graves:valid_grave_location unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run {
+				name offset_down
+				tp @s ~ ~ ~
+				scoreboard players remove #graveY graves.dummy 1
+				function graves:try_to_offset_down
+			}
+			execute if score #graveY graves.dummy <= #bottomY graves.dummy at @e[type=minecraft:marker,tag=graves.start] run tp @s ~ ~ ~
 		}
-		kill @e[type=minecraft:area_effect_cloud,tag=graves.start]
-		execute at @s positioned ~ ~-1 ~ if predicate graves:valid unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run setblock ~ ~ ~ minecraft:grass_block destroy
+		kill @e[type=minecraft:marker,tag=graves.start]
+		execute at @s positioned ~ ~-1 ~ if predicate graves:valid_grave_location unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run setblock ~ ~ ~ minecraft:grass_block destroy
+		execute if score #forceloadSuccess graves.dummy matches 1 run forceload remove ~ ~
 		tag @s remove graves.new
 		execute at @s run tp @s ~0.5 ~ ~0.5
 		execute store result storage graves:storage players[-1].graves[-1].x int 1 run data get entity @s Pos[0]

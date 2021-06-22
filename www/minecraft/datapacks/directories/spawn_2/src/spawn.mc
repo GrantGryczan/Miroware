@@ -61,19 +61,19 @@ clock 1t {
 				name go_to_spawn
 				execute unless score #cooldown spawn.config matches 0 run scoreboard players operation @s spawn.cooldown = #cooldown spawn.config
 				execute at @s run function back:set_back
-				summon minecraft:area_effect_cloud ~ ~ ~ {Tags:["spawn.destination"]}
+				summon minecraft:marker ~ ~ ~ {Tags:["spawn.start"]}
 				block {
 					name offset_up
 					tp @s ~ ~ ~
-					execute unless block ~ ~ ~ #spawn:passable if entity @s[y=0,dy=255] positioned ~ ~1 ~ run function $block
+					execute unless block ~ ~ ~ #spawn:valid_spawn_location if predicate spawn:loaded positioned ~ ~1 ~ run function $block
 				}
-				execute if block ~ ~ ~ #spawn:passable run {
+				execute if block ~ ~ ~ #spawn:valid_spawn_location run {
 					name offset_down
 					tp @s ~ ~ ~
-					execute positioned ~ ~-1 ~ if block ~ ~ ~ #spawn:passable run function $block
-					execute if entity @s[y=0,dy=0] at @e[type=minecraft:area_effect_cloud,tag=spawn.destination] run tp @s ~ ~ ~
+					execute positioned ~ ~-1 ~ if block ~ ~ ~ #spawn:valid_spawn_location run function $block
+					execute positioned ~ ~-1 ~ unless predicate spawn:loaded at @e[type=minecraft:marker,tag=spawn.start] run tp @s ~ ~ ~
 				}
-				kill @e[type=minecraft:area_effect_cloud,tag=spawn.destination]
+				kill @e[type=minecraft:marker,tag=spawn.start]
 			}
 			scoreboard players reset @s spawn.delay
 		}

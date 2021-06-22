@@ -1,0 +1,2 @@
+execute if score #graveY graves.dummy > #bottomY graves.dummy positioned ~ ~-1 ~ if predicate graves:valid_grave_location unless entity @e[dx=0,dy=0,dz=0,type=minecraft:armor_stand,tag=!graves.new,nbt=!{Marker:1b}] run function graves:offset_down
+execute if score #graveY graves.dummy <= #bottomY graves.dummy at @e[type=minecraft:marker,tag=graves.start] run tp @s ~ ~ ~

@@ -2,20 +2,17 @@
 	"condition": "minecraft:alternative",
 	"terms": [
 		{
-			"condition": "minecraft:location_check",
-			"predicate": {
-				"position": {
-					"y": {
-						"min": 256.0
-					}
-				}
+			"condition": "minecraft:inverted",
+			"term": {
+				"condition": "minecraft:reference",
+				"name": "graves:loaded"
 			}
 		},
 		{
 			"condition": "minecraft:location_check",
 			"predicate": {
 				"block": {
-					"tag": "graves:valid"
+					"tag": "graves:valid_grave_location"
 				}
 			}
 		},

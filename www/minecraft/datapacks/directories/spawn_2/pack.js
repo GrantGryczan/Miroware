@@ -1,8 +1,8 @@
 module.exports = {
 	namespace: "spawn",
-	version: "2.3.0",
+	version: "2.3.1",
 	name: "Spawn",
-	compatibility: ["1.16"],
+	compatibility: ["1.17"],
 	description: `
 		Enter "/trigger spawn" to teleport to the world spawn point.<br>
 		<span class="more">
