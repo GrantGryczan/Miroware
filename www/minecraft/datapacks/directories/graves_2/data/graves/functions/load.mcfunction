@@ -3,6 +3,7 @@ scoreboard objectives add graves.deaths deathCount
 scoreboard objectives add graves.id dummy
 scoreboard objectives add graves.dummy dummy
 scoreboard objectives add graves.age dummy
+scoreboard objectives add graves.api dummy
 scoreboard objectives add grave trigger "Locate Last Grave"
 execute unless score #robbing graves.config matches 0..1 run scoreboard players set #robbing graves.config 0
 execute unless score #xp graves.config matches 0..1 run scoreboard players set #xp graves.config 1

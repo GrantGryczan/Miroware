@@ -4,6 +4,7 @@ function load {
 	scoreboard objectives add graves.id dummy
 	scoreboard objectives add graves.dummy dummy
 	scoreboard objectives add graves.age dummy
+	scoreboard objectives add graves.api dummy
 	scoreboard objectives add grave trigger "Locate Last Grave"
 	execute unless score #robbing graves.config matches 0..1 run scoreboard players set #robbing graves.config 0
 	execute unless score #xp graves.config matches 0..1 run scoreboard players set #xp graves.config 1
@@ -38,6 +39,7 @@ function uninstall {
 	scoreboard objectives remove graves.deaths
 	scoreboard objectives remove graves.id
 	scoreboard objectives remove graves.dummy
+	scoreboard objectives remove graves.api
 	scoreboard objectives remove grave
 	data remove storage graves:storage players
 	data remove storage graves:storage lastGrave
@@ -46,17 +48,22 @@ function uninstall {
 clock 1t {
 	name tick
 	execute as @a[scores={graves.deaths=1..}] run {
-		name death
+		name die
 		execute at @s[gamemode=!spectator] run {
-			name drop_inventory
+			name handle_death
 			execute store result score #xp graves.dummy run data get entity @s XpLevel
 			scoreboard players operation #xp graves.dummy *= #pointsPerLevel graves.dummy
 			execute if score #xp graves.dummy matches 101.. run scoreboard players set #xp graves.dummy 100
-			execute unless score #xp graves.config matches 1 if score #xp graves.dummy matches 1.. run function graves:drop_xp
-			execute if data entity @s Inventory[0] align xyz run function graves:create_grave
-			execute if score #xp graves.config matches 1 if score #xp graves.dummy matches 1.. align xyz run function graves:create_grave
-			xp set @s 0 levels
-			xp set @s 0 points
+			scoreboard players set #deathMode graves.api -1
+			function #graves:handle_death
+			execute if score #deathMode graves.api matches -1 run {
+				name try_to_create_grave
+				execute unless score #xp graves.config matches 1 if score #xp graves.dummy matches 1.. run function graves:drop_xp
+				execute if data entity @s Inventory[0] align xyz run function graves:create_grave
+				execute if score #xp graves.config matches 1 if score #xp graves.dummy matches 1.. align xyz run function graves:create_grave
+				xp set @s 0 levels
+				xp set @s 0 points
+			}
 		}
 		scoreboard players reset @s graves.deaths
 	}

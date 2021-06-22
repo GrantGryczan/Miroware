@@ -1,7 +1,7 @@
 [
   [
     "lastUpdate",
-    "Mon Jun 21 2021 19:19:58 GMT-0400 (Eastern Daylight Time)"
+    "Mon Jun 21 2021 22:49:33 GMT-0400 (Eastern Daylight Time)"
   ],
   [
     "INTERNAL/VIRTUAL_FILE_SYSTEM",
@@ -10,15 +10,16 @@
         "data\\minecraft\\tags\\functions\\load.json": 2886407889,
         "data\\minecraft\\tags\\functions\\tick.json": 3035976928,
         "data\\graves\\functions\\load_hitbox.mcfunction": 3781765568,
-        "data\\graves\\functions\\load.mcfunction": 1173545917,
-        "data\\graves\\functions\\uninstall.mcfunction": 2830135728,
-        "data\\graves\\functions\\drop_inventory.mcfunction": 1029476725,
-        "data\\graves\\functions\\death.mcfunction": 3002208064,
+        "data\\graves\\functions\\load.mcfunction": 3494140338,
+        "data\\graves\\functions\\uninstall.mcfunction": 1732361808,
+        "data\\graves\\functions\\try_to_create_grave.mcfunction": 4083094701,
+        "data\\graves\\functions\\handle_death.mcfunction": 308937323,
+        "data\\graves\\functions\\die.mcfunction": 1082901301,
         "data\\graves\\functions\\create_name.mcfunction": 3561244833,
         "data\\graves\\functions\\show_name.mcfunction": 478052705,
         "data\\graves\\functions\\locate_grave.mcfunction": 4037141922,
         "data\\graves\\functions\\trigger_grave.mcfunction": 1563778799,
-        "data\\graves\\functions\\tick.mcfunction": 378851678,
+        "data\\graves\\functions\\tick.mcfunction": 1695914442,
         "data\\graves\\functions\\despawn_grave.mcfunction": 238502371,
         "data\\graves\\functions\\age_grave.mcfunction": 367223107,
         "data\\graves\\functions\\age_graves.mcfunction": 3639442241,
@@ -51,7 +52,7 @@
         "data\\graves\\functions\\clamp_grave_to_world_top.mcfunction": 1562235515,
         "data\\graves\\functions\\found_world_top.mcfunction": 2507915488,
         "data\\graves\\functions\\check_for_world_top.mcfunction": 2997584368,
-        "data\\graves\\functions\\found_world_bottom.mcfunction": 2288907204,
+        "data\\graves\\functions\\found_world_bottom.mcfunction": 2319442372,
         "data\\graves\\functions\\check_for_world_bottom_above.mcfunction": 489258558,
         "data\\graves\\functions\\check_for_world_bottom.mcfunction": 3893665566,
         "data\\graves\\functions\\offset_up.mcfunction": 529256126,
@@ -60,7 +61,7 @@
         "data\\graves\\functions\\try_to_offset_down.mcfunction": 1239788563,
         "data\\graves\\functions\\prepare_model.mcfunction": 1463780222,
         "data\\graves\\functions\\create_model.mcfunction": 2090730945,
-        "data\\graves\\functions\\prepare_grave.mcfunction": 365508567,
+        "data\\graves\\functions\\prepare_grave.mcfunction": 3183547383,
         "data\\graves\\functions\\create_grave.mcfunction": 3795691356,
         "data\\graves\\functions\\drop_xp.mcfunction": 1209641180,
         "data\\graves\\functions\\rotate\\add_player.mcfunction": 1366657452,
