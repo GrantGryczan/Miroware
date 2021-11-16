@@ -21,7 +21,7 @@
 	"homepage": "https://miroware.io/",
 	"dependencies": {
 		"archiver": "^3.1.1",
-		"aws-sdk": "^2.720.0",
+		"aws-sdk": "^2.814.0",
 		"babel-plugin-iife-wrap": "^1.1.0",
 		"body-parser": "^1.19.0",
 		"bson-ext": "^2.0.3",
