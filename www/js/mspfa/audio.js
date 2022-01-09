@@ -32,7 +32,7 @@
 	};
 	const error = evt => {
 		const message = document.createElement("span");
-		message.appendChild(document.createTextNode("Audio failed to load:"));
+		message.appendChild(document.createTextNode("No audio file was found at the following URL:"));
 		message.appendChild(document.createElement("br"));
 		const audioLink = document.createElement("a");
 		audioLink.textContent = audioLink.href = evt.target.src;
