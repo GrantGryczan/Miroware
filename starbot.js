@@ -184,15 +184,15 @@ client.on("messageReactionAdd", async reaction => {
 		}
 	}
 });
-client.on("message", async msg => {
+client.on("messageCreate", async msg => {
 	if (msg.system) {
 		return;
 	}
 	if (msg.channel.type === "GUILD_TEXT") {
 		let content = msg.content;
 		if (prefix.test(content)) {
-			const member = msg.guild.member.resolve(msg.author) || await msg.guild.members.fetch(msg.author);
-			const perm = member.hasPermission(8) || member.id === "152282430915608578";
+			const member = msg.guild.members.resolve(msg.author) || await msg.guild.members.fetch(msg.author);
+			const perm = member.permissions.has(8) || member.id === "152282430915608578";
 			if (perm) {
 				content = content.replace(prefix, ""); // TODO: Don't let no space after "!star" be valid
 				if (content) {
