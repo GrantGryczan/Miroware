@@ -225,7 +225,6 @@ client.on("messageCreate", async msg => {
 											if (err.message === "Missing Permissions") {
 												permWarn(msg.guild, "manage roles");
 											} else {
-												console.log(err);
 												const red = parseInt(colorCode.slice(1, 3), 16);
 												const green = parseInt(colorCode.slice(3, 5), 16);
 												const blue = parseInt(colorCode.slice(5, 7), 16);
