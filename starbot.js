@@ -31,7 +31,6 @@ client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
 const inform = (guild, string1, string2) => {
 	if (guild.available) {
-		console.log(guild.ownerId);
 		guild.members.resolve(guild.ownerId).send(string1).catch(() => {
 			const channels = guild.channels.cache.filter(byTextChannels);
 			let i = -1;
@@ -133,7 +132,7 @@ const star = (msg, callback, channel) => {
 			starred.push(msg.id);
 		}
 		const embed = {
-			embed: {
+			embeds: [{
 				timestamp: msg.createdAt.toISOString(),
 				color: data.guilds[msg.guild.id][3],
 				fields: [{
@@ -148,18 +147,18 @@ const star = (msg, callback, channel) => {
 					name: "Message",
 					value: msg.content || "..."
 				}]
-			}
+			}]
 		};
-		if (embed.embed.fields[2].value.length > 1024) {
-			embed.embed.fields[2].value = msg.content.slice(0, 1024);
-			embed.embed.fields.push({
+		if (embed.embeds[0].fields[2].value.length > 1024) {
+			embed.embeds[0].fields[2].value = msg.content.slice(0, 1024);
+			embed.embeds[0].fields.push({
 				name: "Continued",
 				value: msg.content.slice(1024)
 			});
 		}
 		const attachment = msg.attachments.first();
 		if (attachment) {
-			embed.embed.image = {
+			embed.embeds[0].image = {
 				url: attachment.url
 			};
 		}
@@ -244,11 +243,12 @@ client.on("messageCreate", async msg => {
 										const code = content.replace(colorTest, "$1$1$2$2$3$3$4");
 										data.guilds[msg.guild.id][3] = parseInt(code, 16);
 										save();
-										msg.channel.send(`The starred embed color has been changed to \`#${code}\`.\n(The default starred embed color is \`#ffac33\`.)`, {
-											embed: {
+										msg.channel.send({
+											content: `The starred embed color has been changed to \`#${code}\`.\n(The default starred embed color is \`#ffac33\`.)`,
+											embeds: [{
 												title: `#${code}`,
 												color: data.guilds[msg.guild.id][3]
-											}
+											}]
 										}).catch(errEmbedLinks(msg));
 									} else {
 										sendHelp(msg, perm);

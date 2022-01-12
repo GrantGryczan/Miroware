@@ -103,14 +103,14 @@ client.once("ready", () => {
 			for (const group of Object.keys(data.guilds[id][1])) {
 				data.guilds[id][1][group][1] = data.guilds[id][1][group][1].filter(roleID => guild.roles.resolve(roleID));
 			}
-			// TODO: bot verification required
-			/*guild.members.fetch().then(() => {
+			// TODO: bot verification required for this
+			guild.members.fetch().then(() => {
 				for (const [, role] of guild.roles.cache) {
 					if (properColorTest.test(role.name) && role.members.size === 0) {
 						role.delete().catch(errManageRoles(guild));
 					}
 				}
-			});*/
+			});
 		}
 	}
 	save();
@@ -216,17 +216,16 @@ client.on("messageCreate", async msg => {
 										setColor(member, colorCode, currentRole, msg);
 									} else {
 										msg.guild.roles.create({
-											data: {
-												name: colorCode,
-												color: colorCode,
-												permissions: 0
-											}
+											name: colorCode,
+											color: colorCode,
+											permissions: []
 										}).then(role => {
 											setColor(member, colorCode, role, msg);
 										}).catch(err => {
 											if (err.message === "Missing Permissions") {
 												permWarn(msg.guild, "manage roles");
 											} else {
+												console.log(err);
 												const red = parseInt(colorCode.slice(1, 3), 16);
 												const green = parseInt(colorCode.slice(3, 5), 16);
 												const blue = parseInt(colorCode.slice(5, 7), 16);
@@ -239,11 +238,12 @@ client.on("messageCreate", async msg => {
 														colors.push([role, redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff]);
 													}
 												}
-												msg.channel.send(`${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`, {
-													embed: {
+												msg.channel.send({
+													content: `${msg.author} The maximum role limit has been reached and no more color roles can be created. If you want, you can choose a color that someone else is already using. Below are some similar colors I found to the one you entered.`,
+													embeds: [{
 														description: colors.sort(byColorDiff).slice(0, 20).map(byRoles).join(" "),
 														color: parseInt(colorCode.slice(1), 16)
-													}
+													}]
 												}).catch(errEmbedLinks(msg));
 											}
 										});
@@ -270,10 +270,11 @@ client.on("messageCreate", async msg => {
 								value: data.guilds[msg.guild.id][1][group][1].length ? data.guilds[msg.guild.id][1][group][1].map(roleID => msg.guild.roles.resolve(roleID)).join(" ") : "(empty)"
 							});
 						}
-						msg.channel.send(String(msg.author), {
-							embed: {
+						msg.channel.send({
+							content: String(msg.author),
+							embeds: [{
 								fields: fields
-							}
+							}]
 						}).catch(errEmbedLinks(msg));
 					} else {
 						msg.channel.send(`${msg.author} No role groups were found.`).catch(errEmbedLinks(msg));
