@@ -27,7 +27,7 @@
 		"bson-ext": "^2.0.3",
 		"cookie-parser": "^1.4.4",
 		"core-js": "^3.6.5",
-		"discord.js": "github:hydrabolt/discord.js",
+		"discord.js": "^13.5.1",
 		"express": "^4.17.1",
 		"fs-extra": "^5.0.0",
 		"google-auth-library": "^5.5.1",

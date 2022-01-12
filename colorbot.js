@@ -1,7 +1,7 @@
 "use strict";
 console.log("< Colorbot >");
 const fs = require("fs");
-const Discord = require("discord.js");
+const { Client } = require("discord.js");
 const prefix = /^!cb */i;
 const spaces = / +/g;
 const underscores = /_/g;
@@ -9,7 +9,7 @@ const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
 const properColorTest = /^#[\da-f]{6}$/;
 const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
 const byRoles = color => color[0];
-const byTextChannels = channel => channel.type === "text";
+const byTextChannels = channel => channel.type === "GUILD_TEXT";
 const byColorDiff = (a, b) => a[1] - b[1];
 let data;
 const load = () => {
@@ -19,7 +19,9 @@ load();
 const save = () => {
 	fs.writeFileSync("secret/colorbot.json", JSON.stringify(data));
 };
-const client = new Discord.Client();
+const client = new Client({
+	intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'DIRECT_MESSAGES']
+});
 const exitOnError = err => {
 	console.error(err);
 	process.exit(1);
@@ -115,7 +117,7 @@ client.once("ready", () => {
 	setInterval(present, 60000);
 	present();
 });
-client.on("guildCreate", ({id}) => {
+client.on("guildCreate", ({ id }) => {
 	if (!data.guilds[id]) {
 		guildCreate(id);
 		save();
@@ -185,14 +187,14 @@ const purgeColorRoles = guild => {
 	}
 	return Promise.all(promises).catch(errManageRoles(guild));
 };
-client.on("message", async msg => {
+client.on("messageCreate", async msg => {
 	if (msg.system) {
 		return;
 	}
-	if (msg.channel.type === "text") {
+	if (msg.channel.type === "GUILD_TEXT") {
 		let content = msg.content;
 		if (prefix.test(content)) {
-			const member = msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author);
+			const member = msg.guild.members.resolve(msg.author) || await msg.guild.members.fetch(msg.author);
 			const perm = member.hasPermission(268435456 /* Manage Roles */) || member.id === "152282430915608578";
 			content = content.replace(prefix, ""); // TODO: Don't let no space after "!cb" be valid
 			if (content) {

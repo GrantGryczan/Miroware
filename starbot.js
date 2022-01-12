@@ -1,16 +1,16 @@
 "use strict";
 console.log("< Starbot >");
 const fs = require("fs");
-const Discord = require("discord.js");
+const { Client } = require("discord.js");
 const prefix = /^!star */i;
 const spaces = / +/g;
 const underscores = /_/g;
 const channelTest = /^<#(\d+)>$/;
 const colorTest = /^#?(?:([\da-f])([\da-f])([\da-f])|([\da-f]{6}))$/i;
-const messageLinkTest = /^https:\/\/discordapp\.com\/channels\/(\w+)\/(\w+)\/(\w+)$/;
-const doNothing = () => {};
+const messageLinkTest = /^https:\/\/discord(?:app)?\.com\/channels\/(\w+)\/(\w+)\/(\w+)$/;
+const doNothing = () => { };
 const italicize = str => `_${JSON.stringify(String(str)).slice(1, -1).replace(underscores, "\\_")}_`;
-const byTextChannels = channel => channel.type === "text";
+const byTextChannels = channel => channel.type === "GUILD_TEXT";
 let data;
 const load = () => {
 	data = JSON.parse(fs.readFileSync("secret/starbot.json"));
@@ -19,7 +19,9 @@ load();
 const save = () => {
 	fs.writeFileSync("secret/starbot.json", JSON.stringify(data));
 };
-const client = new Discord.Client();
+const client = new Client({
+	intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS']
+});
 const exitOnError = err => {
 	console.error(err);
 	process.exit(1);
@@ -29,7 +31,8 @@ client.once("error", exitOnError);
 client.once("disconnect", exitOnError);
 const inform = (guild, string1, string2) => {
 	if (guild.available) {
-		guild.owner.send(string1).catch(() => {
+		console.log(guild.ownerId);
+		guild.members.resolve(guild.ownerId).send(string1).catch(() => {
 			const channels = guild.channels.cache.filter(byTextChannels);
 			let i = -1;
 			const testChannel = () => {
@@ -45,19 +48,19 @@ const inform = (guild, string1, string2) => {
 const broadcast = string => {
 	const sentRecipients = [];
 	for (const [, guild] of client.guilds.cache) {
-		if (guild.available && !sentRecipients.includes(guild.ownerID)) {
-			inform(guild, string, `${guild.owner} ${string}`);
-			sentRecipients.push(guild.ownerID);
+		if (guild.available && !sentRecipients.includes(guild.ownerId)) {
+			inform(guild, string, `<@${guild.ownerId}> ${string}`);
+			sentRecipients.push(guild.ownerId);
 		}
 	}
 };
 const permWarn = (guild, perms) => {
 	const warning = `, likely because I do not have permission to ${perms}. It is recommended that you enable these permissions for me in attempt to resolve this error.`;
-	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
+	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `<@${guild.ownerId}> An error occured${warning}`);
 };
 const noStarboard = guild => {
 	const warning = ', as there is nowhere for starred messages to be placed. No starboard channel has been set!\nWith admin permissions, you can set the starboard channel by entering `!star <channel tag>`. It is recommended that you also set permissions on that channel channel so only I can send messages in it.';
-	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `${guild.owner} An error occured${warning}`);
+	inform(guild, `An error occured in ${italicize(guild.name) + warning}`, `<@${guild.ownerId}> An error occured${warning}`);
 }
 const guildCreate = guild => {
 	console.log(`guildCreate ${guild}`);
@@ -139,7 +142,7 @@ const star = (msg, callback, channel) => {
 					inline: true
 				}, {
 					name: "Source",
-					value: `${msg.channel}/[context](https://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id})`,
+					value: `${msg.channel}/[context](https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id})`,
 					inline: true
 				}, {
 					name: "Message",
@@ -170,7 +173,7 @@ const star = (msg, callback, channel) => {
 };
 client.on("messageReactionAdd", async reaction => {
 	if (!starred.includes(reaction.message.id) && data.guilds[reaction.message.guild.id] && reaction.message.author && reaction.message.author !== client.user && reaction.emoji.identifier === data.guilds[reaction.message.guild.id][1]) {
-		let {count} = reaction;
+		let { count } = reaction;
 		if (data.guilds[reaction.message.guild.id][4] && reaction.users.resolve(reaction.message.author.id)) {
 			count--;
 			reaction.message.author.send(`Trying to star your own message? That star doesn't count on ${italicize(reaction.message.guild.name)}.`).catch(doNothing);
@@ -185,10 +188,10 @@ client.on("message", async msg => {
 	if (msg.system) {
 		return;
 	}
-	if (msg.channel.type === "text") {
+	if (msg.channel.type === "GUILD_TEXT") {
 		let content = msg.content;
 		if (prefix.test(content)) {
-			const member = msg.guild.member(msg.author) || await msg.guild.members.fetch(msg.author);
+			const member = msg.guild.member.resolve(msg.author) || await msg.guild.members.fetch(msg.author);
 			const perm = member.hasPermission(8) || member.id === "152282430915608578";
 			if (perm) {
 				content = content.replace(prefix, ""); // TODO: Don't let no space after "!star" be valid
