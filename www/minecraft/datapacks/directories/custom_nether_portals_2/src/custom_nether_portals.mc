@@ -43,7 +43,7 @@ function use_ignition {
 	execute anchored eyes positioned ^ ^ ^ run {
 		name raycast
 		scoreboard players remove #steps cusNetPor.dummy 1
-		execute if score #ignited cusNetPor.dummy matches 0 if block ~ ~ ~ minecraft:fire unless block ^ ^ ^0.1 #custom_nether_portals:air align xyz run {
+		execute if score #ignited cusNetPor.dummy matches 0 if block ~ ~ ~ #minecraft:fire unless block ^ ^ ^0.1 #custom_nether_portals:air align xyz run {
 			name ignite
 			scoreboard players set #ignited cusNetPor.dummy 1
 			scoreboard players set #success cusNetPor.dummy 0
@@ -118,7 +118,7 @@ function use_ignition {
 				kill @e[type=minecraft:area_effect_cloud,tag=cusNetPor.marker]
 			}
 		}
-		execute unless score #ignited cusNetPor.dummy matches 0 unless block ~ ~ ~ minecraft:fire run scoreboard players set #ignited cusNetPor.dummy 0
+		execute unless score #ignited cusNetPor.dummy matches 0 unless block ~ ~ ~ #minecraft:fire run scoreboard players set #ignited cusNetPor.dummy 0
 		execute unless score #steps cusNetPor.dummy matches 0 positioned ^ ^ ^0.1 run function $block
 	}
 }
