@@ -221,7 +221,7 @@ const PipeItem = class PipeItem {
 		}
 		this[_path] = value;
 		if (!typeDir) {
-			if (!(this.element.href = this.url = this.isPrivate() ? "" : `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(value)}`)) {
+			if (!(this.element.href = this.url = this.isPrivate() ? "" : `https://file.garden/${getBase64ID(Miro.data.user.id)}/${encodeForPipe(value)}`)) {
 				this.element.removeAttribute("href");
 			}
 		}
@@ -640,6 +640,11 @@ const showProperty = key => {
 	input.type = input._type;
 };
 const sizeReducer = (size, itemElement) => size + itemElement._item.size;
+const getBase64ID = hex => btoa(
+	hex.match(/\w{2}/g).map(
+		byte => String.fromCharCode(parseInt(byte, 16))
+	).join("")
+);
 const updateProperties = () => {
 	trashInfo.classList.add("hidden");
 	for (const propertyElement of Object.values(property)) {
@@ -673,7 +678,7 @@ const updateProperties = () => {
 			properties.elements.name.parentNode.classList.remove("mdc-text-field--invalid");
 			property.name._label.classList.add("mdc-floating-label--float-above");
 			if (trashDeselected) {
-				const url = item.type === "/" ? `https://pipe.miroware.io/${Miro.data.user.id}/${encodeForPipe(item.path)}` : item.url;
+				const url = item.type === "/" ? `https://file.garden/${getBase64ID(Miro.data.user.id)}/${encodeForPipe(item.path)}` : item.url;
 				if (notPrivate) {
 					properties.elements.url._prev = properties.elements.url.value = linkPreview.href = url;
 					property.url.classList.remove("hidden");

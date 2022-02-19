@@ -144,7 +144,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				if (response.headers["content-length"]) { // This condition is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
 					res.set("Content-Length", response.headers["content-length"]);
 				}
-				res.status(response.statusCode).set("Content-Type", "download" in req.query ? "application/octet-stream" : response.headers["content-type"]).set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src pipe.miroware.io miro.gg data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'");
+				res.status(response.statusCode).set("Content-Type", "download" in req.query ? "application/octet-stream" : response.headers["content-type"]).set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src file.garden pipe.miroware.io miro.gg data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'");
 			});
 		}
 	});

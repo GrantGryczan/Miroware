@@ -108,16 +108,19 @@ const purgeCache = async (...files) => {
 		} while (true);
 	}
 };
+const stringifyID = id => (
+	id.id.toString("base64").replace(/\//g, "-").replace(/+/g, "_")
+)
 const purgePipeCache = (user, items) => purgeCache(...items.flatMap(item => {
 	const encodedPath = encodeForPipe(item.path);
-	const urls = [`https://pipe.miroware.io/${user._id}/${encodedPath}`, `https://piped.miroware.io/${user._id}/${encodedPath}`];
+	const urls = [`https://file.garden/${stringifyID(user._id)}/${encodedPath}`, `https://pipe.miroware.io/${user._id}/${encodedPath}`, `https://piped.miroware.io/${user._id}/${encodedPath}`];
 	for (let slashIndex = encodedPath.indexOf("/"); slashIndex !== -1; slashIndex = encodedPath.indexOf("/", slashIndex + 1)) {
 		const slicedPath = encodedPath.slice(0, slashIndex);
-		urls.push(`https://pipe.miroware.io/${user._id}/${slicedPath}`, `https://piped.miroware.io/${user._id}/${slicedPath}`);
+		urls.push(`https://file.garden/${stringifyID(user._id)}/${slicedPath}`, `https://pipe.miroware.io/${user._id}/${slicedPath}`, `https://piped.miroware.io/${user._id}/${slicedPath}`);
 	}
 	if (encodedPath.endsWith("/index.html") || encodedPath === "index.html") {
 		const slicedPath = encodedPath.slice(0, encodedPath.lastIndexOf("/") + 1);
-		urls.push(`https://pipe.miroware.io/${user._id}/${slicedPath}`, `https://piped.miroware.io/${user._id}/${slicedPath}`);
+		urls.push(`https://file.garden/${stringifyID(user._id)}/${slicedPath}`, `https://pipe.miroware.io/${user._id}/${slicedPath}`, `https://piped.miroware.io/${user._id}/${slicedPath}`);
 	}
 	return urls;
 }));
