@@ -4,7 +4,7 @@ const fs = require("fs");
 const http = require("http");
 const https = require("https");
 const express = require("express");
-const {MongoClient, ObjectID} = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const AWS = require("aws-sdk");
 const archiver = require("archiver");
 const youKnow = require("./secret/youknow.js");
@@ -63,8 +63,17 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				if (slashIndex === -1) {
 					throw 404;
 				}
-				userID = ObjectID(path.slice(0, slashIndex));
-			} catch {
+				let string = path.slice(0, slashIndex);
+				if (string.length === 24) {
+					userID = new ObjectId(string);
+				} else {
+					string = string.replace(/-/g, '/');
+					string = string.replace(/_/g, '+');
+					userID = new ObjectId(
+						Buffer.from(string, 'base64')
+					);
+				}
+			} catch (err) {
 				res.sendStatus(404);
 				return;
 			}
