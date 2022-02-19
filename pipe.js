@@ -63,14 +63,14 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				if (slashIndex === -1) {
 					throw 404;
 				}
-				let string = path.slice(0, slashIndex);
-				if (string.length === 24) {
-					userID = new ObjectId(string);
+				let userIDString = path.slice(0, slashIndex);
+				if (userIDString.length === 24) {
+					userID = new ObjectId(userIDString);
 				} else {
-					string = string.replace(/-/g, '/');
-					string = string.replace(/_/g, '+');
+					userIDString = userIDString.replace(/-/g, "/");
+					userIDString = userIDString.replace(/_/g, "+");
 					userID = new ObjectId(
-						Buffer.from(string, 'base64')
+						Buffer.from(userIDString, "base64")
 					);
 				}
 			} catch (err) {
@@ -138,7 +138,11 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				return;
 			}
 		} else {
-			res.set("X-Powered-By", "Miroware");
+			if (req.hostname === "file.garden" && req.path.indexOf("/", 1) === 25) {
+				// Disallow the old user ID format with the new domain.
+				res.status(400).send("Invalid user ID format.");
+				return;
+			}
 			request(path).then(response => {
 				response.pipe(res);
 				if (response.headers["content-length"]) { // This condition is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
