@@ -644,8 +644,8 @@ const getBase64ID = hex => (
 	btoa(
 		hex.match(/\w{2}/g).map(
 			byte => String.fromCharCode(parseInt(byte, 16))
-		)
-	).join("").replace(/\//g, "-").replace(/\+/g, "_")
+		).join("")
+	).replace(/\//g, "-").replace(/\+/g, "_")
 );
 const updateProperties = () => {
 	trashInfo.classList.add("hidden");
