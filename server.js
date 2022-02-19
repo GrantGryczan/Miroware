@@ -109,7 +109,7 @@ const purgeCache = async (...files) => {
 	}
 };
 const stringifyID = id => (
-	id.id.toString("base64").replace(/\//g, "-").replace(/+/g, "_")
+	id.id.toString("base64").replace(/\//g, "-").replace(/\+/g, "_")
 )
 const purgePipeCache = (user, items) => purgeCache(...items.flatMap(item => {
 	const encodedPath = encodeForPipe(item.path);
