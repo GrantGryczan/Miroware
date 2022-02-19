@@ -140,7 +140,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 		} else {
 			if (req.hostname === "file.garden" && req.path.indexOf("/", 1) === 25) {
 				// Disallow the old user ID format with the new domain.
-				res.status(400).send("Invalid user ID format.");
+				res.sendStatus(404);
 				return;
 			}
 			request(path).then(response => {
