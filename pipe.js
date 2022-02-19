@@ -138,8 +138,10 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				return;
 			}
 		} else {
-			if (req.hostname === "file.garden" && req.path.indexOf("/", 1) === 25) {
-				// Disallow the old user ID format with the new domain.
+			const usingOldUserIDFormat = req.path.indexOf("/", 1) === 25;
+			const usingOldDomain = req.hostname === 'pipe.miroware.io';
+			// Disallow the old user ID format with the new domain, or the new user ID format with the old domain.
+			if (usingOldUserIDFormat === usingOldDomain) {
 				res.sendStatus(404);
 				return;
 			}
