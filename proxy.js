@@ -16,17 +16,22 @@ const ggContext = tls.createSecureContext({
 	cert: fs.readFileSync("/etc/letsencrypt/live/miro.gg/cert.pem"),
 	ca: fs.readFileSync("/etc/letsencrypt/live/miro.gg/chain.pem")
 });
+const gardenContext = tls.createSecureContext({
+	key: fs.readFileSync("/etc/letsencrypt/live/file.garden/privkey.pem"),
+	cert: fs.readFileSync("/etc/letsencrypt/live/file.garden/cert.pem"),
+	ca: fs.readFileSync("/etc/letsencrypt/live/file.garden/chain.pem")
+});
 const proxy = httpProxy.createProxyServer();
 const pipeTest = /^piped?\./;
 const listener = (req, res) => {
 	let target = "http://localhost:8081";
 	if (req.headers.host) {
-		if (req.headers.host.endsWith(".gold")) {
-			target = "http://localhost:8180";
+		if (req.headers.host.endsWith(".garden") || pipeTest.test(req.headers.host)) {
+			target = "http://localhost:8082";
 		} else if (req.headers.host.endsWith(".gg")) {
 			target = "http://localhost:8083";
-		} else if (pipeTest.test(req.headers.host)) {
-			target = "http://localhost:8082";
+		} else if (req.headers.host.endsWith(".gold")) {
+			target = "http://localhost:8180";
 		}
 	}
 	proxy.web(req, res, {
@@ -36,7 +41,7 @@ const listener = (req, res) => {
 http.createServer(listener).listen(8080);
 https.createServer({
 	SNICallback: (domain, callback) => {
-		callback(null, domain.endsWith(".gg") ? ggContext : ioContext);
+		callback(null, domain.endsWith(".garden") ? gardenContext : domain.endsWith(".gg") ? ggContext : ioContext);
 	},
 	...ioContextOptions
 }, listener).listen(8443);
