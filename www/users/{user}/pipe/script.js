@@ -643,7 +643,7 @@ const sizeReducer = (size, itemElement) => size + itemElement._item.size;
 const getBase64ID = hex => btoa(
 	hex.match(/\w{2}/g).map(
 		byte => String.fromCharCode(parseInt(byte, 16))
-	).join("")
+	).join("").replace(/\//g, "-").replace(/\+/g, "_")
 );
 const updateProperties = () => {
 	trashInfo.classList.add("hidden");
