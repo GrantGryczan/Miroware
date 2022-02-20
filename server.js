@@ -108,7 +108,7 @@ const purgeCache = async (...files) => {
 		} while (true);
 	}
 };
-const stringifyID = id => id.id.toString("base64url");
+const stringifyID = id => id.toString("base64url");
 const purgePipeCache = (user, items) => purgeCache(...items.flatMap(item => {
 	const encodedPath = encodeForPipe(item.path);
 	const urls = [`https://file.garden/${stringifyID(user._id)}/${encodedPath}`, `https://pipe.miroware.io/${user._id}/${encodedPath}`, `https://piped.miroware.io/${user._id}/${encodedPath}`];

@@ -1395,8 +1395,9 @@ if (Miro.data.isMe) {
 				};
 				const rootEntries = [];
 				for (const item of evt.dataTransfer.items) {
-					if (item.webkitGetAsEntry) {
-						rootEntries.push(item.webkitGetAsEntry());
+					const entry = item.webkitGetAsEntry?.();
+					if (entry) {
+						rootEntries.push(entry);
 					} else {
 						addFile(item.getAsFile(), targetID);
 					}
