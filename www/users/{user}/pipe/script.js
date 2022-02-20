@@ -1399,7 +1399,10 @@ if (Miro.data.isMe) {
 					if (entry) {
 						rootEntries.push(entry);
 					} else {
-						addFile(item.getAsFile(), targetID);
+						const file = item.getAsFile();
+						if (file) {
+							addFile(file, targetID);
+						}
 					}
 				}
 				if (rootEntries.length) {
