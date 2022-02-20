@@ -25,13 +25,10 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 	app.disable("X-Powered-By");
 	const userAgents = [];
 	const request = path => new Promise(resolve => {
-		const userAgent = `Pipe (${Math.random()})`;
+		const userAgent = `File Garden (${Math.random()})`;
 		userAgents.push(userAgent);
-		if (path.endsWith("/")) {
-			path += "index.html";
-		}
 		https.get({
-			hostname: "piped.miroware.io",
+			hostname: "cache.file.garden",
 			path,
 			headers: {
 				"User-Agent": userAgent
@@ -43,18 +40,19 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 	});
 	app.get("*", async (req, res) => {
 		let path = req.path;
+		try {
+			path = decodeURIComponent(path);
+		} catch (err) {
+			res.header("Content-Type", "text/plain").status(400).send(err.message);
+			return;
+		}
 		if (path === "/") {
-			res.redirect(308, "https://miroware.io/pipe/");
-		} else if (req.subdomains.join(".") === "piped") {
+			res.redirect(307, "https://miroware.io/pipe/");
+		} else if (req.subdomains.join(".") === "cache") {
 			path = path.slice(1);
 			if (!userAgents.includes(req.get("User-Agent"))) {
-				res.redirect(307, `https://pipe.miroware.io/${path}`);
-				return;
-			}
-			try {
-				path = decodeURIComponent(path);
-			} catch (err) {
-				res.status(400).send(err.message);
+				// This is a temporary redirect rather than permanent so that the redirect doesn't get cached.
+				res.redirect(307, `https://file.garden/${path}`);
 				return;
 			}
 			const slashIndex = path.indexOf("/");
@@ -63,17 +61,10 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				if (slashIndex === -1) {
 					throw 404;
 				}
-				let userIDString = path.slice(0, slashIndex);
-				if (userIDString.length === 24) {
-					userID = new ObjectId(userIDString);
-				} else {
-					userIDString = userIDString.replace(/-/g, "/");
-					userIDString = userIDString.replace(/_/g, "+");
-					userID = new ObjectId(
-						Buffer.from(userIDString, "base64")
-					);
-				}
-			} catch (err) {
+				userID = new ObjectId(
+					Buffer.from(path.slice(0, slashIndex), "base64url")
+				);
+			} catch {
 				res.sendStatus(404);
 				return;
 			}
@@ -137,14 +128,11 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				res.sendStatus(404);
 				return;
 			}
+		} else if (req.hostname === 'pipe.miroware.io') {
+			path = path.slice(1);
+			path = path.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
+			res.redirect(308, `https://file.garden/${path}`);
 		} else {
-			const usingOldUserIDFormat = req.path.indexOf("/", 1) === 25;
-			const usingOldDomain = req.hostname === 'pipe.miroware.io';
-			// Disallow the old user ID format with the new domain, or the new user ID format with the old domain.
-			if (usingOldUserIDFormat !== usingOldDomain) {
-				res.sendStatus(404);
-				return;
-			}
 			request(path).then(response => {
 				response.pipe(res);
 				if (response.headers["content-length"]) { // This condition is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
