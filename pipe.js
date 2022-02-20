@@ -28,7 +28,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 		const userAgent = `File Garden (${Math.random()})`;
 		userAgents.push(userAgent);
 		https.get({
-			hostname: "piped.miroware.io",
+			hostname: "cache.file.garden",
 			path,
 			headers: {
 				"User-Agent": userAgent
@@ -42,7 +42,17 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 		let path = req.path;
 		if (path === "/") {
 			res.redirect(307, "https://miroware.io/pipe/");
-		} else if (req.subdomains.join(".") === "piped") {
+		} else if (req.hostname === 'pipe.miroware.io') {
+			path = path.slice(1);
+			try {
+				path = decodeURIComponent(path);
+			} catch (err) {
+				res.header("Content-Type", "text/plain").status(400).send(err.message);
+				return;
+			}
+			path = path.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
+			res.redirect(308, `https://file.garden/${path}`);
+		} else if (req.subdomains.join(".") === "cache") {
 			path = path.slice(1);
 			try {
 				path = decodeURIComponent(path);
@@ -128,16 +138,6 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				res.sendStatus(404);
 				return;
 			}
-		} else if (req.hostname === 'pipe.miroware.io') {
-			path = path.slice(1);
-			try {
-				path = decodeURIComponent(path);
-			} catch (err) {
-				res.header("Content-Type", "text/plain").status(400).send(err.message);
-				return;
-			}
-			path = path.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
-			res.redirect(308, `https://file.garden/${path}`);
 		} else {
 			request(path).then(response => {
 				response.pipe(res);
