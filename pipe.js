@@ -28,7 +28,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 		const userAgent = `File Garden (${Math.random()})`;
 		userAgents.push(userAgent);
 		https.get({
-			hostname: "cache.file.garden",
+			hostname: "piped.miroware.io",
 			path,
 			headers: {
 				"User-Agent": userAgent
@@ -40,16 +40,16 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 	});
 	app.get("*", async (req, res) => {
 		let path = req.path;
-		try {
-			path = decodeURIComponent(path);
-		} catch (err) {
-			res.header("Content-Type", "text/plain").status(400).send(err.message);
-			return;
-		}
 		if (path === "/") {
 			res.redirect(307, "https://miroware.io/pipe/");
-		} else if (req.subdomains.join(".") === "cache") {
+		} else if (req.subdomains.join(".") === "piped") {
 			path = path.slice(1);
+			try {
+				path = decodeURIComponent(path);
+			} catch (err) {
+				res.header("Content-Type", "text/plain").status(400).send(err.message);
+				return;
+			}
 			if (!userAgents.includes(req.get("User-Agent"))) {
 				// This is a temporary redirect rather than permanent so that the redirect doesn't get cached.
 				res.redirect(307, `https://file.garden/${path}`);
@@ -130,6 +130,12 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 			}
 		} else if (req.hostname === 'pipe.miroware.io') {
 			path = path.slice(1);
+			try {
+				path = decodeURIComponent(path);
+			} catch (err) {
+				res.header("Content-Type", "text/plain").status(400).send(err.message);
+				return;
+			}
 			path = path.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
 			res.redirect(308, `https://file.garden/${path}`);
 		} else {
