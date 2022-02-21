@@ -43,6 +43,10 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 		if (path === "/") {
 			res.redirect(307, "https://miroware.io/pipe/");
 		} else if (req.hostname === 'pipe.miroware.io') {
+			const referrer = req.get('Referer');
+			if (referrer) {
+				console.log(referrer);
+			}
 			let url = req.url.slice(1);
 			url = url.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
 			res.set("Access-Control-Allow-Origin", "*").redirect(308, `https://file.garden/${url}`);
