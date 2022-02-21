@@ -45,7 +45,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 		} else if (req.hostname === 'pipe.miroware.io') {
 			const referrer = req.get('Referer');
 			if (referrer) {
-				console.log(referrer);
+				console.log(referrer, req.url);
 			}
 			let url = req.url.slice(1);
 			url = url.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
