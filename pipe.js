@@ -56,7 +56,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 			}
 			if (!userAgents.includes(req.get("User-Agent"))) {
 				// This is a temporary redirect rather than permanent so that the redirect doesn't get cached.
-				res.redirect(307, `https://file.garden/${path}`);
+				res.redirect(307, 'https://file.garden/');
 				return;
 			}
 			const slashIndex = path.indexOf("/");
