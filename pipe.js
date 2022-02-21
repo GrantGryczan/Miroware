@@ -51,7 +51,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				return;
 			}
 			path = path.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
-			res.redirect(308, `https://file.garden/${path}`);
+			res.set("Access-Control-Allow-Origin", "*").redirect(308, `https://file.garden/${path}`);
 		} else if (req.subdomains.join(".") === "cache") {
 			path = path.slice(1);
 			try {
