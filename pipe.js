@@ -43,15 +43,9 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 		if (path === "/") {
 			res.redirect(307, "https://miroware.io/pipe/");
 		} else if (req.hostname === 'pipe.miroware.io') {
-			path = path.slice(1);
-			try {
-				path = decodeURIComponent(path);
-			} catch (err) {
-				res.header("Content-Type", "text/plain").status(400).send(err.message);
-				return;
-			}
-			path = path.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
-			res.set("Access-Control-Allow-Origin", "*").redirect(308, `https://file.garden/${path}`);
+			let url = req.url.slice(1);
+			url = url.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
+			res.set("Access-Control-Allow-Origin", "*").redirect(308, `https://file.garden/${url}`);
 		} else if (req.subdomains.join(".") === "cache") {
 			path = path.slice(1);
 			try {
