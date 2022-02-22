@@ -41,7 +41,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 	app.get("*", async (req, res) => {
 		let path = req.path;
 		if (path === "/") {
-			res.redirect(307, "https://miroware.io/pipe/");
+			res.redirect(302, "https://miroware.io/pipe/");
 		} else if (req.hostname === 'pipe.miroware.io') {
 			const referrer = req.get('Referer');
 			if (referrer) {
@@ -60,7 +60,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 			}
 			if (!userAgents.includes(req.get("User-Agent"))) {
 				// This is a temporary redirect rather than permanent so that the redirect doesn't get cached.
-				res.redirect(307, 'https://file.garden/');
+				res.redirect(302, 'https://file.garden/');
 				return;
 			}
 			const slashIndex = path.indexOf("/");
