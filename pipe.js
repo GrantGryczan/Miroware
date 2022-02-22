@@ -12,9 +12,7 @@ const s3 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.s3),
 	sslEnabled: true
 });
-const encodedSlashes = /%2F/g;
-const encodedAts = /%40/g;
-const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "/").replace(encodedAts, "@");
+const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, "/").replace(/%40/g, "@");
 (async () => {
 	require("replthis")(v => eval(v));
 	const db = (await MongoClient.connect(youKnow.db, {
@@ -23,44 +21,33 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 	const users = db.collection("users");
 	const app = express();
 	app.disable("X-Powered-By");
-	const userAgents = [];
 	const request = path => new Promise(resolve => {
-		const userAgent = `File Garden (${Math.random()})`;
-		userAgents.push(userAgent);
 		https.get({
-			hostname: "cache.file.garden",
-			path,
-			headers: {
-				"User-Agent": userAgent
-			}
-		}, response => {
-			resolve(response);
-			userAgents.splice(userAgents.indexOf(userAgent), 1);
-		});
+			hostname: "file.garden",
+			path
+		}, resolve);
 	});
 	app.get("*", async (req, res) => {
 		let path = req.path;
 		if (path === "/") {
 			res.redirect(302, "https://miroware.io/pipe/");
-		} else if (req.hostname === 'pipe.miroware.io') {
+			return;
+		}
+		res.set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src file.garden pipe.miroware.io miro.gg data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'");
+		if (req.hostname === 'pipe.miroware.io') {
 			const referrer = req.get('Referer');
 			if (referrer) {
 				console.log(referrer, req.url);
 			}
 			let url = req.url.slice(1);
 			url = url.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
-			res.set("Access-Control-Allow-Origin", "*").redirect(301, `https://file.garden/${url}`);
-		} else if (req.subdomains.join(".") === "cache") {
+			res.redirect(301, `https://file.garden/${url}`);
+		} else {
 			path = path.slice(1);
 			try {
 				path = decodeURIComponent(path);
 			} catch (err) {
 				res.header("Content-Type", "text/plain").status(400).send(err.message);
-				return;
-			}
-			if (!userAgents.includes(req.get("User-Agent"))) {
-				// This is a temporary redirect rather than permanent so that the redirect doesn't get cached.
-				res.redirect(302, 'https://file.garden/');
 				return;
 			}
 			const slashIndex = path.indexOf("/");
@@ -102,7 +89,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 									if (item.type === "/") {
 										scan(item.id);
 									} else {
-										promises.push(request(`/${user._id}/${encodeForPipe(item.path)}`).then(response => {
+										promises.push(request(`/${user._id.toString('base64url')}/${encodeForPipe(item.path)}`).then(response => {
 											archive.append(response, {
 												name: item.path.slice(sliceStart)
 											});
@@ -124,7 +111,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 								console.error(err);
 								res.status(err.statusCode).send(err.message);
 							} else {
-								res.set("Content-Type", item.type).set("Content-Length", String(data.Body.length)).send(data.Body);
+								res.set("Content-Type", "download" in req.query ? "application/octet-stream" : item.type).set("Content-Length", data.Body.length.toString()).send(data.Body);
 							}
 						});
 					}
@@ -136,14 +123,6 @@ const encodeForPipe = name => encodeURIComponent(name).replace(encodedSlashes, "
 				res.sendStatus(404);
 				return;
 			}
-		} else {
-			request(path).then(response => {
-				response.pipe(res);
-				if (response.headers["content-length"]) { // This condition is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
-					res.set("Content-Length", response.headers["content-length"]);
-				}
-				res.status(response.statusCode).set("Content-Type", "download" in req.query ? "application/octet-stream" : response.headers["content-type"]).set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src file.garden pipe.miroware.io miro.gg data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'");
-			});
 		}
 	});
 	http.createServer(app).listen(8082);
