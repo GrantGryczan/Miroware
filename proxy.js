@@ -22,11 +22,10 @@ const gardenContext = tls.createSecureContext({
 	ca: fs.readFileSync("/etc/letsencrypt/live/file.garden/chain.pem")
 });
 const proxy = httpProxy.createProxyServer();
-const pipeTest = /^piped?\./;
 const listener = (req, res) => {
 	let target = "http://localhost:8081";
 	if (req.headers.host) {
-		if (req.headers.host.endsWith(".garden") || pipeTest.test(req.headers.host)) {
+		if (req.headers.host.endsWith(".garden") || req.headers.host.startsWith("pipe.")) {
 			target = "http://localhost:8082";
 		} else if (req.headers.host.endsWith(".gg")) {
 			target = "http://localhost:8083";
