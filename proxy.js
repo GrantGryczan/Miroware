@@ -29,7 +29,7 @@ const listener = (req, res) => {
 		req.headers.cookie && req.headers.cookie.includes(maintenance)
 	)) {
 		const body = 'Miroware is undergoing brief maintenance. Please be patient.';
-		response.writeHead(200, {
+		res.writeHead(200, {
 			'Content-Length': Buffer.byteLength(body),
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache'
