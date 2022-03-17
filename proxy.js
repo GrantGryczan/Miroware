@@ -24,6 +24,13 @@ const gardenContext = tls.createSecureContext({
 const proxy = httpProxy.createProxyServer();
 /** A string which, when set, enables maintenance mode and must be in the client's cookies in order to bypass it. */
 let maintenance;
+const enableMaintenance = () => {
+	maintenance = Math.random();
+	return `document.cookie="temp=${maintenance};domain=.miroware.io;path=/;expires="+new Date(Date.now()+1000*60*60*24*7).toUTCString();`;
+};
+const disableMaintenance = () => {
+	maintenance = '';
+};
 const listener = (req, res) => {
 	if (maintenance && !(
 		req.headers.cookie && req.headers.cookie.includes(maintenance)
