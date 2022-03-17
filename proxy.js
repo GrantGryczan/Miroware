@@ -22,7 +22,21 @@ const gardenContext = tls.createSecureContext({
 	ca: fs.readFileSync("/etc/letsencrypt/live/file.garden/chain.pem")
 });
 const proxy = httpProxy.createProxyServer();
+/** A string which, when set, enables maintenance mode and must be in the client's cookies in order to bypass it. */
+let maintenance;
 const listener = (req, res) => {
+	if (maintenance && !(
+		req.headers.cookie && req.headers.cookie.includes(maintenance)
+	)) {
+		const body = 'Miroware is undergoing brief maintenance. Please be patient.';
+		response.writeHead(200, {
+			'Content-Length': Buffer.byteLength(body),
+			'Content-Type': 'text/plain',
+			'Cache-Control': 'no-cache'
+		}).end(body);
+		return;
+	}
+
 	let target = "http://localhost:8081";
 	if (req.headers.host) {
 		if (req.headers.host.endsWith(".garden") || req.headers.host.startsWith("pipe.")) {
