@@ -28,12 +28,23 @@ const listener = (req, res) => {
 	if (maintenance && !(
 		req.headers.cookie && req.headers.cookie.includes(maintenance)
 	)) {
-		const body = 'Miroware is undergoing brief maintenance. Please be patient.';
-		res.writeHead(200, {
-			'Content-Length': Buffer.byteLength(body),
-			'Content-Type': 'text/plain',
-			'Cache-Control': 'no-cache'
-		}).end(body);
+		res.writeHead(req.method === 'OPTIONS' ? 200 : 503, {
+			'Content-Type': 'text/json',
+			'Cache-Control': 'no-cache',
+			'Access-Control-Allow-Origin': 'https://miroware.io',
+			'Access-Control-Allow-Credentials': 'true',
+			'Allow': 'OPTIONS, GET, POST, PUT, DELETE, PATCH',
+			'Access-Control-Allow-Methods': 'OPTIONS, GET, POST, PUT, DELETE, PATCH',
+			...req.headers['access-control-request-headers'] && {
+				'Access-Control-Allow-Headers': req.headers['access-control-request-headers']
+			}
+		}).end(
+			req.method === 'OPTIONS'
+				? undefined
+				: JSON.stringify({
+					error: 'Miroware is undergoing brief maintenance. Please be patient.'
+				}, null, '    ')
+		);
 		return;
 	}
 
