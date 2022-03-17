@@ -26,7 +26,7 @@ const proxy = httpProxy.createProxyServer();
 let maintenance;
 const enableMaintenance = () => {
 	maintenance = Math.random();
-	console.log(`document.cookie="temp=${maintenance};domain=.miroware.io;path=/;expires="+new Date(Date.now()+1000*60*60*24*7).toUTCString();`);
+	console.log(`document.cookie="temp=${maintenance};domain=.miroware.io;path=/;expires="+new Date(Date.now()+1000*60*60*24*7).toUTCString();document.cookie="temp=${maintenance};domain=file.garden;path=/;expires="+new Date(Date.now()+1000*60*60*24*7).toUTCString();`);
 };
 const disableMaintenance = () => {
 	maintenance = '';
