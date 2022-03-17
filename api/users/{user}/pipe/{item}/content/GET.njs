@@ -9,20 +9,16 @@ if (isMe) {
 			this.status = 404;
 			this.done();
 		} else {
-			s3.getObject({
-				Bucket: "miroware-pipe",
-				Key: found.id
-			}, (err, data) => {
-				if (err) {
-					console.error(err);
-					this.value = {
-						error: err.message
-					};
-					this.status = err.statusCode;
-				} else {
-					this.res.set("Content-Type", found.type);
-					this.value = data.Body;
-				}
+			bucket.file(`${user._id.toString('base64url')}/${found.id}`).download().then(([buffer]) => {
+				this.res.set("Content-Type", found.type);
+				this.value = buffer;
+			}).catch(error => {
+				console.error(error);
+				this.value = {
+					error: error.message
+				};
+				this.status = error.code;
+			}).finally(() => {
 				this.done();
 			});
 		}

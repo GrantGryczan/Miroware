@@ -5,13 +5,11 @@ const http = require("http");
 const https = require("https");
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
-const AWS = require("aws-sdk");
+const { Storage } = require("@google-cloud/storage");
 const archiver = require("archiver");
 const youKnow = require("./secret/youknow.js");
-const s3 = new AWS.S3({
-	credentials: new AWS.Credentials(youKnow.s3),
-	sslEnabled: true
-});
+const storage = new Storage(youKnow.gcs);
+const bucket = storage.bucket('file-garden');
 const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, "/").replace(/%40/g, "@");
 (async () => {
 	require("replthis")(v => eval(v));
@@ -103,17 +101,9 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, "/").rep
 							archive.finalize();
 						});
 					} else {
-						s3.getObject({
-							Bucket: "miroware-pipe",
-							Key: item.id
-						}, (err, data) => {
-							if (err) {
-								console.error(err);
-								res.status(err.statusCode).send(err.message);
-							} else {
-								res.set("Content-Type", "download" in req.query ? "application/octet-stream" : item.type).set("Content-Length", data.Body.length.toString()).send(data.Body);
-							}
-						});
+						res.set("Content-Type", "download" in req.query ? "application/octet-stream" : item.type).set("Content-Length", item.size.toString());
+						bucket.file(`${userID.toString('base64url')}/${item.id}`).createReadStream().pipe(res);
+						// TODO: Catch and respond with errors.
 					}
 				} else {
 					res.sendStatus(404);

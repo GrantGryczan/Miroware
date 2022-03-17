@@ -27,25 +27,20 @@ if (found) {
 		});
 		const sliceStart = found.path.lastIndexOf("/") + 1;
 		const promises = [];
+		const userIDString = user._id.toString('base64url');
 		const scan = parent => {
 			for (const item of user.pipe) {
 				if (item.parent === parent && (isMe || item.privacy === 0)) {
 					if (item.type === "/") {
 						scan(item.id);
 					} else {
-						promises.push(new Promise(resolve => {
-							s3.getObject({
-								Bucket: "miroware-pipe",
-								Key: item.id
-							}, (err, data) => {
-								archive.append(err ? JSON.stringify({
-									error: err.message
-								}) : data.Body, {
+						promises.push(
+							bucket.file(`${userIDString}/${item.id}`).download().then(([buffer]) => {
+								archive.append(buffer, {
 									name: item.path.slice(sliceStart)
 								});
-								resolve();
-							});
-						}));
+							})
+						);
 					}
 				}
 			}
@@ -53,20 +48,16 @@ if (found) {
 		scan(found.id);
 		Promise.all(promises).then(archive.finalize.bind(archive));
 	} else {
-		s3.getObject({
-			Bucket: "miroware-pipe",
-			Key: found.id
-		}, (err, data) => {
-			if (err) {
-				console.error(err);
-				this.value = {
-					error: err.message
-				};
-				this.status = err.statusCode;
-			} else {
-				this.res.set("Content-Type", "application/octet-stream");
-				this.value = data.Body;
-			}
+		bucket.file(`${user._id.toString('base64url')}/${found.id}`).download().then(([buffer]) => {
+			this.res.set("Content-Type", "application/octet-stream");
+			this.value = buffer;
+		}).catch(error => {
+			console.error(error);
+			this.value = {
+				error: error.message
+			};
+			this.status = error.code;
+		}).finally(() => {
 			this.done();
 		});
 	}

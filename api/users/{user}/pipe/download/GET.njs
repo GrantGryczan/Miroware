@@ -14,6 +14,7 @@ if (this.req.query.items) {
 	const promises = [];
 	for (const found of this.req.query.items.split(",").map(id => user.pipe.find(item => item.id === id && (isMe || item.privacy !== 2)))) {
 		if (found.id && found.id !== "trash") {
+			const userIDString = user._id.toString('base64url');
 			if (found.type === "/") {
 				const sliceStart = found.path.lastIndexOf("/") + 1;
 				const scan = parent => {
@@ -22,38 +23,26 @@ if (this.req.query.items) {
 							if (item.type === "/") {
 								scan(item.id);
 							} else {
-								promises.push(new Promise(resolve => {
-									s3.getObject({
-										Bucket: "miroware-pipe",
-										Key: item.id
-									}, (err, data) => {
-										archive.append(err ? JSON.stringify({
-											error: err.message
-										}) : data.Body, {
+								promises.push(
+									bucket.file(`${userIDString}/${item.id}`).download().then(([buffer]) => {
+										archive.append(buffer, {
 											name: item.path.slice(sliceStart)
 										});
-										resolve();
-									});
-								}));
+									})
+								);
 							}
 						}
 					}
 				};
 				scan(found.id);
 			} else {
-				promises.push(new Promise(resolve => {
-					s3.getObject({
-						Bucket: "miroware-pipe",
-						Key: found.id
-					}, (err, data) => {
-						archive.append(err ? JSON.stringify({
-							error: err.message
-						}) : data.Body, {
+				promises.push(
+					bucket.file(`${userIDString}/${found.id}`).download().then(([buffer]) => {
+						archive.append(buffer, {
 							name: found.name
 						});
-						resolve();
-					});
-				}));
+					})
+				);
 			}
 		}
 	}

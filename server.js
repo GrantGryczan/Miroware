@@ -9,7 +9,7 @@ const mime = require("mime");
 const {MongoClient, ObjectID} = require("mongodb");
 const nodemailer = require("nodemailer");
 const {OAuth2Client} = require("google-auth-library");
-const AWS = require("aws-sdk");
+const { Storage } = require("@google-cloud/storage");
 const archiver = require("archiver");
 const youKnow = require("./secret/youknow.js");
 const production = process.argv[2] === "production";
@@ -25,13 +25,8 @@ const transporter = nodemailer.createTransport({
 	path: "/usr/sbin/sendmail"
 });
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
-const s3 = new AWS.S3({
-	credentials: new AWS.Credentials(youKnow.s3),
-	sslEnabled: true
-});
-const byS3Object = item => ({
-	Key: item.id
-});
+const storage = new Storage(youKnow.gcs);
+const bucket = storage.bucket('file-garden');
 const byID = ({id}) => id;
 const pipeFiles = item => item.type !== "/";
 const encodedSlashes = /%2F/g;
@@ -382,7 +377,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	}) => new Promise((resolve, reject) => {
 		const fileItems = user.pipe.filter(pipeFiles);
 		if (fileItems.length) {
-			deletePipeFiles(fileItems).then(() => {
+			bucket.deleteFiles({
+				prefix: `${user._id.toString('base64url')}/`
+			}).then(() => {
 				purgePipeCache(user, fileItems);
 				users.deleteOne(userFilter);
 				resolve();
@@ -512,28 +509,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		});
 	});
-	const deletePipeFiles = fileItems => new Promise((resolve, reject) => {
-		const objects = fileItems.map(byS3Object);
-		const deleteMore = () => {
-			if (objects.length) {
-				s3.deleteObjects({
-					Bucket: "miroware-pipe",
-					Delete: {
-						Objects: objects.splice(0, 100)
-					}
-				}, err => {
-					if (err) {
-						reject(err);
-					} else {
-						deleteMore();
-					}
-				});
-			} else {
-				resolve();
-			}
-		};
-		deleteMore();
-	});
 	const deletePipeItem = (user, item, update, context) => new Promise(resolve => {
 		if (!update.$pull) {
 			update.$pull = {};
@@ -547,6 +522,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		if (!update.$pull.pipe.id.$in) {
 			update.$pull.pipe.id.$in = [];
 		}
+		const userIDString = user._id.toString('base64url');
 		if (item.type === "/") {
 			const items = [item]; // all recursive children of the directory being deleted
 			const fileItems = []; // all recursive children of the directory being deleted which are files
@@ -579,39 +555,50 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				}
 			};
 			if (fileItems.length) {
-				deletePipeFiles(fileItems).then(() => {
-					applyUpdate();
-					purgePipeCache(user, fileItems);
-				}).catch(err => {
-					console.error(err);
-					if (context) {
-						context.value = {
-							error: err.message
-						};
-						context.status = err.statusCode;
+				const deleteMore = () => {
+					if (fileItems.length) {
+						Promise.all(
+							fileItems.splice(0, 20).map(item => (
+								bucket.file(`${userIDString}/${item.id}`).delete()
+							))
+						).then(() => {
+							deleteMore();
+						}).catch(error => {
+							console.error(error);
+							if (context) {
+								context.value = {
+									error: error.message
+								};
+								context.status = error.code;
+							}
+							resolve();
+						});
+					} else {
+						// All `fileItems` are deleted.
+
+						applyUpdate();
+						purgePipeCache(user, fileItems);
+						resolve();
 					}
-				}).finally(resolve);
+				};
+				deleteMore();
 			} else {
 				applyUpdate();
 				resolve();
 			}
 		} else {
-			s3.deleteObject({
-				Bucket: "miroware-pipe",
-				Key: item.id
-			}, err => {
-				if (err) {
-					console.error(err);
-					if (context) {
-						context.value = {
-							error: err.message
-						};
-						context.status = err.statusCode;
-					}
-				} else {
-					update.$pull.pipe.id.$in.push(item.id);
-					purgePipeCache(user, [item]);
+			bucket.file(`${userIDString}/${item.id}`).delete().then(() => {
+				update.$pull.pipe.id.$in.push(item.id);
+				purgePipeCache(user, [item]);
+			}).catch(error => {
+				console.error(error);
+				if (context) {
+					context.value = {
+						error: error.message
+					};
+					context.status = error.code;
 				}
+			}).finally(() => {
 				resolve();
 			});
 		}

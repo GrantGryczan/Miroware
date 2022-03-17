@@ -131,7 +131,7 @@ if (isMe) {
 	if (typeDir) {
 		this.update.$push = {
 			pipe: this.value = {
-				id: String(ObjectID()),
+				id: ObjectID().toString('base64url'),
 				date: Date.now(),
 				parent: data.parent,
 				name: data.name,
@@ -198,37 +198,27 @@ if (isMe) {
 		} else {
 			body = this.req.body;
 		}
-		const id = String(ObjectID());
-		s3.putObject({
-			Bucket: "miroware-pipe",
-			StorageClass: 'INTELLIGENT_TIERING',
-			Key: id,
-			ContentLength: body.length,
-			Body: body,
-			Metadata: {
-				user: String(user._id)
-			}
-		}, err => {
-			if (err) {
-				console.error(err);
-				this.value = {
-					error: err.message
-				};
-				this.status = err.statusCode || 422;
-			} else {
-				this.update.$push = {
-					pipe: this.value = {
-						id,
-						date: Date.now(),
-						parent: data.parent,
-						name: data.name,
-						path: parent ? `${parent.path}/${data.name}` : data.name,
-						type: type,
-						size: body.length,
-						privacy: data.privacy
-					}
-				};
-			}
+		const id = ObjectID().toString('base64url');
+		bucket.file(`${user._id.toString('base64url')}/${id}`).save(body).then(() => {
+			this.update.$push = {
+				pipe: this.value = {
+					id,
+					date: Date.now(),
+					parent: data.parent,
+					name: data.name,
+					path: parent ? `${parent.path}/${data.name}` : data.name,
+					type: type,
+					size: body.length,
+					privacy: data.privacy
+				}
+			};
+		}).catch(error => {
+			console.error(error);
+			this.value = {
+				error: error.message
+			};
+			this.status = error.code || 422;
+		}).finally(() => {
 			if (this.value.parent === "trash") {
 				this.value.trashed = Date.now();
 				this.value.restore = null;
