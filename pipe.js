@@ -43,11 +43,11 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 		} if (req.url.includes('?')) {
 			// Strip the query so it doesn't bypass the cache.
 			request(req.path).then(response => {
-				response.pipe(res);
 				if (response.headers['content-length']) { // This condition is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
 					res.set('Content-Length', response.headers['content-length']);
 				}
 				res.status(response.statusCode).set('Content-Type', 'download' in req.query ? 'application/octet-stream' : response.headers['content-type']);
+				response.pipe(res);
 			});
 		} else {
 			path = path.slice(1);
