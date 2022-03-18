@@ -1,37 +1,37 @@
-"use strict";
-console.log("< Pipe >")
-const fs = require("fs");
-const http = require("http");
-const https = require("https");
-const express = require("express");
-const { MongoClient, ObjectId } = require("mongodb");
-const { Storage } = require("@google-cloud/storage");
-const archiver = require("archiver");
-const youKnow = require("./secret/youknow.js");
+'use strict';
+console.log('< Pipe >')
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+const express = require('express');
+const { MongoClient, ObjectId } = require('mongodb');
+const { Storage } = require('@google-cloud/storage');
+const archiver = require('archiver');
+const youKnow = require('./secret/youknow.js');
 const storage = new Storage(youKnow.gcs);
 const bucket = storage.bucket('file-garden');
-const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, "/").replace(/%40/g, "@");
+const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').replace(/%40/g, '@');
 (async () => {
-	require("replthis")(v => eval(v));
+	require('replthis')(v => eval(v));
 	const db = (await MongoClient.connect(youKnow.db, {
 		useUnifiedTopology: true
-	})).db("web");
-	const users = db.collection("users");
+	})).db('web');
+	const users = db.collection('users');
 	const app = express();
-	app.disable("X-Powered-By");
+	app.disable('X-Powered-By');
 	const request = path => new Promise(resolve => {
 		https.get({
-			hostname: "file.garden",
+			hostname: 'file.garden',
 			path
 		}, resolve);
 	});
-	app.get("*", async (req, res) => {
+	app.get('*', async (req, res) => {
 		let path = req.path;
-		if (path === "/") {
-			res.redirect(302, "https://miroware.io/pipe/");
+		if (path === '/') {
+			res.redirect(302, 'https://miroware.io/pipe/');
 			return;
 		}
-		res.set("Access-Control-Allow-Origin", "*").set("Content-Security-Policy", "default-src file.garden pipe.miroware.io miro.gg data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'");
+		res.set('Access-Control-Allow-Origin', '*').set('Content-Security-Policy', 'default-src file.garden pipe.miroware.io miro.gg data: mediastream: blob: \'unsafe-inline\' \'unsafe-eval\'');
 		if (req.hostname === 'pipe.miroware.io') {
 			const referrer = req.get('Referer');
 			if (referrer) {
@@ -45,17 +45,17 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, "/").rep
 			try {
 				path = decodeURIComponent(path);
 			} catch (err) {
-				res.header("Content-Type", "text/plain").status(400).send(err.message);
+				res.header('Content-Type', 'text/plain').status(400).send(err.message);
 				return;
 			}
-			const slashIndex = path.indexOf("/");
+			const slashIndex = path.indexOf('/');
 			let userID;
 			try {
 				if (slashIndex === -1) {
 					throw 404;
 				}
 				userID = new ObjectId(
-					Buffer.from(path.slice(0, slashIndex), "base64url")
+					Buffer.from(path.slice(0, slashIndex), 'base64url')
 				);
 			} catch {
 				res.sendStatus(404);
@@ -66,25 +66,25 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, "/").rep
 			});
 			if (user) {
 				path = path.slice(slashIndex + 1);
-				if (path.startsWith(`${user.pipe.find(item => item.id === "trash").path}/`)) {
+				if (path.startsWith(`${user.pipe.find(item => item.id === 'trash').path}/`)) {
 					res.sendStatus(404);
 					return;
 				}
 				const item = user.pipe.find(item => item.path === path && item.privacy !== 2);
 				if (item) {
-					if (item.type === "/") {
-						res.set("Content-Type", "application/zip");
-						const archive = archiver("zip");
-						archive.on("error", err => {
+					if (item.type === '/') {
+						res.set('Content-Type', 'application/zip');
+						const archive = archiver('zip');
+						archive.on('error', err => {
 							throw err;
 						});
 						archive.pipe(res);
-						const sliceStart = path.length + 1; // Change `path.length` to `path.lastIndexOf("/")` to put the folder inside of the ZIP instead of having the ZIP be the folder itself.
+						const sliceStart = path.length + 1; // Change `path.length` to `path.lastIndexOf('/')` to put the folder inside of the ZIP instead of having the ZIP be the folder itself.
 						const promises = [];
 						const scan = parent => {
 							for (const item of user.pipe) {
 								if (item.parent === parent && item.privacy === 0) {
-									if (item.type === "/") {
+									if (item.type === '/') {
 										scan(item.id);
 									} else {
 										promises.push(request(`/${user._id.toString('base64url')}/${encodeForPipe(item.path)}`).then(response => {
@@ -100,10 +100,18 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, "/").rep
 						Promise.all(promises).then(() => {
 							archive.finalize();
 						});
+					} else if (req.url.includes('?')) {
+						// Strip the query so it doesn't bypass the cache.
+						request(req.path).then(response => {
+							response.pipe(res);
+							if (response.headers['content-length']) { // This condition is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
+								res.set('Content-Length', response.headers['content-length']);
+							}
+							res.status(response.statusCode).set('Content-Type', 'download' in req.query ? 'application/octet-stream' : response.headers['content-type']);
+						});
 					} else {
-						res.set("Content-Type", "download" in req.query ? "application/octet-stream" : item.type).set("Content-Length", item.size.toString());
+						res.set('Content-Type', item.type).set('Content-Length', item.size.toString());
 						bucket.file(`${userID.toString('base64url')}/${item.id}`).createReadStream().pipe(res);
-						// TODO: Catch and respond with errors.
 					}
 				} else {
 					res.sendStatus(404);
