@@ -40,6 +40,15 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 			let url = req.url.slice(1);
 			url = url.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
 			res.redirect(301, `https://file.garden/${url}`);
+		} if (req.url.includes('?')) {
+			// Strip the query so it doesn't bypass the cache.
+			request(req.path).then(response => {
+				response.pipe(res);
+				if (response.headers['content-length']) { // This condition is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
+					res.set('Content-Length', response.headers['content-length']);
+				}
+				res.status(response.statusCode).set('Content-Type', 'download' in req.query ? 'application/octet-stream' : response.headers['content-type']);
+			});
 		} else {
 			path = path.slice(1);
 			try {
@@ -99,15 +108,6 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 						scan(item.id);
 						Promise.all(promises).then(() => {
 							archive.finalize();
-						});
-					} else if (req.url.includes('?')) {
-						// Strip the query so it doesn't bypass the cache.
-						request(req.path).then(response => {
-							response.pipe(res);
-							if (response.headers['content-length']) { // This condition is necessary because Cloudflare removes the `Content-Length` header from dynamic content.
-								res.set('Content-Length', response.headers['content-length']);
-							}
-							res.status(response.statusCode).set('Content-Type', 'download' in req.query ? 'application/octet-stream' : response.headers['content-type']);
 						});
 					} else {
 						res.set('Content-Type', item.type).set('Content-Length', item.size.toString());
