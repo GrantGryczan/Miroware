@@ -107,14 +107,10 @@ const stringifyID = id => id.toString("base64url");
 const purgePipeCache = (user, items) => purgeCache(...items.flatMap(item => {
 	const encodedPath = encodeForPipe(item.path);
 	const userID = stringifyID(user._id);
-	const urls = [`https://file.garden/${userID}/${encodedPath}`, `https://cache.file.garden/${userID}/${encodedPath}`];
+	const urls = [`https://file.garden/${userID}/${encodedPath}`];
 	for (let slashIndex = encodedPath.indexOf("/"); slashIndex !== -1; slashIndex = encodedPath.indexOf("/", slashIndex + 1)) {
 		const slicedPath = encodedPath.slice(0, slashIndex);
-		urls.push(`https://file.garden/${userID}/${slicedPath}`, `https://cache.file.garden/${userID}/${slicedPath}`);
-	}
-	if (encodedPath.endsWith("/index.html") || encodedPath === "index.html") {
-		const slicedPath = encodedPath.slice(0, encodedPath.lastIndexOf("/") + 1);
-		urls.push(`https://file.garden/${userID}/${slicedPath}`, `https://cache.file.garden/${userID}/${slicedPath}`);
+		urls.push(`https://file.garden/${userID}/${slicedPath}`);
 	}
 	return urls;
 }));
