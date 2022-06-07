@@ -4,7 +4,7 @@
 			"item": "minecraft:name_tag"
 		},
 		"title": "Name Colors     ",
-		"description": ["",{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger color","color":"COLOR_2"},{"text":" to list the colors you can give to your username.","color":"COLOR_1"}],
+		"description": ["",{"text":"Enter","color":"COLOR_3"},{"text":" ","color":"COLOR_1"},{"text":"/trigger color","color":"COLOR_2"},{"text":" to list the colors you can set your name to.","color":"COLOR_1"}],
 		"show_toast": false,
 		"announce_to_chat": false
 	},
