@@ -772,8 +772,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		});
 	};
-	// TODO: Uncomment this.
-	// setInterval(hourly, 1000 * 60 * 60);
-	// hourly();
+	setInterval(hourly, 1000 * 60 * 60);
+	hourly();
 	const {load} = cube;
 })();
