@@ -22,6 +22,7 @@
 	"dependencies": {
 		"@google-cloud/storage": "^5.18.2",
 		"archiver": "^3.1.1",
+		"aws-sdk": "^2.1209.0",
 		"babel-plugin-iife-wrap": "^1.1.0",
 		"body-parser": "^1.19.0",
 		"bson-ext": "^2.0.3",

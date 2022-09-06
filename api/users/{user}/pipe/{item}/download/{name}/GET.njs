@@ -34,13 +34,22 @@ if (found) {
 					if (item.type === "/") {
 						scan(item.id);
 					} else {
-						promises.push(
-							bucket.file(`${userIDString}/${item.id}`).download().then(([buffer]) => {
-								archive.append(buffer, {
+						promises.push(new Promise((resolve, reject) => {
+							s3.getObject({
+								Bucket: "file-garden",
+								Key: `${userIDString}/${item.id}`
+							}, (err, data) => {
+								if (err) {
+									reject(err);
+									return;
+								}
+
+								archive.append(data.Body, {
 									name: item.path.slice(sliceStart)
 								});
-							})
-						);
+								resolve();
+							});
+						}));
 					}
 				}
 			}
@@ -48,16 +57,20 @@ if (found) {
 		scan(found.id);
 		Promise.all(promises).then(archive.finalize.bind(archive));
 	} else {
-		bucket.file(`${user._id.toString('base64url')}/${found.id}`).download().then(([buffer]) => {
-			this.res.set("Content-Type", "application/octet-stream");
-			this.value = buffer;
-		}).catch(error => {
-			console.error(error);
-			this.value = {
-				error: error.message
-			};
-			this.status = error.code;
-		}).finally(() => {
+		s3.getObject({
+			Bucket: "file-garden",
+			Key: `${user._id.toString('base64url')}/${found.id}`
+		}, (err, data) => {
+			if (err) {
+				console.error(err);
+				this.value = {
+					error: err.message
+				};
+				this.status = err.statusCode;
+			} else {
+				this.res.set("Content-Type", "application/octet-stream");
+				this.value = data.Body;
+			}
 			this.done();
 		});
 	}

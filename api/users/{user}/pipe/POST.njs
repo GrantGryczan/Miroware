@@ -199,26 +199,33 @@ if (isMe) {
 			body = this.req.body;
 		}
 		const id = ObjectID().toString('base64url');
-		bucket.file(`${user._id.toString('base64url')}/${id}`).save(body).then(() => {
-			this.update.$push = {
-				pipe: this.value = {
-					id,
-					date: Date.now(),
-					parent: data.parent,
-					name: data.name,
-					path: parent ? `${parent.path}/${data.name}` : data.name,
-					type: type,
-					size: body.length,
-					privacy: data.privacy
-				}
-			};
-		}).catch(error => {
-			console.error(error);
-			this.value = {
-				error: error.message
-			};
-			this.status = error.code || 422;
-		}).finally(() => {
+		s3.putObject({
+			Bucket: "miroware-pipe",
+			StorageClass: 'INTELLIGENT_TIERING',
+			Key: `${user._id.toString('base64url')}/${id}`,
+			ContentLength: body.length,
+			Body: body
+		}, err => {
+			if (err) {
+				console.error(err);
+				this.value = {
+					error: err.message
+				};
+				this.status = err.statusCode || 422;
+			} else {
+				this.update.$push = {
+					pipe: this.value = {
+						id,
+						date: Date.now(),
+						parent: data.parent,
+						name: data.name,
+						path: parent ? `${parent.path}/${data.name}` : data.name,
+						type: type,
+						size: body.length,
+						privacy: data.privacy
+					}
+				};
+			}
 			if (this.value.parent === "trash") {
 				this.value.trashed = Date.now();
 				this.value.restore = null;

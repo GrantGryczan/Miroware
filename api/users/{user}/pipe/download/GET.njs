@@ -23,26 +23,44 @@ if (this.req.query.items) {
 							if (item.type === "/") {
 								scan(item.id);
 							} else {
-								promises.push(
-									bucket.file(`${userIDString}/${item.id}`).download().then(([buffer]) => {
-										archive.append(buffer, {
+								promises.push(new Promise((resolve, reject) => {
+									s3.getObject({
+										Bucket: "file-garden",
+										Key: `${userIDString}/${item.id}`
+									}, (err, data) => {
+										if (err) {
+											reject(err);
+											return;
+										}
+
+										archive.append(data.Body, {
 											name: item.path.slice(sliceStart)
 										});
-									})
-								);
+										resolve();
+									});
+								}));
 							}
 						}
 					}
 				};
 				scan(found.id);
 			} else {
-				promises.push(
-					bucket.file(`${userIDString}/${found.id}`).download().then(([buffer]) => {
-						archive.append(buffer, {
+				promises.push(new Promise((resolve, reject) => {
+					s3.getObject({
+						Bucket: "file-garden",
+						Key: `${userIDString}/${found.id}`
+					}, (err, data) => {
+						if (err) {
+							reject(err);
+							return;
+						}
+
+						archive.append(data.Body, {
 							name: found.name
 						});
-					})
-				);
+						resolve();
+					});
+				}));
 			}
 		}
 	}
