@@ -113,14 +113,14 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 						});
 					} else {
 						s3.getObject({
-							Bucket: "miroware-pipe",
+							Bucket: 'file-garden',
 							Key: item.id
 						}, (err, data) => {
 							if (err) {
 								console.error(err);
 								res.status(err.statusCode).send(err.message);
 							} else {
-								res.set("Content-Type", "download" in req.query ? "application/octet-stream" : item.type).set("Content-Length", data.Body.length.toString()).send(data.Body);
+								res.set('Content-Type', 'download' in req.query ? 'application/octet-stream' : item.type).set('Content-Length', data.Body.length.toString()).send(data.Body);
 							}
 						});
 					}

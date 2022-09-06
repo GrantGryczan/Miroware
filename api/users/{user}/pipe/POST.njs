@@ -200,7 +200,7 @@ if (isMe) {
 		}
 		const id = ObjectID().toString('base64url');
 		s3.putObject({
-			Bucket: "miroware-pipe",
+			Bucket: "file-garden",
 			StorageClass: 'INTELLIGENT_TIERING',
 			Key: `${user._id.toString('base64url')}/${id}`,
 			ContentLength: body.length,
