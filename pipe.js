@@ -83,6 +83,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 				}
 				const item = user.pipe.find(item => item.path === path && item.privacy !== 2);
 				if (item) {
+					const userIDString = user._id.toString('base64url')
 					if (item.type === '/') {
 						res.set('Content-Type', 'application/zip');
 						const archive = archiver('zip');
@@ -98,7 +99,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 									if (item.type === '/') {
 										scan(item.id);
 									} else {
-										promises.push(request(`/${user._id.toString('base64url')}/${encodeForPipe(item.path)}`).then(response => {
+										promises.push(request(`/${userIDString}/${encodeForPipe(item.path)}`).then(response => {
 											archive.append(response, {
 												name: item.path.slice(sliceStart)
 											});
@@ -114,7 +115,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 					} else {
 						s3.getObject({
 							Bucket: 'file-garden',
-							Key: item.id
+							Key: `${userIDString}/${item.id}`
 						}, (err, data) => {
 							if (err) {
 								console.error(err);
