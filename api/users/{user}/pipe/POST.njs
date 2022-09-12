@@ -171,7 +171,7 @@ if (isMe) {
 				body = await response.buffer();
 				if (body.length > 100 * 1024 * 1024) { // 100 MiB
 					this.value = {
-						error: "Files larger than 100 MiB are currently not supported due to technical limitations. Sorry!"
+						error: "Files larger than 100 MiB require a paid subscription."
 					};
 					this.status = 422;
 					this.done();
