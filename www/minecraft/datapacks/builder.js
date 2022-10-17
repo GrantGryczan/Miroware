@@ -4,6 +4,18 @@ let id = process.cwd().replace(/\\/g, "/");
 id = id.slice(id.lastIndexOf("/") + 1);
 const packFormats = [
 	{
+		id: 10,
+		versions: ["1.19"]
+	},
+	{
+		id: 9,
+		versions: ["1.18"]
+	},
+	{
+		id: 7,
+		versions: ["1.17"]
+	},
+	{
 		id: 7,
 		versions: ["1.17"]
 	},
@@ -132,7 +144,7 @@ module.exports = {
 					break;
 				}
 			}
-			await fs.writeFile(`${path}/pack.mcmeta`, `{\n\t"pack": {\n\t\t"pack_format": ${packFormat},\n\t\t"description": [{"text":${JSON.stringify(`${config.pack.name}`)},"color":"gold"},{"text":"\\nvanillatweaks.net","color":"yellow"}]\n\t}\n}\n`);
+			await fs.writeFile(`${path}/pack.mcmeta`, `{\n\t"pack": {\n\t\t"pack_format": ${packFormat},\n\t\t"description": [{"text":${JSON.stringify(`${config.pack.name}`)},"color":"gold"},{"text":"\\nvanillatweaks.net","color":"yellow"}]\n\t}\n}`);
 			const metadataPath = `../../../../../../VanillaTweaks/resources/json/${version}/dpcategories.json`;
 			await fs.writeFile(metadataPath, (await fs.readFile(metadataPath, "utf8")).replace(new RegExp(`((\\n\\t+)"name": "${name}",(?:\\2.+,)*\\2"version": )"[^"]+"`), `$1"${config.pack.version}"`));
 		})()))
