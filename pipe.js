@@ -8,8 +8,8 @@ const { MongoClient, ObjectId } = require('mongodb');
 const AWS = require('aws-sdk');
 const archiver = require('archiver');
 const youKnow = require('./secret/youknow.js');
-const s3 = new AWS.S3({
-	credentials: new AWS.Credentials(youKnow.s3),
+const b2 = new AWS.S3({
+	credentials: new AWS.Credentials(youKnow.b2),
 	sslEnabled: true
 });
 const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').replace(/%40/g, '@');
@@ -113,7 +113,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 							archive.finalize();
 						});
 					} else {
-						s3.getObject({
+						b2.getObject({
 							Bucket: 'file-garden',
 							Key: `${userIDString}/${item.id}`
 						}, (err, data) => {

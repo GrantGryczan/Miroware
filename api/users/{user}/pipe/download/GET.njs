@@ -24,7 +24,7 @@ if (this.req.query.items) {
 								scan(item.id);
 							} else {
 								promises.push(new Promise((resolve, reject) => {
-									s3.getObject({
+									b2.getObject({
 										Bucket: "file-garden",
 										Key: `${userIDString}/${item.id}`
 									}, (err, data) => {
@@ -46,7 +46,7 @@ if (this.req.query.items) {
 				scan(found.id);
 			} else {
 				promises.push(new Promise((resolve, reject) => {
-					s3.getObject({
+					b2.getObject({
 						Bucket: "file-garden",
 						Key: `${userIDString}/${found.id}`
 					}, (err, data) => {

@@ -25,9 +25,11 @@ const transporter = nodemailer.createTransport({
 	path: "/usr/sbin/sendmail"
 });
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
-const s3 = new AWS.S3({
-	credentials: new AWS.Credentials(youKnow.s3),
-	sslEnabled: true
+const b2 = new AWS.S3({
+	credentials: new AWS.Credentials(youKnow.b2),
+	sslEnabled: true,
+	endpoint: 's3.us-west-004.backblazeb2.com',
+	region: 'us-west-004'
 });
 const byID = ({id}) => id;
 const pipeFiles = item => item.type !== "/";
@@ -511,7 +513,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}));
 		const deleteMore = () => {
 			if (objects.length) {
-				s3.deleteObjects({
+				b2.deleteObjects({
 					Bucket: "file-garden",
 					Delete: {
 						Objects: objects.splice(0, 100)
@@ -592,7 +594,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 				resolve();
 			}
 		} else {
-			s3.deleteObject({
+			b2.deleteObject({
 				Bucket: "file-garden",
 				Key: `${userIDString}/${item.id}`
 			}, err => {

@@ -9,7 +9,7 @@ if (isMe) {
 			this.status = 404;
 			this.done();
 		} else {
-			s3.getObject({
+			b2.getObject({
 				Bucket: "file-garden",
 				Key: `${user._id.toString('base64url')}/${found.id}`
 			}, (err, data) => {

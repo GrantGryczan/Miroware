@@ -199,7 +199,7 @@ if (isMe) {
 			body = this.req.body;
 		}
 		const id = ObjectID().toString('base64url');
-		s3.putObject({
+		b2.putObject({
 			Bucket: "file-garden",
 			StorageClass: 'INTELLIGENT_TIERING',
 			Key: `${user._id.toString('base64url')}/${id}`,

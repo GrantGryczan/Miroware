@@ -35,7 +35,7 @@ if (found) {
 						scan(item.id);
 					} else {
 						promises.push(new Promise((resolve, reject) => {
-							s3.getObject({
+							b2.getObject({
 								Bucket: "file-garden",
 								Key: `${userIDString}/${item.id}`
 							}, (err, data) => {
@@ -57,7 +57,7 @@ if (found) {
 		scan(found.id);
 		Promise.all(promises).then(archive.finalize.bind(archive));
 	} else {
-		s3.getObject({
+		b2.getObject({
 			Bucket: "file-garden",
 			Key: `${user._id.toString('base64url')}/${found.id}`
 		}, (err, data) => {
