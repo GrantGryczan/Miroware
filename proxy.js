@@ -32,7 +32,7 @@ const disableMaintenance = () => {
 	maintenance = '';
 };
 const listener = (req, res) => {
-	if (maintenance && !req.headers.host.endsWith(".gg") && !req.headers.host.endsWith(".gold") && !(
+	if (maintenance && !req.headers.host?.endsWith(".gg") && !req.headers.host?.endsWith(".gold") && !(
 		req.headers.cookie && req.headers.cookie.includes(maintenance)
 	)) {
 		res.writeHead(req.method === 'OPTIONS' ? 200 : 503, {
@@ -48,7 +48,7 @@ const listener = (req, res) => {
 		}).end(
 			req.method === 'OPTIONS'
 				? undefined
-				: 'Miroware is undergoing brief maintenance. Please be patient.'
+				: 'Miroware is undergoing brief maintenance. Sorry for the inconvenience.'
 		);
 		return;
 	}
