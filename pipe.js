@@ -5,11 +5,11 @@ const http = require('http');
 const https = require('https');
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
-const AWS = require('aws-sdk');
+const { S3 } = require('@aws-sdk/client-s3');
 const archiver = require('archiver');
 const youKnow = require('./secret/youknow.js');
-const b2 = new AWS.S3({
-	credentials: new AWS.Credentials(youKnow.b2),
+const b2 = new S3({
+	credentials: youKnow.b2,
 	sslEnabled: true,
 	endpoint: 's3.us-west-004.backblazeb2.com',
 	region: 'us-west-004'

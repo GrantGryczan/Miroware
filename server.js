@@ -9,7 +9,7 @@ const mime = require("mime");
 const { MongoClient, ObjectID } = require("mongodb");
 const nodemailer = require("nodemailer");
 const { OAuth2Client } = require("google-auth-library");
-const AWS = require("aws-sdk");
+const { S3 } = require("@aws-sdk/client-s3");
 const archiver = require("archiver");
 const youKnow = require("./secret/youknow.js");
 const production = process.argv[2] === "production";
@@ -25,8 +25,8 @@ const transporter = nodemailer.createTransport({
 	path: "/usr/sbin/sendmail"
 });
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
-const b2 = new AWS.S3({
-	credentials: new AWS.Credentials(youKnow.b2),
+const b2 = new S3({
+	credentials: youKnow.b2,
 	sslEnabled: true,
 	endpoint: 's3.us-west-004.backblazeb2.com',
 	region: 'us-west-004'
