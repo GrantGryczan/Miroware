@@ -88,8 +88,7 @@ const purgeCache = async (...files) => {
 				await fetch(`https://api.cloudflare.com/client/v4/zones/${youKnow.cloudflare.zone}/purge_cache`, {
 					method: "POST",
 					headers: {
-						"X-Auth-Email": youKnow.cloudflare.email,
-						"X-Auth-Key": youKnow.cloudflare.key,
+						"Authorization": youKnow.cloudflare.auth,
 						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({
