@@ -11,7 +11,7 @@ const youKnow = require('./secret/youknow.js');
 const b2 = new S3({
 	credentials: youKnow.b2,
 	sslEnabled: true,
-	endpoint: 's3.us-west-004.backblazeb2.com',
+	endpoint: 'https://s3.us-west-004.backblazeb2.com',
 	region: 'us-west-004'
 });
 const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').replace(/%40/g, '@');

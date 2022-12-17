@@ -28,7 +28,7 @@ const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const b2 = new S3({
 	credentials: youKnow.b2,
 	sslEnabled: true,
-	endpoint: 's3.us-west-004.backblazeb2.com',
+	endpoint: 'https://s3.us-west-004.backblazeb2.com',
 	region: 'us-west-004'
 });
 const byID = ({id}) => id;
