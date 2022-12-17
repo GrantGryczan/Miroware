@@ -10,7 +10,9 @@ const archiver = require('archiver');
 const youKnow = require('./secret/youknow.js');
 const b2 = new AWS.S3({
 	credentials: new AWS.Credentials(youKnow.b2),
-	sslEnabled: true
+	sslEnabled: true,
+	endpoint: 's3.us-west-004.backblazeb2.com',
+	region: 'us-west-004'
 });
 const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').replace(/%40/g, '@');
 (async () => {
