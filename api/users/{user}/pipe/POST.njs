@@ -201,7 +201,7 @@ if (isMe) {
 		const id = ObjectID().toString('base64url');
 		b2.putObject({
 			Bucket: "file-garden",
-			StorageClass: 'INTELLIGENT_TIERING',
+			// StorageClass: 'INTELLIGENT_TIERING',
 			Key: `${user._id.toString('base64url')}/${id}`,
 			ContentLength: body.length,
 			Body: body
