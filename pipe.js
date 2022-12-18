@@ -99,8 +99,8 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 					if (item.type === '/') {
 						res.set('Content-Type', 'application/zip');
 						const archive = archiver('zip');
-						archive.on('error', err => {
-							throw err;
+						archive.on('error', error => {
+							throw error;
 						});
 						archive.pipe(res);
 						const sliceStart = path.length + 1; // Change `path.length` to `path.lastIndexOf('/')` to put the folder inside of the ZIP instead of having the ZIP be the folder itself.
@@ -111,8 +111,8 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 									if (item.type === '/') {
 										scan(item.id);
 									} else {
-										promises.push(getB2(`/${userIDString}/${encodeForPipe(item.path)}`).then(response => {
-											archive.append(response.data, {
+										promises.push(getB2(`/${userIDString}/${item.id}`).then(({ data }) => {
+											archive.append(data, {
 												name: item.path.slice(sliceStart)
 											});
 										}));
