@@ -9,20 +9,17 @@ if (isMe) {
 			this.status = 404;
 			this.done();
 		} else {
-			b2.getObject({
-				Bucket: "file-garden",
-				Key: `${user._id.toString('base64url')}/${found.id}`
-			}, (err, data) => {
-				if (err) {
-					console.error(err);
-					this.value = {
-						error: err.message
-					};
-					this.status = err.statusCode;
-				} else {
-					this.res.set("Content-Type", found.type);
-					this.value = data.Body;
-				}
+			getB2(`${user._id.toString('base64url')}/${found.id}`).then(({ data }) => {
+				this.res.set("Content-Type", found.type);
+				data.pipe(this.res);
+				this.noSend = true;
+			}).catch(error => {
+				console.error(error);
+				this.value = {
+					error: error.message
+				};
+				this.status = error.statusCode;
+			}).finally(() => {
 				this.done();
 			});
 		}

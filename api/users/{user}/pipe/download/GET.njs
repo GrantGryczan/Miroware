@@ -24,20 +24,12 @@ if (this.req.query.items) {
 								scan(item.id);
 							} else {
 								promises.push(new Promise((resolve, reject) => {
-									b2.getObject({
-										Bucket: "file-garden",
-										Key: `${userIDString}/${item.id}`
-									}, (err, data) => {
-										if (err) {
-											reject(err);
-											return;
-										}
-
-										archive.append(data.Body, {
+									getB2(`${userIDString}/${item.id}`).then(({ data }) => {
+										archive.append(data, {
 											name: item.path.slice(sliceStart)
 										});
 										resolve();
-									});
+									}).catch(reject);
 								}));
 							}
 						}
@@ -46,20 +38,12 @@ if (this.req.query.items) {
 				scan(found.id);
 			} else {
 				promises.push(new Promise((resolve, reject) => {
-					b2.getObject({
-						Bucket: "file-garden",
-						Key: `${userIDString}/${found.id}`
-					}, (err, data) => {
-						if (err) {
-							reject(err);
-							return;
-						}
-
-						archive.append(data.Body, {
+					getB2(`${userIDString}/${found.id}`).then(({ data }) => {
+						archive.append(data, {
 							name: found.name
 						});
 						resolve();
-					});
+					}).catch(reject);
 				}));
 			}
 		}

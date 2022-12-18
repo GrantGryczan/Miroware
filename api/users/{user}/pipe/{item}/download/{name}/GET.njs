@@ -35,20 +35,12 @@ if (found) {
 						scan(item.id);
 					} else {
 						promises.push(new Promise((resolve, reject) => {
-							b2.getObject({
-								Bucket: "file-garden",
-								Key: `${userIDString}/${item.id}`
-							}, (err, data) => {
-								if (err) {
-									reject(err);
-									return;
-								}
-
-								archive.append(data.Body, {
+							getB2(`${userIDString}/${item.id}`).then(({ data }) => {
+								archive.append(data, {
 									name: item.path.slice(sliceStart)
 								});
 								resolve();
-							});
+							}).catch(reject);
 						}));
 					}
 				}
@@ -57,20 +49,17 @@ if (found) {
 		scan(found.id);
 		Promise.all(promises).then(archive.finalize.bind(archive));
 	} else {
-		b2.getObject({
-			Bucket: "file-garden",
-			Key: `${user._id.toString('base64url')}/${found.id}`
-		}, (err, data) => {
-			if (err) {
-				console.error(err);
-				this.value = {
-					error: err.message
-				};
-				this.status = err.statusCode;
-			} else {
-				this.res.set("Content-Type", "application/octet-stream");
-				this.value = data.Body;
-			}
+		getB2(`${user._id.toString('base64url')}/${found.id}`).then(({ data }) => {
+			this.res.set("Content-Type", "application/octet-stream");
+			data.pipe(this.res);
+			this.noSend = true;
+		}).catch(error => {
+			console.error(error);
+			this.value = {
+				error: error.message
+			};
+			this.status = error.statusCode;
+		}).finally(() => {
 			this.done();
 		});
 	}

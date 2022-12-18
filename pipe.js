@@ -112,7 +112,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 										scan(item.id);
 									} else {
 										promises.push(getB2(`/${userIDString}/${encodeForPipe(item.path)}`).then(response => {
-											archive.append(response, {
+											archive.append(response.data, {
 												name: item.path.slice(sliceStart)
 											});
 										}));

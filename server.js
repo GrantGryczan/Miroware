@@ -139,6 +139,38 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		domain: cookieOptions.domain,
 		path: cookieOptions.path
 	};
+
+	let b2Authorization;
+	const AUTHORIZATION_PERIOD = 1000 * 60 * 60 * 24 * 7;
+	const authorizeB2 = async () => {
+		const { data } = await axios.get('https://api.backblazeb2.com/b2api/v2/b2_authorize_account', {
+			auth: {
+				username: youKnow.b2.auth.accessKeyId,
+				password: youKnow.b2.auth.secretAccessKey
+			}
+		});
+
+		const { data: data2 } = await axios.post(`${data.apiUrl}/b2api/v2/b2_get_download_authorization`, {
+			bucketId: youKnow.b2.bucketID,
+			fileNamePrefix: '',
+			validDurationInSeconds: AUTHORIZATION_PERIOD / 1000
+		}, {
+			headers: {
+				Authorization: data.authorizationToken
+			}
+		});
+
+		b2Authorization = data2.authorizationToken;
+	};
+	await authorizeB2();
+	setInterval(authorizeB2, AUTHORIZATION_PERIOD - 1000 * 60 * 10);
+	const getB2 = path => axios.get(`https://b2.filegarden.com/${path}`, {
+		responseType: 'stream',
+		headers: {
+			Authorization: b2Authorization
+		}
+	});
+
 	const parseUser = context => new Promise(async resolve => {
 		let {user} = context;
 		const isMe = user && context.params.user === String(user._id);
