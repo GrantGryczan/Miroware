@@ -7,17 +7,6 @@ const { MongoClient, ObjectId } = require('mongodb');
 const archiver = require('archiver');
 const youKnow = require('./secret/youknow.js');
 const axios = require('axios');
-let b2Authorization;
-const authorizeB2 = async () => {
-	const { data } = await axios.get('https://api.backblazeb2.com/b2api/v2/b2_authorize_account', {
-		auth: {
-			username: youKnow.b2.accessKeyId,
-			password: youKnow.b2.secretAccessKey
-		}
-	});
-
-	b2Authorization = data.authorizationToken;
-};
 const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').replace(/%40/g, '@');
 (async () => {
 	require('replthis')(v => eval(v));
@@ -25,15 +14,40 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 		useUnifiedTopology: true
 	})).db('web');
 	const users = db.collection('users');
+
+	let b2Authorization;
+	const AUTHORIZATION_PERIOD = 1000 * 60 * 60 * 24 * 7;
+	const authorizeB2 = async () => {
+		const { data } = await axios.get('https://api.backblazeb2.com/b2api/v2/b2_authorize_account', {
+			auth: {
+				username: youKnow.b2.auth.accessKeyId,
+				password: youKnow.b2.auth.secretAccessKey
+			}
+		});
+
+		const { data: data2 } = await axios.post(`${data.apiUrl}/b2api/v2/b2_get_download_authorization`, {
+			bucketId: youKnow.b2.bucketID,
+			fileNamePrefix: '',
+			validDurationInSeconds: AUTHORIZATION_PERIOD / 1000
+		}, {
+			headers: {
+				Authorization: data.authorizationToken
+			}
+		});
+
+		b2Authorization = data2.authorizationToken;
+	};
 	await authorizeB2();
-	const app = express();
-	app.disable('X-Powered-By');
+	setInterval(authorizeB2, AUTHORIZATION_PERIOD - 1000 * 60 * 10);
 	const getB2 = path => axios.get(`https://b2.filegarden.com/${path}`, {
 		responseType: 'stream',
 		headers: {
 			Authorization: b2Authorization
 		}
 	});
+
+	const app = express();
+	app.disable('X-Powered-By');
 	app.get('*', async (req, res) => {
 		let path = req.path;
 		if (path === '/') {

@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
 });
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const b2 = new S3({
-	credentials: youKnow.b2,
+	credentials: youKnow.b2.auth,
 	sslEnabled: true,
 	endpoint: 'https://s3.us-west-004.backblazeb2.com',
 	region: 'us-west-004'
