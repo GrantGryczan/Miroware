@@ -2,10 +2,8 @@
 console.log('< Pipe >')
 const fs = require('fs');
 const http = require('http');
-const https = require('https');
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
-const { S3 } = require('@aws-sdk/client-s3');
 const archiver = require('archiver');
 const youKnow = require('./secret/youknow.js');
 const axios = require('axios');
@@ -20,12 +18,6 @@ const authorizeB2 = async () => {
 
 	b2Authorization = data.authorizationToken;
 };
-const b2 = new S3({
-	credentials: youKnow.b2,
-	sslEnabled: true,
-	endpoint: 'https://s3.us-west-004.backblazeb2.com',
-	region: 'us-west-004'
-});
 const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').replace(/%40/g, '@');
 (async () => {
 	require('replthis')(v => eval(v));
@@ -36,14 +28,11 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 	await authorizeB2();
 	const app = express();
 	app.disable('X-Powered-By');
-	const request = path => new Promise(resolve => {
-		https.get({
-			hostname: 'b2.filegarden.com',
-			path,
-			headers: {
-				Authorization: b2Authorization
-			}
-		}, resolve);
+	const getB2 = path => axios.get(`https://b2.filegarden.com/${path}`, {
+		responseType: 'stream',
+		headers: {
+			Authorization: b2Authorization
+		}
 	});
 	app.get('*', async (req, res) => {
 		let path = req.path;
@@ -108,7 +97,7 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 									if (item.type === '/') {
 										scan(item.id);
 									} else {
-										promises.push(request(`/${userIDString}/${encodeForPipe(item.path)}`).then(response => {
+										promises.push(getB2(`/${userIDString}/${encodeForPipe(item.path)}`).then(response => {
 											archive.append(response, {
 												name: item.path.slice(sliceStart)
 											});
@@ -122,18 +111,13 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 							archive.finalize();
 						});
 					} else {
-						b2.getObject({
-							Bucket: 'file-garden',
-							Key: `${userIDString}/${item.id}`
-						}, (err, data) => {
-							if (err) {
-								console.error(err);
-								res.status(err.statusCode).send(err.message);
-							} else {
-								res.set('Content-Type', 'download' in req.query ? 'application/octet-stream' : item.type);
-								res.set('Content-Length', data.ContentLength);
-								data.Body.pipe(res);
-							}
+						getB2(`${userIDString}/${item.id}`).then(response => {
+							res.set('Content-Type', 'download' in req.query ? 'application/octet-stream' : item.type);
+							res.set('Content-Length', response.headers['content-length']);
+							response.data.pipe(res);
+						}).catch(error => {
+							console.error(error);
+							res.status(error.statusCode).send(error.message);
 						});
 					}
 				} else {
