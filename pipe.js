@@ -7,7 +7,6 @@ const { MongoClient, ObjectId } = require('mongodb');
 const archiver = require('archiver');
 const youKnow = require('./secret/youknow.js');
 const axios = require('axios');
-const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').replace(/%40/g, '@');
 (async () => {
 	require('replthis')(v => eval(v));
 	const db = (await MongoClient.connect(youKnow.db, {
