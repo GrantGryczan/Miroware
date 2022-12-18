@@ -8,6 +8,18 @@ const { MongoClient, ObjectId } = require('mongodb');
 const { S3 } = require('@aws-sdk/client-s3');
 const archiver = require('archiver');
 const youKnow = require('./secret/youknow.js');
+const axios = require('axios');
+let b2Authorization;
+const authorizeB2 = async () => {
+	const { data } = await axios.get('https://api.backblazeb2.com/b2api/v2/b2_authorize_account', {
+		auth: {
+			username: youKnow.b2.accessKeyId,
+			password: youKnow.b2.secretAccessKey
+		}
+	});
+
+	b2Authorization = data.authorizationToken;
+};
 const b2 = new S3({
 	credentials: youKnow.b2,
 	sslEnabled: true,
@@ -21,12 +33,16 @@ const encodeForPipe = name => encodeURIComponent(name).replace(/%2f/gi, '/').rep
 		useUnifiedTopology: true
 	})).db('web');
 	const users = db.collection('users');
+	await authorizeB2();
 	const app = express();
 	app.disable('X-Powered-By');
 	const request = path => new Promise(resolve => {
 		https.get({
-			hostname: 'file.garden',
-			path
+			hostname: 'b2.filegarden.com',
+			path,
+			headers: {
+				Authorization: b2Authorization
+			}
 		}, resolve);
 	});
 	app.get('*', async (req, res) => {
