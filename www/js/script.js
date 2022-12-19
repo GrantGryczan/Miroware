@@ -424,15 +424,25 @@ const clickAuth = service => function() {
 		}
 	}).catch(catchAuth);
 };
+let currentGoogleCallback;
+const googleCallback = response => {
+	currentGoogleCallback(response);
+};
+let googleInitialized = false;
 const auths = {
 	Google: (resolve, reject) => {
-		gapi.load("auth2", () => {
-			gapi.auth2.init().then(auth2 => {
-				auth2.signIn().then(user => {
-					resolve(user.getAuthResponse().id_token);
-				}).catch(reject);
-			}).catch(reject);
-		});
+		currentGoogleCallback = ({ credential }) => {
+			resolve(credential);
+		};
+		if (!googleInitialized) {
+			const clientID = document.querySelector('meta[name="google-signin-client_id"]').content;
+			googleInitialized = true;
+			google.accounts.id.initialize({
+				client_id: clientID,
+				callback: googleCallback
+			});
+		}
+		google.accounts.id.prompt();
 	},
 	Discord: (resolve, reject) => {
 		const win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=${encodeURIComponent(location.origin)}%2Flogin%2Fdiscord%2F&response_type=code&scope=identify%20email`, "authDiscord");
