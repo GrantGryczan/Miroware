@@ -249,7 +249,7 @@ if (isMe) {
 	}
 } else {
 	this.value = {
-		error: "You do not have permission to access that user's pipe."
+		error: "You do not have permission to access that user's garden."
 	};
 	this.status = 403;
 }

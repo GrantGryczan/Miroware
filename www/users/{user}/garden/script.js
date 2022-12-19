@@ -1174,7 +1174,7 @@ if (Miro.data.isMe) {
 	};
 	const addFile = async (file, parent, name) => {
 		if (file.size > 100 * 1024 * 1024 /* 100 MiB */) {
-			new Miro.Dialog("Error", "You can't upload files above 100 MiB! It would clog the pipe!");
+			new Miro.Dialog("Error", "Currently, we don't support uploading files above 100 MiB.");
 			return;
 		}
 		if (!(name = await checkName(typeof name === "string" ? name : file.name, parent))) {

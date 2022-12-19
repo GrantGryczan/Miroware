@@ -1,5 +1,5 @@
 if (this.title === undefined) {
-	this.title = "Miroware";
+	this.title = "File Garden";
 }
 if (this.author === undefined) {
 	this.author = "Grant Gryczan";
@@ -27,7 +27,7 @@ this.value = html`
 		<meta name="keywords" content="$${["miroware", "miro", "ware", "grantgryczan", "grant", "gryczan", ...this.tags].join(",")}">
 		<meta name="theme-color" content="#202020">
 		<meta property="og:type" content="website">
-		<meta property="og:site_name" content="Miroware">
+		<meta property="og:site_name" content="File Garden">
 		<meta property="og:url" content="https://miroware.io$${this.req.decodedURL}">
 		<meta property="og:title" content="$${this.title}">
 		<meta property="og:image" content="$${this.image.includes("//") ? this.image : `https://miroware.io${(this.image.startsWith("/") ? "" : "/") + this.image}`}">

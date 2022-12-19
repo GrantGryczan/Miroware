@@ -165,7 +165,7 @@ if (isMe) {
 				const response = await fetch(data.url, {
 					method: "GET",
 					headers: {
-						"User-Agent": "Miroware"
+						"User-Agent": "File Garden"
 					}
 				});
 				body = await response.buffer();
@@ -236,7 +236,7 @@ if (isMe) {
 	}
 } else {
 	this.value = {
-		error: "You do not have permission to access that user's pipe."
+		error: "You do not have permission to access that user's garden."
 	};
 	this.status = 403;
 	this.done();

@@ -1,5 +1,5 @@
-this.title = "Account Verification";
-this.description = "Verify your Miroware account.";
+this.title = "Verify Email";
+this.description = "Verify your File Garden account.";
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;

@@ -239,14 +239,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		if (!set) {
 			set = user;
 		}
-		const verifyLink = `https://miroware.io/account/verification/?code=${encodeURIComponent(set.emailCode = crypto.randomBytes(50).toString("base64"))}`;
+		const verifyLink = `https://filegarden.com/account/verification/?code=${encodeURIComponent(set.emailCode = crypto.randomBytes(50).toString("base64"))}`;
 		transporter.sendMail({
-			from: "Miroware <bot@miroware.io>",
+			from: "File Garden <no-reply@filegarden.com>",
 			to: `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`,
-			subject: "Miroware / Account Verification",
-			text: "Verify your Miroware account.",
+			subject: "File Garden - Verify Email",
+			text: "Verify your File Garden account.",
 			html: html`
-				Click the following link to verify your Miroware account.<br>
+				Click the following link to verify your File Garden account.<br>
 				<a href="${verifyLink}">${verifyLink}</a>
 				<p>
 					<i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i>

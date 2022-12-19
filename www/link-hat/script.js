@@ -115,8 +115,8 @@ form.elements.val.addEventListener("change", () => {
 });
 const byValue = input => input.value;
 const response = Miro.response(xhr => {
-	const dialog = new Miro.Dialog("Concat", html`
-		Concat successfully saved!<br>
+	const dialog = new Miro.Dialog("Link Hat", html`
+		Link hat successfully saved!<br>
 		<div class="mdc-text-field spaced">
 			<input name="url" class="mdc-text-field__input" type="url" value="$${xhr.response.url}" readonly>
 			<div class="mdc-line-ripple"></div>
@@ -158,7 +158,7 @@ form.addEventListener("submit", evt => {
 			new Miro.Dialog("Error", "You must specify at least one URL.");
 		}
 	} else {
-		new Miro.Dialog("Error", "You must be logged in to create concats.", ["Log in", "Cancel"]).then(value => {
+		new Miro.Dialog("Error", "You must be logged in to create links.", ["Log in", "Cancel"]).then(value => {
 			if (value === 0) {
 				history.replaceState(0, "", `${location.pathname}?anon=${form.elements.anon.checked}&sub=${encodeURIComponent(form.elements.sub.value)}&val=${encodeURIComponent(form.elements.val.value)}&urls=${encodeURIComponent(urls.join(","))}`);
 				Miro.logIn();

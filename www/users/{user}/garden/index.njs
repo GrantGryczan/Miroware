@@ -1,6 +1,6 @@
-this.title = "Pipe";
-this.image = "/pipe/images/icon/full.png";
-this.icon = "/pipe/images/icon/cover.png";
+this.title = "File Garden";
+this.image = "/images/icon/full.png";
+this.icon = "/images/icon/cover.png";
 this.showAds = true;
 let {user} = this;
 const isMe = user && this.params.user === String(user._id);
@@ -26,7 +26,7 @@ if (user) {
 		isMe,
 		trashName: user.pipe.find(item => item.id === "trash").name
 	}
-	this.description = `View ${user.name}'s Pipe.`;
+	this.description = `View ${user.name}'s garden.`;
 } else {
 	Object.assign(this, await load("error/404", this));
 	this.done();
@@ -34,7 +34,7 @@ if (user) {
 }
 this.value = (await load("load/head", this)).value;
 this.value += html`
-		<link rel="stylesheet" href="/users/{user}/pipe/style.css">`;
+		<link rel="stylesheet" href="/users/{user}/garden/style.css">`;
 this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
@@ -49,7 +49,7 @@ this.value += html`
 						</div>
 						<div id="queuedItems" class="items"></div>${true || this.req.cookies.hidesurvey1 ? "" : html`
 						<div style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12);">
-							Hey, would you mind answering a one-minute poll about your interest in Pipe?
+							Hey, would you mind answering a one-minute poll about your interest in File Garden?
 							<a href="https://forms.gle/UtYpPXPrVFEHkKer6" target="_blank">Click here.</a><br>
 							<br>
 							<a class="transparent" href="javascript:;" onclick="this.parentNode.parentNode.removeChild(this.parentNode); document.cookie = 'hidesurvey1=1;path=/;expires=' + new Date(Date.now() + 30*24*60*60*1000).toUTCString();">Hide</a>
@@ -109,8 +109,8 @@ this.value += html`
 					<div class="property hidden" data-key="privacy">
 						<div class="mdc-select spaced">
 							<select id="privacy" name="privacy" class="mdc-select__native-control" required>
-								<option value="0" title="Visible in your Pipe to everyone">Public</option>
-								<option value="1" title="Only visible in your Pipe to you but accessible by URL to anyone">Unlisted</option>
+								<option value="0" title="Visible to everyone in your garden">Public</option>
+								<option value="1" title="Only visible in your garden to you but accessible by URL to anyone">Unlisted</option>
 								<option value="2" title="Only accessible to you">Private</option>
 							</select>
 							<div class="arrow"></div>
@@ -132,6 +132,6 @@ this.value += html`
 this.value += (await load("load/belt", this)).value;
 this.value += html`
 		<div id="targetIndicator"></div>
-		<script src="/users/{user}/pipe/script.js"></script>`;
+		<script src="/users/{user}/garden/script.js"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();

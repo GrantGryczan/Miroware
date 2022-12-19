@@ -5,12 +5,12 @@ if (testEmail(this.req.body.email)) {
 	if (user) {
 		const password = crypto.randomBytes(24).toString("base64");
 		transporter.sendMail({
-			from: "Miroware <bot@miroware.io>",
+			from: "File Garden <no-reply@filegarden.com>",
 			to: `${JSON.stringify(user.name)} <${user.email}>`,
-			subject: "Miroware / Forgot Login",
-			text: "Use this password to log into your Miroware account.",
+			subject: "File Garden - Forgot Login",
+			text: "Use this password to log into your File Garden account.",
 			html: html`
-				Use the below password to log into the Miroware account associated with <b>$${user.email}</b>.<br>
+				Use the below password to log into the File Garden account associated with <b>$${user.email}</b>.<br>
 				<b>$${password}</b><br>
 				It is recommended that you copy it to your clipboard to paste it into the password field.<br>
 				Once you use this password, it will be automatically disconnected.

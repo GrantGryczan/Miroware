@@ -1,4 +1,4 @@
-this.title = "Concat";
+this.title = "Link Hat";
 this.description = "Customize your own URLs on our domain to shorten, randomize, and redirect your links, free subdomains and paths included.";
 this.tags = ["concat", "url", "urls", "link", "links", "linked", "linking", "domain", "domains", "custom", "customize", "redirect", "free", "subdomain", "subdomains", "random", "randomize", "randomizer", "randomized", "image", "images"];
 this.showAds = true;
@@ -17,7 +17,7 @@ this.value += html`
 							<option value="" selected>New</option>
 						</select>
 						<div class="arrow"></div>
-						<label class="mdc-floating-label alwaysFloat" for="saves">Concat</label>
+						<label class="mdc-floating-label alwaysFloat" for="saves">Link</label>
 						<div class="mdc-line-ripple"></div>
 					</div>` : "")}
 					<div id="url">
@@ -69,7 +69,7 @@ this.value += html`
 									$sum: "$size"
 								}
 							}
-						}]).next()).count}</b> concats have been created in total!
+						}]).next()).count}</b> links have been created in total!
 					</div>
 				</form>`;
 this.value += (await load("load/pagefoot", this)).value;

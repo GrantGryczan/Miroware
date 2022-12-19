@@ -50,7 +50,7 @@ const axios = require('axios');
 	app.get('*', async (req, res) => {
 		let path = req.path;
 		if (path === '/') {
-			res.redirect(302, 'https://miroware.io/pipe/');
+			res.redirect(302, 'https://filegarden.com/');
 			return;
 		}
 		res.set('Access-Control-Allow-Origin', '*').set('Content-Security-Policy', 'default-src file.garden pipe.miroware.io linkh.at data: mediastream: blob: \'unsafe-inline\' \'unsafe-eval\'');

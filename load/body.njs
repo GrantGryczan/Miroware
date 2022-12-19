@@ -11,7 +11,7 @@ this.value = html`
 				<div class="mdc-drawer__content">
 					<nav class="mdc-list">
 						<a class="mdc-list-item${this.req.decodedPath === "/" ? " mdc-list-item--activated" : '" href="/'}">
-							<i class="mdc-list-item__graphic material-icons">home</i> <span class="mdc-list-item__text">Home</span>
+							<i class="mdc-list-item__graphic material-icons">home</i> <span class="mdc-list-item__text">Your Garden</span>
 						</a>`;
 if (this.user) {
 	const myProfile = `/users/${this.user._id}/`;
@@ -33,11 +33,8 @@ if (this.user) {
 }
 this.value += html`
 						<hr class="mdc-list-divider">
-						<a class="mdc-list-item${this.req.decodedPath === "/pipe/" ? " mdc-list-item--activated" : '" href="/pipe/'}">
-							<i class="mdc-list-item__graphic material-icons">upload_file</i> <span class="mdc-list-item__text">Pipe</span>
-						</a>
-						<a class="mdc-list-item${this.req.decodedPath === "/concat/" ? " mdc-list-item--activated" : '" href="/concat/'}">
-							<i class="mdc-list-item__graphic material-icons">link</i> <span class="mdc-list-item__text">Concat</span>
+						<a class="mdc-list-item${this.req.decodedPath === "/link-hat/" ? " mdc-list-item--activated" : '" href="/link-hat/'}">
+							<i class="mdc-list-item__graphic material-icons">link</i> <span class="mdc-list-item__text">Link Hat</span>
 						</a>
 						<a class="mdc-list-item${this.req.decodedPath === "/corrupt/" ? " mdc-list-item--activated" : '" href="/corrupt/'}">
 							<i class="mdc-list-item__graphic material-icons">broken_image</i> <span class="mdc-list-item__text">Corrupt</span>
@@ -47,7 +44,7 @@ this.value += html`
 						</a>
 						<hr class="mdc-list-divider">
 					</nav>
-					<div id="legal">© Miroware 2017-${new Date().getFullYear()}</div>`;
+					<div id="legal">© File Garden 2017-${new Date().getFullYear()}</div>`;
 this.value += (await load("load/external", this)).value;
 this.value += html`
 				</div>

@@ -1,6 +1,6 @@
 this.cache = true;
 this.title = "YouTube";
-this.description = "Watch Miroware's videos!";
+this.description = "Watch File Garden's videos!";
 this.tags = ["redirect", "link", "youtube", "channel"];
 this.value = (await load("load/head", this)).value;
 this.value += (await load("load/body", this)).value;

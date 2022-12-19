@@ -48,14 +48,14 @@ const listener = (req, res) => {
 		}).end(
 			req.method === 'OPTIONS'
 				? undefined
-				: 'Miroware is undergoing brief maintenance. Sorry for the inconvenience.'
+				: 'File Garden is undergoing brief maintenance. Sorry for the inconvenience.'
 		);
 		return;
 	}
 
 	let target = "http://localhost:8081";
 	if (req.headers.host) {
-		if (req.headers.host.endsWith(".garden") || req.headers.host.startsWith("pipe.")) {
+		if (req.headers.host.endsWith(".garden") || req.headers.host === "pipe.miroware.io") {
 			target = "http://localhost:8082";
 		} else if (req.headers.host.endsWith(".at") || req.headers.host.endsWith(".gg")) {
 			target = "http://localhost:8083";

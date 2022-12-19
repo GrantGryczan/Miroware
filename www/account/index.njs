@@ -2,7 +2,7 @@ if (notLoggedIn(this)) {
 	return;
 }
 this.title = "Account";
-this.description = "Do things about your Miroware account.";
+this.description = "Do stuff with your File Garden account.";
 this.tags = ["account", "user", "settings", "preferences", "options"];
 this.value = (await load("load/head", this)).value;
 this.value += (await load("load/body", this)).value;

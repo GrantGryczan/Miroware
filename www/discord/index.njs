@@ -1,6 +1,6 @@
 this.cache = true;
 this.title = "Discord";
-this.description = "Join Miroware's Discord community!";
+this.description = "Join File Garden's Discord community!";
 this.tags = ["redirect", "link", "discord", "invite", "invitation", "join"];
 this.value = (await load("load/head", this)).value;
 this.value += (await load("load/body", this)).value;

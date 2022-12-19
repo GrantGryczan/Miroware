@@ -1,6 +1,16 @@
-#wrapper {
-	padding: 512px 56px 56px 56px;
-	background-image: url(images/icon/cube.gif);
-	background-position: center top;
+.mdc-linear-progress .mdc-linear-progress__bar-inner {
+	background-color: #b4783c;
+}
+main {
+	text-align: center;
+}
+#cube {
+	height: 512px;
+	margin: 0 -45px;
+	background-image: url(/images/icon/cube.gif);
+	background-position: center;
 	background-repeat: no-repeat;
+}
+#details {
+	opacity: 0.4;
 }

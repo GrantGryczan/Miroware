@@ -4,7 +4,7 @@ if (this.user) {
 	return;
 }
 this.title = "Login";
-this.description = "Log into your Miroware account.";
+this.description = "Log into your File Garden account.";
 this.tags = ["login", "log", "in", "signup", "sign", "up", "signin", "into", "to", "account", "user", "create"];
 this.value = (await load("load/head", this)).value;
 this.value += html`

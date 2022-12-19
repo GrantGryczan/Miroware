@@ -10,7 +10,7 @@ if (isMe) {
 	};
 } else {
 	this.value = {
-		error: "You do not have permission to access that user's concats."
+		error: "You do not have permission to access that user's links."
 	};
 	this.status = 403;
 }
