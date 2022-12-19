@@ -228,7 +228,7 @@ const PipeItem = class PipeItem {
 	}
 	updateThumbnail() {
 		if (this.type.startsWith("image/")) {
-			this.thumbnailElement.style.backgroundImage = `url(${(this.isPrivate() ? `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${this.id}/content` : this.url).replace(quotationMarks, "%22").replace(apostrophes, "%27").replace(openingParentheses, "%28").replace(closingParentheses, "%29")}?v=${Date.now()})`;
+			this.thumbnailElement.style.backgroundImage = `url(${(this.isPrivate() ? `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/${this.id}/content` : this.url).replace(quotationMarks, "%22").replace(apostrophes, "%27").replace(openingParentheses, "%28").replace(closingParentheses, "%29")}?v=${Date.now()})`;
 		} else {
 			this.thumbnailElement.style.backgroundImage = "";
 			this.thumbnailElement.textContent = this.iconElement.textContent;
@@ -691,7 +691,7 @@ const updateProperties = () => {
 					trashInfo.textContent = `${daysUntilDeletion} day${daysUntilDeletion === 1 ? "" : "s"} until deletion`;
 					trashInfo.classList.remove("hidden");
 				}
-				actionDownload.href = `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/download/${encodeForPipe(item.name)}`;
+				actionDownload.href = `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/${item.id}/download/${encodeForPipe(item.name)}`;
 				actionDownload.classList.remove("hidden");
 				if (item.type !== "/") {
 					properties.elements.type._prev = properties.elements.type.value = item.type;
@@ -700,21 +700,21 @@ const updateProperties = () => {
 					property.type._label.classList.add("mdc-floating-label--float-above");
 					let showEmbedAction = notPrivate;
 					if (item.type.startsWith("image/")) {
-						previewImage.src = `${notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`}?v=${Date.now()}`;
+						previewImage.src = `${notPrivate ? item.url : `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/${item.id}/content`}?v=${Date.now()}`;
 						previewImage.classList.remove("hidden");
 						previewAudio.classList.add("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("audio/")) {
 						previewImage.classList.add("hidden");
-						previewAudio.src = `${notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`}?v=${Date.now()}`;
+						previewAudio.src = `${notPrivate ? item.url : `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/${item.id}/content`}?v=${Date.now()}`;
 						previewAudio.classList.remove("hidden");
 						previewVideo.classList.add("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type.startsWith("video/")) {
 						previewImage.classList.add("hidden");
 						previewAudio.classList.add("hidden");
-						previewVideo.src = `${notPrivate ? item.url : `https://api.miroware.io/users/${Miro.data.user.id}/pipe/${item.id}/content`}?v=${Date.now()}`;
+						previewVideo.src = `${notPrivate ? item.url : `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/${item.id}/content`}?v=${Date.now()}`;
 						previewVideo.classList.remove("hidden");
 						property.preview.classList.remove("hidden");
 					} else if (item.type !== "text/html") {
@@ -726,7 +726,7 @@ const updateProperties = () => {
 				}
 			}
 		} else if (trashDeselected) {
-			actionDownload.href = `https://api.miroware.io/users/${Miro.data.user.id}/pipe/download?items=${Array.prototype.map.call(selected, itemElement => itemElement._item.id).join(",")}`;
+			actionDownload.href = `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/download?items=${Array.prototype.map.call(selected, itemElement => itemElement._item.id).join(",")}`;
 			actionDownload.classList.remove("hidden");
 		}
 		if (Miro.data.isMe) {

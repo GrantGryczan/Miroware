@@ -126,7 +126,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		useUnifiedTopology: true
 	})).db("web");
 	const users = db.collection("users");
-	const domain = production ? "miroware.io" : "localhost:8081";
+	const domain = production ? "filegarden.com" : "localhost:8081";
 	const TOKEN_SUPER_COOLDOWN = 5 * 60 * 1000;
 	const cookieOptions = {
 		domain: `.${production ? domain : "localhost"}`,
@@ -287,7 +287,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 					context.done();
 				});
 			} else if (connection[0] === "Discord") {
-				let redirect_uri = context.req.get("Referrer") || "https://miroware.io/";
+				let redirect_uri = context.req.get("Referrer") || "https://filegarden.com/";
 				const pathIndex = redirect_uri.indexOf("/", redirect_uri.indexOf("//") + 2);
 				if (pathIndex !== -1) {
 					redirect_uri = `${redirect_uri.slice(0, pathIndex)}/login/discord/`;

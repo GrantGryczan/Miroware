@@ -324,7 +324,7 @@ Miro.response = (success, failure) => async xhr => {
 		await new Miro.Dialog("Error", html`${error}`);
 	}
 };
-const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.miroware.io";
+const apiOrigin = location.origin.includes("localhost") ? "http://api.localhost:8081" : "https://api.filegarden.com";
 let loadingQueue = 0;
 Miro.startLoading = () => {
 	loadingQueue++;

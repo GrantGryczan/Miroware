@@ -26,7 +26,7 @@ const proxy = httpProxy.createProxyServer();
 let maintenance;
 const enableMaintenance = () => {
 	maintenance = Math.random();
-	console.log(`document.cookie="temp=${maintenance};domain=.miroware.io;path=/;expires="+new Date(Date.now()+1000*60*60*24*7).toUTCString();document.cookie="temp=${maintenance};domain=file.garden;path=/;expires="+new Date(Date.now()+1000*60*60*24*7).toUTCString();`);
+	console.log(`document.cookie="temp=${maintenance};domain=.filegarden.com;path=/;expires="+new Date(Date.now()+1000*60*60*24*7).toUTCString();document.cookie="temp=${maintenance};domain=file.garden;path=/;expires="+new Date(Date.now()+1000*60*60*24*7).toUTCString();`);
 };
 const disableMaintenance = () => {
 	maintenance = '';
@@ -38,7 +38,7 @@ const listener = (req, res) => {
 		res.writeHead(req.method === 'OPTIONS' ? 200 : 503, {
 			'Content-Type': 'text/plain',
 			'Cache-Control': 'no-cache',
-			'Access-Control-Allow-Origin': 'https://miroware.io',
+			'Access-Control-Allow-Origin': 'https://filegarden.com',
 			'Access-Control-Allow-Credentials': 'true',
 			'Allow': 'OPTIONS, GET, POST, PUT, DELETE, PATCH',
 			'Access-Control-Allow-Methods': 'OPTIONS, GET, POST, PUT, DELETE, PATCH',
