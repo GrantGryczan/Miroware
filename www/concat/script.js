@@ -61,7 +61,7 @@ let changeSave;
 if (Miro.in) {
 	const saves = form.querySelector("#saves");
 	appendConcat = concat => {
-		const option = html`<option>$${concat.sub ? `${concat.sub}.` : ""}miro.gg/$${concat.val}</option>`;
+		const option = html`<option>$${concat.sub ? `${concat.sub}.` : ""}linkh.at/$${concat.val}</option>`;
 		option._concat = concat;
 		saves.appendChild(option);
 		return option;

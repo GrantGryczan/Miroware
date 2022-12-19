@@ -6,7 +6,7 @@
 		},
 		"title": "Grant's Data Packs",
 		"frame": "challenge",
-		"description": ["",{"text":"All loaded data packs by Grant Gryczan\n","color":"COLOR_1"},{"text":"mc.miro.gg/datapacks","color":"COLOR_2"}],
+		"description": ["",{"text":"All loaded data packs by Grant Gryczan\n","color":"COLOR_1"},{"text":"mc.linkh.at/datapacks","color":"COLOR_2"}],
 		"background": "minecraft:textures/block/coal_block.png",
 		"show_toast": false,
 		"announce_to_chat": false

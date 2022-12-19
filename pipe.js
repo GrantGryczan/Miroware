@@ -53,7 +53,7 @@ const axios = require('axios');
 			res.redirect(302, 'https://miroware.io/pipe/');
 			return;
 		}
-		res.set('Access-Control-Allow-Origin', '*').set('Content-Security-Policy', 'default-src file.garden pipe.miroware.io miro.gg data: mediastream: blob: \'unsafe-inline\' \'unsafe-eval\'');
+		res.set('Access-Control-Allow-Origin', '*').set('Content-Security-Policy', 'default-src file.garden pipe.miroware.io linkh.at data: mediastream: blob: \'unsafe-inline\' \'unsafe-eval\'');
 		if (req.hostname === 'pipe.miroware.io') {
 			const referrer = req.get('Referer');
 			if (referrer) {

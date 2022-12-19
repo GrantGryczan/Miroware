@@ -5,7 +5,7 @@ if (isMe) {
 		const concat = await sanitizeConcat(this, true);
 		this.value = {
 			...concat,
-			url: `https://${concat.sub ? `${concat.sub}.` : ""}miro.gg/${concat.val}`
+			url: `https://${concat.sub ? `${concat.sub}.` : ""}linkh.at/${concat.val}`
 		};
 		const keys = Object.keys(concat);
 		if (!keys.length) {
