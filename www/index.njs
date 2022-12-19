@@ -9,7 +9,7 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<p>File Garden lets you upload any type of file to link from any website that'll let you, forever for free.</p>
+				<p>File Garden lets you upload any type of file to link elsewhere, forever for free.</p>
 				<div>
 					<a class="mdc-button mdc-button--raised mdc-ripple" href="${this.user ? `/users/${this.user._id}/garden/#` : "/login/?dest=%2F"}">Go to Your Garden</a>
 				</div>
