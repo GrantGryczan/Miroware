@@ -1601,5 +1601,5 @@ items.parentNode.addEventListener("scroll", resize, {
 window.addEventListener("resize", resize);
 updateViewMode();
 if (!Miro.in) {
-	new Miro.Dialog('Warning', 'You aren\'t signed in, so not all items might be visible.')
+	new Miro.Dialog('Warning', 'You aren\'t signed in, so not all items may be visible.')
 }
