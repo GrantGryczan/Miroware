@@ -5,7 +5,7 @@ if (testEmail(this.req.body.email)) {
 	if (user) {
 		const password = crypto.randomBytes(24).toString("base64");
 		transporter.sendMail({
-			from: "File Garden <no-reply@filegarden.com>",
+			from: "File Garden <no-reply@miroware.io>",
 			to: `${JSON.stringify(user.name)} <${user.email}>`,
 			subject: "File Garden - Forgot Login",
 			text: "Use this password to log into your File Garden account.",

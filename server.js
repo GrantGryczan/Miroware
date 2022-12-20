@@ -241,7 +241,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}
 		const verifyLink = `https://filegarden.com/account/verification/?code=${encodeURIComponent(set.emailCode = crypto.randomBytes(50).toString("base64"))}`;
 		transporter.sendMail({
-			from: "File Garden <no-reply@filegarden.com>",
+			from: "File Garden <no-reply@miroware.io>",
 			to: `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`,
 			subject: "File Garden - Verify Email",
 			text: "Verify your File Garden account.",
