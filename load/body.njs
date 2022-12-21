@@ -12,8 +12,7 @@ this.value = html`
 					<nav class="mdc-list">
 						<a class="mdc-list-item${this.req.decodedPath === "/" ? " mdc-list-item--activated" : '" href="/'}">
 							<i class="mdc-list-item__graphic material-icons">upload_file</i> <span class="mdc-list-item__text">Your Garden</span>
-						</a>
-						<hr class="mdc-list-divider">`;
+						</a>`;
 if (!this.user) {
 	this.value += html`
 						<a id="logIn" class="mdc-list-item${this.req.decodedPath === "/login/" ? " mdc-list-item--activated" : html`" href="/login/?dest=$${encodeURIComponent(this.req.url)}`}">
