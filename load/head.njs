@@ -41,8 +41,8 @@ this.value = html`
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="https://unpkg.com/material-components-web@0.41.1/dist/material-components-web.min.css">
 		<link rel="stylesheet" href="/css/style.css">
-		<script src="https://www.googletagmanager.com/gtag/js?id=UA-110090319-1" async></script>
-		<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","UA-110090319-1");</script>`;
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-68XCMCPLR1"></script>
+		<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-68XCMCPLR1')</script>`;
 /*if (this.showAds) {
 	this.value += html`
 		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
