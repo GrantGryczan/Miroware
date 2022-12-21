@@ -25,7 +25,7 @@ if (isMe) {
 		});
 	} else {
 		this.value = {
-			error: "You do not own that concat."
+			error: "You do not own that link."
 		};
 		this.status = 404;
 	}

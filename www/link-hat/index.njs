@@ -1,6 +1,6 @@
 this.title = "Link Hat";
 this.description = "Customize your own URLs on our domain to shorten, randomize, and redirect your links, free subdomains and paths included.";
-this.tags = ["concat", "url", "urls", "link", "links", "linked", "linking", "domain", "domains", "custom", "customize", "redirect", "free", "subdomain", "subdomains", "random", "randomize", "randomizer", "randomized", "image", "images"];
+this.tags = ["linkhat", "hat", "url", "urls", "link", "links", "linked", "linking", "domain", "domains", "custom", "customize", "redirect", "free", "subdomain", "subdomains", "random", "randomize", "randomizer", "randomized", "image", "images", "rotate", "rotator", "rotation"];
 this.showAds = true;
 if (this.user) {
 	this.data = this.user.concats;

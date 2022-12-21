@@ -529,7 +529,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			if (keeper && (!put || context.req.query.sub !== concat.sub || context.req.query.val !== concat.val)) {
 				const found = keeper.concats.find(item => item.sub === concat.sub && item.val === concat.val);
 				context.value = {
-					error: `That concat is already taken${found.anon ? "" : html` by <a href="/users/${keeper._id}/" target="_blank">$${keeper.name}</a>`}.`,
+					error: `That link is already taken${found.anon ? "" : html` by $${keeper.name}`}.`,
 					keeper: !found.anon && keeper._id
 				};
 				context.status = 422;

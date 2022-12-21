@@ -8,8 +8,8 @@ let selected;
 const enableForm = Miro.formState.bind(null, form, true);
 form.querySelector("#help").addEventListener("click", () => {
 	new Miro.Dialog("Info", html`
-		Adding only one URL will make your concat act as a regular redirect.<br>
-		Adding multiple URLs will make your concat randomly redirect between them.
+		Adding only one URL will make your link act as a regular redirect.<br>
+		Adding multiple URLs will make your link randomly redirect between them.
 	`);
 });
 const addEntry = (noFocus, url) => {
@@ -109,14 +109,14 @@ form.elements.val.addEventListener("change", () => {
 	if (form.elements.val.value !== encoded) {
 		new Miro.Dialog("Warning", html`
 			"$${form.elements.val.value}" has not yet been encoded.<br>
-			After you save this concat, "$${encoded}" will be used instead.
+			After you save this link, "$${encoded}" will be used instead.
 		`);
 	}
 });
 const byValue = input => input.value;
 const response = Miro.response(xhr => {
 	const dialog = new Miro.Dialog("Link Hat", html`
-		Link hat successfully saved!<br>
+		Link successfully saved!<br>
 		<div class="mdc-text-field spaced">
 			<input name="url" class="mdc-text-field__input" type="url" value="$${xhr.response.url}" readonly>
 			<div class="mdc-line-ripple"></div>
