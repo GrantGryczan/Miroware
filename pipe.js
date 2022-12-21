@@ -125,7 +125,7 @@ const axios = require('axios');
 						});
 					} else {
 						getB2(`${userIDString}/${item.id}`).then(response => {
-							res.set('Content-Type', 'download' in req.query ? 'application/octet-stream' : item.type);
+							res.set('Content-Type', item.type);
 							res.set('Content-Length', response.headers['content-length']);
 							response.data.pipe(res);
 						}).catch(error => {
