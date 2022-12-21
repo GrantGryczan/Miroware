@@ -25,7 +25,7 @@ this.value += html`
 							<i class="mdc-list-item__graphic material-icons">link</i> <span class="mdc-list-item__text">Link Hat</span>
 						</a>
 						<a class="mdc-list-item${this.req.decodedPath === "/corrupt/" ? " mdc-list-item--activated" : '" href="/corrupt/'}">
-							<i class="mdc-list-item__graphic material-icons">broken_image</i> <span class="mdc-list-item__text">Corrupt</span>
+							<i class="mdc-list-item__graphic material-icons">broken_image</i> <span class="mdc-list-item__text">Image Corruptor</span>
 						</a>
 						<a class="mdc-list-item${this.req.decodedPath === "/mimic/" ? " mdc-list-item--activated" : '" href="/mimic/'}">
 							<i class="mdc-list-item__graphic material-icons">memory</i> <span class="mdc-list-item__text">Mimic</span>

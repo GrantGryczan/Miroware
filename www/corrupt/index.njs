@@ -1,4 +1,4 @@
-this.title = "Corrupt";
+this.title = "Image Corruptor";
 this.description = "Apply corruption to your images.";
 this.tags = ["file", "files", "online", "tool", "upload", "image", "images", "img", "imgs", "picture", "pictures", "pic", "pics", "photo", "photos", "corrupt", "corrupted", "corruptor", "corruption", "distort", "distorted", "distortion", "glitch", "glitched", "generate", "generator", "gif", "gifs", "jpeg", "jpegs", "jpg", "jpgs"];
 this.showAds = true;
