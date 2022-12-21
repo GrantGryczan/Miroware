@@ -3,11 +3,11 @@ this.value = html`
 	<body class="mdc-typography">
 		<div class="mdc-top-app-bar--fixed-adjust"></div>
 		<div id="container">
-			<aside id="drawer" class="mdc-drawer mdc-drawer--modal">${this.user ? html`
+			<aside id="drawer" class="mdc-drawer mdc-drawer--modal">
 				<div class="mdc-drawer__header">
-					<h3 class="mdc-drawer__title">File Garden</h3>
-					<h6 class="mdc-drawer__subtitle">$${this.user.name}</h6>
-				</div>` : ""}
+					<h3 class="mdc-drawer__title">File Garden</h3>${this.user ? html`
+					<h6 class="mdc-drawer__subtitle">$${this.user.name}</h6>` : ""}
+				</div>
 				<div class="mdc-drawer__content">
 					<nav class="mdc-list">
 						<a class="mdc-list-item${this.req.decodedPath === "/" ? " mdc-list-item--activated" : '" href="/'}">
