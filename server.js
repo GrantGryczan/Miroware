@@ -22,9 +22,10 @@ const subdomainTest = /^(?:[0-9a-z](?:[-_0-9a-z]*[0-9a-z])?)?$/;
 const mimeTest = /^[^\x00-\x20()<>@,;:\\"/[\]?.=]+\/[^\x00-\x20()<>@,;:\\"/[\]?=]+$/;
 const transporter = nodemailer.createTransport({
 	sendmail: true,
-	newline: "unix",
-	path: "/usr/sbin/sendmail"
+	path: "/usr/sbin/sendmail",
+	secure: true
 });
+nodemailer.createTransport({  });
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const b2 = new S3({
 	credentials: youKnow.b2.auth,
@@ -241,7 +242,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}
 		const verifyLink = `https://filegarden.com/account/verification/?code=${encodeURIComponent(set.emailCode = crypto.randomBytes(50).toString("base64"))}`;
 		transporter.sendMail({
-			from: "File Garden <no-reply@miroware.io>",
+			from: "File Garden <no-reply@filegarden.com>",
 			to: `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`,
 			subject: "File Garden - Verify Email",
 			text: "Verify your File Garden account.",
