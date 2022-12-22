@@ -5,6 +5,7 @@ output.addEventListener("focus", output.select.bind(output));
 const update = () => {
 	output.value = input.value
 		.replace(/pipe\.miroware\.io\/([0-9a-f]{24})/g, (match, hex) => `file.garden/${btoa(hex.match(/\w{2}/g).map(byte => String.fromCharCode(parseInt(byte, 16))).join("")).replace(/\+/g, "-").replace(/\//g, "_")}`)
+		.replace(/pipe\.miroware\.io/g, 'file.garden')
 		.replace(/miro\.gg/g, 'linkh.at')
 		.replace(/miroware\.io(?:\/pipe)?/g, 'filegarden.com')
 		.replace(/filegarden\.com\/link-updater/g, 'filegarden.com/pipe/link-updater')
