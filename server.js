@@ -25,7 +25,6 @@ const transporter = nodemailer.createTransport({
 	path: "/usr/sbin/sendmail",
 	secure: true
 });
-nodemailer.createTransport({  });
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const b2 = new S3({
 	credentials: youKnow.b2.auth,
