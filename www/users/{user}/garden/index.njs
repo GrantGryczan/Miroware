@@ -48,7 +48,7 @@ this.value += html`
 							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons mdc-ripple" title="Create directory">create_new_folder</button>
 						</div>
 						<div id="queuedItems" class="items"></div>
-						<div id="belowQueue">
+						<div id="belowQueue" class="hidden">
 							<button id="retryAll" class="mdc-button mdc-button--raised mdc-ripple" title="Retry all failed uploads">
 								Retry all failed uploads
 							</button>
