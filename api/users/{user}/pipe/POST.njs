@@ -213,6 +213,7 @@ if (isMe) {
 				};
 				this.status = err.statusCode || 422;
 			} else {
+				// TODO: Fix race condition here when the parent directory is deleted during the file upload. And there are likely similar database race conditions elsehow.
 				this.update.$push = {
 					pipe: this.value = {
 						id,
