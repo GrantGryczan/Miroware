@@ -34,7 +34,7 @@ if (user) {
 }
 this.value = (await load("load/head", this)).value;
 this.value += html`
-		<link rel="stylesheet" href="/users/{user}/garden/style.css">`;
+		<link rel="stylesheet" href="/users/{user}/garden/style.css?cb=1">`;
 this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
@@ -47,7 +47,12 @@ this.value += html`
 							<button id="addURL" class="mdc-icon-button mdc-button--raised material-icons mdc-ripple" title="Upload from URL">link</button>
 							<button id="addDirectory" class="mdc-icon-button mdc-button--raised material-icons mdc-ripple" title="Create directory">create_new_folder</button>
 						</div>
-						<div id="queuedItems" class="items"></div>${true || this.req.cookies.hidesurvey1 ? "" : html`
+						<div id="queuedItems" class="items"></div>
+						<div id="belowQueue">
+							<button id="retryAll" class="mdc-button mdc-button--raised mdc-ripple" title="Retry all failed uploads">
+								Retry all failed uploads
+							</button>
+						</div>${true || this.req.cookies.hidesurvey1 ? "" : html`
 						<div style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12);">
 							Hey, would you mind answering a one-minute poll about your interest in File Garden?
 							<a href="https://forms.gle/UtYpPXPrVFEHkKer6" target="_blank">Click here.</a><br>
@@ -132,6 +137,6 @@ this.value += html`
 this.value += (await load("load/belt", this)).value;
 this.value += html`
 		<div id="targetIndicator"></div>
-		<script src="/users/{user}/garden/script.js"></script>`;
+		<script src="/users/{user}/garden/script.js?cb=1"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();

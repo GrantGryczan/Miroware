@@ -1036,6 +1036,7 @@ if (Miro.data.isMe) {
 	const creation = container.querySelector("#creation");
 	const queuedItems = container.querySelector("#queuedItems");
 	const queue = [];
+	const failedQueue = [];
 	const updateQueue = () => {
 		if (!queue.length) {
 			creation.classList.remove("loading");
@@ -1057,6 +1058,13 @@ if (Miro.data.isMe) {
 		} else {
 			creation.classList.add("loading");
 			creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
+		}
+	};
+	const updateBelowQueue = () => {
+		if (failedQueue.length) {
+			creation.classList.remove("hidden");
+		} else {
+			creation.classList.add("hidden");
 		}
 	};
 	window.onbeforeunload = () => container.querySelector(".loading") || !actionSave.disabled || undefined;
@@ -1129,11 +1137,15 @@ if (Miro.data.isMe) {
 					render();
 				}
 			}, (xhr, error) => {
+				this.fail();
 				this.element.classList.remove("loading");
 				this.element.classList.add("error");
 				this.subtitleElement.title = error;
 				this.subtitleElement.textContent = "An error occurred. Click to retry.";
 				this.element.addEventListener("click", evt => {
+					if (this.closeElement.contains(evt.target)) {
+						return;
+					}
 					this.retry(evt);
 				});
 				if (this.dequeue()) {
@@ -1160,6 +1172,7 @@ if (Miro.data.isMe) {
 				delete this.cancelDialog;
 				return;
 			}
+			this.unfail();
 			delete this.cancelDialog;
 			if (this.element.parentNode) {
 				this.xhr.abort();
@@ -1169,11 +1182,25 @@ if (Miro.data.isMe) {
 				}
 			}
 		}
-		retry(evt) {
-			if (!this.closeElement.contains(evt.target)) {
-				this.element.parentNode.replaceChild(new PipeFile(this.file, this.name, this.parent).element, this.element);
-				this.dequeue();
+		retry() {
+			this.unfail();
+			this.element.parentNode.replaceChild(new PipeFile(this.file, this.name, this.parent).element, this.element);
+			this.dequeue();
+		}
+		fail() {
+			if (failedQueue.includes(this)) {
+				return;
 			}
+			failedQueue.push(this);
+			updateBelowQueue();
+		}
+		unfail() {
+			const failedQueueIndex = failedQueue.indexOf(this);
+			if (failedQueueIndex === -1) {
+				return;
+			}
+			failedQueue.splice(failedQueueIndex, 1)
+			updateBelowQueue();
 		}
 	};
 	const addFile = async (file, parent, name) => {
@@ -1509,6 +1536,11 @@ if (Miro.data.isMe) {
 					}
 				}
 			}));
+		}
+	});
+	document.getElementById('retryAll').addEventListener('click', () => {
+		for (const item of failedQueue) {
+			item.retry();
 		}
 	});
 }
