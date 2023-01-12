@@ -1540,7 +1540,7 @@ if (Miro.data.isMe) {
 		}
 	});
 	document.getElementById('retryAll').addEventListener('click', () => {
-		for (const item of failedQueue) {
+		for (const item of failedQueue.slice()) {
 			item.retry();
 		}
 	});
