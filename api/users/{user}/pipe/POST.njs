@@ -54,7 +54,7 @@ if (isMe) {
 			return;
 		} else if (data.parent !== "trash" && user.pipe.some(item => item.parent === data.parent && item.name === data.name)) {
 			this.value = {
-				error: "That name is already taken."
+				error: html`<b>$${data.name}</b> already exists in the specified directory.`
 			};
 			this.status = 422;
 			this.done();
