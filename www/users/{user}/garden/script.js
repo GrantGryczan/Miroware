@@ -1096,7 +1096,11 @@ if (Miro.data.isMe) {
 							const percentage = 100 * ((this.loaded = evt.loaded) / this.file.size || 1);
 							this.element.style.backgroundSize = `${percentage}%`;
 							this.subtitleElement.title = `${this.loaded} B / ${this.file.size} B`;
-							this.subtitleElement.textContent = `${Math.floor(10 * percentage) / 10}% (${getSizeString(this.loaded)} / ${this.size})`;
+							this.subtitleElement.textContent = (
+								percentage === 100
+									? 'Processing...'
+									: `${Math.floor(10 * percentage) / 10}% (${getSizeString(this.loaded)} / ${this.size})`
+							);
 							updateQueue();
 						}
 					});
