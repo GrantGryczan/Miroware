@@ -1060,11 +1060,12 @@ if (Miro.data.isMe) {
 			creation.style.backgroundSize = `${100 * (done ? 1 : loaded / total)}%`;
 		}
 	};
+	const belowQueue = document.getElementById('belowQueue');
 	const updateBelowQueue = () => {
 		if (failedQueue.length) {
-			creation.classList.remove("hidden");
+			belowQueue.classList.remove("hidden");
 		} else {
-			creation.classList.add("hidden");
+			belowQueue.classList.add("hidden");
 		}
 	};
 	window.onbeforeunload = () => container.querySelector(".loading") || !actionSave.disabled || undefined;
