@@ -72,7 +72,7 @@ const postConnection = (service, code) => Miro.request("POST", "/users/@me/conne
 let connectionBody;
 const add = html`
 	<button id="addConnection" class="mdc-button margined">
-		<i class="mdc-button__icon material-icons">add</i>New connection
+		<i class="mdc-button__icon material-icons">add</i>New sign-in method
 	</button>
 `;
 const appendCard = connection => {
