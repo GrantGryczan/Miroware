@@ -95,7 +95,7 @@ const appendCard = connection => {
 };
 add.addEventListener("click", () => {
 	Miro.checkSuper(() => {
-		Miro.auth("Add Connection", "Authenticate a new connection for your account.", postConnection, undefined, true, xhr => {
+		Miro.auth("Add Sign-In Method", "Authenticate a new sign-in method for your account.", postConnection, undefined, true, xhr => {
 			appendCard(xhr.response);
 		});
 	});
@@ -106,7 +106,7 @@ form.querySelector("#manageConnections").addEventListener("click", () => {
 			connectionBody = document.createElement("span");
 			connectionBody.appendChild(add);
 			xhr.response.forEach(appendCard);
-			new Miro.Dialog("Connections", connectionBody);
+			new Miro.Dialog("Sign-In Methods", connectionBody);
 		}));
 	});
 });
