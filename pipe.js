@@ -7,6 +7,24 @@ const { MongoClient, ObjectId } = require('mongodb');
 const archiver = require('archiver');
 const youKnow = require('./secret/youknow.js');
 const axios = require('axios');
+
+const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const withTwoDigits = value => `0${value}`.slice(-2);
+
+/** Formats a date for the `Last-Modified` header. */
+const getLastModifiedString = date => {
+	date = new Date(date);
+
+	const weekday = weekdays[date.getUTCDay()];
+	const month = months[date.getUTCMonth()];
+	const dateString = `${withTwoDigits(date.getUTCDate())} ${month} ${date.getUTCFullYear()}`;
+	const timeString = `${withTwoDigits(date.getUTCHours())}:${withTwoDigits(date.getUTCMinutes())}:${withTwoDigits(date.getUTCSeconds())}`;
+
+	return `${weekday}, ${dateString} ${timeString} GMT`
+};
+
 (async () => {
 	require('replthis')(v => eval(v));
 	const db = (await MongoClient.connect(youKnow.db, {
@@ -127,6 +145,7 @@ const axios = require('axios');
 						getB2(`${userIDString}/${item.id}`).then(response => {
 							res.set('Content-Type', item.type);
 							res.set('Content-Length', response.headers['content-length']);
+							res.set('Last-Modified', getLastModifiedString(item.date));
 							response.data.pipe(res);
 						}).catch(error => {
 							console.error(error);
