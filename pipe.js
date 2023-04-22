@@ -89,21 +89,28 @@ const getLastModifiedString = date => {
 				return;
 			}
 			const slashIndex = path.indexOf('/');
-			let userID;
-			try {
-				if (slashIndex === -1) {
-					throw 404;
+			const pathRoot = path.slice(0, slashIndex);
+			let userQuery;
+			if (pathRoot.startsWith('@')) {
+				userQuery = {
+					tag: pathRoot.slice(1)
+				};
+			} else {
+				try {
+					if (slashIndex === -1) {
+						throw 404;
+					}
+					userQuery = {
+						_id: new ObjectId(
+							Buffer.from(pathRoot, 'base64url')
+						)
+					};
+				} catch {
+					res.sendStatus(404);
+					return;
 				}
-				userID = new ObjectId(
-					Buffer.from(path.slice(0, slashIndex), 'base64url')
-				);
-			} catch {
-				res.sendStatus(404);
-				return;
 			}
-			const user = await users.findOne({
-				_id: userID
-			});
+			const user = await users.findOne(userQuery);
 			if (user) {
 				path = path.slice(slashIndex + 1);
 				if (path.startsWith(`${user.pipe.find(item => item.id === 'trash').path}/`)) {
