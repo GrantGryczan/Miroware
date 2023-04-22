@@ -116,6 +116,12 @@ const purgePipeCache = (user, items) => purgeCache(...items.flatMap(item => {
 		const slicedPath = encodedPath.slice(0, slashIndex);
 		urls.push(`https://file.garden/${userID}/${slicedPath}`);
 	}
+	if (user.tag) {
+		const userTag = `@${user.tag}`;
+		for (const url of [...urls]) {
+			urls.push(url.replace(userID, userTag));
+		}
+	}
 	return urls;
 }));
 const bodyMethods = ["POST", "PUT", "PATCH"];
