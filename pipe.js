@@ -71,7 +71,7 @@ const getLastModifiedString = date => {
 			res.redirect(302, 'https://filegarden.com/');
 			return;
 		}
-		res.set('Access-Control-Allow-Origin', '*').set('Content-Security-Policy', 'default-src file.garden pipe.miroware.io linkh.at data: mediastream: blob: \'unsafe-inline\' \'unsafe-eval\'');
+		res.set('Access-Control-Allow-Origin', '*').set('Content-Security-Policy', 'default-src file.garden linkh.at data: mediastream: blob: \'unsafe-inline\' \'unsafe-eval\'');
 		if (req.hostname === 'pipe.miroware.io') {
 			const referrer = req.get('Referer');
 			if (referrer) {
