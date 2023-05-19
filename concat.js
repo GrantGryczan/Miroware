@@ -24,6 +24,11 @@ const youKnow = require("./secret/youknow.js");
 		req.next();
 	});
 	app.get("*", async (req, res) => {
+		if (req.sub === '' && req.val === '/') {
+			res.redirect('https://filegarden.com/link-hat/');
+			return;
+		}
+
 		const keeper = await users.findOne({
 			concats: {
 				$elemMatch: {
