@@ -407,13 +407,13 @@ const closeAndResolveAuth = Miro.response(xhr => {
 	}
 });
 const clickAuth = service => function() {
-	const notPassword = service !== "password";
-	if (notPassword) {
+	const shouldBlock = (service === 'password' || service === 'google');
+	if (shouldBlock) {
 		Miro.block(true);
 	}
 	new Promise(auths[service].bind(this)).then(code => {
 		try {
-			if (notPassword) {
+			if (shouldBlock) {
 				Miro.block(false);
 			}
 			setTimeout(() => {
@@ -424,8 +424,10 @@ const clickAuth = service => function() {
 		}
 	}).catch(catchAuth);
 };
+let googleDialog;
 let currentGoogleCallback;
 const googleCallback = response => {
+	googleDialog.close(2);
 	currentGoogleCallback(response);
 };
 let googleInitialized = false;
@@ -442,14 +444,23 @@ const auths = {
 				callback: googleCallback
 			});
 		}
-		google.accounts.id.prompt();
+		const googleParent = document.createElement('div');
+		googleDialog = new Miro.Dialog('Google Sign-In', googleParent, ['Cancel']);
+		google.accounts.id.renderButton(googleParent, {
+			size: 'large'
+		});
+		googleDialog.then(result => {
+			if (result <= 0) {
+				reject();
+			}
+		});
 	},
 	Discord: (resolve, reject) => {
 		const win = window.open(`https://discordapp.com/api/oauth2/authorize?client_id=430826805302263818&redirect_uri=${encodeURIComponent(location.origin)}%2Flogin%2Fdiscord%2F&response_type=code&scope=identify%20email`, "authDiscord");
 		const winClosedPoll = setInterval(() => {
 			if (win.closed) {
 				clearInterval(winClosedPoll);
-				reject("The Discord authentication page was closed.");
+				reject();
 			}
 		}, 200);
 		const receive = evt => {
