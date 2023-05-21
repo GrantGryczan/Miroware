@@ -31,6 +31,7 @@ const getLastModifiedString = date => {
 		useUnifiedTopology: true
 	})).db('web');
 	const users = db.collection('users');
+	const items = db.collection('items');
 
 	let b2Authorization;
 	const AUTHORIZATION_PERIOD = 1000 * 60 * 60 * 24 * 7;
@@ -80,93 +81,104 @@ const getLastModifiedString = date => {
 			let url = req.url.slice(1);
 			url = url.replace(/^[0-9a-f]{24}/, hex => Buffer.from(hex, 'hex').toString('base64url'));
 			res.redirect(301, `https://file.garden/${url}`);
+			return;
+		}
+
+		path = path.slice(1);
+		try {
+			path = decodeURIComponent(path);
+		} catch (err) {
+			res.header('Content-Type', 'text/plain').status(400).send(err.message);
+			return;
+		}
+		const slashIndex = path.indexOf('/');
+		const pathRoot = path.slice(0, slashIndex);
+		let userQuery;
+		if (pathRoot.startsWith('@')) {
+			userQuery = {
+				tag: pathRoot.slice(1)
+			};
 		} else {
-			path = path.slice(1);
 			try {
-				path = decodeURIComponent(path);
-			} catch (err) {
-				res.header('Content-Type', 'text/plain').status(400).send(err.message);
-				return;
-			}
-			const slashIndex = path.indexOf('/');
-			const pathRoot = path.slice(0, slashIndex);
-			let userQuery;
-			if (pathRoot.startsWith('@')) {
+				if (slashIndex === -1) {
+					throw 404;
+				}
 				userQuery = {
-					tag: pathRoot.slice(1)
+					_id: new ObjectId(
+						Buffer.from(pathRoot, 'base64url')
+					)
 				};
-			} else {
-				try {
-					if (slashIndex === -1) {
-						throw 404;
-					}
-					userQuery = {
-						_id: new ObjectId(
-							Buffer.from(pathRoot, 'base64url')
-						)
-					};
-				} catch {
-					res.sendStatus(404);
-					return;
-				}
-			}
-			const user = await users.findOne(userQuery);
-			if (user) {
-				path = path.slice(slashIndex + 1);
-				if (path.startsWith(`${user.pipe.find(item => item.id === 'trash').path}/`)) {
-					res.sendStatus(404);
-					return;
-				}
-				const item = user.pipe.find(item => item.path === path && item.privacy !== 2);
-				if (item) {
-					const userIDString = user._id.toString('base64url')
-					if (item.type === '/') {
-						res.set('Content-Type', 'application/zip');
-						const archive = archiver('zip');
-						archive.on('error', error => {
-							throw error;
-						});
-						archive.pipe(res);
-						const sliceStart = path.length + 1; // Change `path.length` to `path.lastIndexOf('/')` to put the folder inside of the ZIP instead of having the ZIP be the folder itself.
-						const promises = [];
-						const scan = parent => {
-							for (const item of user.pipe) {
-								if (item.parent === parent && item.privacy === 0) {
-									if (item.type === '/') {
-										scan(item.id);
-									} else {
-										promises.push(getB2(`/${userIDString}/${item.id}`).then(({ data }) => {
-											archive.append(data, {
-												name: item.path.slice(sliceStart)
-											});
-										}));
-									}
-								}
-							}
-						};
-						scan(item.id);
-						Promise.all(promises).then(() => {
-							archive.finalize();
-						});
-					} else {
-						getB2(`${userIDString}/${item.id}`).then(response => {
-							res.set('Content-Type', item.type);
-							res.set('Content-Length', response.headers['content-length']);
-							res.set('Last-Modified', getLastModifiedString(item.date));
-							response.data.pipe(res);
-						}).catch(error => {
-							console.error(error);
-							res.status(error.statusCode).send(error.message);
-						});
-					}
-				} else {
-					res.sendStatus(404);
-					return;
-				}
-			} else {
+			} catch {
 				res.sendStatus(404);
 				return;
 			}
+		}
+
+		const user = await users.findOne(userQuery);
+
+		if (!user) {
+			res.sendStatus(404);
+			return;
+		}
+
+		path = path.slice(slashIndex + 1);
+
+		if (path.startsWith(`${user.pipe.find(item => item.id === 'trash').path}/`)) {
+			res.sendStatus(404);
+			return;
+		}
+
+		const item = user.pipe.find(item => item.path === path) || (
+			await items.findOne({
+				userID: user._id,
+				path,
+			})
+		);
+
+		if (!item || item.privacy === 2) {
+			res.sendStatus(404);
+			return;
+		}
+
+		const userIDString = user._id.toString('base64url');
+		if (item.type === '/') {
+			res.set('Content-Type', 'application/zip');
+			const archive = archiver('zip');
+			archive.on('error', error => {
+				throw error;
+			});
+			archive.pipe(res);
+			const sliceStart = path.length + 1; // Change `path.length` to `path.lastIndexOf('/')` to put the folder inside of the ZIP instead of having the ZIP be the folder itself.
+			const promises = [];
+			const scan = parent => {
+				for (const item of user.pipe) {
+					if (item.parent === parent && item.privacy === 0) {
+						if (item.type === '/') {
+							scan(item.id);
+						} else {
+							promises.push(getB2(`/${userIDString}/${item.id}`).then(({ data }) => {
+								archive.append(data, {
+									name: item.path.slice(sliceStart)
+								});
+							}));
+						}
+					}
+				}
+			};
+			scan(item.id);
+			Promise.all(promises).then(() => {
+				archive.finalize();
+			});
+		} else {
+			getB2(`${userIDString}/${item.id}`).then(response => {
+				res.set('Content-Type', item.type);
+				res.set('Content-Length', response.headers['content-length']);
+				res.set('Last-Modified', getLastModifiedString(item.date));
+				response.data.pipe(res);
+			}).catch(error => {
+				console.error(error);
+				res.status(error.statusCode).send(error.message);
+			});
 		}
 	});
 	http.createServer(app).listen(8082);
