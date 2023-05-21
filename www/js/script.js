@@ -407,7 +407,7 @@ const closeAndResolveAuth = Miro.response(xhr => {
 	}
 });
 const clickAuth = service => function() {
-	const shouldBlock = (service === 'password' || service === 'google');
+	const shouldBlock = !(service === 'password' || service === 'Google');
 	if (shouldBlock) {
 		Miro.block(true);
 	}
