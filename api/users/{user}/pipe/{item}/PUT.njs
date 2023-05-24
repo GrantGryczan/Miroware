@@ -226,6 +226,7 @@ if (isMe) {
 				}, 0);
 				for (const child of user.pipe) {
 					if (child.path.startsWith(prefix)) {
+						itemsToPurge.push({ ...child });
 						promises.push(users.updateOne({
 							_id: user._id,
 							"pipe.id": child.id
