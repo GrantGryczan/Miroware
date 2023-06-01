@@ -647,6 +647,12 @@ const getBase64ID = hex => (
 		).join("")
 	).replace(/\+/g, "-").replace(/\//g, "_")
 );
+actionDownload.addEventListener('click', () => {
+	const downloadLink = document.createElement('a');
+	downloadLink.href = actionDownload._href;
+	downloadLink.target = '_blank';
+	downloadLink.click();
+});
 const updateProperties = () => {
 	trashInfo.classList.add("hidden");
 	for (const propertyElement of Object.values(property)) {
@@ -691,7 +697,7 @@ const updateProperties = () => {
 					trashInfo.textContent = `${daysUntilDeletion} day${daysUntilDeletion === 1 ? "" : "s"} until deletion`;
 					trashInfo.classList.remove("hidden");
 				}
-				actionDownload.href = `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/${item.id}/download/${encodeForPipe(item.name)}`;
+				actionDownload._href = `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/${item.id}/download/${encodeForPipe(item.name)}`;
 				actionDownload.classList.remove("hidden");
 				if (item.type !== "/") {
 					properties.elements.type._prev = properties.elements.type.value = item.type;
@@ -726,7 +732,7 @@ const updateProperties = () => {
 				}
 			}
 		} else if (trashDeselected) {
-			actionDownload.href = `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/download?items=${Array.prototype.map.call(selected, itemElement => itemElement._item.id).join(",")}`;
+			actionDownload._href = `https://api.filegarden.com/users/${Miro.data.user.id}/pipe/download?items=${Array.prototype.map.call(selected, itemElement => itemElement._item.id).join(",")}`;
 			actionDownload.classList.remove("hidden");
 		}
 		if (Miro.data.isMe) {
