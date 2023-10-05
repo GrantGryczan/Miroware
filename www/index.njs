@@ -13,23 +13,7 @@ this.value += html`
 				<div>
 					<a class="mdc-button mdc-button--raised mdc-ripple" href="${this.user ? `/users/${this.user._id}/garden/#` : "/login/?dest=%2F"}">Go to Your Garden</a>
 				</div>
-				<div id="cube"></div>
-				<p id="details">
-					<b>${(await users.aggregate([{
-						$project: {
-							size: {
-								$size: "$pipe"
-							}
-						}
-					}, {
-						$group: {
-							_id: null,
-							count: {
-								$sum: "$size"
-							}
-						}
-					}]).next()).count}</b> items have been uploaded in total!
-				</p>`;
+				<div id="cube"></div>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += (await load("load/foot", this)).value;
