@@ -201,7 +201,7 @@ if (isMe) {
 		let totalUserSize = 0;
 		for (const item of user.pipe) {
 			if (item.type !== "/") {
-				size += item.size;
+				totalUserSize += item.size;
 			}
 		}
 		if ((totalUserSize + body.length) > 15 * 1024 * 1024 * 1024) { // 15 GiB
