@@ -1,4 +1,4 @@
-const {user, isMe} = await parseUser(this);
+const { user, isMe } = await parseUser(this);
 if (isMe) {
 	let data;
 	try {
@@ -172,6 +172,20 @@ if (isMe) {
 				if (body.length > 100 * 1024 * 1024) { // 100 MiB
 					this.value = {
 						error: "Files larger than 100 MiB are currently not supported due to technical limitations. Sorry!"
+					};
+					this.status = 422;
+					this.done();
+					return;
+				}
+				let totalUserSize = 0;
+				for (const item of user.pipe) {
+					if (item.type !== "/") {
+						size += item.size;
+					}
+				}
+				if ((totalUserSize + body.length) > 15 * 1024 * 1024 * 1024) { // 15 GiB
+					this.value = {
+						error: "Uploading more than 15 GiB in total is currently not supported, though in the future we plan to add a donation reward to increase this limit. Sorry!"
 					};
 					this.status = 422;
 					this.done();
