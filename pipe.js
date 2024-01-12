@@ -177,7 +177,7 @@ const getLastModifiedString = date => {
 				response.data.pipe(res);
 			}).catch(error => {
 				console.error(error);
-				res.status(error.statusCode || 500).send(error.message);
+				res.status(error.response?.status || 500).send(error.message);
 			});
 		}
 	});
