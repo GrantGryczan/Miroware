@@ -13,7 +13,7 @@ const { S3 } = require("@aws-sdk/client-s3");
 const archiver = require("archiver");
 const youKnow = require("./secret/youknow.js");
 const axios = require('axios');
-const production = process.argv[2] === "production";
+const production = process.argv.includes("production");
 const lineBreaks = /\n/g;
 const emailTest = /^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
