@@ -465,16 +465,20 @@ const auths = {
 		}, 200);
 		const receive = evt => {
 			if (evt.origin === window.origin) {
+				const params = new URLSearchParams(evt.data);
+				const code = params.get("code");
+				const errorDescription = params.get("error_description");
+
+				if (!(code || errorDescription)) {
+					return;
+				}
+
 				window.removeEventListener("message", receive);
 				clearInterval(winClosedPoll);
-				const ampIndex = evt.data.indexOf("&");
-				if (ampIndex !== -1) {
-					evt.data = evt.data.slice(ampIndex);
-				}
-				if (evt.data.startsWith("code=")) {
-					resolve(evt.data.slice(5));
+				if (code) {
+					resolve(code);
 				} else {
-					reject(evt.data.slice(evt.data.indexOf("=") + 1));
+					reject(errorDescription);
 				}
 			}
 		};
