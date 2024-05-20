@@ -5,9 +5,9 @@ if (testEmail(this.req.body.email)) {
 	if (user) {
 		const password = crypto.randomBytes(24).toString("base64");
 		transporter.sendMail({
-			from: "File Garden <no-reply@filegarden.com>",
+			from: "File Garden <noreply@filegarden.com>",
 			to: `${JSON.stringify(user.name)} <${user.email}>`,
-			subject: "File Garden - Forgot Login",
+			subject: "Temporary Login - File Garden",
 			text: "Use this password to log into your File Garden account.",
 			html: html`
 				Use the below password to log into the File Garden account associated with <b>$${user.email}</b>.<br>

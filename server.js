@@ -20,11 +20,7 @@ const testEmail = email => emailTest.test(email) && email.length <= 254;
 const urlTest = /^https?:\/\/./;
 const subdomainTest = /^(?:[0-9a-z](?:[-_0-9a-z]*[0-9a-z])?)?$/;
 const mimeTest = /^[^\x00-\x20()<>@,;:\\"/[\]?.=]+\/[^\x00-\x20()<>@,;:\\"/[\]?=]+$/;
-const transporter = nodemailer.createTransport({
-	sendmail: true,
-	path: "/usr/sbin/sendmail",
-	secure: true
-});
+const transporter = nodemailer.createTransport(youKnow.mail);
 const googleAuthClient = new OAuth2Client(youKnow.google.id);
 const b2 = new S3({
 	credentials: youKnow.b2.auth,
@@ -247,9 +243,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		}
 		const verifyLink = `https://filegarden.com/account/verification/?code=${encodeURIComponent(set.emailCode = crypto.randomBytes(50).toString("base64"))}`;
 		transporter.sendMail({
-			from: "File Garden <no-reply@filegarden.com>",
+			from: "File Garden <noreply@filegarden.com>",
 			to: `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`,
-			subject: "File Garden - Verify Email",
+			subject: "Verify Email - File Garden",
 			text: "Verify your File Garden account.",
 			html: html`
 				Click the following link to verify your File Garden account.<br>
