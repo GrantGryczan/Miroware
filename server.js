@@ -424,7 +424,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	const shadowBan = async (id) => {
 		const user = await users.findOne({ _id: ObjectID(Buffer.from(id, "base64url")) });
 		await users.updateOne({ _id: user._id }, {
-			$set: { shadowBanned: true },
+			$set: { shadowBanned: new Date() },
 		});
 		if (user.pipe.length) {
 			await purgePipeCache(user, user.pipe);
