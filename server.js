@@ -421,6 +421,15 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			resolve();
 		}
 	});
+	const shadowBan = async (id) => {
+		const user = await users.findOne({ _id: ObjectID(Buffer.from(id, "base64url")) });
+		await users.updateOne({ _id: user._id }, {
+			$set: { shadowBanned: true },
+		});
+		if (user.pipe.length) {
+			await purgePipeCache(user, user.pipe);
+		}
+	};
 	const sanitizeConcat = (context, put) => new Promise(resolve => {
 		const concat = {
 			anon: !!context.req.body.anon,

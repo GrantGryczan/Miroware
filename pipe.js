@@ -114,6 +114,7 @@ const getLastModifiedString = date => {
 			}
 		}
 
+		userQuery.shadowBanned = { $exists: false };
 		const user = await users.findOne(userQuery);
 
 		if (!user) {
