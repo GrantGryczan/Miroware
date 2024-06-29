@@ -102,7 +102,7 @@ if (isMe) {
 					this.status = 422;
 					this.done();
 					return;
-				} else if (this.req.body.name.endsWith(".apk") || this.req.body.name.endsWith(".exe")) {
+				} else if (this.req.body.name.toLowerCase().endsWith(".apk") || this.req.body.name.toLowerCase().endsWith(".exe")) {
 					this.value = {
 						error: "Unfortunately, due to users frequently abusing File Garden by uploading illegal content, you cannot upload file types commonly used for malware. We intend to look for better solutions for these file types in the future."
 					};
