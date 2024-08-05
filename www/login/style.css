@@ -1,6 +1,7 @@
 #container {
 	background-repeat: no-repeat;
 	background-position: left calc(50% - 256px) center;
+	background-size: 256px;
 	background-image: url(/images/icon.svg);
 }
 #loginForm {
