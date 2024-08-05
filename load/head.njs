@@ -11,10 +11,10 @@ if (!(this.tags instanceof Array)) {
 	this.tags = [];
 }
 if (this.image === undefined) {
-	this.image = "/images/icon.svg";
+	this.image = "/images/icon.png";
 }
 if (this.icon === undefined) {
-	this.icon = "/images/icon.svg";
+	this.icon = "/images/icon.png";
 }
 this.value = html`
 <!DOCTYPE html>
