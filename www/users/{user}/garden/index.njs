@@ -1,6 +1,4 @@
 this.title = "File Garden";
-this.image = "/images/icon/full.png";
-this.icon = "/images/icon/cover.png";
 this.showAds = true;
 let {user} = this;
 const isMe = user && this.params.user === String(user._id);

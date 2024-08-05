@@ -1,8 +1,6 @@
 this.title = "File Garden";
 this.description = "Host your files with decency.";
 this.tags = ["filegarden", "garden", "file", "files", "host", "hosting", "hoster", "upload", "uploader", "image", "images", "direct", "link", "links", "url", "urls", "free"];
-this.image = "/images/icon/full.png";
-this.icon = "/images/icon/cover.png";
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">`;

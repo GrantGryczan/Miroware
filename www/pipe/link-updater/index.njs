@@ -1,7 +1,5 @@
 this.title = "Pipe Link Updater";
 this.description = "Update your Pipe URLs to use the new File Garden domain.";
-this.image = "/images/icon/full.png";
-this.icon = "/images/icon/cover.png";
 this.showAds = true;
 this.value = (await load("load/head", this)).value;
 this.value += html`
