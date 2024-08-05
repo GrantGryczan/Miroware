@@ -4,7 +4,7 @@
 main {
 	text-align: center;
 }
-#cube {
+#logo {
 	height: 256px;
 	background-image: url(/images/logo.svg);
 	background-position: center;

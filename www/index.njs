@@ -7,11 +7,11 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
+				<div id="logo"></div>
 				<p>File Garden lets you upload any type of file to link elsewhere, forever for free.</p>
 				<div>
 					<a class="mdc-button mdc-button--raised mdc-ripple" href="${this.user ? `/users/${this.user._id}/garden/#` : "/login/?dest=%2F"}">Go to Your Garden</a>
-				</div>
-				<div id="cube"></div>`;
+				</div>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += (await load("load/foot", this)).value;
