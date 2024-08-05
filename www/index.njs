@@ -10,7 +10,7 @@ this.value += html`
 				<div id="logo"></div>
 				<p>File Garden lets you upload any type of file to link elsewhere, forever for free.</p>
 				<div>
-					<a class="mdc-button mdc-button--raised mdc-ripple" href="${this.user ? `/users/${this.user._id}/garden/#` : "/login/?dest=%2F"}">Go to Your Garden</a>
+					<a class="mdc-button mdc-button--raised mdc-ripple" href="${this.user ? `/users/${this.user._id}/garden/#` : "/login/?dest=%2F"}">Visit Your Garden</a>
 				</div>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
