@@ -55,21 +55,13 @@ this.value += html`
 					<div>
 						<button id="save" class="mdc-button mdc-button--raised spaced mdc-ripple" type="submit">Create</button><button id="delete" class="mdc-button spaced hidden">Delete</button>
 					</div>
-					<div id="details">
-						<b>$${(await users.aggregate([{
-							$project: {
-								size: {
-									$size: "$concats"
-								}
-							}
-						}, {
-							$group: {
-								_id: null,
-								count: {
-									$sum: "$size"
-								}
-							}
-						}]).next()).count}</b> links have been created in total!
+					<div id="details" style="opacity: 1;">
+						<div style="color: red;">
+							<strong>Warning:</strong> Unfortunately, all linkh.at links are not permanent.
+						</div>
+						<div style="opacity: 0.4;">
+							The .at top-level domain registry previously published the home address I'm legally required to give them in the domain's public WHOIS info despite <a href="https://www.nic.at/en/good_to_know/legal-backgrounds/privacy-policy" target="_blank">their privacy policy</a> saying they won't do that. It has since been redacted, but I no longer trust the .at registry with my personal information, so I plan to move Link Hat's functionality to File Garden itself under the file.garden domain instead. This will likely be in several months as I'm prioritizing development of File Garden itself. Sorry for the inconvenience and future link breakage.
+						</div>
 					</div>
 				</form>`;
 this.value += (await load("load/pagefoot", this)).value;
