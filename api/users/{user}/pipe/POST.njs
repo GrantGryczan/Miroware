@@ -111,14 +111,12 @@ if (isMe) {
 		data.privacy = 1;
 	} else if (typeof data.privacy === "number") {
 		if (data.privacy === 2) {
-			if (true /* TODO: not subscribed */) {
-				this.value = {
-					error: "Private items require a paid subscription."
-				};
-				this.status = 422;
-				this.done();
-				return;
-			}
+			this.value = {
+				error: "Private files are coming soon."
+			};
+			this.status = 422;
+			this.done();
+			return;
 		} else if (!(data.privacy === 0 || data.privacy === 1)) {
 			this.value = {
 				error: "The `privacy` value must be 0 (public), 1 (unlisted), or 2 (private)."

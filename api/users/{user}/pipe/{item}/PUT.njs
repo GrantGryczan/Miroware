@@ -168,9 +168,9 @@ if (isMe) {
 			}
 			if (typeof this.req.body.privacy === "number") {
 				if (this.req.body.privacy === 0 || this.req.body.privacy === 1 || this.req.body.privacy === 2) {
-					if (this.req.body.privacy === 2 && true /* TODO: not subscribed */) {
+					if (this.req.body.privacy === 2) {
 						this.value = {
-							error: "Private items require a paid subscription."
+							error: "Private files are coming soon."
 						};
 						this.status = 422;
 						this.done();
