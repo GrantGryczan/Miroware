@@ -68,7 +68,7 @@ const cachedParents = [];
 const getItemByID = id => pipe.find(item => item.id === id);
 const getItemByName = (name, parent = queryParent) => pipe.find(item => item.name === name && item.parent === parent);
 const setItem = item => {
-	const itemIndex = pipe.findIndex(({id}) => id === item.id);
+	const itemIndex = pipe.findIndex(({ id }) => id === item.id);
 	if (itemIndex === -1) {
 		pipe.push(item);
 	} else {
@@ -202,7 +202,7 @@ const PipeItem = class PipeItem {
 			const nameIndex = this.path.lastIndexOf("/") + 1;
 			this.path = (nameIndex ? this.path.slice(0, nameIndex) : "") + value;
 		}
-		if(this.id === "trash") {
+		if (this.id === "trash") {
 			Miro.data.trashName = value;
 		}
 	}
@@ -800,6 +800,26 @@ applyToDescendants.addEventListener("click", () => {
 		}
 	});
 });
+function addToControlsList(element, value) {
+	const controlsListString = element.getAttribute("controlslist");
+	const controlsList = controlsListString ? controlsListString.split(" ") : [];
+	if (!controlsList.includes(value)) {
+		controlsList.push(value);
+	}
+	element.setAttribute("controlslist", controlsList.join(" "));
+}
+function removeFromControlsList(element, value) {
+	const controlsListString = element.getAttribute("controlslist");
+	const controlsList = controlsListString ? controlsListString.split(" ") : [];
+	if (controlsList.includes(value)) {
+		controlsList.splice(controlsList.indexOf(value), 1);
+	}
+	if (controlsList.length) {
+		element.setAttribute("controlslist", controlsList.join(" "));
+	} else {
+		element.removeAttribute("controlslist");
+	}
+}
 actionEmbed.addEventListener("click", () => {
 	const item = items.querySelector(".item.selected")._item;
 	const embedPreview = html`<div id="embedPreview"></div>`;
@@ -871,25 +891,13 @@ actionEmbed.addEventListener("click", () => {
 			if (evt.target.checked) {
 				controlsList.classList.remove("hidden");
 				if (noDownload.checked) {
-					try {
-						embed.controlsList.add("nodownload");
-					} catch {
-						noDownload.checked = false;
-					}
+					addToControlsList(embed, "nodownload");
 				}
 				if (noRemotePlayback.checked) {
-					try {
-						embed.controlsList.add("noremoteplayback");
-					} catch {
-						noRemotePlayback.checked = false;
-					}
+					addToControlsList(embed, "noremoteplayback");
 				}
 				if (noFullscreen && noFullscreen.checked) {
-					try {
-						embed.controlsList.add("nofullscreen");
-					} catch {
-						noFullscreen.checked = false;
-					}
+					addToControlsList(embed, "nofullscreen");
 				}
 			} else {
 				controlsList.classList.add("hidden");
@@ -902,19 +910,9 @@ actionEmbed.addEventListener("click", () => {
 		embedProperties.querySelector("#muted").addEventListener("input", input);
 		const inputControls = evt => {
 			if (evt.target.checked) {
-				try {
-					embed.controlsList.add(evt.target.id);
-				} catch {
-					new Miro.Dialog("Error", "That option is not supported by your browser.");
-					evt.target.checked = false;
-				}
+				addToControlsList(embed, evt.target.id);
 			} else {
-				try {
-					embed.controlsList.remove(evt.target.id);
-					if (!embed.controlsList.length) {
-						embed.removeAttribute("controlslist");
-					}
-				} catch {}
+				removeFromControlsList(embed, evt.target.id);
 			}
 			updateCode();
 		};
@@ -937,7 +935,7 @@ actionEmbed.addEventListener("click", () => {
 		}
 		embed.controls = true;
 		if (embed.controlsList) {
-			embed.controlsList.add("nodownload");
+			addToControlsList(embed, "nodownload");
 			noDownload.checked = true;
 		}
 	}
@@ -1350,7 +1348,7 @@ if (Miro.data.isMe) {
 				try {
 					decodeURIComponent(string);
 					addURL(string);
-				} catch {}
+				} catch { }
 			}
 		}
 	}, {
@@ -1416,7 +1414,7 @@ if (Miro.data.isMe) {
 							if (!item) {
 								const directory = new PipeDirectory(entry.name, parent);
 								await directory.request;
-								({item} = directory);
+								({ item } = directory);
 							}
 							const reader = entry.createReader();
 							let entries;
