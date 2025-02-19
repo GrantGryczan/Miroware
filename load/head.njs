@@ -40,5 +40,5 @@ this.value = html`
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="https://unpkg.com/material-components-web@0.41.1/dist/material-components-web.min.css">
-		<link rel="stylesheet" href="/css/style.css">
+		<link rel="stylesheet" href="/css/style.css">`;
 this.done();
