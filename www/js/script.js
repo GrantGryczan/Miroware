@@ -371,7 +371,7 @@ Miro.response = (success, failure) => async (xhr) => {
     const error =
       (xhr.response && xhr.response.error) ||
       xhr.statusText ||
-      "An unknown error occurred: " + String(xhr.response);
+      "An unknown error occurred: " + html`$${xhr.responseText}`.textContent;
     if (failure instanceof Function && failure(xhr, error)) {
       return; // If the failure function returns truthy, do not display the default error dialog.
     }
