@@ -67,6 +67,9 @@ const listener = (req, res) => {
 		target
 	});
 };
+process.on("uncaughtException", (error) => {
+	console.error("uncaughtException", error);
+});
 http.createServer(listener).listen(8080);
 https.createServer({
 	SNICallback: (domain, callback) => {
