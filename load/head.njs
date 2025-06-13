@@ -14,7 +14,7 @@ if (this.image === undefined) {
 	this.image = "/images/icon.png";
 }
 if (this.icon === undefined) {
-	this.icon = "/images/icon.png";
+	this.icon = "/images/icon.svg";
 }
 this.value = html`
 <!DOCTYPE html>
