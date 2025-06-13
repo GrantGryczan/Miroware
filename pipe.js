@@ -184,6 +184,9 @@ const getLastModifiedString = date => {
 	});
 	http.createServer(app).listen(8082);
 })();
+setTimeout(() => {
+	process.exit();
+}, 1000 * 60 * 60 * 12);
 fs.watch(__filename, () => {
 	process.exit();
 });
