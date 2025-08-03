@@ -19,7 +19,8 @@ if (user) {
 	this.data = {
 		user: {
 			id: user._id,
-			name: user.name
+			name: user.name,
+			tag: user.tag
 		},
 		isMe,
 		trashName: user.pipe.find(item => item.id === "trash").name
