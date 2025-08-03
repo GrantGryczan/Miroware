@@ -136,6 +136,6 @@ this.value += html`
 this.value += (await load("load/belt", this)).value;
 this.value += html`
 		<div id="targetIndicator"></div>
-		<script src="/users/{user}/garden/script.js?cb=5"></script>`;
+		<script src="/users/{user}/garden/script.js?cb=6"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
