@@ -59,7 +59,7 @@ if (isMe) {
 			this.status = 422;
 			this.done();
 			return;
-		} else if (data.name.toLowerCase().endsWith(".apk") || data.name.toLowerCase().endsWith(".exe") || data.name.toLowerCase().endsWith(".bin")) {
+		} else if (!user.exception && (data.name.toLowerCase().endsWith(".apk") || data.name.toLowerCase().endsWith(".exe") || data.name.toLowerCase().endsWith(".bin"))) {
 			this.value = {
 				error: "Unfortunately, due to users frequently abusing File Garden by uploading illegal content, you cannot upload file types commonly used for malware. We intend to look for better solutions for these file types in the future."
 			};
