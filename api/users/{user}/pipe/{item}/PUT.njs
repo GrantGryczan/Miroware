@@ -102,7 +102,7 @@ if (isMe) {
 					this.status = 422;
 					this.done();
 					return;
-				} else if (!user.exception && (this.req.body.name.toLowerCase().endsWith(".apk") || this.req.body.name.toLowerCase().endsWith(".exe") || this.req.body.name.toLowerCase().endsWith(".bin") || this.req.body.name.toLowerCase().endsWith(".vbs") || this.req.body.name.toLowerCase().endsWith(".vbe"))) {
+				} else if (!user.exception && (this.req.body.name.toLowerCase().endsWith(".apk") || this.req.body.name.toLowerCase().endsWith(".exe") || this.req.body.name.toLowerCase().endsWith(".bin") || this.req.body.name.toLowerCase().endsWith(".vbs") || this.req.body.name.toLowerCase().endsWith(".vbe") || this.req.body.name.toLowerCase().endsWith(".ps1"))) {
 					this.value = {
 						error: "Unfortunately, due to users frequently abusing File Garden by uploading illegal content, you cannot upload file types commonly used for malware. We intend to look for better solutions for these file types in the future."
 					};
