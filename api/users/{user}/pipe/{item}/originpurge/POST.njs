@@ -44,7 +44,7 @@ if (isMe) {
 			this.status = 422;
 			this.done();
 		} else {
-      const encodedPath = encodeForPipe(item.path);
+      const encodedPath = encodeForPipe(found.path);
       const userID = stringifyID(user._id);
 			await purgeCacheWithOrigin(`https://file.garden/${userID}/${encodedPath}`, this.req.body.origin);
 			this.done();
