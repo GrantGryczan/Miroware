@@ -42,7 +42,9 @@ let signupDialog;
 const captchaCallbacks = [];
 window.captchaCallback = response => {
 	captchaCallbacks.shift()(response);
-	grecaptcha.reset();
+	if (grecaptcha.reset) {
+		grecaptcha.reset();
+	}
 	if (captchaCallbacks.length) {
 		grecaptcha.execute();
 	}

@@ -9,7 +9,7 @@ this.tags = ["login", "log", "in", "signup", "sign", "up", "signin", "into", "to
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<link rel="stylesheet" href="style.css">
-		<script src="https://www.google.com/recaptcha/api.js" async defer></script>`;
+		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?compat=recaptcha" async defer></script>`;
 this.value += (await load("load/body", this)).value;
 this.value += html`
 			<form id="loginForm">

@@ -211,12 +211,14 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		if (typeof captcha === "string") {
 			let success = false;
 			try {
-				({success} = await (await fetch("https://www.google.com/recaptcha/api/siteverify", {
+				({success} = await (await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
 					method: "POST",
-					body: new URLSearchParams({
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
 						secret: youKnow.captcha.secret,
 						response: captcha,
-						remoteip: context.req.get("CF-Connecting-IP") || context.req.ip
 					})
 				})).json());
 			} catch {}
