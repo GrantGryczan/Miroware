@@ -39,7 +39,7 @@ this.value += html`
 						<div class="mdc-line-ripple"></div>
 					</div><p class="mdc-text-field-helper-text"></p>
 				</span>
-				<div class="g-recaptcha" data-sitekey="${youKnow.captcha.site}" data-badge="inline" data-size="compact" data-callback="captchaCallback"></div>
+				<div class="g-recaptcha" data-sitekey="${youKnow.captcha.site}" data-badge="inline" data-size="invisible" data-callback="captchaCallback"></div>
 			</span>`;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
