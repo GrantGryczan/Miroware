@@ -69,6 +69,9 @@ const listener = (req, res) => {
 };
 process.on("uncaughtException", (error) => {
 	console.error("uncaughtException", error);
+	if (error.code === "ECONNREFUSED" && address === "127.0.0.1") {
+		process.exit();
+	}
 });
 http.createServer(listener).listen(8080);
 https.createServer({
