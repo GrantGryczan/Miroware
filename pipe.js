@@ -33,10 +33,10 @@ const getLastModifiedString = (date) => {
   const weekday = weekdays[date.getUTCDay()];
   const month = months[date.getUTCMonth()];
   const dateString = `${withTwoDigits(
-    date.getUTCDate()
+    date.getUTCDate(),
   )} ${month} ${date.getUTCFullYear()}`;
   const timeString = `${withTwoDigits(date.getUTCHours())}:${withTwoDigits(
-    date.getUTCMinutes()
+    date.getUTCMinutes(),
   )}:${withTwoDigits(date.getUTCSeconds())}`;
 
   return `${weekday}, ${dateString} ${timeString} GMT`;
@@ -62,7 +62,7 @@ const getLastModifiedString = (date) => {
           username: youKnow.b2.auth.accessKeyId,
           password: youKnow.b2.auth.secretAccessKey,
         },
-      }
+      },
     );
 
     const { data: data2 } = await axios.post(
@@ -76,7 +76,7 @@ const getLastModifiedString = (date) => {
         headers: {
           Authorization: data.authorizationToken,
         },
-      }
+      },
     );
 
     b2Authorization = data2.authorizationToken;
@@ -103,8 +103,9 @@ const getLastModifiedString = (date) => {
       .set("Access-Control-Allow-Origin", "*")
       .set(
         "Content-Security-Policy",
-        "default-src file.garden linkh.at data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'"
-      );
+        "default-src file.garden linkh.at data: mediastream: blob: 'unsafe-inline' 'unsafe-eval'",
+      )
+      .set("Cache-Control", "no-transform");
     if (req.hostname === "pipe.miroware.io") {
       const referrer = req.get("Referer");
       if (referrer) {
@@ -112,7 +113,7 @@ const getLastModifiedString = (date) => {
       }
       let url = req.url.slice(1);
       url = url.replace(/^[0-9a-f]{24}/, (hex) =>
-        Buffer.from(hex, "hex").toString("base64url")
+        Buffer.from(hex, "hex").toString("base64url"),
       );
       res.redirect(301, `https://file.garden/${url}`);
       return;
@@ -196,7 +197,7 @@ const getLastModifiedString = (date) => {
                   archive.append(data, {
                     name: item.path.slice(sliceStart),
                   });
-                })
+                }),
               );
             }
           }
@@ -222,9 +223,12 @@ const getLastModifiedString = (date) => {
   });
   http.createServer(app).listen(8082);
 })();
-setTimeout(() => {
-  process.exit();
-}, 1000 * 60 * 60);
+setTimeout(
+  () => {
+    process.exit();
+  },
+  1000 * 60 * 60,
+);
 fs.watch(__filename, () => {
   process.exit();
 });
