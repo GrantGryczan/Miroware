@@ -1,6 +1,6 @@
 const {user, isMe} = await parseUser(this);
 const found = user.pipe.find(item => item.id === this.params.item);
-if (found) {
+if (!user.shadowBanned && found) {
 	if (found.id === "trash") {
 		this.value = {
 			error: "You cannot download the trash directory."
