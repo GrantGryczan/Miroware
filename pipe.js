@@ -142,6 +142,10 @@ const getLastModifiedString = (date) => {
           _id: new ObjectId(Buffer.from(pathRoot, "base64url")),
         };
       } catch {
+        if (req.query.__debug === "404") {
+          console.log("__debug=404: 1");
+        }
+
         res.sendStatus(404);
         return;
       }
@@ -151,6 +155,10 @@ const getLastModifiedString = (date) => {
     const user = await users.findOne(userQuery);
 
     if (!user) {
+      if (req.query.__debug === "404") {
+        console.log("__debug=404: 2");
+      }
+
       res.sendStatus(404);
       return;
     }
@@ -160,6 +168,10 @@ const getLastModifiedString = (date) => {
     if (
       path.startsWith(`${user.pipe.find((item) => item.id === "trash").path}/`)
     ) {
+      if (req.query.__debug === "404") {
+        console.log("__debug=404: 3");
+      }
+
       res.sendStatus(404);
       return;
     }
@@ -172,6 +184,10 @@ const getLastModifiedString = (date) => {
       }));
 
     if (!item || item.privacy === 2) {
+      if (req.query.__debug === "404") {
+        console.log("__debug=404: 4");
+      }
+
       res.sendStatus(404);
       return;
     }
