@@ -1,7 +1,7 @@
 const {user, isMe} = await parseUser(this);
 if (isMe) {
 	const found = user.pipe.find(item => item.id === this.params.item);
-	if (found) {
+	if (!user.shadowBanned && found) {
 		if (found.type === "/") {
 			this.value = {
 				error: "Directories do not have file content."
