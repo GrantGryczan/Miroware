@@ -12,7 +12,8 @@ if (this.req.query.items) {
 		this.done();
 	});
 	const promises = [];
-	for (const found of this.req.query.items.split(",").map(id => user.pipe.find(item => item.id === id && (isMe || item.privacy !== 2)))) {
+	const founds = user.shadowBanned ? [] : this.req.query.items.split(",").map(id => user.pipe.find(item => item.id === id && (isMe || item.privacy !== 2)));
+	for (const found of founds) {
 		if (found.id && found.id !== "trash") {
 			const userIDString = user._id.toString('base64url');
 			if (found.type === "/") {
