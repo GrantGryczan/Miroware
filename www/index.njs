@@ -11,7 +11,10 @@ this.value += html`
 				<p>File Garden lets you upload any type of file to link elsewhere, forever for free.</p>
 				<div>
 					<a class="mdc-button mdc-button--raised mdc-ripple" href="${this.user ? `/users/${this.user._id}/garden/#` : "/login/?dest=%2F"}">Visit Your Garden</a>
-				</div>`;
+				</div>
+				<p>
+					<a href="/terms">Terms of Service</a> | <a href="mailto:abuse@filegarden.com" rel="noopener noreferrer">Report Abuse</a>
+				</p>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += (await load("load/foot", this)).value;
