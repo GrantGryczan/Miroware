@@ -12,7 +12,7 @@ this.value += html`
 				<div>
 					<a class="mdc-button mdc-button--raised mdc-ripple" href="${this.user ? `/users/${this.user._id}/garden/#` : "/login/?dest=%2F"}">Visit Your Garden</a>
 				</div>
-				<p>
+				<p style="margin-top: 4em;">
 					<a href="/terms">Terms of Service</a> | <a href="mailto:abuse@filegarden.com" rel="noopener noreferrer">Report Abuse</a>
 				</p>`;
 this.value += (await load("load/pagefoot", this)).value;
