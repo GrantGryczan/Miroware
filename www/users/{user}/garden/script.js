@@ -448,7 +448,7 @@ const hashChange = () =>
 hashChange().then(() => {
 	const storageUsage = document.getElementById("storageUsage");
 	if (storageUsage) {
-		storageUsage.textContent = cacheItem(null).then(() => {
+		cacheItem(null).then(() => {
 			const rootItems = pipe.filter(item => !item.parent);
 			let netSize = 0;
 			for (const item of rootItems) {
