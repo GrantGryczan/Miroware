@@ -53,7 +53,8 @@ this.value += html`
 							</button>
 						</div>
 						<div style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12);">
-							Your storage: <span id="storageUsage">-</span> / 2 GiB<br>
+							<b>Your storage:</b><br>
+							<span id="storageUsage">-</span><br>
 							<a href="https://bsky.app/profile/filegarden.com/post/3mt5gp52c2k2k" target="_blank" rel="noreferrer noopener">Why was the free limit lowered?</a>
 						</div>
 						<a style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12); text-decoration: none;" href="https://www.patreon.com/filegarden" target="_blank" rel="noreferrer noopener">
@@ -143,6 +144,6 @@ this.value += html`
 this.value += (await load("load/belt", this)).value;
 this.value += html`
 		<div id="targetIndicator"></div>
-		<script src="/users/{user}/garden/script.js?cb=8"></script>`;
+		<script src="/users/{user}/garden/script.js?cb=9"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();

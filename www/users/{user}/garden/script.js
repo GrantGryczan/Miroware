@@ -454,7 +454,8 @@ hashChange().then(() => {
 			for (const item of rootItems) {
 				netSize += item.size;
 			}
-			storageUsage.textContent = getSizeString(netSize);
+			const percentage = (100 * netSize / (2 * 1024 * 1024 * 1024)).toFixed(2);
+			storageUsage.textContent = `${getSizeString(netSize)} / 2 GiB (${percentage}%)`;
 		});
 	}
 });
