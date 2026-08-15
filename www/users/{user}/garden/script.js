@@ -443,10 +443,21 @@ const cacheItem = id => new Promise((resolve, reject) => {
 		}, reject));
 	}
 });
-const hashChange = () => {
+const hashChange = () =>
 	cacheItem(queryParent = location.hash.slice(1) || null).then(render).catch(goHome);
-};
-hashChange();
+hashChange().then(() => {
+	const storageUsage = document.getElementById("storageUsage");
+	if (storageUsage) {
+		storageUsage.textContent = cacheItem(null).then(() => {
+			const rootItems = pipe.filter(item => !item.parent);
+			let netSize = 0;
+			for (const item of rootItems) {
+				netSize += item.size;
+			}
+			storageUsage.textContent = getSizeString(netSize);
+		});
+	}
+});
 window.addEventListener("hashchange", hashChange);
 let selectedItem = null;
 let focusedItem = null;

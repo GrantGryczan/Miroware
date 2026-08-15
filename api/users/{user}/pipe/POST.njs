@@ -209,9 +209,9 @@ if (isMe) {
 				totalUserSize += item.size;
 			}
 		}
-		if ((totalUserSize + body.length) > 15 * 1024 * 1024 * 1024) { // 15 GiB
+		if ((totalUserSize + body.length) > 2 * 1024 * 1024 * 1024) { // 2 GiB
 			this.value = {
-				error: "Uploading more than 15 GiB in total is currently not supported, though in the future we plan to add a donation reward to increase this limit. Sorry!"
+				error: "Unfortunately, we can't afford to host more than 2 GiB per free user anymore. Paid options to increase this limit are in the works. Sorry!"
 			};
 			this.status = 422;
 			this.done();

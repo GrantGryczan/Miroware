@@ -52,6 +52,9 @@ this.value += html`
 								Retry all failed uploads
 							</button>
 						</div>
+						<div style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12);">
+							Your storage: <span id="storageUsage">-</span> / 2 GiB
+						</div>
 						<a style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12); text-decoration: none;" href="https://www.patreon.com/filegarden" target="_blank" rel="noreferrer noopener">
 							I pay hosting costs out of pocket, and it's not cheap. Please support me on Patreon: <span style="text-decoration: underline;">patreon.com/filegarden</span>
 						</a>${true || this.req.cookies.hidesurvey1 ? "" : html`
