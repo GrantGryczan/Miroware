@@ -1,5 +1,5 @@
 "use strict";
-const serverIndex = +process.argv[1];
+const serverIndex = +process.argv[2];
 console.log(`< Server ${serverIndex} >`);
 const crypto = require("crypto");
 const fs = require("fs-extra");
