@@ -56,7 +56,7 @@ const listener = (req, res) => {
 	let target;
 	if (req.headers.host) {
 		if (req.headers.host.endsWith(".garden") || req.headers.host === "pipe.miroware.io") {
-			target = "http://localhost:8082";
+			target = "http://localhost:" + (8200 + Math.floor(Math.random() * 4));
 		} else if (req.headers.host.endsWith(".at") || req.headers.host.endsWith(".gg")) {
 			target = "http://localhost:8083";
 		}

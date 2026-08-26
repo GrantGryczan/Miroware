@@ -1,5 +1,6 @@
 "use strict";
-console.log("< Pipe >");
+const serverIndex = +process.argv[2];
+console.log(`< Pipe ${serverIndex} >`);
 const fs = require("fs");
 const http = require("http");
 const express = require("express");
@@ -221,7 +222,7 @@ const getLastModifiedString = (date) => {
         });
     }
   });
-  http.createServer(app).listen(8082);
+  http.createServer(app).listen(8200 + serverIndex);
 })();
 setTimeout(
   () => {
