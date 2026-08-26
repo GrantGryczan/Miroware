@@ -1,5 +1,6 @@
 "use strict";
-console.log("< Server >");
+const serverIndex = +process.argv[1];
+console.log(`< Server ${serverIndex} >`);
 const crypto = require("crypto");
 const fs = require("fs-extra");
 const { serve, html } = require("servecube");
@@ -13,7 +14,7 @@ const { S3 } = require("@aws-sdk/client-s3");
 const archiver = require("archiver");
 const youKnow = require("./secret/youknow.js");
 const axios = require('axios');
-const production = process.argv.includes("production");
+const production = true;
 const lineBreaks = /\n/g;
 const emailTest = /^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$/;
 const testEmail = email => emailTest.test(email) && email.length <= 254;
@@ -664,7 +665,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		domain,
 		errorDir: "error",
 		loadDirs: ["load"],
-		httpPort: 8081,
+		httpPort: 8100 + serverIndex,
 		subdomains: {
 			d: "www/",
 			api: "api/"
@@ -819,7 +820,9 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			}
 		});
 	};
-	setInterval(hourly, 1000 * 60 * 60);
-	hourly();
+	if (serverIndex === 0) {
+		setInterval(hourly, 1000 * 60 * 60);
+		hourly();
+	}
 	const {load} = cube;
 })();

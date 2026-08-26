@@ -53,15 +53,16 @@ const listener = (req, res) => {
 		return;
 	}
 
-	let target = "http://localhost:8081";
+	let target;
 	if (req.headers.host) {
 		if (req.headers.host.endsWith(".garden") || req.headers.host === "pipe.miroware.io") {
 			target = "http://localhost:8082";
 		} else if (req.headers.host.endsWith(".at") || req.headers.host.endsWith(".gg")) {
 			target = "http://localhost:8083";
-		} else if (req.headers.host.endsWith(".gold")) {
-			target = "http://localhost:8180";
 		}
+	}
+	if (target === undefined) {
+		target = "http://localhost:" + (8100 + Math.floor(Math.random() * 4));
 	}
 	proxy.web(req, res, {
 		target
