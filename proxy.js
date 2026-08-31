@@ -56,13 +56,13 @@ const listener = (req, res) => {
 	let target;
 	if (req.headers.host) {
 		if (req.headers.host.endsWith(".garden") || req.headers.host === "pipe.miroware.io") {
-			target = "http://localhost:" + (8200 + Math.floor(Math.random() * 4));
+			target = "http://localhost:" + (8200 + Math.floor(Math.random() * 3));
 		} else if (req.headers.host.endsWith(".at") || req.headers.host.endsWith(".gg")) {
 			target = "http://localhost:8083";
 		}
 	}
 	if (target === undefined) {
-		target = "http://localhost:" + (8100 + Math.floor(Math.random() * 4));
+		target = "http://localhost:" + (8100 + Math.floor(Math.random() * 3));
 	}
 	proxy.web(req, res, {
 		target
