@@ -797,32 +797,39 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			plugins: ["iife-wrap"]
 		}
 	});
+	let readyToRestart;
 	const hourly = () => {
-		const thirtyDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
-		users.find().forEach(async user => {
-			if (!user.verified && user.created < thirtyDaysAgo) {
-				deleteUser(user);
-				return;
-			}
-			const update = {};
-			let updated = false;
-			for (let i = 0; i < user.pipe.length; i++) {
-				const item = user.pipe[i];
-				if (item.trashed && item.trashed < thirtyDaysAgo) {
-					await deletePipeItem(user, item, update);
-					updated = true;
+		readyToRestart = new Promise(resolve => {
+			const thirtyDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 30;
+			users.find().forEach(async user => {
+				if (!user.verified && user.created < thirtyDaysAgo) {
+					deleteUser(user);
+					return;
 				}
-			}
-			if (updated) {
-				users.updateOne({
-					_id: user._id
-				}, update);
-			}
-		});
+				const update = {};
+				let updated = false;
+				for (let i = 0; i < user.pipe.length; i++) {
+					const item = user.pipe[i];
+					if (item.trashed && item.trashed < thirtyDaysAgo) {
+						await deletePipeItem(user, item, update);
+						updated = true;
+					}
+				}
+				if (updated) {
+					users.updateOne({
+						_id: user._id
+					}, update);
+				}
+			}).then(resolve);
+		})
 	};
 	if (serverIndex === 0) {
 		setInterval(hourly, 1000 * 60 * 60);
 		hourly();
 	}
+	setTimeout(async () => {
+		await readyToRestart;
+		process.exit();
+	}, (0.5 + Math.random()) * 1000 * 60 * 60);
 	const {load} = cube;
 })();
