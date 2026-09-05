@@ -249,7 +249,9 @@ if (isMe) {
     if (requiredStorage > maxStorage) {
       this.value = {
         error: user.storageTier
-          ? `This upload exceeds your account's storage quota. If you'd like more storage, feel free to <a href="/billing">upgrade your supporter plan</a>.`
+          ? user.storageTier === 3
+            ? `This upload exceeds your account's storage quota. Unfortunately, we currently don't offer accounts with more than 1 TB.`
+            : `This upload exceeds your account's storage quota. If you'd like more storage, feel free to <a href="/billing">upgrade your supporter plan</a>.`
           : `Unfortunately, we can't afford to host more than 2 GB per free user. If you'd like increased storage, please <a href="/pricing">support us</a>!`,
       };
       this.status = 422;
