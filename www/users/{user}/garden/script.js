@@ -455,9 +455,9 @@ hashChange().then(() => {
 				netSize += item.size;
 			}
 			const tier = Miro.data.user.storageTier;
-			const maxSizeGb = (tier === 0 ? 2 : tier === 1 ? 100 : tier === 2 ? 400 : 1024) * 1024 * 1024 * 1024;
+			const maxSize = (tier === 0 ? 2 : tier === 1 ? 100 : tier === 2 ? 400 : 1024) * 1024 * 1024 * 1024;
 			const percentage = Math.floor(100 * netSize / maxSize);
-			storageUsage.textContent = `${getSizeString(netSize)} / ${getSizeString(maxSizeGb)} (${percentage}%)`;
+			storageUsage.textContent = `${getSizeString(netSize)} / ${getSizeString(maxSize)} (${percentage}%)`;
 		});
 	}
 });
