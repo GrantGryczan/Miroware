@@ -12,8 +12,8 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<p>We give 2 GB storage for free, but you can support us to get more storage!</p>
-				<p>We don't sell your data, so direct support from users is our only only means of making money. It's very expensive for us to host all your files!</p>`;
+				<p>We give 2 GB storage for free, but you can support us to get more storage.</p>
+				<p style="margin-bottom: 2em;">We don't sell your data, so direct support from users is our only only means of making money. It's very expensive for us to host all your files!</p>`;
 if (this.user.stripeCustomerId) {
 	const customerSession = await stripe.customerSessions.create({
 		customer: this.user.stripeCustomerId,
@@ -44,7 +44,7 @@ if (this.user.stripeCustomerId) {
 				></stripe-pricing-table>`;
 }
 this.value += html`
-				<p>(Due to technical limitations, this page is currently only visible to signed-in users. That will be fixed in a future update, and we'll add a progress bar showing how much of our costs are covered by supporters.)</p>`;
+				<p style="margin-top: 2em;">(Due to technical limitations, this page is currently only visible to signed-in users. That will be fixed in a future update, and we'll add a progress bar showing how much of our costs are covered by supporters.)</p>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += (await load("load/foot", this)).value;
