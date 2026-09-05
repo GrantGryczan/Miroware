@@ -77,7 +77,7 @@ const listener = (req, res) => {
     }
   }
   if (target === undefined) {
-    target = "http://localhost:" + (8100 + Math.floor(Math.random() * 4));
+    target = "http://localhost:" + (8100 + Math.floor(Math.random() * 3));
   }
   proxy.web(req, res, {
     target,
