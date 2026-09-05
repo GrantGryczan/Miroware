@@ -57,12 +57,13 @@ this.value += html`
 						</div>
 						<div style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12);">
 							<b>Your storage:</b><br>
-							<span id="storageUsage">-</span><br>
-							<a href="https://bsky.app/profile/filegarden.com/post/3mt5gp52c2k2k" target="_blank" rel="noreferrer noopener">Why was the free limit lowered?</a>
-						</div>
-						<a style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12); text-decoration: none;" href="https://www.patreon.com/filegarden" target="_blank" rel="noreferrer noopener">
-							I pay hosting costs out of pocket, and it's not cheap. Please support me on Patreon: <span style="text-decoration: underline;">patreon.com/filegarden</span>
-						</a>${true || this.req.cookies.hidesurvey1 ? "" : html`
+							<span id="storageUsage">-</span><br>${!user.storageTier ? html`
+							<a href="/pricing">Get more storage</a>` : user.storageTier === 3 ? "" : html`
+							<a href="/billing">Get more storage</a>`}
+						</div>${user.storageTier ? "" : html`
+						<a style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12); text-decoration: none;" href="/pricing" target="_blank" rel="noreferrer noopener">
+							I pay hosting costs out of pocket, and it's not cheap. Please <span style="text-decoration: underline;">support File Garden</span> if you can!
+						</a>`}${true || this.req.cookies.hidesurvey1 ? "" : html`
 						<div style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12);">
 							Hey, would you mind answering a one-minute poll about your interest in File Garden?
 							<a href="https://forms.gle/UtYpPXPrVFEHkKer6" target="_blank">Click here.</a><br>
