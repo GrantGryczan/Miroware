@@ -39,7 +39,7 @@ if (this.user.stripeCustomerId) {
 					pricing-table-id="prctbl_1UC4zNB0vvlrZrIaCNKU5NAA"
 					publishable-key="pk_test_51UAg9GB0vvlrZrIa8345vgJxAphjxKkeC6YL6T0p4pDvlx1TLEHgb3MMHm48rmXr8LBWvNCjpr9OVjN3UQ0sirrM007qc8Mlhc"
 					customer-email="$${this.user.email}"
-					client-reference-id="$${this.user._id.toString("hex") + ":" + stripeClientReferenceId}"
+					client-reference-id="$${this.user._id.toString("hex") + " " + stripeClientReferenceId}"
 				></stripe-pricing-table>`;
 }
 this.value += (await load("load/pagefoot", this)).value;

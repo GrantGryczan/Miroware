@@ -31,7 +31,7 @@ if (event.type === "checkout.session.completed") {
   }
 
   const clientReferenceId = event.data.object.client_reference_id;
-  const clientReferenceIdParts = clientReferenceId.split(":");
+  const clientReferenceIdParts = clientReferenceId.split(" ");
   if (clientReferenceIdParts.length !== 2) {
     this.done();
     return;
