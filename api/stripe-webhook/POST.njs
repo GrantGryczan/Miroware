@@ -62,7 +62,7 @@ if (event.type === "checkout.session.completed") {
 }
 
 if (event.type === "entitlements.active_entitlement_summary.updated") {
-  const entitlements = event.data.object.data;
+  const entitlements = event.data.object.entitlements.data;
   const storageTiers = entitlements
     .filter((entitlement) => entitlement.lookup_key.startsWith("storage-tier-"))
     .map((entitlement) => +entitlement.lookup_key.slice("storage-tier-".length))
