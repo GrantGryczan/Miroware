@@ -13,7 +13,7 @@ this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
 				<p>We give 2 GB storage for free, but you can support us to get more storage!</p>
-				<p>Hosting costs are not cheap. We don't sell your data, so direct support from users is our only only means of making money.</p>`;
+				<p>We don't sell your data, so direct support from users is our only only means of making money. It's very expensive for us to host all your files!</p>`;
 if (this.user.stripeCustomerId) {
 	const customerSession = await stripe.customerSessions.create({
 		customer: this.user.stripeCustomerId,
