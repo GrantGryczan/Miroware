@@ -8,34 +8,34 @@ const getSizeString = size => {
 	}
 	size /= BYTE_SCALE;
 	if (size < BYTE_SCALE) {
-		return `${Math.round(10 * size) / 10} KiB`;
+		return `${Math.round(10 * size) / 10} KB`;
 	}
 	size /= BYTE_SCALE;
 	if (size < BYTE_SCALE) {
-		return `${Math.round(10 * size) / 10} MiB`;
+		return `${Math.round(10 * size) / 10} MB`;
 	}
 	size /= BYTE_SCALE;
 	if (size < BYTE_SCALE) {
-		return `${Math.round(10 * size) / 10} GiB`;
+		return `${Math.round(10 * size) / 10} GB`;
 	}
 	size /= BYTE_SCALE;
 	if (size < BYTE_SCALE) {
-		return `${Math.round(10 * size) / 10} TiB`;
+		return `${Math.round(10 * size) / 10} TB`;
 	}
 	size /= BYTE_SCALE;
 	if (size < BYTE_SCALE) {
-		return `${Math.round(10 * size) / 10} PiB`;
+		return `${Math.round(10 * size) / 10} PB`;
 	}
 	size /= BYTE_SCALE;
 	if (size < BYTE_SCALE) {
-		return `${Math.round(10 * size) / 10} EiB`;
+		return `${Math.round(10 * size) / 10} EB`;
 	}
 	size /= BYTE_SCALE;
 	if (size < BYTE_SCALE) {
-		return `${Math.round(10 * size) / 10} ZiB`;
+		return `${Math.round(10 * size) / 10} ZB`;
 	}
 	size /= BYTE_SCALE;
-	return `${Math.round(10 * size) / 10} YiB`;
+	return `${Math.round(10 * size) / 10} YB`;
 };
 const container = document.body.querySelector("#container");
 const targetIndicator = document.body.querySelector("#targetIndicator");
@@ -454,8 +454,10 @@ hashChange().then(() => {
 			for (const item of rootItems) {
 				netSize += item.size;
 			}
-			const percentage = Math.floor(1000 * netSize / (2 * 1024 * 1024 * 1024)) / 10;
-			storageUsage.textContent = `${getSizeString(netSize)} / 2 GiB (${percentage}%)`;
+			const tier = Miro.data.user.storageTier;
+			const maxSizeGb = (tier === 0 ? 2 : tier === 1 ? 100 : tier === 2 ? 400 : 1024) * 1024 * 1024 * 1024;
+			const percentage = Math.floor(100 * netSize / maxSize);
+			storageUsage.textContent = `${getSizeString(netSize)} / ${getSizeString(maxSizeGb)} (${percentage}%)`;
 		});
 	}
 });
@@ -1223,8 +1225,8 @@ if (Miro.data.isMe) {
 		}
 	};
 	const addFile = async (file, parent, name) => {
-		if (file.size > 100 * 1024 * 1024 /* 100 MiB */) {
-			new Miro.Dialog("Error", "Currently, we don't support uploading files above 100 MiB.");
+		if (file.size > 100 * 1024 * 1024) {
+			new Miro.Dialog("Error", "Files larger than 100 MB are currently not supported due to technical limitations. Sorry!");
 			return;
 		}
 		if (!(name = await checkName(typeof name === "string" ? name : file.name, parent))) {

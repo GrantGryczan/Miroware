@@ -25,6 +25,9 @@ if (user) {
 		isMe,
 		trashName: user.pipe.find(item => item.id === "trash").name
 	}
+	if (isMe) {
+		this.data.user.storageTier = user.storageTier ?? 0;
+	}
 	this.description = `View ${user.name}'s garden.`;
 } else {
 	Object.assign(this, await load("error/404", this));
@@ -144,6 +147,6 @@ this.value += html`
 this.value += (await load("load/belt", this)).value;
 this.value += html`
 		<div id="targetIndicator"></div>
-		<script src="/users/{user}/garden/script.js?cb=10"></script>`;
+		<script src="/users/{user}/garden/script.js?cb=11"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
