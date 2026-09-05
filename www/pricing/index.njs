@@ -44,7 +44,7 @@ if (this.user.stripeCustomerId) {
 				></stripe-pricing-table>`;
 }
 this.value += html`
-				<p style="margin-top: 2em;">(Due to technical limitations, this page is currently only visible to signed-in users. That will be fixed in a future update, and we'll add a progress bar showing how much of our costs are covered by supporters.)</p>`;
+				<p style="margin-top: 4em;">(Due to technical limitations, this page is currently only visible to signed-in users. That will be fixed in a future update, and we'll add a progress bar showing how much of our costs are covered by supporters.)</p>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += (await load("load/foot", this)).value;
