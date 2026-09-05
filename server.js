@@ -414,13 +414,7 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 		_id: user._id
 	}) => {
 		if (user.stripeCustomerId) {
-			const subscriptions = await stripe.subscriptions.list({
-				customer: user.stripeCustomerId,
-			});
-
-			for await (const subscription of subscriptions) {
-				await stripe.subscriptions.cancel(subscription.id);
-			}
+			await stripe.customers.del(user.stripeCustomerId);
 		}
 
 		const fileItems = user.pipe.filter(pipeFiles);
