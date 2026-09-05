@@ -12,19 +12,20 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<p>I pay hosting costs out of pocket, and it's not cheap. Please support us and get more storage!</p>`;
+				<p>We give 2 GB storage for free, but you can support us to get more storage!</p>
+				<p>Hosting costs are not cheap. We don't sell your data, so direct support from users is our only only means of making money.</p>`;
 if (this.user.stripeCustomerId) {
 	const customerSession = await stripe.customerSessions.create({
 		customer: this.user.stripeCustomerId,
 		components: { pricing_table: { enabled: true } },
 	});
 	this.value += html`
-			<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
-			<stripe-pricing-table
-				pricing-table-id="prctbl_1UC4zNB0vvlrZrIaCNKU5NAA"
-				publishable-key="pk_test_51UAg9GB0vvlrZrIa8345vgJxAphjxKkeC6YL6T0p4pDvlx1TLEHgb3MMHm48rmXr8LBWvNCjpr9OVjN3UQ0sirrM007qc8Mlhc"
-				customer-session-client-secret="$${customerSession.client_secret}"
-			></stripe-pricing-table>`;
+				<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+				<stripe-pricing-table
+					pricing-table-id="prctbl_1UC4zNB0vvlrZrIaCNKU5NAA"
+					publishable-key="pk_test_51UAg9GB0vvlrZrIa8345vgJxAphjxKkeC6YL6T0p4pDvlx1TLEHgb3MMHm48rmXr8LBWvNCjpr9OVjN3UQ0sirrM007qc8Mlhc"
+					customer-session-client-secret="$${customerSession.client_secret}"
+				></stripe-pricing-table>`;
 } else {
 	let stripeClientReferenceId = this.user.stripeClientReferenceId;
 	if (!stripeClientReferenceId) {
@@ -42,6 +43,8 @@ if (this.user.stripeCustomerId) {
 					client-reference-id="$${this.user._id.toString("hex") + " " + stripeClientReferenceId}"
 				></stripe-pricing-table>`;
 }
+this.value += html`
+				<p>(Due to technical limitations, this page is currently only visible to signed-in users. That will be fixed in a future update, and we'll add a progress bar showing how much of our costs are covered by supporters.)</p>`;
 this.value += (await load("load/pagefoot", this)).value;
 this.value += (await load("load/belt", this)).value;
 this.value += (await load("load/foot", this)).value;
