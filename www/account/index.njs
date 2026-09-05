@@ -32,7 +32,7 @@ this.value += html`
 					</div>
 					<p class="mdc-text-field-helper-text">You may only set your username once per day.</p>
 					<button id="manageConnections" class="mdc-button mdc-button--unelevated mdc-button--dense marginedMore">Manage Sign-In Methods</button>
-					<a href="/billing" class="mdc-button mdc-button--unelevated mdc-button--dense marginedMore">Billing</button><br>
+					<a href="/billing" class="mdc-button mdc-button--unelevated mdc-button--dense marginedMore">Billing</a><br>
 					<div class="mdc-text-field">
 						<input id="birth" name="birth" class="mdc-text-field__input" type="text" data-type="date" value="${inputDate(new Date(this.user.birth))}" required>
 						<label class="mdc-floating-label" for="birth">Birthdate</label>
