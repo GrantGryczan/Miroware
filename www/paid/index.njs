@@ -1,4 +1,4 @@
-this.title = "Thank you";
+this.title = "Payment Successful";
 this.value = (await load("load/head", this)).value;
 this.value += html`
 		<style>main{text-align:center;}</style>`;
