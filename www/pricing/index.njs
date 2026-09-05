@@ -23,7 +23,7 @@ if (this.user.stripeCustomerId) {
 				<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 				<stripe-pricing-table
 					pricing-table-id="prctbl_1UC4zNB0vvlrZrIaCNKU5NAA"
-					publishable-key="pk_test_51UAg9GB0vvlrZrIa8345vgJxAphjxKkeC6YL6T0p4pDvlx1TLEHgb3MMHm48rmXr8LBWvNCjpr9OVjN3UQ0sirrM007qc8Mlhc"
+					publishable-key="pk_live_51UB7E2QvT16nIDeAGvt88Gm6FVfIG7Z0tw4gOkidil1eQbCO7osnxK2GXzQHE0aVdrXMr2qNfmZSdNO5Ea09CFtO00ztg9m8GI"
 					customer-session-client-secret="$${customerSession.client_secret}"
 				></stripe-pricing-table>`;
 } else {
@@ -38,7 +38,7 @@ if (this.user.stripeCustomerId) {
 				<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 				<stripe-pricing-table
 					pricing-table-id="prctbl_1UC4zNB0vvlrZrIaCNKU5NAA"
-					publishable-key="pk_test_51UAg9GB0vvlrZrIa8345vgJxAphjxKkeC6YL6T0p4pDvlx1TLEHgb3MMHm48rmXr8LBWvNCjpr9OVjN3UQ0sirrM007qc8Mlhc"
+					publishable-key="pk_live_51UB7E2QvT16nIDeAGvt88Gm6FVfIG7Z0tw4gOkidil1eQbCO7osnxK2GXzQHE0aVdrXMr2qNfmZSdNO5Ea09CFtO00ztg9m8GI"
 					customer-email="$${this.user.email}"
 					client-reference-id="$${this.user._id.toString("hex") + " " + stripeClientReferenceId}"
 				></stripe-pricing-table>`;
