@@ -69,7 +69,7 @@ if (event.type === "entitlements.active_entitlement_summary.updated") {
     .sort();
   const storageTier = storageTiers[storageTiers.length - 1] ?? 0;
 
-  await users.updateOne(
+  const result = await users.updateOne(
     {
       stripeCustomerId: event.data.object.customer,
     },
@@ -79,6 +79,16 @@ if (event.type === "entitlements.active_entitlement_summary.updated") {
       },
     },
   );
+
+  if (!result.matchedCount) {
+    this.value = {
+      error:
+        "No FG user found with the specified Stripe customer ID. Webhook events out of order?",
+    };
+    this.status = 400;
+    this.done();
+    return;
+  }
 
   this.done();
   return;
