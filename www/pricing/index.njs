@@ -28,7 +28,7 @@ if (this.user.stripeCustomerId) {
 } else {
 	let stripeClientReferenceId = this.user.stripeClientReferenceId;
 	if (!stripeClientReferenceId) {
-		stripeClientReferenceId = crypto.randomBytes(16).toString("base64");
+		stripeClientReferenceId = crypto.randomBytes(24).toString("base64");
 		await users.updateOne({ _id: this.user._id }, {
 			$set: { stripeClientReferenceId },
 		});
