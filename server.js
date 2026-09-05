@@ -14,6 +14,7 @@ const { S3 } = require("@aws-sdk/client-s3");
 const archiver = require("archiver");
 const youKnow = require("./secret/youknow.js");
 const axios = require('axios');
+const stripe = require('stripe')(youKnow.stripe.secretKey);
 const production = true;
 const lineBreaks = /\n/g;
 const emailTest = /^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$/;
@@ -409,21 +410,27 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			token
 		};
 	};
-	const deleteUser = (user, userFilter = {
+	const deleteUser = async (user, userFilter = {
 		_id: user._id
-	}) => new Promise((resolve, reject) => {
+	}) => {
+		if (user.stripeCustomerId) {
+			const subscriptions = await stripe.subscriptions.list({
+				customer: user.stripeCustomerId,
+			});
+
+			for await (const subscription of subscriptions) {
+				await stripe.subscriptions.cancel(subscription.id);
+			}
+		}
+
 		const fileItems = user.pipe.filter(pipeFiles);
 		if (fileItems.length) {
-			deletePipeFiles(stringifyID(user._id), fileItems).then(() => {
-				purgePipeCache(user, fileItems);
-				users.deleteOne(userFilter);
-				resolve();
-			}).catch(reject);
-		} else {
-			users.deleteOne(userFilter);
-			resolve();
+			await deletePipeFiles(stringifyID(user._id), fileItems);
+			purgePipeCache(user, fileItems);
 		}
-	});
+
+		await users.deleteOne(userFilter);
+	};
 	const shadowBan = async (id) => {
 		const user = await users.findOne({ _id: ObjectID(Buffer.from(id, "base64url")) });
 		await users.updateOne({ _id: user._id }, {
