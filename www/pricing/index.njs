@@ -22,7 +22,7 @@ if (this.user.stripeCustomerId) {
 	this.value += html`
 				<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 				<stripe-pricing-table
-					pricing-table-id="prctbl_1UC4zNB0vvlrZrIaCNKU5NAA"
+					pricing-table-id="prctbl_1UCJ99QvT16nIDeAyEP3yunL"
 					publishable-key="pk_live_51UB7E2QvT16nIDeAGvt88Gm6FVfIG7Z0tw4gOkidil1eQbCO7osnxK2GXzQHE0aVdrXMr2qNfmZSdNO5Ea09CFtO00ztg9m8GI"
 					customer-session-client-secret="$${customerSession.client_secret}"
 				></stripe-pricing-table>`;
@@ -37,7 +37,7 @@ if (this.user.stripeCustomerId) {
 	this.value += html`
 				<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 				<stripe-pricing-table
-					pricing-table-id="prctbl_1UC4zNB0vvlrZrIaCNKU5NAA"
+					pricing-table-id="prctbl_1UCJ99QvT16nIDeAyEP3yunL"
 					publishable-key="pk_live_51UB7E2QvT16nIDeAGvt88Gm6FVfIG7Z0tw4gOkidil1eQbCO7osnxK2GXzQHE0aVdrXMr2qNfmZSdNO5Ea09CFtO00ztg9m8GI"
 					customer-email="$${this.user.email}"
 					client-reference-id="$${this.user._id.toString("hex") + " " + stripeClientReferenceId}"
