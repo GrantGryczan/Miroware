@@ -36,7 +36,7 @@ if (user) {
 }
 this.value = (await load("load/head", this)).value;
 this.value += html`
-		<link rel="stylesheet" href="/users/{user}/garden/style.css?cb=3">`;
+		<link rel="stylesheet" href="/users/{user}/garden/style.css?cb=4">`;
 this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
