@@ -1,5 +1,5 @@
 if (this.user?.stripeCustomerId) {
-	const entitlements = await stripe.entitlements.activeEntitlements.list({
+	const { data: entitlements } = await stripe.entitlements.activeEntitlements.list({
 		customer: this.user.stripeCustomerId,
 	});
 
