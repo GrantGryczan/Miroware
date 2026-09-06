@@ -302,6 +302,7 @@
 	padding: 6px 0;
 	border-top: 1px solid rgba(255, 255, 255, .12);
 	text-decoration: none;
+	overflow: hidden;
 }
 @keyframes slide-up {
 	0%, 80% {
