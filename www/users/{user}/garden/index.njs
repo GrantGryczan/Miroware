@@ -36,7 +36,7 @@ if (user) {
 }
 this.value = (await load("load/head", this)).value;
 this.value += html`
-		<link rel="stylesheet" href="/users/{user}/garden/style.css?cb=1">`;
+		<link rel="stylesheet" href="/users/{user}/garden/style.css?cb=2">`;
 this.value += (await load("load/body", this)).value;
 this.value += html`
 			<div id="panels">
@@ -60,7 +60,7 @@ this.value += html`
 							<span id="storageUsage">-</span><br>${!user.storageTier || user.storageTier === 3 ? "" : html`
 							<a href="/billing">Get more storage</a>`}
 						</div>${user.storageTier ? "" : html`
-						<a style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12); text-decoration: none;" href="/pricing" target="_blank" rel="noreferrer noopener">
+						<a id="pricing-link" href="/pricing" target="_blank" rel="noreferrer noopener">
 							I pay hosting costs out of pocket, and it's not cheap. If you can, <span style="text-decoration: underline;">support File Garden and get more storage</span>!
 						</a>`}${true || this.req.cookies.hidesurvey1 ? "" : html`
 						<div style="flex-shrink: 0; white-space: normal; padding: 6px 0; border-top: 1px solid rgba(255, 255, 255, .12);">
