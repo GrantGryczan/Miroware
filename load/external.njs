@@ -21,7 +21,7 @@ if (this.socialIcons) {
 	this.value = html`
 					<div id="externalContainer">
 						<div id="externals">`;
-	for (const service of ["discord", "patreon"]) {
+	for (const service of ["discord"]) {
 		const context = await load(`www/${service}/`, {
 			...this,
 			socialIcons: true
