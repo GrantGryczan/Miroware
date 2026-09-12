@@ -831,6 +831,6 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 	setTimeout(async () => {
 		await readyToRestart;
 		process.exit();
-	}, (0.5 + Math.random()) * 1000 * 60 * 60);
+	}, (8 + Math.random()) * 1000 * 60 * 60);
 	const {load} = cube;
 })();

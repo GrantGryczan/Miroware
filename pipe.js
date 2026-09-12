@@ -228,7 +228,7 @@ setTimeout(
   () => {
     process.exit();
   },
-  Math.random() * 1000 * 60 * 30,
+  (8 + Math.random()) * 1000 * 60 * 60,
 );
 fs.watch(__filename, () => {
   process.exit();
