@@ -13,7 +13,8 @@ this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
 				<p>We give 2 GB storage for free, but you can support us to get more storage.</p>
-				<p style="margin-bottom: 2em;">We don't sell your data, so direct support from users is our only means of making money. It's very expensive for us to host all your files!</p>`;
+				<p>We don't sell your data, so direct support from users is our only means of making money. It's very expensive for us to host all your files!</p>
+				<p style="margin-bottom: 2em;">NOTE: Due to technical limitations, our max file size is always 100 MB. We plan to increase this for supporters in the future.</p>`;
 if (this.user.stripeCustomerId) {
 	const customerSession = await stripe.customerSessions.create({
 		customer: this.user.stripeCustomerId,
