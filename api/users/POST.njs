@@ -36,30 +36,6 @@ if (testEmail(this.req.body.email)) {
 				this.done();
 				return;
 			}
-			if (typeof this.req.body.birth === "number") {
-				if (this.req.body.birth < -8640000000000000) {
-					this.value = {
-						error: "Nobody is that old."
-					};
-					this.status = 400;
-					this.done();
-					return;
-				} else if (this.req.body.birth - this.now > -409968000000) {
-					this.value = {
-						error: "You must be at least 13 years of age to sign up."
-					};
-					this.status = 400;
-					this.done();
-					return;
-				}
-			} else {
-				this.value = {
-					error: "The `birth` value must be a number."
-				};
-				this.status = 400;
-				this.done();
-				return;
-			}
 			const salt = youKnow.crypto.salt();
 			const connection = {
 				service: data.connection[0],
@@ -81,7 +57,6 @@ if (testEmail(this.req.body.email)) {
 				publicEmail: false,
 				name: this.req.body.name,
 				nameCooldown: 0,
-				birth: this.req.body.birth,
 				desc: "",
 				icon: null,
 				concats: [],

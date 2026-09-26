@@ -33,11 +33,13 @@ this.value += html`
 						<label class="mdc-floating-label" for="name">Username</label>
 						<div class="mdc-line-ripple"></div>
 					</div><br>
-					<div class="mdc-text-field">
-						<input id="birth" name="birth" class="mdc-text-field__input" type="text" data-type="date" required>
-						<label class="mdc-floating-label" for="birth">Birthdate</label>
-						<div class="mdc-line-ripple"></div>
-					</div><p class="mdc-text-field-helper-text"></p>
+					<div class="mdc-form-field margined">
+						<div class="mdc-checkbox">
+							<input id="publicEmail" name="publicEmail" class="mdc-checkbox__native-control" type="checkbox" required>
+							<div class="mdc-checkbox__background"></div>
+						</div>
+						<label for="publicEmail">I agree to the <a href="/terms" target="_blank">Terms of Service</a>.</label>
+					</div>
 				</span>
 				<div class="g-recaptcha" data-sitekey="${youKnow.captcha.site}" data-badge="inline" data-size="normal" data-callback="captchaCallback" hidden></div>
 			</span>`;

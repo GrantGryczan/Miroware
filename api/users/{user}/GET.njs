@@ -14,7 +14,6 @@ if (isMe || user.publicEmail) {
 	if (isMe) {
 		this.value.unverified = user.unverified;
 		this.value.nameCooldown = user.nameCooldown;
-		this.value.birth = user.birth;
 	}
 }
 this.done();

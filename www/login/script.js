@@ -71,7 +71,6 @@ const signUp = async (service, code) => Miro.request("POST", "/users", {
 	connection: `${service} ${btoa(code)}`,
 	email: signupDialog.form.elements.email.value,
 	name: signupDialog.form.elements.name.value,
-	birth: +new Date(signupDialog.form.elements.birth.value)
 });
 const verificationSent = () => {
 	new Miro.Dialog("Account Verification", html`
