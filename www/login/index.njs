@@ -45,6 +45,6 @@ this.value += html`
 			</span>`;
 this.value += (await load("load/belt", this)).value;
 this.value += html`
-		<script src="script.js"></script>`;
+		<script src="script.js?cb=1"></script>`;
 this.value += (await load("load/foot", this)).value;
 this.done();
