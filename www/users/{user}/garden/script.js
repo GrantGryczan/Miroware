@@ -1227,7 +1227,7 @@ if (Miro.data.isMe) {
 	const addFile = async (file, parent, name) => {
 		if (!Miro.data.user.storageTier && file.size > 40 * 1024 * 1024) {
 			new Miro.Dialog("Error", html`
-				We can't afford to host files above 40 MB for free. You can <a href="/pricing" target="_blank">support us to upload larger files</a>.
+				We can't afford to host files larger than 40 MB for free. You can <a href="/pricing" target="_blank">support us to upload larger files</a>.
 			`);
 			return;
 		}
