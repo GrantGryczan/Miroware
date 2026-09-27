@@ -219,6 +219,14 @@ if (isMe) {
     } else {
       body = this.req.body;
     }
+    if (!user.storageTier && body.length > 40 * 1024 * 1024) {
+      this.value = {
+        error: `We can't afford to host files above 40 MB for free. You can <a href="/pricing" target="_blank">support us to upload larger files</a>.`,
+      };
+      this.status = 422;
+      this.done();
+      return;
+    }
     if (body.length > 100 * 1024 * 1024) {
       this.value = {
         error:
@@ -236,7 +244,7 @@ if (isMe) {
     }
     const requiredStorage = totalUserSize + body.length;
     const maxStorage =
-      (user.storageTier === 0
+      (!user.storageTier
         ? 2
         : user.storageTier === 1
           ? 100

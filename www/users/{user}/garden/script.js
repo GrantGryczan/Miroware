@@ -455,7 +455,7 @@ hashChange().then(() => {
 				netSize += item.size;
 			}
 			const tier = Miro.data.user.storageTier;
-			const maxSize = (tier === 0 ? 2 : tier === 1 ? 100 : tier === 2 ? 400 : 1024) * 1024 * 1024 * 1024;
+			const maxSize = (!tier ? 2 : tier === 1 ? 100 : tier === 2 ? 400 : 1024) * 1024 * 1024 * 1024;
 			const percentage = Math.floor(100 * netSize / maxSize);
 			storageUsage.textContent = `${getSizeString(netSize)} / ${getSizeString(maxSize)} (${percentage}%)`;
 		});
@@ -1225,6 +1225,12 @@ if (Miro.data.isMe) {
 		}
 	};
 	const addFile = async (file, parent, name) => {
+		if (!Miro.data.user.storageTier && file.size > 40 * 1024 * 1024) {
+			new Miro.Dialog("Error", html`
+				We can't afford to host files above 40 MB for free. You can <a href="/pricing" target="_blank">support us to upload larger files</a>.
+			`);
+			return;
+		}
 		if (file.size > 100 * 1024 * 1024) {
 			new Miro.Dialog("Error", "Files larger than 100 MB are currently not supported due to technical limitations. Sorry!");
 			return;
