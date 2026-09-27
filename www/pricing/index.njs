@@ -12,7 +12,7 @@ this.value += html`
 this.value += (await load("load/body", this)).value;
 this.value += (await load("load/pagehead", this)).value;
 this.value += html`
-				<p>We give 2 GB storage for free with a 40 MB per-file limit, but you can support us for the ability to upload more.</p>
+				<p>We give 2 GB storage for free with 40 MB max per file, but you can support us for the ability to upload more.</p>
 				<p style="margin-bottom: 2em;">We don't sell your data, so direct support from users is our only means of making money. It's very expensive for us to host all your files!</p>`;
 if (this.user.stripeCustomerId) {
 	const customerSession = await stripe.customerSessions.create({
