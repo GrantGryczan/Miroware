@@ -100,6 +100,15 @@ const getLastModifiedString = (date) => {
       res.redirect(302, "https://filegarden.com/");
       return;
     }
+    if (path === "/robots.txt") {
+      res.set("Content-Type", "text/plain").send(`User-Agent: ia_archiver
+Allow: /
+
+User-Agent: *
+Disallow: /
+`);
+      return;
+    }
     res
       .set("Access-Control-Allow-Origin", "*")
       .set(
