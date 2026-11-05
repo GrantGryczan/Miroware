@@ -246,17 +246,21 @@ const bodyMethods = ["POST", "PUT", "PATCH"];
 			set = user;
 		}
 		const verifyLink = `https://filegarden.com/account/verification/?code=${encodeURIComponent(set.emailCode = crypto.randomBytes(50).toString("base64"))}`;
+		const to = `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`;
 		transporter.sendMail({
-			from: "File Garden <noreply@filegarden.com>",
-			to: `${JSON.stringify(user.name)} <${set.unverified || user.unverified}>`,
-			subject: "Verify Email - File Garden",
+			from: "File Garden <service@filegarden.com>",
+			replyTo: "File Garden Support <support@filegarden.com>",
+			envelope: {
+				from: "<bounce@filegarden.com>",
+				to
+			},
+			to,
+			subject: "Verify Email",
 			text: "Verify your File Garden account.",
 			html: html`
-				Click the following link to verify your File Garden account.<br>
-				<a href="${verifyLink}">${verifyLink}</a>
-				<p>
-					<i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i>
-				</p>
+				<p>Click the following link to verify your File Garden account.</p>
+				<p><a href="${verifyLink}">${verifyLink}</a></p>
+				<p>If you didn't request this, it's safe to ignore this email.</p>
 			`
 		});
 	};

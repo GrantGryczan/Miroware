@@ -4,19 +4,23 @@ if (testEmail(this.req.body.email)) {
 	});
 	if (user) {
 		const password = crypto.randomBytes(24).toString("base64");
+		const to = `${JSON.stringify(user.name)} <${user.email}>`;
 		transporter.sendMail({
-			from: "File Garden <noreply@filegarden.com>",
-			to: `${JSON.stringify(user.name)} <${user.email}>`,
-			subject: "Temporary Login - File Garden",
+			from: "File Garden <service@filegarden.com>",
+			replyTo: "File Garden Support <support@filegarden.com>",
+			envelope: {
+				from: "<bounce@filegarden.com>",
+				to
+			},
+			to,
+			subject: "Temporary Login",
 			text: "Use this password to log into your File Garden account.",
 			html: html`
-				Use the below password to log into the File Garden account associated with <b>$${user.email}</b>.<br>
-				<b>$${password}</b><br>
-				It is recommended that you copy it to your clipboard to paste it into the password field.<br>
-				Once you use this password, it will be automatically disconnected.
-				<p>
-					<i>(It would be greatly appreciated if you could mark the email as not spam as well, if you did happen to find this email in your spam folder. Thank you!)</i>
-				</p>
+				<p>Use the below password to log into the File Garden account associated with <b>$${user.email}</b>.</p>
+				<p><b>$${password}</b></p>
+				<p>You can copy this to your clipboard and paste it into the password field.</p>
+				<p>This password is automatically deleted after using it, so you should set a new password in your account settings immediately after signing in.</p>
+				<p>If you didn't request this, it's safe to ignore this email.</p>
 			`
 		});
 		await users.updateOne({
