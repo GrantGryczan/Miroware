@@ -21,9 +21,6 @@ if (!this.user) {
 }
 this.value += html`
 						<hr class="mdc-list-divider">
-						<a class="mdc-list-item${this.req.decodedPath === "/link-hat/" ? " mdc-list-item--activated" : '" href="/link-hat/'}">
-							<i class="mdc-list-item__graphic material-icons">link</i> <span class="mdc-list-item__text">Link Hat</span>
-						</a>
 						<a class="mdc-list-item${this.req.decodedPath === "/corrupt/" ? " mdc-list-item--activated" : '" href="/corrupt/'}">
 							<i class="mdc-list-item__graphic material-icons">broken_image</i> <span class="mdc-list-item__text">Image Corruptor</span>
 						</a>`;
